@@ -1,7 +1,6 @@
 #error "This file (TODOLIST.h) should NOT be compiled. It is only in the source tree for use by Doxygen."
 
 /**
- * \todo FUCKING SOURCE CONTROL.
  * \todo Find a better way to do the todo list and to prioritize tasks.
  * \todo Consolidate Story and Reqs wikis.
  * \todo Create new Code wiki.
