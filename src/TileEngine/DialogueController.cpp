@@ -22,13 +22,18 @@ void DialogueController::initMainDialogue()
 }
 
 void DialogueController::narrate(const char* speech)
-{  Line* narration = new Line(NARRATE, speech);
-   lineQueue.push(narration);
+{  if( lineQueue.empty() )
+   {  Line* narration = new Line(NARRATE, speech);
+      lineQueue.push(narration);
+   }
+   else
+   {  lineQueue.front()->dialogue.append(speech);
+   }
 }
 
 void DialogueController::say(const char* speech)
 {  Line* narration = new Line(SAY, speech);
-   lineQueue.push(narration);
+//   lineQueue.push(narration);
 }
 
 void DialogueController::setDialogue(LineType type)

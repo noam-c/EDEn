@@ -8,6 +8,7 @@
 void ProjectOrganizationTodoList(void);
 
 /**
+ * \todo TOP PRIORITY: Fix your freakin' Dialogue Controller hack!!!
  * \todo Fix scripts so they can WAIT on an action to be completed
  * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions.
  * \todo Add NPCs to the game.
@@ -25,6 +26,16 @@ void ProjectOrganizationTodoList(void);
  * \todo Consider changing the quad drawing code by using GL_ORTHO_2D
  */
 void CodeTodoList(void);
+
+/**
+ * \todo narrateBlocking function - narrate but block until speech is flushed to screen
+ * \todo narrateArrow function - narrate but show an arrow and wait until user advances
+ * \todo sayBlocking function - say but block until speech is flushed to screen
+ * \todo sayArrow function - say but show an arrow and wait until user advances
+ * \todo playSound function - play a sound
+ * \todo playSoundBlocking function - play a sound and wait until the sound is finished
+ */
+void ScriptFunctionsTodoList(void);
 
 /**
  * \todo Add Academic Magic descriptions and crests from http://kainsularei.deviantart.com .
