@@ -21,19 +21,22 @@ void DialogueController::initMainDialogue()
    top->add(mainDialogue);
 }
 
-void DialogueController::narrate(const char* speech)
-{  if( lineQueue.empty() )
-   {  Line* narration = new Line(NARRATE, speech);
-      lineQueue.push(narration);
+void DialogueController::addLine(LineType type, const char* speech)
+{  if(currLine == NULL)
+   {  currLine = new Line(type, speech);
+      setDialogue(type);
    }
    else
-   {  lineQueue.front()->dialogue.append(speech);
+   {  currLine->dialogue.append(speech);
    }
 }
 
+void DialogueController::narrate(const char* speech)
+{  addLine(NARRATE, speech);
+}
+
 void DialogueController::say(const char* speech)
-{  Line* narration = new Line(SAY, speech);
-//   lineQueue.push(narration);
+{  addLine(SAY, speech);
 }
 
 void DialogueController::setDialogue(LineType type)
@@ -56,15 +59,6 @@ void DialogueController::setDialogue(LineType type)
          mainDialogue->setForegroundColor(gcn::Color(0,0,0));
          mainDialogue->setVisible(true);
       }   
-   }
-}
-
-void DialogueController::showNextDialogue()
-{  if(!hasDialogue() && !lineQueue.empty())
-   {  currLine = lineQueue.front();
-      lineQueue.pop();
-      setDialogue(currLine->type);
-      dialogueTime = 0;
    }
 }
 
@@ -94,8 +88,5 @@ void DialogueController::timePassed(long time)
 {  if(hasDialogue() && !dialogueComplete())
    {  dialogueTime += time;
       advanceDialogue();
-   }
-   else if(!hasDialogue())
-   {  showNextDialogue();
    }
 }

@@ -23,9 +23,6 @@ class DialogueController
 {  /** Abstract the implementation of the dialogue boxes */
    typedef edwt::TextBox DialogueBox;
 
-   /** As long as dialogue instructions are hardcoded, this is necessary */
-   friend class TileEngine;
-
    /**
     * There are two kinds of dialogues (for now); speech and narration/thought.
     */
@@ -61,29 +58,11 @@ class DialogueController
    /** Main dialogue box for speech or narration */
    DialogueBox* mainDialogue;
 
-   /** Main queue for speech lines to appear in the main dialogue box */
-   std::queue<Line*> lineQueue;
-
-
    /** How much time has passed since the current line of dialogue began */
    long dialogueTime;
 
    /** The current line of dialogue */
    Line* currLine;
-
-   /**
-    * Enqueue a line of speech said by a character.
-    *
-    * @param speech The dialogue that will be said.
-    */
-   void say(const char* speech);
-
-   /**
-    * Enqueue a line of speech narrated or thought by a character.
-    *
-    * @param speech The dialogue that will be narrated.
-    */
-   void narrate(const char* speech);
 
    /**
     * Initialize the main dialogue box.
@@ -106,17 +85,21 @@ class DialogueController
    void advanceDialogue();
 
    /**
-    * If there is dialogue enqueued, display it as the current line.
-    */
-   void showNextDialogue();
-
-   /**
     * Set the current line to be a narration or speech;
     * alter the dialogue box accordingly.
     *
     * @param type The type of line that will be shown.
     */
    void setDialogue(LineType type);
+
+   /**
+    * Enqueue a line of speech in the dialogue box.
+    * If there is already a line being spoken, append the new speech.
+    *
+    * @param type The type of line that will be enqueued.
+    * @param speech The speech to enqueue in the dialogue controller. 
+    */
+   void addLine(LineType type, const char* speech);
 
    public:
 
@@ -128,6 +111,20 @@ class DialogueController
       DialogueController(gcn::Container* top);
 
       /**
+       * Enqueue a line of speech said by a character.
+       *
+       * @param speech The dialogue that will be said.
+       */
+      void say(const char* speech);
+   
+      /**
+       * Enqueue a line of speech narrated or thought by a character.
+       *
+       * @param speech The dialogue that will be narrated.
+       */
+      void narrate(const char* speech);
+
+      /**
        * Signals that some amount of time has passed.
        * Tells the DialogueController how much of the current line
        * of dialogue to reveal (it is shown letter by letter over time)
@@ -135,6 +132,7 @@ class DialogueController
        * @param time The number of milliseconds that has passed since the last frame.
        */
       void timePassed(long time);
+
 };
 
 #endif
