@@ -8,7 +8,8 @@
 void ProjectOrganizationTodoList(void);
 
 /**
- * \todo TOP PRIORITY: Fix your freakin' Dialogue Controller hack!!!
+ * \todo Dialogue Controller should be able to take a textbox argument to write to (instead of the usual dialogue controller)
+ * \todo Give each script thread its own unique ID, and make the dialogue controller a critical section for NPCs
  * \todo Fix scripts so they can WAIT on an action to be completed
  * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions.
  * \todo Add NPCs to the game.
