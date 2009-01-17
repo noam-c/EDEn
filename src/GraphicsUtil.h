@@ -1,6 +1,8 @@
 #ifndef __GRAPHICS_UTIL_H_
 #define __GRAPHICS_UTIL_H_
 
+#include "Singleton.h"
+
 struct SDL_Surface;
 union SDL_Event;
 
@@ -16,16 +18,18 @@ namespace edwt
 {   class OpenGLTrueTypeFont;
 };
 
+class GraphicsUtil;
+
 /**
  * All cross-class utilities for graphic functionality, such as initialization, effects, and drawing
  * are encapsulated in this singleton class.
  *
+ * Note: This class is a singleton.
+ *
  * @author Noam Chitayat
  */
-class GraphicsUtil
-{   /** Singleton Instance */
-    static GraphicsUtil* instance;
-
+class GraphicsUtil : public Singleton<GraphicsUtil>
+{
     /** The screen surface */    
     static SDL_Surface* screen;
 
@@ -44,23 +48,6 @@ class GraphicsUtil
     /** The global default font */
     edwt::OpenGLTrueTypeFont* font;
 
-    /** 
-     * Constructor.
-     * Initializes SDL and OpenGL.
-     * Initialize Guichan GUI drivers for OpenGL.
-     */
-    GraphicsUtil();
-
-    /**
-     * Destructor.
-     * Cleans up the following:
-     * - drivers
-     * - global font
-     * - the SDL TrueTypeFont library
-     * - the SDL layer
-     */
-    ~GraphicsUtil();
-
     /**
      * Initializes SDL audio and video bindings
      * Initializes SDL mixer and TTF libraries
@@ -73,17 +60,26 @@ class GraphicsUtil
      */
     void initGuichan();
 
+protected:
+    /** 
+     * Constructor.
+     * Initializes SDL and OpenGL.
+     * Initialize Guichan GUI drivers for OpenGL.
+     */
+    virtual void initialize();
+
+    /**
+     * Singleton destructor.
+     * Cleans up the following:
+     * - drivers
+     * - global font
+     * - the SDL TrueTypeFont library
+     * - the SDL layer
+     */
+    virtual void finish();
+
+
 public:
-
-    /**
-     * @return the singleton instance of the Graphics Utility.
-     */
-    static GraphicsUtil* getInstance();
-
-    /**
-     * Destroy the singleton instance (if it exists)
-     */
-    static void destroy();
 
     /**
      * Set the widget container to draw to screen.

@@ -13,9 +13,7 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-ScriptEngine* ScriptEngine::instance = NULL;
-
-ScriptEngine::ScriptEngine() throw()
+void ScriptEngine::initialize() throw()
 {  luaVM = luaL_newstate();
 
    if(luaVM == NULL)
@@ -90,19 +88,11 @@ int ScriptEngine::setRegion(lua_State* luaVM)
    return 0;
 }
 
-ScriptEngine::~ScriptEngine()
+void ScriptEngine::finish()
 {  if(luaVM)
    {  DEBUG("Destroying Lua state machine...");
       lua_close(luaVM);
    }
-}
-
-ScriptEngine* ScriptEngine::getInstance() throw()
-{  if(!instance)
-   {  instance = new ScriptEngine();
-   }
-
-   return instance;
 }
 
 void ScriptEngine::runScript(std::string scriptName)
@@ -130,11 +120,4 @@ lua_State* ScriptEngine::makeThread(std::string scriptName)
 
 std::string ScriptEngine::getScriptPath(std::string scriptName)
 {  return scriptName + ".lua";
-}
-
-void ScriptEngine::destroy()
-{   if(instance)
-    {  delete instance;
-       instance = NULL;
-    }
 }

@@ -1,6 +1,8 @@
 #ifndef __EXECUTION_STACK_H_
 #define __EXECUTION_STACK_H_
 
+#include "Singleton.h"
+
 class GameState;
 
 /**
@@ -9,9 +11,11 @@ class GameState;
  * and allows for easy change of state.
  * Main functionality is calling logic and draw, and destroying finished states in the execute() function.
  *
+ * Note: This class is a singleton.
+ *
  * @author Noam Chitayat
  */
-class ExecutionStack
+class ExecutionStack : public Singleton<ExecutionStack>
 {   private:
        /**
         * Holds GameState objects in a linked list structure for easy access by the ExecutionStack.
@@ -29,15 +33,6 @@ class ExecutionStack
           StateNode(GameState* gs, StateNode* prev) : state(gs), prevState(prev) {}
        };
 
-       /**
-        * Constructor.
-        * Initializes an empty execution stack.
-        */
-       ExecutionStack();
-
-       /** Singleton instance */
-       static ExecutionStack* instance;
-
        /** The state stack (stored as a linked list) */
        StateNode* currentState;
 
@@ -47,20 +42,22 @@ class ExecutionStack
         * @return false iff there is no remaining state (stack is empty)
         */
        bool popState();
-       
-    public:
 
+    protected:
        /**
-        * @return the singleton instance of the Execution Stack.
+        * Singleton constructor.
+        * Initializes an empty execution stack.
         */
-       static ExecutionStack* getInstance();
+       void initialize();
 
        /**
-        * Destructor.
+        * Singleton destructor.
         *
         * Destroys all remaining states.
         */
-       ~ExecutionStack();
+       void finish();
+       
+    public:
 
        /**
         * Pushes (and activates) a new game state.
@@ -79,8 +76,7 @@ class ExecutionStack
         * Otherwise, pop the stack and activate the next most recent state.
         * Keep going until there are no more states, and then quit.
         */
-       void execute();       
-       
+       void execute();
 };
 
 #endif

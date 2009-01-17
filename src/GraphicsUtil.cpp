@@ -16,26 +16,10 @@
 const int debugFlag = DEBUG_GRAPHICS;
 
 SDL_Surface* GraphicsUtil::screen = NULL;
-GraphicsUtil* GraphicsUtil::instance = NULL;
 
-GraphicsUtil::GraphicsUtil()
+void GraphicsUtil::initialize()
 {   initSDL();
     initGuichan();
-}
-
-GraphicsUtil* GraphicsUtil::getInstance()
-{   if(!instance)
-    {   instance = new GraphicsUtil();
-    }
-
-    return instance;
-}
-
-void GraphicsUtil::destroy()
-{   if(instance)
-    {  delete instance;
-       instance = NULL;
-    }
 }
 
 void GraphicsUtil::initSDL()
@@ -216,7 +200,7 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
     glBlendFunc(oldSrcFactor,oldDstFactor);
 }
 
-GraphicsUtil::~GraphicsUtil()
+void GraphicsUtil::finish()
 {   //Destroys some Guichan stuff
     delete font;
     delete gui;

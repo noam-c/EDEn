@@ -14,6 +14,8 @@ class Tileset;
  * Responsible for loading (eventually caching and even preloading!) data resources such as
  * tilesets, maps, music, and anything else loaded from the file system for use in the game.
  *
+ * \todo This class should be a singleton.
+ *
  * @author Noam Chitayat
  */
 class ResourceLoader

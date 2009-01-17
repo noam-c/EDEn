@@ -39,7 +39,7 @@ class TileEngine: public GameState
       /**
        * Constructor.
        *
-       * Initializes widgets, controllers and (HARDCODED) tile textures
+       * Initializes widgets and controllers
        */
       TileEngine();
 
@@ -51,7 +51,6 @@ class TileEngine: public GameState
       /**
        * Draw map tiles if a map is loaded in, and then coordinate the drawing
        * of all the controllers and widgets.
-       * Currently, the map drawn is HARDCODED. :(
        */
       void draw();
 

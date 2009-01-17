@@ -2,6 +2,7 @@
 #define __SCRIPT_ENGINE_H_
 
 #include <string>
+#include "Singleton.h"
 
 // We will need to talk to the tile engine from Lua
 class TileEngine;
@@ -12,15 +13,12 @@ struct lua_State;
  * create Lua coroutines, and bind the game functionality to the Lua scripts
  * via functions preceded by "lua" (such as luaNarrate).
  *
+ * This class is a singleton.
+ *
  * @author Noam Chitayat
  */
-class ScriptEngine
+class ScriptEngine : public Singleton<ScriptEngine>
 {   /**
-     * The singleton instance.
-     */
-    static ScriptEngine* instance;
-
-    /**
      * The main Lua execution thread and stack
      */
     lua_State* luaVM;
@@ -29,11 +27,6 @@ class ScriptEngine
      * The tile engine to execute commands on
      */
     TileEngine* tileEngine;
-
-    /**
-     * Constructor. Private since the engine is a singleton.
-     */
-    ScriptEngine() throw();
 
     /**
      * Register some functions in Lua's global space using Lua bindings
@@ -45,17 +38,19 @@ class ScriptEngine
      */
     std::string getScriptPath(std::string scriptName);
 
+    protected:
+
     /**
-     * Destructor.
+     * Singleton constructor. Private since the engine is a singleton.
      */
-    ~ScriptEngine();
+    void initialize() throw();
+
+    /**
+     * Singleton destructor.
+     */
+    void finish();
 
     public:
-
-       /**
-        * @return The singleton instance of the script engine.
-        */
-       static ScriptEngine* getInstance() throw();
 
        /**
         * Run a script on the main thread with the specified name.
@@ -94,11 +89,9 @@ class ScriptEngine
         */
        void callFunction(lua_State* thread, const char* funcName);
 
-       /**
-        * Destroys the singleton instance.
-        */
-       static void destroy();
-
+       /////////////////////////////////////////////////////////
+       /////////// Functions supplied to Lua scripts ///////////
+       /////////////////////////////////////////////////////////
        int narrate(lua_State* luaVM);
        int say(lua_State* luaVM);
        int setRegion(lua_State* luaVM);

@@ -1,7 +1,7 @@
 [Project]
 FileName=GamePrototype.dev
 Name=GamePrototype
-UnitCount=46
+UnitCount=47
 Type=1
 Ver=1
 ObjFiles=
@@ -501,6 +501,16 @@ BuildCmd=
 FileName=src\TileEngine\DialogueController.cpp
 CompileCpp=1
 Folder=TileEngine
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit47]
+FileName=src\Singleton.h
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000

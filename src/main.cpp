@@ -23,8 +23,8 @@ int main (int argc, char *argv[])
        std::cerr << "Executing game" << std::endl;
        stack->execute();
        ResourceLoader::freeAll();
-       delete stack;
 
+       ExecutionStack::destroy();
        ScriptEngine::destroy();
        GraphicsUtil::destroy();
     }
