@@ -19,20 +19,16 @@
  */
 class TileEngine: public GameState
 {
-   /** Time since the first logic step of the TileEngine instance */
+   /** Time since the first logic step of the TileEngine instance. */
    unsigned long time;
 
-   /**
-    * The current region that the player is in.
-    */
+   /** The current region that the player is in. */
    Region* currRegion;
 
-   /** 
-    * The current map that the player is in. 
-    */
+   /** The current map that the player is in. */
    Map* currMap;
 
-   /** Controller for dialogue and narrations */
+   /** Controller for dialogue and narrations. */
    DialogueController* dialogue;
 
    public:
@@ -61,10 +57,27 @@ class TileEngine: public GameState
        */
       bool step();
 
-      void dialogueNarrate(const char* speech);
+      /**
+       * Send a line of dialogue to the DialogueController as a narration.
+       *
+       * @param narration The line of dialogue to appear as a narration.
+       */
+      void dialogueNarrate(const char* narration);
 
+      /**
+       * Send a line of dialogue to the DialogueController as speech.
+       *
+       * @param speech The line of dialogue to appear as character speech.
+       */
       void dialogueSay(const char* speech);
       
+      /**
+       * Set a new location for the gameplay to take place in.
+       *
+       * @param regionName The name of the new region to set.
+       * @param mapName The name of the map to use within the region.
+       *                By default, uses the first map declared in the region.
+       */
       void setRegion(std::string regionName, std::string mapName = "");
 };
 

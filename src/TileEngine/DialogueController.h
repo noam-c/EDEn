@@ -2,8 +2,6 @@
 #define __DIALOGUE_CONTROL_H_
 
 #include "TextBox.h"
-#include <vector>
-#include <queue>
 
 /**
  * The dialogue controller controls all of the dialogue boxes that hold

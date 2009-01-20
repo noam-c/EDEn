@@ -2,7 +2,6 @@
 #define __TILESET_H_
 
 #include "Resource.h"
-#include "GraphicsUtil.h"
 
 typedef unsigned int GLuint;
 

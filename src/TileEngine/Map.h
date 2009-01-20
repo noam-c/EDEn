@@ -6,7 +6,11 @@
 #include <string>
 
 class Map
-{   static const char MAP_DELIM = ':';
+{
+    /**
+     * The delimiter for map data read from file.
+     */
+    static const char MAP_DELIM = ':';
 
     /** The name of this map */
     std::string mapName;

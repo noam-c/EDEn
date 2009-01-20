@@ -14,8 +14,8 @@ TileEngine::TileEngine() : currMap(NULL)
     time = SDL_GetTicks();
 }
 
-void TileEngine::dialogueNarrate(const char* speech)
-{   dialogue->narrate(speech);
+void TileEngine::dialogueNarrate(const char* narration)
+{   dialogue->narrate(narration);
 }
 
 void TileEngine::dialogueSay(const char* speech)

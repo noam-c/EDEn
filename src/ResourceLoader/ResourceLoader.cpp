@@ -20,10 +20,6 @@ char* ResourceLoader::getRegionFolder(Key name)
    const int len = strlen(regionPath) + strlen(name.c_str()) * 2 + 1;
    char* path = new char[len];
 
-   /**
-    * \todo STACK SMASH ENTRY POINT!
-    * \todo YOU'VE DOOMED US ALL!
-    */
    strcpy(path, regionPath);
    strcat(path, name.c_str());
    return strcat(path, "/");
@@ -35,10 +31,6 @@ char* ResourceLoader::getRegionPath(Key name)
    const int len = strlen(regionFolder) + strlen(name.c_str()) + strlen(regionExtension);
    char* path = new char[len];
 
-   /**
-    * \todo STACK SMASH ENTRY POINT!
-    * \todo YOU'VE DOOMED US ALL!
-    */
    strcpy(path, regionFolder);
    strcat(path, name.c_str());
    return strcat(path, regionExtension);
@@ -52,10 +44,6 @@ char* ResourceLoader::getPath(Key name, ResourceType type)
    {  const int len = strlen(PATHS[type]) + strlen(name.c_str()) + strlen(EXTENSIONS[type]);
       char* path = new char[len];
 
-      /**
-       * \todo STACK SMASH ENTRY POINT!
-       * \todo YOU'VE DOOMED US ALL!
-       */
       strcpy(path, PATHS[type]);
       strcat(path, name.c_str());
       return strcat(path, EXTENSIONS[type]);

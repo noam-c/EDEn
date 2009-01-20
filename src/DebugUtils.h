@@ -37,7 +37,11 @@
     *  @author Noam Chitayat
     */
    class DebugUtils
-   {   static long debugFlags;
+   {   /**
+        * Debug flags to output on. This variable controls which components of
+        * the game will actually output when DEBUG is used.
+        */
+       static long debugFlags;
 
        public:
 
