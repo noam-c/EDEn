@@ -13,8 +13,8 @@ void OrganizationTodoList(void);
  * \todo Give each script thread its own unique ID, and make the dialogue controller a critical section for NPCs
  * \todo Fix scripts so they can WAIT on an action to be completed
  * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions.
+ * \todo Encapsulate all of the audio functionality of Mix_Chunk and Mix_Music into the Music and Sound classes.
  * \todo Document all of the Resources (Music, Sound, Tileset, Region).
- * \todo Document ResourceLoader.
  * \todo Complete ScriptException class, as it is currently empty and pointless.
  * \todo Document ScriptException when it is completed.
  * \todo Add NPCs to the game.

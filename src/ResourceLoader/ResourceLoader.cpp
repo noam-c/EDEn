@@ -88,12 +88,12 @@ Resource* ResourceLoader::getResource(Key name, ResourceType type) throw(Resourc
     return resources[name];
 }
 
-Mix_Music* ResourceLoader::getMusic(Key name) throw(ResourceException)
-{   return static_cast<Music*>(getResource(name, MUSIC))->getMusic();
+Music* ResourceLoader::getMusic(Key name) throw(ResourceException)
+{   return static_cast<Music*>(getResource(name, MUSIC));
 }
 
-Mix_Chunk* ResourceLoader::getSound(Key name) throw(ResourceException)
-{   return static_cast<Sound*>(getResource(name, SOUND))->getSound();
+Sound* ResourceLoader::getSound(Key name) throw(ResourceException)
+{   return static_cast<Sound*>(getResource(name, SOUND));
 }
 
 Tileset* ResourceLoader::getTileset(Key name) throw(ResourceException)

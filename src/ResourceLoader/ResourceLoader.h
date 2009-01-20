@@ -6,45 +6,137 @@
 #include "ResourceException.h"
 #include "SDL_mixer.h"
 
-class Region;
 class Resource;
+class Music;
+class Sound;
+class Region;
 class Tileset;
 
 /**
  * Responsible for loading (eventually caching and even preloading!) data resources such as
  * tilesets, maps, music, and anything else loaded from the file system for use in the game.
  *
- * \todo This class should be a singleton.
- *
  * @author Noam Chitayat
  */
 class ResourceLoader
-{  static const char* PATHS[];
+{
+   /**
+    * The ResourceLoader handles loading and caching of multiple
+    * types of resources. This enum contains the types of resources
+    * available.
+    */
+   enum ResourceType
+   { /** Pieces of music to be played in the game background */
+     MUSIC,
+     /** Sound effects to be played during gameplay */
+     SOUND,
+     /** Sets of tiles that may be drawn via the TileEngine */
+     TILESET,
+     /** Locations and maps navigated via the TileEngine */
+     REGION
+   };
+
+   /** 
+    *  A list of paths to various kinds of resources, in the same order as the
+    *  ResourceType enum.
+    */
+   static const char* PATHS[];
+
+   /** 
+    *  A list of file extensions for various kinds of resources, in the same
+    *  order as the ResourceType enum.
+    */
    static const char* EXTENSIONS[];
 
    typedef std::string Key;
 
-   enum ResourceType
-   { MUSIC,
-     SOUND,
-     TILESET,
-     REGION
-   };
-
+   /** A map to hold all the currently loaded resources, organized by key */
    static std::map<Key, Resource*> resources;
 
+   /**
+    * Load in a resource specified by the given unique key-type pair.
+    *
+    * @param name The name of the resource to be loaded.
+    * @param type The ResourceType of the resource to be loaded.
+    */
    static void load(Key name, ResourceType type);
+
+   /**
+    * Get the path to a certain resource based on its name and type.
+    *
+    * @param name The name of the resource.
+    * @param type The type of resource.
+    *
+    * @return A relative path to the resource "name"
+    */
    static char* getPath(Key name, ResourceType type);
+
+   /**
+    * Get the path to a region of the specified name.
+    *
+    * @param name The name of the region to find a path to.
+    *
+    * @return A relative path to the region "name"
+    */
    static char* getRegionPath(Key name);
+
+   /**
+    * Get a resource of a certain name and type. If the resource is not cached
+    * already, then it will be loaded first.
+    *
+    * @param name The name of the resource.
+    * @param type The type of resource.
+    *
+    * @return A pointer to the resource requested.
+    * @throws ResourceException If the resource cannot be found or loaded
+    *         (for example, file not found or malformed resource).
+    */
    static Resource* getResource(Key name, ResourceType type) throw(ResourceException);
 
    public:
-      static Mix_Music* getMusic(Key name) throw(ResourceException);
-      static Mix_Chunk* getSound(Key name) throw(ResourceException);
+      /**
+       * @return The piece of music given by the specified name.
+       * @throws ResourceException If the music resource cannot be found or
+       * loaded.
+       */
+      static Music* getMusic(Key name) throw(ResourceException);
+
+      /**
+       * @return The sound effect given by the specified name.
+       * @throws ResourceException If the sound resource cannot be found or
+       * loaded.
+       */
+      static Sound* getSound(Key name) throw(ResourceException);
+
+      /**
+       * @return The tileset given by the specified name.
+       * @throws ResourceException If the tileset resource cannot be found or
+       * loaded.
+       */
       static Tileset* getTileset(Key name) throw(ResourceException);
+
+      /**
+       * @return The region data given by the specified name.
+       * @throws ResourceException If the region resource cannot be found or
+       * loaded.
+       */
       static Region* getRegion(Key name) throw(ResourceException);
 
+      /**
+       * Gets a relative path to the folder that contains the region file,
+       * map scripts, and possibly other data pertaining specifically to the
+       * specified Region.
+       *
+       * @param name The name of the region whose folder path should be returned.
+       *
+       * @return A relative path to the folder containing the region data. 
+       */
       static char* getRegionFolder(Key name);
+
+      /**
+       * Free all of the memory taken up by the resources, deleting all the
+       * Resources along the way.
+       */
       static void freeAll();
 };
 
