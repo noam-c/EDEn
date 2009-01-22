@@ -2,6 +2,7 @@
 #include "GraphicsUtil.h"
 #include "OpenGLTTF.h"
 #include "TileEngine.h"
+#include "Label.h"
 #include "StringListModel.h"
 #include "TitleScreenListBox.h"
 #include "ExecutionStack.h"
@@ -33,22 +34,29 @@ MainMenu::MainMenu()
 
       populateOpsList();
 
-      listbox = new edwt::TitleScreenListBox(titleOps);
+      titleLabel = new edwt::Label("Exodus Draconis");
+      actionsListBox = new edwt::TitleScreenListBox(titleOps);
 
-      titleFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 32);
+      titleFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 64);
+      actionsFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 32);
 
-      listbox->setFont(titleFont);
+      titleLabel->setForegroundColor(255,255,255);
+      titleLabel->setFont(titleFont);
+      titleLabel->adjustSize();
 
-      listbox->adjustSize();
-      listbox->adjustWidth();
-      listbox->setOpaque(false);
+      actionsListBox->setFont(actionsFont);
+
+      actionsListBox->adjustSize();
+      actionsListBox->adjustWidth();
+      actionsListBox->setOpaque(false);
 
       reselectSound = Mix_LoadWAV("data/sounds/reselect.wav");
       chooseSound = Mix_LoadWAV("data/sounds/choose.wav");
 
-      listbox->setReselectSound(reselectSound);
+      actionsListBox->setReselectSound(reselectSound);
 
-      top->add(listbox, 400 - listbox->getWidth() / 2, 600 - (listbox->getHeight() + 50));
+      top->add(titleLabel, 400 - titleLabel->getWidth() / 2, 50);
+      top->add(actionsListBox, 400 - actionsListBox->getWidth() / 2, 600 - (actionsListBox->getHeight() + 50));
 
       #ifndef MUSIC_OFF
       music = Mix_LoadMUS("data/music/title.mp3");
@@ -64,7 +72,7 @@ void MainMenu::activate()
 {  GameState::activate();
 
    try
-   {  listbox->requestFocus();
+   {  actionsListBox->requestFocus();
    }
    catch (gcn::Exception e)
    {  DEBUG(e.getMessage());
@@ -163,7 +171,9 @@ MainMenu::~MainMenu()
     
    delete bg;
    delete bgImg;
-   delete listbox;
+   delete actionsListBox;
+   delete titleLabel;
+   delete actionsFont;
    delete titleFont;
    delete titleOps;
 

@@ -40,8 +40,8 @@ namespace edwt
       int y = 0;
 
       fontHeight = getFont()->getHeight();
-      gcn::Color highlight(128,128,0);
-      gcn::Color base(255,255,0);
+      gcn::Color highlight(128,128,128);
+      gcn::Color base(255,255,255);
       graphics->setColor(base);
       
       for (i = 0; i < mListModel->getNumberOfElements(); ++i)

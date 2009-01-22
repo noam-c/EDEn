@@ -14,6 +14,7 @@ namespace edwt
 {
    class StringListModel;
    class TitleScreenListBox;
+   class Label;
    class OpenGLTrueTypeFont;
 };
 
@@ -34,8 +35,11 @@ class MainMenu: public GameState
    /** Sound for picking an option */
    Mix_Chunk *chooseSound;
 
+   /** The main title on top of the title screen */
+   edwt::Label* titleLabel;
+
    /** The list box for all options in the title screen */
-   edwt::TitleScreenListBox* listbox;
+   edwt::TitleScreenListBox* actionsListBox;
 
    /** The background image */
    gcn::Image* bgImg;
@@ -46,8 +50,11 @@ class MainMenu: public GameState
    /** The list model holding the options for the title screen */
    edwt::StringListModel* titleOps;
 
-   /** The font for the title screen menu options */
+   /** The font for the title screen heading */
    edwt::OpenGLTrueTypeFont* titleFont;
+
+   /** The font for the title screen menu options */
+   edwt::OpenGLTrueTypeFont* actionsFont;
 
    /**
     * Populate the title screen list with required options
