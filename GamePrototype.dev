@@ -1,7 +1,7 @@
 [Project]
 FileName=GamePrototype.dev
 Name=GamePrototype
-UnitCount=49
+UnitCount=51
 Type=1
 Ver=1
 ObjFiles=
@@ -498,7 +498,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit48]
-FileName=src\ResourceLoader\AudioResource.cpp
+FileName=src\ResourceLoader\Sound.cpp
 CompileCpp=1
 Folder=ResourceLoader
 Compile=1
@@ -508,7 +508,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit49]
-FileName=src\ResourceLoader\AudioResource.h
+FileName=src\ResourceLoader\Sound.h
 CompileCpp=1
 Folder=ResourceLoader
 Compile=1
@@ -518,9 +518,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit51]
-FileName=src\edwt\Widget.cpp
+FileName=src\ResourceLoader\Music.cpp
 CompileCpp=1
-Folder=edwt
+Folder=ResourceLoader
 Compile=1
 Link=1
 Priority=1000
@@ -539,6 +539,16 @@ BuildCmd=
 
 [Unit15]
 FileName=src\ResourceLoader\Resource.h
+CompileCpp=1
+Folder=ResourceLoader
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit50]
+FileName=src\ResourceLoader\Music.h
 CompileCpp=1
 Folder=ResourceLoader
 Compile=1

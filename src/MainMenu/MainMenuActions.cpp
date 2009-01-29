@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "ExecutionStack.h"
-#include "AudioResource.h"
+#include "Music.h"
+#include "Sound.h"
 
 #include "TileEngine.h"
 #include "ScriptEngine.h"

@@ -1,6 +1,7 @@
 #include "ResourceLoader.h"
 
-#include "AudioResource.h"
+#include "Music.h"
+#include "Sound.h"
 #include "GraphicsUtil.h"
 #include "Tileset.h"
 #include "Region.h"

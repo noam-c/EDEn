@@ -4,7 +4,8 @@
 #include "TileEngine.h"
 
 #include "ResourceLoader.h"
-#include "AudioResource.h"
+#include "Music.h"
+#include "Sound.h"
 
 #include "Label.h"
 #include "OpenGLTTF.h"

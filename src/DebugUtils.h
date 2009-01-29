@@ -27,6 +27,7 @@
    #define DEBUG_DIA_CONTR  1<<6     // Dialogue Controller
    #define DEBUG_RES_LOAD   1<<6     // Resource Loader
    #define DEBUG_SCRIPT_ENG 1<<7     // Script Engine
+   #define DEBUG_AUDIO      1<<8     // Audio functionality
 
    /**
     *  Provides utilities to help game devs debug the game code,

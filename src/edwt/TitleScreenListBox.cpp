@@ -1,7 +1,7 @@
 #include "TitleScreenListBox.h"
 #include "StringListModel.h"
 #include <SDL.h>
-#include "AudioResource.h"
+#include "Sound.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_EDWT;
