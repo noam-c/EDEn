@@ -1,5 +1,7 @@
 #include "MainMenu.h"
 #include "ExecutionStack.h"
+#include "AudioResource.h"
+
 #include "TileEngine.h"
 #include "ScriptEngine.h"
 
@@ -17,8 +19,8 @@ void MainMenu::NewGameAction()
    ScriptEngine::getInstance()->runScript(CHAP1);
 
    ExecutionStack::getInstance()->pushState(tileEngine);
-   Mix_PlayChannel(-1, chooseSound, 0);
-   Mix_FadeOutMusic(1000);
+   chooseSound->play();
+   music->fadeOut(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 }
 
@@ -49,7 +51,7 @@ void MainMenu::AboutAction()
  */
 void MainMenu::QuitAction()
 {  finished = true;
-   Mix_PlayChannel(-1, chooseSound, 0);
-   Mix_FadeOutMusic(1000);
+   chooseSound->play();
+   music->fadeOut(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 }

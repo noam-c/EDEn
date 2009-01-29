@@ -22,7 +22,7 @@ class Tileset : public Resource
        /** Tile size constant */
        static const int TILE_SIZE;
 
-       Tileset(char* path) throw(Exception);
+       Tileset(const char* path) throw(Exception);
 
        // Implementation of method in Resource
        size_t getSize();

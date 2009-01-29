@@ -1,8 +1,9 @@
 #ifndef __LIST_BOX_H_
 #define __LIST_BOX_H_
 
-#include "SDL_mixer.h"
 #include "guichan.hpp"
+
+class Sound;
 
 namespace edwt
 {
@@ -19,10 +20,10 @@ namespace edwt
         bool mOpaque;
 
         /** A reselection sound when the mouse or keyboard changes the selected option */
-        Mix_Chunk *reselectSound;
+        Sound* reselectSound;
 
         /** A sound that plays when the user chooses the option selected */
-        Mix_Chunk *chooseSound;
+        Sound* chooseSound;
 
         public:
             /**
@@ -70,12 +71,12 @@ namespace edwt
             /**
              * @param newChoose The new choose sound.
              */
-            void setChooseSound(Mix_Chunk *newChoose);
+            void setChooseSound(Sound* newChoose);
 
             /**
              * @param newReselect The new reselection sound.
              */
-            void setReselectSound(Mix_Chunk *newReselect);
+            void setReselectSound(Sound* newReselect);
 
             /**
              * Adjust the width of the list box

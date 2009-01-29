@@ -11,7 +11,7 @@ class Region : public Resource
     std::map<std::string, Map*> areas;
 
     public:
-       Region(char* path);
+       Region(const char* path);
        std::string getName();
        Map* getStartingMap();
        Map* getMap(std::string name);

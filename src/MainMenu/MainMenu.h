@@ -1,8 +1,6 @@
 #ifndef __MAIN_MENU_H_
 #define __MAIN_MENU_H_
 
-#include "SDL_mixer.h"
-
 #include "GameState.h"
 
 namespace gcn
@@ -18,6 +16,9 @@ namespace edwt
    class OpenGLTrueTypeFont;
 };
 
+class Music;
+class Sound;
+
 /**
  * Provides the title screen functionality, including the game logo, backdrop, 
  * and options for the user.
@@ -27,13 +28,13 @@ namespace edwt
  */
 class MainMenu: public GameState
 {  /** Main menu music */
-   Mix_Music *music;
+   Music* music;
 
    /** Sound for hovering over an option */
-   Mix_Chunk *reselectSound;
+   Sound* reselectSound;
 
    /** Sound for picking an option */
-   Mix_Chunk *chooseSound;
+   Sound* chooseSound;
 
    /** The main title on top of the title screen */
    edwt::Label* titleLabel;

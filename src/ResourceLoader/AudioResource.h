@@ -5,22 +5,39 @@
 #include "SDL_mixer.h"
 
 class Music : public Resource
-{  Mix_Music* music;
-
+{  static Music* currentMusic;
+   static inline bool isPlaying(Music* music);
+   static inline void setPlayingMusic(Music* music);
+   
+   Mix_Music* music;
    public:
-      Music(char* path);
+      Music(const char* path);
       size_t getSize();
-      Mix_Music* getMusic();
+
+      void play();
+      void fadeOut(int time);
+      void stop();
+
       ~Music();
 };
 
+#include <map>
+
 class Sound : public Resource
-{  Mix_Chunk* sound;
+{  static std::map<int, Sound*> playingList;
+   static bool ownsChannel(Sound* sound, int channel);
+   static void channelFinished(int channel);
+
+   Mix_Chunk* sound;
+   int playingChannel;
+
+   void finished();
 
    public:
-      Sound(char* path);
+      Sound(const char* path);
+      void play();
+      void stop();
       size_t getSize();
-      Mix_Chunk* getSound();
       ~Sound();
 };
 

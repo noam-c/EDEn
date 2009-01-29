@@ -40,13 +40,13 @@ class ResourceLoader
     *  A list of paths to various kinds of resources, in the same order as the
     *  ResourceType enum.
     */
-   static const char* PATHS[];
+   static const std::string PATHS[];
 
    /** 
     *  A list of file extensions for various kinds of resources, in the same
     *  order as the ResourceType enum.
     */
-   static const char* EXTENSIONS[];
+   static const std::string EXTENSIONS[];
 
    typedef std::string Key;
 
@@ -69,7 +69,7 @@ class ResourceLoader
     *
     * @return A relative path to the resource "name"
     */
-   static char* getPath(Key name, ResourceType type);
+   static std::string getPath(Key name, ResourceType type);
 
    /**
     * Get the path to a region of the specified name.
@@ -78,7 +78,7 @@ class ResourceLoader
     *
     * @return A relative path to the region "name"
     */
-   static char* getRegionPath(Key name);
+   static std::string getRegionPath(Key name);
 
    /**
     * Get a resource of a certain name and type. If the resource is not cached
@@ -131,7 +131,7 @@ class ResourceLoader
        *
        * @return A relative path to the folder containing the region data. 
        */
-      static char* getRegionFolder(Key name);
+      static std::string getRegionFolder(Key name);
 
       /**
        * Free all of the memory taken up by the resources, deleting all the

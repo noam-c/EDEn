@@ -1,7 +1,7 @@
 #include "TitleScreenListBox.h"
 #include "StringListModel.h"
 #include <SDL.h>
-#include "SDL_mixer.h"
+#include "AudioResource.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_EDWT;
@@ -69,7 +69,7 @@ namespace edwt
    {  mOpaque = opaque;
    }
 
-   void TitleScreenListBox::setReselectSound(Mix_Chunk *newReselect)
+   void TitleScreenListBox::setReselectSound(Sound* newReselect)
    {  reselectSound = newReselect;
    }
 
@@ -94,7 +94,7 @@ namespace edwt
 
    void TitleScreenListBox::setSelected(int selected)
    {  if(getSelected() != selected)
-      {  if(reselectSound != NULL)  {  Mix_PlayChannel(-1, reselectSound, 0);  }
+      {  if(reselectSound != NULL)  {  reselectSound->play();  }
       }
 
       gcn::ListBox::setSelected(selected);

@@ -9,18 +9,19 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to.
+ * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
  * \todo Give each script thread its own unique ID, and make the dialogue controller a critical section for NPCs
  * \todo Fix scripts so they can WAIT on an action to be completed
- * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions.
- * \todo Encapsulate all of the audio functionality of Mix_Chunk and Mix_Music into the Music and Sound classes.
- * \todo Document all of the Resources (Music, Sound, Tileset, Region).
+ * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions
+ * \todo Document all of the Resources (Music, Sound, Tileset, Region)
+ * \todo Separate Sound and Music out into two separate .h/.cpp pairs
+ * \todo Remove references to namespace gcn outside of edwt
  * \todo Complete ScriptException class, as it is currently empty and pointless.
  * \todo Document ScriptException when it is completed.
  * \todo Add NPCs to the game.
  * \todo Create an NPC controller for the Tile Engine.
  * \todo Implement semi-coroutines in the NPC controller using Lua.
- * \todo Add the player sprite to the game, and make him respond to user input.
+ * \todo Add the player character to the game, and make him respond to user input.
  * \todo Update ResourceLoader to include reference counting and LRU resource eviction.
  * \todo Integrate GraphicsUtil stuff from Solstice (synchronous fading and texture load, mainly).
  * \todo Change OpenGLTTF to not depend on gcn::Image
@@ -30,7 +31,7 @@ void OrganizationTodoList(void);
  * \todo Create an options menu with persistence.
  * \todo Create an About/Credits screen
  * \todo Remove Tileset dependency on SDL by abstracting texture load code into GraphicsUtil
- * \todo Tileset passibility matrix uses a bool (1 word) for each entry; it should only need to use one bit.
+ * \todo Tileset passibility matrix uses a bool (1 word) for each entry; it should only need to use one bit per entry.
  * \todo Move GL drawing code in Tileset to GraphicsUtil (less coupling)
  * \todo Consider changing the quad drawing code by using GL_ORTHO_2D
  */

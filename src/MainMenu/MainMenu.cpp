@@ -1,10 +1,16 @@
 #include "MainMenu.h"
 #include "GraphicsUtil.h"
-#include "OpenGLTTF.h"
+
 #include "TileEngine.h"
+
+#include "ResourceLoader.h"
+#include "AudioResource.h"
+
 #include "Label.h"
+#include "OpenGLTTF.h"
 #include "StringListModel.h"
 #include "TitleScreenListBox.h"
+
 #include "ExecutionStack.h"
 #include "SDL_Image.h"
 #include "DebugUtils.h"
@@ -40,7 +46,7 @@ MainMenu::MainMenu()
       titleFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 64);
       actionsFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 32);
 
-      titleLabel->setForegroundColor(255,255,255);
+      titleLabel->setForegroundColor(gcn::Color(255,255,255));
       titleLabel->setFont(titleFont);
       titleLabel->adjustSize();
 
@@ -50,8 +56,8 @@ MainMenu::MainMenu()
       actionsListBox->adjustWidth();
       actionsListBox->setOpaque(false);
 
-      reselectSound = Mix_LoadWAV("data/sounds/reselect.wav");
-      chooseSound = Mix_LoadWAV("data/sounds/choose.wav");
+      chooseSound = ResourceLoader::getSound("choose");
+      reselectSound = ResourceLoader::getSound("reselect");
 
       actionsListBox->setReselectSound(reselectSound);
 
@@ -59,7 +65,7 @@ MainMenu::MainMenu()
       top->add(actionsListBox, 400 - actionsListBox->getWidth() / 2, 600 - (actionsListBox->getHeight() + 50));
 
       #ifndef MUSIC_OFF
-      music = Mix_LoadMUS("data/music/title.mp3");
+      music = ResourceLoader::getMusic("title");
       #endif
    }
    catch (gcn::Exception e)
@@ -98,9 +104,7 @@ bool MainMenu::step()
    bool done = false;
 
    #ifndef MUSIC_OFF
-   if(!Mix_PlayingMusic())
-   {  Mix_PlayMusic(music, 0);
-   }
+   music->play();
    #endif
 
    SDL_Event event;
@@ -166,9 +170,9 @@ void MainMenu::draw()
 }
 
 MainMenu::~MainMenu()
-{  Mix_FadeOutMusic(1000);
+{  music->fadeOut(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
-    
+
    delete bg;
    delete bgImg;
    delete actionsListBox;
@@ -176,11 +180,4 @@ MainMenu::~MainMenu()
    delete actionsFont;
    delete titleFont;
    delete titleOps;
-
-   Mix_FreeChunk(reselectSound);
-   Mix_FreeChunk(chooseSound);
-
-   #ifndef MUSIC_OFF
-   Mix_FreeMusic(music);
-   #endif
 }

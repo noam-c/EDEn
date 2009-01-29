@@ -8,7 +8,7 @@
 
 const int Tileset::TILE_SIZE = 64;
 
-Tileset::Tileset(char* path) throw(Exception)
+Tileset::Tileset(const char* path) throw(Exception)
 {  std::ifstream in;
    std::string imagePath;
    in.open(path);
