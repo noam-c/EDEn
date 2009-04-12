@@ -1,0 +1,77 @@
+; dlltool --base-file C:\DOCUME~1\NC\LOCALS~1\Temp/cca03260.base --output-exp guichan_opengl.exp --dllname guichan_opengl.dll --output-def lib/libguichan_opengl.def --no-export-all-symbols --add-stdcall-alias --exclude-symbol=DllMainCRTStartup@12 --def C:\DOCUME~1\NC\LOCALS~1\Temp/cca03260.def --output-lib lib/libguichan_opengl.a
+EXPORTS
+;	gcn::OpenGLImage::convertToDisplayFormat()
+	_ZN3gcn11OpenGLImage22convertToDisplayFormatEv @ 1
+;	gcn::OpenGLImage::free()
+	_ZN3gcn11OpenGLImage4freeEv @ 2
+;	gcn::OpenGLImage::getPixel(int, int)
+	_ZN3gcn11OpenGLImage8getPixelEii @ 3
+;	gcn::OpenGLImage::putPixel(int, int, gcn::Color const&)
+	_ZN3gcn11OpenGLImage8putPixelEiiRKNS_5ColorE @ 4
+;	gcn::OpenGLImage::OpenGLImage(unsigned int*, int, int, bool)
+	_ZN3gcn11OpenGLImageC1EPjiib @ 5
+;	gcn::OpenGLImage::OpenGLImage(unsigned int, int, int, bool)
+	_ZN3gcn11OpenGLImageC1Ejiib @ 6
+;	gcn::OpenGLImage::OpenGLImage(unsigned int*, int, int, bool)
+	_ZN3gcn11OpenGLImageC2EPjiib @ 7
+;	gcn::OpenGLImage::OpenGLImage(unsigned int, int, int, bool)
+	_ZN3gcn11OpenGLImageC2Ejiib @ 8
+;	gcn::OpenGLImage::~OpenGLImage()
+	_ZN3gcn11OpenGLImageD0Ev @ 9
+;	gcn::OpenGLImage::~OpenGLImage()
+	_ZN3gcn11OpenGLImageD1Ev @ 10
+;	gcn::OpenGLImage::~OpenGLImage()
+	_ZN3gcn11OpenGLImageD2Ev @ 11
+;	gcn::OpenGLGraphics::_beginDraw()
+	_ZN3gcn14OpenGLGraphics10_beginDrawEv @ 12
+;	gcn::OpenGLGraphics::popClipArea()
+	_ZN3gcn14OpenGLGraphics11popClipAreaEv @ 13
+;	gcn::OpenGLGraphics::pushClipArea(gcn::Rectangle)
+	_ZN3gcn14OpenGLGraphics12pushClipAreaENS_9RectangleE @ 14
+;	gcn::OpenGLGraphics::drawRectangle(gcn::Rectangle const&)
+	_ZN3gcn14OpenGLGraphics13drawRectangleERKNS_9RectangleE @ 15
+;	gcn::OpenGLGraphics::fillRectangle(gcn::Rectangle const&)
+	_ZN3gcn14OpenGLGraphics13fillRectangleERKNS_9RectangleE @ 16
+;	gcn::OpenGLGraphics::setTargetPlane(int, int)
+	_ZN3gcn14OpenGLGraphics14setTargetPlaneEii @ 17
+;	gcn::OpenGLGraphics::_endDraw()
+	_ZN3gcn14OpenGLGraphics8_endDrawEv @ 18
+;	gcn::OpenGLGraphics::drawLine(int, int, int, int)
+	_ZN3gcn14OpenGLGraphics8drawLineEiiii @ 19
+;	gcn::OpenGLGraphics::setColor(gcn::Color const&)
+	_ZN3gcn14OpenGLGraphics8setColorERKNS_5ColorE @ 20
+;	gcn::OpenGLGraphics::drawImage(gcn::Image const*, int, int, int, int, int, int)
+	_ZN3gcn14OpenGLGraphics9drawImageEPKNS_5ImageEiiiiii @ 21
+;	gcn::OpenGLGraphics::drawPoint(int, int)
+	_ZN3gcn14OpenGLGraphics9drawPointEii @ 22
+;	gcn::OpenGLGraphics::OpenGLGraphics(int, int)
+	_ZN3gcn14OpenGLGraphicsC1Eii @ 23
+;	gcn::OpenGLGraphics::OpenGLGraphics()
+	_ZN3gcn14OpenGLGraphicsC1Ev @ 24
+;	gcn::OpenGLGraphics::OpenGLGraphics(int, int)
+	_ZN3gcn14OpenGLGraphicsC2Eii @ 25
+;	gcn::OpenGLGraphics::OpenGLGraphics()
+	_ZN3gcn14OpenGLGraphicsC2Ev @ 26
+;	gcn::OpenGLGraphics::~OpenGLGraphics()
+	_ZN3gcn14OpenGLGraphicsD0Ev @ 27
+;	gcn::OpenGLGraphics::~OpenGLGraphics()
+	_ZN3gcn14OpenGLGraphicsD1Ev @ 28
+;	gcn::OpenGLGraphics::~OpenGLGraphics()
+	_ZN3gcn14OpenGLGraphicsD2Ev @ 29
+;	gcn::OpenGLImage::getTextureWidth() const
+	_ZNK3gcn11OpenGLImage15getTextureWidthEv @ 30
+;	gcn::OpenGLImage::getTextureHandle() const
+	_ZNK3gcn11OpenGLImage16getTextureHandleEv @ 31
+;	gcn::OpenGLImage::getTextureHeight() const
+	_ZNK3gcn11OpenGLImage16getTextureHeightEv @ 32
+;	gcn::OpenGLImage::getWidth() const
+	_ZNK3gcn11OpenGLImage8getWidthEv @ 33
+;	gcn::OpenGLImage::getHeight() const
+	_ZNK3gcn11OpenGLImage9getHeightEv @ 34
+;	gcn::OpenGLGraphics::getColor() const
+	_ZNK3gcn14OpenGLGraphics8getColorEv @ 35
+;	vtable for gcn::OpenGLImage
+	_ZTVN3gcn11OpenGLImageE @ 36 DATA
+;	vtable for gcn::OpenGLGraphics
+	_ZTVN3gcn14OpenGLGraphicsE @ 37 DATA
+	gcnOpenGL @ 38

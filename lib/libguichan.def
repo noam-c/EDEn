@@ -1,0 +1,1636 @@
+; dlltool --base-file C:\DOCUME~1\NC\LOCALS~1\Temp/cca03836.base --output-exp guichan.exp --dllname guichan.dll --output-def lib/libguichan.def --no-export-all-symbols --add-stdcall-alias --exclude-symbol=DllMainCRTStartup@12 --def C:\DOCUME~1\NC\LOCALS~1\Temp/cca03836.def --output-lib lib/libguichan.a
+EXPORTS
+;	gcn::InputEvent::consume()
+	_ZN3gcn10InputEvent7consumeEv @ 1
+;	gcn::InputEvent::InputEvent(gcn::Widget*, bool, bool, bool, bool)
+	_ZN3gcn10InputEventC1EPNS_6WidgetEbbbb @ 2
+;	gcn::InputEvent::InputEvent(gcn::Widget*, bool, bool, bool, bool)
+	_ZN3gcn10InputEventC2EPNS_6WidgetEbbbb @ 3
+;	gcn::MouseEvent::MouseEvent(gcn::Widget*, bool, bool, bool, bool, unsigned int, unsigned int, int, int, int)
+	_ZN3gcn10MouseEventC1EPNS_6WidgetEbbbbjjiii @ 4
+;	gcn::MouseEvent::MouseEvent(gcn::Widget*, bool, bool, bool, bool, unsigned int, unsigned int, int, int, int)
+	_ZN3gcn10MouseEventC2EPNS_6WidgetEbbbbjjiii @ 5
+;	gcn::MouseInput::setTimeStamp(int)
+	_ZN3gcn10MouseInput12setTimeStampEi @ 6
+;	gcn::MouseInput::setX(int)
+	_ZN3gcn10MouseInput4setXEi @ 7
+;	gcn::MouseInput::setY(int)
+	_ZN3gcn10MouseInput4setYEi @ 8
+;	gcn::MouseInput::setType(unsigned int)
+	_ZN3gcn10MouseInput7setTypeEj @ 9
+;	gcn::MouseInput::setButton(unsigned int)
+	_ZN3gcn10MouseInput9setButtonEj @ 10
+;	gcn::MouseInput::MouseInput(unsigned int, unsigned int, int, int, int)
+	_ZN3gcn10MouseInputC1Ejjiii @ 11
+;	gcn::MouseInput::MouseInput()
+	_ZN3gcn10MouseInputC1Ev @ 12
+;	gcn::MouseInput::MouseInput(unsigned int, unsigned int, int, int, int)
+	_ZN3gcn10MouseInputC2Ejjiii @ 13
+;	gcn::ScrollArea::drawBorder(gcn::Graphics*)
+	_ZN3gcn10ScrollArea10drawBorderEPNS_8GraphicsE @ 14
+;	gcn::ScrollArea::getContent()
+	_ZN3gcn10ScrollArea10getContentEv @ 15
+;	gcn::ScrollArea::setContent(gcn::Widget*)
+	_ZN3gcn10ScrollArea10setContentEPNS_6WidgetE @ 16
+;	gcn::ScrollArea::drawHMarker(gcn::Graphics*)
+	_ZN3gcn10ScrollArea11drawHMarkerEPNS_8GraphicsE @ 17
+;	gcn::ScrollArea::drawVMarker(gcn::Graphics*)
+	_ZN3gcn10ScrollArea11drawVMarkerEPNS_8GraphicsE @ 18
+;	gcn::ScrollArea::getWidgetAt(int, int)
+	_ZN3gcn10ScrollArea11getWidgetAtEii @ 19
+;	gcn::ScrollArea::drawUpButton(gcn::Graphics*)
+	_ZN3gcn10ScrollArea12drawUpButtonEPNS_8GraphicsE @ 20
+;	gcn::ScrollArea::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn10ScrollArea12mouseDraggedERNS_10MouseEventE @ 21
+;	gcn::ScrollArea::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn10ScrollArea12mousePressedERNS_10MouseEventE @ 22
+;	gcn::ScrollArea::setDimension(gcn::Rectangle const&)
+	_ZN3gcn10ScrollArea12setDimensionERKNS_9RectangleE @ 23
+;	gcn::ScrollArea::checkPolicies()
+	_ZN3gcn10ScrollArea13checkPoliciesEv @ 24
+;	gcn::ScrollArea::mouseReleased(gcn::MouseEvent&)
+	_ZN3gcn10ScrollArea13mouseReleasedERNS_10MouseEventE @ 25
+;	gcn::ScrollArea::drawBackground(gcn::Graphics*)
+	_ZN3gcn10ScrollArea14drawBackgroundEPNS_8GraphicsE @ 26
+;	gcn::ScrollArea::drawDownButton(gcn::Graphics*)
+	_ZN3gcn10ScrollArea14drawDownButtonEPNS_8GraphicsE @ 27
+;	gcn::ScrollArea::drawLeftButton(gcn::Graphics*)
+	_ZN3gcn10ScrollArea14drawLeftButtonEPNS_8GraphicsE @ 28
+;	gcn::ScrollArea::showWidgetPart(gcn::Widget*, gcn::Rectangle)
+	_ZN3gcn10ScrollArea14showWidgetPartEPNS_6WidgetENS_9RectangleE @ 29
+;	gcn::ScrollArea::drawRightButton(gcn::Graphics*)
+	_ZN3gcn10ScrollArea15drawRightButtonEPNS_8GraphicsE @ 30
+;	gcn::ScrollArea::getChildrenArea()
+	_ZN3gcn10ScrollArea15getChildrenAreaEv @ 31
+;	gcn::ScrollArea::setScrollAmount(int, int)
+	_ZN3gcn10ScrollArea15setScrollAmountEii @ 32
+;	gcn::ScrollArea::setScrollPolicy(unsigned int, unsigned int)
+	_ZN3gcn10ScrollArea15setScrollPolicyEjj @ 33
+;	gcn::ScrollArea::getScrollbarWidth()
+	_ZN3gcn10ScrollArea17getScrollbarWidthEv @ 34
+;	gcn::ScrollArea::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZN3gcn10ScrollArea17mouseWheelMovedUpERNS_10MouseEventE @ 35
+;	gcn::ScrollArea::setScrollbarWidth(int)
+	_ZN3gcn10ScrollArea17setScrollbarWidthEi @ 36
+;	gcn::ScrollArea::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZN3gcn10ScrollArea19mouseWheelMovedDownERNS_10MouseEventE @ 37
+;	gcn::ScrollArea::getUpButtonDimension()
+	_ZN3gcn10ScrollArea20getUpButtonDimensionEv @ 38
+;	gcn::ScrollArea::getVerticalMaxScroll()
+	_ZN3gcn10ScrollArea20getVerticalMaxScrollEv @ 39
+;	gcn::ScrollArea::getDownButtonDimension()
+	_ZN3gcn10ScrollArea22getDownButtonDimensionEv @ 40
+;	gcn::ScrollArea::getHorizontalMaxScroll()
+	_ZN3gcn10ScrollArea22getHorizontalMaxScrollEv @ 41
+;	gcn::ScrollArea::getLeftButtonDimension()
+	_ZN3gcn10ScrollArea22getLeftButtonDimensionEv @ 42
+;	gcn::ScrollArea::getRightButtonDimension()
+	_ZN3gcn10ScrollArea23getRightButtonDimensionEv @ 43
+;	gcn::ScrollArea::getUpButtonScrollAmount()
+	_ZN3gcn10ScrollArea23getUpButtonScrollAmountEv @ 44
+;	gcn::ScrollArea::getVerticalBarDimension()
+	_ZN3gcn10ScrollArea23getVerticalBarDimensionEv @ 45
+;	gcn::ScrollArea::getVerticalScrollAmount()
+	_ZN3gcn10ScrollArea23getVerticalScrollAmountEv @ 46
+;	gcn::ScrollArea::getVerticalScrollPolicy()
+	_ZN3gcn10ScrollArea23getVerticalScrollPolicyEv @ 47
+;	gcn::ScrollArea::setUpButtonScrollAmount(int)
+	_ZN3gcn10ScrollArea23setUpButtonScrollAmountEi @ 48
+;	gcn::ScrollArea::setVerticalScrollAmount(int)
+	_ZN3gcn10ScrollArea23setVerticalScrollAmountEi @ 49
+;	gcn::ScrollArea::setVerticalScrollPolicy(unsigned int)
+	_ZN3gcn10ScrollArea23setVerticalScrollPolicyEj @ 50
+;	gcn::ScrollArea::getDownButtonScrollAmount()
+	_ZN3gcn10ScrollArea25getDownButtonScrollAmountEv @ 51
+;	gcn::ScrollArea::getHorizontalBarDimension()
+	_ZN3gcn10ScrollArea25getHorizontalBarDimensionEv @ 52
+;	gcn::ScrollArea::getHorizontalScrollAmount()
+	_ZN3gcn10ScrollArea25getHorizontalScrollAmountEv @ 53
+;	gcn::ScrollArea::getHorizontalScrollPolicy()
+	_ZN3gcn10ScrollArea25getHorizontalScrollPolicyEv @ 54
+;	gcn::ScrollArea::getLeftButtonScrollAmount()
+	_ZN3gcn10ScrollArea25getLeftButtonScrollAmountEv @ 55
+;	gcn::ScrollArea::setDownButtonScrollAmount(int)
+	_ZN3gcn10ScrollArea25setDownButtonScrollAmountEi @ 56
+;	gcn::ScrollArea::setHorizontalScrollAmount(int)
+	_ZN3gcn10ScrollArea25setHorizontalScrollAmountEi @ 57
+;	gcn::ScrollArea::setHorizontalScrollPolicy(unsigned int)
+	_ZN3gcn10ScrollArea25setHorizontalScrollPolicyEj @ 58
+;	gcn::ScrollArea::setLeftButtonScrollAmount(int)
+	_ZN3gcn10ScrollArea25setLeftButtonScrollAmountEi @ 59
+;	gcn::ScrollArea::getRightButtonScrollAmount()
+	_ZN3gcn10ScrollArea26getRightButtonScrollAmountEv @ 60
+;	gcn::ScrollArea::getVerticalMarkerDimension()
+	_ZN3gcn10ScrollArea26getVerticalMarkerDimensionEv @ 61
+;	gcn::ScrollArea::setRightButtonScrollAmount(int)
+	_ZN3gcn10ScrollArea26setRightButtonScrollAmountEi @ 62
+;	gcn::ScrollArea::getHorizontalMarkerDimension()
+	_ZN3gcn10ScrollArea28getHorizontalMarkerDimensionEv @ 63
+;	gcn::ScrollArea::draw(gcn::Graphics*)
+	_ZN3gcn10ScrollArea4drawEPNS_8GraphicsE @ 64
+;	gcn::ScrollArea::logic()
+	_ZN3gcn10ScrollArea5logicEv @ 65
+;	gcn::ScrollArea::drawHBar(gcn::Graphics*)
+	_ZN3gcn10ScrollArea8drawHBarEPNS_8GraphicsE @ 66
+;	gcn::ScrollArea::drawVBar(gcn::Graphics*)
+	_ZN3gcn10ScrollArea8drawVBarEPNS_8GraphicsE @ 67
+;	gcn::ScrollArea::setWidth(int)
+	_ZN3gcn10ScrollArea8setWidthEi @ 68
+;	gcn::ScrollArea::setHeight(int)
+	_ZN3gcn10ScrollArea9setHeightEi @ 69
+;	gcn::ScrollArea::ScrollArea(gcn::Widget*)
+	_ZN3gcn10ScrollAreaC1EPNS_6WidgetE @ 70
+;	gcn::ScrollArea::ScrollArea(gcn::Widget*, unsigned int, unsigned int)
+	_ZN3gcn10ScrollAreaC1EPNS_6WidgetEjj @ 71
+;	gcn::ScrollArea::ScrollArea()
+	_ZN3gcn10ScrollAreaC1Ev @ 72
+;	gcn::ScrollArea::ScrollArea(gcn::Widget*)
+	_ZN3gcn10ScrollAreaC2EPNS_6WidgetE @ 73
+;	gcn::ScrollArea::ScrollArea(gcn::Widget*, unsigned int, unsigned int)
+	_ZN3gcn10ScrollAreaC2EPNS_6WidgetEjj @ 74
+;	gcn::ScrollArea::ScrollArea()
+	_ZN3gcn10ScrollAreaC2Ev @ 75
+;	gcn::ScrollArea::~ScrollArea()
+	_ZN3gcn10ScrollAreaD0Ev @ 76
+;	gcn::ScrollArea::~ScrollArea()
+	_ZN3gcn10ScrollAreaD1Ev @ 77
+;	gcn::ScrollArea::~ScrollArea()
+	_ZN3gcn10ScrollAreaD2Ev @ 78
+;	gcn::ActionEvent::ActionEvent(gcn::Widget*, std::string const&)
+	_ZN3gcn11ActionEventC1EPNS_6WidgetERKSs @ 79
+;	gcn::ActionEvent::ActionEvent(gcn::Widget*, std::string const&)
+	_ZN3gcn11ActionEventC2EPNS_6WidgetERKSs @ 80
+;	gcn::ActionEvent::~ActionEvent()
+	_ZN3gcn11ActionEventD0Ev @ 81
+;	gcn::ActionEvent::~ActionEvent()
+	_ZN3gcn11ActionEventD1Ev @ 82
+;	gcn::ActionEvent::~ActionEvent()
+	_ZN3gcn11ActionEventD2Ev @ 83
+;	gcn::DefaultFont::drawString(gcn::Graphics*, std::string const&, int, int)
+	_ZN3gcn11DefaultFont10drawStringEPNS_8GraphicsERKSsii @ 84
+;	gcn::DefaultFont::getStringIndexAt(std::string const&, int)
+	_ZN3gcn11DefaultFont16getStringIndexAtERKSsi @ 85
+;	gcn::DefaultFont::drawGlyph(gcn::Graphics*, unsigned char, int, int)
+	_ZN3gcn11DefaultFont9drawGlyphEPNS_8GraphicsEhii @ 86
+;	gcn::DefaultFont::~DefaultFont()
+	_ZN3gcn11DefaultFontD0Ev @ 87
+;	gcn::DefaultFont::~DefaultFont()
+	_ZN3gcn11DefaultFontD1Ev @ 88
+;	gcn::KeyListener::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn11KeyListener10keyPressedERNS_8KeyEventE @ 89
+;	gcn::KeyListener::keyReleased(gcn::KeyEvent&)
+	_ZN3gcn11KeyListener11keyReleasedERNS_8KeyEventE @ 90
+;	gcn::KeyListener::KeyListener()
+	_ZN3gcn11KeyListenerC2Ev @ 91
+;	gcn::KeyListener::~KeyListener()
+	_ZN3gcn11KeyListenerD0Ev @ 92
+;	gcn::KeyListener::~KeyListener()
+	_ZN3gcn11KeyListenerD1Ev @ 93
+;	gcn::KeyListener::~KeyListener()
+	_ZN3gcn11KeyListenerD2Ev @ 94
+;	gcn::RadioButton::adjustSize()
+	_ZN3gcn11RadioButton10adjustSizeEv @ 95
+;	gcn::RadioButton::drawBorder(gcn::Graphics*)
+	_ZN3gcn11RadioButton10drawBorderEPNS_8GraphicsE @ 96
+;	gcn::RadioButton::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn11RadioButton10keyPressedERNS_8KeyEventE @ 97
+;	gcn::RadioButton::setCaption(std::string)
+	_ZN3gcn11RadioButton10setCaptionESs @ 98
+;	gcn::RadioButton::mouseClicked(gcn::MouseEvent&)
+	_ZN3gcn11RadioButton12mouseClickedERNS_10MouseEventE @ 99
+;	gcn::RadioButton::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn11RadioButton12mouseDraggedERNS_10MouseEventE @ 100
+;	gcn::RadioButton::draw(gcn::Graphics*)
+	_ZN3gcn11RadioButton4drawEPNS_8GraphicsE @ 101
+;	gcn::RadioButton::drawBox(gcn::Graphics*)
+	_ZN3gcn11RadioButton7drawBoxEPNS_8GraphicsE @ 102
+;	gcn::RadioButton::setGroup(std::string const&)
+	_ZN3gcn11RadioButton8setGroupERKSs @ 103
+;	gcn::RadioButton::mGroupMap
+	_ZN3gcn11RadioButton9mGroupMapE @ 104 DATA
+;	gcn::RadioButton::setMarked(bool)
+	_ZN3gcn11RadioButton9setMarkedEb @ 105
+;	gcn::RadioButton::RadioButton(std::string const&, std::string const&, bool)
+	_ZN3gcn11RadioButtonC1ERKSsS2_b @ 106
+;	gcn::RadioButton::RadioButton()
+	_ZN3gcn11RadioButtonC1Ev @ 107
+;	gcn::RadioButton::RadioButton(std::string const&, std::string const&, bool)
+	_ZN3gcn11RadioButtonC2ERKSsS2_b @ 108
+;	gcn::RadioButton::RadioButton()
+	_ZN3gcn11RadioButtonC2Ev @ 109
+;	gcn::RadioButton::~RadioButton()
+	_ZN3gcn11RadioButtonD0Ev @ 110
+;	gcn::RadioButton::~RadioButton()
+	_ZN3gcn11RadioButtonD1Ev @ 111
+;	gcn::RadioButton::~RadioButton()
+	_ZN3gcn11RadioButtonD2Ev @ 112
+;	gcn::FocusHandler::tabPrevious()
+	_ZN3gcn12FocusHandler11tabPreviousEv @ 113
+;	gcn::FocusHandler::requestFocus(gcn::Widget*)
+	_ZN3gcn12FocusHandler12requestFocusEPNS_6WidgetE @ 114
+;	gcn::FocusHandler::focusPrevious()
+	_ZN3gcn12FocusHandler13focusPreviousEv @ 115
+;	gcn::FocusHandler::getDraggedWidget()
+	_ZN3gcn12FocusHandler16getDraggedWidgetEv @ 116
+;	gcn::FocusHandler::setDraggedWidget(gcn::Widget*)
+	_ZN3gcn12FocusHandler16setDraggedWidgetEPNS_6WidgetE @ 117
+;	gcn::FocusHandler::releaseModalFocus(gcn::Widget*)
+	_ZN3gcn12FocusHandler17releaseModalFocusEPNS_6WidgetE @ 118
+;	gcn::FocusHandler::requestModalFocus(gcn::Widget*)
+	_ZN3gcn12FocusHandler17requestModalFocusEPNS_6WidgetE @ 119
+;	gcn::FocusHandler::getLastWidgetPressed()
+	_ZN3gcn12FocusHandler20getLastWidgetPressedEv @ 120
+;	gcn::FocusHandler::setLastWidgetPressed(gcn::Widget*)
+	_ZN3gcn12FocusHandler20setLastWidgetPressedEPNS_6WidgetE @ 121
+;	gcn::FocusHandler::getLastWidgetWithMouse()
+	_ZN3gcn12FocusHandler22getLastWidgetWithMouseEv @ 122
+;	gcn::FocusHandler::setLastWidgetWithMouse(gcn::Widget*)
+	_ZN3gcn12FocusHandler22setLastWidgetWithMouseEPNS_6WidgetE @ 123
+;	gcn::FocusHandler::distributeFocusLostEvent(gcn::Event const&)
+	_ZN3gcn12FocusHandler24distributeFocusLostEventERKNS_5EventE @ 124
+;	gcn::FocusHandler::distributeFocusGainedEvent(gcn::Event const&)
+	_ZN3gcn12FocusHandler26distributeFocusGainedEventERKNS_5EventE @ 125
+;	gcn::FocusHandler::getLastWidgetWithModalFocus()
+	_ZN3gcn12FocusHandler27getLastWidgetWithModalFocusEv @ 126
+;	gcn::FocusHandler::releaseModalMouseInputFocus(gcn::Widget*)
+	_ZN3gcn12FocusHandler27releaseModalMouseInputFocusEPNS_6WidgetE @ 127
+;	gcn::FocusHandler::requestModalMouseInputFocus(gcn::Widget*)
+	_ZN3gcn12FocusHandler27requestModalMouseInputFocusEPNS_6WidgetE @ 128
+;	gcn::FocusHandler::setLastWidgetWithModalFocus(gcn::Widget*)
+	_ZN3gcn12FocusHandler27setLastWidgetWithModalFocusEPNS_6WidgetE @ 129
+;	gcn::FocusHandler::getLastWidgetWithModalMouseInputFocus()
+	_ZN3gcn12FocusHandler37getLastWidgetWithModalMouseInputFocusEv @ 130
+;	gcn::FocusHandler::setLastWidgetWithModalMouseInputFocus(gcn::Widget*)
+	_ZN3gcn12FocusHandler37setLastWidgetWithModalMouseInputFocusEPNS_6WidgetE @ 131
+;	gcn::FocusHandler::add(gcn::Widget*)
+	_ZN3gcn12FocusHandler3addEPNS_6WidgetE @ 132
+;	gcn::FocusHandler::remove(gcn::Widget*)
+	_ZN3gcn12FocusHandler6removeEPNS_6WidgetE @ 133
+;	gcn::FocusHandler::tabNext()
+	_ZN3gcn12FocusHandler7tabNextEv @ 134
+;	gcn::FocusHandler::focusNext()
+	_ZN3gcn12FocusHandler9focusNextEv @ 135
+;	gcn::FocusHandler::focusNone()
+	_ZN3gcn12FocusHandler9focusNoneEv @ 136
+;	gcn::FocusHandler::FocusHandler()
+	_ZN3gcn12FocusHandlerC1Ev @ 137
+;	gcn::FocusHandler::FocusHandler()
+	_ZN3gcn12FocusHandlerC2Ev @ 138
+;	gcn::FocusHandler::~FocusHandler()
+	_ZN3gcn12FocusHandlerD0Ev @ 139
+;	gcn::FocusHandler::~FocusHandler()
+	_ZN3gcn12FocusHandlerD1Ev @ 140
+;	gcn::GenericInput::_pollInput()
+	_ZN3gcn12GenericInput10_pollInputEv @ 141
+;	gcn::GenericInput::pushKeyPressed(int)
+	_ZN3gcn12GenericInput14pushKeyPressedEi @ 142
+;	gcn::GenericInput::pushMouseMoved(int, int)
+	_ZN3gcn12GenericInput14pushMouseMovedEii @ 143
+;	gcn::GenericInput::dequeueKeyInput()
+	_ZN3gcn12GenericInput15dequeueKeyInputEv @ 144
+;	gcn::GenericInput::isKeyQueueEmpty()
+	_ZN3gcn12GenericInput15isKeyQueueEmptyEv @ 145
+;	gcn::GenericInput::pushKeyReleased(int)
+	_ZN3gcn12GenericInput15pushKeyReleasedEi @ 146
+;	gcn::GenericInput::dequeueMouseInput()
+	_ZN3gcn12GenericInput17dequeueMouseInputEv @ 147
+;	gcn::GenericInput::isMouseQueueEmpty()
+	_ZN3gcn12GenericInput17isMouseQueueEmptyEv @ 148
+;	gcn::GenericInput::pushMouseWheelMovedUp(int, int)
+	_ZN3gcn12GenericInput21pushMouseWheelMovedUpEii @ 149
+;	gcn::GenericInput::pushMouseButtonPressed(int, int, int)
+	_ZN3gcn12GenericInput22pushMouseButtonPressedEiii @ 150
+;	gcn::GenericInput::pushMouseButtonReleased(int, int, int)
+	_ZN3gcn12GenericInput23pushMouseButtonReleasedEiii @ 151
+;	gcn::GenericInput::pushMouseWheelMovedDown(int, int)
+	_ZN3gcn12GenericInput23pushMouseWheelMovedDownEii @ 152
+;	gcn::GenericInput::GenericInput()
+	_ZN3gcn12GenericInputC1Ev @ 153
+;	gcn::GenericInput::GenericInput()
+	_ZN3gcn12GenericInputC2Ev @ 154
+;	gcn::ClipRectangle::ClipRectangle(int, int, int, int, int, int)
+	_ZN3gcn13ClipRectangleC1Eiiiiii @ 155
+;	gcn::ClipRectangle::ClipRectangle()
+	_ZN3gcn13ClipRectangleC1Ev @ 156
+;	gcn::ClipRectangle::ClipRectangle(int, int, int, int, int, int)
+	_ZN3gcn13ClipRectangleC2Eiiiiii @ 157
+;	gcn::ClipRectangle::ClipRectangle()
+	_ZN3gcn13ClipRectangleC2Ev @ 158
+;	gcn::ClipRectangle::operator=(gcn::Rectangle const&)
+	_ZN3gcn13ClipRectangleaSERKNS_9RectangleE @ 159
+;	gcn::DeathListener::~DeathListener()
+	_ZN3gcn13DeathListenerD0Ev @ 160
+;	gcn::DeathListener::~DeathListener()
+	_ZN3gcn13DeathListenerD1Ev @ 161
+;	gcn::DeathListener::~DeathListener()
+	_ZN3gcn13DeathListenerD2Ev @ 162
+;	gcn::FocusListener::focusGained(gcn::Event const&)
+	_ZN3gcn13FocusListener11focusGainedERKNS_5EventE @ 163
+;	gcn::FocusListener::focusLost(gcn::Event const&)
+	_ZN3gcn13FocusListener9focusLostERKNS_5EventE @ 164
+;	gcn::FocusListener::~FocusListener()
+	_ZN3gcn13FocusListenerD0Ev @ 165
+;	gcn::FocusListener::~FocusListener()
+	_ZN3gcn13FocusListenerD1Ev @ 166
+;	gcn::FocusListener::~FocusListener()
+	_ZN3gcn13FocusListenerD2Ev @ 167
+;	gcn::MouseListener::mouseMoved(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener10mouseMovedERNS_10MouseEventE @ 168
+;	gcn::MouseListener::mouseExited(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener11mouseExitedERNS_10MouseEventE @ 169
+;	gcn::MouseListener::mouseClicked(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener12mouseClickedERNS_10MouseEventE @ 170
+;	gcn::MouseListener::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener12mouseDraggedERNS_10MouseEventE @ 171
+;	gcn::MouseListener::mouseEntered(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener12mouseEnteredERNS_10MouseEventE @ 172
+;	gcn::MouseListener::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener12mousePressedERNS_10MouseEventE @ 173
+;	gcn::MouseListener::mouseReleased(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener13mouseReleasedERNS_10MouseEventE @ 174
+;	gcn::MouseListener::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener17mouseWheelMovedUpERNS_10MouseEventE @ 175
+;	gcn::MouseListener::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZN3gcn13MouseListener19mouseWheelMovedDownERNS_10MouseEventE @ 176
+;	gcn::MouseListener::MouseListener()
+	_ZN3gcn13MouseListenerC2Ev @ 177
+;	gcn::MouseListener::~MouseListener()
+	_ZN3gcn13MouseListenerD0Ev @ 178
+;	gcn::MouseListener::~MouseListener()
+	_ZN3gcn13MouseListenerD1Ev @ 179
+;	gcn::MouseListener::~MouseListener()
+	_ZN3gcn13MouseListenerD2Ev @ 180
+;	gcn::ActionListener::~ActionListener()
+	_ZN3gcn14ActionListenerD0Ev @ 181
+;	gcn::ActionListener::~ActionListener()
+	_ZN3gcn14ActionListenerD1Ev @ 182
+;	gcn::ActionListener::~ActionListener()
+	_ZN3gcn14ActionListenerD2Ev @ 183
+;	gcn::BasicContainer::getWidgetAt(int, int)
+	_ZN3gcn14BasicContainer11getWidgetAtEii @ 184
+;	gcn::BasicContainer::drawChildren(gcn::Graphics*)
+	_ZN3gcn14BasicContainer12drawChildrenEPNS_8GraphicsE @ 185
+;	gcn::BasicContainer::moveToBottom(gcn::Widget*)
+	_ZN3gcn14BasicContainer12moveToBottomEPNS_6WidgetE @ 186
+;	gcn::BasicContainer::focusPrevious()
+	_ZN3gcn14BasicContainer13focusPreviousEv @ 187
+;	gcn::BasicContainer::logicChildren()
+	_ZN3gcn14BasicContainer13logicChildrenEv @ 188
+;	gcn::BasicContainer::showWidgetPart(gcn::Widget*, gcn::Rectangle)
+	_ZN3gcn14BasicContainer14showWidgetPartEPNS_6WidgetENS_9RectangleE @ 189
+;	gcn::BasicContainer::getChildrenArea()
+	_ZN3gcn14BasicContainer15getChildrenAreaEv @ 190
+;	gcn::BasicContainer::_setFocusHandler(gcn::FocusHandler*)
+	_ZN3gcn14BasicContainer16_setFocusHandlerEPNS_12FocusHandlerE @ 191
+;	gcn::BasicContainer::setInternalFocusHandler(gcn::FocusHandler*)
+	_ZN3gcn14BasicContainer23setInternalFocusHandlerEPNS_12FocusHandlerE @ 192
+;	gcn::BasicContainer::add(gcn::Widget*)
+	_ZN3gcn14BasicContainer3addEPNS_6WidgetE @ 193
+;	gcn::BasicContainer::clear()
+	_ZN3gcn14BasicContainer5clearEv @ 194
+;	gcn::BasicContainer::death(gcn::Event const&)
+	_ZN3gcn14BasicContainer5deathERKNS_5EventE @ 195
+;	gcn::BasicContainer::logic()
+	_ZN3gcn14BasicContainer5logicEv @ 196
+;	gcn::BasicContainer::remove(gcn::Widget*)
+	_ZN3gcn14BasicContainer6removeEPNS_6WidgetE @ 197
+;	gcn::BasicContainer::focusNext()
+	_ZN3gcn14BasicContainer9focusNextEv @ 198
+;	gcn::BasicContainer::moveToTop(gcn::Widget*)
+	_ZN3gcn14BasicContainer9moveToTopEPNS_6WidgetE @ 199
+;	gcn::BasicContainer::~BasicContainer()
+	_ZN3gcn14BasicContainerD0Ev @ 200
+;	gcn::BasicContainer::~BasicContainer()
+	_ZN3gcn14BasicContainerD1Ev @ 201
+;	gcn::BasicContainer::~BasicContainer()
+	_ZN3gcn14BasicContainerD2Ev @ 202
+;	gcn::Gui::getWidgetAt(int, int)
+	_ZN3gcn3Gui11getWidgetAtEii @ 203
+;	gcn::Gui::setGraphics(gcn::Graphics*)
+	_ZN3gcn3Gui11setGraphicsEPNS_8GraphicsE @ 204
+;	gcn::Gui::handleKeyInput()
+	_ZN3gcn3Gui14handleKeyInputEv @ 205
+;	gcn::Gui::handleMouseInput()
+	_ZN3gcn3Gui16handleMouseInputEv @ 206
+;	gcn::Gui::handleMouseMoved(gcn::MouseInput const&)
+	_ZN3gcn3Gui16handleMouseMovedERKNS_10MouseInputE @ 207
+;	gcn::Gui::isTabbingEnabled()
+	_ZN3gcn3Gui16isTabbingEnabledEv @ 208
+;	gcn::Gui::getKeyEventSource()
+	_ZN3gcn3Gui17getKeyEventSourceEv @ 209
+;	gcn::Gui::setTabbingEnabled(bool)
+	_ZN3gcn3Gui17setTabbingEnabledEb @ 210
+;	gcn::Gui::distributeKeyEvent(gcn::KeyEvent&)
+	_ZN3gcn3Gui18distributeKeyEventERNS_8KeyEventE @ 211
+;	gcn::Gui::handleMousePressed(gcn::MouseInput const&)
+	_ZN3gcn3Gui18handleMousePressedERKNS_10MouseInputE @ 212
+;	gcn::Gui::getMouseEventSource(int, int)
+	_ZN3gcn3Gui19getMouseEventSourceEii @ 213
+;	gcn::Gui::handleMouseReleased(gcn::MouseInput const&)
+	_ZN3gcn3Gui19handleMouseReleasedERKNS_10MouseInputE @ 214
+;	gcn::Gui::addGlobalKeyListener(gcn::KeyListener*)
+	_ZN3gcn3Gui20addGlobalKeyListenerEPNS_11KeyListenerE @ 215
+;	gcn::Gui::distributeMouseEvent(gcn::Widget*, int, int, int, int, bool, bool)
+	_ZN3gcn3Gui20distributeMouseEventEPNS_6WidgetEiiiibb @ 216
+;	gcn::Gui::handleModalFocusRelease()
+	_ZN3gcn3Gui23handleModalFocusReleaseEv @ 217
+;	gcn::Gui::handleMouseWheelMovedUp(gcn::MouseInput const&)
+	_ZN3gcn3Gui23handleMouseWheelMovedUpERKNS_10MouseInputE @ 218
+;	gcn::Gui::removeGlobalKeyListener(gcn::KeyListener*)
+	_ZN3gcn3Gui23removeGlobalKeyListenerEPNS_11KeyListenerE @ 219
+;	gcn::Gui::handleMouseWheelMovedDown(gcn::MouseInput const&)
+	_ZN3gcn3Gui25handleMouseWheelMovedDownERKNS_10MouseInputE @ 220
+;	gcn::Gui::handleModalMouseInputFocusRelease()
+	_ZN3gcn3Gui33handleModalMouseInputFocusReleaseEv @ 221
+;	gcn::Gui::distributeKeyEventToGlobalKeyListeners(gcn::KeyEvent&)
+	_ZN3gcn3Gui38distributeKeyEventToGlobalKeyListenersERNS_8KeyEventE @ 222
+;	gcn::Gui::draw()
+	_ZN3gcn3Gui4drawEv @ 223
+;	gcn::Gui::logic()
+	_ZN3gcn3Gui5logicEv @ 224
+;	gcn::Gui::setTop(gcn::Widget*)
+	_ZN3gcn3Gui6setTopEPNS_6WidgetE @ 225
+;	gcn::Gui::setInput(gcn::Input*)
+	_ZN3gcn3Gui8setInputEPNS_5InputE @ 226
+;	gcn::Gui::focusNone()
+	_ZN3gcn3Gui9focusNoneEv @ 227
+;	gcn::Gui::Gui()
+	_ZN3gcn3GuiC1Ev @ 228
+;	gcn::Gui::Gui()
+	_ZN3gcn3GuiC2Ev @ 229
+;	gcn::Gui::~Gui()
+	_ZN3gcn3GuiD0Ev @ 230
+;	gcn::Gui::~Gui()
+	_ZN3gcn3GuiD1Ev @ 231
+;	gcn::Gui::~Gui()
+	_ZN3gcn3GuiD2Ev @ 232
+;	gcn::Key::Key(int)
+	_ZN3gcn3KeyC1Ei @ 233
+;	gcn::Key::Key(int)
+	_ZN3gcn3KeyC2Ei @ 234
+;	gcn::Font::~Font()
+	_ZN3gcn4FontD0Ev @ 235
+;	gcn::Font::~Font()
+	_ZN3gcn4FontD1Ev @ 236
+;	gcn::Font::~Font()
+	_ZN3gcn4FontD2Ev @ 237
+;	gcn::Icon::drawBorder(gcn::Graphics*)
+	_ZN3gcn4Icon10drawBorderEPNS_8GraphicsE @ 238
+;	gcn::Icon::draw(gcn::Graphics*)
+	_ZN3gcn4Icon4drawEPNS_8GraphicsE @ 239
+;	gcn::Icon::Icon(gcn::Image*)
+	_ZN3gcn4IconC1EPNS_5ImageE @ 240
+;	gcn::Icon::Icon(gcn::Image*)
+	_ZN3gcn4IconC2EPNS_5ImageE @ 241
+;	gcn::Color::Color(int)
+	_ZN3gcn5ColorC1Ei @ 242
+;	gcn::Color::Color(int, int, int, int)
+	_ZN3gcn5ColorC1Eiiii @ 243
+;	gcn::Color::Color()
+	_ZN3gcn5ColorC1Ev @ 244
+;	gcn::Color::Color(int)
+	_ZN3gcn5ColorC2Ei @ 245
+;	gcn::Color::Color(int, int, int, int)
+	_ZN3gcn5ColorC2Eiiii @ 246
+;	gcn::Color::Color()
+	_ZN3gcn5ColorC2Ev @ 247
+;	gcn::Event::Event(gcn::Widget*)
+	_ZN3gcn5EventC1EPNS_6WidgetE @ 248
+;	gcn::Event::Event(gcn::Widget*)
+	_ZN3gcn5EventC2EPNS_6WidgetE @ 249
+;	gcn::Event::~Event()
+	_ZN3gcn5EventD0Ev @ 250
+;	gcn::Event::~Event()
+	_ZN3gcn5EventD1Ev @ 251
+;	gcn::Event::~Event()
+	_ZN3gcn5EventD2Ev @ 252
+;	gcn::Image::mImageLoader
+	_ZN3gcn5Image12mImageLoaderE @ 253 DATA
+;	gcn::Image::getImageLoader()
+	_ZN3gcn5Image14getImageLoaderEv @ 254
+;	gcn::Image::setImageLoader(gcn::ImageLoader*)
+	_ZN3gcn5Image14setImageLoaderEPNS_11ImageLoaderE @ 255
+;	gcn::Image::load(std::string const&, bool)
+	_ZN3gcn5Image4loadERKSsb @ 256
+;	gcn::Image::Image()
+	_ZN3gcn5ImageC1Ev @ 257
+;	gcn::Image::Image()
+	_ZN3gcn5ImageC2Ev @ 258
+;	gcn::Image::~Image()
+	_ZN3gcn5ImageD0Ev @ 259
+;	gcn::Image::~Image()
+	_ZN3gcn5ImageD1Ev @ 260
+;	gcn::Image::~Image()
+	_ZN3gcn5ImageD2Ev @ 261
+;	gcn::Input::~Input()
+	_ZN3gcn5InputD0Ev @ 262
+;	gcn::Input::~Input()
+	_ZN3gcn5InputD1Ev @ 263
+;	gcn::Input::~Input()
+	_ZN3gcn5InputD2Ev @ 264
+;	gcn::Label::adjustSize()
+	_ZN3gcn5Label10adjustSizeEv @ 265
+;	gcn::Label::drawBorder(gcn::Graphics*)
+	_ZN3gcn5Label10drawBorderEPNS_8GraphicsE @ 266
+;	gcn::Label::setCaption(std::string const&)
+	_ZN3gcn5Label10setCaptionERKSs @ 267
+;	gcn::Label::getAlignment()
+	_ZN3gcn5Label12getAlignmentEv @ 268
+;	gcn::Label::setAlignment(unsigned int)
+	_ZN3gcn5Label12setAlignmentEj @ 269
+;	gcn::Label::draw(gcn::Graphics*)
+	_ZN3gcn5Label4drawEPNS_8GraphicsE @ 270
+;	gcn::Label::Label(std::string const&)
+	_ZN3gcn5LabelC1ERKSs @ 271
+;	gcn::Label::Label()
+	_ZN3gcn5LabelC1Ev @ 272
+;	gcn::Label::Label(std::string const&)
+	_ZN3gcn5LabelC2ERKSs @ 273
+;	gcn::Label::Label()
+	_ZN3gcn5LabelC2Ev @ 274
+;	gcn::Button::adjustSize()
+	_ZN3gcn6Button10adjustSizeEv @ 275
+;	gcn::Button::drawBorder(gcn::Graphics*)
+	_ZN3gcn6Button10drawBorderEPNS_8GraphicsE @ 276
+;	gcn::Button::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn6Button10keyPressedERNS_8KeyEventE @ 277
+;	gcn::Button::setCaption(std::string const&)
+	_ZN3gcn6Button10setCaptionERKSs @ 278
+;	gcn::Button::keyReleased(gcn::KeyEvent&)
+	_ZN3gcn6Button11keyReleasedERNS_8KeyEventE @ 279
+;	gcn::Button::mouseExited(gcn::MouseEvent&)
+	_ZN3gcn6Button11mouseExitedERNS_10MouseEventE @ 280
+;	gcn::Button::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn6Button12mouseDraggedERNS_10MouseEventE @ 281
+;	gcn::Button::mouseEntered(gcn::MouseEvent&)
+	_ZN3gcn6Button12mouseEnteredERNS_10MouseEventE @ 282
+;	gcn::Button::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn6Button12mousePressedERNS_10MouseEventE @ 283
+;	gcn::Button::setAlignment(unsigned int)
+	_ZN3gcn6Button12setAlignmentEj @ 284
+;	gcn::Button::mouseReleased(gcn::MouseEvent&)
+	_ZN3gcn6Button13mouseReleasedERNS_10MouseEventE @ 285
+;	gcn::Button::draw(gcn::Graphics*)
+	_ZN3gcn6Button4drawEPNS_8GraphicsE @ 286
+;	gcn::Button::focusLost(gcn::Event const&)
+	_ZN3gcn6Button9focusLostERKNS_5EventE @ 287
+;	gcn::Button::Button(std::string const&)
+	_ZN3gcn6ButtonC1ERKSs @ 288
+;	gcn::Button::Button()
+	_ZN3gcn6ButtonC1Ev @ 289
+;	gcn::Button::Button(std::string const&)
+	_ZN3gcn6ButtonC2ERKSs @ 290
+;	gcn::Button::Button()
+	_ZN3gcn6ButtonC2Ev @ 291
+;	gcn::Slider::drawBorder(gcn::Graphics*)
+	_ZN3gcn6Slider10drawBorderEPNS_8GraphicsE @ 292
+;	gcn::Slider::drawMarker(gcn::Graphics*)
+	_ZN3gcn6Slider10drawMarkerEPNS_8GraphicsE @ 293
+;	gcn::Slider::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn6Slider10keyPressedERNS_8KeyEventE @ 294
+;	gcn::Slider::setScaleEnd(double)
+	_ZN3gcn6Slider11setScaleEndEd @ 295
+;	gcn::Slider::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn6Slider12mouseDraggedERNS_10MouseEventE @ 296
+;	gcn::Slider::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn6Slider12mousePressedERNS_10MouseEventE @ 297
+;	gcn::Slider::setScaleStart(double)
+	_ZN3gcn6Slider13setScaleStartEd @ 298
+;	gcn::Slider::setStepLength(double)
+	_ZN3gcn6Slider13setStepLengthEd @ 299
+;	gcn::Slider::setOrientation(unsigned int)
+	_ZN3gcn6Slider14setOrientationEj @ 300
+;	gcn::Slider::setMarkerLength(int)
+	_ZN3gcn6Slider15setMarkerLengthEi @ 301
+;	gcn::Slider::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZN3gcn6Slider17mouseWheelMovedUpERNS_10MouseEventE @ 302
+;	gcn::Slider::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZN3gcn6Slider19mouseWheelMovedDownERNS_10MouseEventE @ 303
+;	gcn::Slider::draw(gcn::Graphics*)
+	_ZN3gcn6Slider4drawEPNS_8GraphicsE @ 304
+;	gcn::Slider::setScale(double, double)
+	_ZN3gcn6Slider8setScaleEdd @ 305
+;	gcn::Slider::setValue(double)
+	_ZN3gcn6Slider8setValueEd @ 306
+;	gcn::Slider::Slider(double)
+	_ZN3gcn6SliderC1Ed @ 307
+;	gcn::Slider::Slider(double, double)
+	_ZN3gcn6SliderC1Edd @ 308
+;	gcn::Slider::Slider(double)
+	_ZN3gcn6SliderC2Ed @ 309
+;	gcn::Slider::Slider(double, double)
+	_ZN3gcn6SliderC2Edd @ 310
+;	gcn::Slider::~Slider()
+	_ZN3gcn6SliderD0Ev @ 311
+;	gcn::Slider::~Slider()
+	_ZN3gcn6SliderD1Ev @ 312
+;	gcn::Widget::_setParent(gcn::Widget*)
+	_ZN3gcn6Widget10_setParentEPS0_ @ 313
+;	gcn::Widget::drawBorder(gcn::Graphics*)
+	_ZN3gcn6Widget10drawBorderEPNS_8GraphicsE @ 314
+;	gcn::Widget::setEnabled(bool)
+	_ZN3gcn6Widget10setEnabledEb @ 315
+;	gcn::Widget::setVisible(bool)
+	_ZN3gcn6Widget10setVisibleEb @ 316
+;	gcn::Widget::fontChanged()
+	_ZN3gcn6Widget11fontChangedEv @ 317
+;	gcn::Widget::getWidgetAt(int, int)
+	_ZN3gcn6Widget11getWidgetAtEii @ 318
+;	gcn::Widget::mGlobalFont
+	_ZN3gcn6Widget11mGlobalFontE @ 319 DATA
+;	gcn::Widget::setPosition(int, int)
+	_ZN3gcn6Widget11setPositionEii @ 320
+;	gcn::Widget::mDefaultFont
+	_ZN3gcn6Widget12mDefaultFontE @ 321 DATA
+;	gcn::Widget::moveToBottom(gcn::Widget*)
+	_ZN3gcn6Widget12moveToBottomEPS0_ @ 322
+;	gcn::Widget::requestFocus()
+	_ZN3gcn6Widget12requestFocusEv @ 323
+;	gcn::Widget::setBaseColor(gcn::Color const&)
+	_ZN3gcn6Widget12setBaseColorERKNS_5ColorE @ 324
+;	gcn::Widget::setDimension(gcn::Rectangle const&)
+	_ZN3gcn6Widget12setDimensionERKNS_9RectangleE @ 325
+;	gcn::Widget::setFocusable(bool)
+	_ZN3gcn6Widget12setFocusableEb @ 326
+;	gcn::Widget::widgetExists(gcn::Widget const*)
+	_ZN3gcn6Widget12widgetExistsEPKS0_ @ 327
+;	gcn::Widget::focusPrevious()
+	_ZN3gcn6Widget13focusPreviousEv @ 328
+;	gcn::Widget::setBorderSize(unsigned int)
+	_ZN3gcn6Widget13setBorderSizeEj @ 329
+;	gcn::Widget::setGlobalFont(gcn::Font*)
+	_ZN3gcn6Widget13setGlobalFontEPNS_4FontE @ 330
+;	gcn::Widget::addKeyListener(gcn::KeyListener*)
+	_ZN3gcn6Widget14addKeyListenerEPNS_11KeyListenerE @ 331
+;	gcn::Widget::generateAction()
+	_ZN3gcn6Widget14generateActionEv @ 332
+;	gcn::Widget::showWidgetPart(gcn::Widget*, gcn::Rectangle)
+	_ZN3gcn6Widget14showWidgetPartEPS0_NS_9RectangleE @ 333
+;	gcn::Widget::getChildrenArea()
+	_ZN3gcn6Widget15getChildrenAreaEv @ 334
+;	gcn::Widget::setTabInEnabled(bool)
+	_ZN3gcn6Widget15setTabInEnabledEb @ 335
+;	gcn::Widget::_getFocusHandler()
+	_ZN3gcn6Widget16_getFocusHandlerEv @ 336
+;	gcn::Widget::_getKeyListeners()
+	_ZN3gcn6Widget16_getKeyListenersEv @ 337
+;	gcn::Widget::_setFocusHandler(gcn::FocusHandler*)
+	_ZN3gcn6Widget16_setFocusHandlerEPNS_12FocusHandlerE @ 338
+;	gcn::Widget::addDeathListener(gcn::DeathListener*)
+	_ZN3gcn6Widget16addDeathListenerEPNS_13DeathListenerE @ 339
+;	gcn::Widget::addFocusListener(gcn::FocusListener*)
+	_ZN3gcn6Widget16addFocusListenerEPNS_13FocusListenerE @ 340
+;	gcn::Widget::addMouseListener(gcn::MouseListener*)
+	_ZN3gcn6Widget16addMouseListenerEPNS_13MouseListenerE @ 341
+;	gcn::Widget::requestMoveToTop()
+	_ZN3gcn6Widget16requestMoveToTopEv @ 342
+;	gcn::Widget::setActionEventId(std::string const&)
+	_ZN3gcn6Widget16setActionEventIdERKSs @ 343
+;	gcn::Widget::setTabOutEnabled(bool)
+	_ZN3gcn6Widget16setTabOutEnabledEb @ 344
+;	gcn::Widget::addActionListener(gcn::ActionListener*)
+	_ZN3gcn6Widget17addActionListenerEPNS_14ActionListenerE @ 345
+;	gcn::Widget::releaseModalFocus()
+	_ZN3gcn6Widget17releaseModalFocusEv @ 346
+;	gcn::Widget::removeKeyListener(gcn::KeyListener*)
+	_ZN3gcn6Widget17removeKeyListenerEPNS_11KeyListenerE @ 347
+;	gcn::Widget::requestModalFocus()
+	_ZN3gcn6Widget17requestModalFocusEv @ 348
+;	gcn::Widget::setSelectionColor(gcn::Color const&)
+	_ZN3gcn6Widget17setSelectionColorERKNS_5ColorE @ 349
+;	gcn::Widget::_getFocusListeners()
+	_ZN3gcn6Widget18_getFocusListenersEv @ 350
+;	gcn::Widget::_getMouseListeners()
+	_ZN3gcn6Widget18_getMouseListenersEv @ 351
+;	gcn::Widget::setBackgroundColor(gcn::Color const&)
+	_ZN3gcn6Widget18setBackgroundColorERKNS_5ColorE @ 352
+;	gcn::Widget::setForegroundColor(gcn::Color const&)
+	_ZN3gcn6Widget18setForegroundColorERKNS_5ColorE @ 353
+;	gcn::Widget::removeDeathListener(gcn::DeathListener*)
+	_ZN3gcn6Widget19removeDeathListenerEPNS_13DeathListenerE @ 354
+;	gcn::Widget::removeFocusListener(gcn::FocusListener*)
+	_ZN3gcn6Widget19removeFocusListenerEPNS_13FocusListenerE @ 355
+;	gcn::Widget::removeMouseListener(gcn::MouseListener*)
+	_ZN3gcn6Widget19removeMouseListenerEPNS_13MouseListenerE @ 356
+;	gcn::Widget::requestMoveToBottom()
+	_ZN3gcn6Widget19requestMoveToBottomEv @ 357
+;	gcn::Widget::removeActionListener(gcn::ActionListener*)
+	_ZN3gcn6Widget20removeActionListenerEPNS_14ActionListenerE @ 358
+;	gcn::Widget::setInternalFocusHandler(gcn::FocusHandler*)
+	_ZN3gcn6Widget23setInternalFocusHandlerEPNS_12FocusHandlerE @ 359
+;	gcn::Widget::_getInternalFocusHandler()
+	_ZN3gcn6Widget24_getInternalFocusHandlerEv @ 360
+;	gcn::Widget::releaseModalMouseInputFocus()
+	_ZN3gcn6Widget27releaseModalMouseInputFocusEv @ 361
+;	gcn::Widget::requestModalMouseInputFocus()
+	_ZN3gcn6Widget27requestModalMouseInputFocusEv @ 362
+;	gcn::Widget::setX(int)
+	_ZN3gcn6Widget4setXEi @ 363
+;	gcn::Widget::setY(int)
+	_ZN3gcn6Widget4setYEi @ 364
+;	gcn::Widget::logic()
+	_ZN3gcn6Widget5logicEv @ 365
+;	gcn::Widget::setFont(gcn::Font*)
+	_ZN3gcn6Widget7setFontEPNS_4FontE @ 366
+;	gcn::Widget::setSize(int, int)
+	_ZN3gcn6Widget7setSizeEii @ 367
+;	gcn::Widget::mWidgets
+	_ZN3gcn6Widget8mWidgetsE @ 368 DATA
+;	gcn::Widget::setWidth(int)
+	_ZN3gcn6Widget8setWidthEi @ 369
+;	gcn::Widget::focusNext()
+	_ZN3gcn6Widget9focusNextEv @ 370
+;	gcn::Widget::moveToTop(gcn::Widget*)
+	_ZN3gcn6Widget9moveToTopEPS0_ @ 371
+;	gcn::Widget::setHeight(int)
+	_ZN3gcn6Widget9setHeightEi @ 372
+;	gcn::Widget::Widget()
+	_ZN3gcn6WidgetC1Ev @ 373
+;	gcn::Widget::Widget()
+	_ZN3gcn6WidgetC2Ev @ 374
+;	gcn::Widget::~Widget()
+	_ZN3gcn6WidgetD0Ev @ 375
+;	gcn::Widget::~Widget()
+	_ZN3gcn6WidgetD1Ev @ 376
+;	gcn::Widget::~Widget()
+	_ZN3gcn6WidgetD2Ev @ 377
+;	gcn::Window::drawBorder(gcn::Graphics*)
+	_ZN3gcn6Window10drawBorderEPNS_8GraphicsE @ 378
+;	gcn::Window::setCaption(std::string const&)
+	_ZN3gcn6Window10setCaptionERKSs @ 379
+;	gcn::Window::setMovable(bool)
+	_ZN3gcn6Window10setMovableEb @ 380
+;	gcn::Window::setPadding(unsigned int)
+	_ZN3gcn6Window10setPaddingEj @ 381
+;	gcn::Window::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn6Window12mouseDraggedERNS_10MouseEventE @ 382
+;	gcn::Window::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn6Window12mousePressedERNS_10MouseEventE @ 383
+;	gcn::Window::setAlignment(unsigned int)
+	_ZN3gcn6Window12setAlignmentEj @ 384
+;	gcn::Window::getChildrenArea()
+	_ZN3gcn6Window15getChildrenAreaEv @ 385
+;	gcn::Window::resizeToContent()
+	_ZN3gcn6Window15resizeToContentEv @ 386
+;	gcn::Window::getTitleBarHeight()
+	_ZN3gcn6Window17getTitleBarHeightEv @ 387
+;	gcn::Window::setTitleBarHeight(unsigned int)
+	_ZN3gcn6Window17setTitleBarHeightEj @ 388
+;	gcn::Window::draw(gcn::Graphics*)
+	_ZN3gcn6Window4drawEPNS_8GraphicsE @ 389
+;	gcn::Window::isOpaque()
+	_ZN3gcn6Window8isOpaqueEv @ 390
+;	gcn::Window::setOpaque(bool)
+	_ZN3gcn6Window9setOpaqueEb @ 391
+;	gcn::Window::Window(std::string const&)
+	_ZN3gcn6WindowC1ERKSs @ 392
+;	gcn::Window::Window()
+	_ZN3gcn6WindowC1Ev @ 393
+;	gcn::Window::Window(std::string const&)
+	_ZN3gcn6WindowC2ERKSs @ 394
+;	gcn::Window::Window()
+	_ZN3gcn6WindowC2Ev @ 395
+;	gcn::Window::~Window()
+	_ZN3gcn6WindowD0Ev @ 396
+;	gcn::Window::~Window()
+	_ZN3gcn6WindowD1Ev @ 397
+;	gcn::Window::~Window()
+	_ZN3gcn6WindowD2Ev @ 398
+;	gcn::ListBox::adjustSize()
+	_ZN3gcn7ListBox10adjustSizeEv @ 399
+;	gcn::ListBox::drawBorder(gcn::Graphics*)
+	_ZN3gcn7ListBox10drawBorderEPNS_8GraphicsE @ 400
+;	gcn::ListBox::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn7ListBox10keyPressedERNS_8KeyEventE @ 401
+;	gcn::ListBox::getSelected()
+	_ZN3gcn7ListBox11getSelectedEv @ 402
+;	gcn::ListBox::setSelected(int)
+	_ZN3gcn7ListBox11setSelectedEi @ 403
+;	gcn::ListBox::getListModel()
+	_ZN3gcn7ListBox12getListModelEv @ 404
+;	gcn::ListBox::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn7ListBox12mouseDraggedERNS_10MouseEventE @ 405
+;	gcn::ListBox::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn7ListBox12mousePressedERNS_10MouseEventE @ 406
+;	gcn::ListBox::setListModel(gcn::ListModel*)
+	_ZN3gcn7ListBox12setListModelEPNS_9ListModelE @ 407
+;	gcn::ListBox::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZN3gcn7ListBox17mouseWheelMovedUpERNS_10MouseEventE @ 408
+;	gcn::ListBox::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZN3gcn7ListBox19mouseWheelMovedDownERNS_10MouseEventE @ 409
+;	gcn::ListBox::isWrappingKeyboardSelection()
+	_ZN3gcn7ListBox27isWrappingKeyboardSelectionEv @ 410
+;	gcn::ListBox::setWrappingKeyboardSelection(bool)
+	_ZN3gcn7ListBox28setWrappingKeyboardSelectionEb @ 411
+;	gcn::ListBox::draw(gcn::Graphics*)
+	_ZN3gcn7ListBox4drawEPNS_8GraphicsE @ 412
+;	gcn::ListBox::logic()
+	_ZN3gcn7ListBox5logicEv @ 413
+;	gcn::ListBox::ListBox(gcn::ListModel*)
+	_ZN3gcn7ListBoxC1EPNS_9ListModelE @ 414
+;	gcn::ListBox::ListBox()
+	_ZN3gcn7ListBoxC1Ev @ 415
+;	gcn::ListBox::ListBox(gcn::ListModel*)
+	_ZN3gcn7ListBoxC2EPNS_9ListModelE @ 416
+;	gcn::ListBox::ListBox()
+	_ZN3gcn7ListBoxC2Ev @ 417
+;	gcn::ListBox::~ListBox()
+	_ZN3gcn7ListBoxD0Ev @ 418
+;	gcn::ListBox::~ListBox()
+	_ZN3gcn7ListBoxD1Ev @ 419
+;	gcn::TextBox::adjustSize()
+	_ZN3gcn7TextBox10adjustSizeEv @ 420
+;	gcn::TextBox::drawBorder(gcn::Graphics*)
+	_ZN3gcn7TextBox10drawBorderEPNS_8GraphicsE @ 421
+;	gcn::TextBox::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn7TextBox10keyPressedERNS_8KeyEventE @ 422
+;	gcn::TextBox::setTextRow(int, std::string const&)
+	_ZN3gcn7TextBox10setTextRowEiRKSs @ 423
+;	gcn::TextBox::fontChanged()
+	_ZN3gcn7TextBox11fontChangedEv @ 424
+;	gcn::TextBox::setCaretRow(int)
+	_ZN3gcn7TextBox11setCaretRowEi @ 425
+;	gcn::TextBox::setEditable(bool)
+	_ZN3gcn7TextBox11setEditableEb @ 426
+;	gcn::TextBox::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn7TextBox12mouseDraggedERNS_10MouseEventE @ 427
+;	gcn::TextBox::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn7TextBox12mousePressedERNS_10MouseEventE @ 428
+;	gcn::TextBox::scrollToCaret()
+	_ZN3gcn7TextBox13scrollToCaretEv @ 429
+;	gcn::TextBox::setCaretColumn(int)
+	_ZN3gcn7TextBox14setCaretColumnEi @ 430
+;	gcn::TextBox::setCaretPosition(unsigned int)
+	_ZN3gcn7TextBox16setCaretPositionEj @ 431
+;	gcn::TextBox::setCaretRowColumn(int, int)
+	_ZN3gcn7TextBox17setCaretRowColumnEii @ 432
+;	gcn::TextBox::draw(gcn::Graphics*)
+	_ZN3gcn7TextBox4drawEPNS_8GraphicsE @ 433
+;	gcn::TextBox::addRow(std::string)
+	_ZN3gcn7TextBox6addRowESs @ 434
+;	gcn::TextBox::setText(std::string const&)
+	_ZN3gcn7TextBox7setTextERKSs @ 435
+;	gcn::TextBox::isOpaque()
+	_ZN3gcn7TextBox8isOpaqueEv @ 436
+;	gcn::TextBox::drawCaret(gcn::Graphics*, int, int)
+	_ZN3gcn7TextBox9drawCaretEPNS_8GraphicsEii @ 437
+;	gcn::TextBox::setOpaque(bool)
+	_ZN3gcn7TextBox9setOpaqueEb @ 438
+;	gcn::TextBox::TextBox(std::string const&)
+	_ZN3gcn7TextBoxC1ERKSs @ 439
+;	gcn::TextBox::TextBox()
+	_ZN3gcn7TextBoxC1Ev @ 440
+;	gcn::TextBox::TextBox(std::string const&)
+	_ZN3gcn7TextBoxC2ERKSs @ 441
+;	gcn::TextBox::TextBox()
+	_ZN3gcn7TextBoxC2Ev @ 442
+;	gcn::CheckBox::adjustSize()
+	_ZN3gcn8CheckBox10adjustSizeEv @ 443
+;	gcn::CheckBox::drawBorder(gcn::Graphics*)
+	_ZN3gcn8CheckBox10drawBorderEPNS_8GraphicsE @ 444
+;	gcn::CheckBox::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn8CheckBox10keyPressedERNS_8KeyEventE @ 445
+;	gcn::CheckBox::setCaption(std::string const&)
+	_ZN3gcn8CheckBox10setCaptionERKSs @ 446
+;	gcn::CheckBox::mouseClicked(gcn::MouseEvent&)
+	_ZN3gcn8CheckBox12mouseClickedERNS_10MouseEventE @ 447
+;	gcn::CheckBox::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn8CheckBox12mouseDraggedERNS_10MouseEventE @ 448
+;	gcn::CheckBox::draw(gcn::Graphics*)
+	_ZN3gcn8CheckBox4drawEPNS_8GraphicsE @ 449
+;	gcn::CheckBox::toggle()
+	_ZN3gcn8CheckBox6toggleEv @ 450
+;	gcn::CheckBox::drawBox(gcn::Graphics*)
+	_ZN3gcn8CheckBox7drawBoxEPNS_8GraphicsE @ 451
+;	gcn::CheckBox::setMarked(bool)
+	_ZN3gcn8CheckBox9setMarkedEb @ 452
+;	gcn::CheckBox::CheckBox(std::string const&, bool)
+	_ZN3gcn8CheckBoxC1ERKSsb @ 453
+;	gcn::CheckBox::CheckBox()
+	_ZN3gcn8CheckBoxC1Ev @ 454
+;	gcn::CheckBox::CheckBox(std::string const&, bool)
+	_ZN3gcn8CheckBoxC2ERKSsb @ 455
+;	gcn::CheckBox::CheckBox()
+	_ZN3gcn8CheckBoxC2Ev @ 456
+;	gcn::CheckBox::~CheckBox()
+	_ZN3gcn8CheckBoxD0Ev @ 457
+;	gcn::CheckBox::~CheckBox()
+	_ZN3gcn8CheckBoxD1Ev @ 458
+;	gcn::DropDown::drawBorder(gcn::Graphics*)
+	_ZN3gcn8DropDown10drawBorderEPNS_8GraphicsE @ 459
+;	gcn::DropDown::drawButton(gcn::Graphics*)
+	_ZN3gcn8DropDown10drawButtonEPNS_8GraphicsE @ 460
+;	gcn::DropDown::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn8DropDown10keyPressedERNS_8KeyEventE @ 461
+;	gcn::DropDown::getSelected()
+	_ZN3gcn8DropDown11getSelectedEv @ 462
+;	gcn::DropDown::setSelected(int)
+	_ZN3gcn8DropDown11setSelectedEi @ 463
+;	gcn::DropDown::adjustHeight()
+	_ZN3gcn8DropDown12adjustHeightEv @ 464
+;	gcn::DropDown::getListModel()
+	_ZN3gcn8DropDown12getListModelEv @ 465
+;	gcn::DropDown::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn8DropDown12mouseDraggedERNS_10MouseEventE @ 466
+;	gcn::DropDown::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn8DropDown12mousePressedERNS_10MouseEventE @ 467
+;	gcn::DropDown::setBaseColor(gcn::Color const&)
+	_ZN3gcn8DropDown12setBaseColorERKNS_5ColorE @ 468
+;	gcn::DropDown::setListModel(gcn::ListModel*)
+	_ZN3gcn8DropDown12setListModelEPNS_9ListModelE @ 469
+;	gcn::DropDown::mouseReleased(gcn::MouseEvent&)
+	_ZN3gcn8DropDown13mouseReleasedERNS_10MouseEventE @ 470
+;	gcn::DropDown::getChildrenArea()
+	_ZN3gcn8DropDown15getChildrenAreaEv @ 471
+;	gcn::DropDown::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZN3gcn8DropDown17mouseWheelMovedUpERNS_10MouseEventE @ 472
+;	gcn::DropDown::setBackgroundColor(gcn::Color const&)
+	_ZN3gcn8DropDown18setBackgroundColorERKNS_5ColorE @ 473
+;	gcn::DropDown::setForegroundColor(gcn::Color const&)
+	_ZN3gcn8DropDown18setForegroundColorERKNS_5ColorE @ 474
+;	gcn::DropDown::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZN3gcn8DropDown19mouseWheelMovedDownERNS_10MouseEventE @ 475
+;	gcn::DropDown::draw(gcn::Graphics*)
+	_ZN3gcn8DropDown4drawEPNS_8GraphicsE @ 476
+;	gcn::DropDown::death(gcn::Event const&)
+	_ZN3gcn8DropDown5deathERKNS_5EventE @ 477
+;	gcn::DropDown::action(gcn::ActionEvent const&)
+	_ZN3gcn8DropDown6actionERKNS_11ActionEventE @ 478
+;	gcn::DropDown::foldUp()
+	_ZN3gcn8DropDown6foldUpEv @ 479
+;	gcn::DropDown::setFont(gcn::Font*)
+	_ZN3gcn8DropDown7setFontEPNS_4FontE @ 480
+;	gcn::DropDown::dropDown()
+	_ZN3gcn8DropDown8dropDownEv @ 481
+;	gcn::DropDown::focusLost(gcn::Event const&)
+	_ZN3gcn8DropDown9focusLostERKNS_5EventE @ 482
+;	gcn::DropDown::DropDown(gcn::ListModel*, gcn::ScrollArea*, gcn::ListBox*)
+	_ZN3gcn8DropDownC1EPNS_9ListModelEPNS_10ScrollAreaEPNS_7ListBoxE @ 483
+;	gcn::DropDown::DropDown(gcn::ListModel*, gcn::ScrollArea*, gcn::ListBox*)
+	_ZN3gcn8DropDownC2EPNS_9ListModelEPNS_10ScrollAreaEPNS_7ListBoxE @ 484
+;	gcn::DropDown::~DropDown()
+	_ZN3gcn8DropDownD0Ev @ 485
+;	gcn::DropDown::~DropDown()
+	_ZN3gcn8DropDownD1Ev @ 486
+;	gcn::DropDown::~DropDown()
+	_ZN3gcn8DropDownD2Ev @ 487
+;	gcn::Graphics::_beginDraw()
+	_ZN3gcn8Graphics10_beginDrawEv @ 488
+;	gcn::Graphics::popClipArea()
+	_ZN3gcn8Graphics11popClipAreaEv @ 489
+;	gcn::Graphics::pushClipArea(gcn::Rectangle)
+	_ZN3gcn8Graphics12pushClipAreaENS_9RectangleE @ 490
+;	gcn::Graphics::getCurrentClipArea()
+	_ZN3gcn8Graphics18getCurrentClipAreaEv @ 491
+;	gcn::Graphics::setFont(gcn::Font*)
+	_ZN3gcn8Graphics7setFontEPNS_4FontE @ 492
+;	gcn::Graphics::_endDraw()
+	_ZN3gcn8Graphics8_endDrawEv @ 493
+;	gcn::Graphics::drawText(std::string const&, int, int, unsigned int)
+	_ZN3gcn8Graphics8drawTextERKSsiij @ 494
+;	gcn::Graphics::drawImage(gcn::Image const*, int, int)
+	_ZN3gcn8Graphics9drawImageEPKNS_5ImageEii @ 495
+;	gcn::Graphics::Graphics()
+	_ZN3gcn8GraphicsC1Ev @ 496
+;	gcn::Graphics::Graphics()
+	_ZN3gcn8GraphicsC2Ev @ 497
+;	gcn::Graphics::~Graphics()
+	_ZN3gcn8GraphicsD0Ev @ 498
+;	gcn::Graphics::~Graphics()
+	_ZN3gcn8GraphicsD1Ev @ 499
+;	gcn::KeyEvent::KeyEvent(gcn::Widget*, bool, bool, bool, bool, unsigned int, bool, gcn::Key const&)
+	_ZN3gcn8KeyEventC1EPNS_6WidgetEbbbbjbRKNS_3KeyE @ 500
+;	gcn::KeyEvent::KeyEvent(gcn::Widget*, bool, bool, bool, bool, unsigned int, bool, gcn::Key const&)
+	_ZN3gcn8KeyEventC2EPNS_6WidgetEbbbbjbRKNS_3KeyE @ 501
+;	gcn::KeyEvent::~KeyEvent()
+	_ZN3gcn8KeyEventD0Ev @ 502
+;	gcn::KeyEvent::~KeyEvent()
+	_ZN3gcn8KeyEventD1Ev @ 503
+;	gcn::KeyEvent::~KeyEvent()
+	_ZN3gcn8KeyEventD2Ev @ 504
+;	gcn::KeyInput::setAltPressed(bool)
+	_ZN3gcn8KeyInput13setAltPressedEb @ 505
+;	gcn::KeyInput::setNumericPad(bool)
+	_ZN3gcn8KeyInput13setNumericPadEb @ 506
+;	gcn::KeyInput::setMetaPressed(bool)
+	_ZN3gcn8KeyInput14setMetaPressedEb @ 507
+;	gcn::KeyInput::setShiftPressed(bool)
+	_ZN3gcn8KeyInput15setShiftPressedEb @ 508
+;	gcn::KeyInput::setControlPressed(bool)
+	_ZN3gcn8KeyInput17setControlPressedEb @ 509
+;	gcn::KeyInput::setKey(gcn::Key const&)
+	_ZN3gcn8KeyInput6setKeyERKNS_3KeyE @ 510
+;	gcn::KeyInput::setType(int)
+	_ZN3gcn8KeyInput7setTypeEi @ 511
+;	gcn::KeyInput::KeyInput(gcn::Key const&, int)
+	_ZN3gcn8KeyInputC1ERKNS_3KeyEi @ 512
+;	gcn::KeyInput::KeyInput()
+	_ZN3gcn8KeyInputC1Ev @ 513
+;	gcn::KeyInput::KeyInput(gcn::Key const&, int)
+	_ZN3gcn8KeyInputC2ERKNS_3KeyEi @ 514
+;	gcn::Container::drawBorder(gcn::Graphics*)
+	_ZN3gcn9Container10drawBorderEPNS_8GraphicsE @ 515
+;	gcn::Container::add(gcn::Widget*)
+	_ZN3gcn9Container3addEPNS_6WidgetE @ 516
+;	gcn::Container::add(gcn::Widget*, int, int)
+	_ZN3gcn9Container3addEPNS_6WidgetEii @ 517
+;	gcn::Container::draw(gcn::Graphics*)
+	_ZN3gcn9Container4drawEPNS_8GraphicsE @ 518
+;	gcn::Container::clear()
+	_ZN3gcn9Container5clearEv @ 519
+;	gcn::Container::remove(gcn::Widget*)
+	_ZN3gcn9Container6removeEPNS_6WidgetE @ 520
+;	gcn::Container::setOpaque(bool)
+	_ZN3gcn9Container9setOpaqueEb @ 521
+;	gcn::Container::Container()
+	_ZN3gcn9ContainerC1Ev @ 522
+;	gcn::Container::Container()
+	_ZN3gcn9ContainerC2Ev @ 523
+;	gcn::Container::~Container()
+	_ZN3gcn9ContainerD0Ev @ 524
+;	gcn::Container::~Container()
+	_ZN3gcn9ContainerD1Ev @ 525
+;	gcn::Container::~Container()
+	_ZN3gcn9ContainerD2Ev @ 526
+;	gcn::Exception::Exception(std::string const&)
+	_ZN3gcn9ExceptionC1ERKSs @ 527
+;	gcn::Exception::Exception(std::string const&, std::string const&, std::string const&, int)
+	_ZN3gcn9ExceptionC1ERKSsS2_S2_i @ 528
+;	gcn::Exception::Exception()
+	_ZN3gcn9ExceptionC1Ev @ 529
+;	gcn::Exception::Exception(std::string const&)
+	_ZN3gcn9ExceptionC2ERKSs @ 530
+;	gcn::Exception::Exception(std::string const&, std::string const&, std::string const&, int)
+	_ZN3gcn9ExceptionC2ERKSsS2_S2_i @ 531
+;	gcn::Exception::Exception()
+	_ZN3gcn9ExceptionC2Ev @ 532
+;	gcn::ImageFont::drawString(gcn::Graphics*, std::string const&, int, int)
+	_ZN3gcn9ImageFont10drawStringEPNS_8GraphicsERKSsii @ 533
+;	gcn::ImageFont::getRowSpacing()
+	_ZN3gcn9ImageFont13getRowSpacingEv @ 534
+;	gcn::ImageFont::setRowSpacing(int)
+	_ZN3gcn9ImageFont13setRowSpacingEi @ 535
+;	gcn::ImageFont::getGlyphSpacing()
+	_ZN3gcn9ImageFont15getGlyphSpacingEv @ 536
+;	gcn::ImageFont::setGlyphSpacing(int)
+	_ZN3gcn9ImageFont15setGlyphSpacingEi @ 537
+;	gcn::ImageFont::getStringIndexAt(std::string const&, int)
+	_ZN3gcn9ImageFont16getStringIndexAtERKSsi @ 538
+;	gcn::ImageFont::addGlyph(unsigned char, int&, int&, gcn::Color const&)
+	_ZN3gcn9ImageFont8addGlyphEhRiS1_RKNS_5ColorE @ 539
+;	gcn::ImageFont::drawGlyph(gcn::Graphics*, unsigned char, int, int)
+	_ZN3gcn9ImageFont9drawGlyphEPNS_8GraphicsEhii @ 540
+;	gcn::ImageFont::ImageFont(std::string const&, std::string const&)
+	_ZN3gcn9ImageFontC1ERKSsS2_ @ 541
+;	gcn::ImageFont::ImageFont(std::string const&, unsigned char, unsigned char)
+	_ZN3gcn9ImageFontC1ERKSshh @ 542
+;	gcn::ImageFont::ImageFont(std::string const&, std::string const&)
+	_ZN3gcn9ImageFontC2ERKSsS2_ @ 543
+;	gcn::ImageFont::ImageFont(std::string const&, unsigned char, unsigned char)
+	_ZN3gcn9ImageFontC2ERKSshh @ 544
+;	gcn::ImageFont::~ImageFont()
+	_ZN3gcn9ImageFontD0Ev @ 545
+;	gcn::ImageFont::~ImageFont()
+	_ZN3gcn9ImageFontD1Ev @ 546
+;	gcn::ImageFont::~ImageFont()
+	_ZN3gcn9ImageFontD2Ev @ 547
+;	gcn::Rectangle::setAll(int, int, int, int)
+	_ZN3gcn9Rectangle6setAllEiiii @ 548
+;	gcn::Rectangle::intersect(gcn::Rectangle const&)
+	_ZN3gcn9Rectangle9intersectERKS0_ @ 549
+;	gcn::Rectangle::Rectangle(int, int, int, int)
+	_ZN3gcn9RectangleC1Eiiii @ 550
+;	gcn::Rectangle::Rectangle()
+	_ZN3gcn9RectangleC1Ev @ 551
+;	gcn::Rectangle::Rectangle(int, int, int, int)
+	_ZN3gcn9RectangleC2Eiiii @ 552
+;	gcn::Rectangle::Rectangle()
+	_ZN3gcn9RectangleC2Ev @ 553
+;	gcn::TextField::adjustSize()
+	_ZN3gcn9TextField10adjustSizeEv @ 554
+;	gcn::TextField::drawBorder(gcn::Graphics*)
+	_ZN3gcn9TextField10drawBorderEPNS_8GraphicsE @ 555
+;	gcn::TextField::keyPressed(gcn::KeyEvent&)
+	_ZN3gcn9TextField10keyPressedERNS_8KeyEventE @ 556
+;	gcn::TextField::fontChanged()
+	_ZN3gcn9TextField11fontChangedEv @ 557
+;	gcn::TextField::adjustHeight()
+	_ZN3gcn9TextField12adjustHeightEv @ 558
+;	gcn::TextField::mouseDragged(gcn::MouseEvent&)
+	_ZN3gcn9TextField12mouseDraggedERNS_10MouseEventE @ 559
+;	gcn::TextField::mousePressed(gcn::MouseEvent&)
+	_ZN3gcn9TextField12mousePressedERNS_10MouseEventE @ 560
+;	gcn::TextField::setCaretPosition(unsigned int)
+	_ZN3gcn9TextField16setCaretPositionEj @ 561
+;	gcn::TextField::draw(gcn::Graphics*)
+	_ZN3gcn9TextField4drawEPNS_8GraphicsE @ 562
+;	gcn::TextField::setText(std::string const&)
+	_ZN3gcn9TextField7setTextERKSs @ 563
+;	gcn::TextField::drawCaret(gcn::Graphics*, int)
+	_ZN3gcn9TextField9drawCaretEPNS_8GraphicsEi @ 564
+;	gcn::TextField::fixScroll()
+	_ZN3gcn9TextField9fixScrollEv @ 565
+;	gcn::TextField::TextField(std::string const&)
+	_ZN3gcn9TextFieldC1ERKSs @ 566
+;	gcn::TextField::TextField()
+	_ZN3gcn9TextFieldC1Ev @ 567
+;	gcn::TextField::TextField(std::string const&)
+	_ZN3gcn9TextFieldC2ERKSs @ 568
+;	gcn::TextField::TextField()
+	_ZN3gcn9TextFieldC2Ev @ 569
+;	gcn::InputEvent::isConsumed() const
+	_ZNK3gcn10InputEvent10isConsumedEv @ 570
+;	gcn::InputEvent::isAltPressed() const
+	_ZNK3gcn10InputEvent12isAltPressedEv @ 571
+;	gcn::InputEvent::isMetaPressed() const
+	_ZNK3gcn10InputEvent13isMetaPressedEv @ 572
+;	gcn::InputEvent::isShiftPressed() const
+	_ZNK3gcn10InputEvent14isShiftPressedEv @ 573
+;	gcn::InputEvent::isControlPressed() const
+	_ZNK3gcn10InputEvent16isControlPressedEv @ 574
+;	gcn::MouseEvent::getClickCount() const
+	_ZNK3gcn10MouseEvent13getClickCountEv @ 575
+;	gcn::MouseEvent::getX() const
+	_ZNK3gcn10MouseEvent4getXEv @ 576
+;	gcn::MouseEvent::getY() const
+	_ZNK3gcn10MouseEvent4getYEv @ 577
+;	gcn::MouseEvent::getType() const
+	_ZNK3gcn10MouseEvent7getTypeEv @ 578
+;	gcn::MouseEvent::getButton() const
+	_ZNK3gcn10MouseEvent9getButtonEv @ 579
+;	gcn::MouseInput::getTimeStamp() const
+	_ZNK3gcn10MouseInput12getTimeStampEv @ 580
+;	gcn::MouseInput::getX() const
+	_ZNK3gcn10MouseInput4getXEv @ 581
+;	gcn::MouseInput::getY() const
+	_ZNK3gcn10MouseInput4getYEv @ 582
+;	gcn::MouseInput::getType() const
+	_ZNK3gcn10MouseInput7getTypeEv @ 583
+;	gcn::MouseInput::getButton() const
+	_ZNK3gcn10MouseInput9getButtonEv @ 584
+;	gcn::ActionEvent::getId() const
+	_ZNK3gcn11ActionEvent5getIdEv @ 585
+;	gcn::DefaultFont::getWidth(std::string const&) const
+	_ZNK3gcn11DefaultFont8getWidthERKSs @ 586
+;	gcn::DefaultFont::getHeight() const
+	_ZNK3gcn11DefaultFont9getHeightEv @ 587
+;	gcn::RadioButton::getCaption() const
+	_ZNK3gcn11RadioButton10getCaptionEv @ 588
+;	gcn::RadioButton::getGroup() const
+	_ZNK3gcn11RadioButton8getGroupEv @ 589
+;	gcn::RadioButton::isMarked() const
+	_ZNK3gcn11RadioButton8isMarkedEv @ 590
+;	gcn::FocusHandler::getFocused() const
+	_ZNK3gcn12FocusHandler10getFocusedEv @ 591
+;	gcn::FocusHandler::getModalFocused() const
+	_ZNK3gcn12FocusHandler15getModalFocusedEv @ 592
+;	gcn::FocusHandler::getModalMouseInputFocused() const
+	_ZNK3gcn12FocusHandler25getModalMouseInputFocusedEv @ 593
+;	gcn::FocusHandler::isFocused(gcn::Widget const*) const
+	_ZNK3gcn12FocusHandler9isFocusedEPKNS_6WidgetE @ 594
+;	gcn::Gui::getGraphics() const
+	_ZNK3gcn3Gui11getGraphicsEv @ 595
+;	gcn::Gui::getTop() const
+	_ZNK3gcn3Gui6getTopEv @ 596
+;	gcn::Gui::getInput() const
+	_ZNK3gcn3Gui8getInputEv @ 597
+;	gcn::Key::isCharacter() const
+	_ZNK3gcn3Key11isCharacterEv @ 598
+;	gcn::Key::getValue() const
+	_ZNK3gcn3Key8getValueEv @ 599
+;	gcn::Key::isLetter() const
+	_ZNK3gcn3Key8isLetterEv @ 600
+;	gcn::Key::isNumber() const
+	_ZNK3gcn3Key8isNumberEv @ 601
+;	gcn::Font::getStringIndexAt(std::string const&, int) const
+	_ZNK3gcn4Font16getStringIndexAtERKSsi @ 602
+;	gcn::Color::operator==(gcn::Color const&) const
+	_ZNK3gcn5ColoreqERKS0_ @ 603
+;	gcn::Color::operator-(gcn::Color const&) const
+	_ZNK3gcn5ColormiERKS0_ @ 604
+;	gcn::Color::operator*(float) const
+	_ZNK3gcn5ColormlEf @ 605
+;	gcn::Color::operator!=(gcn::Color const&) const
+	_ZNK3gcn5ColorneERKS0_ @ 606
+;	gcn::Color::operator+(gcn::Color const&) const
+	_ZNK3gcn5ColorplERKS0_ @ 607
+;	gcn::Event::getSource() const
+	_ZNK3gcn5Event9getSourceEv @ 608
+;	gcn::Label::getCaption() const
+	_ZNK3gcn5Label10getCaptionEv @ 609
+;	gcn::Button::getCaption() const
+	_ZNK3gcn6Button10getCaptionEv @ 610
+;	gcn::Button::getAlignment() const
+	_ZNK3gcn6Button12getAlignmentEv @ 611
+;	gcn::Button::isPressed() const
+	_ZNK3gcn6Button9isPressedEv @ 612
+;	gcn::Slider::getScaleEnd() const
+	_ZNK3gcn6Slider11getScaleEndEv @ 613
+;	gcn::Slider::getScaleStart() const
+	_ZNK3gcn6Slider13getScaleStartEv @ 614
+;	gcn::Slider::getStepLength() const
+	_ZNK3gcn6Slider13getStepLengthEv @ 615
+;	gcn::Slider::getOrientation() const
+	_ZNK3gcn6Slider14getOrientationEv @ 616
+;	gcn::Slider::getMarkerLength() const
+	_ZNK3gcn6Slider15getMarkerLengthEv @ 617
+;	gcn::Slider::getMarkerPosition() const
+	_ZNK3gcn6Slider17getMarkerPositionEv @ 618
+;	gcn::Slider::markerPositionToValue(int) const
+	_ZNK3gcn6Slider21markerPositionToValueEi @ 619
+;	gcn::Slider::valueToMarkerPosition(double) const
+	_ZNK3gcn6Slider21valueToMarkerPositionEd @ 620
+;	gcn::Slider::getValue() const
+	_ZNK3gcn6Slider8getValueEv @ 621
+;	gcn::Widget::isFocusable() const
+	_ZNK3gcn6Widget11isFocusableEv @ 622
+;	gcn::Widget::getBaseColor() const
+	_ZNK3gcn6Widget12getBaseColorEv @ 623
+;	gcn::Widget::getDimension() const
+	_ZNK3gcn6Widget12getDimensionEv @ 624
+;	gcn::Widget::getBorderSize() const
+	_ZNK3gcn6Widget13getBorderSizeEv @ 625
+;	gcn::Widget::hasModalFocus() const
+	_ZNK3gcn6Widget13hasModalFocusEv @ 626
+;	gcn::Widget::isTabInEnabled() const
+	_ZNK3gcn6Widget14isTabInEnabledEv @ 627
+;	gcn::Widget::isTabOutEnabled() const
+	_ZNK3gcn6Widget15isTabOutEnabledEv @ 628
+;	gcn::Widget::getActionEventId() const
+	_ZNK3gcn6Widget16getActionEventIdEv @ 629
+;	gcn::Widget::getSelectionColor() const
+	_ZNK3gcn6Widget17getSelectionColorEv @ 630
+;	gcn::Widget::getBackgroundColor() const
+	_ZNK3gcn6Widget18getBackgroundColorEv @ 631
+;	gcn::Widget::getForegroundColor() const
+	_ZNK3gcn6Widget18getForegroundColorEv @ 632
+;	gcn::Widget::getAbsolutePosition(int&, int&) const
+	_ZNK3gcn6Widget19getAbsolutePositionERiS1_ @ 633
+;	gcn::Widget::hasModalMouseInputFocus() const
+	_ZNK3gcn6Widget23hasModalMouseInputFocusEv @ 634
+;	gcn::Widget::getX() const
+	_ZNK3gcn6Widget4getXEv @ 635
+;	gcn::Widget::getY() const
+	_ZNK3gcn6Widget4getYEv @ 636
+;	gcn::Widget::getFont() const
+	_ZNK3gcn6Widget7getFontEv @ 637
+;	gcn::Widget::getWidth() const
+	_ZNK3gcn6Widget8getWidthEv @ 638
+;	gcn::Widget::getHeight() const
+	_ZNK3gcn6Widget9getHeightEv @ 639
+;	gcn::Widget::getParent() const
+	_ZNK3gcn6Widget9getParentEv @ 640
+;	gcn::Widget::isEnabled() const
+	_ZNK3gcn6Widget9isEnabledEv @ 641
+;	gcn::Widget::isFocused() const
+	_ZNK3gcn6Widget9isFocusedEv @ 642
+;	gcn::Widget::isVisible() const
+	_ZNK3gcn6Widget9isVisibleEv @ 643
+;	gcn::Window::getCaption() const
+	_ZNK3gcn6Window10getCaptionEv @ 644
+;	gcn::Window::getPadding() const
+	_ZNK3gcn6Window10getPaddingEv @ 645
+;	gcn::Window::getAlignment() const
+	_ZNK3gcn6Window12getAlignmentEv @ 646
+;	gcn::Window::isMovable() const
+	_ZNK3gcn6Window9isMovableEv @ 647
+;	gcn::TextBox::getTextRow(int) const
+	_ZNK3gcn7TextBox10getTextRowEi @ 648
+;	gcn::TextBox::isEditable() const
+	_ZNK3gcn7TextBox10isEditableEv @ 649
+;	gcn::TextBox::getCaretRow() const
+	_ZNK3gcn7TextBox11getCaretRowEv @ 650
+;	gcn::TextBox::getCaretColumn() const
+	_ZNK3gcn7TextBox14getCaretColumnEv @ 651
+;	gcn::TextBox::getNumberOfRows() const
+	_ZNK3gcn7TextBox15getNumberOfRowsEv @ 652
+;	gcn::TextBox::getCaretPosition() const
+	_ZNK3gcn7TextBox16getCaretPositionEv @ 653
+;	gcn::TextBox::getText() const
+	_ZNK3gcn7TextBox7getTextEv @ 654
+;	gcn::CheckBox::getCaption() const
+	_ZNK3gcn8CheckBox10getCaptionEv @ 655
+;	gcn::CheckBox::isMarked() const
+	_ZNK3gcn8CheckBox8isMarkedEv @ 656
+;	gcn::KeyEvent::isNumericPad() const
+	_ZNK3gcn8KeyEvent12isNumericPadEv @ 657
+;	gcn::KeyEvent::getKey() const
+	_ZNK3gcn8KeyEvent6getKeyEv @ 658
+;	gcn::KeyEvent::getType() const
+	_ZNK3gcn8KeyEvent7getTypeEv @ 659
+;	gcn::KeyInput::isAltPressed() const
+	_ZNK3gcn8KeyInput12isAltPressedEv @ 660
+;	gcn::KeyInput::isNumericPad() const
+	_ZNK3gcn8KeyInput12isNumericPadEv @ 661
+;	gcn::KeyInput::isMetaPressed() const
+	_ZNK3gcn8KeyInput13isMetaPressedEv @ 662
+;	gcn::KeyInput::isShiftPressed() const
+	_ZNK3gcn8KeyInput14isShiftPressedEv @ 663
+;	gcn::KeyInput::isControlPressed() const
+	_ZNK3gcn8KeyInput16isControlPressedEv @ 664
+;	gcn::KeyInput::getKey() const
+	_ZNK3gcn8KeyInput6getKeyEv @ 665
+;	gcn::KeyInput::getType() const
+	_ZNK3gcn8KeyInput7getTypeEv @ 666
+;	gcn::Container::isOpaque() const
+	_ZNK3gcn9Container8isOpaqueEv @ 667
+;	gcn::Exception::getMessage() const
+	_ZNK3gcn9Exception10getMessageEv @ 668
+;	gcn::Exception::getFilename() const
+	_ZNK3gcn9Exception11getFilenameEv @ 669
+;	gcn::Exception::getFunction() const
+	_ZNK3gcn9Exception11getFunctionEv @ 670
+;	gcn::Exception::getLine() const
+	_ZNK3gcn9Exception7getLineEv @ 671
+;	gcn::ImageFont::getWidth(std::string const&) const
+	_ZNK3gcn9ImageFont8getWidthERKSs @ 672
+;	gcn::ImageFont::getWidth(unsigned char) const
+	_ZNK3gcn9ImageFont8getWidthEh @ 673
+;	gcn::ImageFont::getHeight() const
+	_ZNK3gcn9ImageFont9getHeightEv @ 674
+;	gcn::Rectangle::isPointInRect(int, int) const
+	_ZNK3gcn9Rectangle13isPointInRectEii @ 675
+;	gcn::TextField::getCaretPosition() const
+	_ZNK3gcn9TextField16getCaretPositionEv @ 676
+;	gcn::TextField::getText() const
+	_ZNK3gcn9TextField7getTextEv @ 677
+;	vtable for gcn::InputEvent
+	_ZTVN3gcn10InputEventE @ 678 DATA
+;	vtable for gcn::MouseEvent
+	_ZTVN3gcn10MouseEventE @ 679 DATA
+;	vtable for gcn::ScrollArea
+	_ZTVN3gcn10ScrollAreaE @ 680 DATA
+;	vtable for gcn::ActionEvent
+	_ZTVN3gcn11ActionEventE @ 681 DATA
+;	vtable for gcn::DefaultFont
+	_ZTVN3gcn11DefaultFontE @ 682 DATA
+;	vtable for gcn::KeyListener
+	_ZTVN3gcn11KeyListenerE @ 683 DATA
+;	vtable for gcn::RadioButton
+	_ZTVN3gcn11RadioButtonE @ 684 DATA
+;	vtable for gcn::FocusHandler
+	_ZTVN3gcn12FocusHandlerE @ 685 DATA
+;	vtable for gcn::GenericInput
+	_ZTVN3gcn12GenericInputE @ 686 DATA
+;	vtable for gcn::DeathListener
+	_ZTVN3gcn13DeathListenerE @ 687 DATA
+;	vtable for gcn::FocusListener
+	_ZTVN3gcn13FocusListenerE @ 688 DATA
+;	vtable for gcn::MouseListener
+	_ZTVN3gcn13MouseListenerE @ 689 DATA
+;	vtable for gcn::ActionListener
+	_ZTVN3gcn14ActionListenerE @ 690 DATA
+;	vtable for gcn::BasicContainer
+	_ZTVN3gcn14BasicContainerE @ 691 DATA
+;	vtable for gcn::Gui
+	_ZTVN3gcn3GuiE @ 692 DATA
+;	vtable for gcn::Font
+	_ZTVN3gcn4FontE @ 693 DATA
+;	vtable for gcn::Icon
+	_ZTVN3gcn4IconE @ 694 DATA
+;	vtable for gcn::Event
+	_ZTVN3gcn5EventE @ 695 DATA
+;	vtable for gcn::Image
+	_ZTVN3gcn5ImageE @ 696 DATA
+;	vtable for gcn::Input
+	_ZTVN3gcn5InputE @ 697 DATA
+;	vtable for gcn::Label
+	_ZTVN3gcn5LabelE @ 698 DATA
+;	vtable for gcn::Button
+	_ZTVN3gcn6ButtonE @ 699 DATA
+;	vtable for gcn::Slider
+	_ZTVN3gcn6SliderE @ 700 DATA
+;	vtable for gcn::Widget
+	_ZTVN3gcn6WidgetE @ 701 DATA
+;	vtable for gcn::Window
+	_ZTVN3gcn6WindowE @ 702 DATA
+;	vtable for gcn::ListBox
+	_ZTVN3gcn7ListBoxE @ 703 DATA
+;	vtable for gcn::TextBox
+	_ZTVN3gcn7TextBoxE @ 704 DATA
+;	vtable for gcn::CheckBox
+	_ZTVN3gcn8CheckBoxE @ 705 DATA
+;	vtable for gcn::DropDown
+	_ZTVN3gcn8DropDownE @ 706 DATA
+;	vtable for gcn::Graphics
+	_ZTVN3gcn8GraphicsE @ 707 DATA
+;	vtable for gcn::KeyEvent
+	_ZTVN3gcn8KeyEventE @ 708 DATA
+;	vtable for gcn::Container
+	_ZTVN3gcn9ContainerE @ 709 DATA
+;	vtable for gcn::ImageFont
+	_ZTVN3gcn9ImageFontE @ 710 DATA
+;	vtable for gcn::TextField
+	_ZTVN3gcn9TextFieldE @ 711 DATA
+;	non-virtual thunk to gcn::ScrollArea::~ScrollArea()
+	_ZThn156_N3gcn10ScrollAreaD0Ev @ 712
+;	non-virtual thunk to gcn::ScrollArea::~ScrollArea()
+	_ZThn156_N3gcn10ScrollAreaD1Ev @ 713
+;	non-virtual thunk to gcn::RadioButton::mouseClicked(gcn::MouseEvent&)
+	_ZThn156_N3gcn11RadioButton12mouseClickedERNS_10MouseEventE @ 714
+;	non-virtual thunk to gcn::RadioButton::mouseDragged(gcn::MouseEvent&)
+	_ZThn156_N3gcn11RadioButton12mouseDraggedERNS_10MouseEventE @ 715
+;	non-virtual thunk to gcn::RadioButton::~RadioButton()
+	_ZThn156_N3gcn11RadioButtonD0Ev @ 716
+;	non-virtual thunk to gcn::RadioButton::~RadioButton()
+	_ZThn156_N3gcn11RadioButtonD1Ev @ 717
+;	non-virtual thunk to gcn::BasicContainer::death(gcn::Event const&)
+	_ZThn156_N3gcn14BasicContainer5deathERKNS_5EventE @ 718
+;	non-virtual thunk to gcn::BasicContainer::~BasicContainer()
+	_ZThn156_N3gcn14BasicContainerD0Ev @ 719
+;	non-virtual thunk to gcn::BasicContainer::~BasicContainer()
+	_ZThn156_N3gcn14BasicContainerD1Ev @ 720
+;	non-virtual thunk to gcn::Button::mouseExited(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Button11mouseExitedERNS_10MouseEventE @ 721
+;	non-virtual thunk to gcn::Button::mouseDragged(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Button12mouseDraggedERNS_10MouseEventE @ 722
+;	non-virtual thunk to gcn::Button::mouseEntered(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Button12mouseEnteredERNS_10MouseEventE @ 723
+;	non-virtual thunk to gcn::Button::mousePressed(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Button12mousePressedERNS_10MouseEventE @ 724
+;	non-virtual thunk to gcn::Button::mouseReleased(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Button13mouseReleasedERNS_10MouseEventE @ 725
+;	non-virtual thunk to gcn::Button::~Button()
+	_ZThn156_N3gcn6ButtonD0Ev @ 726
+;	non-virtual thunk to gcn::Button::~Button()
+	_ZThn156_N3gcn6ButtonD1Ev @ 727
+;	non-virtual thunk to gcn::Slider::mouseDragged(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Slider12mouseDraggedERNS_10MouseEventE @ 728
+;	non-virtual thunk to gcn::Slider::mousePressed(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Slider12mousePressedERNS_10MouseEventE @ 729
+;	non-virtual thunk to gcn::Slider::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Slider17mouseWheelMovedUpERNS_10MouseEventE @ 730
+;	non-virtual thunk to gcn::Slider::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZThn156_N3gcn6Slider19mouseWheelMovedDownERNS_10MouseEventE @ 731
+;	non-virtual thunk to gcn::Slider::~Slider()
+	_ZThn156_N3gcn6SliderD0Ev @ 732
+;	non-virtual thunk to gcn::Slider::~Slider()
+	_ZThn156_N3gcn6SliderD1Ev @ 733
+;	non-virtual thunk to gcn::Window::~Window()
+	_ZThn156_N3gcn6WindowD0Ev @ 734
+;	non-virtual thunk to gcn::Window::~Window()
+	_ZThn156_N3gcn6WindowD1Ev @ 735
+;	non-virtual thunk to gcn::ListBox::mouseDragged(gcn::MouseEvent&)
+	_ZThn156_N3gcn7ListBox12mouseDraggedERNS_10MouseEventE @ 736
+;	non-virtual thunk to gcn::ListBox::mousePressed(gcn::MouseEvent&)
+	_ZThn156_N3gcn7ListBox12mousePressedERNS_10MouseEventE @ 737
+;	non-virtual thunk to gcn::ListBox::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZThn156_N3gcn7ListBox17mouseWheelMovedUpERNS_10MouseEventE @ 738
+;	non-virtual thunk to gcn::ListBox::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZThn156_N3gcn7ListBox19mouseWheelMovedDownERNS_10MouseEventE @ 739
+;	non-virtual thunk to gcn::ListBox::~ListBox()
+	_ZThn156_N3gcn7ListBoxD0Ev @ 740
+;	non-virtual thunk to gcn::ListBox::~ListBox()
+	_ZThn156_N3gcn7ListBoxD1Ev @ 741
+;	non-virtual thunk to gcn::TextBox::mouseDragged(gcn::MouseEvent&)
+	_ZThn156_N3gcn7TextBox12mouseDraggedERNS_10MouseEventE @ 742
+;	non-virtual thunk to gcn::TextBox::mousePressed(gcn::MouseEvent&)
+	_ZThn156_N3gcn7TextBox12mousePressedERNS_10MouseEventE @ 743
+;	non-virtual thunk to gcn::TextBox::~TextBox()
+	_ZThn156_N3gcn7TextBoxD0Ev @ 744
+;	non-virtual thunk to gcn::TextBox::~TextBox()
+	_ZThn156_N3gcn7TextBoxD1Ev @ 745
+;	non-virtual thunk to gcn::CheckBox::mouseClicked(gcn::MouseEvent&)
+	_ZThn156_N3gcn8CheckBox12mouseClickedERNS_10MouseEventE @ 746
+;	non-virtual thunk to gcn::CheckBox::mouseDragged(gcn::MouseEvent&)
+	_ZThn156_N3gcn8CheckBox12mouseDraggedERNS_10MouseEventE @ 747
+;	non-virtual thunk to gcn::CheckBox::~CheckBox()
+	_ZThn156_N3gcn8CheckBoxD0Ev @ 748
+;	non-virtual thunk to gcn::CheckBox::~CheckBox()
+	_ZThn156_N3gcn8CheckBoxD1Ev @ 749
+;	non-virtual thunk to gcn::Container::~Container()
+	_ZThn156_N3gcn9ContainerD0Ev @ 750
+;	non-virtual thunk to gcn::Container::~Container()
+	_ZThn156_N3gcn9ContainerD1Ev @ 751
+;	non-virtual thunk to gcn::TextField::mouseDragged(gcn::MouseEvent&)
+	_ZThn156_N3gcn9TextField12mouseDraggedERNS_10MouseEventE @ 752
+;	non-virtual thunk to gcn::TextField::mousePressed(gcn::MouseEvent&)
+	_ZThn156_N3gcn9TextField12mousePressedERNS_10MouseEventE @ 753
+;	non-virtual thunk to gcn::TextField::~TextField()
+	_ZThn156_N3gcn9TextFieldD0Ev @ 754
+;	non-virtual thunk to gcn::TextField::~TextField()
+	_ZThn156_N3gcn9TextFieldD1Ev @ 755
+;	non-virtual thunk to gcn::RadioButton::keyPressed(gcn::KeyEvent&)
+	_ZThn160_N3gcn11RadioButton10keyPressedERNS_8KeyEventE @ 756
+;	non-virtual thunk to gcn::RadioButton::~RadioButton()
+	_ZThn160_N3gcn11RadioButtonD0Ev @ 757
+;	non-virtual thunk to gcn::RadioButton::~RadioButton()
+	_ZThn160_N3gcn11RadioButtonD1Ev @ 758
+;	non-virtual thunk to gcn::Button::keyPressed(gcn::KeyEvent&)
+	_ZThn160_N3gcn6Button10keyPressedERNS_8KeyEventE @ 759
+;	non-virtual thunk to gcn::Button::keyReleased(gcn::KeyEvent&)
+	_ZThn160_N3gcn6Button11keyReleasedERNS_8KeyEventE @ 760
+;	non-virtual thunk to gcn::Button::~Button()
+	_ZThn160_N3gcn6ButtonD0Ev @ 761
+;	non-virtual thunk to gcn::Button::~Button()
+	_ZThn160_N3gcn6ButtonD1Ev @ 762
+;	non-virtual thunk to gcn::Slider::keyPressed(gcn::KeyEvent&)
+	_ZThn160_N3gcn6Slider10keyPressedERNS_8KeyEventE @ 763
+;	non-virtual thunk to gcn::Slider::~Slider()
+	_ZThn160_N3gcn6SliderD0Ev @ 764
+;	non-virtual thunk to gcn::Slider::~Slider()
+	_ZThn160_N3gcn6SliderD1Ev @ 765
+;	non-virtual thunk to gcn::ListBox::keyPressed(gcn::KeyEvent&)
+	_ZThn160_N3gcn7ListBox10keyPressedERNS_8KeyEventE @ 766
+;	non-virtual thunk to gcn::ListBox::~ListBox()
+	_ZThn160_N3gcn7ListBoxD0Ev @ 767
+;	non-virtual thunk to gcn::ListBox::~ListBox()
+	_ZThn160_N3gcn7ListBoxD1Ev @ 768
+;	non-virtual thunk to gcn::TextBox::keyPressed(gcn::KeyEvent&)
+	_ZThn160_N3gcn7TextBox10keyPressedERNS_8KeyEventE @ 769
+;	non-virtual thunk to gcn::TextBox::~TextBox()
+	_ZThn160_N3gcn7TextBoxD0Ev @ 770
+;	non-virtual thunk to gcn::TextBox::~TextBox()
+	_ZThn160_N3gcn7TextBoxD1Ev @ 771
+;	non-virtual thunk to gcn::CheckBox::keyPressed(gcn::KeyEvent&)
+	_ZThn160_N3gcn8CheckBox10keyPressedERNS_8KeyEventE @ 772
+;	non-virtual thunk to gcn::CheckBox::~CheckBox()
+	_ZThn160_N3gcn8CheckBoxD0Ev @ 773
+;	non-virtual thunk to gcn::CheckBox::~CheckBox()
+	_ZThn160_N3gcn8CheckBoxD1Ev @ 774
+;	non-virtual thunk to gcn::DropDown::death(gcn::Event const&)
+	_ZThn160_N3gcn8DropDown5deathERKNS_5EventE @ 775
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn160_N3gcn8DropDownD0Ev @ 776
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn160_N3gcn8DropDownD1Ev @ 777
+;	non-virtual thunk to gcn::TextField::keyPressed(gcn::KeyEvent&)
+	_ZThn160_N3gcn9TextField10keyPressedERNS_8KeyEventE @ 778
+;	non-virtual thunk to gcn::TextField::~TextField()
+	_ZThn160_N3gcn9TextFieldD0Ev @ 779
+;	non-virtual thunk to gcn::TextField::~TextField()
+	_ZThn160_N3gcn9TextFieldD1Ev @ 780
+;	non-virtual thunk to gcn::Button::focusLost(gcn::Event const&)
+	_ZThn164_N3gcn6Button9focusLostERKNS_5EventE @ 781
+;	non-virtual thunk to gcn::Button::~Button()
+	_ZThn164_N3gcn6ButtonD0Ev @ 782
+;	non-virtual thunk to gcn::Button::~Button()
+	_ZThn164_N3gcn6ButtonD1Ev @ 783
+;	non-virtual thunk to gcn::ScrollArea::mouseDragged(gcn::MouseEvent&)
+	_ZThn168_N3gcn10ScrollArea12mouseDraggedERNS_10MouseEventE @ 784
+;	non-virtual thunk to gcn::ScrollArea::mousePressed(gcn::MouseEvent&)
+	_ZThn168_N3gcn10ScrollArea12mousePressedERNS_10MouseEventE @ 785
+;	non-virtual thunk to gcn::ScrollArea::mouseReleased(gcn::MouseEvent&)
+	_ZThn168_N3gcn10ScrollArea13mouseReleasedERNS_10MouseEventE @ 786
+;	non-virtual thunk to gcn::ScrollArea::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZThn168_N3gcn10ScrollArea17mouseWheelMovedUpERNS_10MouseEventE @ 787
+;	non-virtual thunk to gcn::ScrollArea::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZThn168_N3gcn10ScrollArea19mouseWheelMovedDownERNS_10MouseEventE @ 788
+;	non-virtual thunk to gcn::ScrollArea::~ScrollArea()
+	_ZThn168_N3gcn10ScrollAreaD0Ev @ 789
+;	non-virtual thunk to gcn::ScrollArea::~ScrollArea()
+	_ZThn168_N3gcn10ScrollAreaD1Ev @ 790
+;	non-virtual thunk to gcn::Window::mouseDragged(gcn::MouseEvent&)
+	_ZThn172_N3gcn6Window12mouseDraggedERNS_10MouseEventE @ 791
+;	non-virtual thunk to gcn::Window::mousePressed(gcn::MouseEvent&)
+	_ZThn172_N3gcn6Window12mousePressedERNS_10MouseEventE @ 792
+;	non-virtual thunk to gcn::Window::~Window()
+	_ZThn172_N3gcn6WindowD0Ev @ 793
+;	non-virtual thunk to gcn::Window::~Window()
+	_ZThn172_N3gcn6WindowD1Ev @ 794
+;	non-virtual thunk to gcn::DropDown::keyPressed(gcn::KeyEvent&)
+	_ZThn172_N3gcn8DropDown10keyPressedERNS_8KeyEventE @ 795
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn172_N3gcn8DropDownD0Ev @ 796
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn172_N3gcn8DropDownD1Ev @ 797
+;	non-virtual thunk to gcn::DropDown::mouseDragged(gcn::MouseEvent&)
+	_ZThn176_N3gcn8DropDown12mouseDraggedERNS_10MouseEventE @ 798
+;	non-virtual thunk to gcn::DropDown::mousePressed(gcn::MouseEvent&)
+	_ZThn176_N3gcn8DropDown12mousePressedERNS_10MouseEventE @ 799
+;	non-virtual thunk to gcn::DropDown::mouseReleased(gcn::MouseEvent&)
+	_ZThn176_N3gcn8DropDown13mouseReleasedERNS_10MouseEventE @ 800
+;	non-virtual thunk to gcn::DropDown::mouseWheelMovedUp(gcn::MouseEvent&)
+	_ZThn176_N3gcn8DropDown17mouseWheelMovedUpERNS_10MouseEventE @ 801
+;	non-virtual thunk to gcn::DropDown::mouseWheelMovedDown(gcn::MouseEvent&)
+	_ZThn176_N3gcn8DropDown19mouseWheelMovedDownERNS_10MouseEventE @ 802
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn176_N3gcn8DropDownD0Ev @ 803
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn176_N3gcn8DropDownD1Ev @ 804
+;	non-virtual thunk to gcn::DropDown::focusLost(gcn::Event const&)
+	_ZThn180_N3gcn8DropDown9focusLostERKNS_5EventE @ 805
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn180_N3gcn8DropDownD0Ev @ 806
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn180_N3gcn8DropDownD1Ev @ 807
+;	non-virtual thunk to gcn::DropDown::drawBorder(gcn::Graphics*)
+	_ZThn4_N3gcn8DropDown10drawBorderEPNS_8GraphicsE @ 808
+;	non-virtual thunk to gcn::DropDown::setBaseColor(gcn::Color const&)
+	_ZThn4_N3gcn8DropDown12setBaseColorERKNS_5ColorE @ 809
+;	non-virtual thunk to gcn::DropDown::getChildrenArea()
+	_ZThn4_N3gcn8DropDown15getChildrenAreaEv @ 810
+;	non-virtual thunk to gcn::DropDown::setBackgroundColor(gcn::Color const&)
+	_ZThn4_N3gcn8DropDown18setBackgroundColorERKNS_5ColorE @ 811
+;	non-virtual thunk to gcn::DropDown::setForegroundColor(gcn::Color const&)
+	_ZThn4_N3gcn8DropDown18setForegroundColorERKNS_5ColorE @ 812
+;	non-virtual thunk to gcn::DropDown::draw(gcn::Graphics*)
+	_ZThn4_N3gcn8DropDown4drawEPNS_8GraphicsE @ 813
+;	non-virtual thunk to gcn::DropDown::death(gcn::Event const&)
+	_ZThn4_N3gcn8DropDown5deathERKNS_5EventE @ 814
+;	non-virtual thunk to gcn::DropDown::setFont(gcn::Font*)
+	_ZThn4_N3gcn8DropDown7setFontEPNS_4FontE @ 815
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn4_N3gcn8DropDownD0Ev @ 816
+;	non-virtual thunk to gcn::DropDown::~DropDown()
+	_ZThn4_N3gcn8DropDownD1Ev @ 817
