@@ -9,7 +9,7 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
+ * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to (rewrite may be required)
  * \todo Give each script thread its own unique ID, and make the dialogue controller a critical section for NPCs
  * \todo Fix scripts so they can WAIT on an action to be completed
  * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions
@@ -54,11 +54,13 @@ void OptionsMenuTodoList(void);
  * \todo sayArrow function - say but show an arrow and wait until user advances
  * \todo playSound function - play a sound
  * \todo playSoundBlocking function - play a sound and wait until the sound is finished
+ * \todo playMusic function - play a song (stop the currently playing song)
+ * \todo fadeMusic function - fade a song out with a given time delay
  */
 void ScriptFunctionsTodoList(void);
 
 /**
- * \todo Add Academic Magic descriptions and crests from http://kainsularei.deviantart.com .
+ * \todo Add Academic Magic descriptions and crests from DA page
  * \todo Come up with a title for Part 2.
  * \todo Finish descriptions of Parts 1-3.
  * \todo Complete the description of the Crystal Guardian, and come up with a name for her.
