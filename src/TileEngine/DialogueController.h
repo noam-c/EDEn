@@ -2,6 +2,7 @@
 #define __DIALOGUE_CONTROL_H_
 
 #include "TextBox.h"
+#include "TicketId.h"
 
 /**
  * The dialogue controller controls all of the dialogue boxes that hold
@@ -112,15 +113,17 @@ class DialogueController
        * Enqueue a line of speech said by a character.
        *
        * @param speech The dialogue that will be said.
+       * @param ticket The ticket number of this speech instruction
        */
-      void say(const char* speech);
+      void say(const char* speech, TicketId ticket);
    
       /**
        * Enqueue a line of speech narrated or thought by a character.
        *
        * @param speech The dialogue that will be narrated.
+       * @param ticket The ticket number of this narration instruction
        */
-      void narrate(const char* speech);
+      void narrate(const char* speech, TicketId ticket);
 
       /**
        * Signals that some amount of time has passed.

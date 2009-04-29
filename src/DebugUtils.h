@@ -53,6 +53,11 @@
            * @param flag the associated debug flag (usually set at the top of *.cpp files).
            */
           static void print(long flag, std::string str);
+
+          /**
+           * /todo Document.
+           */
+          static void print(long flag, int x);
    };
 
 #endif

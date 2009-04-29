@@ -14,15 +14,15 @@ TileEngine::TileEngine() : currMap(NULL)
     time = SDL_GetTicks();
 }
 
-void TileEngine::dialogueNarrate(const char* narration)
-{   dialogue->narrate(narration);
+void TileEngine::dialogueNarrate(const char* narration, TicketId ticket)
+{   dialogue->narrate(narration, ticket);
 }
 
-void TileEngine::dialogueSay(const char* speech)
-{   dialogue->say(speech);
+void TileEngine::dialogueSay(const char* speech, TicketId ticket)
+{   dialogue->say(speech, ticket);
 }
 
-void TileEngine::setRegion(std::string regionName, std::string mapName)
+int TileEngine::setRegion(lua_State* thread, std::string regionName, std::string mapName)
 {  try
    {  DEBUG2("Loading region: ", regionName);
       currRegion = ResourceLoader::getRegion(regionName);
@@ -43,7 +43,7 @@ void TileEngine::setRegion(std::string regionName, std::string mapName)
 
       std::string scriptFolder(ResourceLoader::getRegionFolder(regionName));
       DEBUG2("Running map script: ", scriptFolder + mapName);
-      ScriptEngine::getInstance()->runScript(scriptFolder + mapName);
+      return ScriptEngine::getInstance()->runScript(scriptFolder + mapName, thread);
    }
    catch(ResourceException e)
    {  DEBUG(e.what());
@@ -68,6 +68,7 @@ bool TileEngine::step()
    GameState::step();
 
    bool done = false;
+   ScriptEngine::getInstance()->runThreads();
    dialogue->timePassed(timePassed);
    SDL_Event event;
 

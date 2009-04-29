@@ -7,6 +7,9 @@
 #include "Map.h"
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
+#include "TicketId.h"
+
+struct lua_State;
 
 /**
  * GameState that coordinates all the gameplay involving walking around fields
@@ -61,15 +64,17 @@ class TileEngine: public GameState
        * Send a line of dialogue to the DialogueController as a narration.
        *
        * @param narration The line of dialogue to appear as a narration.
+       * @param ticket The ticket number of this narration instruction
        */
-      void dialogueNarrate(const char* narration);
+      void dialogueNarrate(const char* narration, TicketId ticket);
 
       /**
        * Send a line of dialogue to the DialogueController as speech.
        *
        * @param speech The line of dialogue to appear as character speech.
+       * @param ticket The ticket number of this speech instruction
        */
-      void dialogueSay(const char* speech);
+      void dialogueSay(const char* speech, TicketId ticket);
       
       /**
        * Set a new location for the gameplay to take place in.
@@ -78,7 +83,7 @@ class TileEngine: public GameState
        * @param mapName The name of the map to use within the region.
        *                By default, uses the first map declared in the region.
        */
-      void setRegion(std::string regionName, std::string mapName = "");
+      int setRegion(lua_State* thread, std::string regionName, std::string mapName = "");
 };
 
 #endif

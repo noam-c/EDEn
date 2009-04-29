@@ -3,10 +3,12 @@
 
 #include <string>
 #include "Singleton.h"
+#include "TicketId.h"
 
 // We will need to talk to the tile engine from Lua
 class TileEngine;
 struct lua_State;
+class ScriptScheduler;
 
 /**
  * The Script Engine encapsulates the use of the Lua interpreter to run scripts,
@@ -19,10 +21,19 @@ struct lua_State;
  */
 class ScriptEngine : public Singleton<ScriptEngine>
 {   /**
+     * The scheduler for the script threads
+     */
+    ScriptScheduler* scheduler;
+
+    /**
+     * The current ticket ID for the next instruction
+     */
+    TicketId nextTicket;
+
+    /**
      * The main Lua execution thread and stack
      */
     lua_State* luaVM;
-
     /**
      * The tile engine to execute commands on
      */
@@ -38,17 +49,24 @@ class ScriptEngine : public Singleton<ScriptEngine>
      */
     std::string getScriptPath(std::string scriptName);
 
+    /**
+     * Grab the next instruction ticket and queue up the next one
+     *
+     * @return the next instruction ticket to use.
+     */
+    inline TicketId getNextTicket();
+
     protected:
 
-    /**
-     * Singleton constructor. Private since the engine is a singleton.
-     */
-    void initialize() throw();
+       /**
+        * Singleton constructor. Private since the engine is a singleton.
+        */
+       void initialize() throw();
 
-    /**
-     * Singleton destructor.
-     */
-    void finish();
+       /**
+        * Singleton destructor.
+        */
+       void finish();
 
     public:
 
@@ -56,8 +74,18 @@ class ScriptEngine : public Singleton<ScriptEngine>
         * Run a script on the main thread with the specified name.
         *
         * @param scriptName The name of the script to run.
+        * @param state The parent state of this script
         */
-       void runScript(std::string scriptName);
+       int runScript(std::string scriptName, lua_State* state = NULL);
+
+       /**
+        * Resume the script yielded on the current stack, and destroy it if it completes.
+        *
+        * @param state The state of the script to resume.
+        * @param started Whether or not this state has been started yet.
+        * @return true iff the script completely finished executing
+        */
+       bool resumeScript(lua_State* state);
 
        /**
         * Set the tile engine to send commands to.
@@ -74,6 +102,16 @@ class ScriptEngine : public Singleton<ScriptEngine>
         * @return Pointer to a new Lua coroutine and its execution stack
         */
        lua_State* makeThread(std::string scriptName);
+
+       /**
+        * \todo Document.
+        */
+       void runThreads();
+
+       /**
+        * \todo Document.
+        */
+       void signalTicket(TicketId ticket);
 
        /**
         * Calls a specified function on a specified Lua thread.

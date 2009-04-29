@@ -1,4 +1,5 @@
 #include "DialogueController.h"
+#include "ScriptEngine.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_DIA_CONTR;
@@ -31,11 +32,11 @@ void DialogueController::addLine(LineType type, const char* speech)
    }
 }
 
-void DialogueController::narrate(const char* speech)
+void DialogueController::narrate(const char* speech, TicketId ticket)
 {  addLine(NARRATE, speech);
 }
 
-void DialogueController::say(const char* speech)
+void DialogueController::say(const char* speech, TicketId ticket)
 {  addLine(SAY, speech);
 }
 
@@ -70,6 +71,7 @@ void DialogueController::advanceDialogue()
    if(dialogue.size() <= charsToShow)
    {  charsToShow = dialogue.size();
       dialogueTime = -1;
+      ScriptEngine::getInstance()->signalTicket(0);
    }
 
    dialogue = dialogue.substr(0, charsToShow);
