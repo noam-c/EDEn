@@ -1,14 +1,15 @@
 #include "DialogueController.h"
+#include "TextBox.h"
+#include "Container.h"
 #include "ScriptEngine.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueController(gcn::Container* top) : top(top)
+DialogueController::DialogueController(edwt::Container* top) : top(top)
 {  initMainDialogue();
 
-   dialogueTime = 0;
-   currLine = NULL;
+   clearDialogue();
 }
 
 void DialogueController::initMainDialogue()
@@ -22,22 +23,23 @@ void DialogueController::initMainDialogue()
    top->add(mainDialogue);
 }
 
-void DialogueController::addLine(LineType type, const char* speech)
-{  if(currLine == NULL)
-   {  currLine = new Line(type, speech);
+void DialogueController::addLine(LineType type, const char* speech, TicketId ticket)
+{  Line* nextLine = new Line(type, speech, ticket);
+   if(currLine == NULL)
+   {  currLine = nextLine;
       setDialogue(type);
    }
    else
-   {  currLine->dialogue.append(speech);
+   {  lineQueue.push(nextLine);
    }
 }
 
 void DialogueController::narrate(const char* speech, TicketId ticket)
-{  addLine(NARRATE, speech);
+{  addLine(NARRATE, speech, ticket);
 }
 
 void DialogueController::say(const char* speech, TicketId ticket)
-{  addLine(SAY, speech);
+{  addLine(SAY, speech, ticket);
 }
 
 void DialogueController::setDialogue(LineType type)
@@ -71,7 +73,7 @@ void DialogueController::advanceDialogue()
    if(dialogue.size() <= charsToShow)
    {  charsToShow = dialogue.size();
       dialogueTime = -1;
-      ScriptEngine::getInstance()->signalTicket(0);
+      ScriptEngine::getInstance()->signalTicket(currLine->ticket);
    }
 
    dialogue = dialogue.substr(0, charsToShow);
@@ -84,6 +86,33 @@ bool DialogueController::dialogueComplete()
 
 bool DialogueController::hasDialogue()
 {  return currLine != NULL;
+}
+
+void DialogueController::clearDialogue()
+{  dialogueTime = 0;
+   currLine = NULL;
+   mainDialogue->setText("");
+}
+
+bool DialogueController::nextLine()
+{  if(!hasDialogue() || !dialogueComplete())
+   {  return false;
+   }
+
+   // If the dialogue is finished, clear the dialogue box and 
+   // move on to the next line
+   if(currLine) delete currLine;
+   
+   clearDialogue();
+   if(lineQueue.empty())
+   {  currLine = NULL;
+   }
+   else
+   {  currLine = lineQueue.front();
+      lineQueue.pop();
+   }
+
+   return true;
 }
 
 void DialogueController::timePassed(long time)

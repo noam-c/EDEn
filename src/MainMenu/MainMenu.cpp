@@ -7,6 +7,7 @@
 #include "Music.h"
 #include "Sound.h"
 
+#include "Container.h"
 #include "Label.h"
 #include "OpenGLTTF.h"
 #include "StringListModel.h"
@@ -31,10 +32,7 @@ const int debugFlag = DEBUG_TITLE;
 //#define MUSIC_OFF
 
 MainMenu::MainMenu()
-{  top = new gcn::Container();
-   top->setDimension(gcn::Rectangle(0, 0, 800, 600));
-
-   try
+{  try
    {  bgImg = gcn::Image::load("data/images/splash.bmp");
       bg = new gcn::Icon(bgImg);
       top->add(bg,0,0);

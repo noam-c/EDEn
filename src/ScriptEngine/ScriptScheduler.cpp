@@ -37,17 +37,15 @@ void ScriptScheduler::block(lua_State* state, TicketId waitInstruction)
 
 void ScriptScheduler::ready(TicketId readyInstruction)
 {  lua_State* resumingState = blockedThreads[readyInstruction];
-   DEBUG("Putting thread on resume list...");
-   DEBUG((int)resumingState);
    if(resumingState)
-   {  // Put the resumed thread onto the unstarted stack
+   {  DEBUG("Putting thread on resume list...");
+      DEBUG((int)resumingState);
+
+      // Put the resumed thread onto the unstarted stack
       unstartedThreads.insert(resumingState);
 
       // Remove the thread from the block list
       blockedThreads[readyInstruction] = NULL;
-   }
-   else
-   {  T_T("Attempting to ready a thread that isn't blocked!");
    }
 }
 

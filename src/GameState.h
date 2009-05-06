@@ -1,7 +1,7 @@
 #ifndef __GAME_STATE_H_
 #define __GAME_STATE_H_
 
-namespace gcn
+namespace edwt
 {  class Container;
 };
 
@@ -21,13 +21,20 @@ namespace gcn
  */
 class GameState
 {   protected:
-        /** The container for any Guichan widgets used by the state. */
-        gcn::Container* top;
+        /** The container for any GUI widgets used by the state. */
+        edwt::Container* top;
 
         /**
          * Set true to signal the state logic to terminate so that the state is destroyed.
          */
         bool finished;
+
+        /**
+         * Constructor.
+         *
+         * Initializes the top-level GUI widget container
+         */
+        GameState();
 
     public:
         /**

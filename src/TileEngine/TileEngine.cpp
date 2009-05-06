@@ -1,16 +1,13 @@
 #include "TileEngine.h"
 #include "Region.h"
 #include "ScriptEngine.h"
+#include "Container.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_TILE_ENG;
 
 TileEngine::TileEngine() : currMap(NULL)
-{   top = new gcn::Container();
-    top->setDimension(gcn::Rectangle(0, 0, 800, 600));
-    top->setOpaque(false);
-
-    dialogue = new DialogueController(top);
+{   dialogue = new DialogueController(top);
     time = SDL_GetTicks();
 }
 
@@ -78,9 +75,14 @@ bool TileEngine::step()
       {   case SDL_USEREVENT:
           {  case SDL_KEYDOWN:
                 switch(event.key.keysym.sym)
-                {  case SDLK_ESCAPE:
-                      done = true;
+                {  case SDLK_SPACE:
+                   {  dialogue->nextLine();
                       break;
+                   }
+                   case SDLK_ESCAPE:
+                   {  done = true;
+                      break;
+                   }
                 }
                 break;
              case SDL_QUIT:

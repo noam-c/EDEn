@@ -9,9 +9,10 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo **Dialogue Controller needs to handle and signal instruction IDs (currently a hack)
- * \todo Dialogue controller needs to properly enqueue and append lines as necessary
- * \todo TileEngine::setRegion shouldn't be calling ScriptEngine::runScript, but instead should return an optional map name
+ * \todo Create a new Thread object to encapsulate either a Lua state or a component that can block
+ * \todo The dialogue controller needs to be a thread
+ * \todo The dialogue controller must be able to handle embedded instructions, blocking if necessary
+ * \todo Dialogue Controller needs to have proper "speed up" on holding of the space bar
  * \todo Sound needs to handle and signal instruction IDs
  * \todo Give each script thread its own unique ID
  * \todo Fix scripts so they can WAIT on an action to be completed
@@ -19,7 +20,6 @@ void OrganizationTodoList(void);
  * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions
  * \todo Document all of the Resources (Music, Sound, Tileset, Region)
  * \todo Remove references to namespace gcn outside of edwt
- * \todo Add a DEBUG_MODE macro to DebugUtils that only runs the code inside it if debug is active.
  * \todo Complete ScriptException class, as it is currently empty and pointless.
  * \todo Document ScriptException when it is completed.
  * \todo Add NPCs to the game.
@@ -27,7 +27,7 @@ void OrganizationTodoList(void);
  * \todo Implement semi-coroutines in the NPC controller using Lua.
  * \todo Make the dialogue controller a critical section for NPCs
  * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
-   To do this, a full rewrite of the Dialogue Controller might be necessary, due to some tight coupling in the class at the moment
+   * To do this, a full rewrite of the Dialogue Controller might be necessary, due to some tight coupling in the class at the moment
  * \todo Add the player character to the game, and make him respond to user input.
  * \todo Update ResourceLoader to include reference counting and LRU resource eviction.
  * \todo Integrate GraphicsUtil stuff from Solstice (synchronous fading and texture load, mainly).

@@ -1,8 +1,15 @@
 #ifndef __DIALOGUE_CONTROL_H_
 #define __DIALOGUE_CONTROL_H_
 
-#include "TextBox.h"
+#include <queue>
+#include <string>
+
 #include "TicketId.h"
+
+namespace edwt
+{  class Container;
+   class TextBox;
+};
 
 /**
  * The dialogue controller controls all of the dialogue boxes that hold
@@ -14,7 +21,7 @@
  * If there is already text in the main dialogue box that is not finished,
  * any new text is enqueued in preparation.
  * Eventually, we may support having "mini-boxes" for many small utterances around the screen
- * (such as rabbling crowds or unstable machinery).
+ * (such as rabbling crowds or unstable machinery). Currently, though, we are not supporting this capability.
  *
  * @author Noam Chitayat
  */
@@ -45,14 +52,20 @@ class DialogueController
       /** The dialogue itself. */
       std::string dialogue;
 
+      /** The ticket waiting on this particular line of dialogue */
+      TicketId ticket;
+
       /** Constructor. */
-      Line(LineType type, std::string dialogue) 
-                    : type(type), dialogue(dialogue)
+      Line(LineType type, std::string dialogue, TicketId ticket) 
+                    : type(type), dialogue(dialogue), ticket(ticket)
       {}
    };
 
+   /** The queue to hold all the pending dialogue sequences. */
+   std::queue<Line*> lineQueue;
+
    /** The topmost container that will contain the dialogue boxes */
-   gcn::Container* top;
+   edwt::Container* top;
 
    /** Main dialogue box for speech or narration */
    DialogueBox* mainDialogue;
@@ -97,8 +110,14 @@ class DialogueController
     *
     * @param type The type of line that will be enqueued.
     * @param speech The speech to enqueue in the dialogue controller. 
+    * @param ticket The ticket number to be signalled when the line is finished
     */
-   void addLine(LineType type, const char* speech);
+   void addLine(LineType type, const char* speech, TicketId ticket);
+
+   /**
+    * \todo Document.
+    */
+   void clearDialogue();
 
    public:
 
@@ -107,7 +126,12 @@ class DialogueController
        *
        * @param top The top-level widget container of the current state.
        */
-      DialogueController(gcn::Container* top);
+      DialogueController(edwt::Container* top);
+
+      /**
+       * \todo Document.
+       */
+      bool nextLine();
 
       /**
        * Enqueue a line of speech said by a character.
