@@ -19,11 +19,11 @@ void TileEngine::dialogueSay(const char* speech, TicketId ticket)
 {   dialogue->say(speech, ticket);
 }
 
-int TileEngine::setRegion(lua_State* thread, std::string regionName, std::string mapName)
+std::string TileEngine::setRegion(std::string regionName, std::string mapName)
 {  try
-   {  DEBUG2("Loading region: ", regionName);
+   {  DEBUG("Loading region: %s", regionName.c_str());
       currRegion = ResourceLoader::getRegion(regionName);
-      DEBUG2("Loaded region: ", currRegion->getName());
+      DEBUG("Loaded region: %s", currRegion->getName().c_str());
 
       DEBUG("Setting map...");
       if(!mapName.empty())
@@ -36,11 +36,11 @@ int TileEngine::setRegion(lua_State* thread, std::string regionName, std::string
          mapName = currMap->getName();
       }
 
-      DEBUG2("Map set to: ", mapName);
+      DEBUG("Map set to: %s", mapName.c_str());
 
       std::string scriptFolder(ResourceLoader::getRegionFolder(regionName));
-      DEBUG2("Running map script: ", scriptFolder + mapName);
-      return ScriptEngine::getInstance()->runScript(scriptFolder + mapName, thread);
+      DEBUG("Running map script: %s%s", scriptFolder.c_str(), mapName.c_str());
+      return (scriptFolder + mapName);
    }
    catch(ResourceException e)
    {  DEBUG(e.what());
@@ -65,7 +65,7 @@ bool TileEngine::step()
    GameState::step();
 
    bool done = false;
-   ScriptEngine::getInstance()->runThreads();
+   ScriptEngine::getInstance()->runThreads(timePassed);
    dialogue->timePassed(timePassed);
    SDL_Event event;
 

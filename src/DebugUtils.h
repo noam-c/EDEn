@@ -9,8 +9,7 @@
    //#define MUSIC_OFF
 
    // Make a nice easy access macro for debug statements in the code
-   #define DEBUG(x) DebugUtils::print(debugFlag, x)
-   #define DEBUG2(x,y) DebugUtils::print(debugFlag, std::string(x) + y)
+   #define DEBUG(x, ...) DebugUtils::print(debugFlag, x, ## __VA_ARGS__)
 
    // Macro for exception-related information (should be passed into every exception constructor)
    #define EXCEPTION_INFO __PRETTY_FUNCTION__, __LINE__
@@ -49,15 +48,19 @@
           /**
            * Print a string to the error log if the associated debug flag is active
            *
-           * @param str the string to print.
            * @param flag the associated debug flag (usually set at the top of *.cpp files).
+           * @param str the string to print.
            */
           static void print(long flag, std::string str);
-
+          
           /**
-           * /todo Document.
+           * Print a string to the error log if the associated debug flag is active
+           * Uses a format string followed by a variable argument list (treat like printf)
+           *
+           * @param flag the associated debug flag (usually set at the top of *.cpp files).
+           * @param fmt the format string to print
            */
-          static void print(long flag, int x);
+          static void print(long flag, const char* fmt, ...);
    };
 
 #endif

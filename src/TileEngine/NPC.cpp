@@ -2,7 +2,7 @@
 
 NPC::NPC(std::string name)
 {  scriptEngine = ScriptEngine::getInstance();
-   npcThread = scriptEngine->makeThread(name);
+   //npcThread = scriptEngine->makeThread(name);
 }
 
 void NPC::idle()

@@ -1,6 +1,7 @@
 #include "ScriptEngine.h"
 #include "TileEngine.h"
 #include "ScriptScheduler.h"
+#include "Script.h"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -38,70 +39,64 @@ TicketId ScriptEngine::getNextTicket()
 {  return nextTicket++;
 }
 
-int ScriptEngine::narrate(lua_State* luaVM)
-{  int nargs = lua_gettop(luaVM);
+int ScriptEngine::narrate(lua_State* luaStack)
+{  int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
    if(nargs > 0)
-   {  const char* speech = lua_tostring(luaVM, 1);
+   {  const char* speech = lua_tostring(luaStack, 1);
       if(nargs == 2)
-      {  waitForFinish = lua_toboolean(luaVM, 2);
+      {  waitForFinish = lua_toboolean(luaStack, 2);
       }
 
       TicketId ticket = getNextTicket();
 
-      DEBUG2("Narrating text: ", speech);
+      DEBUG("Narrating text: %s", speech);
       tileEngine->dialogueNarrate(speech, ticket);
 
+      Script* currScript = runningScripts.top();
       if(waitForFinish)
-      {  scheduler->block(luaVM, ticket);
-         return lua_yield(luaVM, 0);
+      {  scheduler->block(currScript, ticket);
+         return currScript->yield();
       }
    }
 
    return 0;
 }
 
-int ScriptEngine::say(lua_State* luaVM)
-{  int nargs = lua_gettop(luaVM);
+int ScriptEngine::say(lua_State* luaStack)
+{  int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
    if(nargs > 0)
-   {  const char* speech = lua_tostring(luaVM, 1);
+   {  const char* speech = lua_tostring(luaStack, 1);
       if(nargs == 2)
-      {  waitForFinish = lua_toboolean(luaVM, 2);
+      {  waitForFinish = lua_toboolean(luaStack, 2);
       }
 
       TicketId ticket = getNextTicket();
 
-      DEBUG2("Saying text: ", speech);
+      DEBUG("Saying text: %s", speech);
       tileEngine->dialogueSay(speech, ticket);
 
+      Script* currScript = runningScripts.top();
       if(waitForFinish)
-      {  scheduler->block(luaVM, ticket);
-         return lua_yield(luaVM, 0);
+      {  scheduler->block(currScript, ticket);
+         return currScript->yield();
       }
    }
 
    return 0;
 }
 
-int ScriptEngine::setRegion(lua_State* luaVM)
-{  int nargs = lua_gettop(luaVM);
+int ScriptEngine::setRegion(lua_State* luaStack)
+{  int nargs = lua_gettop(luaStack);
    if(nargs > 0)
-   {  std::string regionName(lua_tostring(luaVM, 1));
-      if(nargs == 2)
-      {  bool waitForFinish = lua_toboolean(luaVM, 2);
-         if(waitForFinish)
-         {  /** \todo We need to handle the wait case, not just yield blindly.
-             */
-            return lua_yield(luaVM, 0);
-         } 
-      }
+   {  std::string regionName(lua_tostring(luaStack, 1));
+      DEBUG("Setting region: %s", regionName.c_str());
 
-      DEBUG2("Setting region: ", regionName);
-      
-      return tileEngine->setRegion(luaVM, regionName);
+      std::string mapScriptPath = tileEngine->setRegion(regionName);
+      return runScript(mapScriptPath);
    }
 
    return 0;
@@ -116,15 +111,16 @@ void ScriptEngine::finish()
    delete scheduler;
 }
 
-int ScriptEngine::runScript(std::string scriptName, lua_State* state)
-{  DEBUG2("Running script: ", scriptName);
-   lua_State* newState = makeThread(scriptName);
-   scheduler->start(newState);
-   if(state != NULL)
-   {  scheduler->join(state, newState);
-      DEBUG("Yielding: ");
-      DEBUG((int)state);
-      return lua_yield(state, 0);
+int ScriptEngine::runScript(std::string scriptName)
+{  DEBUG("Running script: %s", scriptName.c_str());
+   Script* newScript = new Script(luaVM, getScriptPath(scriptName));
+   scheduler->start(newScript);
+
+   if(!runningScripts.empty())
+   {  Script* currScript = runningScripts.top();
+      scheduler->join(currScript, newScript);
+      DEBUG("Yielding: %d", currScript->getId());
+      return currScript->yield();
    }
 
    return 0;
@@ -132,25 +128,6 @@ int ScriptEngine::runScript(std::string scriptName, lua_State* state)
 
 void ScriptEngine::signalTicket(TicketId ticket)
 {  scheduler->ready(ticket);
-}
-
-bool ScriptEngine::resumeScript(lua_State* state)
-{  int returnCode = lua_resume(state, 0);
-   if(returnCode == 0)
-   {  DEBUG("Closing state.");
-      DEBUG((int)state);
-      //lua_close(state); // Do we need to close each thread, or just the main one?
-      return true;
-   }
-   else if(returnCode == LUA_YIELD)
-   {  DEBUG("State yielded.");
-      return false;
-   }
-
-   // An error occurred: Print out the error message
-   DEBUG2("Error running script: ", lua_tostring(state, -1));
-
-   return false;
 }
 
 void ScriptEngine::setTileEngine(TileEngine* engine)
@@ -164,14 +141,16 @@ void ScriptEngine::callFunction(lua_State* thread, const char* funcName)
    lua_resume(thread, 0);
 }
 
-lua_State* ScriptEngine::makeThread(std::string scriptName)
-{  lua_State* newThread = lua_newthread(luaVM);
-   luaL_loadfile(newThread, getScriptPath(scriptName).c_str());
-   return newThread;
+void ScriptEngine::pushRunningScript(Script* script)
+{  runningScripts.push(script);
 }
 
-void ScriptEngine::runThreads()
-{  scheduler->run();
+void ScriptEngine::popRunningScript()
+{  runningScripts.pop();
+}
+
+void ScriptEngine::runThreads(long timePassed)
+{  scheduler->run(timePassed);
 }
 
 std::string ScriptEngine::getScriptPath(std::string scriptName)

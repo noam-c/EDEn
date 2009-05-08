@@ -9,14 +9,10 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo Create a new Thread object to encapsulate either a Lua state or a component that can block
  * \todo The dialogue controller needs to be a thread
  * \todo The dialogue controller must be able to handle embedded instructions, blocking if necessary
  * \todo Dialogue Controller needs to have proper "speed up" on holding of the space bar
  * \todo Sound needs to handle and signal instruction IDs
- * \todo Give each script thread its own unique ID
- * \todo Fix scripts so they can WAIT on an action to be completed
- * \todo Create a script scheduler that keeps track of EVERY lua_State thread including the main one
  * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions
  * \todo Document all of the Resources (Music, Sound, Tileset, Region)
  * \todo Remove references to namespace gcn outside of edwt

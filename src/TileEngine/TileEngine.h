@@ -9,8 +9,6 @@
 #include "OpenGLTTF.h"
 #include "TicketId.h"
 
-struct lua_State;
-
 /**
  * GameState that coordinates all the gameplay involving walking around fields
  * (towns or dungeons).
@@ -83,7 +81,7 @@ class TileEngine: public GameState
        * @param mapName The name of the map to use within the region.
        *                By default, uses the first map declared in the region.
        */
-      int setRegion(lua_State* thread, std::string regionName, std::string mapName = "");
+      std::string setRegion(std::string regionName, std::string mapName = "");
 };
 
 #endif

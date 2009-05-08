@@ -7,7 +7,7 @@ const int debugFlag = DEBUG_RES_LOAD;
 
 Map::Map(std::ifstream& in)
 {  std::getline(in, mapName, MAP_DELIM);
-   DEBUG2("Loading map: ", mapName);
+   DEBUG("Loading map: %s", mapName.c_str());
    std::getline(in, tilesetName, MAP_DELIM);
 
    in >> width;

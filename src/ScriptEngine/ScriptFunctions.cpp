@@ -11,7 +11,7 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-#define REGISTER(luaName, function) DEBUG2("Registering function: ", luaName); \
+#define REGISTER(luaName, function) DEBUG("Registering function: %s", luaName); \
                                     lua_register(luaVM, luaName, function)
 
 static int luaNarrate(lua_State* luaVM)

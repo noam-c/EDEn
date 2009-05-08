@@ -1,6 +1,7 @@
 #ifndef __SCRIPT_ENGINE_H_
 #define __SCRIPT_ENGINE_H_
 
+#include <stack>
 #include <string>
 #include "Singleton.h"
 #include "TicketId.h"
@@ -9,6 +10,7 @@
 class TileEngine;
 struct lua_State;
 class ScriptScheduler;
+class Script;
 
 /**
  * The Script Engine encapsulates the use of the Lua interpreter to run scripts,
@@ -24,6 +26,11 @@ class ScriptEngine : public Singleton<ScriptEngine>
      * The scheduler for the script threads
      */
     ScriptScheduler* scheduler;
+
+    /**
+     * \todo Document.
+     */
+    std::stack<Script*> runningScripts;
 
     /**
      * The current ticket ID for the next instruction
@@ -71,21 +78,21 @@ class ScriptEngine : public Singleton<ScriptEngine>
     public:
 
        /**
+        * \todo Document.
+        */
+       void pushRunningScript(Script* script);
+
+       /**
+        * \todo Document.
+        */
+       void popRunningScript();
+
+       /**
         * Run a script on the main thread with the specified name.
         *
         * @param scriptName The name of the script to run.
-        * @param state The parent state of this script
         */
-       int runScript(std::string scriptName, lua_State* state = NULL);
-
-       /**
-        * Resume the script yielded on the current stack, and destroy it if it completes.
-        *
-        * @param state The state of the script to resume.
-        * @param started Whether or not this state has been started yet.
-        * @return true iff the script completely finished executing
-        */
-       bool resumeScript(lua_State* state);
+       int runScript(std::string scriptName);
 
        /**
         * Set the tile engine to send commands to.
@@ -95,18 +102,9 @@ class ScriptEngine : public Singleton<ScriptEngine>
        void setTileEngine(TileEngine* engine);
 
        /**
-        * Create a new thread with a specified script loaded in.
-        *
-        * @param scriptName The name of the script to run.
-        *
-        * @return Pointer to a new Lua coroutine and its execution stack
-        */
-       lua_State* makeThread(std::string scriptName);
-
-       /**
         * \todo Document.
         */
-       void runThreads();
+       void runThreads(long timePassed);
 
        /**
         * \todo Document.

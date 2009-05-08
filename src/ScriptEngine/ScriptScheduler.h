@@ -1,7 +1,7 @@
 #ifndef __SCRIPT_SCHEDULER_H_
 #define __SCRIPT_SCHEDULER_H_
 
-struct lua_State;
+class Thread;
 
 #include "TicketId.h"
 #include <map>
@@ -9,10 +9,10 @@ struct lua_State;
 #include <queue>
 
 class ScriptScheduler
-{  typedef std::map<TicketId, lua_State*> BlockList;
-   typedef std::map<lua_State*, lua_State*> JoinList;
-   typedef std::set<lua_State*> ReadyList;
-   typedef std::queue<lua_State*> FinishedList;
+{  typedef std::map<TicketId, Thread*> BlockList;
+   typedef std::map<Thread*, Thread*> JoinList;
+   typedef std::set<Thread*> ReadyList;
+   typedef std::queue<Thread*> FinishedList;
 
    BlockList blockedThreads;
    JoinList joiningThreads;
@@ -21,14 +21,14 @@ class ScriptScheduler
    FinishedList finishedThreads;
 
    public:
-      void block(lua_State* state, TicketId waitInstruction);
-      void start(lua_State* state);
+      void block(Thread* state, TicketId waitInstruction);
+      void start(Thread* state);
       void ready(TicketId readyInstruction);
-      void join(lua_State* joiningState, lua_State* runningState);
-      void finishJoin(lua_State* state);
-      void finished(lua_State* state);
+      void join(Thread* joiningState, Thread* runningState);
+      void finishJoin(Thread* state);
+      void finished(Thread* state);
 
-      void run();
+      void run(long timePassed);
 };
 
 #endif
