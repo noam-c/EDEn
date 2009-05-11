@@ -28,7 +28,14 @@ class ScriptEngine : public Singleton<ScriptEngine>
     ScriptScheduler* scheduler;
 
     /**
-     * \todo Document.
+     * A stack used to keep track of which script is currently running. This
+     * stack is necessary to keep track of the Script object that was last invoked,
+     * so that the scripting engine can properly yield or block the thread after
+     * a call from a Lua script (which only passes in a Lua stack, not a Script).
+     *
+     * \todo Do we need a stack? A thread should theoretically always finish or 
+     * yield before any other one runs, so this stack may only have 1 entry at a
+     * time anyway.
      */
     std::stack<Script*> runningScripts;
 
@@ -78,12 +85,13 @@ class ScriptEngine : public Singleton<ScriptEngine>
     public:
 
        /**
-        * \todo Document.
+        * Push a script onto the runningScripts stack so the engine may refer
+        * back to the script thread when needed.
         */
        void pushRunningScript(Script* script);
 
        /**
-        * \todo Document.
+        * Remove the last running script from the runningScripts stack.
         */
        void popRunningScript();
 
@@ -102,12 +110,22 @@ class ScriptEngine : public Singleton<ScriptEngine>
        void setTileEngine(TileEngine* engine);
 
        /**
-        * \todo Document.
+        * Run all of the threads in the engine.
+        * \todo This should be removed when the ScriptScheduler is refactored
+        * out of the ScriptEngine.
+        *
+        * @param timePassed The amount of time that has passed since the last frame
         */
        void runThreads(long timePassed);
 
        /**
-        * \todo Document.
+        * Signal the scheduler that an instruction has finished and that
+        * a thread waiting on the instruction should be unblocked.
+        *
+        * \todo This should be removed when the ScriptScheduler is refactored
+        * out of the ScriptEngine.
+        *
+        * @param ticket The instruction that has completed executing.
         */
        void signalTicket(TicketId ticket);
 

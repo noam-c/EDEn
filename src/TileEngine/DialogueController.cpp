@@ -6,7 +6,7 @@
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueController(edwt::Container* top) : top(top)
+DialogueController::DialogueController(edwt::Container* top) : top(top), currLine(NULL)
 {  initMainDialogue();
 
    clearDialogue();
@@ -90,6 +90,7 @@ bool DialogueController::hasDialogue()
 
 void DialogueController::clearDialogue()
 {  dialogueTime = 0;
+   if(currLine) delete currLine;
    currLine = NULL;
    mainDialogue->setText("");
 }
@@ -101,8 +102,6 @@ bool DialogueController::nextLine()
 
    // If the dialogue is finished, clear the dialogue box and 
    // move on to the next line
-   if(currLine) delete currLine;
-   
    clearDialogue();
    if(lineQueue.empty())
    {  currLine = NULL;

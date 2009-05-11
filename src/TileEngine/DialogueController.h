@@ -115,7 +115,7 @@ class DialogueController
    void addLine(LineType type, const char* speech, TicketId ticket);
 
    /**
-    * \todo Document.
+    * Clears any dialogue currently being displayed onscreen.
     */
    void clearDialogue();
 
@@ -129,7 +129,8 @@ class DialogueController
       DialogueController(edwt::Container* top);
 
       /**
-       * \todo Document.
+       * Clears a finished line of dialogue from the screen and loads the next
+       * line in the lineQueue for display on screen.
        */
       bool nextLine();
 
