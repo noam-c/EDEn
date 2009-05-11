@@ -1,13 +1,9 @@
 #include "Thread.h"
 
-int Thread::numThreads = 0;
-
-int Thread::getNumThreads()
-{  return numThreads;
-}
+int Thread::nextThreadId = 0;
 
 Thread::Thread()
-{  threadId = numThreads++;
+{  threadId = nextThreadId++;
 }
 
 int Thread::getId()

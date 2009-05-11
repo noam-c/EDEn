@@ -5,28 +5,28 @@
 
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-void ScriptScheduler::start(Thread* state)
-{  DEBUG("Starting thread %d...", state->getId());
+void ScriptScheduler::start(Thread* thread)
+{  DEBUG("Starting thread %d...", thread->getId());
 
    // Ensure that this thread is not already scheduled
-   if(readyThreads.find(state) == readyThreads.end()
-      && unstartedThreads.find(state) == unstartedThreads.end())
+   if(readyThreads.find(thread) == readyThreads.end()
+      && unstartedThreads.find(thread) == unstartedThreads.end())
    {  // Insert the thread into the unstarted thread list
-      unstartedThreads.insert(state);
+      unstartedThreads.insert(thread);
    }
 }
 
-void ScriptScheduler::block(Thread* state, TicketId waitInstruction)
-{  DEBUG("Blocking thread %d...", state->getId());
+void ScriptScheduler::block(Thread* thread, TicketId waitInstruction)
+{  DEBUG("Blocking thread %d...", thread->getId());
    
    // Find the thread in the ready list
-   if(readyThreads.find(state) != readyThreads.end())
+   if(readyThreads.find(thread) != readyThreads.end())
    {  // If the thread is in the ready list, push it into the finished thread list
-      finishedThreads.push(state);
+      finishedThreads.push(thread);
       //readyThreads.erase(stateToBlock);
 
       // Add the thread to the blocked list
-      blockedThreads[waitInstruction] = state;
+      blockedThreads[waitInstruction] = thread;
    }
    else
    {  T_T("Attempting to block a thread that isn't ready/running!");
@@ -34,57 +34,57 @@ void ScriptScheduler::block(Thread* state, TicketId waitInstruction)
 
 }
 
-void ScriptScheduler::ready(TicketId readyInstruction)
-{  Thread* resumingState = blockedThreads[readyInstruction];
-   if(resumingState)
-   {  DEBUG("Putting thread %d on resume list...", resumingState->getId());
+void ScriptScheduler::ready(TicketId finishedInstruction)
+{  Thread* resumingThread = blockedThreads[finishedInstruction];
+   if(resumingThread)
+   {  DEBUG("Putting thread %d on resume list...", resumingThread->getId());
 
       // Put the resumed thread onto the unstarted stack
-      unstartedThreads.insert(resumingState);
+      unstartedThreads.insert(resumingThread);
 
       // Remove the thread from the block list
-      blockedThreads[readyInstruction] = NULL;
+      blockedThreads[finishedInstruction] = NULL;
    }
 }
 
-void ScriptScheduler::join(Thread* joiningState, Thread* runningState)
-{  DEBUG("Joining thread %d...", joiningState->getId());
+void ScriptScheduler::join(Thread* joiningThread, Thread* runningThread)
+{  DEBUG("Joining thread %d...", joiningThread->getId());
 
    // Find the thread in the ready list
-   if(readyThreads.find(joiningState) != readyThreads.end())
+   if(readyThreads.find(joiningThread) != readyThreads.end())
    {  // If the thread is in the ready list, push it into the finished thread list
-      finishedThreads.push(joiningState);
+      finishedThreads.push(joiningThread);
       //readyThreads.erase(stateToBlock);
 
       // Add the thread to the joining list
-      joiningThreads[runningState] = joiningState;
+      joiningThreads[runningThread] = joiningThread;
    }
    else
    {  T_T("Attempting to join a thread that isn't ready/running!");
    }
 }
 
-void ScriptScheduler::finishJoin(Thread* state)
+void ScriptScheduler::finishJoin(Thread* thread)
 {  // A thread has completed execution,
    // so check if anyone is waiting for it to finish
-   Thread* resumingState = joiningThreads[state];
+   Thread* resumingThread = joiningThreads[thread];
 
-   if(resumingState)
+   if(resumingThread)
    {  // If there is such a thread, put it on the unstarted thread list again
-      DEBUG("Putting thread %d on resume list...", resumingState->getId());
-      unstartedThreads.insert(resumingState);
+      DEBUG("Putting thread %d on resume list...", resumingThread->getId());
+      unstartedThreads.insert(resumingThread);
 
       // Clear the joining thread out of the joining list
-      joiningThreads[state] = NULL;
+      joiningThreads[thread] = NULL;
    }
 }
 
-void ScriptScheduler::finished(Thread* state)
+void ScriptScheduler::finished(Thread* thread)
 {  // Check for any joins on this thread, then push it onto the finished
    // thread list
-   finishJoin(state);
-   finishedThreads.push(state);
-   delete state;
+   finishJoin(thread);
+   finishedThreads.push(thread);
+   delete thread;
 }
 
 void ScriptScheduler::run(long timePassed)
@@ -96,7 +96,7 @@ void ScriptScheduler::run(long timePassed)
    }
 
    // Run each thread until either it yields or finishes execution
-   for(ReadyList::iterator iter = readyThreads.begin(); iter != readyThreads.end(); ++iter)
+   for(ThreadList::iterator iter = readyThreads.begin(); iter != readyThreads.end(); ++iter)
    {  DEBUG("Resuming script %d...", (*iter)->getId());
 
       // Run/resume the thread
@@ -114,10 +114,10 @@ void ScriptScheduler::run(long timePassed)
    // If there are any finished/blocked threads,
    // remove them from the ready thread list
    while(!finishedThreads.empty())
-   {  Thread* state = finishedThreads.front();
-      DEBUG("Removing thread %d", state->getId());
+   {  Thread* thread = finishedThreads.front();
+      DEBUG("Removing thread %d", thread->getId());
 
-      readyThreads.erase(state);
+      readyThreads.erase(thread);
       finishedThreads.pop();
    }
 }

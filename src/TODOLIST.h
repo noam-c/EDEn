@@ -14,7 +14,7 @@ void OrganizationTodoList(void);
  * \todo Dialogue Controller needs to have proper "speed up" on holding of the space bar
  * \todo Sound needs to handle and signal instruction IDs
  * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions
- * \todo Document all of the Resources (Music, Sound, Tileset, Region)
+ * \todo Document all of the Resources (Music, Sound, Tileset, Region), and the Resource abstract class
  * \todo Remove references to namespace gcn outside of edwt
  * \todo Complete ScriptException class, as it is currently empty and pointless.
  * \todo Document ScriptException when it is completed.
