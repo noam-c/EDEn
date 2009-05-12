@@ -11,6 +11,8 @@ namespace edwt
    class TextBox;
 };
 
+class ScriptEngine;
+
 /**
  * The dialogue controller controls all of the dialogue boxes that hold
  * character speech, thought, or narration of any kind.
@@ -76,6 +78,9 @@ class DialogueController
    /** The current line of dialogue */
    Line* currLine;
 
+   /** The scripting engine that will be interfacing with this controller */
+   ScriptEngine* scriptEngine;
+
    /**
     * Initialize the main dialogue box.
     */
@@ -126,7 +131,7 @@ class DialogueController
        *
        * @param top The top-level widget container of the current state.
        */
-      DialogueController(edwt::Container* top);
+      DialogueController(ScriptEngine* scriptEngine, edwt::Container* top);
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next

@@ -1,11 +1,11 @@
-#include "ScriptScheduler.h"
+#include "Scheduler.h"
 #include "ScriptEngine.h"
 #include "Thread.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-void ScriptScheduler::start(Thread* thread)
+void Scheduler::start(Thread* thread)
 {  DEBUG("Starting thread %d...", thread->getId());
 
    // Ensure that this thread is not already scheduled
@@ -16,7 +16,7 @@ void ScriptScheduler::start(Thread* thread)
    }
 }
 
-void ScriptScheduler::block(Thread* thread, TicketId waitInstruction)
+void Scheduler::block(Thread* thread, TicketId waitInstruction)
 {  DEBUG("Blocking thread %d...", thread->getId());
    
    // Find the thread in the ready list
@@ -34,7 +34,7 @@ void ScriptScheduler::block(Thread* thread, TicketId waitInstruction)
 
 }
 
-void ScriptScheduler::ready(TicketId finishedInstruction)
+void Scheduler::ready(TicketId finishedInstruction)
 {  Thread* resumingThread = blockedThreads[finishedInstruction];
    if(resumingThread)
    {  DEBUG("Putting thread %d on resume list...", resumingThread->getId());
@@ -47,7 +47,7 @@ void ScriptScheduler::ready(TicketId finishedInstruction)
    }
 }
 
-void ScriptScheduler::join(Thread* joiningThread, Thread* runningThread)
+void Scheduler::join(Thread* joiningThread, Thread* runningThread)
 {  DEBUG("Joining thread %d...", joiningThread->getId());
 
    // Find the thread in the ready list
@@ -64,7 +64,7 @@ void ScriptScheduler::join(Thread* joiningThread, Thread* runningThread)
    }
 }
 
-void ScriptScheduler::finishJoin(Thread* thread)
+void Scheduler::finishJoin(Thread* thread)
 {  // A thread has completed execution,
    // so check if anyone is waiting for it to finish
    Thread* resumingThread = joiningThreads[thread];
@@ -79,7 +79,7 @@ void ScriptScheduler::finishJoin(Thread* thread)
    }
 }
 
-void ScriptScheduler::finished(Thread* thread)
+void Scheduler::finished(Thread* thread)
 {  // Check for any joins on this thread, then push it onto the finished
    // thread list
    finishJoin(thread);
@@ -87,7 +87,7 @@ void ScriptScheduler::finished(Thread* thread)
    delete thread;
 }
 
-void ScriptScheduler::run(long timePassed)
+void Scheduler::run(long timePassed)
 {  // If there are any threads on the unstarted list, then put them all into
    // the ready list and clear the unstarted list
    if(!unstartedThreads.empty())

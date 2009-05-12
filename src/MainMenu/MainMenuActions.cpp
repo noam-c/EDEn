@@ -15,9 +15,7 @@
  * and pushed state (field or battle) changing based on the chapter].
  */
 void MainMenu::NewGameAction()
-{  TileEngine* tileEngine = new TileEngine();
-   ScriptEngine::getInstance()->setTileEngine(tileEngine);
-   ScriptEngine::getInstance()->runScript(CHAP1);
+{  TileEngine* tileEngine = new TileEngine(CHAP1);
 
    ExecutionStack::getInstance()->pushState(tileEngine);
    chooseSound->play();

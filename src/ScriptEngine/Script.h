@@ -5,6 +5,7 @@
 #include <string>
 
 struct lua_State;
+class ScriptEngine;
 
 /**
  * A Script is a type of Thread that runs a Lua coroutine. As such, the Script
@@ -15,6 +16,9 @@ struct lua_State;
 class Script : public Thread
 {  /** The stack and execution thread of this script. */
    lua_State* luaStack;
+
+   /** The ScriptEngine that invokes this script */
+   ScriptEngine* engine;
 
    /**
     * Runs the script until completion or yielding. Prints out any errors encountered
@@ -30,10 +34,11 @@ class Script : public Thread
        * Constructor. Creates a new Lua thread by forking the main VM, and then
        * loads the specified script onto the new thread's stack.
        *
+       * @param scriptEngine The scripting engine that will invoke this thread
        * @param luaVM The main Lua stack to fork a thread from.
        * @param scriptPath The path to a script that should be run on this thread.
        */
-      Script(lua_State* luaVM, std::string scriptPath);
+      Script(ScriptEngine* scriptEngine, lua_State* luaVM, std::string scriptPath);
 
       /**
        * Performs a Lua resume on the thread.

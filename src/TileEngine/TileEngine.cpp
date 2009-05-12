@@ -6,9 +6,11 @@
 
 const int debugFlag = DEBUG_TILE_ENG;
 
-TileEngine::TileEngine() : currMap(NULL)
-{   dialogue = new DialogueController(top);
+TileEngine::TileEngine(const char* introScript) : currMap(NULL)
+{   scriptEngine = new ScriptEngine(this);
+    dialogue = new DialogueController(scriptEngine, top);
     time = SDL_GetTicks();
+    scriptEngine->runScript(introScript);
 }
 
 void TileEngine::dialogueNarrate(const char* narration, TicketId ticket)
@@ -65,7 +67,7 @@ bool TileEngine::step()
    GameState::step();
 
    bool done = false;
-   ScriptEngine::getInstance()->runThreads(timePassed);
+   scriptEngine->runThreads(timePassed);
    dialogue->timePassed(timePassed);
    SDL_Event event;
 
@@ -100,6 +102,7 @@ bool TileEngine::step()
 }
 
 TileEngine::~TileEngine()
-{  delete dialogue;
+{  delete scriptEngine;
+   delete dialogue;
    delete top;
 }

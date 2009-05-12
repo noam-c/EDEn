@@ -1,7 +1,7 @@
 #include "NPC.h"
 
 NPC::NPC(std::string name)
-{  scriptEngine = ScriptEngine::getInstance();
+{  //scriptEngine = ScriptEngine::getInstance();
    //npcThread = scriptEngine->makeThread(name);
 }
 

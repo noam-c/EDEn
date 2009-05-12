@@ -14,16 +14,23 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
 #define REGISTER(luaName, function) DEBUG("Registering function: %s", luaName); \
                                     lua_register(luaVM, luaName, function)
 
+static ScriptEngine* getEngine(lua_State* luaVM)
+{  lua_getglobal(luaVM, "ScriptEngine");
+   ScriptEngine* engine = static_cast<ScriptEngine*>(lua_touserdata(luaVM, lua_gettop(luaVM)));
+   lua_pop(luaVM, 1);
+   return engine;
+}
+
 static int luaNarrate(lua_State* luaVM)
-{  return ScriptEngine::getInstance()->narrate(luaVM);
+{  return getEngine(luaVM)->narrate(luaVM);
 }
 
 static int luaSay(lua_State* luaVM)
-{  return ScriptEngine::getInstance()->say(luaVM);
+{  return getEngine(luaVM)->say(luaVM);
 }
 
 static int luaSetRegion(lua_State* luaVM)
-{  return ScriptEngine::getInstance()->setRegion(luaVM);
+{  return getEngine(luaVM)->setRegion(luaVM);
 }
 
 void ScriptEngine::registerFunctions()

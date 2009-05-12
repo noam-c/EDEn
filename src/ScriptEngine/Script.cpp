@@ -13,7 +13,8 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-Script::Script(lua_State* luaVM, std::string scriptPath)
+Script::Script(ScriptEngine* scriptEngine, lua_State* luaVM, std::string scriptPath)
+                             : engine(scriptEngine)
 {  luaStack = lua_newthread(luaVM);
    luaL_loadfile(luaStack, scriptPath.c_str());
 }
@@ -36,9 +37,9 @@ bool Script::runScript()
 }
 
 bool Script::resume(long /*timePassed*/)
-{  ScriptEngine::getInstance()->pushRunningScript(this);   
+{  engine->pushRunningScript(this);   
    bool result = runScript();
-   ScriptEngine::getInstance()->popRunningScript();
+   engine->popRunningScript();
 
    return result;
 }

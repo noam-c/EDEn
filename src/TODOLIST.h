@@ -9,6 +9,7 @@
 void OrganizationTodoList(void);
 
 /**
+ * \todo Organize the global code folder and try to create some new folders for organization
  * \todo The dialogue controller needs to be a thread
  * \todo The dialogue controller must be able to handle embedded instructions, blocking if necessary
  * \todo Dialogue Controller needs to have proper "speed up" on holding of the space bar

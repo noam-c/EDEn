@@ -6,7 +6,8 @@
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueController(edwt::Container* top) : top(top), currLine(NULL)
+DialogueController::DialogueController(ScriptEngine* scriptEngine, edwt::Container* top) 
+                     : scriptEngine(scriptEngine), top(top), currLine(NULL)
 {  initMainDialogue();
 
    clearDialogue();
@@ -73,7 +74,7 @@ void DialogueController::advanceDialogue()
    if(dialogue.size() <= charsToShow)
    {  charsToShow = dialogue.size();
       dialogueTime = -1;
-      ScriptEngine::getInstance()->signalTicket(currLine->ticket);
+      scriptEngine->signalTicket(currLine->ticket);
    }
 
    dialogue = dialogue.substr(0, charsToShow);

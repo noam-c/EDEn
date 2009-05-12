@@ -1,6 +1,6 @@
 #include "ScriptEngine.h"
 #include "TileEngine.h"
-#include "ScriptScheduler.h"
+#include "Scheduler.h"
 #include "Script.h"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
@@ -15,7 +15,7 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-void ScriptEngine::initialize() throw()
+ScriptEngine::ScriptEngine(TileEngine* tileEngine) : tileEngine(tileEngine)
 {  luaVM = luaL_newstate();
 
    if(luaVM == NULL)
@@ -29,8 +29,12 @@ void ScriptEngine::initialize() throw()
    // register game functions with Lua
    registerFunctions();
 
+   // push this engine as a global pointer
+   lua_pushlightuserdata(luaVM, this);
+   lua_setglobal(luaVM, "ScriptEngine");
+
    // initialize the script scheduler
-   scheduler = new ScriptScheduler();
+   scheduler = new Scheduler();
 
    nextTicket = 0;
 }
@@ -102,7 +106,7 @@ int ScriptEngine::setRegion(lua_State* luaStack)
    return 0;
 }
 
-void ScriptEngine::finish()
+ScriptEngine::~ScriptEngine()
 {  if(luaVM)
    {  DEBUG("Destroying Lua state machine...");
       lua_close(luaVM);
@@ -113,7 +117,7 @@ void ScriptEngine::finish()
 
 int ScriptEngine::runScript(std::string scriptName)
 {  DEBUG("Running script: %s", scriptName.c_str());
-   Script* newScript = new Script(luaVM, getScriptPath(scriptName));
+   Script* newScript = new Script(this, luaVM, getScriptPath(scriptName));
    scheduler->start(newScript);
 
    if(!runningScripts.empty())
@@ -128,10 +132,6 @@ int ScriptEngine::runScript(std::string scriptName)
 
 void ScriptEngine::signalTicket(TicketId ticket)
 {  scheduler->ready(ticket);
-}
-
-void ScriptEngine::setTileEngine(TileEngine* engine)
-{  tileEngine = engine;
 }
 
 void ScriptEngine::callFunction(lua_State* thread, const char* funcName)

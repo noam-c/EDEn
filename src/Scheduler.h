@@ -18,7 +18,7 @@ class Thread;
  *
  * @author Noam Chitayat
  */
-class ScriptScheduler
+class Scheduler
 {  /** A list of threads. */
    typedef std::set<Thread*> ThreadList;
 

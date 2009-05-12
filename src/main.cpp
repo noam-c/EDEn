@@ -25,7 +25,6 @@ int main (int argc, char *argv[])
        ResourceLoader::freeAll();
 
        ExecutionStack::destroy();
-       ScriptEngine::destroy();
        GraphicsUtil::destroy();
     }
     catch (gcn::Exception e)

@@ -9,6 +9,8 @@
 #include "OpenGLTTF.h"
 #include "TicketId.h"
 
+class ScriptEngine;
+
 /**
  * GameState that coordinates all the gameplay involving walking around fields
  * (towns or dungeons).
@@ -32,13 +34,16 @@ class TileEngine: public GameState
    /** Controller for dialogue and narrations. */
    DialogueController* dialogue;
 
+   /** The Scripting Engine used for the engine's scripting */
+   ScriptEngine* scriptEngine;
+
    public:
       /**
-       * Constructor.
+       * Constructor. Initializes widgets and controllers
        *
-       * Initializes widgets and controllers
+       * @param introScript The name of the script to run after construction
        */
-      TileEngine();
+      TileEngine(const char* introScript);
 
       /**
        * Destructor.

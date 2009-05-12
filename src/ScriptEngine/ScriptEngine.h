@@ -9,7 +9,7 @@
 // We will need to talk to the tile engine from Lua
 class TileEngine;
 struct lua_State;
-class ScriptScheduler;
+class Scheduler;
 class Script;
 
 /**
@@ -17,15 +17,13 @@ class Script;
  * create Lua coroutines, and bind the game functionality to the Lua scripts
  * via functions preceded by "lua" (such as luaNarrate).
  *
- * This class is a singleton.
- *
  * @author Noam Chitayat
  */
-class ScriptEngine : public Singleton<ScriptEngine>
+class ScriptEngine
 {   /**
      * The scheduler for the script threads
      */
-    ScriptScheduler* scheduler;
+    Scheduler* scheduler;
 
     /**
      * A stack used to keep track of which script is currently running. This
@@ -70,19 +68,10 @@ class ScriptEngine : public Singleton<ScriptEngine>
      */
     inline TicketId getNextTicket();
 
-    protected:
-
-       /**
-        * Singleton constructor. Private since the engine is a singleton.
-        */
-       void initialize() throw();
-
-       /**
-        * Singleton destructor.
-        */
-       void finish();
-
     public:
+
+       /** \todo Document. */
+       ScriptEngine(TileEngine* tileEngine);
 
        /**
         * Push a script onto the runningScripts stack so the engine may refer
@@ -111,7 +100,7 @@ class ScriptEngine : public Singleton<ScriptEngine>
 
        /**
         * Run all of the threads in the engine.
-        * \todo This should be removed when the ScriptScheduler is refactored
+        * \todo This should be removed when the Scheduler is refactored
         * out of the ScriptEngine.
         *
         * @param timePassed The amount of time that has passed since the last frame
@@ -122,7 +111,7 @@ class ScriptEngine : public Singleton<ScriptEngine>
         * Signal the scheduler that an instruction has finished and that
         * a thread waiting on the instruction should be unblocked.
         *
-        * \todo This should be removed when the ScriptScheduler is refactored
+        * \todo This should be removed when the Scheduler is refactored
         * out of the ScriptEngine.
         *
         * @param ticket The instruction that has completed executing.
@@ -142,6 +131,9 @@ class ScriptEngine : public Singleton<ScriptEngine>
         * @param funcName The name of the function to call.
         */
        void callFunction(lua_State* thread, const char* funcName);
+
+       /** \todo Document. */
+       ~ScriptEngine();
 
        /////////////////////////////////////////////////////////
        /////////// Functions supplied to Lua scripts ///////////
