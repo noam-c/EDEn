@@ -1,5 +1,4 @@
 #include "Scheduler.h"
-#include "ScriptEngine.h"
 #include "Thread.h"
 #include "DebugUtils.h"
 
@@ -34,7 +33,7 @@ void Scheduler::block(Thread* thread, TicketId waitInstruction)
 
 }
 
-void Scheduler::ready(TicketId finishedInstruction)
+void Scheduler::instructionDone(TicketId finishedInstruction)
 {  Thread* resumingThread = blockedThreads[finishedInstruction];
    if(resumingThread)
    {  DEBUG("Putting thread %d on resume list...", resumingThread->getId());
@@ -64,7 +63,7 @@ void Scheduler::join(Thread* joiningThread, Thread* runningThread)
    }
 }
 
-void Scheduler::finishJoin(Thread* thread)
+void Scheduler::threadDone(Thread* thread)
 {  // A thread has completed execution,
    // so check if anyone is waiting for it to finish
    Thread* resumingThread = joiningThreads[thread];
@@ -82,12 +81,12 @@ void Scheduler::finishJoin(Thread* thread)
 void Scheduler::finished(Thread* thread)
 {  // Check for any joins on this thread, then push it onto the finished
    // thread list
-   finishJoin(thread);
+   threadDone(thread);
    finishedThreads.push(thread);
    delete thread;
 }
 
-void Scheduler::run(long timePassed)
+void Scheduler::runThreads(long timePassed)
 {  // If there are any threads on the unstarted list, then put them all into
    // the ready list and clear the unstarted list
    if(!unstartedThreads.empty())

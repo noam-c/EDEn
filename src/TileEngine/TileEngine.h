@@ -9,6 +9,7 @@
 #include "OpenGLTTF.h"
 #include "TicketId.h"
 
+class Scheduler;
 class ScriptEngine;
 
 /**
@@ -36,6 +37,9 @@ class TileEngine: public GameState
 
    /** The Scripting Engine used for the engine's scripting */
    ScriptEngine* scriptEngine;
+
+   /** The Thread scheduler used by the tile engine */
+   Scheduler* scheduler;
 
    public:
       /**

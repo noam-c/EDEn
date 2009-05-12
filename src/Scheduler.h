@@ -47,6 +47,12 @@ class Scheduler
    /** A list of threads to remove from the ready list after a run. */
    ThreadQueue finishedThreads;
 
+   /**
+    * Signal that a Thread has run to completion so that waiting Threads
+    * can be unblocked.
+    */
+   void threadDone(Thread* thread);
+
    public:
       /**
        * Block a Thread on a specified instruction TicketId. Thread will be
@@ -70,7 +76,7 @@ class Scheduler
        *
        * @param finishedInstruction The instruction that has been finished.
        */
-      void ready(TicketId finishedInstruction);
+      void instructionDone(TicketId finishedInstruction);
 
       /**
        * Block a Thread and make it wait until another Thread has finished
@@ -80,12 +86,6 @@ class Scheduler
        * @param runningThread The Thread on which the joining Thread is waiting.
        */
       void join(Thread* joiningThread, Thread* runningThread);
-
-      /**
-       * Signal that a Thread has run to completion so that waiting Threads
-       * can be unblocked.
-       */
-      void finishJoin(Thread* thread);
 
       /**
        * Signal that a Thread has been finished and destroy the Thread.
@@ -99,7 +99,7 @@ class Scheduler
        * @param timePassed The amount of time that has passed since the last frame.
        *                   (roughly speaking, the amount of time since the last run)
        */
-      void run(long timePassed);
+      void runThreads(long timePassed);
 };
 
 #endif

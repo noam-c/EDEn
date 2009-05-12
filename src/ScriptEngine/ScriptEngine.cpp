@@ -15,7 +15,8 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-ScriptEngine::ScriptEngine(TileEngine* tileEngine) : tileEngine(tileEngine)
+ScriptEngine::ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler)
+                                  : tileEngine(tileEngine), scheduler(scheduler)
 {  luaVM = luaL_newstate();
 
    if(luaVM == NULL)
@@ -29,12 +30,11 @@ ScriptEngine::ScriptEngine(TileEngine* tileEngine) : tileEngine(tileEngine)
    // register game functions with Lua
    registerFunctions();
 
-   // push this engine as a global pointer
+   // Push this engine instance as a global pointer for the Lua VM
+   // This allows global C functions in our API to reference this instance
+   // (thus eliminating the need for a global ScriptEngine instance or singleton)
    lua_pushlightuserdata(luaVM, this);
    lua_setglobal(luaVM, "ScriptEngine");
-
-   // initialize the script scheduler
-   scheduler = new Scheduler();
 
    nextTicket = 0;
 }
@@ -111,8 +111,6 @@ ScriptEngine::~ScriptEngine()
    {  DEBUG("Destroying Lua state machine...");
       lua_close(luaVM);
    }
-
-   delete scheduler;
 }
 
 int ScriptEngine::runScript(std::string scriptName)
@@ -130,10 +128,6 @@ int ScriptEngine::runScript(std::string scriptName)
    return 0;
 }
 
-void ScriptEngine::signalTicket(TicketId ticket)
-{  scheduler->ready(ticket);
-}
-
 void ScriptEngine::callFunction(lua_State* thread, const char* funcName)
 {  // push the function onto the stack and then resume the thread from the
    // start of the function 
@@ -147,10 +141,6 @@ void ScriptEngine::pushRunningScript(Script* script)
 
 void ScriptEngine::popRunningScript()
 {  runningScripts.pop();
-}
-
-void ScriptEngine::runThreads(long timePassed)
-{  scheduler->run(timePassed);
 }
 
 std::string ScriptEngine::getScriptPath(std::string scriptName)

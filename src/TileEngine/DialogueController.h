@@ -11,7 +11,7 @@ namespace edwt
    class TextBox;
 };
 
-class ScriptEngine;
+class Scheduler;
 
 /**
  * The dialogue controller controls all of the dialogue boxes that hold
@@ -78,8 +78,8 @@ class DialogueController
    /** The current line of dialogue */
    Line* currLine;
 
-   /** The scripting engine that will be interfacing with this controller */
-   ScriptEngine* scriptEngine;
+   /** The scheduler to signal when a line is finished printing onto the screen */
+   Scheduler* scheduler;
 
    /**
     * Initialize the main dialogue box.
@@ -130,12 +130,16 @@ class DialogueController
        * Constructor.
        *
        * @param top The top-level widget container of the current state.
+       * @param scheduler The scheduler that will be blocking Threads on this controller
        */
-      DialogueController(ScriptEngine* scriptEngine, edwt::Container* top);
+      DialogueController(edwt::Container* top, Scheduler* scheduler);
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next
-       * line in the lineQueue for display on screen.
+       * line in the lineQueue for display on screen. Only works when there is
+       * dialogue and it isn't in the process of printing
+       *
+       * @return true iff the controller was able to respond to the nextLine request
        */
       bool nextLine();
 

@@ -1,13 +1,13 @@
 #include "DialogueController.h"
 #include "TextBox.h"
 #include "Container.h"
-#include "ScriptEngine.h"
+#include "Scheduler.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueController(ScriptEngine* scriptEngine, edwt::Container* top) 
-                     : scriptEngine(scriptEngine), top(top), currLine(NULL)
+DialogueController::DialogueController(edwt::Container* top, Scheduler* scheduler) 
+                     : top(top), scheduler(scheduler), currLine(NULL)
 {  initMainDialogue();
 
    clearDialogue();
@@ -74,7 +74,7 @@ void DialogueController::advanceDialogue()
    if(dialogue.size() <= charsToShow)
    {  charsToShow = dialogue.size();
       dialogueTime = -1;
-      scriptEngine->signalTicket(currLine->ticket);
+      scheduler->instructionDone(currLine->ticket);
    }
 
    dialogue = dialogue.substr(0, charsToShow);

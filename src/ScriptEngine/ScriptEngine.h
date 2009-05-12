@@ -13,7 +13,7 @@ class Scheduler;
 class Script;
 
 /**
- * The Script Engine encapsulates the use of the Lua interpreter to run scripts,
+ * The ScriptEngine encapsulates the use of the Lua interpreter to run scripts,
  * create Lua coroutines, and bind the game functionality to the Lua scripts
  * via functions preceded by "lua" (such as luaNarrate).
  *
@@ -46,6 +46,7 @@ class ScriptEngine
      * The main Lua execution thread and stack
      */
     lua_State* luaVM;
+
     /**
      * The tile engine to execute commands on
      */
@@ -70,8 +71,13 @@ class ScriptEngine
 
     public:
 
-       /** \todo Document. */
-       ScriptEngine(TileEngine* tileEngine);
+       /** 
+        * Constructor. Initializes a Lua VM and initializes members as needed.
+        *
+        * @param tileEngine The tile engine to make calls to from scripts
+        * @param scheduler The scheduler responsible for managing this engine's Script threads
+        */
+       ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
 
        /**
         * Push a script onto the runningScripts stack so the engine may refer
@@ -99,26 +105,6 @@ class ScriptEngine
        void setTileEngine(TileEngine* engine);
 
        /**
-        * Run all of the threads in the engine.
-        * \todo This should be removed when the Scheduler is refactored
-        * out of the ScriptEngine.
-        *
-        * @param timePassed The amount of time that has passed since the last frame
-        */
-       void runThreads(long timePassed);
-
-       /**
-        * Signal the scheduler that an instruction has finished and that
-        * a thread waiting on the instruction should be unblocked.
-        *
-        * \todo This should be removed when the Scheduler is refactored
-        * out of the ScriptEngine.
-        *
-        * @param ticket The instruction that has completed executing.
-        */
-       void signalTicket(TicketId ticket);
-
-       /**
         * Calls a specified function on a specified Lua thread.
         * Because of the nature of Lua's argument pushing, passing an array of
         * arguments here will be complicated and may not be worth adding in.
@@ -132,7 +118,10 @@ class ScriptEngine
         */
        void callFunction(lua_State* thread, const char* funcName);
 
-       /** \todo Document. */
+       /** 
+        * Destructor. Cleans up used memory and closes the Lua VM,
+        * disposing of any memory used by the Lua scripts.
+        */
        ~ScriptEngine();
 
        /////////////////////////////////////////////////////////

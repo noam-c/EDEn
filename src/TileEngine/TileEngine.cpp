@@ -1,14 +1,16 @@
 #include "TileEngine.h"
 #include "Region.h"
 #include "ScriptEngine.h"
+#include "Scheduler.h"
 #include "Container.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_TILE_ENG;
 
 TileEngine::TileEngine(const char* introScript) : currMap(NULL)
-{   scriptEngine = new ScriptEngine(this);
-    dialogue = new DialogueController(scriptEngine, top);
+{   scheduler = new Scheduler();
+    scriptEngine = new ScriptEngine(this, scheduler);
+    dialogue = new DialogueController(top, scheduler);
     time = SDL_GetTicks();
     scriptEngine->runScript(introScript);
 }
@@ -67,7 +69,7 @@ bool TileEngine::step()
    GameState::step();
 
    bool done = false;
-   scriptEngine->runThreads(timePassed);
+   scheduler->runThreads(timePassed);
    dialogue->timePassed(timePassed);
    SDL_Event event;
 
@@ -102,7 +104,8 @@ bool TileEngine::step()
 }
 
 TileEngine::~TileEngine()
-{  delete scriptEngine;
+{  delete scheduler;
+   delete scriptEngine;
    delete dialogue;
    delete top;
 }
