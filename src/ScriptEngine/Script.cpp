@@ -20,7 +20,9 @@ Script::Script(ScriptEngine* scriptEngine, lua_State* luaVM, std::string scriptP
 }
 
 bool Script::runScript()
-{  int returnCode = lua_resume(luaStack, 0);
+{  DEBUG("Resuming script %d...", threadId);
+
+   int returnCode = lua_resume(luaStack, 0);
    if(returnCode == 0)
    {  DEBUG("Script %d finished.", threadId);
       return true;
@@ -37,10 +39,9 @@ bool Script::runScript()
 }
 
 bool Script::resume(long /*timePassed*/)
-{  engine->pushRunningScript(this);   
+{  engine->pushRunningScript(this);
    bool result = runScript();
    engine->popRunningScript();
-
    return result;
 }
 

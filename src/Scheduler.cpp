@@ -96,17 +96,11 @@ void Scheduler::runThreads(long timePassed)
 
    // Run each thread until either it yields or finishes execution
    for(ThreadList::iterator iter = readyThreads.begin(); iter != readyThreads.end(); ++iter)
-   {  DEBUG("Resuming script %d...", (*iter)->getId());
-
-      // Run/resume the thread
+   {  // Run/resume the thread
       bool scriptIsFinished = (*iter)->resume(timePassed);
 
       if(scriptIsFinished)
       {  finished(*iter);
-         DEBUG("Script finished.");
-      }
-      else
-      {  DEBUG("Script yielded.");
       }
    }
 

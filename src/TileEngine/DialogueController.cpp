@@ -115,9 +115,11 @@ bool DialogueController::nextLine()
    return true;
 }
 
-void DialogueController::timePassed(long time)
+bool DialogueController::resume(long timePassed)
 {  if(hasDialogue() && !dialogueComplete())
-   {  dialogueTime += time;
+   {  dialogueTime += timePassed;
       advanceDialogue();
    }
+
+   return false;
 }

@@ -4,6 +4,7 @@
 #include <queue>
 #include <string>
 
+#include "Thread.h"
 #include "TicketId.h"
 
 namespace edwt
@@ -27,7 +28,7 @@ class Scheduler;
  *
  * @author Noam Chitayat
  */
-class DialogueController
+class DialogueController : public Thread
 {  /** Abstract the implementation of the dialogue boxes */
    typedef edwt::TextBox DialogueBox;
 
@@ -164,9 +165,10 @@ class DialogueController
        * Tells the DialogueController how much of the current line
        * of dialogue to reveal (it is shown letter by letter over time)
        *
-       * @param time The number of milliseconds that has passed since the last frame.
+       * @param timePassed The number of milliseconds that has passed since the last frame.
+       * @return false only, since this Thread does not end until end-of-life
        */
-      void timePassed(long time);
+      bool resume(long time);
 
 };
 

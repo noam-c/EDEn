@@ -12,6 +12,7 @@ TileEngine::TileEngine(const char* introScript) : currMap(NULL)
     scriptEngine = new ScriptEngine(this, scheduler);
     dialogue = new DialogueController(top, scheduler);
     time = SDL_GetTicks();
+    scheduler->start(dialogue);
     scriptEngine->runScript(introScript);
 }
 
@@ -70,7 +71,6 @@ bool TileEngine::step()
 
    bool done = false;
    scheduler->runThreads(timePassed);
-   dialogue->timePassed(timePassed);
    SDL_Event event;
 
    /* Check for events */
