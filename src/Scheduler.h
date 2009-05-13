@@ -3,7 +3,7 @@
 
 class Thread;
 
-#include "TicketId.h"
+#include "TaskId.h"
 #include <map>
 #include <set>
 #include <queue>
@@ -25,8 +25,8 @@ class Scheduler
    /** A queue of threads. */
    typedef std::queue<Thread*> ThreadQueue;
 
-   /** A list of blocked threads, indexed by the TicketId on which they are waiting */
-   typedef std::map<TicketId, Thread*> BlockList;
+   /** A list of blocked threads, indexed by the TaskId on which they are waiting */
+   typedef std::map<TaskId, Thread*> BlockList;
 
    /** A list of joining/waiting threads, indexed by the Thread on which they are waiting */
    typedef std::map<Thread*, Thread*> JoinList;
@@ -73,11 +73,11 @@ class Scheduler
        * Block a Thread on a specified instruction TicketId. Thread will be
        * readied again when the instruction is finished executing.
        *
-       * @param instruction The instruction upon which the thread is waiting.
+       * @param task The task upon which the thread is waiting.
        *
        * @return a yield code from the Thread being blocked
        */
-      int block(TicketId instruction);
+      int block(TaskId task);
 
       /**
        * Add a Thread to the scheduler by enqueuing it to be started on the next run.
@@ -90,9 +90,9 @@ class Scheduler
        * Signals that an instruction has been completed so that the scheduler
        * can unblock any waiting Threads.
        *
-       * @param finishedInstruction The instruction that has been finished.
+       * @param finishedTask The instruction that has been finished.
        */
-      void instructionDone(TicketId finishedInstruction);
+      void taskDone(TaskId finishedTask);
 
       /**
        * Block a Thread and make it wait until another Thread has finished

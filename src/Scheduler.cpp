@@ -23,7 +23,7 @@ bool Scheduler::hasRunningThread()
 {  return runningThread;
 }
 
-int Scheduler::block(TicketId waitInstruction)
+int Scheduler::block(TaskId pendingTask)
 {  DEBUG("Blocking thread %d...", runningThread->getId());
    
    // Find the thread in the ready list
@@ -33,7 +33,7 @@ int Scheduler::block(TicketId waitInstruction)
       //readyThreads.erase(stateToBlock);
 
       // Add the thread to the blocked list
-      blockedThreads[waitInstruction] = runningThread;
+      blockedThreads[pendingTask] = runningThread;
    }
    else
    {  T_T("Attempting to block a thread that isn't ready/running!");
@@ -43,8 +43,8 @@ int Scheduler::block(TicketId waitInstruction)
    return runningThread->yield();
 }
 
-void Scheduler::instructionDone(TicketId finishedInstruction)
-{  Thread* resumingThread = blockedThreads[finishedInstruction];
+void Scheduler::taskDone(TaskId finishedTask)
+{  Thread* resumingThread = blockedThreads[finishedTask];
    if(resumingThread)
    {  DEBUG("Putting thread %d on resume list...", resumingThread->getId());
 
@@ -52,7 +52,7 @@ void Scheduler::instructionDone(TicketId finishedInstruction)
       unstartedThreads.insert(resumingThread);
 
       // Remove the thread from the block list
-      blockedThreads[finishedInstruction] = NULL;
+      blockedThreads[finishedTask] = NULL;
    }
 }
 

@@ -4,7 +4,6 @@
 #include "Sound.h"
 
 #include "TileEngine.h"
-#include "ScriptEngine.h"
 
 #define CHAP1 "data/chapters/chapter1"
 //Actions for each of the list ops in the title screen

@@ -36,11 +36,11 @@ ScriptEngine::ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler)
    lua_pushlightuserdata(luaVM, this);
    lua_setglobal(luaVM, SCRIPT_ENG_LUA_NAME);
 
-   nextTicket = 0;
+   nextTaskTicket = 0;
 }
 
-TicketId ScriptEngine::getNextTicket()
-{  return nextTicket++;
+TaskId ScriptEngine::getNextTicket()
+{  return nextTaskTicket++;
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
@@ -53,13 +53,13 @@ int ScriptEngine::narrate(lua_State* luaStack)
       {  waitForFinish = lua_toboolean(luaStack, 2);
       }
 
-      TicketId ticket = getNextTicket();
+      TaskId task = getNextTicket();
 
       DEBUG("Narrating text: %s", speech);
-      tileEngine->dialogueNarrate(speech, ticket);
+      tileEngine->dialogueNarrate(speech, task);
 
       if(waitForFinish)
-      {  return scheduler->block(ticket);;
+      {  return scheduler->block(task);
       }
    }
 
@@ -76,13 +76,13 @@ int ScriptEngine::say(lua_State* luaStack)
       {  waitForFinish = lua_toboolean(luaStack, 2);
       }
 
-      TicketId ticket = getNextTicket();
+      TaskId task = getNextTicket();
 
       DEBUG("Saying text: %s", speech);
-      tileEngine->dialogueSay(speech, ticket);
+      tileEngine->dialogueSay(speech, task);
 
       if(waitForFinish)
-      {  return scheduler->block(ticket);
+      {  return scheduler->block(task);
       }
    }
 

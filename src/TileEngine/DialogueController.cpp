@@ -24,8 +24,8 @@ void DialogueController::initMainDialogue()
    top->add(mainDialogue);
 }
 
-void DialogueController::addLine(LineType type, const char* speech, TicketId ticket)
-{  Line* nextLine = new Line(type, speech, ticket);
+void DialogueController::addLine(LineType type, const char* speech, TaskId task)
+{  Line* nextLine = new Line(type, speech, task);
    if(currLine == NULL)
    {  currLine = nextLine;
       setDialogue(type);
@@ -35,12 +35,12 @@ void DialogueController::addLine(LineType type, const char* speech, TicketId tic
    }
 }
 
-void DialogueController::narrate(const char* speech, TicketId ticket)
-{  addLine(NARRATE, speech, ticket);
+void DialogueController::narrate(const char* speech, TaskId task)
+{  addLine(NARRATE, speech, task);
 }
 
-void DialogueController::say(const char* speech, TicketId ticket)
-{  addLine(SAY, speech, ticket);
+void DialogueController::say(const char* speech, TaskId task)
+{  addLine(SAY, speech, task);
 }
 
 void DialogueController::setDialogue(LineType type)
@@ -74,7 +74,7 @@ void DialogueController::advanceDialogue()
    if(dialogue.size() <= charsToShow)
    {  charsToShow = dialogue.size();
       dialogueTime = -1;
-      scheduler->instructionDone(currLine->ticket);
+      scheduler->taskDone(currLine->task);
    }
 
    dialogue = dialogue.substr(0, charsToShow);

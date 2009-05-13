@@ -5,7 +5,7 @@
 #include <string>
 
 #include "Thread.h"
-#include "TicketId.h"
+#include "TaskId.h"
 
 namespace edwt
 {  class Container;
@@ -55,12 +55,12 @@ class DialogueController : public Thread
       /** The dialogue itself. */
       std::string dialogue;
 
-      /** The ticket waiting on this particular line of dialogue */
-      TicketId ticket;
+      /** The task ID waiting on this particular line of dialogue */
+      TaskId task;
 
       /** Constructor. */
-      Line(LineType type, std::string dialogue, TicketId ticket) 
-                    : type(type), dialogue(dialogue), ticket(ticket)
+      Line(LineType type, std::string dialogue, TaskId task) 
+                    : type(type), dialogue(dialogue), task(task)
       {}
    };
 
@@ -116,9 +116,9 @@ class DialogueController : public Thread
     *
     * @param type The type of line that will be enqueued.
     * @param speech The speech to enqueue in the dialogue controller. 
-    * @param ticket The ticket number to be signalled when the line is finished
+    * @param task The ticket number to be signalled when the line is finished
     */
-   void addLine(LineType type, const char* speech, TicketId ticket);
+   void addLine(LineType type, const char* speech, TaskId task);
 
    /**
     * Clears any dialogue currently being displayed onscreen.
@@ -148,17 +148,17 @@ class DialogueController : public Thread
        * Enqueue a line of speech said by a character.
        *
        * @param speech The dialogue that will be said.
-       * @param ticket The ticket number of this speech instruction
+       * @param task The ticket number of this speech instruction
        */
-      void say(const char* speech, TicketId ticket);
+      void say(const char* speech, TaskId task);
    
       /**
        * Enqueue a line of speech narrated or thought by a character.
        *
        * @param speech The dialogue that will be narrated.
-       * @param ticket The ticket number of this narration instruction
+       * @param task The ticket number of this narration instruction
        */
-      void narrate(const char* speech, TicketId ticket);
+      void narrate(const char* speech, TaskId task);
 
       /**
        * Signals that some amount of time has passed.

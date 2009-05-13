@@ -16,12 +16,12 @@ TileEngine::TileEngine(const char* introScript) : currMap(NULL)
     scriptEngine->runScript(introScript);
 }
 
-void TileEngine::dialogueNarrate(const char* narration, TicketId ticket)
-{   dialogue->narrate(narration, ticket);
+void TileEngine::dialogueNarrate(const char* narration, TaskId task)
+{   dialogue->narrate(narration, task);
 }
 
-void TileEngine::dialogueSay(const char* speech, TicketId ticket)
-{   dialogue->say(speech, ticket);
+void TileEngine::dialogueSay(const char* speech, TaskId task)
+{   dialogue->say(speech, task);
 }
 
 std::string TileEngine::setRegion(std::string regionName, std::string mapName)

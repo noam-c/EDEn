@@ -4,7 +4,7 @@
 #include <stack>
 #include <string>
 #include "Singleton.h"
-#include "TicketId.h"
+#include "TaskId.h"
 
 // We will need to talk to the tile engine from Lua
 class TileEngine;
@@ -27,9 +27,9 @@ class ScriptEngine
     Scheduler* scheduler;
 
     /**
-     * The current ticket ID for the next instruction
+     * The TaskId available for the next instruction
      */
-    TicketId nextTicket;
+    TaskId nextTaskTicket;
 
     /**
      * The main Lua execution thread and stack
@@ -56,7 +56,7 @@ class ScriptEngine
      *
      * @return the next instruction ticket to use.
      */
-    inline TicketId getNextTicket();
+    inline TaskId getNextTicket();
 
     public:
 
