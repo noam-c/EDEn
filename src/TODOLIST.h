@@ -9,7 +9,6 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo Rename TicketId to TaskId, and rename Scheduler references to "instructions" to "tasks"
  * \todo Organize the global code folder and try to create some new folders for organization
  * \todo The dialogue controller must be able to handle embedded instructions, blocking if necessary
  * \todo Dialogue Controller needs to have "speed up" on holding of the space bar
