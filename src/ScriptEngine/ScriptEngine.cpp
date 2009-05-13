@@ -34,7 +34,7 @@ ScriptEngine::ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler)
    // This allows global C functions in our API to reference this instance
    // (thus eliminating the need for a global ScriptEngine instance or singleton)
    lua_pushlightuserdata(luaVM, this);
-   lua_setglobal(luaVM, "ScriptEngine");
+   lua_setglobal(luaVM, SCRIPT_ENG_LUA_NAME);
 
    nextTicket = 0;
 }
@@ -58,10 +58,8 @@ int ScriptEngine::narrate(lua_State* luaStack)
       DEBUG("Narrating text: %s", speech);
       tileEngine->dialogueNarrate(speech, ticket);
 
-      Script* currScript = runningScripts.top();
       if(waitForFinish)
-      {  scheduler->block(currScript, ticket);
-         return currScript->yield();
+      {  return scheduler->block(ticket);;
       }
    }
 
@@ -83,10 +81,8 @@ int ScriptEngine::say(lua_State* luaStack)
       DEBUG("Saying text: %s", speech);
       tileEngine->dialogueSay(speech, ticket);
 
-      Script* currScript = runningScripts.top();
       if(waitForFinish)
-      {  scheduler->block(currScript, ticket);
-         return currScript->yield();
+      {  return scheduler->block(ticket);
       }
    }
 
@@ -106,23 +102,13 @@ int ScriptEngine::setRegion(lua_State* luaStack)
    return 0;
 }
 
-ScriptEngine::~ScriptEngine()
-{  if(luaVM)
-   {  DEBUG("Destroying Lua state machine...");
-      lua_close(luaVM);
-   }
-}
-
 int ScriptEngine::runScript(std::string scriptName)
 {  DEBUG("Running script: %s", scriptName.c_str());
-   Script* newScript = new Script(this, luaVM, getScriptPath(scriptName));
+   Script* newScript = new Script(luaVM, getScriptPath(scriptName));
    scheduler->start(newScript);
 
-   if(!runningScripts.empty())
-   {  Script* currScript = runningScripts.top();
-      scheduler->join(currScript, newScript);
-      DEBUG("Yielding: %d", currScript->getId());
-      return currScript->yield();
+   if(scheduler->hasRunningThread())
+   {  return scheduler->join(newScript);
    }
 
    return 0;
@@ -135,14 +121,13 @@ void ScriptEngine::callFunction(lua_State* thread, const char* funcName)
    lua_resume(thread, 0);
 }
 
-void ScriptEngine::pushRunningScript(Script* script)
-{  runningScripts.push(script);
-}
-
-void ScriptEngine::popRunningScript()
-{  runningScripts.pop();
-}
-
 std::string ScriptEngine::getScriptPath(std::string scriptName)
 {  return scriptName + ".lua";
+}
+
+ScriptEngine::~ScriptEngine()
+{  if(luaVM)
+   {  DEBUG("Destroying Lua state machine...");
+      lua_close(luaVM);
+   }
 }

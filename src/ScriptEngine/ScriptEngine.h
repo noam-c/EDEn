@@ -10,7 +10,8 @@
 class TileEngine;
 struct lua_State;
 class Scheduler;
-class Script;
+
+#define SCRIPT_ENG_LUA_NAME ","
 
 /**
  * The ScriptEngine encapsulates the use of the Lua interpreter to run scripts,
@@ -24,18 +25,6 @@ class ScriptEngine
      * The scheduler for the script threads
      */
     Scheduler* scheduler;
-
-    /**
-     * A stack used to keep track of which script is currently running. This
-     * stack is necessary to keep track of the Script object that was last invoked,
-     * so that the scripting engine can properly yield or block the thread after
-     * a call from a Lua script (which only passes in a Lua stack, not a Script).
-     *
-     * \todo Do we need a stack? A thread should theoretically always finish or 
-     * yield before any other one runs, so this stack may only have 1 entry at a
-     * time anyway.
-     */
-    std::stack<Script*> runningScripts;
 
     /**
      * The current ticket ID for the next instruction
@@ -78,17 +67,6 @@ class ScriptEngine
         * @param scheduler The scheduler responsible for managing this engine's Script threads
         */
        ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
-
-       /**
-        * Push a script onto the runningScripts stack so the engine may refer
-        * back to the script thread when needed.
-        */
-       void pushRunningScript(Script* script);
-
-       /**
-        * Remove the last running script from the runningScripts stack.
-        */
-       void popRunningScript();
 
        /**
         * Run a script on the main thread with the specified name.

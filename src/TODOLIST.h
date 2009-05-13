@@ -11,14 +11,13 @@ void OrganizationTodoList(void);
 /**
  * \todo Rename TicketId to TaskId, and rename Scheduler references to "instructions" to "tasks"
  * \todo Organize the global code folder and try to create some new folders for organization
- * \todo The dialogue controller needs to be a thread
  * \todo The dialogue controller must be able to handle embedded instructions, blocking if necessary
- * \todo Dialogue Controller needs to have proper "speed up" on holding of the space bar
+ * \todo Dialogue Controller needs to have "speed up" on holding of the space bar
  * \todo Sound needs to handle and signal instruction IDs
- * \todo Further integration of scripts into Tile Engine, followed by a quick test for all the script functions
+ * \todo Further integration of scripts into Tile Engine, followed by unit tests for all the script functions
  * \todo Document all of the Resources (Music, Sound, Tileset, Region), and the Resource abstract class
  * \todo Remove references to namespace gcn outside of edwt
- * \todo Complete ScriptException class, as it is currently empty and pointless.
+ * \todo Complete or remove ScriptException class, as it is currently empty and pointless.
  * \todo Document ScriptException when it is completed.
  * \todo Add NPCs to the game.
  * \todo Create an NPC controller for the Tile Engine.
@@ -54,15 +53,11 @@ void DevelopmentTodoList(void);
 void OptionsMenuTodoList(void);
 
 /**
- * \todo narrateBlocking function - narrate but block until speech is flushed to screen
- * \todo narrateArrow function - narrate but show an arrow and wait until user advances
- * \todo sayBlocking function - say but block until speech is flushed to screen
- * \todo sayArrow function - say but show an arrow and wait until user advances
- * \todo playSound function - play a sound
- * \todo playSoundBlocking function - play a sound and wait until the sound is finished
+ * \todo freezeUserInput/startCutScene - don't allow user input (begin a cutscene)
+ * \todo permitUserInput/endCutScene - allow user input (end a cutscene)
+ * \todo playSound function - play a sound (possibly blocking until sound is finished)
  * \todo playMusic function - play a song (stop the currently playing song)
- * \todo fadeMusic function - fade a song out with a given time delay
- * \todo fadeMusicBlocked function - fade a song out with a given time delay and wait until the song is faded
+ * \todo fadeMusic function - fade a song out with a given time delay (possibly blocking until the song is faded)
  */
 void ScriptFunctionsTodoList(void);
 

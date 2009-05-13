@@ -47,21 +47,37 @@ class Scheduler
    /** A list of threads to remove from the ready list after a run. */
    ThreadQueue finishedThreads;
 
+   /** The currently running thread */
+   Thread* runningThread;
+
    /**
     * Signal that a Thread has run to completion so that waiting Threads
     * can be unblocked.
+    *
+    * @param thread The thread that has completed execution
     */
    void threadDone(Thread* thread);
 
    public:
       /**
+       * Constructor. Initializes member variables.
+       */
+      Scheduler();
+
+      /**
+       * @return true iff there is a Thread currently running in the Scheduler
+       */
+      bool hasRunningThread();
+
+      /**
        * Block a Thread on a specified instruction TicketId. Thread will be
        * readied again when the instruction is finished executing.
        *
-       * @param thread The thread to block.
        * @param instruction The instruction upon which the thread is waiting.
+       *
+       * @return a yield code from the Thread being blocked
        */
-      void block(Thread* thread, TicketId instruction);
+      int block(TicketId instruction);
 
       /**
        * Add a Thread to the scheduler by enqueuing it to be started on the next run.
@@ -84,8 +100,10 @@ class Scheduler
        *
        * @param joiningThread The Thread that will be waiting for the runningState to finish
        * @param runningThread The Thread on which the joining Thread is waiting.
+       *
+       * @return a yield code from the Thread being blocked
        */
-      void join(Thread* joiningThread, Thread* runningThread);
+      int join(Thread* runningThread);
 
       /**
        * Signal that a Thread has been finished and destroy the Thread.

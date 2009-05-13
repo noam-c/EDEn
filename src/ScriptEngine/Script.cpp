@@ -1,5 +1,4 @@
 #include "Script.h"
-#include "ScriptEngine.h"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -13,8 +12,7 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-Script::Script(ScriptEngine* scriptEngine, lua_State* luaVM, std::string scriptPath)
-                             : engine(scriptEngine)
+Script::Script(lua_State* luaVM, std::string scriptPath)
 {  luaStack = lua_newthread(luaVM);
    luaL_loadfile(luaStack, scriptPath.c_str());
 }
@@ -39,9 +37,7 @@ bool Script::runScript()
 }
 
 bool Script::resume(long /*timePassed*/)
-{  engine->pushRunningScript(this);
-   bool result = runScript();
-   engine->popRunningScript();
+{  bool result = runScript();
    return result;
 }
 

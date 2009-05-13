@@ -9,3 +9,7 @@ Thread::Thread()
 int Thread::getId()
 {  return threadId;
 }
+
+int Thread::yield()
+{  return 0;
+}

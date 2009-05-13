@@ -44,6 +44,15 @@ class Thread
        *              yielded or encountered an error.
        */
       virtual bool resume(long timePassed) = 0;
+
+      /**
+       * Yield the currently running thread, if it is a coroutine.
+       * Otherwise, do nothing.
+       *
+       * @return a yield code, indicating a yield to a calling class, or 0 if
+       *         this thread is not a coroutine.
+       */
+      virtual int yield();
 };
 
 #endif

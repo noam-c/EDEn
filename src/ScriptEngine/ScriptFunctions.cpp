@@ -15,7 +15,7 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
                                     lua_register(luaVM, luaName, function)
 
 static ScriptEngine* getEngine(lua_State* luaVM)
-{  lua_getglobal(luaVM, "ScriptEngine");
+{  lua_getglobal(luaVM, SCRIPT_ENG_LUA_NAME);
    ScriptEngine* engine = static_cast<ScriptEngine*>(lua_touserdata(luaVM, lua_gettop(luaVM)));
    lua_pop(luaVM, 1);
    return engine;

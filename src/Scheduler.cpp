@@ -4,6 +4,10 @@
 
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
+Scheduler::Scheduler() : runningThread(NULL)
+{
+}
+
 void Scheduler::start(Thread* thread)
 {  DEBUG("Starting thread %d...", thread->getId());
 
@@ -15,22 +19,28 @@ void Scheduler::start(Thread* thread)
    }
 }
 
-void Scheduler::block(Thread* thread, TicketId waitInstruction)
-{  DEBUG("Blocking thread %d...", thread->getId());
+bool Scheduler::hasRunningThread()
+{  return runningThread;
+}
+
+int Scheduler::block(TicketId waitInstruction)
+{  DEBUG("Blocking thread %d...", runningThread->getId());
    
    // Find the thread in the ready list
-   if(readyThreads.find(thread) != readyThreads.end())
+   if(readyThreads.find(runningThread) != readyThreads.end())
    {  // If the thread is in the ready list, push it into the finished thread list
-      finishedThreads.push(thread);
+      finishedThreads.push(runningThread);
       //readyThreads.erase(stateToBlock);
 
       // Add the thread to the blocked list
-      blockedThreads[waitInstruction] = thread;
+      blockedThreads[waitInstruction] = runningThread;
    }
    else
    {  T_T("Attempting to block a thread that isn't ready/running!");
    }
 
+   DEBUG("Yielding: %d", runningThread->getId());
+   return runningThread->yield();
 }
 
 void Scheduler::instructionDone(TicketId finishedInstruction)
@@ -46,21 +56,23 @@ void Scheduler::instructionDone(TicketId finishedInstruction)
    }
 }
 
-void Scheduler::join(Thread* joiningThread, Thread* runningThread)
-{  DEBUG("Joining thread %d...", joiningThread->getId());
+int Scheduler::join(Thread* thread)
+{  DEBUG("Joining thread %d...", runningThread->getId());
 
    // Find the thread in the ready list
-   if(readyThreads.find(joiningThread) != readyThreads.end())
+   if(readyThreads.find(runningThread) != readyThreads.end())
    {  // If the thread is in the ready list, push it into the finished thread list
-      finishedThreads.push(joiningThread);
-      //readyThreads.erase(stateToBlock);
+      finishedThreads.push(runningThread);
 
       // Add the thread to the joining list
-      joiningThreads[runningThread] = joiningThread;
+      joiningThreads[thread] = runningThread;
    }
    else
-   {  T_T("Attempting to join a thread that isn't ready/running!");
+   {  T_T("Attempting to suspend a thread that isn't ready/running!");
    }
+
+   DEBUG("Yielding: %d", runningThread->getId());
+   return runningThread->yield();
 }
 
 void Scheduler::threadDone(Thread* thread)
@@ -96,13 +108,19 @@ void Scheduler::runThreads(long timePassed)
 
    // Run each thread until either it yields or finishes execution
    for(ThreadList::iterator iter = readyThreads.begin(); iter != readyThreads.end(); ++iter)
-   {  // Run/resume the thread
+   {  // Set the running thread to the next thread
+      runningThread = *iter;
+
+      // Run/resume the thread
       bool scriptIsFinished = (*iter)->resume(timePassed);
 
       if(scriptIsFinished)
       {  finished(*iter);
       }
    }
+
+   // Clear the running thread since none are running now
+   runningThread = NULL;
 
    // If there are any finished/blocked threads,
    // remove them from the ready thread list
