@@ -6,52 +6,39 @@
  * /______/ //______/ //_/ //_____/\ /_/ //_/ //_/ //_/ //_/ /|_/ /
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
- * Copyright (c) 2004, 2005, 2006, 2007 Olof Naessén and Per Larsson
+ * Copyright (c) 2004 - 2008 Olof Naessén and Per Larsson
  *
- *                                                         Js_./
- * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
- * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
- *                                                 _Qhm`] _f "'c  1!5m
- * Visit: http://guichan.darkbits.org             )Qk<P ` _: :+' .'  "{[
- *                                               .)j(] .d_/ '-(  P .   S
- * License: (BSD)                                <Td/Z <fP"5(\"??"\a.  .L
- * Redistribution and use in source and          _dV>ws?a-?'      ._/L  #'
- * binary forms, with or without                 )4d[#7r, .   '     )d`)[
- * modification, are permitted provided         _Q-5'5W..j/?'   -?!\)cam'
- * that the following conditions are met:       j<<WP+k/);.        _W=j f
- * 1. Redistributions of source code must       .$%w\/]Q  . ."'  .  mj$
- *    retain the above copyright notice,        ]E.pYY(Q]>.   a     J@\
- *    this list of conditions and the           j(]1u<sE"L,. .   ./^ ]{a
- *    following disclaimer.                     4'_uomm\.  )L);-4     (3=
- * 2. Redistributions in binary form must        )_]X{Z('a_"a7'<a"a,  ]"[
- *    reproduce the above copyright notice,       #}<]m7`Za??4,P-"'7. ).m
- *    this list of conditions and the            ]d2e)Q(<Q(  ?94   b-  LQ/
- *    following disclaimer in the                <B!</]C)d_, '(<' .f. =C+m
- *    documentation and/or other materials      .Z!=J ]e []('-4f _ ) -.)m]'
- *    provided with the distribution.          .w[5]' _[ /.)_-"+?   _/ <W"
- * 3. Neither the name of Guichan nor the      :$we` _! + _/ .        j?
- *    names of its contributors may be used     =3)= _f  (_yQmWW$#(    "
- *    to endorse or promote products derived     -   W,  sQQQQmZQ#Wwa]..
- *    from this software without specific        (js, \[QQW$QWW#?!V"".
- *    prior written permission.                    ]y:.<\..          .
- *                                                 -]n w/ '         [.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT       )/ )/           !
- * HOLDERS AND CONTRIBUTORS "AS IS" AND ANY         <  (; sac    ,    '
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING,               ]^ .-  %
- * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF            c <   r
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR            aga<  <La
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE          5%  )P'-3L
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR        _bQf` y`..)a
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,          ,J?4P'.P"_(\?d'.,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES               _Pa,)!f/<[]/  ?"
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT      _2-..:. .r+_,.. .
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     ?a.<%"'  " -'.a_ _,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION)                     ^
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
- * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Per Larsson a.k.a finalman
+ * Olof Naessén a.k.a jansem/yakslem
+ *
+ * Visit: http://guichan.sourceforge.net
+ *
+ * License: (BSD)
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of Guichan nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef GCN_SLIDER_HPP
@@ -65,9 +52,11 @@
 namespace gcn
 {
     /**
-     * A slider able to slide between different values. You can set the scale
-     * of the slider yourself so that it ranges between, for example, -1.0 and
-     * 2.0.
+     * An implementation of a slider where a user can select different values by
+     * sliding between a start value and an end value of a scale. 
+     *
+     * If the selected value is changed an action event will be sent to all
+     * action listeners of the slider.
      */
     class GCN_CORE_DECLSPEC Slider :
         public Widget,
@@ -77,17 +66,27 @@ namespace gcn
     public:
 
         /**
-         * Constructor. Scale start is 0.
+         * Draw orientations for the slider. A slider can be drawn vertically or
+         * horizontally.
+         */
+        enum Orientation
+        {
+            HORIZONTAL = 0,
+            VERTICAL
+        };
+
+        /**
+         * Constructor. The default start value of the slider scale is zero.
          *
-         * @param scaleEnd the end of the slider scale.
+         * @param scaleEnd The end value of the slider scale.
          */
         Slider(double scaleEnd = 1.0);
 
         /**
          * Constructor.
          *
-         * @param scaleStart the start of the scale.
-         * @param scaleEnd the end of the scale.
+         * @param scaleStart The start value of the slider scale.
+         * @param scaleEnd The end value of the slider scale.
          */
         Slider(double scaleStart, double scaleEnd);
 
@@ -97,112 +96,118 @@ namespace gcn
         virtual ~Slider() { }
 
         /**
-         * Sets the scale.
+         * Sets the scale of the slider.
          *
-         * @param scaleStart the start of the scale.
-         * @param scaleEnd the end of the scale.
+         * @param scaleStart The start value of the scale.
+         * @param scaleEnd tThe end of value the scale.
+         * @see getScaleStart, getScaleEnd
          */
-        virtual void setScale(double scaleStart, double scaleEnd);
+        void setScale(double scaleStart, double scaleEnd);
 
         /**
-         * Gets the scale start.
+         * Gets the start value of the scale.
          *
-         * @return the scale start.
+         * @return The start value of the scale.
+         * @see setScaleStart, setScale
          */
-        virtual double getScaleStart() const;
+        double getScaleStart() const;
 
         /**
-         * Sets the scale start.
+         * Sets the start value of the scale.
          *
-         * @param scaleStart the start of the scale.
+         * @param scaleStart The start value of the scale.
+         * @see getScaleStart
          */
-        virtual void setScaleStart(double scaleStart);
+        void setScaleStart(double scaleStart);
 
         /**
-         * Gets the scale end.
+         * Gets the end value of the scale.
          *
-         * @return the scale end.
+         * @return The end value of the scale.
+         * @see setScaleEnd, setScale
          */
-        virtual double getScaleEnd() const;
+        double getScaleEnd() const;
 
         /**
-         * Sets the scale end.
+         * Sets the end value of the scale.
          *
-         * @param scaleEnd the end of the scale.
+         * @param scaleEnd The end value of the scale.
+         * @see getScaleEnd
          */
-        virtual void setScaleEnd(double scaleEnd);
+        void setScaleEnd(double scaleEnd);
 
         /**
-         * Gets the current value.
+         * Gets the current selected value.
          *
-         * @return the current value.
+         * @return The current selected value.
+         * @see setValue
          */
-        virtual double getValue() const;
+        double getValue() const;
 
         /**
-         * Sets the current value.
+         * Sets the current selected value.
          *
-         * @param value a scale value.
+         * @param value The current selected value.
+         * @see getValue
          */
-        virtual void setValue(double value);
-
-        /**
-         * Draws the marker.
-         *
-         * @param graphics a graphics object to draw with.
-         */
-        virtual void drawMarker(gcn::Graphics* graphics);
+        void setValue(double value);
 
         /**
          * Sets the length of the marker.
          *
-         * @param length new length for the marker.
+         * @param length The length for the marker.
+         * @see getMarkerLength
          */
-        virtual void setMarkerLength(int length);
+        void setMarkerLength(int length);
 
         /**
          * Gets the length of the marker.
          *
-         * @return the length of the marker.
+         * @return The length of the marker.
+         * @see setMarkerLength
          */
-        virtual int getMarkerLength() const;
+        int getMarkerLength() const;
 
         /**
-         * Sets the orientation of the slider. A slider can be drawn verticaly
-         * or horizontaly. For orientation, see the enum in this class.
+         * Sets the orientation of the slider. A slider can be drawn vertically
+         * or horizontally.
          *
-         * @param orientation the orientation.
+         * @param orientation The orientation of the slider.
+         * @see getOrientation
          */
-        virtual void setOrientation(unsigned int orientation);
+        void setOrientation(Orientation orientation);
 
         /**
-         * Gets the orientation of the slider. Se the enum in this class.
+         * Gets the orientation of the slider. A slider can be drawn vertically
+         * or horizontally.
          *
-         * @return the orientation of the slider.
+         * @return The orientation of the slider.
+         * @see setOrientation
          */
-        virtual unsigned int getOrientation() const;
+        Orientation getOrientation() const;
 
         /**
-         * Sets the step length. Step length is used when the keys left and
-         * right are pressed.
+         * Sets the step length. The step length is used when the keys LEFT 
+         * and RIGHT are pressed to step in the scale.
          *
-         * @param length the step length.
+         * @param length The step length.
+         * @see getStepLength
          */
-        virtual void setStepLength(double length);
+        void setStepLength(double length);
 
         /**
-         * Gets the step length.
+         * Gets the step length. The step length is used when the keys LEFT 
+         * and RIGHT are pressed to step in the scale.
          *
          * @return the step length.
+         * @see setStepLength
          */
-        virtual double getStepLength() const;
+        double getStepLength() const;
 
 
         // Inherited from Widget
 
-        virtual void draw(gcn::Graphics* graphics);
-
-        virtual void drawBorder(gcn::Graphics* graphics);
+        virtual void draw(Graphics* graphics);
 
 
         // Inherited from MouseListener.
@@ -220,47 +225,75 @@ namespace gcn
 
         virtual void keyPressed(KeyEvent& keyEvent);
 
-        /**
-         * Draw orientations for the slider. It can be drawn verticaly or
-         * horizontaly.
-         */
-        enum
-        {
-            HORIZONTAL = 0,
-            VERTICAL
-        };
-
     protected:
         /**
-         * Converts a marker position to a value.
+         * Draws the marker.
          *
-         * @param v the position to convert.
-         * @return the value corresponding to the position.
+         * @param graphics A graphics object to draw with.
          */
-        virtual double markerPositionToValue(int v) const;
+        virtual void drawMarker(gcn::Graphics* graphics);
+
+        /**
+         * Converts a marker position to a value in the scale.
+         *
+         * @param position The position to convert.
+         * @return A scale value corresponding to the position.
+         * @see valueToMarkerPosition
+         */
+        virtual double markerPositionToValue(int position) const;
 
         /**
          * Converts a value to a marker position.
          *
-         * @param value the value to convert.
-         * @return the position corresponding to the value.
+         * @param value The value to convert.
+         * @return A marker position corresponding to the value.
+         * @see markerPositionToValue
          */
         virtual int valueToMarkerPosition(double value) const;
 
         /**
-         * Gets the marker position for the current value.
+         * Gets the marker position of the current selected value.
          *
-         * @return the marker position for the current value.
+         * @return The marker position of the current selected value.
          */
         virtual int getMarkerPosition() const;
 
-        bool mMouseDrag;
+        /**
+         * True if the slider is dragged, false otherwise.
+         */
+        bool mDragged;
+
+        /**
+         * Holds the current selected value.
+         */
         double mValue;
+
+        /**
+         * Holds the step length. The step length is used when the keys LEFT 
+         * and RIGHT are pressed to step in the scale.
+         */
         double mStepLength;
+
+        /**
+         * Holds the length of the marker.
+         */
         int mMarkerLength;
+
+        /**
+         * Holds the start value of the scale.
+         */
         double mScaleStart;
+
+        /**
+         * Holds the end value of the scale.
+         */
         double mScaleEnd;
-        unsigned int mOrientation;
+
+        /**
+         * Holds the orientation of the slider. A slider can be drawn 
+         * vertically or horizontally.
+         */
+        Orientation mOrientation;
     };
 }
 

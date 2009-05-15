@@ -19,7 +19,7 @@ namespace edwt
    {  mOpaque = true;
       addMouseListener(this);
       addActionListener(this);
-      setWrappingKeyboardSelection(true);
+      setWrappingEnabled(true);
       gcn::ListBox::setSelected(0);
    }
 

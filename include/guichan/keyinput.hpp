@@ -6,52 +6,39 @@
  * /______/ //______/ //_/ //_____/\ /_/ //_/ //_/ //_/ //_/ /|_/ /
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
- * Copyright (c) 2004, 2005, 2006, 2007 Olof Naessén and Per Larsson
+ * Copyright (c) 2004 - 2008 Olof Naessén and Per Larsson
  *
- *                                                         Js_./
- * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
- * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
- *                                                 _Qhm`] _f "'c  1!5m
- * Visit: http://guichan.darkbits.org             )Qk<P ` _: :+' .'  "{[
- *                                               .)j(] .d_/ '-(  P .   S
- * License: (BSD)                                <Td/Z <fP"5(\"??"\a.  .L
- * Redistribution and use in source and          _dV>ws?a-?'      ._/L  #'
- * binary forms, with or without                 )4d[#7r, .   '     )d`)[
- * modification, are permitted provided         _Q-5'5W..j/?'   -?!\)cam'
- * that the following conditions are met:       j<<WP+k/);.        _W=j f
- * 1. Redistributions of source code must       .$%w\/]Q  . ."'  .  mj$
- *    retain the above copyright notice,        ]E.pYY(Q]>.   a     J@\
- *    this list of conditions and the           j(]1u<sE"L,. .   ./^ ]{a
- *    following disclaimer.                     4'_uomm\.  )L);-4     (3=
- * 2. Redistributions in binary form must        )_]X{Z('a_"a7'<a"a,  ]"[
- *    reproduce the above copyright notice,       #}<]m7`Za??4,P-"'7. ).m
- *    this list of conditions and the            ]d2e)Q(<Q(  ?94   b-  LQ/
- *    following disclaimer in the                <B!</]C)d_, '(<' .f. =C+m
- *    documentation and/or other materials      .Z!=J ]e []('-4f _ ) -.)m]'
- *    provided with the distribution.          .w[5]' _[ /.)_-"+?   _/ <W"
- * 3. Neither the name of Guichan nor the      :$we` _! + _/ .        j?
- *    names of its contributors may be used     =3)= _f  (_yQmWW$#(    "
- *    to endorse or promote products derived     -   W,  sQQQQmZQ#Wwa]..
- *    from this software without specific        (js, \[QQW$QWW#?!V"".
- *    prior written permission.                    ]y:.<\..          .
- *                                                 -]n w/ '         [.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT       )/ )/           !
- * HOLDERS AND CONTRIBUTORS "AS IS" AND ANY         <  (; sac    ,    '
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING,               ]^ .-  %
- * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF            c <   r
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR            aga<  <La
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE          5%  )P'-3L
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR        _bQf` y`..)a
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,          ,J?4P'.P"_(\?d'.,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES               _Pa,)!f/<[]/  ?"
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT      _2-..:. .r+_,.. .
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     ?a.<%"'  " -'.a_ _,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION)                     ^
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
- * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Per Larsson a.k.a finalman
+ * Olof Naessén a.k.a jansem/yakslem
+ *
+ * Visit: http://guichan.sourceforge.net
+ *
+ * License: (BSD)
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of Guichan nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef GCN_KEYINPUT_HPP
@@ -63,8 +50,11 @@
 namespace gcn
 {
     /**
-     * Internal class representing keyboard input. Generally you won't have to
-     * bother using this class.
+     * Internal class that represents key input. Generally you won't have to
+     * bother using this class unless you implement an Input class for
+     * a back end.
+     *
+     * @since 0.1.0
      */
     class GCN_CORE_DECLSPEC KeyInput
     {
@@ -78,115 +68,141 @@ namespace gcn
         /**
          * Constructor.
          *
-         * @param key the Key the input concerns.
-         * @param type the type of input.
+         * @param key The key of the key input.
+         * @param type The type of key input.
          */
-        KeyInput(const Key& key, int type);
+        KeyInput(const Key& key, unsigned int type);
 
         /**
-         * Sets the input type.
+         * Sets the type of the key input.
          *
-         * @param type the type of input.
+         * @param type The type of key input.
+         * @see getType
          */
-        void setType(int type);
+        void setType(unsigned int type);
 
         /**
-         * Gets the input type.
+         * Gets the type of the key input.
          *
          * @return the input type.
+         * @see setType
          */
         int getType() const;
 
         /**
-         * Sets the key the input concerns.
+         * Sets the key of the key input.
          *
-         * @param key the Key the input concerns.
+         * @param key The key of the key input.
+         * @see getKey
          */
         void setKey(const Key& key);
 
         /**
-         * Gets the key the input concerns.
+         * Gets the key of the key input.
          *
-         * @return the Key the input concerns.
+         * @return The key of the key input.
+         * @see setKey
          */
         const Key& getKey() const;
 
         /**
-         * Checks whether shift is pressed.
+         * Checks if shift is pressed.
          *
-         * @return true if shift was pressed at the same time as the key.
+         * @return True if shift was pressed at the same 
+         *         time as the key, false otherwise.
+         * @see setShiftPressed
          * @since 0.6.0
          */
         bool isShiftPressed() const;
 
         /**
-         * Sets the shift pressed flag.
+         * Sets shift to be pressed at the same time as the key, 
+         * or not. 
          *
-         * @param pressed the shift flag value.
+         * @param pressed True if shift is pressed, false otherwise.
+         * @see isShiftPressed
          * @since 0.6.0
          */
         void setShiftPressed(bool pressed);
 
         /**
-         * Checks whether control is pressed.
+         * Checks if control is pressed.
          *
-         * @return true if control was pressed at the same time as the key.
+         * @return True if control was pressed at the same 
+         *         time as the key, false otherwise.
+         * @see setControlPressed
          * @since 0.6.0
          */
         bool isControlPressed() const;
 
         /**
-         * Sets the control pressed flag.
+         * Sets control to be pressed at the same time as the key, 
+         * or not. 
          *
-         * @param pressed the control flag value.
+         * @param pressed True if control is pressed, false otherwise.
+         * @see isControlPressed
          * @since 0.6.0
          */
         void setControlPressed(bool pressed);
 
         /**
-         * Checks whether alt is pressed.
+         * Checks if alt is pressed.
          *
-         * @return true if alt was pressed at the same time as the key.
+         * @return True if alt was pressed at the same 
+         *         time as the key, false otherwise.
+         * @see setAltPressed
          * @since 0.6.0
          */
         bool isAltPressed() const;
 
         /**
-         * Sets the alt pressed flag.
+         * Sets the alt to be pressed at the same time as the key, 
+         * or not. 
          *
-         * @param pressed the alt flag value.
+         * @param pressed True if alt is pressed at the same 
+         *                time as the key, , false otherwise.
+         * @see isAltPressed
          * @since 0.6.0
          */
         void setAltPressed(bool pressed);
 
         /**
-         * Checks whether meta is pressed.
+         * Checks if meta is pressed.
          *
-         * @return true if meta was pressed at the same time as the key.
+         * @return True if meta was pressed at the same 
+         *         time as the key, false otherwise.
+         * @see setMetaPressed
          * @since 0.6.0
          */
         bool isMetaPressed() const;
 
         /**
-         * Sets the meta pressed flag.
+         * Sets meta to be pressed at the same time as the key, 
+         * or not. 
          *
-         * @param pressed the meta flag value.
+         * @param pressed True if meta is pressed at the same
+         *                time as the key, false otherwise.
+         * @see isMetaPressed
          * @since 0.6.0
          */
         void setMetaPressed(bool pressed);
 
         /**
-         * Checks whether the key was pressed at the numeric pad.
+         * Checks if the key was pressed at the numeric pad.
          *
-         * @return true if key pressed at the numeric pad.
+         * @return True if key pressed at the numeric pad,
+         *         false otherwise.
+         * @setNumericPad
          * @since 0.6.0
          */
         bool isNumericPad() const;
 
         /**
-         * Sets the numeric pad flag.
+         * Sets the key to be pressed at the numeric pad.
          *
-         * @param numpad the numeric pad flag value.
+         * @param numpad True if the key was pressed at the numeric
+         *               pad, false otherwise.
+         * @see isNumericPad
          * @since 0.6.0
          */
         void setNumericPad(bool numpad);
@@ -202,13 +218,44 @@ namespace gcn
         };
 
     protected:
+        /**
+         * Holds the key of the key input.
+         */
         Key mKey;
-        int mType;
-        int mButton;
+
+        /**
+         * Holds the type of the key input.
+         */
+        unsigned int mType;
+
+        /**
+         * True if shift was pressed at the same time as the key,
+         * false otherwise.
+         */ 
         bool mShiftPressed;
+
+        /**
+         * True if control was pressed at the same time as the key,
+         * false otherwise.
+         */ 
         bool mControlPressed;
+
+        /**
+         * True if alt was pressed at the same time as the key,
+         * false otherwise.
+         */ 
         bool mAltPressed;
+
+        /**
+         * True if meta was pressed at the same time as the key,
+         * false otherwise.
+         */ 
         bool mMetaPressed;
+
+        /**
+         * True if the numeric pad was used when the key was pressed,
+         * false otherwise.
+         */ 
         bool mNumericPad;
     };
 }

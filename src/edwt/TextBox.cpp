@@ -8,7 +8,7 @@ const int debugFlag = DEBUG_EDWT;
 
 namespace edwt
 {  void TextBox::drawBorder(gcn::Graphics* graphics)
-   {   if(mOpaque) gcn::TextBox::drawBorder(graphics);
+   {   if(mOpaque) gcn::TextBox::drawFrame(graphics);
    }
 
    void TextBox::draw(gcn::Graphics* graphics)

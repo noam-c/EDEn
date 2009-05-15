@@ -6,52 +6,39 @@
  * /______/ //______/ //_/ //_____/\ /_/ //_/ //_/ //_/ //_/ /|_/ /
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
- * Copyright (c) 2004, 2005, 2006, 2007 Olof Naessén and Per Larsson
+ * Copyright (c) 2004 - 2008 Olof Naessén and Per Larsson
  *
- *                                                         Js_./
- * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
- * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
- *                                                 _Qhm`] _f "'c  1!5m
- * Visit: http://guichan.darkbits.org             )Qk<P ` _: :+' .'  "{[
- *                                               .)j(] .d_/ '-(  P .   S
- * License: (BSD)                                <Td/Z <fP"5(\"??"\a.  .L
- * Redistribution and use in source and          _dV>ws?a-?'      ._/L  #'
- * binary forms, with or without                 )4d[#7r, .   '     )d`)[
- * modification, are permitted provided         _Q-5'5W..j/?'   -?!\)cam'
- * that the following conditions are met:       j<<WP+k/);.        _W=j f
- * 1. Redistributions of source code must       .$%w\/]Q  . ."'  .  mj$
- *    retain the above copyright notice,        ]E.pYY(Q]>.   a     J@\
- *    this list of conditions and the           j(]1u<sE"L,. .   ./^ ]{a
- *    following disclaimer.                     4'_uomm\.  )L);-4     (3=
- * 2. Redistributions in binary form must        )_]X{Z('a_"a7'<a"a,  ]"[
- *    reproduce the above copyright notice,       #}<]m7`Za??4,P-"'7. ).m
- *    this list of conditions and the            ]d2e)Q(<Q(  ?94   b-  LQ/
- *    following disclaimer in the                <B!</]C)d_, '(<' .f. =C+m
- *    documentation and/or other materials      .Z!=J ]e []('-4f _ ) -.)m]'
- *    provided with the distribution.          .w[5]' _[ /.)_-"+?   _/ <W"
- * 3. Neither the name of Guichan nor the      :$we` _! + _/ .        j?
- *    names of its contributors may be used     =3)= _f  (_yQmWW$#(    "
- *    to endorse or promote products derived     -   W,  sQQQQmZQ#Wwa]..
- *    from this software without specific        (js, \[QQW$QWW#?!V"".
- *    prior written permission.                    ]y:.<\..          .
- *                                                 -]n w/ '         [.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT       )/ )/           !
- * HOLDERS AND CONTRIBUTORS "AS IS" AND ANY         <  (; sac    ,    '
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING,               ]^ .-  %
- * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF            c <   r
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR            aga<  <La
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE          5%  )P'-3L
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR        _bQf` y`..)a
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,          ,J?4P'.P"_(\?d'.,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES               _Pa,)!f/<[]/  ?"
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT      _2-..:. .r+_,.. .
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     ?a.<%"'  " -'.a_ _,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION)                     ^
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
- * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Per Larsson a.k.a finalman
+ * Olof Naessén a.k.a jansem/yakslem
+ *
+ * Visit: http://guichan.sourceforge.net
+ *
+ * License: (BSD)
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of Guichan nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef GCN_EXCEPTION_HPP
@@ -69,10 +56,10 @@
 #endif
 
 /*
- * A macro to be used when throwing exceptions.
+ * A macro used to create a standard exception object.
  * What it basicly does is that it creates a new exception
  * and automatically sets the filename and line number where
- * the exception occured.
+ * the exception occured by using other compiler macros.
  */
 #define GCN_EXCEPTION(mess) gcn::Exception(mess,   \
                             __FUNCTION__,          \
@@ -83,9 +70,12 @@ namespace gcn
 {
 
     /**
-     * An exception containing a message, a file and a line number.
-     * Guichan will only throw exceptions of this class. You can use
-     * this class for your own exceptions. A nifty feature of the
+     * An exception containing a message, a file and a line number
+     * where the exception occured. Guichan will only throw exceptions 
+     * of this class. 
+     * 
+     * You can use this class for your own exceptions that has
+     * something to do with a GUI exception. A nifty feature of the
      * excpetion class is that it can tell you from which line and
      * file it was thrown. To make things easier when throwing
      * exceptions there exists a macro for creating exceptions
@@ -107,7 +97,7 @@ namespace gcn
         /**
          * Constructor.
          *
-         * @param message the error message.
+         * @param message The error message of the exception.
          */
         Exception(const std::string& message);
 
@@ -115,50 +105,69 @@ namespace gcn
          * Constructor.
          *
          * NOTE: Don't use this constructor. Use the GCN_EXCEPTION macro instead.
+         *       This constructor merely exists for the GCN_EXCEPTION macro to
+         *       use.
          *
-         * @param message the error message.
-         * @param function the function name.
-         * @param filename the name of the file.
-         * @param line the line number.
+         * @param message The error message of the exception.
+         * @param function The function name where the exception occured.
+         * @param filename The name of the file where the exception occured.
+         * @param line The line number in the source code where the exception
+         *             occured.
          */
         Exception(const std::string& message,
                   const std::string& function,
                   const std::string& filename,
-                  int line);
+                  unsigned int line);
 
         /**
-         * Gets the function name in which the exception was thrown.
+         * Gets the function name where the exception occured.
          *
-         * @return the function name in which the exception was thrown.
+         * @return The function name where the exception occured.
          */
         const std::string& getFunction() const;
 
         /**
          * Gets the error message of the exception.
          *
-         * @return the error message.
+         * @return The error message of the exception.
          */
         const std::string& getMessage() const;
 
         /**
-         * Gets the filename in which the exceptions was thrown.
+         * Gets the filename where the exception occured.
          *
-         * @return the filename in which the exception was thrown.
+         * @return The filename where the exception occured.
          */
         const std::string& getFilename() const;
 
         /**
-         * Gets the line number of the line where the exception was thrown.
+         * Gets the line number where the exception occured.
          *
-         * @return the line number of the line where the exception was thrown.
+         * @return The line number where the exception occured.
          */
-        int getLine() const;
+        unsigned int getLine() const;
 
     protected:
+        /**
+         * Holds the name of the function name where the
+         * exception occured.
+         */
         std::string mFunction;
+
+        /**
+         * Holds the error message of the exception.
+         */
         std::string mMessage;
+
+        /**
+         * Holds the filename where the exception occured.
+         */
         std::string mFilename;
-        int mLine;
+
+        /**
+         * Holds the line number where the exception occured.
+         */
+        unsigned int mLine;
     };
 }
 

@@ -6,58 +6,46 @@
  * /______/ //______/ //_/ //_____/\ /_/ //_/ //_/ //_/ //_/ /|_/ /
  * \______\/ \______\/ \_\/ \_____\/ \_\/ \_\/ \_\/ \_\/ \_\/ \_\/
  *
- * Copyright (c) 2004, 2005, 2006, 2007 Olof Naessén and Per Larsson
+ * Copyright (c) 2004 - 2008 Olof Naessén and Per Larsson
  *
- *                                                         Js_./
- * Per Larsson a.k.a finalman                          _RqZ{a<^_aa
- * Olof Naessén a.k.a jansem/yakslem                _asww7!uY`>  )\a//
- *                                                 _Qhm`] _f "'c  1!5m
- * Visit: http://guichan.darkbits.org             )Qk<P ` _: :+' .'  "{[
- *                                               .)j(] .d_/ '-(  P .   S
- * License: (BSD)                                <Td/Z <fP"5(\"??"\a.  .L
- * Redistribution and use in source and          _dV>ws?a-?'      ._/L  #'
- * binary forms, with or without                 )4d[#7r, .   '     )d`)[
- * modification, are permitted provided         _Q-5'5W..j/?'   -?!\)cam'
- * that the following conditions are met:       j<<WP+k/);.        _W=j f
- * 1. Redistributions of source code must       .$%w\/]Q  . ."'  .  mj$
- *    retain the above copyright notice,        ]E.pYY(Q]>.   a     J@\
- *    this list of conditions and the           j(]1u<sE"L,. .   ./^ ]{a
- *    following disclaimer.                     4'_uomm\.  )L);-4     (3=
- * 2. Redistributions in binary form must        )_]X{Z('a_"a7'<a"a,  ]"[
- *    reproduce the above copyright notice,       #}<]m7`Za??4,P-"'7. ).m
- *    this list of conditions and the            ]d2e)Q(<Q(  ?94   b-  LQ/
- *    following disclaimer in the                <B!</]C)d_, '(<' .f. =C+m
- *    documentation and/or other materials      .Z!=J ]e []('-4f _ ) -.)m]'
- *    provided with the distribution.          .w[5]' _[ /.)_-"+?   _/ <W"
- * 3. Neither the name of Guichan nor the      :$we` _! + _/ .        j?
- *    names of its contributors may be used     =3)= _f  (_yQmWW$#(    "
- *    to endorse or promote products derived     -   W,  sQQQQmZQ#Wwa]..
- *    from this software without specific        (js, \[QQW$QWW#?!V"".
- *    prior written permission.                    ]y:.<\..          .
- *                                                 -]n w/ '         [.
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT       )/ )/           !
- * HOLDERS AND CONTRIBUTORS "AS IS" AND ANY         <  (; sac    ,    '
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING,               ]^ .-  %
- * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF            c <   r
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR            aga<  <La
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE          5%  )P'-3L
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR        _bQf` y`..)a
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,          ,J?4P'.P"_(\?d'.,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES               _Pa,)!f/<[]/  ?"
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT      _2-..:. .r+_,.. .
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     ?a.<%"'  " -'.a_ _,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION)                     ^
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
- * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * Per Larsson a.k.a finalman
+ * Olof Naessén a.k.a jansem/yakslem
+ *
+ * Visit: http://guichan.sourceforge.net
+ *
+ * License: (BSD)
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ * 3. Neither the name of Guichan nor the names of its contributors may
+ *    be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 #ifndef GCN_GUI_HPP
 #define GCN_GUI_HPP
 
 #include <list>
+#include <deque>
 
 #include "guichan/keyevent.hpp"
 #include "guichan/mouseevent.hpp"
@@ -83,12 +71,22 @@ namespace gcn
      */
 
     /**
-     * Gui core class. Contains a special widget called the top widget.
-     * If you want to be able to have more then one Widget in your Gui,
-     * the top widget should be a Container.
+     * Contains a Guichan GUI. This is the core class of Guichan to which
+     * implementations of back ends are passed, to make Guichan work with
+     * a specific library, and to where the top widget (root widget of GUI)
+     * is added. If you want to be able to have more then one widget in your 
+     * GUI, the top widget should be a container.
      *
-     * NOTE: For the Gui to function properly you need to set a Graphics
-     *       object to use and an Input object to use.
+     * A Gui object cannot work properly without passing back end 
+     * implementations to it. A Gui object must have an implementation of a
+     * Graphics and an implementation of Input. 
+     *
+     * NOTE: A complete GUI also must have the ability to load images.
+     *       Images are loaded with the Image class, so to make Guichan
+     *       able to load images an implementation of ImageLoader must be
+     *       passed to Image.
+     *
+     * @see Graphics, Input, Image
      */
     class GCN_CORE_DECLSPEC Gui
     {
@@ -105,100 +103,134 @@ namespace gcn
         virtual ~Gui();
 
         /**
-         * Sets the top Widget.
+         * Sets the top widget. The top widget is the root widget
+         * of the GUI. If you want a GUI to be able to contain more
+         * than one widget the top widget should be a container.
          *
-         * @param top the top Widget.
+         * @param top The top widget.
+         * @see Container
+         * @since 0.1.0
          */
         virtual void setTop(Widget* top);
 
         /**
-         * Gets the top Widget.
+         * Gets the top widget. The top widget is the root widget
+         * of the GUI.
          *
-         * @return the top widget. NULL if no top widget has been set.
+         * @return The top widget. NULL if no top widget has been set.
+         * @since 0.1.0
          */
         virtual Widget* getTop() const;
 
         /**
-         * Sets the Graphics object to use for drawing.
+         * Sets the graphics object to use for drawing.
          *
-         * @param graphics the Graphics object to use for drawing.
-         * @see SDLGraphics, OpenGLGraphics, AllegroGraphics
+         * @param graphics The graphics object to use for drawing.
+         * @see getGraphics, AllegroGraphics, HGEGraphics, 
+         *      OpenLayerGraphics, OpenGLGraphics, SDLGraphics
+         * @since 0.1.0
          */
         virtual void setGraphics(Graphics* graphics);
 
         /**
-         * Gets the Graphics object used for drawing.
+         * Gets the graphics object used for drawing.
          *
-         *  @return the Graphics object used for drawing. NULL if no
-         *          Graphics object has been set.
+         *  @return The graphics object used for drawing. NULL if no
+         *          graphics object has been set.
+         * @see setGraphics, AllegroGraphics, HGEGraphics, 
+         *      OpenLayerGraphics, OpenGLGraphics, SDLGraphics
+         * @since 0.1.0
          */
         virtual Graphics* getGraphics() const;
 
         /**
-         * Sets the Input object to use for input handling.
+         * Sets the input object to use for input handling.
          *
-         * @param input the Input object to use for input handling.
-         * @see SDLInput, AllegroInput
+         * @param input The input object to use for input handling.
+         * @see getInput, AllegroInput, HGEInput, OpenLayerInput,
+         *      SDLInput
+         * @since 0.1.0
          */
         virtual void setInput(Input* input);
 
         /**
-         * Gets the Input object being used for input handling.
+         * Gets the input object being used for input handling.
          *
-         *  @return the Input object used for handling input. NULL if no
-         *          Input object has been set.
+         *  @return The input object used for handling input. NULL if no
+         *          input object has been set.
+         * @see setInput, AllegroInput, HGEInput, OpenLayerInput,
+         *      SDLInput
+         * @since 0.1.0
          */
         virtual Input* getInput() const;
 
         /**
-         * Performs the Gui logic. By calling this function all logic
-         * functions down in the Gui heirarchy will be called.
-         * What performs in Logic can be just about anything like
-         * adjusting a Widgets size or doing some calculations.
+         * Performs logic of the GUI. By calling this function all logic
+         * functions down in the GUI heirarchy will be called. When logic
+         * is called for Gui, user input will be handled.
          *
-         * NOTE: Logic also deals with user input (Mouse and Keyboard)
-         *       for Widgets.
+         * @see Widget::logic
+         * @since 0.1.0
          */
         virtual void logic();
 
         /**
-         * Draws the Gui. By calling this funcion all draw functions
-         * down in the Gui hierarchy will be called.
+         * Draws the GUI. By calling this funcion all draw functions
+         * down in the GUI hierarchy will be called. When draw is called
+         * the used Graphics object will be initialised and drawing of
+         * the top widget will commence.
+         *
+         * @see Widget::draw
+         * @since 0.1.0
          */
         virtual void draw();
 
         /**
-         * Focus none of the Widgets in the Gui.
+         * Focuses none of the widgets in the Gui.
+         *
+         * @since 0.1.0
          */
         virtual void focusNone();
 
         /**
-         * Toggles the use of the tab key to focus Widgets.
-         * By default, tabbing is enabled.
+         * Sets tabbing enabled, or not. Tabbing is the usage of
+         * changing focus by utilising the tab key.
          *
-         * @param tabbing set to false if you want to disable tabbing.
+         * @param tabbing True if tabbing should be enabled, false
+         *                otherwise.
+         * @see isTabbingEnabled
+         * @since 0.1.0
          */
         virtual void setTabbingEnabled(bool tabbing);
 
         /**
          * Checks if tabbing is enabled.
          *
-         * @return true if tabbing is enabled.
+         * @return True if tabbing is enabled, false otherwise.
+         * @see setTabbingEnabled
+         * @since 0.1.0
          */
         virtual bool isTabbingEnabled();
 
         /**
-         * Adds a global KeyListener to the Gui.
+         * Adds a global key listener to the Gui. A global key listener
+         * will receive all key events generated from the GUI and global
+         * key listeners will receive the events before key listeners
+         * of widgets.
          *
-         * @param keyListener a KeyListener to add.
+         * @param keyListener The key listener to add.
+         * @see removeGlobalKeyListener
+         * @since 0.5.0
          */
         virtual void addGlobalKeyListener(KeyListener* keyListener);
 
         /**
-         * Remove global KeyListener from the Gui.
+         * Removes global key listener from the Gui.
          *
-         * @param keyListener a KeyListener to remove.
-         * @throws Exception if the KeyListener hasn't been added.
+         * @param keyListener The key listener to remove.
+         * @throws Exception if the key listener hasn't been added.
+         * @see addGlobalKeyListener
+         * @since 0.5.0
          */
         virtual void removeGlobalKeyListener(KeyListener* keyListener);
 
@@ -220,7 +252,7 @@ namespace gcn
         /**
          * Handles mouse moved input.
          *
-         * @param mouseInput the mouse input to handle.
+         * @param mouseInput The mouse input to handle.
          * @since 0.6.0
          */
         virtual void handleMouseMoved(const MouseInput& mouseInput);
@@ -228,7 +260,7 @@ namespace gcn
         /**
          * Handles mouse pressed input.
          *
-         * @param mouseInput the mouse input to handle.
+         * @param mouseInput The mouse input to handle.
          * @since 0.6.0
          */
         virtual void handleMousePressed(const MouseInput& mouseInput);
@@ -237,7 +269,7 @@ namespace gcn
          *
          * Handles mouse wheel moved down input.
          *
-         * @param mouseInput the mouse input to handle.
+         * @param mouseInput The mouse input to handle.
          * @since 0.6.0
          */
         virtual void handleMouseWheelMovedDown(const MouseInput& mouseInput);
@@ -245,7 +277,7 @@ namespace gcn
         /**
          * Handles mouse wheel moved up input.
          *
-         * @param mouseInput the mouse input to handle.
+         * @param mouseInput The mouse input to handle.
          * @since 0.6.0
          */
         virtual void handleMouseWheelMovedUp(const MouseInput& mouseInput);
@@ -253,26 +285,44 @@ namespace gcn
         /**
          * Handles mouse released input.
          *
-         * @param mouseInput the mouse input to handle.
+         * @param mouseInput The mouse input to handle.
          * @since 0.6.0
          */
         virtual void handleMouseReleased(const MouseInput& mouseInput);
 
         /**
-         * Handles modal mouse input focus releases. When a release occurs appropriate
-         * mouse events should be distributed (such as mouse entered and mouse exited).
+         * Handles modal focus. Modal focus needs to be checked at 
+         * each logic iteration as it might be necessary to distribute
+         * mouse entered or mouse exited events.
          *
-         * @since 0.6.0
+         * @since 0.8.0
          */
-        virtual void handleModalMouseInputFocusRelease();
+        virtual void handleModalFocus();
 
         /**
-         * Handles modal focus releases. When a release occurs appropriate mouse events
-         * should be distributed (such as mouse entered and mouse exited).
+         * Handles modal mouse input focus. Modal mouse input focus needs 
+         * to be checked at each logic iteration as it might be necessary to 
+         * distribute mouse entered or mouse exited events.
          *
-         * @since 0.6.0
+         * @since 0.8.0
          */
-        virtual void handleModalFocusRelease();
+        virtual void handleModalMouseInputFocus();
+
+        /**
+         * Handles modal focus gained. If modal focus has been gaind it might 
+         * be necessary to distribute mouse entered or mouse exited events.
+         *
+         * @since 0.8.0
+         */
+        virtual void handleModalFocusGained();
+
+        /**
+         * Handles modal mouse input focus gained. If modal focus has been gaind 
+         * it might be necessary to distribute mouse entered or mouse exited events.
+         *
+         * @since 0.8.0
+         */
+        virtual void handleModalFocusReleased();
 
         /**
          * Distributes a mouse event.
@@ -283,7 +333,9 @@ namespace gcn
          * @param y The y coordinate of the event.
          * @param fource indicates whether the distribution should be forced or not.
          *               A forced distribution distributes the event even if a widget
-         *               is not enabled or not visible. Default value is false.
+         *               is not enabled, not visible, another widget has modal
+         *               focus or another widget has modal mouse input focus. 
+         *               Default value is false.
          * @param toSourceOnly indicates whether the distribution should be to the
          *                     source widget only or to it's parent's mouse listeners
          *                     as well.
@@ -301,7 +353,7 @@ namespace gcn
         /**
          * Distributes a key event.
          *
-         * @param keyEvent the key event to distribute.
+         * @param keyEvent The key event to distribute.
 
          * @since 0.6.0
          */
@@ -310,7 +362,7 @@ namespace gcn
         /**
          * Distributes a key event to the global key listeners.
          *
-         * @param keyEvent the key event to distribute.
+         * @param keyEvent The key event to distribute.
          *
          * @since 0.6.0
          */
@@ -319,7 +371,7 @@ namespace gcn
         /**
          * Gets the widget at a certain position.
          *
-         * @return the widget at a certain position.
+         * @return The widget at a certain position.
          * @since 0.6.0
          */
         virtual Widget* getWidgetAt(int x, int y);
@@ -327,7 +379,7 @@ namespace gcn
         /**
          * Gets the source of the mouse event.
          *
-         * @return the source widget of the mouse event.
+         * @return The source widget of the mouse event.
          * @since 0.6.0
          */
         virtual Widget* getMouseEventSource(int x, int y);
@@ -335,36 +387,109 @@ namespace gcn
         /**
          * Gets the source of the key event.
          *
-         * @return the source widget of the key event.
+         * @return The source widget of the key event.
          * @since 0.6.0
          */
         virtual Widget* getKeyEventSource();
 
+        /**
+         * Holds the top widget.
+         */
         Widget* mTop;
+
+        /**
+         * Holds the graphics implementation used.
+         */
         Graphics* mGraphics;
+
+        /**
+         * Holds the input implementation used.
+         */
         Input* mInput;
+
+        /**
+         * Holds the focus handler for the Gui.
+         */
         FocusHandler* mFocusHandler;
 
+        /**
+         * True if tabbing is enabled, false otherwise.
+         */
         bool mTabbing;
 
+        /**
+         * Typedef.
+         */
         typedef std::list<KeyListener*> KeyListenerList;
+
+        /**
+         * Typedef.
+         */
         typedef KeyListenerList::iterator KeyListenerListIterator;
 
+        /**
+         * Holds the global key listeners of the Gui.
+         */
         KeyListenerList mKeyListeners;
         
-        // Current input state
+        /**
+         * True if shift is pressed, false otherwise.
+         */
         bool mShiftPressed;
+
+        /**
+         * True if meta is pressed, false otherwise.
+         */
         bool mMetaPressed;
+
+        /**
+         * True if control is pressed, false otherwise.
+         */
         bool mControlPressed;
+
+        /**
+         * True if alt is pressed, false otherwise.
+         */
         bool mAltPressed;
 
-        // Last mouse state
+        /**
+         * Holds the last mouse button pressed.
+         */
         unsigned int mLastMousePressButton;
+
+        /**
+         * Holds the last mouse press time stamp.
+         */
         int mLastMousePressTimeStamp;
+
+        /**
+         * Holds the last mouse x coordinate.
+         */
         int mLastMouseX;
+
+        /**
+         * Holds the last mouse y coordinate.
+         */
         int mLastMouseY;
+
+        /**
+         * Holds the current click count. Used to keep track
+         * of clicks for a the last pressed button.
+         */
         int mClickCount;
+
+        /**
+         * Holds the last button used when a drag of a widget
+         * was initiated. Used to be able to release a drag
+         * when the same button is released.
+         */
         int mLastMouseDragButton;
+
+        /**
+         * Holds a stack with all the widgets with the mouse.
+         * Used to properly distribute mouse events.
+         */
+        std::deque<Widget*> mWidgetWithMouseQueue;
     };
 }
 
