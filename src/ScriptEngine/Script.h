@@ -27,13 +27,27 @@ class Script : public Thread
 
    public:
       /**
-       * Constructor. Creates a new Lua thread by forking the main VM, and then
-       * loads the specified script onto the new thread's stack.
+       * Constructor.
+       */
+      Script();
+
+      /**
+       * Creates a new Lua thread by forking the main VM, and then
+       * loads the specified script file onto the new thread's stack.
        *
        * @param luaVM The main Lua stack to fork a thread from.
        * @param scriptPath The path to a script that should be run on this thread.
        */
-      Script(lua_State* luaVM, std::string scriptPath);
+      void loadFile(lua_State* luaVM, std::string scriptPath);
+
+      /**
+       * Creates a new Lua thread by forking the main VM, and then
+       * loads the specified script string into the new thread's stack.
+       *
+       * @param luaVM The main Lua stack to fork a thread from.
+       * @param scriptString The Lua code that should be run on this thread.
+       */
+      void loadString(lua_State* luaVM, std::string scriptString);
 
       /**
        * Performs a Lua resume on the thread.

@@ -1,3 +1,5 @@
 setRegion('sereia')
-narrate('The day that the spiral sword fell from the dark, war-torn sky...\nThe last day that the world of Pharennia would ever see...\nIt was called...')
+--narrate('The day that the spiral sword fell from the dark, war-torn sky...\nThe last day that the world of Pharennia would ever see...\nIt was called...')
 narrate('Exodus Draconis')
+narrate('Our story begins four centuries after the angels left this world.')
+narrate('It was a dark and<playSound(\'thunder\', true)> stormy night...')

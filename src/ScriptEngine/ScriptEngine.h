@@ -69,11 +69,18 @@ class ScriptEngine
        ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
 
        /**
-        * Run a script on the main thread with the specified name.
+        * Run a script with the specified name.
         *
         * @param scriptName The name of the script to run.
         */
        int runScript(std::string scriptName);
+
+       /**
+        * Run a string of script with the specified name.
+        *
+        * @param scriptString The name of the script to run.
+        */
+       int runScriptString(std::string scriptString);
 
        /**
         * Set the tile engine to send commands to.
@@ -107,6 +114,7 @@ class ScriptEngine
        /////////////////////////////////////////////////////////
        int narrate(lua_State* luaVM);
        int say(lua_State* luaVM);
+       int playSound(lua_State* luaVM);
        int setRegion(lua_State* luaVM);
 };
 

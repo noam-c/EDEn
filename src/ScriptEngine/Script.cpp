@@ -12,13 +12,25 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-Script::Script(lua_State* luaVM, std::string scriptPath)
+Script::Script() : luaStack(NULL)
+{}
+
+void Script::loadString(lua_State* luaVM, std::string scriptString)
+{  luaStack = lua_newthread(luaVM);
+   luaL_loadstring(luaStack, scriptString.c_str());
+}
+
+void Script::loadFile(lua_State* luaVM, std::string scriptPath)
 {  luaStack = lua_newthread(luaVM);
    luaL_loadfile(luaStack, scriptPath.c_str());
 }
 
 bool Script::runScript()
-{  DEBUG("Resuming script %d...", threadId);
+{  if(!luaStack)
+   {  T_T("Attempting to run an uninitialized script!");
+   }
+   
+   DEBUG("Resuming script %d...", threadId);
 
    int returnCode = lua_resume(luaStack, 0);
    if(returnCode == 0)

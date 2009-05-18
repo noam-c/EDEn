@@ -1,6 +1,8 @@
 #include "ScriptEngine.h"
 #include "TileEngine.h"
 #include "Scheduler.h"
+#include "ResourceLoader.h"
+#include "Sound.h"
 #include "Script.h"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
@@ -89,6 +91,32 @@ int ScriptEngine::say(lua_State* luaStack)
    return 0;
 }
 
+int ScriptEngine::playSound(lua_State* luaStack)
+{  int nargs = lua_gettop(luaStack);
+   bool waitForFinish = false;
+
+   if(nargs > 0)
+   {  std::string soundName(lua_tostring(luaStack, 1));
+      DEBUG("Playing sound: %s", soundName.c_str());
+
+      if(nargs == 2)
+      {  waitForFinish = lua_toboolean(luaStack, 2);
+      }
+
+      TaskId task = getNextTicket();
+
+      DEBUG("Playing sound: %s", soundName.c_str());
+      Sound* sound = ResourceLoader::getSound(soundName);
+      sound->play();
+
+      if(waitForFinish)
+      {  return scheduler->block(task);
+      }
+   }
+
+   return 0;
+}
+
 int ScriptEngine::setRegion(lua_State* luaStack)
 {  int nargs = lua_gettop(luaStack);
    if(nargs > 0)
@@ -104,7 +132,21 @@ int ScriptEngine::setRegion(lua_State* luaStack)
 
 int ScriptEngine::runScript(std::string scriptName)
 {  DEBUG("Running script: %s", scriptName.c_str());
-   Script* newScript = new Script(luaVM, getScriptPath(scriptName));
+   Script* newScript = new Script();
+   newScript->loadFile(luaVM, getScriptPath(scriptName));
+   scheduler->start(newScript);
+
+   if(scheduler->hasRunningThread())
+   {  return scheduler->join(newScript);
+   }
+
+   return 0;
+}
+
+int ScriptEngine::runScriptString(std::string scriptString)
+{  DEBUG("Running script string: %s", scriptString.c_str());
+   Script* newScript = new Script();
+   newScript->loadString(luaVM, scriptString);
    scheduler->start(newScript);
 
    if(scheduler->hasRunningThread())

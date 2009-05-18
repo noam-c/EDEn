@@ -13,6 +13,7 @@ namespace edwt
 };
 
 class Scheduler;
+class ScriptEngine;
 
 /**
  * The dialogue controller controls all of the dialogue boxes that hold
@@ -29,7 +30,10 @@ class Scheduler;
  * @author Noam Chitayat
  */
 class DialogueController : public Thread
-{  /** Abstract the implementation of the dialogue boxes */
+{  /** The hardcoded time-per-letter speed */
+   static const int MILLISECONDS_PER_LETTER = 100;
+   
+   /** Abstract the implementation of the dialogue boxes */
    typedef edwt::TextBox DialogueBox;
 
    /**
@@ -48,20 +52,42 @@ class DialogueController : public Thread
     *
     * @author Noam Chitayat
     */
-   struct Line
-   {  /** The type of line (how it should be displayed) */
-      LineType type;
+   class Line
+   {  /** A queue of upcoming open script brackets ('<' characters) */
+      std::queue<int> openScriptBrackets;
 
-      /** The dialogue itself. */
-      std::string dialogue;
+      /** A queue of upcoming close script brackets ('>' characters) */
+      std::queue<int> closeScriptBrackets;
 
-      /** The task ID waiting on this particular line of dialogue */
-      TaskId task;
+      public:
+         /** The type of line (how it should be displayed) */
+         LineType type;
+   
+         /** The dialogue itself. */
+         std::string dialogue;
+   
+         /** The task ID waiting on this particular line of dialogue */
+         TaskId task;
+   
+         /**
+          *  Constructor. Initializes values and indexes the locations of
+          *  embedded scripts in the line of dialogue for later use.
+          */
+         Line(LineType type, std::string dialogue, TaskId task);
 
-      /** Constructor. */
-      Line(LineType type, std::string dialogue, TaskId task) 
-                    : type(type), dialogue(dialogue), task(task)
-      {}
+         /**
+          *  Gets the next embdedded script bracket pair.
+          *
+          *  @return true iff there are embedded script brackets left in the string
+          */
+         bool getNextBracketPair(int& openIndex, int& closeIndex);
+
+         /**
+          *  Gets the next embedded script and removes it from the dialogue line.
+          *
+          *  @return the script string removed from the dialogue line
+          */
+         std::string removeNextScriptString();
    };
 
    /** The queue to hold all the pending dialogue sequences. */
@@ -78,6 +104,9 @@ class DialogueController : public Thread
 
    /** The current line of dialogue */
    Line* currLine;
+
+   /** The script engine to call when embedded instructions are found */
+   ScriptEngine* scriptEngine;
 
    /** The scheduler to signal when a line is finished printing onto the screen */
    Scheduler* scheduler;
@@ -131,9 +160,10 @@ class DialogueController : public Thread
        * Constructor.
        *
        * @param top The top-level widget container of the current state.
-       * @param scheduler The scheduler that will be blocking Threads on this controller
+       * @param engine The scripting engine to call with embedded scripts.
+       * @param scheduler The scheduler that will be blocking Threads on this controller.
        */
-      DialogueController(edwt::Container* top, Scheduler* scheduler);
+      DialogueController(edwt::Container* top, ScriptEngine* engine, Scheduler* scheduler);
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next

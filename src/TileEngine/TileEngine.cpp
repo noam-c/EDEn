@@ -10,7 +10,7 @@ const int debugFlag = DEBUG_TILE_ENG;
 TileEngine::TileEngine(const char* introScript) : currMap(NULL)
 {   scheduler = new Scheduler();
     scriptEngine = new ScriptEngine(this, scheduler);
-    dialogue = new DialogueController(top, scheduler);
+    dialogue = new DialogueController(top, scriptEngine, scheduler);
     time = SDL_GetTicks();
     scheduler->start(dialogue);
     scriptEngine->runScript(introScript);
