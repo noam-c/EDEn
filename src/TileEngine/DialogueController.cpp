@@ -1,14 +1,13 @@
 #include "DialogueController.h"
 #include "TextBox.h"
 #include "Container.h"
-#include "Scheduler.h"
 #include "ScriptEngine.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueController(edwt::Container* top, ScriptEngine* engine, Scheduler* scheduler)
-                     : top(top), scriptEngine(engine), scheduler(scheduler), currLine(NULL)
+DialogueController::DialogueController(edwt::Container* top, ScriptEngine* engine)
+                     : top(top), scriptEngine(engine), currLine(NULL)
 {  initMainDialogue();
    clearDialogue();
 }
@@ -24,7 +23,7 @@ void DialogueController::initMainDialogue()
    top->add(mainDialogue);
 }
 
-void DialogueController::addLine(LineType type, const char* speech, TaskId task)
+void DialogueController::addLine(LineType type, const char* speech, Task* task)
 {  Line* nextLine = new Line(type, speech, task);
    if(currLine == NULL)
    {  currLine = nextLine;
@@ -35,11 +34,11 @@ void DialogueController::addLine(LineType type, const char* speech, TaskId task)
    }
 }
 
-void DialogueController::narrate(const char* speech, TaskId task)
+void DialogueController::narrate(const char* speech, Task* task)
 {  addLine(NARRATE, speech, task);
 }
 
-void DialogueController::say(const char* speech, TaskId task)
+void DialogueController::say(const char* speech, Task* task)
 {  addLine(SAY, speech, task);
 }
 
@@ -84,11 +83,11 @@ void DialogueController::advanceDialogue()
    std::string dialogue = currLine->dialogue;
 
    // If we have run to the end of the dialogue, we show all the text
-   // and inform the scheduler that we are done.
+   // and signal that the associated task is done.
    if(dialogue.size() <= charsToShow)
    {  charsToShow = dialogue.size();
       dialogueTime = -1;
-      scheduler->taskDone(currLine->task);
+      currLine->task->signal();
    }
 
    // Display the necessary piece of text in the text box
@@ -139,7 +138,7 @@ bool DialogueController::resume(long timePassed)
    return false;
 }
 
-DialogueController::Line::Line(LineType type, std::string dialogue, TaskId task)
+DialogueController::Line::Line(LineType type, std::string dialogue, Task* task)
                     : type(type), dialogue(dialogue), task(task)
 {  int openIndex = 0;
    int closeIndex = 0;
@@ -201,3 +200,4 @@ std::string DialogueController::Line::removeNextScriptString()
    DEBUG("Extracting script %s, leaving dialogue %s", script.c_str(), dialogue.c_str());
    return script;
 }
+

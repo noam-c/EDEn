@@ -1,12 +1,14 @@
 #ifndef __SCRIPT_SCHEDULER_H_
 #define __SCRIPT_SCHEDULER_H_
 
-class Thread;
-
 #include "TaskId.h"
+
 #include <map>
 #include <set>
 #include <queue>
+
+class Task;
+class Thread;
 
 /**
  * A scheduler for scheduling, resuming and blocking a set of Threads.
@@ -77,7 +79,7 @@ class Scheduler
        *
        * @return a yield code from the Thread being blocked
        */
-      int block(TaskId task);
+      int block(Task* task);
 
       /**
        * Add a Thread to the scheduler by enqueuing it to be started on the next run.
@@ -90,7 +92,7 @@ class Scheduler
        * Signals that an instruction has been completed so that the scheduler
        * can unblock any waiting Threads.
        *
-       * @param finishedTask The instruction that has been finished.
+       * @param finishedTask The ID of the instruction that has been finished.
        */
       void taskDone(TaskId finishedTask);
 

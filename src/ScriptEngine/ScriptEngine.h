@@ -4,7 +4,7 @@
 #include <stack>
 #include <string>
 #include "Singleton.h"
-#include "TaskId.h"
+#include "Task.h"
 
 // We will need to talk to the tile engine from Lua
 class TileEngine;
@@ -27,11 +27,6 @@ class ScriptEngine
     Scheduler* scheduler;
 
     /**
-     * The TaskId available for the next instruction
-     */
-    TaskId nextTaskTicket;
-
-    /**
      * The main Lua execution thread and stack
      */
     lua_State* luaVM;
@@ -50,13 +45,6 @@ class ScriptEngine
      * Converts a script name into a relative path for the associated Lua file
      */
     std::string getScriptPath(std::string scriptName);
-
-    /**
-     * Grab the next instruction ticket and queue up the next one
-     *
-     * @return the next instruction ticket to use.
-     */
-    inline TaskId getNextTicket();
 
     public:
 

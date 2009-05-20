@@ -5,11 +5,14 @@
 #include "SDL_mixer.h"
 #include <map>
 
+class Task;
+
 class Sound : public Resource
 {  static std::map<int, Sound*> playingList;
    static bool ownsChannel(Sound* sound, int channel);
    static void channelFinished(int channel);
 
+   Task* playTask;
    Mix_Chunk* sound;
    int playingChannel;
 
@@ -17,7 +20,7 @@ class Sound : public Resource
 
    public:
       Sound(const char* path);
-      void play();
+      void play(Task* task = NULL);
       void stop();
       size_t getSize();
       ~Sound();

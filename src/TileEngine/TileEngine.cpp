@@ -10,17 +10,17 @@ const int debugFlag = DEBUG_TILE_ENG;
 TileEngine::TileEngine(const char* introScript) : currMap(NULL)
 {   scheduler = new Scheduler();
     scriptEngine = new ScriptEngine(this, scheduler);
-    dialogue = new DialogueController(top, scriptEngine, scheduler);
+    dialogue = new DialogueController(top, scriptEngine);
     time = SDL_GetTicks();
     scheduler->start(dialogue);
     scriptEngine->runScript(introScript);
 }
 
-void TileEngine::dialogueNarrate(const char* narration, TaskId task)
+void TileEngine::dialogueNarrate(const char* narration, Task* task)
 {   dialogue->narrate(narration, task);
 }
 
-void TileEngine::dialogueSay(const char* speech, TaskId task)
+void TileEngine::dialogueSay(const char* speech, Task* task)
 {   dialogue->say(speech, task);
 }
 

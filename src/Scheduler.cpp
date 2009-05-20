@@ -1,4 +1,5 @@
 #include "Scheduler.h"
+#include "Task.h"
 #include "Thread.h"
 #include "DebugUtils.h"
 
@@ -23,8 +24,8 @@ bool Scheduler::hasRunningThread()
 {  return runningThread;
 }
 
-int Scheduler::block(TaskId pendingTask)
-{  DEBUG("Blocking thread %d...", runningThread->getId());
+int Scheduler::block(Task* pendingTask)
+{  DEBUG("Blocking thread %d on task %d...", runningThread->getId(), pendingTask->getTaskId());
    
    // Find the thread in the ready list
    if(readyThreads.find(runningThread) != readyThreads.end())
@@ -33,7 +34,7 @@ int Scheduler::block(TaskId pendingTask)
       //readyThreads.erase(stateToBlock);
 
       // Add the thread to the blocked list
-      blockedThreads[pendingTask] = runningThread;
+      blockedThreads[pendingTask->getTaskId()] = runningThread;
    }
    else
    {  T_T("Attempting to block a thread that isn't ready/running!");
@@ -44,7 +45,9 @@ int Scheduler::block(TaskId pendingTask)
 }
 
 void Scheduler::taskDone(TaskId finishedTask)
-{  Thread* resumingThread = blockedThreads[finishedTask];
+{  DEBUG("Task %d finished.", finishedTask);
+
+   Thread* resumingThread = blockedThreads[finishedTask];
    if(resumingThread)
    {  DEBUG("Putting thread %d on resume list...", resumingThread->getId());
 

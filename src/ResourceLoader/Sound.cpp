@@ -1,4 +1,6 @@
 #include "Sound.h"
+#include "Task.h"
+
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_AUDIO;
@@ -10,7 +12,8 @@ bool Sound::ownsChannel(Sound* sound, int channel)
 }
 
 void Sound::channelFinished(int channel)
-{  Sound* finishedSound = playingList[channel];
+{  DEBUG("Channel %d finished playing.", channel);
+   Sound* finishedSound = playingList[channel];
 
    if(finishedSound != NULL)
    {  finishedSound->finished();
@@ -30,13 +33,16 @@ size_t Sound::getSize()
 {  return sizeof(Sound);
 }
 
-void Sound::play()
-{  playingChannel = Mix_PlayChannel(-1, sound, 0);
+void Sound::play(Task* task)
+{  Mix_ChannelFinished(&Sound::channelFinished);
+
+   playingChannel = Mix_PlayChannel(-1, sound, 0);
    if(playingChannel == -1)
    {  T_T(Mix_GetError());
    }
 
-   Mix_ChannelFinished(&Sound::channelFinished);
+   playingList[playingChannel] = this;
+   playTask = task;
 }
 
 void Sound::stop()
@@ -46,7 +52,13 @@ void Sound::stop()
 }
 
 void Sound::finished()
-{  playingChannel = -1;
+{  DEBUG("Sound finished.");
+   if(playTask)
+   {  playTask->signal();
+      playTask = NULL;
+   }
+
+   playingChannel = -1;
 }
 
 Sound::~Sound()

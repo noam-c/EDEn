@@ -37,12 +37,6 @@ ScriptEngine::ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler)
    // (thus eliminating the need for a global ScriptEngine instance or singleton)
    lua_pushlightuserdata(luaVM, this);
    lua_setglobal(luaVM, SCRIPT_ENG_LUA_NAME);
-
-   nextTaskTicket = 0;
-}
-
-TaskId ScriptEngine::getNextTicket()
-{  return nextTaskTicket++;
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
@@ -55,7 +49,7 @@ int ScriptEngine::narrate(lua_State* luaStack)
       {  waitForFinish = lua_toboolean(luaStack, 2);
       }
 
-      TaskId task = getNextTicket();
+      Task* task = Task::getNextTask(scheduler);
 
       DEBUG("Narrating text: %s", speech);
       tileEngine->dialogueNarrate(speech, task);
@@ -78,7 +72,7 @@ int ScriptEngine::say(lua_State* luaStack)
       {  waitForFinish = lua_toboolean(luaStack, 2);
       }
 
-      TaskId task = getNextTicket();
+      Task* task = Task::getNextTask(scheduler);
 
       DEBUG("Saying text: %s", speech);
       tileEngine->dialogueSay(speech, task);
@@ -103,11 +97,11 @@ int ScriptEngine::playSound(lua_State* luaStack)
       {  waitForFinish = lua_toboolean(luaStack, 2);
       }
 
-      TaskId task = getNextTicket();
+      Task* task = Task::getNextTask(scheduler);
 
       DEBUG("Playing sound: %s", soundName.c_str());
       Sound* sound = ResourceLoader::getSound(soundName);
-      sound->play();
+      sound->play(task);
 
       if(waitForFinish)
       {  return scheduler->block(task);

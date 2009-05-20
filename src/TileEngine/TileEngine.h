@@ -7,7 +7,7 @@
 #include "Map.h"
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
-#include "TaskId.h"
+#include "Task.h"
 
 class Scheduler;
 class ScriptEngine;
@@ -71,17 +71,17 @@ class TileEngine: public GameState
        * Send a line of dialogue to the DialogueController as a narration.
        *
        * @param narration The line of dialogue to appear as a narration.
-       * @param task The ID of this narration instruction
+       * @param task The ticket of this narration instruction
        */
-      void dialogueNarrate(const char* narration, TaskId task);
+      void dialogueNarrate(const char* narration, Task* task);
 
       /**
        * Send a line of dialogue to the DialogueController as speech.
        *
        * @param speech The line of dialogue to appear as character speech.
-       * @param task The ID of this speech instruction
+       * @param task The ticket of this speech instruction
        */
-      void dialogueSay(const char* speech, TaskId task);
+      void dialogueSay(const char* speech, Task* task);
       
       /**
        * Set a new location for the gameplay to take place in.

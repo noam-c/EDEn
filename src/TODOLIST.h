@@ -9,7 +9,6 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo Sound needs to handle and signal instruction IDs
  * \todo Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?
  * \todo Dialogue Controller needs to have "speed up" on holding of the space bar
  * \todo Dialogue Controller needs a blinking cursor to indicate finished dialogue.

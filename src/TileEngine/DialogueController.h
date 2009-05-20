@@ -5,14 +5,13 @@
 #include <string>
 
 #include "Thread.h"
-#include "TaskId.h"
+#include "Task.h"
 
 namespace edwt
 {  class Container;
    class TextBox;
 };
 
-class Scheduler;
 class ScriptEngine;
 
 /**
@@ -67,13 +66,13 @@ class DialogueController : public Thread
          std::string dialogue;
    
          /** The task ID waiting on this particular line of dialogue */
-         TaskId task;
+         Task* task;
    
          /**
           *  Constructor. Initializes values and indexes the locations of
           *  embedded scripts in the line of dialogue for later use.
           */
-         Line(LineType type, std::string dialogue, TaskId task);
+         Line(LineType type, std::string dialogue, Task* task);
 
          /**
           *  Gets the next embdedded script bracket pair.
@@ -107,9 +106,6 @@ class DialogueController : public Thread
 
    /** The script engine to call when embedded instructions are found */
    ScriptEngine* scriptEngine;
-
-   /** The scheduler to signal when a line is finished printing onto the screen */
-   Scheduler* scheduler;
 
    /**
     * Initialize the main dialogue box.
@@ -145,9 +141,9 @@ class DialogueController : public Thread
     *
     * @param type The type of line that will be enqueued.
     * @param speech The speech to enqueue in the dialogue controller. 
-    * @param task The ticket number to be signalled when the line is finished
+    * @param task The ticket to be signalled when the line is finished
     */
-   void addLine(LineType type, const char* speech, TaskId task);
+   void addLine(LineType type, const char* speech, Task* task);
 
    /**
     * Clears any dialogue currently being displayed onscreen.
@@ -161,9 +157,8 @@ class DialogueController : public Thread
        *
        * @param top The top-level widget container of the current state.
        * @param engine The scripting engine to call with embedded scripts.
-       * @param scheduler The scheduler that will be blocking Threads on this controller.
        */
-      DialogueController(edwt::Container* top, ScriptEngine* engine, Scheduler* scheduler);
+      DialogueController(edwt::Container* top, ScriptEngine* engine);
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next
@@ -178,17 +173,17 @@ class DialogueController : public Thread
        * Enqueue a line of speech said by a character.
        *
        * @param speech The dialogue that will be said.
-       * @param task The ticket number of this speech instruction
+       * @param task The ticket of this speech instruction
        */
-      void say(const char* speech, TaskId task);
+      void say(const char* speech, Task* task);
    
       /**
        * Enqueue a line of speech narrated or thought by a character.
        *
        * @param speech The dialogue that will be narrated.
-       * @param task The ticket number of this narration instruction
+       * @param task The ticket of this narration instruction
        */
-      void narrate(const char* speech, TaskId task);
+      void narrate(const char* speech, Task* task);
 
       /**
        * Signals that some amount of time has passed.
