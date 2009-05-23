@@ -24,22 +24,24 @@ bool Music::isPlaying(Music* music)
 {  return (music == currentMusic) && Mix_PlayingMusic();
 }
 
+void Music::fadeOutMusic(int time)
+{  if(Mix_PlayingMusic())
+   {  Mix_FadeOutMusic(time);
+      currentMusic = NULL;
+   }
+}
+
+void Music::stopMusic()
+{  if(Mix_PlayingMusic())
+   {  Mix_HaltMusic();
+      currentMusic = NULL;
+   }
+}
+
 void Music::play()
 {  if(!isPlaying(this))
    {  setPlayingMusic(this);
       Mix_PlayMusic(music, 0);
-   }
-}
-
-void Music::fadeOut(int time)
-{  if(isPlaying(this))
-   {  Mix_FadeOutMusic(time);
-   }
-}
-
-void Music::stop()
-{  if(isPlaying(this))
-   {  Mix_HaltMusic();
    }
 }
 

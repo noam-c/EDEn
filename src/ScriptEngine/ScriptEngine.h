@@ -103,6 +103,9 @@ class ScriptEngine
        int narrate(lua_State* luaVM);
        int say(lua_State* luaVM);
        int playSound(lua_State* luaVM);
+       int playMusic(lua_State* luaVM);
+       int fadeMusic(lua_State* luaVM);
+       int stopMusic(lua_State* luaVM);
        int setRegion(lua_State* luaVM);
 };
 

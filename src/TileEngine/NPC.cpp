@@ -1,8 +1,11 @@
 #include "NPC.h"
+#include "ScriptEngine.h"
+#include "Script.h"
 
-NPC::NPC(std::string name)
-{  //scriptEngine = ScriptEngine::getInstance();
-   //npcThread = scriptEngine->makeThread(name);
+NPC::NPC(ScriptEngine* engine, lua_State* luaVM, std::string name)
+{  scriptEngine = engine;
+   npcScript = new Script();
+   npcScript->loadFile(luaVM, name);
 }
 
 void NPC::idle()

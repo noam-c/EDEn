@@ -26,14 +26,14 @@ class ResourceLoader
     * available.
     */
    enum ResourceType
-   { /** Pieces of music to be played in the game background */
-     MUSIC,
-     /** Sound effects to be played during gameplay */
+   { /** Sound effects to be played during gameplay */
      SOUND,
      /** Sets of tiles that may be drawn via the TileEngine */
      TILESET,
      /** Locations and maps navigated via the TileEngine */
-     REGION
+     REGION,
+     /** Pieces of music to be played in the game background */
+     MUSIC,
    };
 
    /** 
@@ -95,6 +95,10 @@ class ResourceLoader
 
    public:
       /**
+       * Get a music resource with the specified filename.
+       * The extension must also be specified since music
+       * can appear in multiple file types.
+       *
        * @return The piece of music given by the specified name.
        * @throws ResourceException If the music resource cannot be found or
        * loaded.

@@ -18,7 +18,7 @@ void MainMenu::NewGameAction()
 
    ExecutionStack::getInstance()->pushState(tileEngine);
    chooseSound->play();
-   music->fadeOut(1000);
+   Music::fadeOutMusic(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 }
 
@@ -50,6 +50,6 @@ void MainMenu::AboutAction()
 void MainMenu::QuitAction()
 {  finished = true;
    chooseSound->play();
-   music->fadeOut(1000);
+   Music::fadeOutMusic(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 }

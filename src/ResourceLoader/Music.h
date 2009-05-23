@@ -10,13 +10,14 @@ class Music : public Resource
    static inline void setPlayingMusic(Music* music);
    
    Mix_Music* music;
+
    public:
       Music(const char* path);
       size_t getSize();
 
       void play();
-      void fadeOut(int time);
-      void stop();
+      static void fadeOutMusic(int time);
+      static void stopMusic();
 
       ~Music();
 };

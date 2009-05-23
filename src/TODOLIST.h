@@ -54,7 +54,6 @@ void OptionsMenuTodoList(void);
 /**
  * \todo freezeUserInput/startCutScene - don't allow user input (begin a cutscene)
  * \todo permitUserInput/endCutScene - allow user input (end a cutscene)
- * \todo playMusic function - play a song (stop the currently playing song)
  * \todo fadeMusic function - fade a song out with a given time delay (possibly blocking until the song is faded)
  * \todo setLoopPoints function - set new looping points for a song (song continues playing with new points)
  */

@@ -37,12 +37,22 @@ static int luaPlaySound(lua_State* luaVM)
 {  return getEngine(luaVM)->playSound(luaVM);
 }
 
+static int luaPlayMusic(lua_State* luaVM)
+{  return getEngine(luaVM)->playMusic(luaVM);
+}
+
+static int luaStopMusic(lua_State* luaVM)
+{  return getEngine(luaVM)->stopMusic(luaVM);
+}
+
 void ScriptEngine::registerFunctions()
 {  REGISTER("narrate", luaNarrate);
    REGISTER("say", luaSay);
    REGISTER("setRegion", luaSetRegion);
    REGISTER("playSound", luaPlaySound);
-//   REGISTER("playMusic", luaPlayMusic);
+   REGISTER("playMusic", luaPlayMusic);
+   REGISTER("stopMusic", luaStopMusic);
+
 //   REGISTER("registerNPC", luaRegisterNPC);
 //   REGISTER("setMap", luaSetMap);
 }

@@ -64,7 +64,7 @@ MainMenu::MainMenu()
       top->add(actionsListBox, 400 - actionsListBox->getWidth() / 2, 600 - (actionsListBox->getHeight() + 50));
 
       #ifndef MUSIC_OFF
-      music = ResourceLoader::getMusic("title");
+      music = ResourceLoader::getMusic("title.mp3");
       #endif
    }
    catch (gcn::Exception e)
@@ -169,7 +169,7 @@ void MainMenu::draw()
 }
 
 MainMenu::~MainMenu()
-{  music->fadeOut(1000);
+{  Music::fadeOutMusic(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 
    delete bg;

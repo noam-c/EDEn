@@ -2,6 +2,7 @@
 #include "TileEngine.h"
 #include "Scheduler.h"
 #include "ResourceLoader.h"
+#include "Music.h"
 #include "Sound.h"
 #include "Script.h"
 
@@ -106,6 +107,31 @@ int ScriptEngine::playSound(lua_State* luaStack)
       if(waitForFinish)
       {  return scheduler->block(task);
       }
+   }
+
+   return 0;
+}
+
+int ScriptEngine::playMusic(lua_State* luaStack)
+{  int nargs = lua_gettop(luaStack);
+
+   if(nargs > 0)
+   {  std::string musicName(lua_tostring(luaStack, 1));
+      DEBUG("Playing music: %s", musicName.c_str());
+
+      Music* song = ResourceLoader::getMusic(musicName);
+      song->play();
+   }
+
+   return 0;
+}
+
+int ScriptEngine::stopMusic(lua_State* luaStack)
+{  int nargs = lua_gettop(luaStack);
+
+   if(nargs == 0)
+   {  DEBUG("Stopping music.");
+      Music::stopMusic();
    }
 
    return 0;

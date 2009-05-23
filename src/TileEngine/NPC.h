@@ -1,10 +1,13 @@
 #ifndef __NPC_H_
 #define __NPC_H_
 
-#include "ScriptEngine.h"
 #include <string>
 #include <queue>
 #include <map>
+
+class Script;
+class ScriptEngine;
+struct lua_State;
 
 /**
  * An NPC (non-player character) is an animate being on the map that can
@@ -55,6 +58,8 @@ class NPC
    /** The NPC's thread */
    lua_State* npcThread;
 
+   Script* npcScript;
+
    /** The scripting engine for the NPC to use */
    ScriptEngine* scriptEngine;
 
@@ -65,7 +70,7 @@ class NPC
        * 
        * @param name The name of the NPC (must also be the name of its script).
        */
-      NPC(std::string name);
+      NPC(ScriptEngine* engine, lua_State* luaVM, std::string name);
 
       /**
        * A logic step for the NPC. Every frame, the NPC works on completing a
