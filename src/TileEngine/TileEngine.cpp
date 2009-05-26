@@ -1,8 +1,10 @@
 #include "TileEngine.h"
 #include "Region.h"
 #include "ScriptEngine.h"
+#include "NPC.h"
 #include "Scheduler.h"
 #include "Container.h"
+
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_TILE_ENG;
@@ -50,6 +52,10 @@ std::string TileEngine::setRegion(std::string regionName, std::string mapName)
    catch(ResourceException e)
    {  DEBUG(e.what());
    }
+}
+
+void TileEngine::addNPC(NPC* npc)
+{  
 }
 
 void TileEngine::draw()

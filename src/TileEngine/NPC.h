@@ -55,9 +55,7 @@ class NPC
    /** A queue of instructions for the NPC to follow */
    std::queue<Instruction*> instructions;
 
-   /** The NPC's thread */
-   lua_State* npcThread;
-
+   /** The NPC's script */
    Script* npcScript;
 
    /** The scripting engine for the NPC to use */

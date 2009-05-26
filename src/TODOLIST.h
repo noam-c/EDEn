@@ -9,6 +9,10 @@
 void OrganizationTodoList(void);
 
 /**
+ * \todo Add NPCs to the game.
+ * \todo Create an NPC controller for the Tile Engine.
+ * \todo Implement semi-coroutines in the NPC controller using Lua.
+ * \todo Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
  * \todo Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?
  * \todo Dialogue Controller needs to have "speed up" on holding of the space bar
  * \todo Dialogue Controller needs a blinking cursor to indicate finished dialogue.
@@ -17,9 +21,6 @@ void OrganizationTodoList(void);
  * \todo Remove references to namespace gcn outside of edwt (as many as possible if not all)
  * \todo Complete or remove ScriptException class, as it is currently empty and pointless.
  * \todo Document ScriptException when it is completed.
- * \todo Add NPCs to the game.
- * \todo Create an NPC controller for the Tile Engine.
- * \todo Implement semi-coroutines in the NPC controller using Lua.
  * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
    * To do this, a full rewrite of the Dialogue Controller might be necessary, due to some tight coupling in the class at the moment
  * \todo Add the player character to the game, and make him respond to user input.
@@ -36,7 +37,6 @@ void OrganizationTodoList(void);
  * \todo Tileset passibility matrix uses a bool (1 word) for each entry; it should only need to use one bit per entry.
  * \todo Move GL drawing code in Tileset to GraphicsUtil (less coupling)
  * \todo Consider changing the quad drawing code by using GL_ORTHO_2D
- * \todo Consider how to change the embedded script markup to avoid having to escape single-quotes in string parameters
  */
 void DevelopmentTodoList(void);
 
@@ -54,6 +54,10 @@ void OptionsMenuTodoList(void);
 /**
  * \todo freezeUserInput/startCutScene - don't allow user input (begin a cutscene)
  * \todo permitUserInput/endCutScene - allow user input (end a cutscene)
+ * \todo freezeNPCs - don't allow NPCs to move/idle
+ * \todo unfreezeNPCs - allow NPCs to move/idle
+ * \todo freezeNPC - freeze a particular NPC
+ * \todo unfreezeNPC - unfreeze a particular NPC
  * \todo fadeMusic function - fade a song out with a given time delay (possibly blocking until the song is faded)
  * \todo setLoopPoints function - set new looping points for a song (song continues playing with new points)
  */

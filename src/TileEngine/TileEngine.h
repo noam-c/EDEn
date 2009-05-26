@@ -9,6 +9,7 @@
 #include "OpenGLTTF.h"
 #include "Task.h"
 
+class NPC;
 class Scheduler;
 class ScriptEngine;
 
@@ -91,6 +92,11 @@ class TileEngine: public GameState
        *                By default, uses the first map declared in the region.
        */
       std::string setRegion(std::string regionName, std::string mapName = "");
+
+      /**
+       * Add a new NPC into the region.
+       */
+      void addNPC(NPC* npc);
 };
 
 #endif

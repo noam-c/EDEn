@@ -107,6 +107,8 @@ class ScriptEngine
        int fadeMusic(lua_State* luaVM);
        int stopMusic(lua_State* luaVM);
        int setRegion(lua_State* luaVM);
+       int addNPC(lua_State* luaVM);
+       int delay(lua_State* luaVM);
 };
 
 #endif

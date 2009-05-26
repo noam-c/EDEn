@@ -4,6 +4,8 @@
 #include "ResourceLoader.h"
 #include "Music.h"
 #include "Sound.h"
+#include "Timer.h"
+#include "NPC.h"
 #include "Script.h"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
@@ -148,6 +150,33 @@ int ScriptEngine::setRegion(lua_State* luaStack)
    }
 
    return 0;
+}
+
+int ScriptEngine::addNPC(lua_State* luaStack)
+{  int nargs = lua_gettop(luaStack);
+   bool waitForFinish = false;
+
+   if(nargs > 0)
+   {  std::string npcName(lua_tostring(luaStack, 1));
+      DEBUG("Adding NPC: %s", npcName.c_str());
+
+      NPC* addedNPC = new NPC(this, luaVM, npcName);
+      tileEngine->addNPC(addedNPC);
+   }
+
+   return 0;
+}
+
+int ScriptEngine::delay(lua_State* luaStack)
+{  int nargs = lua_gettop(luaStack);
+   long timeToWait = (long)lua_tonumber(luaStack, 1);
+   DEBUG("Waiting %d milliseconds", timeToWait);
+
+   Task* task = Task::getNextTask(scheduler);
+   Timer* waitTimer = new Timer(task, timeToWait);
+   scheduler->start(waitTimer);
+
+   return scheduler->join(waitTimer);
 }
 
 int ScriptEngine::runScript(std::string scriptName)
