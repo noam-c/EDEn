@@ -5,7 +5,7 @@ const int debugFlag = DEBUG_AUDIO;
 
 Music* Music::currentMusic = NULL;
 
-Music::Music(const char* path)
+Music::Music(ResourceKey name, const char* path) : Resource(name)
 {  music = Mix_LoadMUS(path);
    if(music == NULL)
    {  T_T(Mix_GetError());

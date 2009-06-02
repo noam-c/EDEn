@@ -20,7 +20,7 @@ void Sound::channelFinished(int channel)
    }
 }
 
-Sound::Sound(const char* path) : playingChannel(-1)
+Sound::Sound(ResourceKey name, const char* path) : Resource(name), playingChannel(-1)
 {  DEBUG("Loading WAV %s", path);
    sound = Mix_LoadWAV(path);
    DEBUG("Loaded WAV.");

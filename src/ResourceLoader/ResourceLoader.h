@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include "ResourceKey.h"
 #include "ResourceException.h"
 #include "SDL_mixer.h"
 
@@ -48,10 +49,8 @@ class ResourceLoader
     */
    static const std::string EXTENSIONS[];
 
-   typedef std::string Key;
-
    /** A map to hold all the currently loaded resources, organized by key */
-   static std::map<Key, Resource*> resources;
+   static std::map<ResourceKey, Resource*> resources;
 
    /**
     * Load in a resource specified by the given unique key-type pair.
@@ -59,7 +58,7 @@ class ResourceLoader
     * @param name The name of the resource to be loaded.
     * @param type The ResourceType of the resource to be loaded.
     */
-   static void load(Key name, ResourceType type);
+   static void load(ResourceKey name, ResourceType type);
 
    /**
     * Get the path to a certain resource based on its name and type.
@@ -69,7 +68,7 @@ class ResourceLoader
     *
     * @return A relative path to the resource "name"
     */
-   static std::string getPath(Key name, ResourceType type);
+   static std::string getPath(ResourceKey name, ResourceType type);
 
    /**
     * Get the path to a region of the specified name.
@@ -78,7 +77,7 @@ class ResourceLoader
     *
     * @return A relative path to the region "name"
     */
-   static std::string getRegionPath(Key name);
+   static std::string getRegionPath(ResourceKey name);
 
    /**
     * Get a resource of a certain name and type. If the resource is not cached
@@ -91,7 +90,7 @@ class ResourceLoader
     * @throws ResourceException If the resource cannot be found or loaded
     *         (for example, file not found or malformed resource).
     */
-   static Resource* getResource(Key name, ResourceType type) throw(ResourceException);
+   static Resource* getResource(ResourceKey name, ResourceType type) throw(ResourceException);
 
    public:
       /**
@@ -103,28 +102,28 @@ class ResourceLoader
        * @throws ResourceException If the music resource cannot be found or
        * loaded.
        */
-      static Music* getMusic(Key name) throw(ResourceException);
+      static Music* getMusic(ResourceKey name) throw(ResourceException);
 
       /**
        * @return The sound effect given by the specified name.
        * @throws ResourceException If the sound resource cannot be found or
        * loaded.
        */
-      static Sound* getSound(Key name) throw(ResourceException);
+      static Sound* getSound(ResourceKey name) throw(ResourceException);
 
       /**
        * @return The tileset given by the specified name.
        * @throws ResourceException If the tileset resource cannot be found or
        * loaded.
        */
-      static Tileset* getTileset(Key name) throw(ResourceException);
+      static Tileset* getTileset(ResourceKey name) throw(ResourceException);
 
       /**
        * @return The region data given by the specified name.
        * @throws ResourceException If the region resource cannot be found or
        * loaded.
        */
-      static Region* getRegion(Key name) throw(ResourceException);
+      static Region* getRegion(ResourceKey name) throw(ResourceException);
 
       /**
        * Gets a relative path to the folder that contains the region file,
@@ -135,7 +134,7 @@ class ResourceLoader
        *
        * @return A relative path to the folder containing the region data. 
        */
-      static std::string getRegionFolder(Key name);
+      static std::string getRegionFolder(ResourceKey name);
 
       /**
        * Free all of the memory taken up by the resources, deleting all the

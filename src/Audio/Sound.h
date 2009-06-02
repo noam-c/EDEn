@@ -19,7 +19,7 @@ class Sound : public Resource
    void finished();
 
    public:
-      Sound(const char* path);
+      Sound(ResourceKey name, const char* path);
       void play(Task* task = NULL);
       void stop();
       size_t getSize();

@@ -4,7 +4,7 @@
 
 const int debugFlag = DEBUG_RES_LOAD;
 
-Region::Region(const char* path)
+Region::Region(ResourceKey name, const char* path) : Resource(name)
 {  std::ifstream in;
    int numMaps;
    in.open(path);

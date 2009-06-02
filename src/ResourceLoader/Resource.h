@@ -2,9 +2,25 @@
 #define __RESOURCE_H_
 
 #include "ResourceException.h"
+#include "ResourceKey.h"
 
 class Resource
-{  public:
+{  /**
+    * \todo Document.
+    */
+   ResourceKey name;
+   
+   public:
+      /**
+       * \todo Document.
+       */
+      Resource(ResourceKey name);
+
+      /**
+       * \todo Document.
+       */
+      std::string getName();
+
       /**
        * @return the size that the resource takes up in memory.
        */

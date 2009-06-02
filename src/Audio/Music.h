@@ -12,7 +12,7 @@ class Music : public Resource
    Mix_Music* music;
 
    public:
-      Music(const char* path);
+      Music(ResourceKey name, const char* path);
       size_t getSize();
 
       void play();
