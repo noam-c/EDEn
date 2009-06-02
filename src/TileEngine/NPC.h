@@ -18,6 +18,10 @@ struct lua_State;
  * facilitated by an instruction queue and a coroutine provided for the NPC via
  * the scripting engine.
  *
+ * This class is EXTREMELY unfinished at the moment. In fact, I'd say it's nearly
+ * unstarted.
+ * \todo Start and finish the NPC class.
+ *
  * @author Noam Chitayat
  */
 class NPC
@@ -65,6 +69,7 @@ class NPC
       /**
        * Constructor for the NPC.
        * Initializes the NPC's thread and loads the associated script.
+       * \todo Get rid of luaVM parameter when ScriptEngine::getVM is implemented.
        * 
        * @param name The name of the NPC (must also be the name of its script).
        */

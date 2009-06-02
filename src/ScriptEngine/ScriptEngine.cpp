@@ -6,7 +6,8 @@
 #include "Sound.h"
 #include "Timer.h"
 #include "NPC.h"
-#include "Script.h"
+#include "FileScript.h"
+#include "StringScript.h"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -181,8 +182,7 @@ int ScriptEngine::delay(lua_State* luaStack)
 
 int ScriptEngine::runScript(std::string scriptName)
 {  DEBUG("Running script: %s", scriptName.c_str());
-   Script* newScript = new Script();
-   newScript->loadFile(luaVM, getScriptPath(scriptName));
+   FileScript* newScript = new FileScript(luaVM, getScriptPath(scriptName));
    scheduler->start(newScript);
 
    if(scheduler->hasRunningThread())
@@ -194,8 +194,7 @@ int ScriptEngine::runScript(std::string scriptName)
 
 int ScriptEngine::runScriptString(std::string scriptString)
 {  DEBUG("Running script string: %s", scriptString.c_str());
-   Script* newScript = new Script();
-   newScript->loadString(luaVM, scriptString);
+   StringScript* newScript = new StringScript(luaVM, scriptString);
    scheduler->start(newScript);
 
    if(scheduler->hasRunningThread())

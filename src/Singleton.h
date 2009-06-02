@@ -20,8 +20,10 @@
  * -# Instead of implementing a destructor, use finish()
  * -# Gaze upon your new singleton class with pride. Use getInstance() to grab
  *    a singleton instance, and use destroy() to force a cleanup of an existing
- *    singleton (at the time of writing, there is no "manager" to clean up
- *    singletons, but there certainly should be).
+ *    singleton
+ 
+ * \todo At the time of writing, there is no static "manager" to clean up
+ *       singletons, but there certainly should be.
  *
  * @author Noam Chitayat
  */

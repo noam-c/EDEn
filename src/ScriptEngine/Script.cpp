@@ -15,16 +15,6 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
 Script::Script() : luaStack(NULL)
 {}
 
-void Script::loadString(lua_State* luaVM, std::string scriptString)
-{  luaStack = lua_newthread(luaVM);
-   luaL_loadstring(luaStack, scriptString.c_str());
-}
-
-void Script::loadFile(lua_State* luaVM, std::string scriptPath)
-{  luaStack = lua_newthread(luaVM);
-   luaL_loadfile(luaStack, scriptPath.c_str());
-}
-
 bool Script::runScript()
 {  if(!luaStack)
    {  T_T("Attempting to run an uninitialized script!");
@@ -55,4 +45,8 @@ bool Script::resume(long /*timePassed*/)
 
 int Script::yield()
 {  return lua_yield(luaStack, 0);
+}
+
+Script::~Script()
+{
 }

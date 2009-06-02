@@ -5,7 +5,7 @@ namespace edwt
 {  class Container;
 };
 
-/** GameState class
+/**
  * This class abstractly represents a potential state for the game to enter
  * States can include "Title Screen", "Battle", "Field" and more
  * Each GameState has a step function to perform state logic and a 

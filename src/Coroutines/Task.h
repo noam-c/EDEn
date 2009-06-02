@@ -6,9 +6,11 @@
 class Scheduler;
 
 /**
- *  A Task is a ticket container for engine instructions that occur across
- *  many frames of logic. These tasks are handed to the Scheduler, which blocks
- *  Threads waiting on the instruction and resumes them when the instruction is finished.
+ * A Task is a ticket container for engine instructions that occur across
+ * many frames of logic. These tasks are handed to the Scheduler, which blocks
+ * Threads waiting on the instruction and resumes them when the instruction is finished.
+ *
+ * @author Noam Chitayat
  */
 class Task
 {  /** The unique identifier for this task */

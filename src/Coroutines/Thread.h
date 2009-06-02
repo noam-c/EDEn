@@ -6,9 +6,9 @@
  * The typical scenario for a Thread object is a resumption (with the amount of
  * time since the last frame passed in), followed by blocking or by destruction.
  *
- * Thread objects do not actually use "threads" in the typical sense. They are
- * semi-coroutines, running serially, resuming and suspending.
- * They do not have their own threads of execution.
+ * The class name is a misnomer; Thread objects do not actually use "threads" in
+ * the typical sense. They are semi-coroutines, running serially, resuming
+ * and yielding. They do not have their own threads of execution.
  *
  * @author Noam Chitayat
  */
@@ -53,6 +53,11 @@ class Thread
        *         this thread is not a coroutine.
        */
       virtual int yield();
+
+      /**
+       * Destructor.
+       */
+      virtual ~Thread();
 };
 
 #endif

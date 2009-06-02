@@ -1,11 +1,10 @@
 #include "NPC.h"
 #include "ScriptEngine.h"
-#include "Script.h"
+#include "FileScript.h"
 
 NPC::NPC(ScriptEngine* engine, lua_State* luaVM, std::string name)
 {  scriptEngine = engine;
-   npcScript = new Script();
-   npcScript->loadFile(luaVM, name);
+   npcScript = new FileScript(luaVM, name);
 }
 
 void NPC::idle()

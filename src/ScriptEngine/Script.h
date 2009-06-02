@@ -13,10 +13,7 @@ struct lua_State;
  * @author Noam Chitayat
  */
 class Script : public Thread
-{  /** The stack and execution thread of this script. */
-   lua_State* luaStack;
-
-   /**
+{  /**
     * Runs the script until completion or yielding. Prints out any errors encountered
     * while resuming the script.
     *
@@ -25,29 +22,15 @@ class Script : public Thread
     */
    bool runScript();
 
+   protected:
+      /** The stack and execution thread of this script. */
+      lua_State* luaStack;
+
    public:
       /**
        * Constructor.
        */
       Script();
-
-      /**
-       * Creates a new Lua thread by forking the main VM, and then
-       * loads the specified script file onto the new thread's stack.
-       *
-       * @param luaVM The main Lua stack to fork a thread from.
-       * @param scriptPath The path to a script that should be run on this thread.
-       */
-      void loadFile(lua_State* luaVM, std::string scriptPath);
-
-      /**
-       * Creates a new Lua thread by forking the main VM, and then
-       * loads the specified script string into the new thread's stack.
-       *
-       * @param luaVM The main Lua stack to fork a thread from.
-       * @param scriptString The Lua code that should be run on this thread.
-       */
-      void loadString(lua_State* luaVM, std::string scriptString);
 
       /**
        * Performs a Lua resume on the thread.
@@ -63,6 +46,11 @@ class Script : public Thread
        *         can regain control and handle the yield.
        */
       int yield();
+
+      /**
+       * Destructor. Made abstract in order to make Scripts abstract.
+       */
+      virtual ~Script() = 0;
 };
 
 #endif

@@ -13,3 +13,7 @@ int Thread::getId()
 int Thread::yield()
 {  return 0;
 }
+
+Thread::~Thread()
+{
+}
