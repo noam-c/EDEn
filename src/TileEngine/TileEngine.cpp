@@ -4,18 +4,24 @@
 #include "NPC.h"
 #include "Scheduler.h"
 #include "Container.h"
+#include "ScriptFactory.h"
 
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_TILE_ENG;
 
-TileEngine::TileEngine(const char* introScript) : currMap(NULL)
+TileEngine::TileEngine(std::string chapterName) : currMap(NULL)
 {   scheduler = new Scheduler();
     scriptEngine = new ScriptEngine(this, scheduler);
     dialogue = new DialogueController(top, scriptEngine);
     time = SDL_GetTicks();
     scheduler->start(dialogue);
+    Script* introScript = ScriptFactory::getChapterScript(scriptEngine->getVM(), chapterName);
     scriptEngine->runScript(introScript);
+}
+
+std::string TileEngine::getMapName()
+{   return currMap->getName();
 }
 
 void TileEngine::dialogueNarrate(const char* narration, Task* task)
@@ -26,7 +32,7 @@ void TileEngine::dialogueSay(const char* speech, Task* task)
 {   dialogue->say(speech, task);
 }
 
-std::string TileEngine::setRegion(std::string regionName, std::string mapName)
+bool TileEngine::setRegion(std::string regionName, std::string mapName)
 {  try
    {  DEBUG("Loading region: %s", regionName.c_str());
       currRegion = ResourceLoader::getRegion(regionName);
@@ -45,13 +51,14 @@ std::string TileEngine::setRegion(std::string regionName, std::string mapName)
 
       DEBUG("Map set to: %s", mapName.c_str());
 
-      std::string scriptFolder(ResourceLoader::getRegionFolder(regionName));
-      DEBUG("Running map script: %s%s", scriptFolder.c_str(), mapName.c_str());
-      return (scriptFolder + mapName);
+      DEBUG("Running map script: %s/%s", regionName.c_str(), mapName.c_str());
+      return true;
    }
    catch(ResourceException e)
    {  DEBUG(e.what());
    }
+
+   return false;
 }
 
 void TileEngine::addNPC(NPC* npc)

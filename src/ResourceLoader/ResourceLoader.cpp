@@ -2,12 +2,12 @@
 
 #include "Music.h"
 #include "Sound.h"
-#include "GraphicsUtil.h"
 #include "Tileset.h"
 #include "Region.h"
 
-#include "DebugUtils.h"
 #include <fstream>
+
+#include "DebugUtils.h"
 
 const int debugFlag = DEBUG_RES_LOAD;
 

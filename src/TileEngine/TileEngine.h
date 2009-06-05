@@ -46,9 +46,14 @@ class TileEngine: public GameState
       /**
        * Constructor. Initializes widgets and controllers
        *
-       * @param introScript The name of the script to run after construction
+       * @param chapterName The name of the chapter to load after construction
        */
-      TileEngine(const char* introScript);
+      TileEngine(std::string chapterName);
+
+      /**
+       * @return The name of the currently loaded map.
+       */
+      std::string getMapName();
 
       /**
        * Destructor.
@@ -90,8 +95,10 @@ class TileEngine: public GameState
        * @param regionName The name of the new region to set.
        * @param mapName The name of the map to use within the region.
        *                By default, uses the first map declared in the region.
+       *
+       * @return true iff the region was successfully set, and a map successfully loaded
        */
-      std::string setRegion(std::string regionName, std::string mapName = "");
+      bool setRegion(std::string regionName, std::string mapName = "");
 
       /**
        * Add a new NPC into the region.

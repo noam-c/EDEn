@@ -4,7 +4,7 @@
 
 NPC::NPC(ScriptEngine* engine, lua_State* luaVM, std::string name)
 {  scriptEngine = engine;
-   npcScript = new FileScript(luaVM, name);
+//   npcScript = new FileScript(luaVM, name);
 }
 
 void NPC::idle()

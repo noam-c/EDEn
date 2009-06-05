@@ -7,9 +7,6 @@
  * A FileScript is a type of Script that runs Lua code supplied in a Lua script
  * file.
  *
- * \todo FileScripts should be a type of Resource managed by the ResourceLoader
- *       since they are loaded from file.
- *
  * @author Noam Chitayat
  */
 class FileScript : public Script

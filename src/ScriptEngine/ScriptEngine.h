@@ -8,8 +8,10 @@
 
 // We will need to talk to the tile engine from Lua
 class TileEngine;
-struct lua_State;
 class Scheduler;
+class Script;
+
+struct lua_State;
 
 #define SCRIPT_ENG_LUA_NAME ","
 
@@ -57,11 +59,16 @@ class ScriptEngine
        ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
 
        /**
-        * Run a script with the specified name.
-        *
-        * @param scriptName The name of the script to run.
+        * @return the main luaVM used by this script engine
         */
-       int runScript(std::string scriptName);
+       lua_State* getVM() const;
+
+       /**
+        * Run a specified script.
+        *
+        * @param script The script to run.
+        */
+       int runScript(Script* script);
 
        /**
         * Run a string of script with the specified name.

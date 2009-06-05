@@ -9,6 +9,11 @@
 void OrganizationTodoList(void);
 
 /**
+ * \todo Fix Resource getSize functions to return an accurate size estimate for their resources
+ * \todo Refactor ScriptEngine so that it is the only user of ScriptFactory by introducting run*Script methods
+   * Doing this allows removal of the getVM() method; don't forget to do that in addition
+ * \todo Move regions (.edr files) to the common region folder instead of having each within its own folder, and change ResourceLoader appropriately
+   * We should be able to remove that "region paths are different from all other resource paths" crap after this.
  * \todo Add NPCs to the game.
  * \todo Create an NPC controller for the Tile Engine.
  * \todo Implement semi-coroutines in the NPC controller using Lua.
@@ -16,6 +21,7 @@ void OrganizationTodoList(void);
  * \todo Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?
  * \todo Dialogue Controller needs to have "speed up" on holding of the space bar
  * \todo Dialogue Controller needs a blinking cursor to indicate finished dialogue.
+ * \todo Create a console that appears on use of ~ key, and make it respond to Lua script commands (including special debug/dev functions that we come up with)
  * \todo Further integration of scripts into Tile Engine, followed by unit tests for all the script functions
  * \todo Document all of the Resources (Music, Sound, Tileset, Region), and the Resource abstract class
  * \todo Remove references to namespace gcn outside of edwt (as many as possible if not all)

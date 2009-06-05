@@ -8,6 +8,7 @@
 #include "NPC.h"
 #include "FileScript.h"
 #include "StringScript.h"
+#include "ScriptFactory.h"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -41,6 +42,10 @@ ScriptEngine::ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler)
    // (thus eliminating the need for a global ScriptEngine instance or singleton)
    lua_pushlightuserdata(luaVM, this);
    lua_setglobal(luaVM, SCRIPT_ENG_LUA_NAME);
+}
+
+lua_State* ScriptEngine::getVM() const
+{  return luaVM;
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
@@ -146,8 +151,13 @@ int ScriptEngine::setRegion(lua_State* luaStack)
    {  std::string regionName(lua_tostring(luaStack, 1));
       DEBUG("Setting region: %s", regionName.c_str());
 
-      std::string mapScriptPath = tileEngine->setRegion(regionName);
-      return runScript(mapScriptPath);
+      if(!tileEngine->setRegion(regionName))
+      {  /** \todo Report an error to Lua, perhaps throw a ScriptException? */
+      }
+
+      std::string mapName = tileEngine->getMapName();
+      Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);
+      return runScript(mapScript);
    }
 
    return 0;
@@ -180,13 +190,11 @@ int ScriptEngine::delay(lua_State* luaStack)
    return scheduler->join(waitTimer);
 }
 
-int ScriptEngine::runScript(std::string scriptName)
-{  DEBUG("Running script: %s", scriptName.c_str());
-   FileScript* newScript = new FileScript(luaVM, getScriptPath(scriptName));
-   scheduler->start(newScript);
+int ScriptEngine::runScript(Script* script)
+{  scheduler->start(script);
 
    if(scheduler->hasRunningThread())
-   {  return scheduler->join(newScript);
+   {  return scheduler->join(script);
    }
 
    return 0;

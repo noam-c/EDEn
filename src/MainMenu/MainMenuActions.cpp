@@ -5,7 +5,7 @@
 
 #include "TileEngine.h"
 
-#define CHAP1 "data/chapters/chapter1"
+#define CHAP1 "chapter1"
 //Actions for each of the list ops in the title screen
 
 /**
