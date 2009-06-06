@@ -48,8 +48,14 @@ class ScriptEngine
      */
     std::string getScriptPath(std::string scriptName);
 
-    public:
+    /**
+     * Run a specified script.
+     *
+     * @param script The script to run.
+     */
+    int runScript(Script* script);
 
+    public:
        /** 
         * Constructor. Initializes a Lua VM and initializes members as needed.
         *
@@ -59,16 +65,20 @@ class ScriptEngine
        ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
 
        /**
-        * @return the main luaVM used by this script engine
-        */
-       lua_State* getVM() const;
-
-       /**
-        * Run a specified script.
+        * Run a specified map script.
         *
-        * @param script The script to run.
+        * @param regionName The region containing the map script to run.
+        * @param mapName The name of the map script to be run.
         */
-       int runScript(Script* script);
+       int runMapScript(std::string regionName, std::string mapName);
+       
+       /**
+        * Run a specified map script.
+        *
+        * @param regionName The region containing the map script to run.
+        * @param mapName The name of the map script to be run.
+        */
+       int runChapterScript(std::string chapterName);
 
        /**
         * Run a string of script with the specified name.

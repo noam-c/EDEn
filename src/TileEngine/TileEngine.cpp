@@ -16,8 +16,7 @@ TileEngine::TileEngine(std::string chapterName) : currMap(NULL)
     dialogue = new DialogueController(top, scriptEngine);
     time = SDL_GetTicks();
     scheduler->start(dialogue);
-    Script* introScript = ScriptFactory::getChapterScript(scriptEngine->getVM(), chapterName);
-    scriptEngine->runScript(introScript);
+    scriptEngine->runChapterScript(chapterName);
 }
 
 std::string TileEngine::getMapName()

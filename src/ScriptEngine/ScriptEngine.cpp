@@ -44,10 +44,6 @@ ScriptEngine::ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler)
    lua_setglobal(luaVM, SCRIPT_ENG_LUA_NAME);
 }
 
-lua_State* ScriptEngine::getVM() const
-{  return luaVM;
-}
-
 int ScriptEngine::narrate(lua_State* luaStack)
 {  int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
@@ -156,8 +152,7 @@ int ScriptEngine::setRegion(lua_State* luaStack)
       }
 
       std::string mapName = tileEngine->getMapName();
-      Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);
-      return runScript(mapScript);
+      return runMapScript(regionName, mapName);
    }
 
    return 0;
@@ -188,6 +183,16 @@ int ScriptEngine::delay(lua_State* luaStack)
    scheduler->start(waitTimer);
 
    return scheduler->join(waitTimer);
+}
+
+int ScriptEngine::runMapScript(std::string regionName, std::string mapName)
+{  Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);
+   return runScript(mapScript);
+}
+
+int ScriptEngine::runChapterScript(std::string chapterName)
+{  Script* chapterScript = ScriptFactory::getChapterScript(luaVM, chapterName);
+   return runScript(chapterScript);
 }
 
 int ScriptEngine::runScript(Script* script)

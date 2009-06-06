@@ -10,8 +10,6 @@ void OrganizationTodoList(void);
 
 /**
  * \todo Fix Resource getSize functions to return an accurate size estimate for their resources
- * \todo Refactor ScriptEngine so that it is the only user of ScriptFactory by introducting run*Script methods
-   * Doing this allows removal of the getVM() method; don't forget to do that in addition
  * \todo Add NPCs to the game.
  * \todo Create an NPC controller for the Tile Engine.
  * \todo Implement semi-coroutines in the NPC controller using Lua.
