@@ -16,21 +16,8 @@ const std::string ResourceLoader::EXTENSIONS[] = {".wav", ".edt", ".edr", ""};
 
 extern std::map<ResourceKey, Resource*> ResourceLoader::resources;
 
-std::string ResourceLoader::getRegionFolder(ResourceKey name)
-{  return PATHS[REGION] + name + '/';
-}
-
-std::string ResourceLoader::getRegionPath(ResourceKey name)
-{  return getRegionFolder(name) + name + EXTENSIONS[REGION];
-}
-
 std::string ResourceLoader::getPath(ResourceKey name, ResourceType type)
-{  if( type == REGION )
-   {  return getRegionPath(name);
-   }
-   else
-   {  return PATHS[type] + name + EXTENSIONS[type];
-   }
+{  return PATHS[type] + name + EXTENSIONS[type];
 }
 
 void ResourceLoader::load(ResourceKey name, ResourceType type)

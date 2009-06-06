@@ -71,15 +71,6 @@ class ResourceLoader
    static std::string getPath(ResourceKey name, ResourceType type);
 
    /**
-    * Get the path to a region of the specified name.
-    *
-    * @param name The name of the region to find a path to.
-    *
-    * @return A relative path to the region "name"
-    */
-   static std::string getRegionPath(ResourceKey name);
-
-   /**
     * Get a resource of a certain name and type. If the resource is not cached
     * already, then it will be loaded first.
     *
@@ -124,17 +115,6 @@ class ResourceLoader
        * loaded.
        */
       static Region* getRegion(ResourceKey name) throw(ResourceException);
-
-      /**
-       * Gets a relative path to the folder that contains the region file,
-       * map scripts, and possibly other data pertaining specifically to the
-       * specified Region.
-       *
-       * @param name The name of the region whose folder path should be returned.
-       *
-       * @return A relative path to the folder containing the region data. 
-       */
-      static std::string getRegionFolder(ResourceKey name);
 
       /**
        * Free all of the memory taken up by the resources, deleting all the
