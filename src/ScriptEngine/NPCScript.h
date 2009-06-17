@@ -3,9 +3,20 @@
 
 #include "Script.h"
 
+class NPC;
+
 /**
  * An NPCScript is a type of Script that holds functions that determine
  * NPC behaviour.
+ *
+ * When resumed, instead of strictly running the script, the NPC Script only
+ * runs the script if it is in the middle of execution. Otherwise, it checks if
+ * the NPC is busy and runs the NPC's idle script function if it is not doing
+ * anything.
+ *
+ * The NPCScript and NPC need to be separate entities, because otherwise the
+ * Scheduler could block the NPC in its entirety if the script executes a
+ * blocking instruction.
  *
  * @author Noam Chitayat
  */
@@ -26,6 +37,10 @@ class NPCScript : public Script
     */
    static const char* FUNCTION_NAMES[];
 
+   /** The NPC controlled by this script's execution. */
+   NPC* npc;
+   bool finished;
+
    public:
       /**
        * Constructor.
@@ -37,7 +52,7 @@ class NPCScript : public Script
        * @param luaVM The main Lua stack to fork a thread from.
        * @param scriptPath The path to a script that should be run on this thread.
        */
-      NPCScript(lua_State* luaVM, std::string scriptPath);
+      NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc);
 
       /**
        * Call a function on this NPC's script.
@@ -48,6 +63,29 @@ class NPCScript : public Script
        *         yielded, or there was an error in execution.
        */
       bool callFunction(std::string functionName);
+
+      /**
+       * Either resume the NPC's script if it is running, or run the script's
+       * idle function if the NPC isn't doing anything.
+       *
+       * @param timePassed the amount of time that has passed since the last frame.
+       *
+       * @return true iff the NPC is finished and the thread should end.
+       */
+      bool resume(long timePassed);
+
+      /**
+       * Activates this NPC as a result of player action.
+       * Call the activate function in the script and stall the current idle
+       * instructions.
+       */
+      void activate();
+
+      /**
+       * Signal that the NPC is finished, and its thread should no longer
+       * execute.
+       */
+      void finish();
 
       /**
        * Destructor.

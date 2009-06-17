@@ -9,6 +9,7 @@
 // We will need to talk to the tile engine from Lua
 class TileEngine;
 class Scheduler;
+class NPC;
 class Script;
 class NPCScript;
 
@@ -68,11 +69,12 @@ class ScriptEngine
        /**
         * Get a specified NPC script.
         *
+        * @param npc The NPC to bind to the requested script.
         * @param regionName The name of the region this NPC is found in.
         * @param mapName The name of the map this NPC is found in.
         * @param npcName The name of the NPC (and its script file).
         */
-       NPCScript* getNPCScript(std::string regionName, std::string mapName, std::string npcName);
+       NPCScript* getNPCScript(NPC* npc, std::string regionName, std::string mapName, std::string npcName);
 
        /**
         * Run a specified map script.

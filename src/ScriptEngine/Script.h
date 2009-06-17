@@ -13,15 +13,15 @@ struct lua_State;
  * @author Noam Chitayat
  */
 class Script : public Thread
-{  /** Flag indicating whether or not the script is currently in the middle of a run */
-   bool running;
-   
-   protected:
+{  protected:
       /** The stack and execution thread of this script. */
       lua_State* luaStack;
 
       /** The name of the script. */
       std::string scriptName;
+
+      /** Flag indicating whether or not the script is currently in the middle of a run */
+      bool running;
 
       /**
        * Runs the script until completion or yielding. Prints out any errors encountered
@@ -52,11 +52,6 @@ class Script : public Thread
        *         can regain control and handle the yield.
        */
       int yield();
-
-      /**
-       * @return true iff this script is in the middle of a run
-       */
-      bool isRunning();
 
       /**
        * Destructor. Made abstract in order to make Scripts abstract.

@@ -1,7 +1,8 @@
 #include "NPCScript.h"
+#include "NPC.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SCRIPT_ENG;
+const int debugFlag = DEBUG_NPC;
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -14,7 +15,7 @@ extern "C"
 
 const char* NPCScript::FUNCTION_NAMES[] = { "idle" };
 
-NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath) : Script(scriptPath)
+NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Script(scriptPath), npc(npc), finished(false)
 {  luaStack = lua_newthread(luaVM);
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
    luaL_dofile(luaStack, scriptPath.c_str());
@@ -80,6 +81,30 @@ bool NPCScript::callFunction(std::string functionName)
 
    // Run the script
 	return runScript();
+}
+
+bool NPCScript::resume(long timePassed)
+{  if(finished) return true;
+   if(running)
+   {  DEBUG("NPC Thread %d resuming running script.", getId());
+      runScript();
+   }
+   else
+   {  if(npc->isIdle())
+      {  DEBUG("NPC Thread %d idling.", getId());
+         callFunction("idle");
+      }
+   }
+
+   return false;
+}
+
+void NPCScript::activate()
+{  callFunction("activate");
+}
+
+void NPCScript::finish()
+{  finished = true;
 }
 
 NPCScript::~NPCScript()

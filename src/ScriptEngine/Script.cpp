@@ -43,10 +43,6 @@ bool Script::runScript()
    return false;
 }
 
-bool Script::isRunning()
-{  return running;
-}
-
 bool Script::resume(long /*timePassed*/)
 {  bool result = runScript();
    return result;

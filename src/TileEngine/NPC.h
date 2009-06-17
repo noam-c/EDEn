@@ -4,7 +4,7 @@
 #include <queue>
 #include <string>
 
-class NPCThread;
+class NPCScript;
 class Scheduler;
 class ScriptEngine;
 
@@ -65,7 +65,7 @@ class NPC
    std::queue<Instruction*> instructions;
 
    /** The NPC's thread of execution */
-   NPCThread* npcThread;
+   NPCScript* npcThread;
 
    public:
       /**

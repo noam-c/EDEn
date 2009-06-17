@@ -9,9 +9,11 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo Merge the NPCThread and NPCScript classes to improve design.
-   * This will require adding the NPC as a parameter in ScriptFactory::getNPCScript
-   * We might be able to get rid of public Script::isRunning also
+ * \todo Add drawable Sprite objects to represent NPCs and the player.
+ * \todo Add movement capabilities to NPCs.
+ * \todo Add passible tile considerations and best-path calculations for NPCs.
+ * \todo Add collision detection for moving NPCs.
+ * \todo Recalculate an NPC's best path dynamically if there is a problem travelling a path.
  * \todo Fix Resource getSize functions to return an accurate size estimate for their resources
  * \todo Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
  * \todo Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?

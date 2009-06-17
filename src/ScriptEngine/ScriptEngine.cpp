@@ -182,8 +182,8 @@ int ScriptEngine::delay(lua_State* luaStack)
    return scheduler->join(waitTimer);
 }
 
-NPCScript* ScriptEngine::getNPCScript(std::string regionName, std::string mapName, std::string npcName)
-{  return ScriptFactory::getNPCScript(luaVM, regionName, mapName, npcName);
+NPCScript* ScriptEngine::getNPCScript(NPC* npc, std::string regionName, std::string mapName, std::string npcName)
+{  return ScriptFactory::getNPCScript(luaVM, npc, regionName, mapName, npcName);
 }
 
 int ScriptEngine::runMapScript(std::string regionName, std::string mapName)

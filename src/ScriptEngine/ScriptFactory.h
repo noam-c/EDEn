@@ -3,6 +3,7 @@
 
 #include <string>
 
+class NPC;
 class Script;
 class NPCScript;
 struct lua_State;
@@ -50,7 +51,7 @@ class ScriptFactory
     * @param name The name of the script to be loaded.
     * @param type The ScriptType of the script to be loaded.
     */
-   static Script* createScript(lua_State* luaVM, std::string name, ScriptType type);
+   static Script* createScript(lua_State* luaVM, std::string name, ScriptType type, ...);
 
    /**
     * Get the path to a certain resource based on its name and type.
@@ -71,7 +72,7 @@ class ScriptFactory
        *
        * @return The NPC script associated with the NPC requested
        */
-      static NPCScript* getNPCScript(lua_State* luaVM, std::string regionName, std::string mapName, std::string npcName);
+      static NPCScript* getNPCScript(lua_State* luaVM, NPC* npc, std::string regionName, std::string mapName, std::string npcName);
 
       /**
        * @param luaVM The Lua VM to be used to load the script
