@@ -2,7 +2,7 @@
 #include "Scheduler.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SCRIPT_ENG;
+const int debugFlag = DEBUG_SCHEDULER;
 
 /** The next available unique task identifier. */
 static TaskId nextId = 0;

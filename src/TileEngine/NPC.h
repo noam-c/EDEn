@@ -1,13 +1,12 @@
 #ifndef __NPC_H_
 #define __NPC_H_
 
-#include <string>
 #include <queue>
-#include <map>
+#include <string>
 
-class Script;
+class NPCThread;
+class Scheduler;
 class ScriptEngine;
-struct lua_State;
 
 /**
  * An NPC (non-player character) is an animate being on the map that can
@@ -18,9 +17,18 @@ struct lua_State;
  * facilitated by an instruction queue and a coroutine provided for the NPC via
  * the scripting engine.
  *
- * This class is EXTREMELY unfinished at the moment. In fact, I'd say it's nearly
- * unstarted.
- * \todo Start and finish the NPC class.
+ * How NPCs work:
+ * NPCs contain NPCThreads, which are separate entities that managed the
+ * thread/script state of an NPC's AI behaviour. An NPCThread contains (for now)
+ * and runs an NPCScript based on whether or not the script is currently in the
+ * middle of a run or if the NPC itself currently has instructions to work on.
+ * If the script is not running and the NPC is idle, the NPCThread runs the
+ * NPC's idle function (if it exists).
+ * The NPC itself is updated by the TileEngine, and the NPCThread is given time
+ * to run by the Scheduler as necessary, and updates the NPC's instruction queue
+ * via the script instructions (which don't exist yet, but will).
+ *
+ * \todo Update this documentation when NPCThread and NPCScript are merged.
  *
  * @author Noam Chitayat
  */
@@ -53,17 +61,11 @@ class NPC
                                   {}
    };
 
-   /** A list of all NPCs in the map, identified by their names */
-   static std::map<std::string, NPC*> npcList;
-
    /** A queue of instructions for the NPC to follow */
    std::queue<Instruction*> instructions;
 
-   /** The NPC's script */
-   Script* npcScript;
-
-   /** The scripting engine for the NPC to use */
-   ScriptEngine* scriptEngine;
+   /** The NPC's thread of execution */
+   NPCThread* npcThread;
 
    public:
       /**
@@ -73,7 +75,7 @@ class NPC
        * 
        * @param name The name of the NPC (must also be the name of its script).
        */
-      NPC(ScriptEngine* engine, lua_State* luaVM, std::string name);
+      NPC(ScriptEngine* engine, Scheduler* scheduler, std::string regionName, std::string mapName, std::string name);
 
       /**
        * A logic step for the NPC. Every frame, the NPC works on completing a
@@ -82,6 +84,20 @@ class NPC
        * the sprite animation frame and NPC location.
        */
       void step();
+
+      /**
+       * Performs a logic step of this NPC. During the step, the NPC works on
+       * enqueued Instructions if there are any.
+       *
+       * @param timePassed The amount of time that has passed since the last frame.
+       */
+      void step(long timePassed);
+
+      /**
+       * @return true iff the NPC is not chewing on any instructions
+       *              (i.e. it is doing absolutely nothing)
+       */
+      bool isIdle();
 
       /**
        * The NPC is currently not doing anything, nor has it been asked to do
@@ -114,6 +130,11 @@ class NPC
        * @param y The y coordinate (in tiles) for the NPC to move to
        */
       void orderMove(int x, int y);
+
+      /**
+       * Destructor.
+       */
+      ~NPC();
 };
 
 #endif

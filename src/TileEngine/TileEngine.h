@@ -9,6 +9,8 @@
 #include "OpenGLTTF.h"
 #include "Task.h"
 
+#include <map>
+
 class NPC;
 class Scheduler;
 class ScriptEngine;
@@ -23,8 +25,7 @@ class ScriptEngine;
  * @author Noam Chitayat
  */
 class TileEngine: public GameState
-{
-   /** Time since the first logic step of the TileEngine instance. */
+{  /** Time since the first logic step of the TileEngine instance. */
    unsigned long time;
 
    /** The current region that the player is in. */
@@ -42,6 +43,9 @@ class TileEngine: public GameState
    /** The Thread scheduler used by the tile engine */
    Scheduler* scheduler;
 
+   /** A list of all NPCs in the map, identified by their names */
+   std::map<std::string, NPC*> npcList;
+
    public:
       /**
        * Constructor. Initializes widgets and controllers
@@ -54,11 +58,6 @@ class TileEngine: public GameState
        * @return The name of the currently loaded map.
        */
       std::string getMapName();
-
-      /**
-       * Destructor.
-       */
-      ~TileEngine();
 
       /**
        * Draw map tiles if a map is loaded in, and then coordinate the drawing
@@ -103,7 +102,12 @@ class TileEngine: public GameState
       /**
        * Add a new NPC into the region.
        */
-      void addNPC(NPC* npc);
+      void addNPC(std::string npcName);
+
+      /**
+       * Destructor.
+       */
+      ~TileEngine();
 };
 
 #endif

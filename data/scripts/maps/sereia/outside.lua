@@ -1,3 +1,2 @@
-narrate('THIS........... ', true)
-narrate('IS. ')
-narrate('MAP TEXT!!!!')
+addNPC('testNPC')
+addNPC('testNPC2')

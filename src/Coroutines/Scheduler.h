@@ -49,6 +49,9 @@ class Scheduler
    /** A list of threads to remove from the ready list after a run. */
    ThreadQueue finishedThreads;
 
+   /** A list of threads to delete after a run. */
+   ThreadQueue deletedThreads;
+
    /** The currently running thread */
    Thread* runningThread;
 
@@ -111,6 +114,11 @@ class Scheduler
        * Signal that a Thread has been finished and destroy the Thread.
        */
       void finished(Thread* thread);
+
+      /**
+       * Print the contents of the finished thread list to debug output.
+       */
+      void printFinishedQueue();
 
       /**
        * A scheduler run resumes each Thread in order and allows them to execute

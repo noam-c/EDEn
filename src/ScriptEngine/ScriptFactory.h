@@ -4,10 +4,19 @@
 #include <string>
 
 class Script;
+class NPCScript;
 struct lua_State;
 
 /**
- * \todo Document.
+ * The ScriptFactory is a factory class that loads FileScripts and NPCScripts
+ * based on information supplied by the ScriptEngine. This class is used to
+ * abstract the details of loading in new Script files.
+ *
+ * Unlike the ResourceLoader, the ScriptFactory does not cache or manage loaded
+ * Script objects. The Scripts are managed outside of the ScriptFactory and must
+ * be cleaned up by the script initializer.
+ *
+ * @author Noam Chitayat
  */
 class ScriptFactory
 {  /**
@@ -19,6 +28,8 @@ class ScriptFactory
       CHAPTER_SCRIPT,
       /** Scripts to be called when maps are loaded */
       MAP_SCRIPT,
+      /** Scripts containing instructions for NPC behaviour */
+      NPC_SCRIPT,
    };
 
    /** 
@@ -53,7 +64,17 @@ class ScriptFactory
 
    public:
       /**
-       * @param luaVM The Lua VM to be used to load the script if it is not cached
+       * @param luaVM The Lua VM to be used to load the script
+       * @param regionName The name of the region containing the map
+       * @param mapName The name of the map containing the NPC
+       * @param npcName The name of an NPC
+       *
+       * @return The NPC script associated with the NPC requested
+       */
+      static NPCScript* getNPCScript(lua_State* luaVM, std::string regionName, std::string mapName, std::string npcName);
+
+      /**
+       * @param luaVM The Lua VM to be used to load the script
        * @param regionName The name of the region containing the map
        * @param mapName The name of the map associated with the script
        *
@@ -62,7 +83,7 @@ class ScriptFactory
       static Script* getMapScript(lua_State* luaVM, std::string regionName, std::string mapName);
 
       /**
-       * @param luaVM The Lua VM to be used to load the script if it is not cached
+       * @param luaVM The Lua VM to be used to load the script
        * @param name The name of the chapter to load the intro script for
        *
        * @return The chapter script given by the specified chapter name

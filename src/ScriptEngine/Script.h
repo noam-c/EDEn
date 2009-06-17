@@ -13,24 +13,30 @@ struct lua_State;
  * @author Noam Chitayat
  */
 class Script : public Thread
-{  /**
-    * Runs the script until completion or yielding. Prints out any errors encountered
-    * while resuming the script.
-    *
-    * @return true iff the script runs to completion, false if the coroutine
-    *         yielded, or there was an error in execution.
-    */
-   bool runScript();
-
+{  /** Flag indicating whether or not the script is currently in the middle of a run */
+   bool running;
+   
    protected:
       /** The stack and execution thread of this script. */
       lua_State* luaStack;
+
+      /** The name of the script. */
+      std::string scriptName;
+
+      /**
+       * Runs the script until completion or yielding. Prints out any errors encountered
+       * while resuming the script.
+       *
+       * @return true iff the script runs to completion, false if the coroutine
+       *         yielded, or there was an error in execution.
+       */
+      bool runScript();
 
    public:
       /**
        * Constructor.
        */
-      Script();
+      Script(std::string name);
 
       /**
        * Performs a Lua resume on the thread.
@@ -46,6 +52,11 @@ class Script : public Thread
        *         can regain control and handle the yield.
        */
       int yield();
+
+      /**
+       * @return true iff this script is in the middle of a run
+       */
+      bool isRunning();
 
       /**
        * Destructor. Made abstract in order to make Scripts abstract.

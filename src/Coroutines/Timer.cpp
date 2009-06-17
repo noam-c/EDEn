@@ -1,16 +1,13 @@
 #include "Timer.h"
-#include "Task.h"
+#include "DebugUtils.h"
 
-Timer::Timer(Task* task, long timeLeft) : timerTask(task), timeLeft(timeLeft)
-{}
+const int debugFlag = DEBUG_SCHEDULER;
+
+Timer::Timer(long timeLeft) : timeLeft(timeLeft)
+{  DEBUG("Timer ID is %d", getId());
+}
 
 bool Timer::resume(long timePassed)
 {  timeLeft -= timePassed;
-
-   if(timeLeft < 0)
-   {  timerTask->signal();
-      return true;
-   }
-
-   return false;
+   return timeLeft < 0;
 }

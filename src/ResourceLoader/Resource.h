@@ -28,7 +28,7 @@ class Resource
       /**
        * @return the name of this Resource in string format.
        */
-      std::string getName();
+      std::string getResourceName();
 
       /**
        * @return the size that the resource takes up in memory.

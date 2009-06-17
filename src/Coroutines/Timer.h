@@ -3,8 +3,6 @@
 
 #include "Thread.h"
 
-class Task;
-
 /**
  * A Timer is a type of Thread that is used to track the passage of time in a
  * simple way. The Timer is supplied with a Task to signal when it reaches the
@@ -15,10 +13,9 @@ class Task;
  */
 class Timer : public Thread
 {  long timeLeft;
-   Task* timerTask;
    
    public:
-      Timer(Task* task, long time);
+      Timer(long time);
       bool resume(long timePassed);
 };
 

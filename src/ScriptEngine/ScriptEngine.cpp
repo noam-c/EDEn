@@ -165,9 +165,7 @@ int ScriptEngine::addNPC(lua_State* luaStack)
    if(nargs > 0)
    {  std::string npcName(lua_tostring(luaStack, 1));
       DEBUG("Adding NPC: %s", npcName.c_str());
-
-      NPC* addedNPC = new NPC(this, luaVM, npcName);
-      tileEngine->addNPC(addedNPC);
+      tileEngine->addNPC(npcName);
    }
 
    return 0;
@@ -178,11 +176,14 @@ int ScriptEngine::delay(lua_State* luaStack)
    long timeToWait = (long)lua_tonumber(luaStack, 1);
    DEBUG("Waiting %d milliseconds", timeToWait);
 
-   Task* task = Task::getNextTask(scheduler);
-   Timer* waitTimer = new Timer(task, timeToWait);
+   Timer* waitTimer = new Timer(timeToWait);
    scheduler->start(waitTimer);
 
    return scheduler->join(waitTimer);
+}
+
+NPCScript* ScriptEngine::getNPCScript(std::string regionName, std::string mapName, std::string npcName)
+{  return ScriptFactory::getNPCScript(luaVM, regionName, mapName, npcName);
 }
 
 int ScriptEngine::runMapScript(std::string regionName, std::string mapName)

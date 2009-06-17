@@ -10,6 +10,7 @@
 class TileEngine;
 class Scheduler;
 class Script;
+class NPCScript;
 
 struct lua_State;
 
@@ -63,6 +64,15 @@ class ScriptEngine
         * @param scheduler The scheduler responsible for managing this engine's Script threads
         */
        ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
+
+       /**
+        * Get a specified NPC script.
+        *
+        * @param regionName The name of the region this NPC is found in.
+        * @param mapName The name of the map this NPC is found in.
+        * @param npcName The name of the NPC (and its script file).
+        */
+       NPCScript* getNPCScript(std::string regionName, std::string mapName, std::string npcName);
 
        /**
         * Run a specified map script.

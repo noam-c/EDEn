@@ -60,8 +60,9 @@ bool TileEngine::setRegion(std::string regionName, std::string mapName)
    return false;
 }
 
-void TileEngine::addNPC(NPC* npc)
-{  
+void TileEngine::addNPC(std::string npcName)
+{  npcList[npcName] = new NPC(scriptEngine, scheduler,
+                           currRegion->getName(), currMap->getName(), npcName);
 }
 
 void TileEngine::draw()

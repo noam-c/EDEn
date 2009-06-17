@@ -3,10 +3,23 @@
 #include "Thread.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SCRIPT_ENG;
+const int debugFlag = DEBUG_SCHEDULER;
 
 Scheduler::Scheduler() : runningThread(NULL)
 {
+}
+
+void Scheduler::printFinishedQueue()
+{  DEBUG("Finished Thread List:");
+   DEBUG("---");
+   const int queueSize = finishedThreads.size();
+   for(int i = 0; i < queueSize; ++i)
+   {  Thread* t = finishedThreads.front();
+      DEBUG("\t%d at address 0x%x", t->getId(), t);
+      finishedThreads.pop();
+      finishedThreads.push(t);
+   }
+   DEBUG("---");
 }
 
 void Scheduler::start(Thread* thread)
@@ -30,8 +43,9 @@ int Scheduler::block(Task* pendingTask)
    // Find the thread in the ready list
    if(readyThreads.find(runningThread) != readyThreads.end())
    {  // If the thread is in the ready list, push it into the finished thread list
+      DEBUG("Putting thread %d in the finish list", runningThread->getId());
       finishedThreads.push(runningThread);
-      //readyThreads.erase(stateToBlock);
+      printFinishedQueue();
 
       // Add the thread to the blocked list
       blockedThreads[pendingTask->getTaskId()] = runningThread;
@@ -60,12 +74,14 @@ void Scheduler::taskDone(TaskId finishedTask)
 }
 
 int Scheduler::join(Thread* thread)
-{  DEBUG("Joining thread %d...", runningThread->getId());
+{  DEBUG("Joining thread %d on thread %d...", runningThread->getId(), thread->getId());
 
    // Find the thread in the ready list
    if(readyThreads.find(runningThread) != readyThreads.end())
    {  // If the thread is in the ready list, push it into the finished thread list
+      DEBUG("Putting thread %d in the finish list", runningThread->getId());
       finishedThreads.push(runningThread);
+      printFinishedQueue();
 
       // Add the thread to the joining list
       joiningThreads[thread] = runningThread;
@@ -97,8 +113,10 @@ void Scheduler::finished(Thread* thread)
 {  // Check for any joins on this thread, then push it onto the finished
    // thread list
    threadDone(thread);
+   DEBUG("Putting thread %d in the finish list", thread->getId());
+   printFinishedQueue();
    finishedThreads.push(thread);
-   delete thread;
+   deletedThreads.push(thread);
 }
 
 void Scheduler::runThreads(long timePassed)
@@ -133,5 +151,12 @@ void Scheduler::runThreads(long timePassed)
 
       readyThreads.erase(thread);
       finishedThreads.pop();
+   }
+
+   // If there are any threads that are done and need deleting, delete them
+   if(!deletedThreads.empty()) DEBUG("Deleting threads.");
+   while(!deletedThreads.empty())
+   {  delete deletedThreads.front();
+      deletedThreads.pop();
    }
 }

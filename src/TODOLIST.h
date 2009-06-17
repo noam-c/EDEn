@@ -9,10 +9,10 @@
 void OrganizationTodoList(void);
 
 /**
+ * \todo Merge the NPCThread and NPCScript classes to improve design.
+   * This will require adding the NPC as a parameter in ScriptFactory::getNPCScript
+   * We might be able to get rid of public Script::isRunning also
  * \todo Fix Resource getSize functions to return an accurate size estimate for their resources
- * \todo Add NPCs to the game.
- * \todo Create an NPC controller for the Tile Engine.
- * \todo Implement semi-coroutines in the NPC controller using Lua.
  * \todo Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
  * \todo Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?
  * \todo Dialogue Controller needs to have "speed up" on holding of the space bar

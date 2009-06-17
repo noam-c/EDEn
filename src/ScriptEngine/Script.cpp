@@ -12,19 +12,23 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-Script::Script() : luaStack(NULL)
+Script::Script(std::string name) : scriptName(name), running(false)
 {}
 
 bool Script::runScript()
 {  if(!luaStack)
    {  T_T("Attempting to run an uninitialized script!");
    }
-   
-   DEBUG("Resuming script %d...", threadId);
+
+   running = true;
+
+   DEBUG("Resuming script with name %s, thread ID %d...", scriptName.c_str(), threadId);
+   DEBUG("Lua Thread Address: 0x%x", luaStack);
 
    int returnCode = lua_resume(luaStack, 0);
    if(returnCode == 0)
    {  DEBUG("Script %d finished.", threadId);
+      running = false;
       return true;
    }
    else if(returnCode == LUA_YIELD)
@@ -35,7 +39,12 @@ bool Script::runScript()
    // An error occurred: Print out the error message
    DEBUG("Error running script: %s", lua_tostring(luaStack, -1));
 
+   running = false;
    return false;
+}
+
+bool Script::isRunning()
+{  return running;
 }
 
 bool Script::resume(long /*timePassed*/)

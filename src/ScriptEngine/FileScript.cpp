@@ -1,4 +1,7 @@
 #include "FileScript.h"
+#include "DebugUtils.h"
+
+const int debugFlag = DEBUG_SCRIPT_ENG;
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -9,8 +12,9 @@ extern "C"
    #include <lauxlib.h>
 }
 
-FileScript::FileScript(lua_State* luaVM, std::string scriptPath)
+FileScript::FileScript(lua_State* luaVM, std::string scriptPath) : Script(scriptPath)
 {  luaStack = lua_newthread(luaVM);
+   DEBUG("Script ID %d loading file %s", getId(), scriptPath.c_str());
    luaL_loadfile(luaStack, scriptPath.c_str());
 }
 

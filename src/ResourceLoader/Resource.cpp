@@ -3,6 +3,6 @@
 Resource::Resource(ResourceKey name) : name(name)
 {}
 
-std::string Resource::getName()
+std::string Resource::getResourceName()
 {  return std::string(name);
 }
