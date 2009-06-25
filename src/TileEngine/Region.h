@@ -4,7 +4,8 @@
 #include "Resource.h"
 #include <string>
 #include <map>
-#include "Map.h"
+
+class Map;
 
 class Region : public Resource
 {   std::string regionName;

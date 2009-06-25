@@ -1,12 +1,17 @@
 #include "Region.h"
+#include "Map.h"
 #include <fstream>
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_RES_LOAD;
 
 Region::Region(ResourceKey name, const char* path) : Resource(name)
-{  std::ifstream in;
-   int numMaps;
+{  /**
+    * \todo Regions shouldn't assume that files are well-formed.
+            Find and report errors if the file isn't formed ideally.
+    */
+   
+   std::ifstream in;
    in.open(path);
    if(!in.is_open())
    {  T_T(std::string("Error opening file: ") + path);
@@ -22,7 +27,6 @@ Region::Region(ResourceKey name, const char* path) : Resource(name)
    {  T_T(std::string("Region file contains no maps: ") + path);
    }
 
-   int i = 0;
    Map* nextMap;
    while(!in.eof())
    {  try
