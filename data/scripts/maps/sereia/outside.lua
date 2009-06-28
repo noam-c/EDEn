@@ -1,2 +1,2 @@
-addNPC('testNPC')
-addNPC('testNPC2')
+addNPC('testNPC', 'crono')
+addNPC('testNPC2', 'marle')
