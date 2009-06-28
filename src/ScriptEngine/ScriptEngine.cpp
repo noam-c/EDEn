@@ -162,10 +162,11 @@ int ScriptEngine::addNPC(lua_State* luaStack)
 {  int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
-   if(nargs > 0)
+   if(nargs > 1)
    {  std::string npcName(lua_tostring(luaStack, 1));
-      DEBUG("Adding NPC: %s", npcName.c_str());
-      tileEngine->addNPC(npcName);
+      std::string spritesheetName(lua_tostring(luaStack, 2));
+      DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
+      tileEngine->addNPC(npcName, spritesheetName);
    }
 
    return 0;

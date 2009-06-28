@@ -7,6 +7,8 @@
 class NPCScript;
 class Scheduler;
 class ScriptEngine;
+class Sprite;
+class Spritesheet;
 
 /**
  * An NPC (non-player character) is an animate being on the map that can
@@ -61,6 +63,15 @@ class NPC
                                   {}
    };
 
+   /** \todo Document. */
+   Sprite* sprite;
+
+   /** \todo Document. */
+   int x;
+
+   /** \todo Document. */
+   int y;
+
    /** A queue of instructions for the NPC to follow */
    std::queue<Instruction*> instructions;
 
@@ -71,11 +82,11 @@ class NPC
       /**
        * Constructor for the NPC.
        * Initializes the NPC's thread and loads the associated script.
-       * \todo Get rid of luaVM parameter when ScriptEngine::getVM is implemented.
+       * \todo Finish documenting.
        * 
        * @param name The name of the NPC (must also be the name of its script).
        */
-      NPC(ScriptEngine* engine, Scheduler* scheduler, std::string regionName, std::string mapName, std::string name);
+      NPC(ScriptEngine* engine, Scheduler* scheduler, Spritesheet* sheet, std::string regionName, std::string mapName, std::string name);
 
       /**
        * A logic step for the NPC. Every frame, the NPC works on completing a

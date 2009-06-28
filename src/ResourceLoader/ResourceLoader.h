@@ -12,6 +12,7 @@ class Music;
 class Sound;
 class Region;
 class Tileset;
+class Spritesheet;
 
 /**
  * Responsible for loading (eventually caching and even preloading!) data resources such as
@@ -35,6 +36,8 @@ class ResourceLoader
      REGION,
      /** Pieces of music to be played in the game background */
      MUSIC,
+     /** Sheets of sprites that can be drawn on screen to represent moving objects */
+     SPRITESHEET,
    };
 
    /** 
@@ -108,6 +111,13 @@ class ResourceLoader
        * loaded.
        */
       static Tileset* getTileset(ResourceKey name) throw(ResourceException);
+
+      /**
+       * @return The spritesheet given by the specified name.
+       * @throws ResourceException If the tileset resource cannot be found or
+       * loaded.
+       */
+      static Spritesheet* getSpritesheet(ResourceKey name) throw(ResourceException);
 
       /**
        * @return The region data given by the specified name.

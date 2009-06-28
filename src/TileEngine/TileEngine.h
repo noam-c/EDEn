@@ -66,6 +66,18 @@ class TileEngine: public GameState
       void draw();
 
       /**
+       * Updates all NPCs on the map.
+       *
+       * @param timePassed the amount of time that has passed since the last frame. 
+       */
+      void stepNPCs(long timePassed);
+
+      /**
+       * Draws all NPCs on the map.
+       */
+      void drawNPCs();
+
+      /**
        * Logic step.
        * Sends time passed to all controllers so that they can update accordingly.
        * Takes user input if there is any. 
@@ -100,9 +112,12 @@ class TileEngine: public GameState
       bool setRegion(std::string regionName, std::string mapName = "");
 
       /**
-       * Add a new NPC into the region.
+       * Add a new NPC into the region with the specified spritesheet.
+       *
+       * @param npcName The name of the npc to add
+       * @param spritesheetName The name of the spritesheet to draw the NPC with
        */
-      void addNPC(std::string npcName);
+      void addNPC(std::string npcName, std::string spritesheetName);
 
       /**
        * Destructor.

@@ -2,6 +2,7 @@
 #include "Region.h"
 #include "ScriptEngine.h"
 #include "NPC.h"
+#include "Spritesheet.h"
 #include "Scheduler.h"
 #include "Container.h"
 #include "ScriptFactory.h"
@@ -11,24 +12,24 @@
 const int debugFlag = DEBUG_TILE_ENG;
 
 TileEngine::TileEngine(std::string chapterName) : currMap(NULL)
-{   scheduler = new Scheduler();
-    scriptEngine = new ScriptEngine(this, scheduler);
-    dialogue = new DialogueController(top, scriptEngine);
-    time = SDL_GetTicks();
-    scheduler->start(dialogue);
-    scriptEngine->runChapterScript(chapterName);
+{  scheduler = new Scheduler();
+   scriptEngine = new ScriptEngine(this, scheduler);
+   dialogue = new DialogueController(top, scriptEngine);
+   time = SDL_GetTicks();
+   scheduler->start(dialogue);
+   scriptEngine->runChapterScript(chapterName);
 }
 
 std::string TileEngine::getMapName()
-{   return currMap->getName();
+{  return currMap->getName();
 }
 
 void TileEngine::dialogueNarrate(const char* narration, Task* task)
-{   dialogue->narrate(narration, task);
+{  dialogue->narrate(narration, task);
 }
 
 void TileEngine::dialogueSay(const char* speech, Task* task)
-{   dialogue->say(speech, task);
+{  dialogue->say(speech, task);
 }
 
 bool TileEngine::setRegion(std::string regionName, std::string mapName)
@@ -60,18 +61,39 @@ bool TileEngine::setRegion(std::string regionName, std::string mapName)
    return false;
 }
 
-void TileEngine::addNPC(std::string npcName)
-{  npcList[npcName] = new NPC(scriptEngine, scheduler,
+void TileEngine::addNPC(std::string npcName, std::string spritesheetName)
+{  Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
+   npcList[npcName] = new NPC(scriptEngine, scheduler, sheet,
                            currRegion->getName(), currMap->getName(), npcName);
+}
+
+void TileEngine::stepNPCs(long timePassed)
+{  std::map<std::string, NPC*>::iterator iter;
+
+   for(iter = npcList.begin(); iter != npcList.end(); ++iter)
+   {  NPC* currNPC = iter->second;
+      currNPC->step(timePassed);
+   }
+}
+
+void TileEngine::drawNPCs()
+{  std::map<std::string, NPC*>::iterator iter;
+
+   for(iter = npcList.begin(); iter != npcList.end(); ++iter)
+   {  NPC* currNPC = iter->second;
+      currNPC->draw();
+   }
 }
 
 void TileEngine::draw()
 {  if(currMap != NULL)
-   {   currMap->draw();
+   {  currMap->draw();
    }
    else
-   {   GraphicsUtil::getInstance()->clearBuffer();
+   {  GraphicsUtil::getInstance()->clearBuffer();
    }
+
+   drawNPCs();
 
    GameState::draw();
    GraphicsUtil::getInstance()->flipScreen();
@@ -112,6 +134,8 @@ bool TileEngine::step()
 
       GraphicsUtil::getInstance()->pushInput(event);
    }
+
+   stepNPCs(timePassed);
 
    return !done;
 }

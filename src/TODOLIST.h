@@ -9,7 +9,10 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo Add drawable Sprite objects to represent NPCs and the player.
+ * \todo Add location parameters to NPC construction functions; separate our test NPCs spatially
+ * \todo Remove tileset hardcode and put entire tileset into one texture, drawing pieces as appropriate.
+ * \todo Draw sprites onto screen when requested.
+ * \todo Add support for animated sprites using a circularly linked list
  * \todo Add movement capabilities to NPCs.
  * \todo Add passible tile considerations and best-path calculations for NPCs.
  * \todo Add collision detection for moving NPCs.
@@ -23,6 +26,7 @@ void OrganizationTodoList(void);
  * \todo Further integration of scripts into Tile Engine, followed by unit tests for all the script functions
  * \todo Document all of the Resources (Music, Sound, Tileset, Region), and the Resource abstract class
  * \todo Remove references to namespace gcn outside of edwt (as many as possible if not all)
+ * \todo Script engine doesn't do ANY error-checking yet. Fix that!
  * \todo Complete or remove ScriptException class, as it is currently empty and pointless.
  * \todo Document ScriptException when it is completed.
  * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to

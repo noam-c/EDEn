@@ -4,6 +4,7 @@
 #include "Sound.h"
 #include "Tileset.h"
 #include "Region.h"
+#include "Spritesheet.h"
 
 #include <fstream>
 
@@ -11,8 +12,8 @@
 
 const int debugFlag = DEBUG_RES_LOAD;
 
-const std::string ResourceLoader::PATHS[] = {"data/sounds/", "data/tilesets/", "data/regions/", "data/music/"};
-const std::string ResourceLoader::EXTENSIONS[] = {".wav", ".edt", ".edr", ""};
+const std::string ResourceLoader::PATHS[] = {"data/sounds/", "data/tilesets/", "data/regions/", "data/music/", "data/sprites/"};
+const std::string ResourceLoader::EXTENSIONS[] = {".wav", ".edt", ".edr", "", ""};
 
 extern std::map<ResourceKey, Resource*> ResourceLoader::resources;
 
@@ -39,6 +40,10 @@ void ResourceLoader::load(ResourceKey name, ResourceType type)
          }
          case REGION:
          {  resources[name] = new Region(name, path.c_str());
+            break;
+         }
+         case SPRITESHEET:
+         {  resources[name] = new Spritesheet(name, path.c_str());
             break;
          }
       }
@@ -72,6 +77,10 @@ Tileset* ResourceLoader::getTileset(ResourceKey name) throw(ResourceException)
 
 Region* ResourceLoader::getRegion(ResourceKey name) throw(ResourceException)
 {   return static_cast<Region*>(getResource(name, REGION));
+}
+
+Spritesheet* ResourceLoader::getSpritesheet(ResourceKey name) throw(ResourceException)
+{   return static_cast<Spritesheet*>(getResource(name, SPRITESHEET));
 }
 
 void ResourceLoader::freeAll()

@@ -29,6 +29,7 @@
    #define DEBUG_AUDIO      1<<8     // Audio functionality
    #define DEBUG_SCHEDULER  1<<9     // Scheduler/coroutine functionality
    #define DEBUG_NPC        1<<10    // NPC functionality
+   #define DEBUG_SPRITE     1<<11    // Sprite/spritesheet functionality
 
    /**
     *  Provides utilities to help game devs debug the game code,
