@@ -8,9 +8,9 @@ const int debugFlag = DEBUG_RES_LOAD;
 Region::Region(ResourceKey name, const char* path) : Resource(name)
 {  /**
     * \todo Regions shouldn't assume that files are well-formed.
-            Find and report errors if the file isn't formed ideally.
+    *       Find and report errors if the file isn't formed ideally.
     */
-   
+
    std::ifstream in;
    in.open(path);
    if(!in.is_open())

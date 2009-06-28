@@ -87,6 +87,11 @@ void Tileset::draw(int destX, int destY, int tileNum)
 {  int tilesetX = tileNum % width;
    int tilesetY = tileNum / width;
 
+   float destLeft = float(destX * TILE_SIZE);
+   float destRight = float((destX + 1) * TILE_SIZE);
+   float destTop = float(destY * TILE_SIZE);
+   float destBottom = float((destY + 1) * TILE_SIZE);
+
    float tileRight = (tilesetX + 1) * TILE_SIZE - 1;
    float tileBottom = (tilesetY + 1) * TILE_SIZE - 1;
 
@@ -96,10 +101,10 @@ void Tileset::draw(int destX, int destY, int tileNum)
    float right = tileRight / (width*TILE_SIZE - 1);
 
    glBegin(GL_QUADS);
-      glTexCoord2f(left, top); glVertex3f(float(destX), float(destY), 0.0f);
-      glTexCoord2f(right, top); glVertex3f(float(destX + 1), float(destY), 0.0f);
-      glTexCoord2f(right, bottom); glVertex3f(float(destX + 1), float(destY + 1), 0.0f);
-      glTexCoord2f(left, bottom); glVertex3f(float(destX), float(destY + 1), 0.0f);
+      glTexCoord2f(left, top); glVertex3f(destLeft, destTop, 0.0f);
+      glTexCoord2f(right, top); glVertex3f(destRight, destTop, 0.0f);
+      glTexCoord2f(right, bottom); glVertex3f(destRight, destBottom, 0.0f);
+      glTexCoord2f(left, bottom); glVertex3f(destLeft, destBottom, 0.0f);
    glEnd();
 }
 

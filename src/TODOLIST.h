@@ -10,7 +10,6 @@ void OrganizationTodoList(void);
 
 /**
  * \todo Add location parameters to NPC construction functions; separate our test NPCs spatially
- * \todo Remove tileset hardcode and put entire tileset into one texture, drawing pieces as appropriate.
  * \todo Draw sprites onto screen when requested.
  * \todo Add support for animated sprites using a circularly linked list
  * \todo Add movement capabilities to NPCs.
@@ -41,10 +40,10 @@ void OrganizationTodoList(void);
  * \todo Create an options menu with persistence.
  * \todo Create an About/Credits screen
  * \todo Organize the global code folder and try to create some new folders for organization
+ * \todo Center the tiles in the TileEngine on the X and Y axes if there aren't enough tiles to fill the window
  * \todo Remove Tileset dependency on SDL by abstracting texture load code into GraphicsUtil
  * \todo Tileset passibility matrix uses a bool (1 word) for each entry; it should only need to use one bit per entry.
  * \todo Move GL drawing code in Tileset to GraphicsUtil (less coupling)
- * \todo Consider changing the quad drawing code by using GL_ORTHO_2D
  */
 void DevelopmentTodoList(void);
 

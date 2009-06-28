@@ -72,8 +72,7 @@ void GraphicsUtil::initSDL()
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
     // Create a 2D orthogonal perspective (better for 2D games)
-    gluOrtho2D(0.0f, 10.0f, 0.0f, 10.0f);    
-    //gluPerspective( 45.0, width/height, 1.0, 20.0 );
+    gluOrtho2D(0.0f, (float)width, 0.0f, (float)height);    
 
     //Initialize SDL_ttf for use of TrueType Fonts
     if(TTF_Init() == -1)
