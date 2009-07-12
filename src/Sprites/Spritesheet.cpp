@@ -129,6 +129,23 @@ void Spritesheet::draw(int x, int y, int frameIndex)
    float frameLeft = f.left / float(width);
    float frameRight = f.right / float(width);
 
+   // NOTE: Alpha testing doesn't do transparency; it either draws a pixel or it doesn't
+   // If we want fades or something like that, we would need to use alpha blending
+
+   // Retain old alpha test state, function and threshold
+   int oldAlphaFunction;
+   float oldAlphaThreshold;
+   glGetIntegerv(GL_ALPHA_TEST_FUNC, &oldAlphaFunction);
+   glGetFloatv(GL_ALPHA_TEST_REF, &oldAlphaThreshold);
+
+   bool alphaTestEnabled = glIsEnabled(GL_ALPHA_TEST);
+
+   // Enable alpha testing
+   glEnable(GL_ALPHA_TEST);
+
+   // Set the alpha blending evaluation function
+   glAlphaFunc(GL_GREATER, 0.1);
+
    glBindTexture(GL_TEXTURE_2D, texture);
 
    glBegin(GL_QUADS);
@@ -137,6 +154,10 @@ void Spritesheet::draw(int x, int y, int frameIndex)
       glTexCoord2f(frameRight, frameBottom); glVertex3f(destRight, destBottom, 0.0f);
       glTexCoord2f(frameLeft, frameBottom); glVertex3f(destLeft, destBottom, 0.0f);
    glEnd();
+
+   // We're done with alpha testing, return to default state
+   glAlphaFunc(oldAlphaFunction, oldAlphaThreshold);
+   if(!alphaTestEnabled) glDisable(GL_ALPHA_TEST);
 }
 
 size_t Spritesheet::getSize()

@@ -63,7 +63,7 @@ void GraphicsUtil::initSDL()
    // Enable Texture Mapping
    glEnable(GL_TEXTURE_2D);
 
-   // Sprite draws to screen replace whatever is behind them
+   // Sprites drawn to screen replace whatever is behind them (tiles, background)
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
    // Set up the viewport and reset the projection matrix
