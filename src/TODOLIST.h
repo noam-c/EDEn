@@ -9,8 +9,14 @@
 void OrganizationTodoList(void);
 
 /**
+ * \todo Consolidate common functionality between Tileset and Spritesheet.
+ * \todo Sprites need to have transparent backgrounds.
+ * \todo The game needs to fail more gracefully.
+   * At the moment, every time there's a mistake in the data files or scripts, we just throw an exception and die.
+ * \todo The Lua script bindings need to be more strict about parameters
+   * Do type-checking, enforce strict argument counts, and write an API spec to explain the functions available
+ * \todo Analyze .edt file to figure out if it's really necessary or not
  * \todo Add location parameters to NPC construction functions; separate our test NPCs spatially
- * \todo Draw sprites onto screen when requested.
  * \todo Add support for animated sprites using a circularly linked list
  * \todo Add movement capabilities to NPCs.
  * \todo Add passible tile considerations and best-path calculations for NPCs.
@@ -46,6 +52,12 @@ void OrganizationTodoList(void);
  * \todo Move GL drawing code in Tileset to GraphicsUtil (less coupling)
  */
 void DevelopmentTodoList(void);
+
+/**
+ * \todo Create a tool to make spritesheet files (.eds files)
+ * \todo Create a tool to make maps in regions (.edr files)
+ */
+void ToolingTodoList(void);
 
 /**
  * \todo Create a slider for volume control of music.

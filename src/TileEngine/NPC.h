@@ -86,7 +86,7 @@ class NPC
        * 
        * @param name The name of the NPC (must also be the name of its script).
        */
-      NPC(ScriptEngine* engine, Scheduler* scheduler, Spritesheet* sheet, std::string regionName, std::string mapName, std::string name);
+      NPC(ScriptEngine* engine, Scheduler* scheduler, Spritesheet* sheet, std::string regionName, std::string mapName, std::string name, int x, int y);
 
       /**
        * A logic step for the NPC. Every frame, the NPC works on completing a

@@ -1,12 +1,10 @@
 #include "Tileset.h"
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <SDL.h>
-#include "SDL_opengl.h"
-#include "DebugUtils.h"
 #include <fstream>
-
-const int Tileset::TILE_SIZE = 64;
+#include "GraphicsUtil.h"
+#include "TileEngine.h"
+#include "DebugUtils.h"
 
 Tileset::Tileset(ResourceKey name, const char* path) throw(Exception) : Resource(name)
 {  std::ifstream in;
@@ -22,15 +20,10 @@ Tileset::Tileset(ResourceKey name, const char* path) throw(Exception) : Resource
    {  T_T("Tileset missing passibility matrix.");
    }
 
-   char* p = new char[imagePath.length()];
-   strcpy(p, imagePath.c_str());
-
-   try
-   {  loadGLTexture(p);
-   }
-   catch(Exception e)
-   {  throw e;
-   }
+   int imgWidth, imgHeight;
+   GraphicsUtil::getInstance()->loadGLTexture(imagePath.c_str(), texture, imgWidth, imgHeight);
+   width = imgWidth / TileEngine::TILE_SIZE;
+   height = imgHeight / TileEngine::TILE_SIZE;
 
    passibility = new bool*[width];
 
@@ -48,57 +41,24 @@ Tileset::Tileset(ResourceKey name, const char* path) throw(Exception) : Resource
 
 }
    
-bool Tileset::loadGLTexture(char* path)
-{   // Create storage space for the texture
-    SDL_Surface *tilesetImage; 
-
-    // Create the texture
-    glGenTextures(1, &texture);
-
-    // Load the bitmap
-    if ((tilesetImage = SDL_LoadBMP(path)))
-    {  // Bitmap load successful
-       // Load in texture
-	    // Typical texture generation using bitmap data
-	    glBindTexture(GL_TEXTURE_2D, texture);
-
-	    // Linear filtering
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	    // Generate the texture
-	    glTexImage2D(GL_TEXTURE_2D, 0, 3, tilesetImage->w,
-			  tilesetImage->h, 0, GL_BGR,
-			  GL_UNSIGNED_BYTE, tilesetImage->pixels);
-
-       width = tilesetImage->w / TILE_SIZE;
-       height = tilesetImage->h / TILE_SIZE;
-
-       SDL_FreeSurface(tilesetImage);
-
-       return true;
-    }
-    
-    // Problem loading the bitmap; throw an exception
-    throw (EXCEPTION_INFO, std::string("Unable to load tileset: ") + path);
-}
-
 void Tileset::draw(int destX, int destY, int tileNum)
 {  int tilesetX = tileNum % width;
    int tilesetY = tileNum / width;
 
-   float destLeft = float(destX * TILE_SIZE);
-   float destRight = float((destX + 1) * TILE_SIZE);
-   float destTop = float(destY * TILE_SIZE);
-   float destBottom = float((destY + 1) * TILE_SIZE);
+   float destLeft = float(destX * TileEngine::TILE_SIZE);
+   float destRight = float((destX + 1) * TileEngine::TILE_SIZE);
+   float destTop = float(destY * TileEngine::TILE_SIZE);
+   float destBottom = float((destY + 1) * TileEngine::TILE_SIZE);
 
-   float tileRight = (tilesetX + 1) * TILE_SIZE - 1;
-   float tileBottom = (tilesetY + 1) * TILE_SIZE - 1;
+   float tileRight = (tilesetX + 1) * TileEngine::TILE_SIZE - 1;
+   float tileBottom = (tilesetY + 1) * TileEngine::TILE_SIZE - 1;
 
    float top = float(tilesetY) / height;
-   float bottom = tileBottom / (height*TILE_SIZE - 1);
+   float bottom = tileBottom / (height * TileEngine::TILE_SIZE - 1);
    float left = float(tilesetX) / width;
-   float right = tileRight / (width*TILE_SIZE - 1);
+   float right = tileRight / (width * TileEngine::TILE_SIZE - 1);
+
+   glBindTexture(GL_TEXTURE_2D, texture);
 
    glBegin(GL_QUADS);
       glTexCoord2f(left, top); glVertex3f(destLeft, destTop, 0.0f);

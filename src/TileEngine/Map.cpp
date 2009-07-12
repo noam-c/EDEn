@@ -45,9 +45,9 @@ std::string Map::getName()
 void Map::draw()
 {  GraphicsUtil::getInstance()->clearBuffer();
 
-   for(int i = 0, k = width - 1; i < width; ++i, --k)
-   {  for(int j = 0, l = height - 1; j < height; ++j, --l)
-      {  tileset->draw(i, j, tileMap[l][i]);
+   for(int i = 0; i < width; ++i)
+   {  for(int j = 0; j < height; ++j)
+      {  tileset->draw(i, j, tileMap[j][i]);
       }
    }
 }

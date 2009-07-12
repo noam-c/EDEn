@@ -3,12 +3,11 @@
 
 #include <string>
 
-class Frame;
 class Spritesheet;
 
 class Sprite
 {  Spritesheet* sheet;
-   Frame* frame;
+   int frameIndex;
 
    public:
       Sprite(Spritesheet* sheet);

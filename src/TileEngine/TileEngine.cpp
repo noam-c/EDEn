@@ -8,8 +8,9 @@
 #include "ScriptFactory.h"
 
 #include "DebugUtils.h"
-
 const int debugFlag = DEBUG_TILE_ENG;
+
+const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(std::string chapterName) : currMap(NULL)
 {  scheduler = new Scheduler();
@@ -61,10 +62,11 @@ bool TileEngine::setRegion(std::string regionName, std::string mapName)
    return false;
 }
 
-void TileEngine::addNPC(std::string npcName, std::string spritesheetName)
+void TileEngine::addNPC(std::string npcName, std::string spritesheetName, int x, int y)
 {  Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
    npcList[npcName] = new NPC(scriptEngine, scheduler, sheet,
-                           currRegion->getName(), currMap->getName(), npcName);
+                           currRegion->getName(), currMap->getName(), npcName,
+                           x * TILE_SIZE, y * TILE_SIZE);
 }
 
 void TileEngine::stepNPCs(long timePassed)
@@ -100,8 +102,14 @@ void TileEngine::draw()
 }
 
 bool TileEngine::step()
-{  long timePassed = SDL_GetTicks() - time;
-   time += timePassed;
+{  long prevTime = time;
+   time = SDL_GetTicks();
+
+   long timePassed = time - prevTime;
+   if(timePassed > 32)
+   {  timePassed = 32;
+   }
+
    GameState::step();
 
    bool done = false;

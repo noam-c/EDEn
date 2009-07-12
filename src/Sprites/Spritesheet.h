@@ -7,6 +7,8 @@
 
 class Frame;
 
+typedef unsigned int GLuint;
+
 /**
  * \todo Document.
  */
@@ -14,12 +16,25 @@ class Spritesheet : public Resource
 {  static const std::string IMG_EXTENSION;
    static const std::string DATA_EXTENSION;
 
-   std::map<std::string, Frame*> frames;
+   /** The spritesheet texture */
+   GLuint texture;
+
+   /** Width (in pixels) */
+   int width;
+
+   /** Height (in pixels) */
+   int height;
+
+   int numFrames;
+
+   std::map<std::string, int> frameIndices;
+
+   Frame** frameList;
 
    public:
       Spritesheet(ResourceKey name, const char* path);
-      void draw(int x, int y, Frame* frame);
-      Frame* getFrame(std::string frameName);
+      void draw(int x, int y, int frameIndex);
+      int getFrameIndex(std::string frameName);
       size_t getSize();
 };
 

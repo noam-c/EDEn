@@ -19,9 +19,6 @@ class Tileset : public Resource
     GLuint texture;
 
     public:
-       /** Tile size constant */
-       static const int TILE_SIZE;
-
        Tileset(ResourceKey name, const char* path) throw(Exception);
 
        // Implementation of method in Resource
@@ -53,14 +50,6 @@ class Tileset : public Resource
         * @return true iff the tile at x,y is passable by default
         */
        bool isPassable(int x, int y);
-
-       /**
-        * Load the texture given in the path, set the tileset's height
-        * and width based on the bitmap
-        *
-        * @param path The file path to the tileset
-        */
-       bool loadGLTexture(char* path);
 
        /**
         * Destructor.

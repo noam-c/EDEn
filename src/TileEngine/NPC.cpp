@@ -9,7 +9,8 @@
 const int debugFlag = DEBUG_NPC;
 
 NPC::NPC(ScriptEngine* engine, Scheduler* scheduler, Spritesheet* sheet,
-                       std::string regionName, std::string mapName, std::string name)
+                       std::string regionName, std::string mapName, std::string name,
+                       int x, int y) : x(x), y(y)
 {  npcThread = engine->getNPCScript(this, regionName, mapName, name);
    scheduler->start(npcThread);
    DEBUG("NPC %s has a Thread with ID %d", name.c_str(), npcThread->getId());

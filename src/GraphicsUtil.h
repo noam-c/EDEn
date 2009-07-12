@@ -18,7 +18,7 @@ namespace edwt
 {   class OpenGLTrueTypeFont;
 };
 
-class GraphicsUtil;
+typedef unsigned int GLuint;
 
 /**
  * All cross-class utilities for graphic functionality, such as initialization, effects, and drawing
@@ -89,21 +89,15 @@ public:
     void setInterface(gcn::Container* top);
 
     /**
-     * Draw an image from an SDL Surface to a specified xy-coordinate on screen
+     * Load the texture given in the path, set the tileset's height
+     * and width based on the bitmap
      *
-     * @param img The image surface to draw
-     * @param x The x location of the draw destination
-     * @param y The y location of the draw destination
+     * @param path The file path to the tileset
+     * @param texture The parameter used to return the OpenGL texture index
+     * @param w The parameter used to return image width
+     * @param h The parameter used to return image height
      */
-    void DrawIMG(SDL_Surface *img, int x, int y);        
-
-    /**
-     * Load an image from file using SDL.
-     * 
-     * @param file the filename of the image to load
-     * @return An SDL surface with the loaded image
-     */
-    SDL_Surface* ImageLoad(char *file);
+    void loadGLTexture(const char* path, GLuint& texture, int& w, int& h);
 
     /**
      * Flush any enqueued GL commands and then flip the screen buffer

@@ -47,6 +47,9 @@ class TileEngine: public GameState
    std::map<std::string, NPC*> npcList;
 
    public:
+      /** Tile size constant */
+      static const int TILE_SIZE;
+
       /**
        * Constructor. Initializes widgets and controllers
        *
@@ -117,7 +120,7 @@ class TileEngine: public GameState
        * @param npcName The name of the npc to add
        * @param spritesheetName The name of the spritesheet to draw the NPC with
        */
-      void addNPC(std::string npcName, std::string spritesheetName);
+      void addNPC(std::string npcName, std::string spritesheetName, int x, int y);
 
       /**
        * Destructor.

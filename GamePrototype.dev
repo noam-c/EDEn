@@ -12,7 +12,7 @@ ResourceIncludes=
 MakeIncludes=
 Compiler=-Dmain=SDL_main_@@_-DGUICHAN_DLL_IMPORT=1_@@_
 CppCompiler=-DGUICHAN_DLL_IMPORT=1_@@_
-Linker=-lmingw32_@@_-lSDLmain_@@_-llua5.1_@@_-lguichan_@@_-lguichan_sdl_@@_-lguichan_opengl_@@_-lSDL_ttf_@@_-lSDL_mixer_@@_-lSDL_@@_-lopengl32_@@_-lglu32_@@_
+Linker=-lmingw32_@@_-lSDLmain_@@_-llua5.1_@@_-lguichan_@@_-lguichan_sdl_@@_-lguichan_opengl_@@_-lSDL_ttf_@@_-lSDL_image_@@_-lSDL_mixer_@@_-lSDL_@@_-lopengl32_@@_-lglu32_@@_
 IsCpp=1
 Icon=
 ExeOutput=
