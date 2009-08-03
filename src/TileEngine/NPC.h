@@ -54,7 +54,7 @@ class NPC
    /**
     * A container for NPC instructions, as well as their parameters.
     */
-   class Instruction
+   struct Instruction
    {  InstructionType type;
       void* params;
 
@@ -63,13 +63,16 @@ class NPC
                                   {}
    };
 
-   /** \todo Document. */
+   /** The NPC's name */
+   std::string name;
+
+   /** The NPC's associated sprite, which is drawn on screen. */
    Sprite* sprite;
 
-   /** \todo Document. */
+   /** The x-location of this NPC (in pixels). */
    int x;
 
-   /** \todo Document. */
+   /** The y-location of this NPC (in pixels). */
    int y;
 
    /** A queue of instructions for the NPC to follow */
@@ -77,6 +80,9 @@ class NPC
 
    /** The NPC's thread of execution */
    NPCScript* npcThread;
+
+   /** \todo Document. */
+   bool runInstruction(Instruction* instruction, long timePassed); 
 
    public:
       /**
@@ -87,6 +93,11 @@ class NPC
        * @param name The name of the NPC (must also be the name of its script).
        */
       NPC(ScriptEngine* engine, Scheduler* scheduler, Spritesheet* sheet, std::string regionName, std::string mapName, std::string name, int x, int y);
+
+      /**
+       * @return The name of this NPC.
+       */
+      std::string getName();
 
       /**
        * A logic step for the NPC. Every frame, the NPC works on completing a
@@ -137,10 +148,10 @@ class NPC
       /**
        * This function enqueues a movement instruction.
        *
-       * @param x The x coordinate (in tiles) for the NPC to move to
-       * @param y The y coordinate (in tiles) for the NPC to move to
+       * @param x The x coordinate (in pixels) for the NPC to move to
+       * @param y The y coordinate (in pixels) for the NPC to move to
        */
-      void orderMove(int x, int y);
+      void move(int x, int y);
 
       /**
        * Destructor.

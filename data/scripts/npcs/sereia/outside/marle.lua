@@ -1,4 +1,4 @@
 function idle()
-   delay(5000)
+   delay(10000)
    print("Marle: I'm idling after a 5 second wait!")
 end

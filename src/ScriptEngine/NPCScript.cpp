@@ -41,7 +41,7 @@ NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Scrip
       // Push the function name into the table
       lua_pushstring(luaStack, FUNCTION_NAMES[i]);
 
-      // Push the value of "idle" onto the stack
+      // Push the function pointer onto the stack
       lua_getglobal(luaStack, FUNCTION_NAMES[i]);
 
       // Do a type-check here and push an empty function if needed
@@ -69,6 +69,13 @@ NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Scrip
 
    // Push the table into the global space with the file path as the name
    lua_setglobal(luaStack, scriptName.c_str());
+
+   // Push the NPC into the globals with its own name as an identifier
+   // Now, other scripts can refer to the NPC itself without any extra
+   // function calls or syntactic bloat
+   std::string npcName(npc->getName());
+   lua_pushlightuserdata(luaStack, npc);
+   lua_setglobal(luaStack, npcName.c_str());
 }
 
 bool NPCScript::callFunction(std::string functionName)
@@ -112,4 +119,9 @@ NPCScript::~NPCScript()
    // Set the function table to nil so that it gets garbage collected
    // lua_pushnil(luaStack);
    // lua_setglobal(luaStack, scriptPath.c_str());
+
+   // Blank out this NPC's global variable, since it no longer exists
+   std::string npcName(npc->getName());
+   lua_pushnil(luaStack);
+   lua_setglobal(luaStack, npcName.c_str());
 }

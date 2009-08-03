@@ -1,4 +1,7 @@
 #include "ScriptEngine.h"
+#include "TileEngine.h"
+#include "NPC.h"
+
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
 extern "C"
@@ -53,6 +56,53 @@ static int luaDelay(lua_State* luaVM)
 {  return getEngine(luaVM)->delay(luaVM);
 }
 
+static NPC* getNPC(lua_State* luaVM)
+{  return static_cast<NPC*>(lua_touserdata(luaVM, 1));
+}
+
+static int luaNPCMove(lua_State* luaVM)
+{  NPC* npc = getNPC(luaVM);
+   std::string NPCname = npc->getName();
+   int x = (int)luaL_checknumber(luaVM, 2);
+   int y = (int)luaL_checknumber(luaVM, 3);
+   DEBUG("NPC %s is being moved to %d, %d!", NPCname.c_str(), x, y);
+   npc->move(x, y);
+   return 0;
+}
+
+static int luaTilesToPixels(lua_State* luaVM)
+{  int numInTiles = (int)luaL_checknumber(luaVM, 1);
+   lua_pushnumber(luaVM, numInTiles * TileEngine::TILE_SIZE);
+   return 1;
+}
+
+static int luaRandom(lua_State* luaVM)
+{  int nargs = lua_gettop(luaVM);
+   int min, max;
+
+   switch(nargs)
+   {  case 1:
+      {  min = 0;
+         max = (int)luaL_checknumber(luaVM, 1);
+      }
+      case 2:
+      {  min = (int)luaL_checknumber(luaVM, 1);
+         max = (int)luaL_checknumber(luaVM, 2);
+         break;
+      }
+      default:
+      {  /** \todo Error case. */
+         min = 0;
+         max = 0;
+         break;
+      }
+   }
+
+   /** \todo Random number generation is currently unseeded. Use a good seed. */
+   lua_pushnumber(luaVM, (rand() % max) + min);
+   return 1;
+}
+
 void ScriptEngine::registerFunctions()
 {  REGISTER("narrate", luaNarrate);
    REGISTER("say", luaSay);
@@ -63,6 +113,9 @@ void ScriptEngine::registerFunctions()
    REGISTER("addNPC", luaAddNPC);
    REGISTER("delay", luaDelay);
 
-//   REGISTER("registerNPC", luaRegisterNPC);
+   REGISTER("tilesToPixels", luaTilesToPixels);
+   REGISTER("random", luaRandom);
+
+   REGISTER("move", luaNPCMove);
 //   REGISTER("setMap", luaSetMap);
 }
