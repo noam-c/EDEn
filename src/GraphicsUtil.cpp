@@ -50,9 +50,6 @@ void GraphicsUtil::initSDL()
    // On exit, run the SDL cleanup
    atexit (SDL_Quit);
  
-   // Resolution (HARDCODED)
-   const int width = 800, height = 600;
-
    // Set 800x600 32-bits video mode (HARDCODED)
    screen = SDL_SetVideoMode (width, height, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL);
    if (screen == NULL)
@@ -234,11 +231,11 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
 
    for (;;)
    {  glBegin(GL_QUADS);
-         glColor4f(red,green,blue,alpha);
-         glVertex3f(0.0f,10.0f,1.0f);
-         glVertex3f(10.0f,10.0f,1.0f);
-         glVertex3f(10.0f,0.0f,1.0f);
-         glVertex3f(0.0f,0.0f,1.0f);
+         glColor4f(red, green, blue, alpha);
+         glVertex3f( 0.0f,         0.0f,          0.0f);
+         glVertex3f( (float)width, 0.0f,          0.0f);
+         glVertex3f( (float)width, (float)height, 0.0f);
+         glVertex3f( 0.0f,         (float)height, 0.0f);
       glEnd();
 
       GraphicsUtil::getInstance()->flipScreen();

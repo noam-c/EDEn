@@ -30,6 +30,12 @@ typedef unsigned int GLuint;
  */
 class GraphicsUtil : public Singleton<GraphicsUtil>
 {
+    /** The screen width (currently HARDCODED) */
+    static const int width = 800;
+
+    /** The screen height (currently HARDCODED) */
+    static const int height = 600;
+
     /** The screen surface */    
     static SDL_Surface* screen;
 
