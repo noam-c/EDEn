@@ -11,8 +11,15 @@ void OrganizationTodoList(void);
 /**
  * \todo Consolidate common functionality between Tileset and Spritesheet.
  * \todo Sprites need to have transparent backgrounds.
- * \todo The game needs to fail more gracefully.
+ * \todo The game needs to fail more gracefully ("nice" handling).
    * At the moment, every time there's a mistake in the data files or scripts, we just throw an exception and die.
+ * \todo Add "nice" handling for failed Tileset loads.
+ * \todo Add "nice" handling for failed Spritesheet loads.
+ * \todo Add "nice" handling for failed Region loads.
+ * \todo Add "nice" handling for failed Script runs.
+ * \todo Make sure that the Tile Engine does not play music if music is disabled.
+   * If MUSIC_OFF is sticking around for a while, make sure that the tile engine doesn't play music if it is enabled
+ * \todo For error detection purposes, investigate adding some kind of default sound to indicate that a sound that failed to load was played.
  * \todo The Lua script bindings need to be more strict about parameters
    * Do type-checking, enforce strict argument counts, and write an API spec to explain the functions available
  * \todo Analyze .edt file to figure out if it's really necessary or not

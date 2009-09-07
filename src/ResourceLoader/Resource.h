@@ -1,7 +1,6 @@
 #ifndef __RESOURCE_H_
 #define __RESOURCE_H_
 
-#include "ResourceException.h"
 #include "ResourceKey.h"
 
 /**
@@ -14,16 +13,22 @@
  * @author Noam Chitayat
  */
 class Resource
-{  /**
-    * The name of the resource.
-    */
-   ResourceKey name;
+{  protected:
+      /**
+       * The name of the resource.
+       */
+      ResourceKey name;
    
    public:
       /**
        * Constructor.
        */
       Resource(ResourceKey name);
+
+      /**
+       * Loading function for initialization of the resource from file.
+       */
+      virtual void load(const char* path) = 0;
 
       /**
        * @return the name of this Resource in string format.

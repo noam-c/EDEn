@@ -20,13 +20,24 @@ void Sound::channelFinished(int channel)
    }
 }
 
-Sound::Sound(ResourceKey name, const char* path) : Resource(name), playingChannel(-1)
-{  DEBUG("Loading WAV %s", path);
+Sound::Sound(ResourceKey name) : Resource(name), playingChannel(-1)
+{
+}
+
+void Sound::load(const char* path)
+{  /**
+    * \todo This should only be called once. Move it into initialization code.
+    */
+   Mix_ChannelFinished(&Sound::channelFinished);
+
+   DEBUG("Loading WAV %s", path);
    sound = Mix_LoadWAV(path);
-   DEBUG("Loaded WAV.");
+
    if(sound == NULL)
    {  T_T(Mix_GetError());
    }
+
+   DEBUG("Successfully loaded WAV %s.", path);
 }
 
 size_t Sound::getSize()
@@ -34,11 +45,17 @@ size_t Sound::getSize()
 }
 
 void Sound::play(Task* task)
-{  Mix_ChannelFinished(&Sound::channelFinished);
+{  if(sound == NULL)
+   {  if(task)
+      {  task->signal();
+      }
+
+      return;
+   }
 
    playingChannel = Mix_PlayChannel(-1, sound, 0);
    if(playingChannel == -1)
-   {  T_T(Mix_GetError());
+   {  DEBUG("There was a problem playing the sound ""%s"": %s", name.c_str(), Mix_GetError());
    }
 
    playingList[playingChannel] = this;
@@ -62,9 +79,11 @@ void Sound::finished()
 }
 
 Sound::~Sound()
-{  if(ownsChannel(this, playingChannel))
-   {  stop();
-   }
+{  if(sound != NULL)
+   {  if(ownsChannel(this, playingChannel))
+      {  stop();
+      }
 
-   Mix_FreeChunk(sound);
+      Mix_FreeChunk(sound);
+   }
 }

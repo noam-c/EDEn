@@ -21,70 +21,79 @@ std::string ResourceLoader::getPath(ResourceKey name, ResourceType type)
 {  return PATHS[type] + name + EXTENSIONS[type];
 }
 
-void ResourceLoader::load(ResourceKey name, ResourceType type)
+Resource* ResourceLoader::load(ResourceKey name, ResourceType type)
 {  std::string path = getPath(name, type);
 
-   try
-   {  switch(type)
-      {  case MUSIC:
-         {  resources[name] = new Music(name, path.c_str());
-            break;
-         }
-         case SOUND:
-         {  resources[name] = new Sound(name, path.c_str());
-            break;
-         }
-         case TILESET:
-         {  resources[name] = new Tileset(name, path.c_str());
-            break;
-         }
-         case REGION:
-         {  resources[name] = new Region(name, path.c_str());
-            break;
-         }
-         case SPRITESHEET:
-         {  resources[name] = new Spritesheet(name, path.c_str());
-            break;
-         }
+   Resource* newResource = NULL;
+   switch(type)
+   {  case MUSIC:
+      {  newResource = new Music(name);
+         break;
+      }
+      case SOUND:
+      {  newResource = new Sound(name);
+         break;
+      }
+      case TILESET:
+      {  newResource = new Tileset(name);
+         break;
+      }
+      case REGION:
+      {  newResource = new Region(name);
+         break;
+      }
+      case SPRITESHEET:
+      {  newResource = new Spritesheet(name);
+         break;
       }
    }
-   catch(Exception e)
-   {  delete resources[name];
-      resources[name] = NULL;
-      throw ResourceException(e, name);
+
+   try
+   {  newResource->load(path.c_str());
+      resources[name] = newResource;
    }
+   catch(Exception e)
+   {  /**
+       * \todo Failed resource loads cause a memory leak!!!
+       *       Cache zombie objects or find a new solution!
+       */
+      //delete newResource;
+      DEBUG("Failed to load resource %s.\n\tReason: %s", path.c_str(), e.what());
+   }
+
+   return newResource;
 }
 
-Resource* ResourceLoader::getResource(ResourceKey name, ResourceType type) throw(ResourceException)
-{   if(resources.find(name) == resources.end())
-    {   load(name, type);
-    }
+Resource* ResourceLoader::getResource(ResourceKey name, ResourceType type)
+{  if(resources.find(name) == resources.end())
+   {  return load(name, type);
+   }
 
-    return resources[name];
+   return resources[name];
 }
 
-Music* ResourceLoader::getMusic(ResourceKey name) throw(ResourceException)
-{   return static_cast<Music*>(getResource(name, MUSIC));
+Music* ResourceLoader::getMusic(ResourceKey name)
+{  return static_cast<Music*>(getResource(name, MUSIC));
 }
 
-Sound* ResourceLoader::getSound(ResourceKey name) throw(ResourceException)
+Sound* ResourceLoader::getSound(ResourceKey name)
 {  return static_cast<Sound*>(getResource(name, SOUND));
 }
 
-Tileset* ResourceLoader::getTileset(ResourceKey name) throw(ResourceException)
-{   return static_cast<Tileset*>(getResource(name, TILESET));
+Tileset* ResourceLoader::getTileset(ResourceKey name)
+{  return static_cast<Tileset*>(getResource(name, TILESET));
 }
 
-Region* ResourceLoader::getRegion(ResourceKey name) throw(ResourceException)
-{   return static_cast<Region*>(getResource(name, REGION));
+Region* ResourceLoader::getRegion(ResourceKey name)
+{  return static_cast<Region*>(getResource(name, REGION));
 }
 
-Spritesheet* ResourceLoader::getSpritesheet(ResourceKey name) throw(ResourceException)
-{   return static_cast<Spritesheet*>(getResource(name, SPRITESHEET));
+Spritesheet* ResourceLoader::getSpritesheet(ResourceKey name)
+{  return static_cast<Spritesheet*>(getResource(name, SPRITESHEET));
 }
 
 void ResourceLoader::freeAll()
-{   for(std::map<ResourceKey, Resource*>::iterator i = resources.begin(); i != resources.end(); ++i)
-    {  delete (i->second);
-    }
+{  for(std::map<ResourceKey, Resource*>::iterator i = resources.begin(); i != resources.end(); ++i)
+   {  delete (i->second);
+   }
 }

@@ -4,7 +4,6 @@
 #include <map>
 #include <string>
 #include "ResourceKey.h"
-#include "ResourceException.h"
 #include "SDL_mixer.h"
 
 class Resource;
@@ -56,12 +55,16 @@ class ResourceLoader
    static std::map<ResourceKey, Resource*> resources;
 
    /**
-    * Load in a resource specified by the given unique key-type pair.
+    * Create a resource specified by the given unique key-type pair, and load
+    * its data from file. If there is a problem loading the data, the
+    * uninitialized resource is returned and acts as a stub.
     *
     * @param name The name of the resource to be loaded.
     * @param type The ResourceType of the resource to be loaded.
+    *
+    * @return A pointer to the created resource.
     */
-   static void load(ResourceKey name, ResourceType type);
+   static Resource* load(ResourceKey name, ResourceType type);
 
    /**
     * Get the path to a certain resource based on its name and type.
@@ -81,10 +84,8 @@ class ResourceLoader
     * @param type The type of resource.
     *
     * @return A pointer to the resource requested.
-    * @throws ResourceException If the resource cannot be found or loaded
-    *         (for example, file not found or malformed resource).
     */
-   static Resource* getResource(ResourceKey name, ResourceType type) throw(ResourceException);
+   static Resource* getResource(ResourceKey name, ResourceType type);
 
    public:
       /**
@@ -93,38 +94,28 @@ class ResourceLoader
        * can appear in multiple file types.
        *
        * @return The piece of music given by the specified name.
-       * @throws ResourceException If the music resource cannot be found or
-       * loaded.
        */
-      static Music* getMusic(ResourceKey name) throw(ResourceException);
+      static Music* getMusic(ResourceKey name);
 
       /**
        * @return The sound effect given by the specified name.
-       * @throws ResourceException If the sound resource cannot be found or
-       * loaded.
        */
-      static Sound* getSound(ResourceKey name) throw(ResourceException);
+      static Sound* getSound(ResourceKey name);
 
       /**
        * @return The tileset given by the specified name.
-       * @throws ResourceException If the tileset resource cannot be found or
-       * loaded.
        */
-      static Tileset* getTileset(ResourceKey name) throw(ResourceException);
+      static Tileset* getTileset(ResourceKey name);
 
       /**
        * @return The spritesheet given by the specified name.
-       * @throws ResourceException If the tileset resource cannot be found or
-       * loaded.
        */
-      static Spritesheet* getSpritesheet(ResourceKey name) throw(ResourceException);
+      static Spritesheet* getSpritesheet(ResourceKey name);
 
       /**
        * @return The region data given by the specified name.
-       * @throws ResourceException If the region resource cannot be found or
-       * loaded.
        */
-      static Region* getRegion(ResourceKey name) throw(ResourceException);
+      static Region* getRegion(ResourceKey name);
 
       /**
        * Free all of the memory taken up by the resources, deleting all the

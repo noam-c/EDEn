@@ -5,8 +5,13 @@ const int debugFlag = DEBUG_AUDIO;
 
 Music* Music::currentMusic = NULL;
 
-Music::Music(ResourceKey name, const char* path) : Resource(name)
+Music::Music(ResourceKey name) : Resource(name)
+{
+}
+
+void Music::load(const char* path)
 {  music = Mix_LoadMUS(path);
+
    if(music == NULL)
    {  T_T(Mix_GetError());
    }
@@ -39,12 +44,18 @@ void Music::stopMusic()
 }
 
 void Music::play()
-{  if(!isPlaying(this))
+{  if(music == NULL) return;
+
+   if(!isPlaying(this))
    {  setPlayingMusic(this);
-      Mix_PlayMusic(music, 0);
+      if(Mix_PlayMusic(music, 0) < 0)
+      {  DEBUG("There was a problem playing the music: %s", Mix_GetError());
+      }
    }
 }
 
 Music::~Music()
-{  Mix_FreeMusic(music);
+{  if(music != NULL)
+   {  Mix_FreeMusic(music);
+   }
 }

@@ -25,12 +25,6 @@ const int debugFlag = DEBUG_TITLE;
 #define ABOUT_ACTION 3
 #define QUIT_GAME_ACTION 4
 
-/** \todo Get rid of the MUSIC_OFF macro usage once an options menu with
- * persistence is successfully implemented.
- */
-// Uncomment this macro to turn off music in the main menu
-//#define MUSIC_OFF
-
 MainMenu::MainMenu()
 {  try
    {  bgImg = gcn::Image::load("data/images/splash.bmp");

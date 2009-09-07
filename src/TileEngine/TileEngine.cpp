@@ -34,32 +34,25 @@ void TileEngine::dialogueSay(const char* speech, Task* task)
 }
 
 bool TileEngine::setRegion(std::string regionName, std::string mapName)
-{  try
-   {  DEBUG("Loading region: %s", regionName.c_str());
-      currRegion = ResourceLoader::getRegion(regionName);
-      DEBUG("Loaded region: %s", currRegion->getName().c_str());
+{  DEBUG("Loading region: %s", regionName.c_str());
+   currRegion = ResourceLoader::getRegion(regionName);
+   DEBUG("Loaded region: %s", currRegion->getName().c_str());
 
-      DEBUG("Setting map...");
-      if(!mapName.empty())
-      {  // If a map name was supplied, then we set this map and run its script
-         currMap = currRegion->getMap(mapName);
-      }
-      else
-      {  // Otherwise, we use the region's default starting map
-         currMap = currRegion->getStartingMap();
-         mapName = currMap->getName();
-      }
-
-      DEBUG("Map set to: %s", mapName.c_str());
-
-      DEBUG("Running map script: %s/%s", regionName.c_str(), mapName.c_str());
-      return true;
+   DEBUG("Setting map...");
+   if(!mapName.empty())
+   {  // If a map name was supplied, then we set this map and run its script
+      currMap = currRegion->getMap(mapName);
    }
-   catch(ResourceException e)
-   {  DEBUG(e.what());
+   else
+   {  // Otherwise, we use the region's default starting map
+      currMap = currRegion->getStartingMap();
+      mapName = currMap->getName();
    }
 
-   return false;
+   DEBUG("Map set to: %s", mapName.c_str());
+
+   DEBUG("Running map script: %s/%s", regionName.c_str(), mapName.c_str());
+   return true;
 }
 
 void TileEngine::addNPC(std::string npcName, std::string spritesheetName, int x, int y)

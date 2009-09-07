@@ -14,8 +14,12 @@ const int debugFlag = DEBUG_RES_LOAD | DEBUG_SPRITE;
 const std::string Spritesheet::IMG_EXTENSION = ".png";
 const std::string Spritesheet::DATA_EXTENSION = ".eds";
 
-Spritesheet::Spritesheet(ResourceKey name, const char* path)
+Spritesheet::Spritesheet(ResourceKey name)
                                      : Resource(name), frameList(NULL), numFrames(0)
+{
+}
+
+void Spritesheet::load(const char* path)
 {  // Load the image itself into a texture using GraphicsUtil
    std::string imgPath(path);
    imgPath += IMG_EXTENSION;

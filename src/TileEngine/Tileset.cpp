@@ -6,7 +6,13 @@
 #include "TileEngine.h"
 #include "DebugUtils.h"
 
-Tileset::Tileset(ResourceKey name, const char* path) throw(Exception) : Resource(name)
+const int debugFlag = DEBUG_RES_LOAD | DEBUG_TILE_ENG;
+
+Tileset::Tileset(ResourceKey name) : Resource(name)
+{
+}
+
+void Tileset::load(const char* path)
 {  std::ifstream in;
    std::string imagePath;
    in.open(path);
@@ -35,7 +41,7 @@ Tileset::Tileset(ResourceKey name, const char* path) throw(Exception) : Resource
          }
          else
          {  T_T("Tileset has incomplete passibility matrix.");
-         }         
+         }
       }
    }
 

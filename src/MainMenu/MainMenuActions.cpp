@@ -15,7 +15,6 @@
  */
 void MainMenu::NewGameAction()
 {  TileEngine* tileEngine = new TileEngine(CHAP1);
-
    ExecutionStack::getInstance()->pushState(tileEngine);
    chooseSound->play();
    Music::fadeOutMusic(1000);

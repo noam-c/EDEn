@@ -32,7 +32,8 @@ class Spritesheet : public Resource
    Frame** frameList;
 
    public:
-      Spritesheet(ResourceKey name, const char* path);
+      Spritesheet(ResourceKey name);
+      void load(const char* path);
       void draw(int x, int y, int frameIndex);
       int getFrameIndex(std::string frameName);
       size_t getSize();

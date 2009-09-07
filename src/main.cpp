@@ -4,9 +4,11 @@
 #include "MainMenu.h"
 #include "ResourceLoader.h"
 #include <guichan.hpp>
-
 #include <iostream>
 #include <fstream>
+
+#include "DebugUtils.h"
+const int debugFlag = DEBUG_MAIN;
 
 /**
  * The main function.
@@ -17,32 +19,39 @@ int main (int argc, char *argv[])
 {   
     try
     {  GraphicsUtil::getInstance();
+       DEBUG("Initializing execution stack.");
        ExecutionStack* stack = ExecutionStack::getInstance();
-       std::cerr << "Pushing state" << std::endl;
+       DEBUG("Pushing Main Menu state.");
        stack->pushState(new MainMenu());
-       std::cerr << "Executing game" << std::endl;
+       DEBUG("Beginning game execution.");
        stack->execute();
-       ResourceLoader::freeAll();
 
+       DEBUG("Game is finished. Freeing resources and destroying singletons.");
+       ResourceLoader::freeAll();
        ExecutionStack::destroy();
        GraphicsUtil::destroy();
     }
     catch (gcn::Exception e)
-  	 {  std::cerr << e.getMessage() << std::endl;
+  	 {  DEBUG("Uncaught Guichan exception: \n%s", e.getMessage().c_str());
+       DEBUG_PAUSE;
        return 1;
     }
     catch(Exception e)
-    {  std::cerr << e.getMessage() << std::endl;
+  	 {  DEBUG("Uncaught game exception: \n%s", e.what());
+       DEBUG_PAUSE;
        return 1;
     }
     catch(std::exception e)
-    {  std::cerr << e.what() << std::endl;
+  	 {  DEBUG("Uncaught STL exception: \n%s", e.what());
+       DEBUG_PAUSE;
        return 1;
     }
     catch(...)
-    {  std::cerr << "GENERAL BULLSHIT" << std::endl;
+  	 {  DEBUG("Uncaught general exception.");
+       DEBUG_PAUSE;
        return 1;
     }	
 
+    DEBUG_PAUSE;
     return 0;
 }

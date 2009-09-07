@@ -19,7 +19,9 @@ class Tileset : public Resource
     GLuint texture;
 
     public:
-       Tileset(ResourceKey name, const char* path) throw(Exception);
+       Tileset(ResourceKey name);
+
+       void load(const char* path);
 
        // Implementation of method in Resource
        size_t getSize();

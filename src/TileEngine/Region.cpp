@@ -5,7 +5,11 @@
 
 const int debugFlag = DEBUG_RES_LOAD;
 
-Region::Region(ResourceKey name, const char* path) : Resource(name)
+Region::Region(ResourceKey name) : Resource(name)
+{
+}
+
+void Region::load(const char* path)
 {  /**
     * \todo Regions shouldn't assume that files are well-formed.
     *       Find and report errors if the file isn't formed ideally.
