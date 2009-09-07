@@ -13,12 +13,22 @@
  * @author Noam Chitayat
  */
 class Resource
-{  protected:
-      /**
-       * The name of the resource.
-       */
-      ResourceKey name;
-   
+{  /**
+    * True iff the resource has been successfully initialized.
+    * False iff the resource is currently in an uninitialized stub/zombie state.
+    */
+   bool initialized;
+
+   /**
+    * Loading function for initialization of the resource from file.
+    */
+   virtual void load(const char* path) = 0;
+
+   /**
+    * The name of the resource.
+    */
+   ResourceKey name;
+
    public:
       /**
        * Constructor.
@@ -26,9 +36,15 @@ class Resource
       Resource(ResourceKey name);
 
       /**
-       * Loading function for initialization of the resource from file.
+       * Loads a resource from file and sets the resource to 'loaded' state
+       * on success.
        */
-      virtual void load(const char* path) = 0;
+      void initialize(const char* path);
+
+      /**
+       * @return true iff this resource has already been successfully loaded.
+       */
+      bool isInitialized();
 
       /**
        * @return the name of this Resource in string format.

@@ -6,57 +6,57 @@
 typedef unsigned int GLuint;
 
 class Tileset : public Resource
-{   /** Width (in tiles) */
-    int width;
+{  /** Width (in tiles) */
+   int width;
 
-    /** Height (in tiles) */
-    int height;
+   /** Height (in tiles) */
+   int height;
 
-    /** Passibility matrix */
-    bool** passibility;
+   /** Passibility matrix */
+   bool** passibility;
 
-    /** The tile texture */
-    GLuint texture;
+   /** The tile texture */
+   GLuint texture;
 
-    public:
-       Tileset(ResourceKey name);
+   void load(const char* path);
 
-       void load(const char* path);
+   public:
+      Tileset(ResourceKey name);
 
-       // Implementation of method in Resource
-       size_t getSize();
+      // Implementation of method in Resource
+      size_t getSize();
 
-       /**  
-        * @return the width (in tiles) of the tileset
-        */
-       int getWidth();
+      /**  
+       * @return the width (in tiles) of the tileset
+       */
+      int getWidth();
 
-       /**  
-        * @return the height (in tiles) of the tileset
-        */
-       int getHeight();
+      /**  
+       * @return the height (in tiles) of the tileset
+       */
+      int getHeight();
 
-       /**
-        * Draws the specified tile to the coordinates specified
-        *
-        * @param destX The destination x-location (in tiles)
-        * @param destY The destination y-location (in tiles)
-        * @param tileNum The index of the tile to draw
-        */
-       void draw(int destX, int destY, int tileNum);
+      /**
+       * Draws the specified tile to the coordinates specified
+       *
+       * @param destX The destination x-location (in tiles)
+       * @param destY The destination y-location (in tiles)
+       * @param tileNum The index of the tile to draw
+       */
+      void draw(int destX, int destY, int tileNum);
 
-       /**
-        * @param x The x location of the tile in the tileset
-        * @param y The y location of the tile in the tileset
-        *
-        * @return true iff the tile at x,y is passable by default
-        */
-       bool isPassable(int x, int y);
+      /**
+       * @param x The x location of the tile in the tileset
+       * @param y The y location of the tile in the tileset
+       *
+       * @return true iff the tile at x,y is passable by default
+       */
+      bool isPassable(int x, int y);
 
-       /**
-        * Destructor.
-        */
-       ~Tileset();
+      /**
+       * Destructor.
+       */
+      ~Tileset();
 };
 
 #endif

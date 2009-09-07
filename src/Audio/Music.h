@@ -11,10 +11,11 @@ class Music : public Resource
    
    Mix_Music* music;
 
+   void load(const char* path);
+
    public:
       Music(ResourceKey name);
       size_t getSize();
-      void load(const char* path);
 
       void play();
       static void fadeOutMusic(int time);

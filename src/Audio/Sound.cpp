@@ -55,7 +55,7 @@ void Sound::play(Task* task)
 
    playingChannel = Mix_PlayChannel(-1, sound, 0);
    if(playingChannel == -1)
-   {  DEBUG("There was a problem playing the sound ""%s"": %s", name.c_str(), Mix_GetError());
+   {  DEBUG("There was a problem playing the sound ""%s"": %s", getResourceName().c_str(), Mix_GetError());
    }
 
    playingList[playingChannel] = this;

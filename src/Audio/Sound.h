@@ -16,11 +16,12 @@ class Sound : public Resource
    Mix_Chunk* sound;
    int playingChannel;
 
+   void load(const char* path);
+
    void finished();
 
    public:
       Sound(ResourceKey name);
-      void load(const char* path);
       void play(Task* task = NULL);
       void stop();
       size_t getSize();

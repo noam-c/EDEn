@@ -21,55 +21,78 @@ std::string ResourceLoader::getPath(ResourceKey name, ResourceType type)
 {  return PATHS[type] + name + EXTENSIONS[type];
 }
 
-Resource* ResourceLoader::load(ResourceKey name, ResourceType type)
-{  std::string path = getPath(name, type);
-
+Resource* ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
+{  // Construct a new resource instance based on the resource type
    Resource* newResource = NULL;
    switch(type)
    {  case MUSIC:
-      {  newResource = new Music(name);
+      {  // Create a resource to hold a song
+         newResource = new Music(name);
          break;
       }
       case SOUND:
-      {  newResource = new Sound(name);
+      {  // Create a resource to hold a sound effect
+         newResource = new Sound(name);
          break;
       }
       case TILESET:
-      {  newResource = new Tileset(name);
+      {  // Create a resource to hold a tile set
+         newResource = new Tileset(name);
          break;
       }
       case REGION:
-      {  newResource = new Region(name);
+      {  // Create a resource to hold a region
+         newResource = new Region(name);
          break;
       }
       case SPRITESHEET:
-      {  newResource = new Spritesheet(name);
+      {  // Create a resource to hold a spritesheet
+         newResource = new Spritesheet(name);
          break;
       }
    }
 
-   try
-   {  newResource->load(path.c_str());
-      resources[name] = newResource;
-   }
-   catch(Exception e)
-   {  /**
-       * \todo Failed resource loads cause a memory leak!!!
-       *       Cache zombie objects or find a new solution!
-       */
-      //delete newResource;
-      DEBUG("Failed to load resource %s.\n\tReason: %s", path.c_str(), e.what());
-   }
+   // Try to load the data for this resource from file
+   tryInitialize(newResource, name, type);
 
+   // Place the new resource into the resource map and return it
+   resources[name] = newResource;
    return newResource;
 }
 
+void ResourceLoader::tryInitialize(Resource* resource, ResourceKey name, ResourceType type)
+{  // Get the path to the data for this resource
+   std::string path = getPath(name, type);
+
+   try
+   {  // Attempt to load the resource from its data file
+      resource->initialize(path.c_str());
+   }
+   catch(Exception e)
+   {  // On failure, print to debug output and return
+      DEBUG("Failed to load resource %s.\n\tReason: %s", path.c_str(), e.what());
+   }
+}
+
 Resource* ResourceLoader::getResource(ResourceKey name, ResourceType type)
-{  if(resources.find(name) == resources.end())
-   {  return load(name, type);
+{  Resource* resource = NULL;
+
+   if(resources.find(name) == resources.end())
+   {  // If the resource is not already in the resource map, it is not
+      // currently being cached. Construct a resource and load the data.
+      resource = loadNewResource(name, type);
+   }
+   else
+   {  // If the resource is cached, check that it is already initialized.
+      resource = resources[name];
+      if(!resource->isInitialized())
+      {  // If it is not (because of a prior failure to initialize),
+         // make another attempt to load the resource.
+         tryInitialize(resource, name, type);
+      }
    }
 
-   return resources[name];
+   return resource;
 }
 
 Music* ResourceLoader::getMusic(ResourceKey name)
@@ -93,7 +116,10 @@ Spritesheet* ResourceLoader::getSpritesheet(ResourceKey name)
 }
 
 void ResourceLoader::freeAll()
-{  for(std::map<ResourceKey, Resource*>::iterator i = resources.begin(); i != resources.end(); ++i)
+{  // Iterate through the resource map and clear out all of the cached resources
+   for(std::map<ResourceKey, Resource*>::iterator i = resources.begin(); i != resources.end(); ++i)
    {  delete (i->second);
    }
+
+   resources.clear();
 }

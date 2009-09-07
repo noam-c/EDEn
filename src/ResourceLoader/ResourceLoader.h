@@ -64,7 +64,18 @@ class ResourceLoader
     *
     * @return A pointer to the created resource.
     */
-   static Resource* load(ResourceKey name, ResourceType type);
+   static Resource* loadNewResource(ResourceKey name, ResourceType type);
+
+   /**
+    * Attempts to initialize the resource by loading its data from file.
+    * If an exception occurs, the resource remains in uninitialized state,
+    * and the method outputs an error to debug.
+    *
+    * @param resource The pointer to the resource to initialize.
+    * @param name The name of the resource.
+    * @param type The type of resource.
+    */
+   static void tryInitialize(Resource* resource, ResourceKey name, ResourceType type);
 
    /**
     * Get the path to a certain resource based on its name and type.
