@@ -2,7 +2,8 @@
 #define __GAME_STATE_H_
 
 namespace edwt
-{  class Container;
+{
+   class Container;
 };
 
 /**
@@ -20,42 +21,42 @@ namespace edwt
  * @author Noam Chitayat
  */
 class GameState
-{   protected:
-        /** The container for any GUI widgets used by the state. */
-        edwt::Container* top;
+{
+   protected:
+      /** The container for any GUI widgets used by the state. */
+      edwt::Container* top;
 
-        /**
-         * Set true to signal the state logic to terminate so that the state is destroyed.
-         */
-        bool finished;
+      /**
+       * Set true to signal the state logic to terminate so that the state is destroyed.
+       */
+      bool finished;
 
-        /**
-         * Constructor.
-         *
-         * Initializes the top-level GUI widget container
-         */
-        GameState();
+      /**
+       * Constructor.
+       *
+       * Initializes the top-level GUI widget container
+       */
+      GameState();
 
-    public:
-        /**
-         * State activation called every time this state is found at the top of the execution stack.
-         * In other words, activate is always called before this state takes control of the game loop.
-         * Currently, all game state activations, at the very least, change the top level Widget container.
-         */
-        virtual void activate();
+   public:
+      /**
+       * State activation called every time this state is found at the top of the execution stack.
+       * In other words, activate is always called before this state takes control of the game loop.
+       * Currently, all game state activations, at the very least, change the top level Widget container.
+       */
+      virtual void activate();
 
-        /**
-         * Runs the state's logic processing
-         *
-         * @return true iff the state is not finished
-         */
-        virtual bool step();
+      /**
+       * Runs the state's logic processing
+       *
+       * @return true iff the state is not finished
+       */
+      virtual bool step();
 
-
-        /**
-         * Runs the state's graphic and interface processing
-         */
-        virtual void draw();
+      /**
+       * Runs the state's graphic and interface processing
+       */
+      virtual void draw();
 };
 
 #endif

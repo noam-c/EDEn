@@ -1,6 +1,10 @@
 #include "Exception.h"
 #include <sstream>
 
+Exception::Exception()
+{
+}
+
 Exception::Exception(const std::string& function,
        int line, const std::string& message)
        : message(message),
@@ -10,22 +14,26 @@ Exception::Exception(const std::string& function,
 }
 
 const char* Exception::what() const throw()
-{  std::stringstream err;
+{
+   std::stringstream err;
    err << message << "\n at line " << line << " of function " << function << '\n';
 
    return err.str().c_str();
 }
 
 const std::string& Exception::getFunction() const
-{  return function;
+{
+   return function;
 }
 
 const std::string& Exception::getMessage() const
-{  return message;
+{
+   return message;
 }
 
 int Exception::getLine() const
-{  return line;
+{
+   return line;
 }
 
 Exception::~Exception() throw()

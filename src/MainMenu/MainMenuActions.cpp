@@ -14,7 +14,8 @@
  * and pushed state (field or battle) changing based on the chapter].
  */
 void MainMenu::NewGameAction()
-{  TileEngine* tileEngine = new TileEngine(CHAP1);
+{
+   TileEngine* tileEngine = new TileEngine(CHAP1);
    ExecutionStack::getInstance()->pushState(tileEngine);
    chooseSound->play();
    Music::fadeOutMusic(1000);
@@ -47,7 +48,8 @@ void MainMenu::AboutAction()
  * 'Quit Game' was selected. Signal state logic termination, fade to black.
  */
 void MainMenu::QuitAction()
-{  finished = true;
+{
+   finished = true;
    chooseSound->play();
    Music::fadeOutMusic(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);

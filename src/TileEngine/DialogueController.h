@@ -8,7 +8,8 @@
 #include "Task.h"
 
 namespace edwt
-{  class Container;
+{
+   class Container;
    class TextBox;
 };
 
@@ -29,7 +30,8 @@ class ScriptEngine;
  * @author Noam Chitayat
  */
 class DialogueController : public Thread
-{  /** The hardcoded time-per-letter speed */
+{
+   /** The hardcoded time-per-letter speed */
    static const int MILLISECONDS_PER_LETTER = 50;
    
    /** Abstract the implementation of the dialogue boxes */
@@ -39,7 +41,8 @@ class DialogueController : public Thread
     * There are two kinds of dialogues (for now); speech and narration/thought.
     */
    enum LineType
-   {  /** Dialogue is narrated in center screen */
+   {
+      /** Dialogue is narrated in center screen */
       NARRATE,
       /** Dialogue is spoken to the player via bottom dialogue box */
       SAY
@@ -52,7 +55,8 @@ class DialogueController : public Thread
     * @author Noam Chitayat
     */
    class Line
-   {  /** A queue of upcoming open script brackets ('<' characters) */
+   {
+      /** A queue of upcoming open script brackets ('<' characters) */
       std::queue<int> openScriptBrackets;
 
       /** A queue of upcoming close script brackets ('>' characters) */

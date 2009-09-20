@@ -10,11 +10,13 @@ Scheduler::Scheduler() : runningThread(NULL)
 }
 
 void Scheduler::printFinishedQueue()
-{  DEBUG("Finished Thread List:");
+{
+   DEBUG("Finished Thread List:");
    DEBUG("---");
    const int queueSize = finishedThreads.size();
    for(int i = 0; i < queueSize; ++i)
-   {  Thread* t = finishedThreads.front();
+   {
+      Thread* t = finishedThreads.front();
       DEBUG("\t%d at address 0x%x", t->getId(), t);
       finishedThreads.pop();
       finishedThreads.push(t);
@@ -23,26 +25,31 @@ void Scheduler::printFinishedQueue()
 }
 
 void Scheduler::start(Thread* thread)
-{  DEBUG("Starting thread %d...", thread->getId());
+{
+   DEBUG("Starting thread %d...", thread->getId());
 
    // Ensure that this thread is not already scheduled
    if(readyThreads.find(thread) == readyThreads.end()
       && unstartedThreads.find(thread) == unstartedThreads.end())
-   {  // Insert the thread into the unstarted thread list
+   {
+      // Insert the thread into the unstarted thread list
       unstartedThreads.insert(thread);
    }
 }
 
 bool Scheduler::hasRunningThread()
-{  return runningThread;
+{
+   return runningThread;
 }
 
 int Scheduler::block(Task* pendingTask)
-{  DEBUG("Blocking thread %d on task %d...", runningThread->getId(), pendingTask->getTaskId());
-   
+{
+   DEBUG("Blocking thread %d on task %d...", runningThread->getId(), pendingTask->getTaskId());
+
    // Find the thread in the ready list
    if(readyThreads.find(runningThread) != readyThreads.end())
-   {  // If the thread is in the ready list, push it into the finished thread list
+   {
+      // If the thread is in the ready list, push it into the finished thread list
       DEBUG("Putting thread %d in the finish list", runningThread->getId());
       finishedThreads.push(runningThread);
       printFinishedQueue();
@@ -51,7 +58,8 @@ int Scheduler::block(Task* pendingTask)
       blockedThreads[pendingTask->getTaskId()] = runningThread;
    }
    else
-   {  T_T("Attempting to block a thread that isn't ready/running!");
+   {
+      T_T("Attempting to block a thread that isn't ready/running!");
    }
 
    DEBUG("Yielding: %d", runningThread->getId());
@@ -59,11 +67,13 @@ int Scheduler::block(Task* pendingTask)
 }
 
 void Scheduler::taskDone(TaskId finishedTask)
-{  DEBUG("Task %d finished.", finishedTask);
+{
+   DEBUG("Task %d finished.", finishedTask);
 
    Thread* resumingThread = blockedThreads[finishedTask];
    if(resumingThread)
-   {  DEBUG("Putting thread %d on resume list...", resumingThread->getId());
+   {
+      DEBUG("Putting thread %d on resume list...", resumingThread->getId());
 
       // Put the resumed thread onto the unstarted stack
       unstartedThreads.insert(resumingThread);
@@ -74,11 +84,13 @@ void Scheduler::taskDone(TaskId finishedTask)
 }
 
 int Scheduler::join(Thread* thread)
-{  DEBUG("Joining thread %d on thread %d...", runningThread->getId(), thread->getId());
+{
+   DEBUG("Joining thread %d on thread %d...", runningThread->getId(), thread->getId());
 
    // Find the thread in the ready list
    if(readyThreads.find(runningThread) != readyThreads.end())
-   {  // If the thread is in the ready list, push it into the finished thread list
+   {
+      // If the thread is in the ready list, push it into the finished thread list
       DEBUG("Putting thread %d in the finish list", runningThread->getId());
       finishedThreads.push(runningThread);
       printFinishedQueue();
@@ -87,7 +99,8 @@ int Scheduler::join(Thread* thread)
       joiningThreads[thread] = runningThread;
    }
    else
-   {  T_T("Attempting to suspend a thread that isn't ready/running!");
+   {
+      T_T("Attempting to suspend a thread that isn't ready/running!");
    }
 
    DEBUG("Yielding: %d", runningThread->getId());
@@ -95,12 +108,14 @@ int Scheduler::join(Thread* thread)
 }
 
 void Scheduler::threadDone(Thread* thread)
-{  // A thread has completed execution,
+{
+   // A thread has completed execution,
    // so check if anyone is waiting for it to finish
    Thread* resumingThread = joiningThreads[thread];
 
    if(resumingThread)
-   {  // If there is such a thread, put it on the unstarted thread list again
+   {
+      // If there is such a thread, put it on the unstarted thread list again
       DEBUG("Putting thread %d on resume list...", resumingThread->getId());
       unstartedThreads.insert(resumingThread);
 
@@ -110,7 +125,8 @@ void Scheduler::threadDone(Thread* thread)
 }
 
 void Scheduler::finished(Thread* thread)
-{  // Check for any joins on this thread, then push it onto the finished
+{
+   // Check for any joins on this thread, then push it onto the finished
    // thread list
    threadDone(thread);
    DEBUG("Putting thread %d in the finish list", thread->getId());
@@ -120,23 +136,27 @@ void Scheduler::finished(Thread* thread)
 }
 
 void Scheduler::runThreads(long timePassed)
-{  // If there are any threads on the unstarted list, then put them all into
+{
+   // If there are any threads on the unstarted list, then put them all into
    // the ready list and clear the unstarted list
    if(!unstartedThreads.empty())
-   {  readyThreads.insert(unstartedThreads.begin(), unstartedThreads.end());
+   {
+      readyThreads.insert(unstartedThreads.begin(), unstartedThreads.end());
       unstartedThreads.clear();
    }
 
    // Run each thread until either it yields or finishes execution
    for(ThreadList::iterator iter = readyThreads.begin(); iter != readyThreads.end(); ++iter)
-   {  // Set the running thread to the next thread
+   {
+      // Set the running thread to the next thread
       runningThread = *iter;
 
       // Run/resume the thread
       bool scriptIsFinished = (*iter)->resume(timePassed);
 
       if(scriptIsFinished)
-      {  finished(*iter);
+      {
+         finished(*iter);
       }
    }
 
@@ -146,7 +166,8 @@ void Scheduler::runThreads(long timePassed)
    // If there are any finished/blocked threads,
    // remove them from the ready thread list
    while(!finishedThreads.empty())
-   {  Thread* thread = finishedThreads.front();
+   {
+      Thread* thread = finishedThreads.front();
       DEBUG("Removing thread %d", thread->getId());
 
       readyThreads.erase(thread);
@@ -156,7 +177,8 @@ void Scheduler::runThreads(long timePassed)
    // If there are any threads that are done and need deleting, delete them
    if(!deletedThreads.empty()) DEBUG("Deleting threads.");
    while(!deletedThreads.empty())
-   {  delete deletedThreads.front();
+   {
+      delete deletedThreads.front();
       deletedThreads.pop();
    }
 }

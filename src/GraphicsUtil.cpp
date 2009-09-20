@@ -19,12 +19,14 @@ const int debugFlag = DEBUG_GRAPHICS;
 SDL_Surface* GraphicsUtil::screen = NULL;
 
 void GraphicsUtil::initialize()
-{  initSDL();
+{
+   initSDL();
    initGuichan();
 }
 
 void GraphicsUtil::initSDL()
-{  char *msg;
+{
+   char *msg;
 
    // Audio information (HARDCODED)
    int audio_rate = 44100;
@@ -33,14 +35,16 @@ void GraphicsUtil::initSDL()
    int audio_buffers = 2048;
 
    // Initialize SDL audio and video bindings
-   if (SDL_Init (SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0)
-   {  printf ("Couldn't initialize SDL: %s\n", SDL_GetError ());
+   if(SDL_Init (SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0)
+   {
+      printf ("Couldn't initialize SDL: %s\n", SDL_GetError ());
       exit(1);
    }
 
    // Initialize SDL_mixer audio library
    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers))
-   {  printf("Unable to open audio: %s\n", SDL_GetError());
+   {
+      printf("Unable to open audio: %s\n", SDL_GetError());
       exit(1);
    }
 
@@ -52,8 +56,9 @@ void GraphicsUtil::initSDL()
  
    // Set 800x600 32-bits video mode (HARDCODED)
    screen = SDL_SetVideoMode (width, height, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL);
-   if (screen == NULL)
-   {  printf ("Couldn't set 800x600x32 video mode: %s\n", SDL_GetError());
+   if(screen == NULL)
+   {
+      printf ("Couldn't set 800x600x32 video mode: %s\n", SDL_GetError());
       exit(1);
    }
 
@@ -76,20 +81,22 @@ void GraphicsUtil::initSDL()
 
    //Initialize SDL_ttf for use of TrueType Fonts
    if(TTF_Init() == -1)
-   {  printf("TTF_Init: %s\n", TTF_GetError());
+   {
+      printf("TTF_Init: %s\n", TTF_GetError());
       exit(1);
    }
 
-	// We want unicode
+   // We want unicode
    SDL_EnableUNICODE(1);
    // We want to enable key repeat
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
    SDL_WM_SetCaption ("Buhr Prototype", NULL);
 }
 
 void GraphicsUtil::initGuichan()
-{  imageLoader = new gcn::OpenGLSDLImageLoader();
+{
+   imageLoader = new gcn::OpenGLSDLImageLoader();
 
    // The ImageLoader in use is static and must be set to be
    // able to load images
@@ -97,7 +104,7 @@ void GraphicsUtil::initGuichan()
    graphics = new gcn::OpenGLGraphics();
    graphics->setTargetPlane(800, 600);
 
-  	input = new gcn::SDLInput();
+   input = new gcn::SDLInput();
 
    gui = new gcn::Gui();
    // Set gui to use the SDLGraphics object.
@@ -107,22 +114,25 @@ void GraphicsUtil::initGuichan()
    // Load the image font.
    font = new edwt::OpenGLTrueTypeFont("data/fonts/LDSRegular.ttf", 16);
 
-	// The global font is static and must be set.
-	gcn::Widget::setGlobalFont(font);
+   // The global font is static and must be set.
+   gcn::Widget::setGlobalFont(font);
 }
 
 void GraphicsUtil::flipScreen()
-{  glFlush();
+{
+   glFlush();
    SDL_GL_SwapBuffers();
 }
 
 void GraphicsUtil::loadGLTexture(const char* path, GLuint& texture, int& w, int& h)
-{  // Create storage space for the texture and load the image
+{
+   // Create storage space for the texture and load the image
    DEBUG("Loading image %s...", path);
    SDL_Surface *image = IMG_Load(path);
 
    if(!image)
-   {  // Problem loading the image; throw an exception
+   {
+      // Problem loading the image; throw an exception
       throw (EXCEPTION_INFO, std::string("Unable to load image: ") + IMG_GetError());
    }
 
@@ -135,15 +145,15 @@ void GraphicsUtil::loadGLTexture(const char* path, GLuint& texture, int& w, int&
    (byte order) of the machine */
 
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-			rmask = 0xff000000;
-			gmask = 0x00ff0000;
-			bmask = 0x0000ff00;
-			amask = 0x000000ff;
+   rmask = 0xff000000;
+   gmask = 0x00ff0000;
+   bmask = 0x0000ff00;
+   amask = 0x000000ff;
 #else
-			rmask = 0x000000ff;
-			gmask = 0x0000ff00;
-			bmask = 0x00ff0000;
-			amask = 0xff000000;
+   rmask = 0x000000ff;
+   gmask = 0x0000ff00;
+   bmask = 0x00ff0000;
+   amask = 0xff000000;
 #endif
 
    SDL_Surface* rgbSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, image->w, 
@@ -151,7 +161,8 @@ void GraphicsUtil::loadGLTexture(const char* path, GLuint& texture, int& w, int&
                                  rmask, gmask, bmask, amask);
 
    if(!rgbSurface)
-   {  // Problem converting the image; throw an exception
+   {
+      // Problem converting the image; throw an exception
       throw (EXCEPTION_INFO, std::string("Unable to convert image: ") + SDL_GetError());
    }
 
@@ -190,31 +201,39 @@ void GraphicsUtil::loadGLTexture(const char* path, GLuint& texture, int& w, int&
 }
 
 void GraphicsUtil::setInterface(gcn::Container* top)
-{  gui->setTop(top);
+{
+   gui->setTop(top);
 }
 
 void GraphicsUtil::stepGUI()
-{  gui->logic();
+{
+   gui->logic();
 }
 
 void GraphicsUtil::drawGUI()
-{  gui->draw();
+{
+   // Draw the GUI to buffer
+   gui->draw();
+
    // Update the screen
    SDL_GL_SwapBuffers();
 }
 
 void GraphicsUtil::pushInput(SDL_Event event)
-{  input->pushInput(event);
+{
+   input->pushInput(event);
 }
 
 void GraphicsUtil::clearBuffer()
-{  glMatrixMode(GL_MODELVIEW);
+{
+   glMatrixMode(GL_MODELVIEW);
    glClear(GL_COLOR_BUFFER_BIT);
    glLoadIdentity();
 }
 
 void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
-{  long time = SDL_GetTicks();
+{
+   long time = SDL_GetTicks();
    float alpha = 0.0f;
 
    GLint oldSrcFactor, oldDstFactor;
@@ -230,7 +249,8 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
    if(tex2dEnabled)  glDisable(GL_TEXTURE_2D);
 
    for (;;)
-   {  glBegin(GL_QUADS);
+   {
+      glBegin(GL_QUADS);
          glColor4f(red, green, blue, alpha);
          glVertex3f( 0.0f,         0.0f,          0.0f);
          glVertex3f( (float)width, 0.0f,          0.0f);
@@ -245,7 +265,8 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
 
       //We're done when alpha reaches 1.0
       if (alpha >= 1.0f)
-      {  glColor3f(1.0f,1.0f,1.0f);
+      {
+         glColor3f(1.0f,1.0f,1.0f);
          break;
       }
    }
@@ -257,7 +278,8 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
 }
 
 void GraphicsUtil::finish()
-{  //Destroys some Guichan stuff
+{
+   //Destroys some Guichan stuff
    delete font;
    delete gui;
    delete imageLoader;
@@ -266,7 +288,8 @@ void GraphicsUtil::finish()
 
    //Destroy the SDL_ttf stuff
    if(!TTF_WasInit())
-   {  TTF_Quit();
+   {
+      TTF_Quit();
    }
 
    // Destroy SDL stuff

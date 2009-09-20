@@ -24,10 +24,12 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
 
 ScriptEngine::ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler)
                                   : tileEngine(tileEngine), scheduler(scheduler)
-{  luaVM = luaL_newstate();
+{
+   luaVM = luaL_newstate();
 
    if(luaVM == NULL)
-   {  // An error occurred
+   {
+      // An error occurred
       T_T("Unable to initialize Lua state machine");
    }
 
@@ -45,13 +47,16 @@ ScriptEngine::ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler)
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
-{  int nargs = lua_gettop(luaStack);
+{
+   int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
    if(nargs > 0)
-   {  const char* speech = lua_tostring(luaStack, 1);
+   {
+      const char* speech = lua_tostring(luaStack, 1);
       if(nargs == 2)
-      {  waitForFinish = lua_toboolean(luaStack, 2);
+      {
+         waitForFinish = lua_toboolean(luaStack, 2);
       }
 
       Task* task = Task::getNextTask(scheduler);
@@ -60,7 +65,8 @@ int ScriptEngine::narrate(lua_State* luaStack)
       tileEngine->dialogueNarrate(speech, task);
 
       if(waitForFinish)
-      {  return scheduler->block(task);
+      {
+         return scheduler->block(task);
       }
    }
 
@@ -68,13 +74,16 @@ int ScriptEngine::narrate(lua_State* luaStack)
 }
 
 int ScriptEngine::say(lua_State* luaStack)
-{  int nargs = lua_gettop(luaStack);
+{
+   int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
    if(nargs > 0)
-   {  const char* speech = lua_tostring(luaStack, 1);
+   {
+      const char* speech = lua_tostring(luaStack, 1);
       if(nargs == 2)
-      {  waitForFinish = lua_toboolean(luaStack, 2);
+      {
+         waitForFinish = lua_toboolean(luaStack, 2);
       }
 
       Task* task = Task::getNextTask(scheduler);
@@ -83,7 +92,8 @@ int ScriptEngine::say(lua_State* luaStack)
       tileEngine->dialogueSay(speech, task);
 
       if(waitForFinish)
-      {  return scheduler->block(task);
+      {
+         return scheduler->block(task);
       }
    }
 
@@ -91,15 +101,18 @@ int ScriptEngine::say(lua_State* luaStack)
 }
 
 int ScriptEngine::playSound(lua_State* luaStack)
-{  int nargs = lua_gettop(luaStack);
+{
+   int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
    if(nargs > 0)
-   {  std::string soundName(lua_tostring(luaStack, 1));
+   {
+      std::string soundName(lua_tostring(luaStack, 1));
       DEBUG("Playing sound: %s", soundName.c_str());
 
       if(nargs == 2)
-      {  waitForFinish = lua_toboolean(luaStack, 2);
+      {
+         waitForFinish = lua_toboolean(luaStack, 2);
       }
 
       Task* task = Task::getNextTask(scheduler);
@@ -109,7 +122,8 @@ int ScriptEngine::playSound(lua_State* luaStack)
       sound->play(task);
 
       if(waitForFinish)
-      {  return scheduler->block(task);
+      {
+         return scheduler->block(task);
       }
    }
 
@@ -117,10 +131,12 @@ int ScriptEngine::playSound(lua_State* luaStack)
 }
 
 int ScriptEngine::playMusic(lua_State* luaStack)
-{  int nargs = lua_gettop(luaStack);
+{
+   int nargs = lua_gettop(luaStack);
 
    if(nargs > 0)
-   {  std::string musicName(lua_tostring(luaStack, 1));
+   {
+      std::string musicName(lua_tostring(luaStack, 1));
       DEBUG("Playing music: %s", musicName.c_str());
 
       Music* song = ResourceLoader::getMusic(musicName);
@@ -131,10 +147,12 @@ int ScriptEngine::playMusic(lua_State* luaStack)
 }
 
 int ScriptEngine::stopMusic(lua_State* luaStack)
-{  int nargs = lua_gettop(luaStack);
+{
+   int nargs = lua_gettop(luaStack);
 
    if(nargs == 0)
-   {  DEBUG("Stopping music.");
+   {
+      DEBUG("Stopping music.");
       Music::stopMusic();
    }
 
@@ -142,13 +160,16 @@ int ScriptEngine::stopMusic(lua_State* luaStack)
 }
 
 int ScriptEngine::setRegion(lua_State* luaStack)
-{  int nargs = lua_gettop(luaStack);
+{
+   int nargs = lua_gettop(luaStack);
    if(nargs > 0)
-   {  std::string regionName(lua_tostring(luaStack, 1));
+   {
+      std::string regionName(lua_tostring(luaStack, 1));
       DEBUG("Setting region: %s", regionName.c_str());
 
       if(!tileEngine->setRegion(regionName))
-      {  /** \todo Report an error to Lua, perhaps throw a ScriptException? */
+      {
+         /** \todo Report an error to Lua, perhaps throw a ScriptException? */
       }
 
       std::string mapName = tileEngine->getMapName();
@@ -159,19 +180,23 @@ int ScriptEngine::setRegion(lua_State* luaStack)
 }
 
 int ScriptEngine::addNPC(lua_State* luaStack)
-{  int nargs = lua_gettop(luaStack);
+{
+   int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
    int x = 0;
    int y = 0;
 
    switch(nargs)
-   {  case 4:
-      {  y = lua_tointeger(luaStack, 4);
+   {
+      case 4:
+      {
+         y = lua_tointeger(luaStack, 4);
          x = lua_tointeger(luaStack, 3);
       }
       case 2:
-      {  std::string spritesheetName(lua_tostring(luaStack, 2));
+      {
+         std::string spritesheetName(lua_tostring(luaStack, 2));
          std::string npcName(lua_tostring(luaStack, 1));
          DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
          DEBUG("NPC Location will be (%d, %d)", x, y);
@@ -183,7 +208,8 @@ int ScriptEngine::addNPC(lua_State* luaStack)
 }
 
 int ScriptEngine::delay(lua_State* luaStack)
-{  int nargs = lua_gettop(luaStack);
+{
+   int nargs = lua_gettop(luaStack);
    long timeToWait = (long)lua_tonumber(luaStack, 1);
    DEBUG("Waiting %d milliseconds", timeToWait);
 
@@ -194,55 +220,66 @@ int ScriptEngine::delay(lua_State* luaStack)
 }
 
 NPCScript* ScriptEngine::getNPCScript(NPC* npc, std::string regionName, std::string mapName, std::string npcName)
-{  return ScriptFactory::getNPCScript(luaVM, npc, regionName, mapName, npcName);
+{
+   return ScriptFactory::getNPCScript(luaVM, npc, regionName, mapName, npcName);
 }
 
 int ScriptEngine::runMapScript(std::string regionName, std::string mapName)
-{  Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);
+{
+   Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);
    return runScript(mapScript);
 }
 
 int ScriptEngine::runChapterScript(std::string chapterName)
-{  Script* chapterScript = ScriptFactory::getChapterScript(luaVM, chapterName);
+{
+   Script* chapterScript = ScriptFactory::getChapterScript(luaVM, chapterName);
    return runScript(chapterScript);
 }
 
 int ScriptEngine::runScript(Script* script)
-{  scheduler->start(script);
+{
+   scheduler->start(script);
 
    if(scheduler->hasRunningThread())
-   {  return scheduler->join(script);
+   {
+      return scheduler->join(script);
    }
 
    return 0;
 }
 
 int ScriptEngine::runScriptString(std::string scriptString)
-{  DEBUG("Running script string: %s", scriptString.c_str());
+{
+   DEBUG("Running script string: %s", scriptString.c_str());
    StringScript* newScript = new StringScript(luaVM, scriptString);
    scheduler->start(newScript);
 
    if(scheduler->hasRunningThread())
-   {  return scheduler->join(newScript);
+   {
+      return scheduler->join(newScript);
    }
 
    return 0;
 }
 
 void ScriptEngine::callFunction(lua_State* thread, const char* funcName)
-{  // push the function onto the stack and then resume the thread from the
+{
+   // push the function onto the stack and then resume the thread from the
    // start of the function 
    lua_getfield(thread, LUA_GLOBALSINDEX, funcName);
    lua_resume(thread, 0);
 }
 
 std::string ScriptEngine::getScriptPath(std::string scriptName)
-{  return scriptName + ".lua";
+{
+   return scriptName + ".lua";
 }
 
 ScriptEngine::~ScriptEngine()
-{  if(luaVM)
-   {  DEBUG("Destroying Lua state machine...");
+{
+   if(luaVM)
+   {
+      DEBUG("Destroying Lua state machine...");
       lua_close(luaVM);
    }
 }

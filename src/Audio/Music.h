@@ -5,7 +5,8 @@
 #include "SDL_mixer.h"
 
 class Music : public Resource
-{  static Music* currentMusic;
+{
+   static Music* currentMusic;
    static inline bool isPlaying(Music* music);
    static inline void setPlayingMusic(Music* music);
    

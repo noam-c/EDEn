@@ -13,7 +13,8 @@
  * @author Noam Chitayat
  */
 class Thread
-{  /** 
+{
+   /** 
     * The next available thread ID to use for constructing a thread.
     */
    static int nextThreadId;

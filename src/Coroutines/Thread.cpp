@@ -3,15 +3,18 @@
 int Thread::nextThreadId = 0;
 
 Thread::Thread()
-{  threadId = nextThreadId++;
+{
+   threadId = nextThreadId++;
 }
 
 int Thread::getId()
-{  return threadId;
+{
+   return threadId;
 }
 
 int Thread::yield()
-{  return 0;
+{
+   return 0;
 }
 
 Thread::~Thread()

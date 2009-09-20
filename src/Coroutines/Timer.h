@@ -12,7 +12,8 @@
  * @author Noam Chitayat
  */
 class Timer : public Thread
-{  long timeLeft;
+{
+   long timeLeft;
    
    public:
       Timer(long time);

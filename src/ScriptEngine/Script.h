@@ -13,7 +13,8 @@ struct lua_State;
  * @author Noam Chitayat
  */
 class Script : public Thread
-{  protected:
+{
+   protected:
       /** The stack and execution thread of this script. */
       lua_State* luaStack;
 

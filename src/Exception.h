@@ -22,7 +22,7 @@ class Exception : public std::exception
    /**
     * Making the default constructor private to force people to throw detailed exceptions.
     */
-   Exception() {}
+   Exception();
    
    /**
     * The line number from which this Exception was thrown.

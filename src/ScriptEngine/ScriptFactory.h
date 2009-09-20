@@ -20,12 +20,14 @@ struct lua_State;
  * @author Noam Chitayat
  */
 class ScriptFactory
-{  /**
+{
+   /**
     * The ScriptFactory handles creation of various kinds of scripts.
     * This enum contains the types of resources available.
     */
    enum ScriptType
-   {  /** Scripts to be called when chapters are loaded */
+   {
+      /** Scripts to be called when chapters are loaded */
       CHAPTER_SCRIPT,
       /** Scripts to be called when maps are loaded */
       MAP_SCRIPT,

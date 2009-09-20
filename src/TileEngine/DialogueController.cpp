@@ -8,12 +8,14 @@ const int debugFlag = DEBUG_DIA_CONTR;
 
 DialogueController::DialogueController(edwt::Container* top, ScriptEngine* engine)
                      : top(top), scriptEngine(engine), currLine(NULL)
-{  initMainDialogue();
+{
+   initMainDialogue();
    clearDialogue();
 }
 
 void DialogueController::initMainDialogue()
-{  mainDialogue = new DialogueBox();
+{
+   mainDialogue = new DialogueBox();
    mainDialogue->setEditable(false);
 
    mainDialogue->setVisible(false);
@@ -24,28 +26,36 @@ void DialogueController::initMainDialogue()
 }
 
 void DialogueController::addLine(LineType type, const char* speech, Task* task)
-{  Line* nextLine = new Line(type, speech, task);
+{
+   Line* nextLine = new Line(type, speech, task);
    if(currLine == NULL)
-   {  currLine = nextLine;
+   {
+      currLine = nextLine;
       setDialogue(type);
    }
    else
-   {  lineQueue.push(nextLine);
+   {
+      lineQueue.push(nextLine);
    }
 }
 
 void DialogueController::narrate(const char* speech, Task* task)
-{  addLine(NARRATE, speech, task);
+{
+   addLine(NARRATE, speech, task);
 }
 
 void DialogueController::say(const char* speech, Task* task)
-{  addLine(SAY, speech, task);
+{
+   addLine(SAY, speech, task);
 }
 
 void DialogueController::setDialogue(LineType type)
-{  switch(type)
-   {  case NARRATE:
-      {  mainDialogue->setOpaque(false);
+{
+   switch(type)
+   {
+      case NARRATE:
+      {
+         mainDialogue->setOpaque(false);
          mainDialogue->setAlignment(edwt::TextBox::CENTER);
       
          mainDialogue->setY(600/2 - mainDialogue->getHeight()/2);
@@ -54,7 +64,8 @@ void DialogueController::setDialogue(LineType type)
          break;
       }
       case SAY:
-      {  mainDialogue->setOpaque(true);
+      {
+         mainDialogue->setOpaque(true);
          mainDialogue->setAlignment(edwt::TextBox::LEFT);
       
          mainDialogue->setHeight(100);
@@ -66,15 +77,18 @@ void DialogueController::setDialogue(LineType type)
 }
 
 void DialogueController::advanceDialogue()
-{  int charsToShow = dialogueTime / MILLISECONDS_PER_LETTER;
+{
+   int charsToShow = dialogueTime / MILLISECONDS_PER_LETTER;
 
    // See if we ran over any embedded scripts that we should execute
    int openIndex, closeIndex;
    if(currLine->getNextBracketPair(openIndex, closeIndex))
-   {  // If there is a bracket pair coming up and we're past the point of the
+   {
+      // If there is a bracket pair coming up and we're past the point of the
       // open bracket, then extract the script string and run it
       if(openIndex <= charsToShow)
-      {  charsToShow = openIndex;
+      {
+         charsToShow = openIndex;
          std::string script = currLine->removeNextScriptString();
          scriptEngine->runScriptString(script);
       }
@@ -85,7 +99,8 @@ void DialogueController::advanceDialogue()
    // If we have run to the end of the dialogue, we show all the text
    // and signal that the associated task is done.
    if(dialogue.size() <= charsToShow)
-   {  charsToShow = dialogue.size();
+   {
+      charsToShow = dialogue.size();
       dialogueTime = -1;
       currLine->task->signal();
    }
@@ -96,33 +111,45 @@ void DialogueController::advanceDialogue()
 }
 
 bool DialogueController::dialogueComplete()
-{  return dialogueTime == -1;
+{
+   return dialogueTime == -1;
 }
 
 bool DialogueController::hasDialogue()
-{  return currLine != NULL;
+{
+   return currLine != NULL;
 }
 
 void DialogueController::clearDialogue()
-{  dialogueTime = 0;
-   if(currLine) delete currLine;
-   currLine = NULL;
+{
+   dialogueTime = 0;
+
+   if(currLine)
+   {
+      delete currLine;
+      currLine = NULL;
+   }
+
    mainDialogue->setText("");
 }
 
 bool DialogueController::nextLine()
-{  if(!hasDialogue() || !dialogueComplete())
-   {  return false;
+{
+   if(!hasDialogue() || !dialogueComplete())
+   {
+      return false;
    }
 
    // If the dialogue is finished, clear the dialogue box and 
    // move on to the next line
    clearDialogue();
    if(lineQueue.empty())
-   {  currLine = NULL;
+   {
+      currLine = NULL;
    }
    else
-   {  currLine = lineQueue.front();
+   {
+      currLine = lineQueue.front();
       lineQueue.pop();
    }
 
@@ -130,8 +157,10 @@ bool DialogueController::nextLine()
 }
 
 bool DialogueController::resume(long timePassed)
-{  if(hasDialogue() && !dialogueComplete())
-   {  dialogueTime += timePassed;
+{
+   if(hasDialogue() && !dialogueComplete())
+   {
+      dialogueTime += timePassed;
       advanceDialogue();
    }
 
@@ -140,35 +169,43 @@ bool DialogueController::resume(long timePassed)
 
 DialogueController::Line::Line(LineType type, std::string dialogue, Task* task)
                     : type(type), dialogue(dialogue), task(task)
-{  int openIndex = 0;
+{
+   int openIndex = 0;
    int closeIndex = 0;
 
    for(;;)
-   {  int nextOpenIndex = dialogue.find('<', openIndex+1);
+   {
+      int nextOpenIndex = dialogue.find('<', openIndex+1);
       int nextCloseIndex = dialogue.find('>', closeIndex+1);
 
       if(nextOpenIndex < 0)
-      {  if(nextCloseIndex >= 0)
-         {  T_T("Extra '>' character detected in dialogue line."
+      {
+         if(nextCloseIndex >= 0)
+         {
+            T_T("Extra '>' character detected in dialogue line."
                 " Please balance your dialogue script brackets (< and >).");
          }
 
          break;
       }
       else if(nextCloseIndex < 0)
-      {  T_T("Found '<' without matching '>' in dialogue line."
+      {
+         T_T("Found '<' without matching '>' in dialogue line."
             " Please balance your dialogue script brackets ('<' and '>').");
       }
       else if(nextCloseIndex < nextOpenIndex)
-      {  T_T("Found extra '>' character in dialogue line."
+      {
+         T_T("Found extra '>' character in dialogue line."
             " Please balance your dialogue script brackets ('<' and '>').");
       }
       else if(nextOpenIndex < closeIndex)
-      {  T_T("Found nested '<' character in dialogue line."
+      {
+         T_T("Found nested '<' character in dialogue line."
             " Please revise the line to remove nested brackets ('<' and '>').");
       }
       else
-      {  openIndex = nextOpenIndex;
+      {
+         openIndex = nextOpenIndex;
          closeIndex = nextCloseIndex;
          openScriptBrackets.push(openIndex);
          closeScriptBrackets.push(closeIndex);
@@ -178,7 +215,11 @@ DialogueController::Line::Line(LineType type, std::string dialogue, Task* task)
 }
 
 bool DialogueController::Line::getNextBracketPair(int& openIndex, int& closeIndex)
-{  if(openScriptBrackets.empty()) return false;
+{
+   if(openScriptBrackets.empty())
+   {
+      return false;
+   }
 
    openIndex = openScriptBrackets.front();
    closeIndex = closeScriptBrackets.front();
@@ -187,7 +228,8 @@ bool DialogueController::Line::getNextBracketPair(int& openIndex, int& closeInde
 }
 
 std::string DialogueController::Line::removeNextScriptString()
-{  int openIndex, closeIndex;
+{
+   int openIndex, closeIndex;
    getNextBracketPair(openIndex, closeIndex);
 
    openScriptBrackets.pop();
@@ -200,4 +242,3 @@ std::string DialogueController::Line::removeNextScriptString()
    DEBUG("Extracting script %s, leaving dialogue %s", script.c_str(), dialogue.c_str());
    return script;
 }
-

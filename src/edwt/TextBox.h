@@ -4,76 +4,80 @@
 #include "guichan.hpp"
 
 namespace edwt
-{   /**
-     * Overrides the original Guichan Text Box to add text alignment (LEFT, CENTER, RIGHT).
-     *
-     * @author Noam Chitayat
-     */
-    class TextBox : public gcn::TextBox
-    {   public:
-            /** Enumeration for text box text alignment. */
-            enum TextAlign
-            {   /** Text is left-aligned */
-                LEFT,
-                /** Text is centered */
-                CENTER,
-                /** Text is right-aligned */
-                RIGHT
-            };
+{
+   /**
+    * Overrides the original Guichan Text Box to add text alignment (LEFT, CENTER, RIGHT).
+    *
+    * @author Noam Chitayat
+    */
+   class TextBox : public gcn::TextBox
+   {
+      public:
+         /** Enumeration for text box text alignment. */
+         enum TextAlign
+         {
+            /** Text is left-aligned */
+            LEFT,
+            /** Text is centered */
+            CENTER,
+            /** Text is right-aligned */
+            RIGHT
+         };
 
-        private:
-            /** The text alignment of this TextBox */
-            TextAlign align;
-            /** The text color of the TextBox */
-            gcn::Color textColor;
+      private:
+         /** The text alignment of this TextBox */
+         TextAlign align;
 
-            /** Determine the point in the x-axis where the text begins */
-            int determineX(std::string text);
+         /** The text color of the TextBox */
+         gcn::Color textColor;
 
-        protected:
-            /**
-             * Size adjustment is overridden to retain current width.
-             * (unless the existing text does not fit in the current width)
-             * This is necessary so that text updates don't change the width
-             * (and thus affect the alignment) of the text in the box.
-             */
-            virtual void adjustSize();
+         /** Determine the point in the x-axis where the text begins */
+         int determineX(std::string text);
 
-        public:
-            /**
-             * Constructor.
-             *
-             * Text is left-aligned by default.
-             */
-            TextBox() : align(LEFT) {}
+      protected:
+         /**
+          * Size adjustment is overridden to retain current width.
+          * (unless the existing text does not fit in the current width)
+          * This is necessary so that text updates don't change the width
+          * (and thus affect the alignment) of the text in the box.
+          */
+         virtual void adjustSize();
 
-            /**
-             * @param alignment The new text alignment of the text box.
-             */
-            void setAlignment(TextAlign alignment);
+      public:
+         /**
+          * Constructor.
+          *
+          * Text is left-aligned by default.
+          */
+         TextBox() : align(LEFT) {}
 
-            /**
-             * @return the current text alignment of this text box.
-             */
-            TextAlign getAlignment();
+         /**
+          * @param alignment The new text alignment of the text box.
+          */
+         void setAlignment(TextAlign alignment);
 
-            /**
-             * Border drawing is overridden to prevent drawing
-             * when the text box is transparent.
-             * (otherwise you still see the border all the time)
-             *
-             * @param graphics The graphics driver to draw with.
-             */
-            void drawBorder(gcn::Graphics* graphics);
+         /**
+          * @return the current text alignment of this text box.
+          */
+         TextAlign getAlignment();
 
-            /**
-             * Override the drawing code to take text alignment into account.
-             * (most of the code is the same as the overridden implementation, sadly)
-             *
-             * @param graphics The graphics driver to draw with.
-             */
-            void draw(gcn::Graphics* graphics);
-    };
+         /**
+          * Border drawing is overridden to prevent drawing
+          * when the text box is transparent.
+          * (otherwise you still see the border all the time)
+          *
+          * @param graphics The graphics driver to draw with.
+          */
+         void drawBorder(gcn::Graphics* graphics);
+
+         /**
+          * Override the drawing code to take text alignment into account.
+          * (most of the code is the same as the overridden implementation, sadly)
+          *
+          * @param graphics The graphics driver to draw with.
+          */
+         void draw(gcn::Graphics* graphics);
+   };
 };
 
 #endif

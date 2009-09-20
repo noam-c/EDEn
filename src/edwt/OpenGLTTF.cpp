@@ -75,110 +75,107 @@
 const int debugFlag = DEBUG_EDWT;
 
 namespace edwt
-{    
-    OpenGLTrueTypeFont::OpenGLTrueTypeFont (const std::string& filename, int size)
-    {   mRowSpacing = 0;
-        mGlyphSpacing = 0;
-        mAntiAlias = true;        
-        mFilename = filename;
-        mFont = NULL;
-        
-        mFont = TTF_OpenFont(filename.c_str(), size);
-        
-        if (mFont == NULL)
-        {
-            throw GCN_EXCEPTION("SDLTrueTypeFont::SDLTrueTypeFont. "+std::string(TTF_GetError()));
-        }
-    }
+{
+   OpenGLTrueTypeFont::OpenGLTrueTypeFont (const std::string& filename, int size)
+   {
+      mRowSpacing = 0;
+      mGlyphSpacing = 0;
+      mAntiAlias = true;        
+      mFilename = filename;
+      mFont = NULL;
+
+      mFont = TTF_OpenFont(filename.c_str(), size);
+
+      if (mFont == NULL)
+      {
+         throw GCN_EXCEPTION("SDLTrueTypeFont::SDLTrueTypeFont. "+std::string(TTF_GetError()));
+      }
+   }
     
-    OpenGLTrueTypeFont::~OpenGLTrueTypeFont()
-    {
-        TTF_CloseFont(mFont);
-    }
+   OpenGLTrueTypeFont::~OpenGLTrueTypeFont()
+   {
+      TTF_CloseFont(mFont);
+   }
   
-    int OpenGLTrueTypeFont::getWidth(const std::string& text) const
-    {
-        int w, h;
-        TTF_SizeText(mFont, text.c_str(), &w, &h);
-        
-        return w;
-    }
+   int OpenGLTrueTypeFont::getWidth(const std::string& text) const
+   {
+      int w, h;
+      TTF_SizeText(mFont, text.c_str(), &w, &h);
 
-    int OpenGLTrueTypeFont::getHeight() const
-    {
-        return TTF_FontHeight(mFont) + mRowSpacing;
-    }
+      return w;
+   }
+
+   int OpenGLTrueTypeFont::getHeight() const
+   {
+      return TTF_FontHeight(mFont) + mRowSpacing;
+   }
     
-    void OpenGLTrueTypeFont::drawString(gcn::Graphics* graphics, const std::string& text, const int x, const int y)
-    {
-        if (text == "")
-        {
-            return;
-        }
+   void OpenGLTrueTypeFont::drawString(gcn::Graphics* graphics, const std::string& text, const int x, const int y)
+   {
+      if (text == "") return;
+
+      gcn::OpenGLGraphics *openGlGraphics = dynamic_cast<gcn::OpenGLGraphics *>(graphics);
+
+      if (openGlGraphics == NULL)
+      {
+         throw GCN_EXCEPTION("OpenGLTrueTypeFont::drawString. Graphics object not an OpenGL graphics object!");
+         return;
+      }
         
-        gcn::OpenGLGraphics *openGlGraphics = dynamic_cast<gcn::OpenGLGraphics *>(graphics);
-
-        if (openGlGraphics == NULL)
-        {
-            throw GCN_EXCEPTION("OpenGLTrueTypeFont::drawString. Graphics object not an OpenGL graphics object!");
-            return;
-        }
+      // This is needed for drawing the Glyph in the middle if we have spacing
+      int yoffset = getRowSpacing() / 2;
         
-        // This is needed for drawing the Glyph in the middle if we have spacing
-        int yoffset = getRowSpacing() / 2;
-        
-        gcn::Color col = openGlGraphics->getColor();
+      gcn::Color col = openGlGraphics->getColor();
 
-        SDL_Color sdlCol;
-        sdlCol.r = col.r;
-        sdlCol.g = col.g;
-        sdlCol.b = col.b;
+      SDL_Color sdlCol;
+      sdlCol.r = col.r;
+      sdlCol.g = col.g;
+      sdlCol.b = col.b;
 
-        SDL_Surface *textSurface;
-        if (mAntiAlias)
-        {
-            textSurface = TTF_RenderText_Blended(mFont, text.c_str(), sdlCol);
-        }
-        else
-        {
-            textSurface = TTF_RenderText_Solid(mFont, text.c_str(), sdlCol);
-        }
+      SDL_Surface *textSurface;
+      if (mAntiAlias)
+      {
+         textSurface = TTF_RenderText_Blended(mFont, text.c_str(), sdlCol);
+      }
+      else
+      {
+         textSurface = TTF_RenderText_Solid(mFont, text.c_str(), sdlCol);
+      }
 
-        gcn::OpenGLImage *img = new gcn::OpenGLImage((unsigned int*)textSurface->pixels, textSurface->w, textSurface->h);
-        openGlGraphics->drawImage(img, 0, 0, x, y + yoffset, textSurface->w, textSurface->h);
-        delete img;
+      gcn::OpenGLImage *img = new gcn::OpenGLImage((unsigned int*)textSurface->pixels, textSurface->w, textSurface->h);
+      openGlGraphics->drawImage(img, 0, 0, x, y + yoffset, textSurface->w, textSurface->h);
+      delete img;
 
-        SDL_FreeSurface(textSurface);
-    }
+      SDL_FreeSurface(textSurface);
+   }
     
-    void OpenGLTrueTypeFont::setRowSpacing(int spacing)
-    {
-        mRowSpacing = spacing;
-    }
+   void OpenGLTrueTypeFont::setRowSpacing(int spacing)
+   {
+      mRowSpacing = spacing;
+   }
 
-    int OpenGLTrueTypeFont::getRowSpacing()
-    {
-        return mRowSpacing;
-    }
-    
-    void OpenGLTrueTypeFont::setGlyphSpacing(int spacing)
-    {
-        mGlyphSpacing = spacing;
-    }
-    
-    int OpenGLTrueTypeFont::getGlyphSpacing()
-    {
-        return mGlyphSpacing;
-    }
+   int OpenGLTrueTypeFont::getRowSpacing()
+   {
+      return mRowSpacing;
+   }
 
-    void OpenGLTrueTypeFont::setAntiAlias(bool antiAlias)
-    {
-        mAntiAlias = antiAlias;
-    }
+   void OpenGLTrueTypeFont::setGlyphSpacing(int spacing)
+   {
+      mGlyphSpacing = spacing;
+   }
 
-    bool OpenGLTrueTypeFont::isAntiAlias()
-    {
-        return mAntiAlias;        
-    }    
+   int OpenGLTrueTypeFont::getGlyphSpacing()
+   {
+      return mGlyphSpacing;
+   }
+
+   void OpenGLTrueTypeFont::setAntiAlias(bool antiAlias)
+   {
+      mAntiAlias = antiAlias;
+   }
+
+   bool OpenGLTrueTypeFont::isAntiAlias()
+   {
+      return mAntiAlias;
+   }
 }
-

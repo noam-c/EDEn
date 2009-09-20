@@ -13,7 +13,8 @@ typedef unsigned int GLuint;
  * \todo Document.
  */
 class Spritesheet : public Resource
-{  static const std::string IMG_EXTENSION;
+{
+   static const std::string IMG_EXTENSION;
    static const std::string DATA_EXTENSION;
 
    /** The spritesheet texture */

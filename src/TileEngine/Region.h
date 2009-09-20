@@ -8,7 +8,8 @@
 class Map;
 
 class Region : public Resource
-{  std::string regionName;
+{
+   std::string regionName;
    std::map<std::string, Map*> areas;
 
    void load(const char* path);

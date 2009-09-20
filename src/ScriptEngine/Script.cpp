@@ -13,11 +13,14 @@ extern "C"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
 Script::Script(std::string name) : scriptName(name), running(false)
-{}
+{
+}
 
 bool Script::runScript()
-{  if(!luaStack)
-   {  T_T("Attempting to run an uninitialized script!");
+{
+   if(!luaStack)
+   {
+      T_T("Attempting to run an uninitialized script!");
    }
 
    running = true;
@@ -27,12 +30,14 @@ bool Script::runScript()
 
    int returnCode = lua_resume(luaStack, 0);
    if(returnCode == 0)
-   {  DEBUG("Script %d finished.", threadId);
+   {
+      DEBUG("Script %d finished.", threadId);
       running = false;
       return true;
    }
    else if(returnCode == LUA_YIELD)
-   {  DEBUG("Script %d yielded.", threadId);
+   {
+      DEBUG("Script %d yielded.", threadId);
       return false;
    }
 
@@ -44,12 +49,14 @@ bool Script::runScript()
 }
 
 bool Script::resume(long /*timePassed*/)
-{  bool result = runScript();
+{
+   bool result = runScript();
    return result;
 }
 
 int Script::yield()
-{  return lua_yield(luaStack, 0);
+{
+   return lua_yield(luaStack, 0);
 }
 
 Script::~Script()

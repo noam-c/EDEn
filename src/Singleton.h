@@ -2,7 +2,7 @@
 #define __SINGLETON_H_
 
 #ifndef NULL
-        #define NULL 0
+   #define NULL 0
 #endif
 
 /**
@@ -23,57 +23,61 @@
  *    singleton
  
  * \todo At the time of writing, there is no static "manager" to clean up
- *       singletons, but there certainly should be.
+ *       all instantiated singletons, but there certainly should be!
  *
  * @author Noam Chitayat
  */
 template<class C> class Singleton
 {
-    protected:
-       /**
-        * The singleton instance of class C.
-        */
-       static Singleton<C>* instance;
+   protected:
+      /**
+       * The singleton instance of class C.
+       */
+      static Singleton<C>* instance;
 
-       /**
-        * Initializes the singleton of class C.
-        * This method is run after the default constructor of C,
-        * and should be implemented to take care of all the initialization of
-        * the new object.
-        */
-       virtual void initialize() = 0;
+      /**
+       * Initializes the singleton of class C.
+       * This method is run after the default constructor of C,
+       * and should be implemented to take care of all the initialization of
+       * the new object.
+       */
+      virtual void initialize() = 0;
        
-       /**
-        * Uninitializes the singleton of class C.
-        * This method is run before the destructor of C, and should be
-        * implemented to take care of all the cleanup of the object before
-        * it gets deleted.
-        */
-       virtual void finish() = 0;
+      /**
+       * Uninitializes the singleton of class C.
+       * This method is run before the destructor of C, and should be
+       * implemented to take care of all the cleanup of the object before
+       * it gets deleted.
+       */
+      virtual void finish() = 0;
 
-    public:
-       /**
-        * @return the singleton instance of the class C.
-        */
-       static C* getInstance()
-       {  if(!Singleton<C>::instance)
-          {   Singleton<C>::instance = new C();
-              Singleton<C>::instance->initialize();
-          }
+   public:
+      /**
+       * @return the singleton instance of the class C.
+       */
+      static C* getInstance()
+      {
+         if(!Singleton<C>::instance)
+         {
+            Singleton<C>::instance = new C();
+            Singleton<C>::instance->initialize();
+         }
       
-          return static_cast<C*>(instance);
-       }
+         return static_cast<C*>(instance);
+      }
 
-       /**
-        * Destroy the singleton instance (if it exists)
-        */
-       static void destroy()
-       {  if(Singleton<C>::instance)
-          {  Singleton<C>::instance->finish();
-             delete Singleton<C>::instance;
-             Singleton<C>::instance = NULL;
-          }
-       }
+      /**
+       * Destroy the singleton instance (if it exists)
+       */
+      static void destroy()
+      {
+         if(Singleton<C>::instance)
+         {
+            Singleton<C>::instance->finish();
+            delete Singleton<C>::instance;
+            Singleton<C>::instance = NULL;
+         }
+      }
 };
 
 template<class C> Singleton<C>* Singleton<C>::instance = NULL;

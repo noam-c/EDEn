@@ -35,12 +35,14 @@ class Spritesheet;
  * @author Noam Chitayat
  */
 class NPC
-{  /**
+{
+   /**
     * Types of instructions that an NPC can perform. Each instruction
     * has a set of required parameters, which are noted in each instruction type.
     */
    enum InstructionType
-   {  /** Instructs the NPC to move.
+   {
+      /** Instructs the NPC to move.
        * Parameters: X location to move to [int], Y location to move to [int]
        */
       MOVE,
@@ -55,7 +57,8 @@ class NPC
     * A container for NPC instructions, as well as their parameters.
     */
    struct Instruction
-   {  InstructionType type;
+   {
+      InstructionType type;
       void* params;
 
       Instruction(InstructionType type, void* parameters)

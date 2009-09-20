@@ -25,7 +25,8 @@ class ScriptEngine;
  * @author Noam Chitayat
  */
 class TileEngine: public GameState
-{  /** Time since the first logic step of the TileEngine instance. */
+{
+   /** Time since the first logic step of the TileEngine instance. */
    unsigned long time;
 
    /** The current region that the player is in. */

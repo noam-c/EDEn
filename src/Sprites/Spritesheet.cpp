@@ -20,7 +20,8 @@ Spritesheet::Spritesheet(ResourceKey name)
 }
 
 void Spritesheet::load(const char* path)
-{  // Load the image itself into a texture using GraphicsUtil
+{
+   // Load the image itself into a texture using GraphicsUtil
    std::string imgPath(path);
    imgPath += IMG_EXTENSION;
 
@@ -35,23 +36,26 @@ void Spritesheet::load(const char* path)
 
    std::ifstream in(dataPath.c_str());
    if(!in.is_open())
-   {  T_T(std::string("Error opening file: ") + dataPath);
+   {
+      T_T(std::string("Error opening file: ") + dataPath);
    }
 
    std::string line;
    std::queue<Frame*> frameQueue;
    for(;;)
-   {  // Get the next line
+   {
+      // Get the next line
       getline(in, line);
 
       // If the file is done, we are done
       if(in.eof())
-      {  break;
+      {
+         break;
       }
       // If there is some other error, throw an exception
       else if(!in)
-      {  T_T(std::string("Error reading from file: ") + path);
-         break;
+      {
+         T_T(std::string("Error reading from file: ") + path);
       }
 
       // Send the loaded line into a string stream for parsing
@@ -63,16 +67,19 @@ void Spritesheet::load(const char* path)
 
       // Make sure this frame name has not already been used in this file
       if(frameIndices.find(frameName) != frameIndices.end())
-      {  DEBUG("Duplicated name %s in spritesheet %s", frameName.c_str(), path);
+      {
+         DEBUG("Duplicated name %s in spritesheet %s", frameName.c_str(), path);
          T_T("Parse error reading spritesheet.");
       }
 
       // Get the four coordinates of the frame
       int coords[4];
       for(int i = 0; i < 4; ++i)
-      {  lineStream >> coords[i];
+      {
+         lineStream >> coords[i];
          if(!lineStream)
-         {  DEBUG("Error reading frame %s in spritesheet %s", frameName.c_str(), path);
+         {
+            DEBUG("Error reading frame %s in spritesheet %s", frameName.c_str(), path);
             T_T("Parse error reading spritesheet.");
          }
       }
@@ -100,23 +107,28 @@ void Spritesheet::load(const char* path)
    // Fill the new array with the accumulated frames
    int frameNum = 0;
    while(!frameQueue.empty())
-   {  frameList[frameNum++] = frameQueue.front(); frameQueue.pop();
+   {
+      frameList[frameNum++] = frameQueue.front(); frameQueue.pop();
    }
 
    DEBUG("Spritesheet constructed!");
 }
 
 int Spritesheet::getFrameIndex(std::string frameName)
-{  int index = frameIndices[frameName];
+{
+   int index = frameIndices[frameName];
 
    if(index < 0 || index >= numFrames)
-   {  return -1;
+   {
+      return -1;
    }
 }
 
 void Spritesheet::draw(int x, int y, int frameIndex)
-{  if(frameIndex < 0 || frameIndex > numFrames)
-   {  T_T("Spritesheet frame index out of bounds!");
+{
+   if(frameIndex < 0 || frameIndex > numFrames)
+   {
+      T_T("Spritesheet frame index out of bounds!");
    }
 
    Frame f = *frameList[frameIndex];
@@ -165,5 +177,6 @@ void Spritesheet::draw(int x, int y, int frameIndex)
 }
 
 size_t Spritesheet::getSize()
-{  return sizeof(Spritesheet);
+{
+   return sizeof(Spritesheet);
 }

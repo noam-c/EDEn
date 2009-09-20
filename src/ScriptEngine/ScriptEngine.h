@@ -25,119 +25,120 @@ struct lua_State;
  * @author Noam Chitayat
  */
 class ScriptEngine
-{   /**
-     * The scheduler for the script threads
-     */
-    Scheduler* scheduler;
+{
+   /**
+    * The scheduler for the script threads
+    */
+   Scheduler* scheduler;
 
-    /**
-     * The main Lua execution thread and stack
-     */
-    lua_State* luaVM;
+   /**
+    * The main Lua execution thread and stack
+    */
+   lua_State* luaVM;
 
-    /**
-     * The tile engine to execute commands on
-     */
-    TileEngine* tileEngine;
+   /**
+    * The tile engine to execute commands on
+    */
+   TileEngine* tileEngine;
 
-    /**
-     * Register some functions in Lua's global space using Lua bindings
-     */
-    void registerFunctions();
+   /**
+    * Register some functions in Lua's global space using Lua bindings
+    */
+   void registerFunctions();
 
-    /**
-     * Converts a script name into a relative path for the associated Lua file
-     */
-    std::string getScriptPath(std::string scriptName);
+   /**
+    * Converts a script name into a relative path for the associated Lua file
+    */
+   std::string getScriptPath(std::string scriptName);
 
-    /**
-     * Run a specified script.
-     *
-     * @param script The script to run.
-     */
-    int runScript(Script* script);
+   /**
+    * Run a specified script.
+    *
+    * @param script The script to run.
+    */
+   int runScript(Script* script);
 
-    public:
-       /** 
-        * Constructor. Initializes a Lua VM and initializes members as needed.
-        *
-        * @param tileEngine The tile engine to make calls to from scripts
-        * @param scheduler The scheduler responsible for managing this engine's Script threads
-        */
-       ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
+   public:
+      /** 
+       * Constructor. Initializes a Lua VM and initializes members as needed.
+       *
+       * @param tileEngine The tile engine to make calls to from scripts
+       * @param scheduler The scheduler responsible for managing this engine's Script threads
+       */
+      ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
 
-       /**
-        * Get a specified NPC script.
-        *
-        * @param npc The NPC to bind to the requested script.
-        * @param regionName The name of the region this NPC is found in.
-        * @param mapName The name of the map this NPC is found in.
-        * @param npcName The name of the NPC (and its script file).
-        */
-       NPCScript* getNPCScript(NPC* npc, std::string regionName, std::string mapName, std::string npcName);
+      /**
+       * Get a specified NPC script.
+       *
+       * @param npc The NPC to bind to the requested script.
+       * @param regionName The name of the region this NPC is found in.
+       * @param mapName The name of the map this NPC is found in.
+       * @param npcName The name of the NPC (and its script file).
+       */
+      NPCScript* getNPCScript(NPC* npc, std::string regionName, std::string mapName, std::string npcName);
 
-       /**
-        * Run a specified map script.
-        *
-        * @param regionName The region containing the map script to run.
-        * @param mapName The name of the map script to be run.
-        */
-       int runMapScript(std::string regionName, std::string mapName);
-       
-       /**
-        * Run a specified map script.
-        *
-        * @param regionName The region containing the map script to run.
-        * @param mapName The name of the map script to be run.
-        */
-       int runChapterScript(std::string chapterName);
+      /**
+       * Run a specified map script.
+       *
+       * @param regionName The region containing the map script to run.
+       * @param mapName The name of the map script to be run.
+       */
+      int runMapScript(std::string regionName, std::string mapName);
 
-       /**
-        * Run a string of script with the specified name.
-        *
-        * @param scriptString The name of the script to run.
-        */
-       int runScriptString(std::string scriptString);
+      /**
+       * Run a specified map script.
+       *
+       * @param regionName The region containing the map script to run.
+       * @param mapName The name of the map script to be run.
+       */
+      int runChapterScript(std::string chapterName);
 
-       /**
-        * Set the tile engine to send commands to.
-        *
-        * @param engine The tile engine to set.
-        */
-       void setTileEngine(TileEngine* engine);
+      /**
+       * Run a string of script with the specified name.
+       *
+       * @param scriptString The name of the script to run.
+       */
+      int runScriptString(std::string scriptString);
 
-       /**
-        * Calls a specified function on a specified Lua thread.
-        * Because of the nature of Lua's argument pushing, passing an array of
-        * arguments here will be complicated and may not be worth adding in.
-        *
-        * \todo We should add error handling in case the function doesn't exist
-        * in this thread.
-        *
-        * @param thread The thread to run the function on. This can be the main
-        * thread.
-        * @param funcName The name of the function to call.
-        */
-       void callFunction(lua_State* thread, const char* funcName);
+      /**
+       * Set the tile engine to send commands to.
+       *
+       * @param engine The tile engine to set.
+       */
+      void setTileEngine(TileEngine* engine);
 
-       /** 
-        * Destructor. Cleans up used memory and closes the Lua VM,
-        * disposing of any memory used by the Lua scripts.
-        */
-       ~ScriptEngine();
+      /**
+       * Calls a specified function on a specified Lua thread.
+       * Because of the nature of Lua's argument pushing, passing an array of
+       * arguments here will be complicated and may not be worth adding in.
+       *
+       * \todo We should add error handling in case the function doesn't exist
+       * in this thread.
+       *
+       * @param thread The thread to run the function on. This can be the main
+       * thread.
+       * @param funcName The name of the function to call.
+       */
+      void callFunction(lua_State* thread, const char* funcName);
 
-       /////////////////////////////////////////////////////////
-       /////////// Functions supplied to Lua scripts ///////////
-       /////////////////////////////////////////////////////////
-       int narrate(lua_State* luaVM);
-       int say(lua_State* luaVM);
-       int playSound(lua_State* luaVM);
-       int playMusic(lua_State* luaVM);
-       int fadeMusic(lua_State* luaVM);
-       int stopMusic(lua_State* luaVM);
-       int setRegion(lua_State* luaVM);
-       int addNPC(lua_State* luaVM);
-       int delay(lua_State* luaVM);
+      /** 
+       * Destructor. Cleans up used memory and closes the Lua VM,
+       * disposing of any memory used by the Lua scripts.
+       */
+      ~ScriptEngine();
+
+      /////////////////////////////////////////////////////////
+      /////////// Functions supplied to Lua scripts ///////////
+      /////////////////////////////////////////////////////////
+      int narrate(lua_State* luaVM);
+      int say(lua_State* luaVM);
+      int playSound(lua_State* luaVM);
+      int playMusic(lua_State* luaVM);
+      int fadeMusic(lua_State* luaVM);
+      int stopMusic(lua_State* luaVM);
+      int setRegion(lua_State* luaVM);
+      int addNPC(lua_State* luaVM);
+      int delay(lua_State* luaVM);
 };
 
 #endif

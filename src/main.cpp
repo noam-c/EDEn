@@ -16,42 +16,47 @@ const int debugFlag = DEBUG_MAIN;
  * and executes it. Afterwards, destroys graphics utilities and we're done.
  */
 int main (int argc, char *argv[])
-{   
-    try
-    {  GraphicsUtil::getInstance();
-       DEBUG("Initializing execution stack.");
-       ExecutionStack* stack = ExecutionStack::getInstance();
-       DEBUG("Pushing Main Menu state.");
-       stack->pushState(new MainMenu());
-       DEBUG("Beginning game execution.");
-       stack->execute();
+{  
+   try
+   {
+      GraphicsUtil::getInstance();
+      DEBUG("Initializing execution stack.");
+      ExecutionStack* stack = ExecutionStack::getInstance();
+      DEBUG("Pushing Main Menu state.");
+      stack->pushState(new MainMenu());
+      DEBUG("Beginning game execution.");
+      stack->execute();
 
-       DEBUG("Game is finished. Freeing resources and destroying singletons.");
-       ResourceLoader::freeAll();
-       ExecutionStack::destroy();
-       GraphicsUtil::destroy();
-    }
-    catch (gcn::Exception e)
-  	 {  DEBUG("Uncaught Guichan exception: \n%s", e.getMessage().c_str());
-       DEBUG_PAUSE;
-       return 1;
-    }
-    catch(Exception e)
-  	 {  DEBUG("Uncaught game exception: \n%s", e.what());
-       DEBUG_PAUSE;
-       return 1;
-    }
-    catch(std::exception e)
-  	 {  DEBUG("Uncaught STL exception: \n%s", e.what());
-       DEBUG_PAUSE;
-       return 1;
-    }
-    catch(...)
-  	 {  DEBUG("Uncaught general exception.");
-       DEBUG_PAUSE;
-       return 1;
-    }	
+      DEBUG("Game is finished. Freeing resources and destroying singletons.");
+      ResourceLoader::freeAll();
+      ExecutionStack::destroy();
+      GraphicsUtil::destroy();
+   }
+   catch (gcn::Exception e)
+   {
+      DEBUG("Uncaught Guichan exception: \n%s", e.getMessage().c_str());
+      DEBUG_PAUSE;
+      return 1;
+   }
+   catch(Exception e)
+   {
+      DEBUG("Uncaught game exception: \n%s", e.what());
+      DEBUG_PAUSE;
+      return 1;
+   }
+   catch(std::exception e)
+   {
+      DEBUG("Uncaught STL exception: \n%s", e.what());
+      DEBUG_PAUSE;
+      return 1;
+   }
+   catch(...)
+   {
+      DEBUG("Uncaught general exception.");
+      DEBUG_PAUSE;
+      return 1;
+   }
 
-    DEBUG_PAUSE;
-    return 0;
+   DEBUG_PAUSE;
+   return 0;
 }

@@ -16,7 +16,8 @@ extern "C"
 const char* NPCScript::FUNCTION_NAMES[] = { "idle" };
 
 NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Script(scriptPath), npc(npc), finished(false)
-{  luaStack = lua_newthread(luaVM);
+{
+   luaStack = lua_newthread(luaVM);
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
    luaL_dofile(luaStack, scriptPath.c_str());
 
@@ -36,7 +37,8 @@ NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Scrip
    lua_createtable(luaStack, 0, NUM_FUNCTIONS);
 
    for(int i = 0; i < NUM_FUNCTIONS; ++i)
-   {  DEBUG("Checking for function %s.", FUNCTION_NAMES[i]);
+   {
+      DEBUG("Checking for function %s.", FUNCTION_NAMES[i]);
 
       // Push the function name into the table
       lua_pushstring(luaStack, FUNCTION_NAMES[i]);
@@ -46,7 +48,8 @@ NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Scrip
 
       // Do a type-check here and push an empty function if needed
       if(!lua_isfunction(luaStack, -1))
-      {  DEBUG("%s was not found to be a function!", FUNCTION_NAMES[i]);
+      {
+         DEBUG("%s was not found to be a function!", FUNCTION_NAMES[i]);
          /**
           * \todo Create a Lua constant empty function somewhere, and use it
           * here.
@@ -79,25 +82,29 @@ NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Scrip
 }
 
 bool NPCScript::callFunction(std::string functionName)
-{  // Load the table of Lua functions for this NPC
-	lua_getglobal(luaStack, scriptName.c_str());
+{
+   // Load the table of Lua functions for this NPC
+   lua_getglobal(luaStack, scriptName.c_str());
 
-	// Get the function 'functionName' from this table
+   // Get the function 'functionName' from this table
    lua_pushstring(luaStack, functionName.c_str());
    lua_rawget(luaStack, -2);
 
    // Run the script
-	return runScript();
+   return runScript();
 }
 
 bool NPCScript::resume(long timePassed)
-{  if(finished) return true;
+{
+   if(finished) return true;
    if(running)
-   {  DEBUG("NPC Thread %d resuming running script.", getId());
+   {
+      DEBUG("NPC Thread %d resuming running script.", getId());
       runScript();
    }
    else
-   {  if(npc->isIdle())
+   {
+      if(npc->isIdle())
       {  DEBUG("NPC Thread %d idling.", getId());
          callFunction("idle");
       }
@@ -107,15 +114,18 @@ bool NPCScript::resume(long timePassed)
 }
 
 void NPCScript::activate()
-{  callFunction("activate");
+{
+   callFunction("activate");
 }
 
 void NPCScript::finish()
-{  finished = true;
+{
+   finished = true;
 }
 
 NPCScript::~NPCScript()
-{  /** \todo Check if this cleanup is appropriate. */
+{
+   /** \todo Check if this cleanup is appropriate. */
    // Set the function table to nil so that it gets garbage collected
    // lua_pushnil(luaStack);
    // lua_setglobal(luaStack, scriptPath.c_str());

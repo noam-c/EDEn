@@ -13,7 +13,8 @@ Tileset::Tileset(ResourceKey name) : Resource(name)
 }
 
 void Tileset::load(const char* path)
-{  std::ifstream in;
+{
+   std::ifstream in;
    std::string imagePath;
    in.open(path);
 
@@ -34,13 +35,17 @@ void Tileset::load(const char* path)
    passibility = new bool*[width];
 
    for(int i = 0; i < width; ++i)
-   {  passibility[i] = new bool[height];
+   {
+      passibility[i] = new bool[height];
       for(int j = 0; j < height; ++j)
-      {  if(in)
-         {  in >> passibility[i][j];
+      {
+         if(in)
+         {
+            in >> passibility[i][j];
          }
          else
-         {  T_T("Tileset has incomplete passibility matrix.");
+         {
+            T_T("Tileset has incomplete passibility matrix.");
          }
       }
    }
@@ -48,7 +53,8 @@ void Tileset::load(const char* path)
 }
    
 void Tileset::draw(int destX, int destY, int tileNum)
-{  int tilesetX = tileNum % width;
+{
+   int tilesetX = tileNum % width;
    int tilesetY = tileNum / width;
 
    float destLeft = float(destX * TileEngine::TILE_SIZE);
@@ -75,12 +81,15 @@ void Tileset::draw(int destX, int destY, int tileNum)
 }
 
 size_t Tileset::getSize()
-{  return sizeof(this);
+{
+   return sizeof(this);
 }
    
 Tileset::~Tileset()
-{  for(int i = 0; i < width; ++i)
-   {  delete [] passibility[i];
+{
+   for(int i = 0; i < width; ++i)
+   {
+      delete [] passibility[i];
    }
 
    delete [] passibility;

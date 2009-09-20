@@ -2,7 +2,8 @@
 #define __FRAME_H_
 
 struct Frame
-{  int left, top, right, bottom;
+{
+   int left, top, right, bottom;
 
    Frame(int left, int top, int right, int bottom);
 };

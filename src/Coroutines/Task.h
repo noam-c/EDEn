@@ -13,7 +13,8 @@ class Scheduler;
  * @author Noam Chitayat
  */
 class Task
-{  /** The unique identifier for this task */
+{
+   /** The unique identifier for this task */
    TaskId id;
    
    /** The scheduler to signal when this task is finished */

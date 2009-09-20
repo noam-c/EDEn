@@ -8,7 +8,8 @@ const int debugFlag = DEBUG_SCHEDULER;
 static TaskId nextId = 0;
 
 Task* Task::getNextTask(Scheduler* scheduler)
-{  return new Task(nextId++, scheduler);
+{
+   return new Task(nextId++, scheduler);
 }
 
 Task::Task(TaskId taskId, Scheduler* scheduler)
@@ -16,11 +17,13 @@ Task::Task(TaskId taskId, Scheduler* scheduler)
 {}
 
 TaskId Task::getTaskId()
-{  return id;
+{
+   return id;
 }
 
 void Task::signal()
-{  scheduler->taskDone(id);
+{
+   scheduler->taskDone(id);
    delete this;
 }
 

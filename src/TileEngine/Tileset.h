@@ -6,7 +6,8 @@
 typedef unsigned int GLuint;
 
 class Tileset : public Resource
-{  /** Width (in tiles) */
+{
+   /** Width (in tiles) */
    int width;
 
    /** Height (in tiles) */

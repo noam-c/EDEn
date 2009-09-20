@@ -21,7 +21,8 @@ class Thread;
  * @author Noam Chitayat
  */
 class Scheduler
-{  /** A list of threads. */
+{
+   /** A list of threads. */
    typedef std::set<Thread*> ThreadList;
 
    /** A queue of threads. */

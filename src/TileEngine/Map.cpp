@@ -6,7 +6,8 @@
 const int debugFlag = DEBUG_RES_LOAD;
 
 Map::Map(std::ifstream& in)
-{  /**
+{
+   /**
     * \todo Regions shouldn't assume that files are well-formed.
     *       Find and report errors if the file isn't formed ideally.
     */
@@ -24,37 +25,49 @@ Map::Map(std::ifstream& in)
    tileMap = new int*[width];
 
    for(int i = 0; i < width; ++i)
-   {  tileMap[i] = new int[height];
+   {
+      tileMap[i] = new int[height];
       for(int j = 0; j < height; ++j)
-      {  if(in)
-         {  in >> tileMap[i][j];
+      {
+         if(in)
+         {
+            in >> tileMap[i][j];
          }
          else
-         {  T_T("Tile map incomplete.");
+         {
+            T_T("Tile map incomplete.");
          }
       }
+
       in.ignore(width<<1, '\n');
    }
+
    DEBUG("Map loaded.");
 }
 
 std::string Map::getName()
-{  return mapName;
+{
+   return mapName;
 }
 
 void Map::draw()
-{  GraphicsUtil::getInstance()->clearBuffer();
+{
+   GraphicsUtil::getInstance()->clearBuffer();
 
    for(int i = 0; i < width; ++i)
-   {  for(int j = 0; j < height; ++j)
-      {  tileset->draw(i, j, tileMap[j][i]);
+   {
+      for(int j = 0; j < height; ++j)
+      {
+         tileset->draw(i, j, tileMap[j][i]);
       }
    }
 }
 
 Map::~Map()
-{  for(int i = 0; i < width; ++i)
-   {  delete [] tileMap[i];
+{
+   for(int i = 0; i < width; ++i)
+   {
+      delete [] tileMap[i];
    }
 
    delete [] tileMap;

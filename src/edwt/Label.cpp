@@ -4,7 +4,8 @@
 const int debugFlag = DEBUG_EDWT;
 
 namespace edwt
-{  Label::Label() : gcn::Label()
+{
+   Label::Label() : gcn::Label()
    {
    }
 

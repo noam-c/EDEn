@@ -1,31 +1,31 @@
-#ifndef __SOUND_H_
-#define __SOUND_H_
+#ifndef __FILE_SCRIPT_H_
+#define __FILE_SCRIPT_H_
 
-#include "Resource.h"
-#include "SDL_mixer.h"
-#include <map>
+#include "Script.h"
 
-class Task;
-
-class Sound : public Resource
-{  static std::map<int, Sound*> playingList;
-   static bool ownsChannel(Sound* sound, int channel);
-   static void channelFinished(int channel);
-
-   Task* playTask;
-   Mix_Chunk* sound;
-   int playingChannel;
-
-   void load(const char* path);
-
-   void finished();
-
+/**
+ * A FileScript is a type of Script that runs Lua code supplied in a Lua script
+ * file.
+ *
+ * @author Noam Chitayat
+ */
+class FileScript : public Script
+{
    public:
-      Sound(ResourceKey name);
-      void play(Task* task = NULL);
-      void stop();
-      size_t getSize();
-      ~Sound();
+      /**
+       * Constructor.
+       * Creates a new Lua thread by forking the main VM, and then
+       * loads the specified script file onto the new thread's stack.
+       *
+       * @param luaVM The main Lua stack to fork a thread from.
+       * @param scriptPath The path to a script that should be run on this thread.
+       */
+      FileScript(lua_State* luaVM, std::string scriptPath);
+
+      /**
+       * Destructor.
+       */
+      ~FileScript();
 };
 
 #endif

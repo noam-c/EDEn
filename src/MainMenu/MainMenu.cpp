@@ -26,8 +26,10 @@ const int debugFlag = DEBUG_TITLE;
 #define QUIT_GAME_ACTION 4
 
 MainMenu::MainMenu()
-{  try
-   {  bgImg = gcn::Image::load("data/images/splash.bmp");
+{
+   try
+   {
+      bgImg = gcn::Image::load("data/images/splash.bmp");
       bg = new gcn::Icon(bgImg);
       top->add(bg,0,0);
 
@@ -62,25 +64,30 @@ MainMenu::MainMenu()
       #endif
    }
    catch (gcn::Exception e)
-   {  DEBUG(e.getMessage());
+   {
+      DEBUG(e.getMessage());
       DEBUG(IMG_GetError());
    }
 }
 
 void MainMenu::activate()
-{  GameState::activate();
+{
+   GameState::activate();
 
    try
-   {  actionsListBox->requestFocus();
+   {
+      actionsListBox->requestFocus();
    }
    catch (gcn::Exception e)
-   {  DEBUG(e.getMessage());
+   {
+      DEBUG(e.getMessage());
       DEBUG(IMG_GetError());
    }
 }
 
 void MainMenu::populateOpsList()
-{  titleOps = new edwt::StringListModel();
+{
+   titleOps = new edwt::StringListModel();
 
    titleOps->add("New Game", NEW_GAME_ACTION);
    titleOps->add("Load Game", LOAD_GAME_ACTION);
@@ -90,15 +97,16 @@ void MainMenu::populateOpsList()
 }
 
 bool MainMenu::step()
-{  GameState::step();
+{
+   GameState::step();
 
    if(finished) return false;
 
    bool done = false;
 
-   #ifndef MUSIC_OFF
+#ifndef MUSIC_OFF
    music->play();
-   #endif
+#endif
 
    SDL_Event event;
 
@@ -106,45 +114,61 @@ bool MainMenu::step()
    SDL_WaitEvent(&event);
 
    switch (event.type)
-   {   case SDL_USEREVENT:
-       {  switch(event.user.code)
-          {  case NEW_GAME_ACTION:
-             {  NewGameAction();
-                break;
-             }
-             case LOAD_GAME_ACTION:
-             {  LoadGameAction();
-                break;
-             }
-             case OPTIONS_ACTION:
-             {  OptionsAction();
-                break;
-             }
-             case ABOUT_ACTION:
-             {  AboutAction();
-                break;
-             }
-             case QUIT_GAME_ACTION:
-             {  QuitAction();
-                break;
-             }
-          }
+   {
+      case SDL_USEREVENT:
+      {
+         switch(event.user.code)
+         {
+            case NEW_GAME_ACTION:
+            {
+               NewGameAction();
+               break;
+            }
+            case LOAD_GAME_ACTION:
+            {
+               LoadGameAction();
+               break;
+            }
+            case OPTIONS_ACTION:
+            {
+               OptionsAction();
+               break;
+            }
+            case ABOUT_ACTION:
+            {
+               AboutAction();
+               break;
+            }
+            case QUIT_GAME_ACTION:
+            {
+               QuitAction();
+               break;
+            }
+         }
 
+         break;
+      }
+      case SDL_KEYDOWN:
+      {
+         switch(event.key.keysym.sym)
+         {
+            case SDLK_ESCAPE:
+            {
+               done = true; break;
+            }
+         }
+
+         break;
+      }
+      case SDL_QUIT:
+      {
+          done = true;
           break;
-       }
-       case SDL_KEYDOWN:
-       {  switch(event.key.keysym.sym)
-             case SDLK_ESCAPE:
-             {  done = true; break;  }
+      }
+      default:
+      {
           break;
-       }
-       case SDL_QUIT:
-       {   done = true;
-           break;
-       }
-       default:
-       {   break;
-       }
+      }
    }
 
    GraphicsUtil::getInstance()->pushInput(event);
@@ -153,7 +177,8 @@ bool MainMenu::step()
 }
 
 void MainMenu::draw()
-{  GameState::draw();
+{
+   GameState::draw();
 
    // Make sure everything is displayed on screen
    GraphicsUtil::getInstance()->flipScreen();
@@ -163,7 +188,8 @@ void MainMenu::draw()
 }
 
 MainMenu::~MainMenu()
-{  Music::fadeOutMusic(1000);
+{
+   Music::fadeOutMusic(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 
    delete bg;

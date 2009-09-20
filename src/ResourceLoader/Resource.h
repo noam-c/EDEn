@@ -13,7 +13,8 @@
  * @author Noam Chitayat
  */
 class Resource
-{  /**
+{
+   /**
     * True iff the resource has been successfully initialized.
     * False iff the resource is currently in an uninitialized stub/zombie state.
     */

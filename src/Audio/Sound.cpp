@@ -8,11 +8,13 @@ const int debugFlag = DEBUG_AUDIO;
 std::map<int, Sound*> Sound::playingList;
 
 bool Sound::ownsChannel(Sound* sound, int channel)
-{  return sound == playingList[channel];
+{
+   return sound == playingList[channel];
 }
 
 void Sound::channelFinished(int channel)
-{  DEBUG("Channel %d finished playing.", channel);
+{
+   DEBUG("Channel %d finished playing.", channel);
    Sound* finishedSound = playingList[channel];
 
    if(finishedSound != NULL)
@@ -25,7 +27,8 @@ Sound::Sound(ResourceKey name) : Resource(name), playingChannel(-1)
 }
 
 void Sound::load(const char* path)
-{  /**
+{
+   /**
     * \todo This should only be called once. Move it into initialization code.
     */
    Mix_ChannelFinished(&Sound::channelFinished);
@@ -34,20 +37,25 @@ void Sound::load(const char* path)
    sound = Mix_LoadWAV(path);
 
    if(sound == NULL)
-   {  T_T(Mix_GetError());
+   {
+      T_T(Mix_GetError());
    }
 
    DEBUG("Successfully loaded WAV %s.", path);
 }
 
 size_t Sound::getSize()
-{  return sizeof(Sound);
+{
+   return sizeof(Sound);
 }
 
 void Sound::play(Task* task)
-{  if(sound == NULL)
-   {  if(task)
-      {  task->signal();
+{
+   if(sound == NULL)
+   {
+      if(task)
+      {
+         task->signal();
       }
 
       return;
@@ -55,7 +63,8 @@ void Sound::play(Task* task)
 
    playingChannel = Mix_PlayChannel(-1, sound, 0);
    if(playingChannel == -1)
-   {  DEBUG("There was a problem playing the sound ""%s"": %s", getResourceName().c_str(), Mix_GetError());
+   {
+      DEBUG("There was a problem playing the sound ""%s"": %s", getResourceName().c_str(), Mix_GetError());
    }
 
    playingList[playingChannel] = this;
@@ -63,15 +72,19 @@ void Sound::play(Task* task)
 }
 
 void Sound::stop()
-{  if(ownsChannel(this, playingChannel))
-   {  Mix_HaltChannel(playingChannel);
+{
+   if(ownsChannel(this, playingChannel))
+   {
+      Mix_HaltChannel(playingChannel);
    }
 }
 
 void Sound::finished()
-{  DEBUG("Sound finished.");
+{
+   DEBUG("Sound finished.");
    if(playTask)
-   {  playTask->signal();
+   {
+      playTask->signal();
       playTask = NULL;
    }
 
@@ -79,9 +92,12 @@ void Sound::finished()
 }
 
 Sound::~Sound()
-{  if(sound != NULL)
-   {  if(ownsChannel(this, playingChannel))
-      {  stop();
+{
+   if(sound != NULL)
+   {
+      if(ownsChannel(this, playingChannel))
+      {
+         stop();
       }
 
       Mix_FreeChunk(sound);

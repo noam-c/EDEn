@@ -10,7 +10,8 @@
  * @author Noam Chitayat
  */
 class StringScript : public Script
-{  public:
+{
+   public:
       /**
        * Constructor.
        * Creates a new Lua thread by forking the main VM, and then

@@ -10,52 +10,66 @@ Music::Music(ResourceKey name) : Resource(name)
 }
 
 void Music::load(const char* path)
-{  music = Mix_LoadMUS(path);
+{
+   music = Mix_LoadMUS(path);
 
    if(music == NULL)
-   {  T_T(Mix_GetError());
+   {
+      T_T(Mix_GetError());
    }
 }
 
 size_t Music::getSize()
-{  return sizeof(Music);
+{
+   return sizeof(Music);
 }
 
 void Music::setPlayingMusic(Music* music)
-{  currentMusic = music;
+{
+   currentMusic = music;
 }
 
 bool Music::isPlaying(Music* music)
-{  return (music == currentMusic) && Mix_PlayingMusic();
+{
+   return (music == currentMusic) && Mix_PlayingMusic();
 }
 
 void Music::fadeOutMusic(int time)
-{  if(Mix_PlayingMusic())
-   {  Mix_FadeOutMusic(time);
+{
+   if(Mix_PlayingMusic())
+   {
+      Mix_FadeOutMusic(time);
       currentMusic = NULL;
    }
 }
 
 void Music::stopMusic()
-{  if(Mix_PlayingMusic())
-   {  Mix_HaltMusic();
+{
+   if(Mix_PlayingMusic())
+   {
+      Mix_HaltMusic();
       currentMusic = NULL;
    }
 }
 
 void Music::play()
-{  if(music == NULL) return;
+{
+   if(music == NULL) return;
 
    if(!isPlaying(this))
-   {  setPlayingMusic(this);
+   {
+      setPlayingMusic(this);
       if(Mix_PlayMusic(music, 0) < 0)
-      {  DEBUG("There was a problem playing the music: %s", Mix_GetError());
+      {
+         DEBUG("There was a problem playing the music: %s", Mix_GetError());
       }
    }
 }
 
 Music::~Music()
-{  if(music != NULL)
-   {  Mix_FreeMusic(music);
+{
+   if(music != NULL)
+   {
+      Mix_FreeMusic(music);
    }
 }

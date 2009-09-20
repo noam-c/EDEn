@@ -4,7 +4,8 @@
 #include "GameState.h"
 
 namespace gcn
-{  class Image;
+{
+   class Image;
    class Icon;
 };
 
@@ -27,7 +28,8 @@ class Sound;
  * @author Noam Chitayat
  */
 class MainMenu: public GameState
-{  /** Main menu music */
+{
+   /** Main menu music */
    Music* music;
 
    /** Sound for hovering over an option */
@@ -62,12 +64,12 @@ class MainMenu: public GameState
     */
    void populateOpsList();
 
-    //Actions for the list ops - see documentation in MainMenuActions.cpp
-    void NewGameAction();
-    void LoadGameAction();
-    void OptionsAction();
-    void AboutAction();
-    void QuitAction();
+   //Actions for the list ops - see documentation in MainMenuActions.cpp
+   void NewGameAction();
+   void LoadGameAction();
+   void OptionsAction();
+   void AboutAction();
+   void QuitAction();
 
    public:
       /**

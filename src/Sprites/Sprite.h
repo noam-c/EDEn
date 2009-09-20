@@ -6,7 +6,8 @@
 class Spritesheet;
 
 class Sprite
-{  Spritesheet* sheet;
+{
+   Spritesheet* sheet;
    int frameIndex;
 
    public:

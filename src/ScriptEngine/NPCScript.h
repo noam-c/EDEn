@@ -21,14 +21,18 @@ class NPC;
  * @author Noam Chitayat
  */
 class NPCScript : public Script
-{  /**
+{
+   /**
     * The functions that can be called on an NPC.
     * When new functions are added here, the name of the function must also be
     * added to FUNCTION_NAMES. The functions are optional and can be replaced
     * by an empty function if they do not exist in a given NPC.
     */
    enum Functions
-   {  IDLE,
+   {
+      /** \todo Document. */
+      IDLE,
+      /** \todo Document. */
       NUM_FUNCTIONS
    };
 
@@ -39,6 +43,8 @@ class NPCScript : public Script
 
    /** The NPC controlled by this script's execution. */
    NPC* npc;
+
+   /** \todo Document. */
    bool finished;
 
    public:

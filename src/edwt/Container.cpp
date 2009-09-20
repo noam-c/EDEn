@@ -4,7 +4,8 @@
 const int debugFlag = DEBUG_EDWT;
 
 namespace edwt
-{  Container::Container() : gcn::Container()
+{
+   Container::Container() : gcn::Container()
    {
    }
 };

@@ -18,50 +18,61 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
                                     lua_register(luaVM, luaName, function)
 
 static ScriptEngine* getEngine(lua_State* luaVM)
-{  lua_getglobal(luaVM, SCRIPT_ENG_LUA_NAME);
+{
+   lua_getglobal(luaVM, SCRIPT_ENG_LUA_NAME);
    ScriptEngine* engine = static_cast<ScriptEngine*>(lua_touserdata(luaVM, lua_gettop(luaVM)));
    lua_pop(luaVM, 1);
    return engine;
 }
 
 static int luaNarrate(lua_State* luaVM)
-{  return getEngine(luaVM)->narrate(luaVM);
+{
+   return getEngine(luaVM)->narrate(luaVM);
 }
 
 static int luaSay(lua_State* luaVM)
-{  return getEngine(luaVM)->say(luaVM);
+{
+   return getEngine(luaVM)->say(luaVM);
 }
 
 static int luaSetRegion(lua_State* luaVM)
-{  return getEngine(luaVM)->setRegion(luaVM);
+{
+   return getEngine(luaVM)->setRegion(luaVM);
 }
 
 static int luaPlaySound(lua_State* luaVM)
-{  return getEngine(luaVM)->playSound(luaVM);
+{
+   return getEngine(luaVM)->playSound(luaVM);
 }
 
 static int luaPlayMusic(lua_State* luaVM)
-{  return getEngine(luaVM)->playMusic(luaVM);
+{
+   return getEngine(luaVM)->playMusic(luaVM);
 }
 
 static int luaStopMusic(lua_State* luaVM)
-{  return getEngine(luaVM)->stopMusic(luaVM);
+{
+   return getEngine(luaVM)->stopMusic(luaVM);
 }
 
 static int luaAddNPC(lua_State* luaVM)
-{  return getEngine(luaVM)->addNPC(luaVM);
+{
+   return getEngine(luaVM)->addNPC(luaVM);
 }
 
 static int luaDelay(lua_State* luaVM)
-{  return getEngine(luaVM)->delay(luaVM);
+{
+   return getEngine(luaVM)->delay(luaVM);
 }
 
 static NPC* getNPC(lua_State* luaVM)
-{  return static_cast<NPC*>(lua_touserdata(luaVM, 1));
+{
+   return static_cast<NPC*>(lua_touserdata(luaVM, 1));
 }
 
 static int luaNPCMove(lua_State* luaVM)
-{  NPC* npc = getNPC(luaVM);
+{
+   NPC* npc = getNPC(luaVM);
    std::string NPCname = npc->getName();
    int x = (int)luaL_checknumber(luaVM, 2);
    int y = (int)luaL_checknumber(luaVM, 3);
@@ -71,27 +82,33 @@ static int luaNPCMove(lua_State* luaVM)
 }
 
 static int luaTilesToPixels(lua_State* luaVM)
-{  int numInTiles = (int)luaL_checknumber(luaVM, 1);
+{ 
+   int numInTiles = (int)luaL_checknumber(luaVM, 1);
    lua_pushnumber(luaVM, numInTiles * TileEngine::TILE_SIZE);
    return 1;
 }
 
 static int luaRandom(lua_State* luaVM)
-{  int nargs = lua_gettop(luaVM);
+{
+   int nargs = lua_gettop(luaVM);
    int min, max;
 
    switch(nargs)
-   {  case 1:
-      {  min = 0;
+   {
+      case 1:
+      {
+         min = 0;
          max = (int)luaL_checknumber(luaVM, 1);
       }
       case 2:
-      {  min = (int)luaL_checknumber(luaVM, 1);
+      {
+         min = (int)luaL_checknumber(luaVM, 1);
          max = (int)luaL_checknumber(luaVM, 2);
          break;
       }
       default:
-      {  /** \todo Error case. */
+      {
+         /** \todo Error case. */
          min = 0;
          max = 0;
          break;
@@ -104,7 +121,8 @@ static int luaRandom(lua_State* luaVM)
 }
 
 void ScriptEngine::registerFunctions()
-{  REGISTER("narrate", luaNarrate);
+{
+   REGISTER("narrate", luaNarrate);
    REGISTER("say", luaSay);
    REGISTER("setRegion", luaSetRegion);
    REGISTER("playSound", luaPlaySound);
