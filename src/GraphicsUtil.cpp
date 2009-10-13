@@ -133,7 +133,7 @@ void GraphicsUtil::loadGLTexture(const char* path, GLuint& texture, int& w, int&
    if(!image)
    {
       // Problem loading the image; throw an exception
-      throw (EXCEPTION_INFO, std::string("Unable to load image: ") + IMG_GetError());
+      T_T(std::string("Unable to load image: ") + IMG_GetError());
    }
 
    DEBUG("Image load successful!");
@@ -163,7 +163,7 @@ void GraphicsUtil::loadGLTexture(const char* path, GLuint& texture, int& w, int&
    if(!rgbSurface)
    {
       // Problem converting the image; throw an exception
-      throw (EXCEPTION_INFO, std::string("Unable to convert image: ") + SDL_GetError());
+      T_T(std::string("Unable to convert image: ") + SDL_GetError());
    }
 
    SDL_BlitSurface(image, 0, rgbSurface, 0);

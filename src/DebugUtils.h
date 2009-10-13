@@ -7,16 +7,10 @@
 // Uncomment this macro to turn on debugging
 #define DEBUG_MODE
 
-/** \todo Get rid of the MUSIC_OFF macro usage once an options menu with
- * persistence is successfully implemented.
- */
-// Uncomment this macro to turn off music
-//#define MUSIC_OFF
-
 // Make a nice easy access macro for debug statements in the code
 #ifdef DEBUG_MODE
    #define DEBUG(x, ...) DebugUtils::print(debugFlag, x, ## __VA_ARGS__)
-   #define DEBUG_PAUSE system("PAUSE")
+   #define DEBUG_PAUSE DebugUtils::pause();
 #else
    #define DEBUG(x, ...)
    #define DEBUG_PAUSE
@@ -42,6 +36,8 @@
 #define DEBUG_SCHEDULER  1<<11    // Scheduler/coroutine functionality
 #define DEBUG_NPC        1<<12    // NPC functionality
 #define DEBUG_SPRITE     1<<13    // Sprite/spritesheet functionality
+
+#define DEBUG_ALL           ~0    // Turn on all debug output (verbose, but handy)
 
 /**
  *  Provides utilities to help game devs debug the game code,
@@ -76,6 +72,12 @@ class DebugUtils
        * @param fmt the format string to print
        */
       static void print(long flag, const char* fmt, ...);
+
+      /**
+       * Standard debug pausing mechanism.
+       * Print out "Press enter to continue" and wait for input.
+       */
+      static void pause();
 };
 
 #endif

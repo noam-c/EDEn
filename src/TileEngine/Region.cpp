@@ -24,7 +24,10 @@ void Region::load(const char* path)
    }
 
    in >> regionName;
-   in.get();
+
+   // Get rid of remaining crap on the line (like DOS newline characters...)
+   std::string remainder;
+   std::getline(in, remainder);
 
    if(!in)
    {

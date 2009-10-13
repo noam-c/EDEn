@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-long DebugUtils::debugFlags = ~0;
+long DebugUtils::debugFlags = DEBUG_ALL;
 
 void DebugUtils::print(long flag, std::string str)
 {
@@ -19,4 +19,10 @@ void DebugUtils::print(long flag, const char* fmt, ...)
       fprintf(stderr, "\n");
       va_end(argp);
    }
+}
+
+void DebugUtils::pause()
+{
+   printf("Press enter to continue...\n");
+   getchar();
 }

@@ -51,6 +51,7 @@ size_t Sound::getSize()
 
 void Sound::play(Task* task)
 {
+#ifndef SOUND_OFF
    if(sound == NULL)
    {
       if(task)
@@ -69,6 +70,7 @@ void Sound::play(Task* task)
 
    playingList[playingChannel] = this;
    playTask = task;
+#endif
 }
 
 void Sound::stop()

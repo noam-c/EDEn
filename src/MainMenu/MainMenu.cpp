@@ -14,7 +14,7 @@
 #include "TitleScreenListBox.h"
 
 #include "ExecutionStack.h"
-#include "SDL_Image.h"
+#include "SDL_image.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_TITLE;

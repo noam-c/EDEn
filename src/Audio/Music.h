@@ -4,6 +4,12 @@
 #include "Resource.h"
 #include "SDL_mixer.h"
 
+/** \todo Get rid of the MUSIC_OFF macro usage once an options menu with
+ * persistence is successfully implemented.
+ */
+// Uncomment this macro to turn off music
+//#define MUSIC_OFF
+
 class Music : public Resource
 {
    static Music* currentMusic;
