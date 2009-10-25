@@ -28,10 +28,12 @@ class NPCScript : public Script
     * added to FUNCTION_NAMES. The functions are optional and can be replaced
     * by an empty function if they do not exist in a given NPC.
     */
-   enum Functions
+   enum NPCFunction
    {
       /** \todo Document. */
       IDLE,
+      /** \todo Document. */
+      ACTIVATE,
       /** \todo Document. */
       NUM_FUNCTIONS
    };
@@ -40,6 +42,8 @@ class NPCScript : public Script
     * The names of the functions denoted in the Functions list.
     */
    static const char* FUNCTION_NAMES[];
+
+   bool functionExists[];
 
    /** The NPC controlled by this script's execution. */
    NPC* npc;
@@ -63,12 +67,12 @@ class NPCScript : public Script
       /**
        * Call a function on this NPC's script.
        *
-       * @param functionName the name of the function to call
+       * @param function the function to call
        *
        * @return true iff the script runs to completion, false if the coroutine
        *         yielded, or there was an error in execution.
        */
-      bool callFunction(std::string functionName);
+      bool callFunction(NPCFunction function);
 
       /**
        * Either resume the NPC's script if it is running, or run the script's

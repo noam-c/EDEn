@@ -204,6 +204,30 @@ int ScriptEngine::addNPC(lua_State* luaStack)
          break;
       }
    }
+
+   return 0;
+}
+
+int ScriptEngine::moveNPC(lua_State* luaStack)
+{
+   int nargs = lua_gettop(luaStack);
+   bool waitForFinish = false;
+
+   int x = 0;
+   int y = 0;
+    
+   switch(nargs)
+   {
+      case 3:
+      {
+         y = lua_tointeger(luaStack, 3);
+         x = lua_tointeger(luaStack, 2);
+         std::string npcName(lua_tostring(luaStack, 1));
+         tileEngine->moveNPC(npcName, x, y);
+         break;
+      }
+   }
+
    return 0;
 }
 

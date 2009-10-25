@@ -151,11 +151,21 @@ void Scheduler::runThreads(long timePassed)
       // Set the running thread to the next thread
       runningThread = *iter;
 
-      // Run/resume the thread
-      bool scriptIsFinished = (*iter)->resume(timePassed);
-
-      if(scriptIsFinished)
+      try
       {
+         // Run/resume the thread
+         bool scriptIsFinished = (*iter)->resume(timePassed);
+   
+         if(scriptIsFinished)
+         {
+            finished(*iter);
+         }
+      }
+      catch(Exception e)
+      {
+         // This coroutine malfunctioned in some terminal way. We should not run it again.
+         DEBUG("Thread failure encountered! Removing thread %d", runningThread->getId());
+         DEBUG("Reason: %s", e.getMessage().c_str());
          finished(*iter);
       }
    }

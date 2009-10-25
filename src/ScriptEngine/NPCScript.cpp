@@ -13,13 +13,21 @@ extern "C"
    #include <lauxlib.h>
 }
 
-const char* NPCScript::FUNCTION_NAMES[] = { "idle" };
+const char* NPCScript::FUNCTION_NAMES[] = { "idle", "activate" };
 
 NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Script(scriptPath), npc(npc), finished(false)
 {
    luaStack = lua_newthread(luaVM);
+
+   // Run through the script to gather all the NPC functions
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
-   luaL_dofile(luaStack, scriptPath.c_str());
+
+   int result = luaL_dofile(luaStack, scriptPath.c_str());
+
+   if(result != 0)
+   {
+      DEBUG("Error loading NPC functions for %s: %s", npc->getName().c_str(), lua_tostring(luaStack, -1));
+   }
 
    // All the below code simply takes all the global functions that the script
    // created, and pushes them into a table that uses this NPC's unique
@@ -49,49 +57,55 @@ NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Scrip
       // Do a type-check here and push an empty function if needed
       if(!lua_isfunction(luaStack, -1))
       {
+         // Pop off the bad value and the function name
+         lua_pop(luaStack, 2);
+
+         // This function is not available for the NPC
+         functionExists[i] = false;
+
          DEBUG("%s was not found to be a function!", FUNCTION_NAMES[i]);
-         /**
-          * \todo Create a Lua constant empty function somewhere, and use it
-          * here.
-          */
-         // Pop off the bad function
-         //lua_pop(luaStack, 1);
-
-         // Push on the empty function
-         //lua_getglobal(luaStack, "emptyFunction");
       }
+      else
+      {
+         // Grabs the table explicitly, and uses the string function name as a key
+         // to push in the global function we found (pops string and function off the stack)
+         lua_settable(luaStack, -3);
 
-      // Grabs the table explicitly, and uses the string function name as a key
-      // to push in the global function we found (pops string and function off the stack)
-      lua_rawset(luaStack, -3);
+         // Remove the function from the global table so nobody else accidentally runs into it
+         lua_pushnil(luaStack);
+         lua_setglobal(luaStack, FUNCTION_NAMES[i]);
 
-      // Remove the function from the global table so nobody else accidentally runs into it
-      lua_pushnil(luaStack);
-      lua_setglobal(luaStack, FUNCTION_NAMES[i]);
+         // The function is valid for the NPC
+         functionExists[i] = true;
+
+         DEBUG("Function %s was found and loaded", FUNCTION_NAMES[i]);
+      }
    }
 
    // Push the table into the global space with the file path as the name
    lua_setglobal(luaStack, scriptName.c_str());
 
-   // Push the NPC into the globals with its own name as an identifier
-   // Now, other scripts can refer to the NPC itself without any extra
-   // function calls or syntactic bloat
-   std::string npcName(npc->getName());
-   lua_pushlightuserdata(luaStack, npc);
-   lua_setglobal(luaStack, npcName.c_str());
 }
 
-bool NPCScript::callFunction(std::string functionName)
+bool NPCScript::callFunction(NPCFunction function)
 {
-   // Load the table of Lua functions for this NPC
-   lua_getglobal(luaStack, scriptName.c_str());
+   if(functionExists[function])
+   {
+      // Load the table of Lua functions for this NPC
+      lua_getglobal(luaStack, scriptName.c_str());
 
-   // Get the function 'functionName' from this table
-   lua_pushstring(luaStack, functionName.c_str());
-   lua_rawget(luaStack, -2);
+      // Grab the function name
+      const char* functionName = FUNCTION_NAMES[function];
 
-   // Run the script
-   return runScript();
+      DEBUG("NPC %s running function %s", npc->getName().c_str(), functionName);
+
+      // Get the function from the NPC function table and push it on the stack
+      lua_pushstring(luaStack, functionName);
+      lua_gettable(luaStack, -2);
+
+      // Run the script
+      return runScript();
+   }
 }
 
 bool NPCScript::resume(long timePassed)
@@ -105,8 +119,8 @@ bool NPCScript::resume(long timePassed)
    else
    {
       if(npc->isIdle())
-      {  DEBUG("NPC Thread %d idling.", getId());
-         callFunction("idle");
+      {
+         callFunction(IDLE);
       }
    }
 
@@ -115,7 +129,7 @@ bool NPCScript::resume(long timePassed)
 
 void NPCScript::activate()
 {
-   callFunction("activate");
+   callFunction(ACTIVATE);
 }
 
 void NPCScript::finish()
@@ -129,9 +143,4 @@ NPCScript::~NPCScript()
    // Set the function table to nil so that it gets garbage collected
    // lua_pushnil(luaStack);
    // lua_setglobal(luaStack, scriptPath.c_str());
-
-   // Blank out this NPC's global variable, since it no longer exists
-   std::string npcName(npc->getName());
-   lua_pushnil(luaStack);
-   lua_setglobal(luaStack, npcName.c_str());
 }

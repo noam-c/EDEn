@@ -29,23 +29,28 @@ bool Script::runScript()
    DEBUG("Lua Thread Address: 0x%x", luaStack);
 
    int returnCode = lua_resume(luaStack, 0);
-   if(returnCode == 0)
+   switch(returnCode)
    {
-      DEBUG("Script %d finished.", threadId);
-      running = false;
-      return true;
-   }
-   else if(returnCode == LUA_YIELD)
-   {
-      DEBUG("Script %d yielded.", threadId);
-      return false;
+      case 0:
+      {
+         DEBUG("Script %d finished.", threadId);
+         running = false;
+         return true;
+      }
+      case LUA_YIELD:
+      {
+         DEBUG("Script %d yielded.", threadId);
+         return false;
+      }
+      default:
+      {
+         // An error occurred: Print out the error message
+         DEBUG("Error running script: %s", lua_tostring(luaStack, -1));
+         running = false;
+         T_T("An error occured running this script.");
+      }
    }
 
-   // An error occurred: Print out the error message
-   DEBUG("Error running script: %s", lua_tostring(luaStack, -1));
-
-   running = false;
-   return false;
 }
 
 bool Script::resume(long /*timePassed*/)

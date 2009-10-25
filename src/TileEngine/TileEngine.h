@@ -116,12 +116,23 @@ class TileEngine: public GameState
       bool setRegion(std::string regionName, std::string mapName = "");
 
       /**
-       * Add a new NPC into the region with the specified spritesheet.
+       * Add a new NPC with the specified name into the region with the specified spritesheet.
        *
        * @param npcName The name of the npc to add
        * @param spritesheetName The name of the spritesheet to draw the NPC with
+       * @param x The x location where we spawn the NPC
+       * @param y The y location where we spawn the NPC
        */
       void addNPC(std::string npcName, std::string spritesheetName, int x, int y);
+
+      /**
+       * Move an NPC with the specified name to the specified location.
+       *
+       * @param npcName The name of the npc to move
+       * @param x The x location to move the NPC to
+       * @param y The y location to move the NPC to
+       */
+      void moveNPC(std::string npcName, int x, int y);
 
       /**
        * Destructor.

@@ -65,20 +65,9 @@ static int luaDelay(lua_State* luaVM)
    return getEngine(luaVM)->delay(luaVM);
 }
 
-static NPC* getNPC(lua_State* luaVM)
-{
-   return static_cast<NPC*>(lua_touserdata(luaVM, 1));
-}
-
 static int luaNPCMove(lua_State* luaVM)
 {
-   NPC* npc = getNPC(luaVM);
-   std::string NPCname = npc->getName();
-   int x = (int)luaL_checknumber(luaVM, 2);
-   int y = (int)luaL_checknumber(luaVM, 3);
-   DEBUG("NPC %s is being moved to %d, %d!", NPCname.c_str(), x, y);
-   npc->move(x, y);
-   return 0;
+   return getEngine(luaVM)->moveNPC(luaVM);
 }
 
 static int luaTilesToPixels(lua_State* luaVM)
@@ -122,6 +111,7 @@ static int luaRandom(lua_State* luaVM)
 
 void ScriptEngine::registerFunctions()
 {
+   // Tile Engine functions
    REGISTER("narrate", luaNarrate);
    REGISTER("say", luaSay);
    REGISTER("setRegion", luaSetRegion);
@@ -130,10 +120,11 @@ void ScriptEngine::registerFunctions()
    REGISTER("stopMusic", luaStopMusic);
    REGISTER("addNPC", luaAddNPC);
    REGISTER("delay", luaDelay);
+   REGISTER("move", luaNPCMove);
 
+   // Utility functions (calculations)
    REGISTER("tilesToPixels", luaTilesToPixels);
    REGISTER("random", luaRandom);
 
-   REGISTER("move", luaNPCMove);
 //   REGISTER("setMap", luaSetMap);
 }

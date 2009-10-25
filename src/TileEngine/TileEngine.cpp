@@ -70,6 +70,12 @@ void TileEngine::addNPC(std::string npcName, std::string spritesheetName, int x,
                            x * TILE_SIZE, y * TILE_SIZE);
 }
 
+void TileEngine::moveNPC(std::string npcName, int x, int y)
+{
+   NPC* npcToMove = npcList[npcName];
+   npcToMove->move(x, y);
+}
+
 void TileEngine::stepNPCs(long timePassed)
 {
    std::map<std::string, NPC*>::iterator iter;

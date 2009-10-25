@@ -47,14 +47,15 @@ void Spritesheet::load(const char* path)
       // Get the next line
       getline(in, line);
 
-      // If the file is done, we are done
       if(in.eof())
       {
+         // If the file is done, we are done
          break;
       }
-      // If there is some other error, throw an exception
-      else if(!in)
+
+      if(!in)
       {
+         // If there is some other error, throw an exception
          T_T(std::string("Error reading from file: ") + path);
       }
 
@@ -122,16 +123,31 @@ int Spritesheet::getFrameIndex(std::string frameName)
    {
       return -1;
    }
+
+   return index;
 }
 
 void Spritesheet::draw(int x, int y, int frameIndex)
 {
+   if(frameList == NULL)
+   {
+      // Don't draw if the spritesheet was not initialized
+      // (i.e. there was a failure constructing this spritesheet)
+      return;
+   }
+   
    if(frameIndex < 0 || frameIndex > numFrames)
    {
-      T_T("Spritesheet frame index out of bounds!");
+      DEBUG("Spritesheet frame index %d out of bounds!", frameIndex);
+      return;
    }
 
    Frame f = *frameList[frameIndex];
+
+   /** 
+    * \todo Maybe we can do all these calculations when the frames are initialized
+    *       in order to optimize the drawing code a bit more!
+    */
    int frameHeight = f.bottom - f.top;
    int frameWidth = f.right - f.left;
 
