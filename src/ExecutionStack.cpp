@@ -1,4 +1,5 @@
 #include "ExecutionStack.h"
+#include "LinkedListNode.h"
 #include "DebugUtils.h"
 #include "GameState.h"
 
@@ -27,7 +28,7 @@ bool ExecutionStack::popState()
    if(currentState)
    {
       StateNode* oldState = currentState;
-      currentState = currentState->prevState;
+      currentState = currentState->next;
 
       delete oldState;
    }
@@ -39,15 +40,15 @@ void ExecutionStack::execute()
 {
    while(currentState)
    {
-      if(currentState->state->step())
+      if(currentState->data->step())
       {
-         currentState->state->draw();
+         currentState->data->draw();
       }
       else
       {
          if(popState())
          {
-            currentState->state->activate();
+            currentState->data->activate();
          }
       }
    }

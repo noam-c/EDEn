@@ -70,6 +70,21 @@ static int luaNPCMove(lua_State* luaVM)
    return getEngine(luaVM)->moveNPC(luaVM);
 }
 
+static int luaNPCSetSprite(lua_State* luaVM)
+{
+   return getEngine(luaVM)->setNPCSprite(luaVM);
+}
+
+static int luaNPCSetAnimation(lua_State* luaVM)
+{
+   return getEngine(luaVM)->setNPCAnimation(luaVM);
+}
+
+static int luaNPCChangeSpritesheet(lua_State* luaVM)
+{
+   return getEngine(luaVM)->changeNPCSpritesheet(luaVM);
+}
+
 static int luaTilesToPixels(lua_State* luaVM)
 { 
    int numInTiles = (int)luaL_checknumber(luaVM, 1);
@@ -121,6 +136,9 @@ void ScriptEngine::registerFunctions()
    REGISTER("addNPC", luaAddNPC);
    REGISTER("delay", luaDelay);
    REGISTER("move", luaNPCMove);
+   REGISTER("changeSpritesheet", luaNPCChangeSpritesheet);
+   REGISTER("setSprite", luaNPCSetSprite);
+   REGISTER("setAnimation", luaNPCSetAnimation);
 
    // Utility functions (calculations)
    REGISTER("tilesToPixels", luaTilesToPixels);

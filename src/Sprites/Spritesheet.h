@@ -5,9 +5,18 @@
 #include <map>
 #include <string>
 
-class Frame;
+struct Frame;
+class Animation;
+template<class C> struct LinkedListNode;
 
 typedef unsigned int GLuint;
+
+/**
+ * Holds integers in a linked list structure to signify frames of an animation
+ *
+ * @author Noam Chitayat
+ */
+typedef LinkedListNode<int> FrameNode;
 
 /**
  * \todo Document.
@@ -27,10 +36,11 @@ class Spritesheet : public Resource
    int height;
 
    int numFrames;
-
    std::map<std::string, int> frameIndices;
-
    Frame** frameList;
+
+   int numAnimations;
+   std::map<std::string, FrameNode*> animationList;
 
    void load(const char* path);
 
@@ -38,6 +48,7 @@ class Spritesheet : public Resource
       Spritesheet(ResourceKey name);
       void draw(int x, int y, int frameIndex);
       int getFrameIndex(std::string frameName);
+      Animation* getAnimation(std::string animationName);
       size_t getSize();
 };
 

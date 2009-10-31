@@ -70,6 +70,7 @@ Resource* ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
 
 void ResourceLoader::tryInitialize(Resource* resource, ResourceKey name, ResourceType type)
 {
+   DEBUG("Trying to initialize resource %s", name.c_str());
    // Get the path to the data for this resource
    std::string path = getPath(name, type);
 
@@ -77,6 +78,7 @@ void ResourceLoader::tryInitialize(Resource* resource, ResourceKey name, Resourc
    {
       // Attempt to load the resource from its data file
       resource->initialize(path.c_str());
+      DEBUG("Resource %s initialized.", name.c_str());
    }
    catch(Exception e)
    {

@@ -76,6 +76,25 @@ void TileEngine::moveNPC(std::string npcName, int x, int y)
    npcToMove->move(x, y);
 }
 
+void TileEngine::setNPCSprite(std::string npcName, std::string frameName)
+{
+   NPC* npcToChange = npcList[npcName];
+   npcToChange->setFrame(frameName);
+}
+
+void TileEngine::setNPCAnimation(std::string npcName, std::string animationName)
+{
+   NPC* npcToChange = npcList[npcName];
+   npcToChange->setAnimation(animationName);
+}
+
+void TileEngine::changeNPCSpritesheet(std::string npcName, std::string spritesheetName)
+{
+   Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
+   NPC* npcToChange = npcList[npcName];
+   npcToChange->setSpritesheet(sheet);
+}
+
 void TileEngine::stepNPCs(long timePassed)
 {
    std::map<std::string, NPC*>::iterator iter;

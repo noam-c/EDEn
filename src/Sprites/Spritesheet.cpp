@@ -4,6 +4,7 @@
 #include "GraphicsUtil.h"
 #include "TileEngine.h"
 #include "Frame.h"
+#include "Animation.h"
 #include <queue>
 #include <fstream>
 #include <sstream>
@@ -42,6 +43,7 @@ void Spritesheet::load(const char* path)
 
    std::string line;
    std::queue<Frame*> frameQueue;
+
    for(;;)
    {
       // Get the next line
@@ -60,41 +62,106 @@ void Spritesheet::load(const char* path)
       }
 
       // Send the loaded line into a string stream for parsing
-      std::string frameName;
       std::stringstream lineStream(line, std::stringstream::in | std::stringstream::out);
 
-      // Get the name of the frame
-      lineStream >> frameName;
+      // Get the type of the line's content (static frame, or animation?)
+      std::string typeName;
+      lineStream >> typeName;
 
-      // Make sure this frame name has not already been used in this file
-      if(frameIndices.find(frameName) != frameIndices.end())
+      if(typeName == "frame")
       {
-         DEBUG("Duplicated name %s in spritesheet %s", frameName.c_str(), path);
-         T_T("Parse error reading spritesheet.");
-      }
-
-      // Get the four coordinates of the frame
-      int coords[4];
-      for(int i = 0; i < 4; ++i)
-      {
-         lineStream >> coords[i];
-         if(!lineStream)
+         // Get the name of the frame
+         std::string frameName;
+         lineStream >> frameName;
+   
+         // Make sure this frame name has not already been used in this file
+         if(frameIndices.find(frameName) != frameIndices.end())
          {
-            DEBUG("Error reading frame %s in spritesheet %s", frameName.c_str(), path);
+            DEBUG("Duplicated name %s in spritesheet %s", frameName.c_str(), path);
             T_T("Parse error reading spritesheet.");
          }
+   
+         // Get the four coordinates of the frame
+         int coords[4];
+         for(int i = 0; i < 4; ++i)
+         {
+            lineStream >> coords[i];
+            if(!lineStream)
+            {
+               DEBUG("Error reading frame %s in spritesheet %s", frameName.c_str(), path);
+               T_T("Parse error reading spritesheet.");
+            }
+         }
+   
+         // Create a new frame with the read coordinates
+         Frame* f = new Frame(coords[0], coords[1], coords[2], coords[3]);
+         DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
+                         frameName.c_str(), coords[0], coords[1], coords[2], coords[3]);
+   
+         // Bind the frame name to the next available frame index
+         frameIndices[frameName] = frameQueue.size();
+   
+         // Push the frame into a queue for later processing
+         frameQueue.push(f);
+      }   
+      else if(typeName == "anim")
+      {
+         // Get the name of the frame
+         std::string animationName;
+         lineStream >> animationName;
+   
+         // Make sure this animation name has not already been used in this file
+         if(animationList.find(animationName) != animationList.end())
+         {
+            DEBUG("Duplicated animation name %s in spritesheet %s", animationName.c_str(), path);
+            T_T("Parse error reading spritesheet.");
+         }
+
+         // Get the frames of the animation
+         std::string frameName;
+         FrameNode* listTail = NULL;
+         for(;;)
+         {
+            lineStream >> frameName;
+
+            int frameIndex = frameIndices[frameName];
+            if(frameIndex < 0)
+            {
+               DEBUG("Found invalid frame name '%s' in animation %s", frameName.c_str(), animationName.c_str());
+               T_T("Parse error reading spritesheet.");
+            }
+
+            DEBUG("Animation %s: Adding node with index %d", animationName.c_str(), frameIndex);
+
+            if(listTail == NULL)
+            {
+               listTail = new FrameNode(frameIndex, NULL);
+               listTail->next = listTail;
+            }
+            else
+            {
+               FrameNode* nextNode = new FrameNode(frameIndex, listTail->next);
+               listTail->next = nextNode;
+               listTail = nextNode;
+            }
+            if(lineStream.eof())
+            {
+               // If the line is done, there are no animations left to read
+               if(listTail == NULL)
+               {
+                  DEBUG("Empty animation %s in spritesheet %s", animationName.c_str(), path);
+                  T_T("Parse error reading spritesheet.");
+               }
+               break;
+            }
+         }
+
+         //DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
+         //                frameName.c_str(), coords[0], coords[1], coords[2], coords[3]);
+
+         // Bind the animation name to the next available animation index
+         animationList[animationName] = listTail->next;
       }
-
-      // Create a new frame with the read coordinates
-      Frame* f = new Frame(coords[0], coords[1], coords[2], coords[3]);
-      DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
-                      frameName.c_str(), coords[0], coords[1], coords[2], coords[3]);
-
-      // Bind the frame name to the next available frame index
-      frameIndices[frameName] = frameQueue.size();
-
-      // Push the frame into a queue for later processing
-      frameQueue.push(f);
 
       // Flush any remaining line data in the stream
       /** \todo Should we be doing this? Or failing on extraneous text? */
@@ -127,6 +194,11 @@ int Spritesheet::getFrameIndex(std::string frameName)
    return index;
 }
 
+Animation* Spritesheet::getAnimation(std::string animationName)
+{
+   return new Animation(animationList[animationName]);
+}
+
 void Spritesheet::draw(int x, int y, int frameIndex)
 {
    if(frameList == NULL)
@@ -151,15 +223,15 @@ void Spritesheet::draw(int x, int y, int frameIndex)
    int frameHeight = f.bottom - f.top;
    int frameWidth = f.right - f.left;
 
-   float destLeft = float(x);
-   float destBottom = float(y + TileEngine::TILE_SIZE);
-   float destRight = destLeft + frameWidth;
-   float destTop = destBottom - frameHeight;
-
    float frameTop = f.top / float(height);
    float frameBottom = f.bottom / float(height);
    float frameLeft = f.left / float(width);
    float frameRight = f.right / float(width);
+
+   float destLeft = float(x);
+   float destBottom = float(y + TileEngine::TILE_SIZE);
+   float destRight = destLeft + frameWidth;
+   float destTop = destBottom - frameHeight;
 
    // NOTE: Alpha testing doesn't do transparency; it either draws a pixel or it doesn't
    // If we want fades or something like that, we would need to use alpha blending

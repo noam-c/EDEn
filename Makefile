@@ -4,8 +4,8 @@
 CPP  = g++
 CC   = gcc
 RES  = 
-OBJ  = obj/DebugUtils.o obj/Exception.o obj/ExecutionStack.o obj/GameState.o obj/GraphicsUtil.o obj/main.o obj/Resource.o obj/ResourceLoader.o obj/MainMenu.o obj/MainMenuActions.o obj/OpenGLTTF.o obj/StringListModel.o obj/TextBox.o obj/TitleScreenListBox.o obj/DialogueController.o obj/Map.o obj/NPC.o obj/Region.o obj/TileEngine.o obj/Tileset.o obj/ScriptFunctions.o obj/ScriptEngine.o obj/Label.o obj/Container.o obj/Script.o obj/Scheduler.o obj/Thread.o obj/Timer.o obj/Task.o obj/Music.o obj/Sound.o obj/FileScript.o obj/StringScript.o obj/ScriptFactory.o obj/NPCScript.o obj/Spritesheet.o obj/Frame.o obj/Sprite.o $(RES)
-LINKOBJ  = obj/DebugUtils.o obj/Exception.o obj/ExecutionStack.o obj/GameState.o obj/GraphicsUtil.o obj/main.o obj/Resource.o obj/ResourceLoader.o obj/MainMenu.o obj/MainMenuActions.o obj/OpenGLTTF.o obj/StringListModel.o obj/TextBox.o obj/TitleScreenListBox.o obj/DialogueController.o obj/Map.o obj/NPC.o obj/Region.o obj/TileEngine.o obj/Tileset.o obj/ScriptFunctions.o obj/ScriptEngine.o obj/Label.o obj/Container.o obj/Script.o obj/Scheduler.o obj/Thread.o obj/Timer.o obj/Task.o obj/Music.o obj/Sound.o obj/FileScript.o obj/StringScript.o obj/ScriptFactory.o obj/NPCScript.o obj/Spritesheet.o obj/Frame.o obj/Sprite.o $(RES)
+OBJ  = obj/DebugUtils.o obj/Exception.o obj/ExecutionStack.o obj/GameState.o obj/GraphicsUtil.o obj/main.o obj/Resource.o obj/ResourceLoader.o obj/MainMenu.o obj/MainMenuActions.o obj/OpenGLTTF.o obj/StringListModel.o obj/TextBox.o obj/TitleScreenListBox.o obj/DialogueController.o obj/Map.o obj/NPC.o obj/Region.o obj/TileEngine.o obj/Tileset.o obj/ScriptFunctions.o obj/ScriptEngine.o obj/Label.o obj/Container.o obj/Script.o obj/Scheduler.o obj/Thread.o obj/Timer.o obj/Task.o obj/Music.o obj/Sound.o obj/FileScript.o obj/StringScript.o obj/ScriptFactory.o obj/NPCScript.o obj/Spritesheet.o obj/Frame.o obj/Sprite.o obj/Animation.o $(RES)
+LINKOBJ  = obj/DebugUtils.o obj/Exception.o obj/ExecutionStack.o obj/GameState.o obj/GraphicsUtil.o obj/main.o obj/Resource.o obj/ResourceLoader.o obj/MainMenu.o obj/MainMenuActions.o obj/OpenGLTTF.o obj/StringListModel.o obj/TextBox.o obj/TitleScreenListBox.o obj/DialogueController.o obj/Map.o obj/NPC.o obj/Region.o obj/TileEngine.o obj/Tileset.o obj/ScriptFunctions.o obj/ScriptEngine.o obj/Label.o obj/Container.o obj/Script.o obj/Scheduler.o obj/Thread.o obj/Timer.o obj/Task.o obj/Music.o obj/Sound.o obj/FileScript.o obj/StringScript.o obj/ScriptFactory.o obj/NPCScript.o obj/Spritesheet.o obj/Frame.o obj/Sprite.o obj/Animation.o $(RES)
 LIBS =  -lSDLmain -llua5.1 -lguichan -lguichan_sdl -lguichan_opengl -lSDL_ttf -lSDL_image -lSDL_mixer -lSDL -lGL -lGLU -pg  -g3 
 INCS =  -I"include"  -I"src"  -I"src/Audio"  -I"src/Coroutines"  -I"src/edwt"  -I"src/MainMenu"  -I"src/ResourceLoader"  -I"src/ScriptEngine"  -I"src/Sprites"  -I"src/TileEngine"  -I"include"  -I"include/SDL" 
 CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"src"  -I"src/Audio"  -I"src/Coroutines"  -I"src/edwt"  -I"src/MainMenu"  -I"src/ResourceLoader"  -I"src/ScriptEngine"  -I"src/Sprites"  -I"src/TileEngine"  -I"include"  -I"include/SDL" 
@@ -138,3 +138,6 @@ obj/Frame.o: src/Sprites/Frame.cpp
 
 obj/Sprite.o: src/Sprites/Sprite.cpp
 	$(CPP) -c src/Sprites/Sprite.cpp -o obj/Sprite.o $(CXXFLAGS)
+
+obj/Animation.o: src/Sprites/Animation.cpp
+	$(CPP) -c src/Sprites/Animation.cpp -o obj/Animation.o $(CXXFLAGS)

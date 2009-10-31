@@ -135,6 +135,30 @@ class TileEngine: public GameState
       void moveNPC(std::string npcName, int x, int y);
 
       /**
+       * Change the sprite frame of the specified NPC.
+       *
+       * @param npcName The name of the NPC to change.
+       * @param animationName The name of the animation to change to.
+       */
+      void setNPCAnimation(std::string npcName, std::string animationName);
+
+      /**
+       * Change the sprite frame of the specified NPC.
+       *
+       * @param npcName The name of the NPC to change.
+       * @param frameName The name of the frame to change to.
+       */
+      void setNPCSprite(std::string npcName, std::string frameName);
+
+      /**
+       * Change the spritesheet of the specified NPC.
+       *
+       * @param npcName The name of the NPC to change.
+       * @param spritesheetName The name of the spritesheet to use.
+       */
+      void changeNPCSpritesheet(std::string npcName, std::string spritesheetName);
+
+      /**
        * Destructor.
        */
       ~TileEngine();

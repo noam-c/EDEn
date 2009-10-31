@@ -49,13 +49,16 @@ bool NPC::runInstruction(Instruction* instruction, long timePassed)
 
 void NPC::step(long timePassed)
 {
-   if(isIdle()) return;
+   sprite->step(timePassed);
 
-   Instruction* currentInstruction = instructions.front();
-   if(runInstruction(currentInstruction, timePassed))
+   if(!isIdle())
    {
-      instructions.pop();
-      delete currentInstruction;
+      Instruction* currentInstruction = instructions.front();
+      if(runInstruction(currentInstruction, timePassed))
+      {
+         instructions.pop();
+         delete currentInstruction;
+      }
    }
 }
 
@@ -77,6 +80,21 @@ void NPC::move(int x, int y)
 
    Instruction* i = new Instruction(MOVE, coords);
    instructions.push(i);
+}
+
+void NPC::setSpritesheet(Spritesheet* sheet)
+{
+   sprite->setSheet(sheet);
+}
+
+void NPC::setFrame(std::string frameName)
+{
+   sprite->setFrame(frameName);
+}
+
+void NPC::setAnimation(std::string animationName)
+{
+   sprite->setAnimation(animationName);
 }
 
 void NPC::draw()

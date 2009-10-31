@@ -3,7 +3,7 @@
 
 struct Frame
 {
-   int left, top, right, bottom;
+   const int left, top, right, bottom;
 
    Frame(int left, int top, int right, int bottom);
 };

@@ -1,1 +1,4 @@
-STAND_DOWN 252 0 282 68
+frame stand_down 252 0 282 68
+frame laugh1 252 800 283 869
+frame laugh2 252 882 283 949
+anim laughing laugh1 laugh2

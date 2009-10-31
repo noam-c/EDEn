@@ -1,7 +1,7 @@
 [Project]
 FileName=GamePrototype.dev
 Name=GamePrototype
-UnitCount=78
+UnitCount=81
 Type=1
 Ver=1
 ObjFiles=
@@ -798,7 +798,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit79]
-FileName=src\Sprites\Sprite.h
+FileName=src\Sprites\Animation.cpp
 CompileCpp=1
 Folder=Sprites
 Compile=1
@@ -808,17 +808,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit80]
-FileName=src\Sprites\Sprite.cpp
-CompileCpp=1
-Folder=Sprites
-Compile=1
-Link=1
-Priority=1000
-OverrideBuildCmd=0
-BuildCmd=
-
-[Unit81]
-FileName=src\Sprites\Sprite.h
+FileName=src\Sprites\Animation.h
 CompileCpp=1
 Folder=Sprites
 Compile=1
@@ -871,6 +861,16 @@ BuildCmd=
 FileName=src\ResourceLoader\ResourceLoader.cpp
 CompileCpp=1
 Folder=ResourceLoader
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit81]
+FileName=src\LinkedListNode.h
+CompileCpp=1
+Folder=
 Compile=1
 Link=1
 Priority=1000

@@ -130,16 +130,19 @@ class ScriptEngine
       /////////////////////////////////////////////////////////
       /////////// Functions supplied to Lua scripts ///////////
       /////////////////////////////////////////////////////////
-      int narrate(lua_State* luaVM);
-      int say(lua_State* luaVM);
-      int playSound(lua_State* luaVM);
-      int playMusic(lua_State* luaVM);
-      int fadeMusic(lua_State* luaVM);
-      int stopMusic(lua_State* luaVM);
-      int setRegion(lua_State* luaVM);
-      int addNPC(lua_State* luaVM);
-      int moveNPC(lua_State* luaVM);
-      int delay(lua_State* luaVM);
+      int narrate(lua_State* luaStack);
+      int say(lua_State* luaStack);
+      int playSound(lua_State* luaStack);
+      int playMusic(lua_State* luaStack);
+      int fadeMusic(lua_State* luaStack);
+      int stopMusic(lua_State* luaStack);
+      int setRegion(lua_State* luaStack);
+      int addNPC(lua_State* luaStack);
+      int moveNPC(lua_State* luaStack);
+      int setNPCSprite(lua_State* luaStack);
+      int setNPCAnimation(lua_State* luaStack);
+      int changeNPCSpritesheet(lua_State* luaStack);
+      int delay(lua_State* luaStack);
 };
 
 #endif

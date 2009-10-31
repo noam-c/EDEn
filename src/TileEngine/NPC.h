@@ -46,11 +46,6 @@ class NPC
        * Parameters: X location to move to [int], Y location to move to [int]
        */
       MOVE,
-
-      /** Instructs the NPC to say something.
-       * Parameters: The text for the NPC to speak [string]
-       */
-      SPEAK
    };
 
    /**
@@ -155,6 +150,30 @@ class NPC
        * @param y The y coordinate (in pixels) for the NPC to move to
        */
       void move(int x, int y);
+
+      /**
+       * This function changes the NPC's spritesheet.
+       *
+       * @param spritesheet A valid spritesheet.
+       *
+       */
+      void setSpritesheet(Spritesheet* sheet);
+
+      /**
+       * This function changes the NPC's frame.
+       *
+       * @param frameName The name of the frame to use.
+       *
+       */
+      void setFrame(std::string frameName);
+
+      /**
+       * This function changes the NPC's animation.
+       *
+       * @param animationName The name of the animation to use.
+       *
+       */
+      void setAnimation(std::string animationName);
 
       /**
        * Destructor.

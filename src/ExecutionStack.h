@@ -4,6 +4,7 @@
 #include "Singleton.h"
 
 class GameState;
+template<class C> struct LinkedListNode;
 
 /**
  * The heart of the game's execution.
@@ -22,19 +23,7 @@ class ExecutionStack : public Singleton<ExecutionStack>
     *
     * @author Noam Chitayat
     */
-   struct StateNode
-   {
-      /** The game state in this node */
-      GameState* state;
-
-      /** The previous state in the stack */
-      StateNode* prevState;
-
-      /** Constructor. */
-      StateNode(GameState* gs, StateNode* prev) : state(gs), prevState(prev)
-      {
-      }
-   };
+   typedef LinkedListNode<GameState*> StateNode;
 
    /** The state stack (stored as a linked list) */
    StateNode* currentState;
