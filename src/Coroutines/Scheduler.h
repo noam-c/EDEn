@@ -129,6 +129,11 @@ class Scheduler
        *                   (roughly speaking, the amount of time since the last run)
        */
       void runThreads(long timePassed);
+
+      /**
+       * Destrutor.
+       */
+      ~Scheduler();
 };
 
 #endif

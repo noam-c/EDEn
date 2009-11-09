@@ -3,7 +3,8 @@
 #include <GL/glu.h>
 #include "GraphicsUtil.h"
 #include "TileEngine.h"
-#include "Frame.h"
+#include "LinkedListNode.h"
+#include "SpriteFrame.h"
 #include "Animation.h"
 #include <queue>
 #include <fstream>
@@ -42,7 +43,7 @@ void Spritesheet::load(const char* path)
    }
 
    std::string line;
-   std::queue<Frame*> frameQueue;
+   std::queue<SpriteFrame> frameQueue;
 
    for(;;)
    {
@@ -94,7 +95,7 @@ void Spritesheet::load(const char* path)
          }
    
          // Create a new frame with the read coordinates
-         Frame* f = new Frame(coords[0], coords[1], coords[2], coords[3]);
+         SpriteFrame f(coords[0], coords[1], coords[2], coords[3]);
          DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
                          frameName.c_str(), coords[0], coords[1], coords[2], coords[3]);
    
@@ -170,7 +171,7 @@ void Spritesheet::load(const char* path)
 
    // Create the new array of frames
    numFrames = frameQueue.size();
-   frameList = new Frame*[numFrames];
+   frameList = new SpriteFrame[numFrames];
 
    // Fill the new array with the accumulated frames
    int frameNum = 0;
@@ -214,7 +215,7 @@ void Spritesheet::draw(int x, int y, int frameIndex)
       return;
    }
 
-   Frame f = *frameList[frameIndex];
+   SpriteFrame f = frameList[frameIndex];
 
    /** 
     * \todo Maybe we can do all these calculations when the frames are initialized
@@ -267,4 +268,24 @@ void Spritesheet::draw(int x, int y, int frameIndex)
 size_t Spritesheet::getSize()
 {
    return sizeof(Spritesheet);
+}
+
+Spritesheet::~Spritesheet()
+{
+   // Delete the list of animations
+   std::map<std::string, FrameNode*>::iterator iter;
+   for(iter = animationList.begin(); iter != animationList.end(); ++iter)
+   {
+      // To delete a circularly linked list, we need to first make it a linear
+      // list by breaking one of the links, and then deleting from the beginning
+      // of the chain to make sure every node is deleted.
+      FrameNode* firstNode = iter->second;
+      FrameNode* secondNode = firstNode->next;
+      firstNode->next = NULL;
+
+      delete secondNode;
+   }
+
+   // Delete all the static frames
+   delete [] frameList;
 }

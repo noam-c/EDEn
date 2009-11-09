@@ -30,11 +30,11 @@ class NPCScript : public Script
     */
    enum NPCFunction
    {
-      /** \todo Document. */
+      /** The idling function for the NPC (runs if the NPC is not running any other instructions). */
       IDLE,
-      /** \todo Document. */
+      /** The activation function for the NPC (runs if the NPC is 'clicked' by the player) */
       ACTIVATE,
-      /** \todo Document. */
+      /** The number of NPCFunction values. */
       NUM_FUNCTIONS
    };
 
@@ -43,12 +43,19 @@ class NPCScript : public Script
     */
    static const char* FUNCTION_NAMES[];
 
+   /**
+    * A mapping to determine whether or not each function exists and
+    * has been properly loaded for the NPC.
+    * Indexing is done using the NPCFunction enum.
+    * (i.e. functionExists[IDLE] returns true iff the NPC script had an idle
+    * function declared)
+    */
    bool functionExists[];
 
    /** The NPC controlled by this script's execution. */
    NPC* npc;
 
-   /** \todo Document. */
+   /** True iff the NPC script is finished and should be unscheduled. */
    bool finished;
 
    public:

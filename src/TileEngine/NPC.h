@@ -79,7 +79,12 @@ class NPC
    /** The NPC's thread of execution */
    NPCScript* npcThread;
 
-   /** \todo Document. */
+   /**
+    * Run an NPC instruction for a frame.
+    *
+    * @param instruction The instruction for the NPC to run.
+    * @param timePassed The amount of time that has passed since the last frame.
+    */
    bool runInstruction(Instruction* instruction, long timePassed); 
 
    public:

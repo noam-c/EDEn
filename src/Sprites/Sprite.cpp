@@ -6,13 +6,28 @@
 
 const int debugFlag = DEBUG_SPRITE;
 
-Sprite::Sprite(Spritesheet* sheet) : sheet(sheet), frameIndex(0), animated(false)
+Sprite::Sprite(Spritesheet* sheet) : sheet(sheet), frameIndex(0), animation(NULL)
 {
+}
+
+void Sprite::clearCurrentFrame()
+{
+   if(animation)
+   {
+      delete animation;
+      animation = NULL;
+   }
+
+   // Default to frame 0 for now.
+   frameIndex = 0;
 }
 
 void Sprite::setSheet(Spritesheet* newSheet)
 {
    sheet = newSheet;
+
+   // A new sheet invalidates the current frame information.
+   clearCurrentFrame();
 }
 
 void Sprite::setFrame(std::string frameName)
@@ -23,8 +38,8 @@ void Sprite::setFrame(std::string frameName)
       T_T("Failed to find sprite frame.");
    }
 
+   clearCurrentFrame();
    frameIndex = newFrameIndex;
-   animated = false;
 }
 
 void Sprite::setAnimation(std::string animationName)
@@ -35,13 +50,13 @@ void Sprite::setAnimation(std::string animationName)
       T_T("Failed to find animation.");
    }
 
+   clearCurrentFrame();
    animation = newAnimation;
-   animated = true;
 }
 
 void Sprite::step(long timePassed)
 {
-   if(animated)
+   if(animation != NULL)
    {
       animation->update(timePassed);
    }
@@ -49,6 +64,11 @@ void Sprite::step(long timePassed)
 
 void Sprite::draw(int x, int y)
 {
-   int indexToDraw = animated ? animation->getIndex() : frameIndex;
+   int indexToDraw = animation != NULL ? animation->getIndex() : frameIndex;
    sheet->draw(x, y, indexToDraw);
+}
+
+Sprite::~Sprite()
+{
+   clearCurrentFrame();
 }

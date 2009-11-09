@@ -10,6 +10,18 @@
  * Anything that needs to load information from file should be considered as
  * a candidate for becoming a Resource, in order to better cache data.
  *
+ * Any subclass of Resource needs to implement a basic constructor, but must
+ * delegate the actual resource load and initialization to the load function.
+ * By doing this, we can contain load failures without screwing up the actual
+ * construction of the object in memory (thus, we can have more control over
+ * how the resource is freed.
+ * Any resource that fails to load properly (due to file not found or
+ * corrupt/malformed data falls back on a "zombie resource" state where its
+ * data is uninitialized. The rest of the code can reference it SAFELY (this is
+ * the key!), but it will simply do nothing if it was not initialized.
+ * The ResourceLoader may attempt to reload the Resource from time to time if
+ * it is in a zombie state.
+ *
  * @author Noam Chitayat
  */
 class Resource
@@ -33,6 +45,8 @@ class Resource
    public:
       /**
        * Constructor.
+       *
+       * @param name The unique name of this resource.
        */
       Resource(ResourceKey name);
 
@@ -56,6 +70,11 @@ class Resource
        * @return the size that the resource takes up in memory.
        */
       virtual size_t getSize() = 0;
+
+      /**
+       * Abstract destructor (forces all Resources to have destructors).
+       */
+      virtual ~Resource() = 0;
 };
 
 #endif

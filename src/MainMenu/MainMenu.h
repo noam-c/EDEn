@@ -80,11 +80,6 @@ class MainMenu: public GameState
       MainMenu();
 
       /**
-       * Destructor.
-       */
-      ~MainMenu();
-
-      /**
        * Just draws widgets, flips the buffer,
        * and then waits a millisecond (no rush on a title screen)
        */
@@ -103,6 +98,11 @@ class MainMenu: public GameState
        * When the state is activated, set modal focus to the listbox
        */
       void activate();
+
+      /**
+       * Destructor.
+       */
+      ~MainMenu();
 };
 
 #endif

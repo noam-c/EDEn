@@ -192,3 +192,64 @@ void Scheduler::runThreads(long timePassed)
       deletedThreads.pop();
    }
 }
+
+Scheduler::~Scheduler()
+{
+   // Delete all the blocked threads.
+   BlockList::iterator blockListIter;
+   for(blockListIter = blockedThreads.begin(); blockListIter != blockedThreads.end(); ++blockListIter)
+   {
+      Thread* threadToDelete = blockListIter->second;
+      if(threadToDelete != NULL)
+      {
+         delete threadToDelete;
+      }
+   }
+
+   // Delete all the threads waiting on a join.
+   JoinList::iterator joinListIter;
+   for(joinListIter = joiningThreads.begin(); joinListIter != joiningThreads.end(); ++joinListIter)
+   {
+      Thread* threadToDelete = joinListIter->second;
+      if(threadToDelete != NULL)
+      {
+         delete threadToDelete;
+      }
+   }
+
+   // Delete all the unstarted threads.
+   ThreadList::iterator unstartedListIter;
+   for(unstartedListIter = unstartedThreads.begin(); unstartedListIter != unstartedThreads.end(); ++unstartedListIter)
+   {
+      Thread* threadToDelete = *unstartedListIter;
+      if(threadToDelete != NULL)
+      {
+         delete threadToDelete;
+      }
+   }
+
+   // Delete all the ready threads.
+   ThreadList::iterator readyListIter;
+   for(readyListIter = readyThreads.begin(); readyListIter != readyThreads.end(); ++readyListIter)
+   {
+      Thread* threadToDelete = *readyListIter;
+      if(threadToDelete != NULL)
+      {
+         delete threadToDelete;
+      }
+   }
+
+   // Delete all the finished threads.
+   while(!finishedThreads.empty())
+   {
+      delete finishedThreads.front();
+      finishedThreads.pop();
+   }
+
+   // Delete all the threads waiting to be destroyed.
+   while(!deletedThreads.empty())
+   {
+      delete deletedThreads.front();
+      deletedThreads.pop();
+   }
+}

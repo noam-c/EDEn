@@ -32,12 +32,6 @@ typedef unsigned int GLuint;
  */
 class GraphicsUtil : public Singleton<GraphicsUtil>
 {
-   /** The screen width (currently HARDCODED) */
-   static const int width = 800;
-
-   /** The screen height (currently HARDCODED) */
-   static const int height = 600;
-
    /** The screen surface */    
    static SDL_Surface* screen;
 
@@ -55,6 +49,12 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
 
    /** The global default font */
    edwt::OpenGLTrueTypeFont* font;
+
+   /** The x-offset to draw at (in pixels). */
+   int currentXOffset;
+
+   /** The y-offset to draw at (in pixels). */
+   int currentYOffset;
 
    /**
     * Initializes SDL audio and video bindings
@@ -87,6 +87,12 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       virtual void finish();
 
    public:
+      /** The screen width (currently HARDCODED) */
+      static const int width = 800;
+   
+      /** The screen height (currently HARDCODED) */
+      static const int height = 600;
+
       /**
        * Set the widget container to draw to screen.
        *
@@ -126,7 +132,22 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * @param event the input event to send to the widgets
        */
       void pushInput(SDL_Event event);
-   
+
+      /**
+       * Sets a camera offset to begin drawing at. Note that this offset is
+       * absolute; the offset is from the origin, rather than from the current
+       * offset.
+       *
+       * @param xOffset The x-offset to draw at.
+       * @param yOffset The y-offset to draw at.
+       */
+      void setOffset(int xOffset, int yOffset);
+
+      /**
+       * Resets the camera offset to 0.
+       */
+      void resetOffset();
+
       /** 
        *  Graphical effect: Fade to a specific colour in a specified time period
        *

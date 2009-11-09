@@ -13,11 +13,28 @@
  */
 class Timer : public Thread
 {
+   /** The amount of time left before this timer is finished. */
    long timeLeft;
-   
+
    public:
+      /**
+       * Constructor.
+       *
+       * @param time The amount of time this timer initializes with.
+       */
       Timer(long time);
+
+      /**
+       * Resume this timer's countdown.
+       *
+       * @param timePassed The time that has passed since the last frame.
+       */
       bool resume(long timePassed);
+
+      /**
+       * Destructor.
+       */
+      ~Timer();
 };
 
 #endif

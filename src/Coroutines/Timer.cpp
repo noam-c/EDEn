@@ -13,3 +13,8 @@ bool Timer::resume(long timePassed)
    timeLeft -= timePassed;
    return timeLeft < 0;
 }
+
+Timer::~Timer()
+{
+   // Currently no extra cleanup necessary
+}

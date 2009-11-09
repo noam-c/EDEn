@@ -10,7 +10,6 @@ void OrganizationTodoList(void);
 
 /**
  * \todo Consolidate common functionality between Tileset and Spritesheet.
- * \todo Sprites need to have transparent backgrounds.
  * \todo The game needs to fail more gracefully ("nice" handling).
    * At the moment, every time there's a mistake in the data files or scripts, we just throw an exception and die.
  * \todo Add "nice" handling for failed Tileset loads.
@@ -19,9 +18,7 @@ void OrganizationTodoList(void);
  * \todo The Lua script bindings need to be more strict about parameters
    * Do type-checking, enforce strict argument counts, and write an API spec to explain the functions available
  * \todo Analyze .edt file to figure out if it's really necessary or not
- * \todo Add location parameters to NPC construction functions; separate our test NPCs spatially
- * \todo Add support for animated sprites using a circularly linked list
- * \todo Add movement capabilities to NPCs.
+ * \todo Add smooth movement capabilities to NPCs.
  * \todo Add passible tile considerations and best-path calculations for NPCs.
  * \todo Add collision detection for moving NPCs.
  * \todo Recalculate an NPC's best path dynamically if there is a problem travelling a path.
@@ -32,11 +29,8 @@ void OrganizationTodoList(void);
  * \todo Dialogue Controller needs a blinking cursor to indicate finished dialogue.
  * \todo Create a console that appears on use of ~ key, and make it respond to Lua script commands (including special debug/dev functions that we come up with)
  * \todo Further integration of scripts into Tile Engine, followed by unit tests for all the script functions
- * \todo Document all of the Resources (Music, Sound, Tileset, Region), and the Resource abstract class
  * \todo Remove references to namespace gcn outside of edwt (as many as possible if not all)
- * \todo Script engine doesn't do ANY error-checking yet. Fix that!
- * \todo Complete or remove ScriptException class, as it is currently empty and pointless.
- * \todo Document ScriptException when it is completed.
+ * \todo Complete or remove ScriptException class, as it is currently empty and pointless (document it if its staying).
  * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
    * To do this, a full rewrite of the Dialogue Controller might be necessary, due to some tight coupling in the class at the moment
  * \todo Add the player character to the game, and make him respond to user input.
@@ -49,8 +43,6 @@ void OrganizationTodoList(void);
  * \todo Create an options menu with persistence.
  * \todo Create an About/Credits screen
  * \todo Organize the global code folder and try to create some new folders for organization
- * \todo Center the tiles in the TileEngine on the X and Y axes if there aren't enough tiles to fill the window
- * \todo Remove Tileset dependency on SDL by abstracting texture load code into GraphicsUtil
  * \todo Tileset passibility matrix uses a bool (1 word) for each entry; it should only need to use one bit per entry.
  * \todo Move GL drawing code in Tileset to GraphicsUtil (less coupling)
  */

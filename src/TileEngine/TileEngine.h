@@ -47,6 +47,18 @@ class TileEngine: public GameState
    /** A list of all NPCs in the map, identified by their names */
    std::map<std::string, NPC*> npcList;
 
+   /** The x-offset to draw elements of the map at */
+   int xMapOffset;
+
+   /** The y-offset to draw elements of the map at */
+   int yMapOffset;
+
+   /**
+    * Recalculate the camera offset (based on map and window dimensions)
+    * in order to center the map and its elements properly.
+    */
+   void recalculateMapOffsets();
+
    public:
       /** Tile size constant */
       static const int TILE_SIZE;
@@ -114,6 +126,14 @@ class TileEngine: public GameState
        * @return true iff the region was successfully set, and a map successfully loaded
        */
       bool setRegion(std::string regionName, std::string mapName = "");
+
+      /**
+       * Set a new map within the current region.
+       *
+       * @param mapName The name of the map to use within the region.
+       *                By default, uses the first map declared in the region.
+       */
+      void setMap(std::string mapName = "");
 
       /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.

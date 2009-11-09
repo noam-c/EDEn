@@ -1,5 +1,4 @@
 #include "Map.h"
-#include "GraphicsUtil.h"
 #include "ResourceLoader.h"
 #include "DebugUtils.h"
 
@@ -22,12 +21,12 @@ Map::Map(std::ifstream& in)
 
    tileset = ResourceLoader::getTileset(tilesetName);
 
-   tileMap = new int*[width];
+   tileMap = new int*[height];
 
-   for(int i = 0; i < width; ++i)
+   for(int i = 0; i < height; ++i)
    {
-      tileMap[i] = new int[height];
-      for(int j = 0; j < height; ++j)
+      tileMap[i] = new int[width];
+      for(int j = 0; j < width; ++j)
       {
          if(in)
          {
@@ -50,10 +49,18 @@ std::string Map::getName()
    return mapName;
 }
 
+int Map::getWidth()
+{
+   return width;
+}
+
+int Map::getHeight()
+{
+   return height;
+}
+
 void Map::draw()
 {
-   GraphicsUtil::getInstance()->clearBuffer();
-
    for(int i = 0; i < width; ++i)
    {
       for(int j = 0; j < height; ++j)

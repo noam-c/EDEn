@@ -5,6 +5,12 @@
 
 typedef unsigned int GLuint;
 
+/**
+ * This resource holds a tileset image texture and associated data
+ * including dimensions (in tiles) and default passibility of each tile.
+ *
+ * @author Noam Chitayat
+ */
 class Tileset : public Resource
 {
    /** Width (in tiles) */
@@ -22,9 +28,19 @@ class Tileset : public Resource
    void load(const char* path);
 
    public:
+
+      /**
+       * Constructor.
+       *
+       * @param name The name of this tileset Resource.
+       */
       Tileset(ResourceKey name);
 
-      // Implementation of method in Resource
+      /**
+       * Implementation of method in Resource class.
+       *
+       * @return The size of the tileset resource in memory.
+       */
       size_t getSize();
 
       /**  

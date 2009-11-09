@@ -20,6 +20,9 @@ SDL_Surface* GraphicsUtil::screen = NULL;
 
 void GraphicsUtil::initialize()
 {
+   currentXOffset = 0;
+   currentYOffset = 0;
+
    initSDL();
    initGuichan();
 }
@@ -229,6 +232,20 @@ void GraphicsUtil::clearBuffer()
    glMatrixMode(GL_MODELVIEW);
    glClear(GL_COLOR_BUFFER_BIT);
    glLoadIdentity();
+}
+
+void GraphicsUtil::setOffset(int xOffset, int yOffset)
+{
+   glTranslated(xOffset - currentXOffset, yOffset - currentYOffset, 0);
+   currentXOffset = xOffset;
+   currentYOffset = yOffset;
+}
+
+void GraphicsUtil::resetOffset()
+{
+   glTranslated(-currentXOffset, -currentYOffset, 0);
+   currentXOffset = 0;
+   currentYOffset = 0;
 }
 
 void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)

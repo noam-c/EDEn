@@ -1,5 +1,6 @@
 #include "ExecutionStack.h"
 #include "LinkedListNode.h"
+#include "GraphicsUtil.h"
 #include "DebugUtils.h"
 #include "GameState.h"
 
@@ -30,6 +31,12 @@ bool ExecutionStack::popState()
       StateNode* oldState = currentState;
       currentState = currentState->next;
 
+      /** 
+       *  \todo This might be kind of a hacky solution.
+       *  Maybe encapsulate this in LinkedListNode if it's going to actually happen?
+       */
+      oldState->next = NULL;
+
       delete oldState;
    }
 
@@ -42,6 +49,7 @@ void ExecutionStack::execute()
    {
       if(currentState->data->step())
       {
+         GraphicsUtil::getInstance()->clearBuffer();
          currentState->data->draw();
       }
       else

@@ -12,7 +12,8 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 const int TileEngine::TILE_SIZE = 32;
 
-TileEngine::TileEngine(std::string chapterName) : currMap(NULL)
+TileEngine::TileEngine(std::string chapterName)
+                                   : currMap(NULL), xMapOffset(0), yMapOffset(0)
 {
    scheduler = new Scheduler();
    scriptEngine = new ScriptEngine(this, scheduler);
@@ -43,6 +44,14 @@ bool TileEngine::setRegion(std::string regionName, std::string mapName)
    currRegion = ResourceLoader::getRegion(regionName);
    DEBUG("Loaded region: %s", currRegion->getName().c_str());
 
+   setMap(mapName);
+
+   DEBUG("Running map script: %s/%s", regionName.c_str(), currMap->getName().c_str());
+   return true;
+}
+
+void TileEngine::setMap(std::string mapName)
+{
    DEBUG("Setting map...");
    if(!mapName.empty())
    {
@@ -58,8 +67,19 @@ bool TileEngine::setRegion(std::string regionName, std::string mapName)
 
    DEBUG("Map set to: %s", mapName.c_str());
 
-   DEBUG("Running map script: %s/%s", regionName.c_str(), mapName.c_str());
-   return true;
+   recalculateMapOffsets();
+}
+
+void TileEngine::recalculateMapOffsets()
+{
+   const int mapPixelWidth = currMap->getWidth() * TILE_SIZE;
+   const int mapPixelHeight = currMap->getHeight() * TILE_SIZE;
+
+   xMapOffset = mapPixelWidth < GraphicsUtil::width ? 
+              (GraphicsUtil::width - mapPixelWidth) >> 1 : 0;
+
+   yMapOffset = mapPixelHeight < GraphicsUtil::height ?
+              (GraphicsUtil::height - mapPixelHeight) >> 1 : 0;
 }
 
 void TileEngine::addNPC(std::string npcName, std::string spritesheetName, int x, int y)
@@ -119,16 +139,19 @@ void TileEngine::drawNPCs()
 
 void TileEngine::draw()
 {
-   if(currMap != NULL)
-   {
-      currMap->draw();
-   }
-   else
-   {
-      GraphicsUtil::getInstance()->clearBuffer();
-   }
-
-   drawNPCs();
+   GraphicsUtil::getInstance()->setOffset(xMapOffset, yMapOffset);
+      // Draw the map and NPCs against an offset (to center all the map elements)
+      if(currMap != NULL)
+      {
+         currMap->draw();
+      }
+      else
+      {
+         GraphicsUtil::getInstance()->clearBuffer();
+      }
+   
+      drawNPCs();
+   GraphicsUtil::getInstance()->resetOffset();
 
    GameState::draw();
    GraphicsUtil::getInstance()->flipScreen();

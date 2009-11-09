@@ -19,3 +19,7 @@ std::string Resource::getResourceName()
 {
    return std::string(name);
 }
+
+Resource::~Resource()
+{
+}

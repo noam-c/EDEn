@@ -25,3 +25,6 @@ int Animation::getIndex()
    return curr->data;
 }
 
+Animation::~Animation()
+{
+}
