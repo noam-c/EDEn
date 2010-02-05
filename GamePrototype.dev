@@ -1,7 +1,7 @@
 [Project]
 FileName=GamePrototype.dev
 Name=GamePrototype
-UnitCount=81
+UnitCount=83
 Type=1
 Ver=1
 ObjFiles=
@@ -23,7 +23,7 @@ HostApplication=
 Folders=Audio,Coroutines,edwt,MainMenu,ResourceLoader,ScriptEngine,Sprites,TileEngine
 CommandLine=
 UseCustomMakefile=0
-CustomMakefile=Makefile.win
+CustomMakefile=
 IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
@@ -798,9 +798,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit82]
-FileName=src\Sprites\SpriteFrame.h
+FileName=src\TileEngine\PlayerCharacter.h
 CompileCpp=1
-Folder=Sprites
+Folder=TileEngine
 Compile=1
 Link=1
 Priority=1000
@@ -808,9 +808,9 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit83]
-FileName=src\Sprites\SpriteFrame.cpp
+FileName=src\TileEngine\PlayerCharacter.cpp
 CompileCpp=1
-Folder=Sprites
+Folder=TileEngine
 Compile=1
 Link=1
 Priority=1000
