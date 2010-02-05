@@ -1,11 +1,15 @@
 #include "TileEngine.h"
-#include "Region.h"
 #include "ScriptEngine.h"
 #include "NPC.h"
-#include "Spritesheet.h"
+#include "PlayerCharacter.h"
 #include "Scheduler.h"
 #include "Container.h"
-#include "ScriptFactory.h"
+#include "GraphicsUtil.h"
+#include "ResourceLoader.h"
+#include "Region.h"
+#include "Map.h"
+#include "DialogueController.h"
+#include "OpenGLTTF.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
@@ -15,6 +19,7 @@ const int TileEngine::TILE_SIZE = 32;
 TileEngine::TileEngine(std::string chapterName)
                                    : currMap(NULL), xMapOffset(0), yMapOffset(0)
 {
+   player = new PlayerCharacter(ResourceLoader::getSpritesheet("crono"), 320, 320);
    scheduler = new Scheduler();
    scriptEngine = new ScriptEngine(this, scheduler);
    dialogue = new DialogueController(top, scriptEngine);
@@ -151,6 +156,7 @@ void TileEngine::draw()
       }
    
       drawNPCs();
+      player->draw();
    GraphicsUtil::getInstance()->resetOffset();
 
    GameState::draw();
@@ -172,6 +178,7 @@ bool TileEngine::step()
 
    bool done = false;
    scheduler->runThreads(timePassed);
+
    SDL_Event event;
 
    /* Check for events */
@@ -186,12 +193,33 @@ bool TileEngine::step()
                switch(event.key.keysym.sym)
                {
                   case SDLK_SPACE:
-                  {  dialogue->nextLine();
+                  {
+                     dialogue->setFastModeEnabled(true);
+                     dialogue->nextLine();
                      break;
                   }
                   case SDLK_ESCAPE:
-                  {  done = true;
+                  {
+                     done = true;
                      break;
+                  }
+                  default:
+                  {
+                  }
+               }
+               break;
+            }
+            case SDL_KEYUP:
+            {
+               switch(event.key.keysym.sym)
+               {
+                  case SDLK_SPACE:
+                  {
+                     dialogue->setFastModeEnabled(false);
+                     break;
+                  }
+                  default:
+                  {
                   }
                }
                break;
@@ -210,6 +238,8 @@ bool TileEngine::step()
 
       GraphicsUtil::getInstance()->pushInput(event);
    }
+
+   player->step(timePassed);
 
    stepNPCs(timePassed);
 

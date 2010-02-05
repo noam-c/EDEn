@@ -13,6 +13,12 @@ typedef unsigned int GLuint;
  */
 class Tileset : public Resource
 {
+   /** The file extension used for Spritesheet image files */
+   static const std::string IMG_EXTENSION;
+
+   /** The file extension used for Spritesheet data files */
+   static const std::string DATA_EXTENSION;
+
    /** Width (in tiles) */
    int width;
 

@@ -32,7 +32,7 @@ class ScriptEngine;
 class DialogueController : public Thread
 {
    /** The hardcoded time-per-letter speed */
-   static const int MILLISECONDS_PER_LETTER = 50;
+   static const int MILLISECONDS_PER_LETTER = 100;
    
    /** Abstract the implementation of the dialogue boxes */
    typedef edwt::TextBox DialogueBox;
@@ -102,8 +102,21 @@ class DialogueController : public Thread
    /** Main dialogue box for speech or narration */
    DialogueBox* mainDialogue;
 
-   /** How much time has passed since the current line of dialogue began */
-   long dialogueTime;
+   /** 
+    * How much time since a letter was added to the screen's dialogue box 
+    * from the current line.
+    */
+   int dialogueTime;
+
+   /**
+    * The number of characters that should be placed on the screen.
+    */
+   int charsToShow;
+
+   /**
+    * \todo Document.
+    */
+   bool fastMode;
 
    /** The current line of dialogue */
    Line* currLine;
@@ -154,6 +167,12 @@ class DialogueController : public Thread
     */
    void clearDialogue();
 
+   /**
+    * @return The amount of time (in milliseconds) to wait before
+    *         adding another letter.
+    */
+   int getMillisecondsPerCharacter();
+
    public:
 
       /**
@@ -188,6 +207,11 @@ class DialogueController : public Thread
        * @param task The ticket of this narration instruction
        */
       void narrate(const char* speech, Task* task);
+
+      /**
+       * \todo Document.
+       */
+      void setFastModeEnabled(bool enabled);
 
       /**
        * Signals that some amount of time has passed.

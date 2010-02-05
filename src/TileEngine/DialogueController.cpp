@@ -7,7 +7,7 @@
 const int debugFlag = DEBUG_DIA_CONTR;
 
 DialogueController::DialogueController(edwt::Container* top, ScriptEngine* engine)
-                     : top(top), scriptEngine(engine), currLine(NULL)
+                     : top(top), scriptEngine(engine), currLine(NULL), fastMode(false)
 {
    initMainDialogue();
    clearDialogue();
@@ -76,10 +76,18 @@ void DialogueController::setDialogue(LineType type)
    }
 }
 
+void DialogueController::setFastModeEnabled(bool enabled)
+{
+   if(!fastMode)
+   {
+      dialogueTime = -1;
+   }
+
+   fastMode = enabled;
+}
+
 void DialogueController::advanceDialogue()
 {
-   int charsToShow = dialogueTime / MILLISECONDS_PER_LETTER;
-
    // See if we ran over any embedded scripts that we should execute
    int openIndex, closeIndex;
    if(currLine->getNextBracketPair(openIndex, closeIndex))
@@ -101,7 +109,6 @@ void DialogueController::advanceDialogue()
    if(dialogue.size() <= charsToShow)
    {
       charsToShow = dialogue.size();
-      dialogueTime = -1;
       currLine->task->signal();
    }
 
@@ -112,7 +119,7 @@ void DialogueController::advanceDialogue()
 
 bool DialogueController::dialogueComplete()
 {
-   return dialogueTime == -1;
+   return charsToShow == currLine->dialogue.size();
 }
 
 bool DialogueController::hasDialogue()
@@ -122,7 +129,8 @@ bool DialogueController::hasDialogue()
 
 void DialogueController::clearDialogue()
 {
-   dialogueTime = 0;
+   dialogueTime = getMillisecondsPerCharacter();
+   charsToShow = 0;
 
    if(currLine)
    {
@@ -131,6 +139,17 @@ void DialogueController::clearDialogue()
    }
 
    mainDialogue->setText("");
+}
+
+int DialogueController::getMillisecondsPerCharacter()
+{
+   int time = MILLISECONDS_PER_LETTER;
+   if(fastMode)
+   {
+      time >>= 2;
+   }
+
+   return time;
 }
 
 bool DialogueController::nextLine()
@@ -160,7 +179,13 @@ bool DialogueController::resume(long timePassed)
 {
    if(hasDialogue() && !dialogueComplete())
    {
-      dialogueTime += timePassed;
+      dialogueTime -= timePassed;
+      while(dialogueTime < 0)
+      {
+         dialogueTime += getMillisecondsPerCharacter();
+         ++charsToShow;
+      }
+
       advanceDialogue();
    }
 

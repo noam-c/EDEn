@@ -30,10 +30,10 @@ class ResourceLoader
    {
       /** Sound effects to be played during gameplay */
       SOUND,
-      /** Sets of tiles that may be drawn via the TileEngine */
-      TILESET,
       /** Locations and maps navigated via the TileEngine */
       REGION,
+      /** Sets of tiles that may be drawn via the TileEngine */
+      TILESET,
       /** Pieces of music to be played in the game background */
       MUSIC,
       /** Sheets of sprites that can be drawn on screen to represent moving objects */

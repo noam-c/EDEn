@@ -12,8 +12,8 @@
 
 const int debugFlag = DEBUG_RES_LOAD;
 
-const std::string ResourceLoader::PATHS[] = {"data/sounds/", "data/tilesets/", "data/regions/", "data/music/", "data/sprites/"};
-const std::string ResourceLoader::EXTENSIONS[] = {".wav", ".edt", ".edr", "", ""};
+const std::string ResourceLoader::PATHS[] = {"data/sounds/", "data/regions/", "data/tilesets/", "data/music/", "data/sprites/"};
+const std::string ResourceLoader::EXTENSIONS[] = {".wav", ".edr", "", "", ""};
 
 extern std::map<ResourceKey, Resource*> ResourceLoader::resources;
 

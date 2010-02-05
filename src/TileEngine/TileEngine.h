@@ -1,19 +1,19 @@
 #ifndef __TILE_ENGINE_H_
 #define __TILE_ENGINE_H_
 
-#include "GraphicsUtil.h"
 #include "GameState.h"
-#include "ResourceLoader.h"
-#include "Map.h"
-#include "DialogueController.h"
-#include "OpenGLTTF.h"
-#include "Task.h"
 
 #include <map>
+#include <string>
 
 class NPC;
 class Scheduler;
 class ScriptEngine;
+class PlayerCharacter;
+class Region;
+class Map;
+class DialogueController;
+class Task;
 
 /**
  * GameState that coordinates all the gameplay involving walking around fields
@@ -43,6 +43,9 @@ class TileEngine: public GameState
 
    /** The Thread scheduler used by the tile engine */
    Scheduler* scheduler;
+
+   /** The player character */
+   PlayerCharacter* player;
 
    /** A list of all NPCs in the map, identified by their names */
    std::map<std::string, NPC*> npcList;

@@ -14,10 +14,8 @@ void OrganizationTodoList(void);
    * At the moment, every time there's a mistake in the data files or scripts, we just throw an exception and die.
  * \todo Add "nice" handling for failed Tileset loads.
  * \todo Add "nice" handling for failed Region loads.
- * \todo For error detection purposes, investigate adding some kind of default sound to indicate that a sound that failed to load was played.
  * \todo The Lua script bindings need to be more strict about parameters
    * Do type-checking, enforce strict argument counts, and write an API spec to explain the functions available
- * \todo Analyze .edt file to figure out if it's really necessary or not
  * \todo Add smooth movement capabilities to NPCs.
  * \todo Add passible tile considerations and best-path calculations for NPCs.
  * \todo Add collision detection for moving NPCs.
@@ -25,7 +23,6 @@ void OrganizationTodoList(void);
  * \todo Fix Resource getSize functions to return an accurate size estimate for their resources
  * \todo Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
  * \todo Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?
- * \todo Dialogue Controller needs to have "speed up" on holding of the space bar
  * \todo Dialogue Controller needs a blinking cursor to indicate finished dialogue.
  * \todo Create a console that appears on use of ~ key, and make it respond to Lua script commands (including special debug/dev functions that we come up with)
  * \todo Further integration of scripts into Tile Engine, followed by unit tests for all the script functions
@@ -33,7 +30,6 @@ void OrganizationTodoList(void);
  * \todo Complete or remove ScriptException class, as it is currently empty and pointless (document it if its staying).
  * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
    * To do this, a full rewrite of the Dialogue Controller might be necessary, due to some tight coupling in the class at the moment
- * \todo Add the player character to the game, and make him respond to user input.
  * \todo Update ResourceLoader to include reference counting and LRU resource eviction.
  * \todo Integrate GraphicsUtil stuff from Solstice (synchronous fading and texture load, mainly).
  * \todo Change OpenGLTTF to remove dependency on gcn::Image
