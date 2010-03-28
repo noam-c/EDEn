@@ -67,8 +67,8 @@
 #include "guichan/image.hpp"
 #include "guichan/platform.hpp"
 
-#include <guichan/opengl/openglgraphics.hpp>
-#include <guichan/opengl/openglimage.hpp>
+#include "guichan/opengl/openglgraphics.hpp"
+#include "guichan/opengl/openglimage.hpp"
 
 #include "DebugUtils.h"
 

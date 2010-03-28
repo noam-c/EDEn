@@ -51,6 +51,8 @@ int ScriptEngine::narrate(lua_State* luaStack)
    int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
+   int callResult = 0;
+
    if(nargs > 0)
    {
       const char* speech = lua_tostring(luaStack, 1);
@@ -60,17 +62,16 @@ int ScriptEngine::narrate(lua_State* luaStack)
       }
 
       Task* task = Task::getNextTask(scheduler);
+      if(waitForFinish)
+      {
+         callResult = scheduler->block(task);
+      }
 
       DEBUG("Narrating text: %s", speech);
       tileEngine->dialogueNarrate(speech, task);
-
-      if(waitForFinish)
-      {
-         return scheduler->block(task);
-      }
    }
 
-   return 0;
+   return callResult;
 }
 
 int ScriptEngine::say(lua_State* luaStack)
@@ -78,6 +79,8 @@ int ScriptEngine::say(lua_State* luaStack)
    int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
+   int callResult = 0;
+
    if(nargs > 0)
    {
       const char* speech = lua_tostring(luaStack, 1);
@@ -87,17 +90,16 @@ int ScriptEngine::say(lua_State* luaStack)
       }
 
       Task* task = Task::getNextTask(scheduler);
+      if(waitForFinish)
+      {
+         callResult = scheduler->block(task);
+      }
 
       DEBUG("Saying text: %s", speech);
       tileEngine->dialogueSay(speech, task);
-
-      if(waitForFinish)
-      {
-         return scheduler->block(task);
-      }
    }
 
-   return 0;
+   return callResult;
 }
 
 int ScriptEngine::playSound(lua_State* luaStack)

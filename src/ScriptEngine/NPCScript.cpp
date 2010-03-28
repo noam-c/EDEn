@@ -41,6 +41,8 @@ NPCScript::NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc) : Scrip
    // flexibility of the scripts, because anything you can do in Lua, you can
    // do using the Lua/C++ API.
 
+   functionExists = new bool[NUM_FUNCTIONS];
+
    // Create a table for this NPC's functions
    lua_createtable(luaStack, 0, NUM_FUNCTIONS);
 
@@ -143,4 +145,6 @@ NPCScript::~NPCScript()
    // Set the function table to nil so that it gets garbage collected
    // lua_pushnil(luaStack);
    // lua_setglobal(luaStack, scriptPath.c_str());
+
+   delete [] functionExists;
 }

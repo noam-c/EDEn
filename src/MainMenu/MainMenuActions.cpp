@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "ExecutionStack.h"
+#include "GraphicsUtil.h"
 #include "Music.h"
 #include "Sound.h"
 

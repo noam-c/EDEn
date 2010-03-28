@@ -51,11 +51,6 @@ class Exception : public std::exception
              int line, const std::string& message);
 
       /**
-       * @return A nicely formatted description of the Exception.
-       */
-      const char* what() const throw();
-
-      /**
        * @return The name of the function that threw this Exception.
        */
       const std::string& getFunction() const;

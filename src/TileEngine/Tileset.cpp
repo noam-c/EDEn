@@ -37,9 +37,10 @@ void Tileset::load(const char* path)
    DEBUG("Loading tileset data \"%s\"...", dataPath.c_str());
 
    std::ifstream in(dataPath.c_str());
-   in.open(path);
+
    if(!in.is_open())
-   {  T_T(std::string("Error opening file: ") + path);
+   {  
+      T_T(std::string("Error opening file: ") + path);
    }
 
    passibility = new bool*[width];

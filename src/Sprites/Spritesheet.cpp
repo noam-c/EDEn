@@ -74,14 +74,14 @@ void Spritesheet::load(const char* path)
          // Get the name of the frame
          std::string frameName;
          lineStream >> frameName;
-   
+
          // Make sure this frame name has not already been used in this file
          if(frameIndices.find(frameName) != frameIndices.end())
          {
             DEBUG("Duplicated name %s in spritesheet %s", frameName.c_str(), path);
             T_T("Parse error reading spritesheet.");
          }
-   
+
          // Get the four coordinates of the frame
          int coords[4];
          for(int i = 0; i < 4; ++i)
@@ -93,24 +93,24 @@ void Spritesheet::load(const char* path)
                T_T("Parse error reading spritesheet.");
             }
          }
-   
+
          // Create a new frame with the read coordinates
          SpriteFrame f(coords[0], coords[1], coords[2], coords[3]);
          DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
                          frameName.c_str(), coords[0], coords[1], coords[2], coords[3]);
-   
+
          // Bind the frame name to the next available frame index
          frameIndices[frameName] = frameQueue.size();
-   
+
          // Push the frame into a queue for later processing
          frameQueue.push(f);
-      }   
+      }
       else if(typeName == "anim")
       {
          // Get the name of the frame
          std::string animationName;
          lineStream >> animationName;
-   
+
          // Make sure this animation name has not already been used in this file
          if(animationList.find(animationName) != animationList.end())
          {
@@ -185,19 +185,24 @@ void Spritesheet::load(const char* path)
 
 int Spritesheet::getFrameIndex(std::string frameName)
 {
-   int index = frameIndices[frameName];
-
-   if(index < 0 || index >= numFrames)
+   std::map<std::string, int>::const_iterator frameIndex = frameIndices.find(frameName);
+   if(frameIndex != frameIndices.end() && frameIndex->second < numFrames)
    {
-      return -1;
+      return frameIndex->second;
    }
 
-   return index;
+   return -1;
 }
 
 Animation* Spritesheet::getAnimation(std::string animationName)
 {
-   return new Animation(animationList[animationName]);
+   std::map<std::string, FrameNode*>::const_iterator animFrames = animationList.find(animationName);
+   if(animFrames != animationList.end())
+   {
+      return new Animation(animFrames->second);
+   }
+
+   return NULL;
 }
 
 void Spritesheet::draw(int x, int y, int frameIndex)
@@ -208,7 +213,7 @@ void Spritesheet::draw(int x, int y, int frameIndex)
       // (i.e. there was a failure constructing this spritesheet)
       return;
    }
-   
+
    if(frameIndex < 0 || frameIndex > numFrames)
    {
       DEBUG("Spritesheet frame index %d out of bounds!", frameIndex);
@@ -217,7 +222,7 @@ void Spritesheet::draw(int x, int y, int frameIndex)
 
    SpriteFrame f = frameList[frameIndex];
 
-   /** 
+   /**
     * \todo Maybe we can do all these calculations when the frames are initialized
     *       in order to optimize the drawing code a bit more!
     */

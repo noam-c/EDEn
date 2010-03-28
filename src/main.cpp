@@ -3,9 +3,11 @@
 #include "ExecutionStack.h"
 #include "MainMenu.h"
 #include "ResourceLoader.h"
-#include <guichan.hpp>
+#include "guichan.hpp"
 #include <iostream>
 #include <fstream>
+
+#include "SDL.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MAIN;
@@ -40,7 +42,7 @@ int main (int argc, char *argv[])
    }
    catch(Exception e)
    {
-      DEBUG("Uncaught game exception: \n%s", e.what());
+      DEBUG("Uncaught game exception: \n%s", e.getMessage());
       DEBUG_PAUSE;
       return 1;
    }

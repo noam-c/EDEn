@@ -35,7 +35,7 @@ void Sprite::setFrame(std::string frameName)
    int newFrameIndex = sheet->getFrameIndex(frameName);
    if(newFrameIndex < 0)
    {
-      T_T("Failed to find sprite frame.");
+      //DEBUG("Failed to find sprite frame.");
    }
 
    clearCurrentFrame();
@@ -47,7 +47,7 @@ void Sprite::setAnimation(std::string animationName)
    Animation* newAnimation = sheet->getAnimation(animationName);
    if(newAnimation == NULL)
    {
-      T_T("Failed to find animation.");
+      //DEBUG("Failed to find animation.");
    }
 
    clearCurrentFrame();

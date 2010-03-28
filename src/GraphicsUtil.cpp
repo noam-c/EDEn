@@ -6,10 +6,10 @@
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 #include "SDL_ttf.h"
-#include <guichan.hpp>
-#include <guichan/sdl.hpp>
-#include <guichan/opengl.hpp>
-#include <guichan/opengl/openglsdlimageloader.hpp>
+#include "guichan.hpp"
+#include "guichan/sdl.hpp"
+#include "guichan/opengl.hpp"
+#include "guichan/opengl/openglsdlimageloader.hpp"
 #include "OpenGLTTF.h"
 
 #include "DebugUtils.h"
@@ -29,8 +29,6 @@ void GraphicsUtil::initialize()
 
 void GraphicsUtil::initSDL()
 {
-   char *msg;
-
    // Audio information (HARDCODED)
    int audio_rate = 44100;
    Uint16 audio_format = AUDIO_S16SYS; /* 16-bit stereo */

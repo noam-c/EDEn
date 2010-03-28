@@ -50,7 +50,7 @@ class NPCScript : public Script
     * (i.e. functionExists[IDLE] returns true iff the NPC script had an idle
     * function declared)
     */
-   bool functionExists[];
+   bool* functionExists;
 
    /** The NPC controlled by this script's execution. */
    NPC* npc;

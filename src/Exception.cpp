@@ -13,7 +13,7 @@ Exception::Exception(const std::string& function,
 {
 }
 
-const char* Exception::what() const throw()
+const std::string& Exception::getMessage() const throw()
 {
    std::stringstream err;
    err << message << "\n at line " << line << " of function " << function << '\n';
@@ -24,11 +24,6 @@ const char* Exception::what() const throw()
 const std::string& Exception::getFunction() const
 {
    return function;
-}
-
-const std::string& Exception::getMessage() const
-{
-   return message;
 }
 
 int Exception::getLine() const

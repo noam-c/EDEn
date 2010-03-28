@@ -4,9 +4,6 @@
 #include <string>
 #include "Exception.h"
 
-// Uncomment this macro to turn on debugging
-#define DEBUG_MODE
-
 // Make a nice easy access macro for debug statements in the code
 #ifdef DEBUG_MODE
    #define DEBUG(x, ...) DebugUtils::print(debugFlag, x, ## __VA_ARGS__)
@@ -14,6 +11,10 @@
 #else
    #define DEBUG(x, ...)
    #define DEBUG_PAUSE
+#endif
+
+#ifndef __PRETTY_FUNCTION__
+   #define __PRETTY_FUNCTION__ __FILE__
 #endif
 
 // Macro for exception-related information (should be passed into every exception constructor)

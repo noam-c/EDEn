@@ -15,7 +15,7 @@ const int debugFlag = DEBUG_RES_LOAD;
 const std::string ResourceLoader::PATHS[] = {"data/sounds/", "data/regions/", "data/tilesets/", "data/music/", "data/sprites/"};
 const std::string ResourceLoader::EXTENSIONS[] = {".wav", ".edr", "", "", ""};
 
-extern std::map<ResourceKey, Resource*> ResourceLoader::resources;
+std::map<ResourceKey, Resource*> ResourceLoader::resources;
 
 std::string ResourceLoader::getPath(ResourceKey name, ResourceType type)
 {
@@ -83,7 +83,7 @@ void ResourceLoader::tryInitialize(Resource* resource, ResourceKey name, Resourc
    catch(Exception e)
    {
       // On failure, print to debug output and return
-      DEBUG("Failed to load resource %s.\n\tReason: %s", path.c_str(), e.what());
+      DEBUG("Failed to load resource %s.\n\tReason: %s", path.c_str(), e.getMessage());
    }
 }
 

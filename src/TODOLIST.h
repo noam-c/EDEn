@@ -10,10 +10,6 @@ void OrganizationTodoList(void);
 
 /**
  * \todo Consolidate common functionality between Tileset and Spritesheet.
- * \todo The game needs to fail more gracefully ("nice" handling).
-   * At the moment, every time there's a mistake in the data files or scripts, we just throw an exception and die.
- * \todo Add "nice" handling for failed Tileset loads.
- * \todo Add "nice" handling for failed Region loads.
  * \todo The Lua script bindings need to be more strict about parameters
    * Do type-checking, enforce strict argument counts, and write an API spec to explain the functions available
  * \todo Add smooth movement capabilities to NPCs.
@@ -45,7 +41,6 @@ void OrganizationTodoList(void);
 void DevelopmentTodoList(void);
 
 /**
- * \todo Create a tool to make spritesheet files (.eds files)
  * \todo Create a tool to make maps in regions (.edr files)
  */
 void ToolingTodoList(void);
