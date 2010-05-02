@@ -44,7 +44,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="-Dmain=SDL_main"
 				Optimization="0"
-				AdditionalIncludeDirectories="src;src\Audio;src\Coroutines;src\edwt;src\MainMenu;src\ResourceLoader;src\ScriptEngine;src\Sprites;src\TileEngine"
+				AdditionalIncludeDirectories="src;src\Audio;src\Coroutines;src\edwt;src\MainMenu;src\ResourceLoader;src\ScriptEngine;src\Sprites;src\TileEngine;src\PlayerData;src\tinyxml"
 				PreprocessorDefinitions="WIN32;DEBUG_MODE;_CONSOLE"
 				MinimalRebuild="true"
 				ExceptionHandling="2"
@@ -199,6 +199,10 @@
 			</File>
 			<File
 				RelativePath=".\src\guichan\widgets\button.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\PlayerData\Character.h"
 				>
 			</File>
 			<File
@@ -430,6 +434,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\PlayerData\PlayerData.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\PlayerData\PlayerDataItemNames.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\PlayerData\Quest.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\guichan\widgets\radiobutton.hpp"
 				>
 			</File>
@@ -586,6 +602,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\tinyxml\tinystr.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tinyxml\tinyxml.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\edwt\TitleScreenListBox.h"
 				>
 			</File>
@@ -649,6 +673,10 @@
 						ObjectFile="$(IntDir)\gcn$(InputName)"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\PlayerData\Character.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\src\guichan\widgets\checkbox.cpp"
@@ -939,6 +967,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\src\edwt\Label.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\guichan\widgets\label.cpp"
 				>
 				<FileConfiguration
@@ -949,10 +981,6 @@
 						ObjectFile="$(IntDir)\gcn$(InputName)"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\src\edwt\Label.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\src\guichan\widgets\listbox.cpp"
@@ -1060,6 +1088,14 @@
 			</File>
 			<File
 				RelativePath=".\src\TileEngine\PlayerCharacter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\PlayerData\PlayerData.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\PlayerData\Quest.cpp"
 				>
 			</File>
 			<File
@@ -1308,6 +1344,22 @@
 			</File>
 			<File
 				RelativePath=".\src\Coroutines\Timer.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tinyxml\tinystr.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tinyxml\tinyxml.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tinyxml\tinyxmlerror.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\tinyxml\tinyxmlparser.cpp"
 				>
 			</File>
 			<File

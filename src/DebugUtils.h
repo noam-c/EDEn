@@ -37,6 +37,7 @@
 #define DEBUG_SCHEDULER  1<<11    // Scheduler/coroutine functionality
 #define DEBUG_NPC        1<<12    // NPC functionality
 #define DEBUG_SPRITE     1<<13    // Sprite/spritesheet functionality
+#define DEBUG_PLAYER     1<<13    // Player data/Character functionality
 
 #define DEBUG_ALL           ~0    // Turn on all debug output (verbose, but handy)
 

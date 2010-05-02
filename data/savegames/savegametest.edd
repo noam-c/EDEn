@@ -1,0 +1,24 @@
+<PlayerData>
+	<Characters>
+		<Character name="Kain" hp="100" sp="50" str="5" int="8" />
+		<Character name="Akrom" hp="150" sp="30" str="7" int="6" />
+	</Characters>
+	
+	<Party>
+		<Character name="Kain" />
+	</Party>
+	
+	<Inventory>
+		<Item itemNum="0" quantity="5" />
+		<Item itemNum="1" quantity="10" />
+	</Inventory>
+
+	<Quest name="root" completed="false" optional="false">
+		<Quest name="Five Tigers" description="Bring back 5 tiger pelts" completed="false" optional="false">
+			<Description>The old man said he wanted five tiger pelts...</Description>
+			<Quest name="Kill five tigers" description="Fight and defeat five tigers" completed="false" optional="false" />
+		</Quest>
+	</Quest>
+	
+	<CurrentLocation chapter="0" region="sereia" map="outside" x="5" y="5" />
+</PlayerData>
