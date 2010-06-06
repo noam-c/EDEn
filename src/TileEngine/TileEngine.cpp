@@ -8,6 +8,7 @@
 #include "ResourceLoader.h"
 #include "Region.h"
 #include "Map.h"
+#include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
 
@@ -23,6 +24,9 @@ TileEngine::TileEngine(std::string chapterName)
    scheduler = new Scheduler();
    scriptEngine = new ScriptEngine(this, scheduler);
    dialogue = new DialogueController(top, scriptEngine);
+
+   consoleWindow = new edwt::DebugConsoleWindow(top, 800, 200);
+
    time = SDL_GetTicks();
    scheduler->start(dialogue);
    scriptEngine->runChapterScript(chapterName);
@@ -85,6 +89,23 @@ void TileEngine::recalculateMapOffsets()
 
    yMapOffset = mapPixelHeight < GraphicsUtil::height ?
               (GraphicsUtil::height - mapPixelHeight) >> 1 : 0;
+}
+
+void TileEngine::toggleDebugConsole()
+{
+   bool consoleWindowVisible = consoleWindow->isVisible();
+   if(consoleWindowVisible)
+   {
+      // Hide the console window
+      consoleWindow->setVisible(false);
+   }
+   else
+   {
+      // Show the console window
+      top->moveToTop(consoleWindow);
+      consoleWindow->setVisible(true);
+      consoleWindow->requestFocus();
+   }
 }
 
 void TileEngine::addNPC(std::string npcName, std::string spritesheetName, int x, int y)
@@ -158,9 +179,6 @@ void TileEngine::draw()
       drawNPCs();
       player->draw();
    GraphicsUtil::getInstance()->resetOffset();
-
-   GameState::draw();
-   GraphicsUtil::getInstance()->flipScreen();
 }
 
 bool TileEngine::step()
@@ -174,70 +192,10 @@ bool TileEngine::step()
       timePassed = 32;
    }
 
-   GameState::step();
-
    bool done = false;
    scheduler->runThreads(timePassed);
 
-   SDL_Event event;
-
-   /* Check for events */
-   while(SDL_PollEvent(&event))
-   {
-      switch (event.type)
-      {
-         case SDL_USEREVENT:
-         {
-            case SDL_KEYDOWN:
-            {
-               switch(event.key.keysym.sym)
-               {
-                  case SDLK_SPACE:
-                  {
-                     dialogue->setFastModeEnabled(true);
-                     dialogue->nextLine();
-                     break;
-                  }
-                  case SDLK_ESCAPE:
-                  {
-                     done = true;
-                     break;
-                  }
-                  default:
-                  {
-                  }
-               }
-               break;
-            }
-            case SDL_KEYUP:
-            {
-               switch(event.key.keysym.sym)
-               {
-                  case SDLK_SPACE:
-                  {
-                     dialogue->setFastModeEnabled(false);
-                     break;
-                  }
-                  default:
-                  {
-                  }
-               }
-               break;
-            }
-            case SDL_QUIT:
-            {
-               done = true;
-               break;
-            }
-            default:
-            {
-               break;
-            }
-         }
-      }
-
-      GraphicsUtil::getInstance()->pushInput(event);
-   }
+   handleInputEvents(done);
 
    player->step(timePassed);
 
@@ -246,9 +204,83 @@ bool TileEngine::step()
    return !done;
 }
 
+void TileEngine::handleInputEvents(bool& finishState)
+{
+   SDL_Event event;
+
+   while(SDL_PollEvent(&event))
+   {
+      switch (event.type)
+      {
+         case SDL_USEREVENT:
+         {
+            switch(event.user.code)
+            {
+               case DEBUG_CONSOLE_EVENT:
+               {
+                  std::string* script = (std::string*)event.user.data1;
+                  scriptEngine->runScriptString(*script);
+
+                  // This assumes that, once the debug event is consumed here, it is not used anymore
+                  delete script;
+               }
+            }
+         }
+         case SDL_KEYDOWN:
+         {
+            switch(event.key.keysym.sym)
+            {
+               case SDLK_SPACE:
+               {
+                  dialogue->setFastModeEnabled(true);
+                  dialogue->nextLine();
+                  return;
+               }
+               case SDLK_ESCAPE:
+               {
+                  finishState = true;
+                  return;
+               }
+               case SDLK_BACKQUOTE:
+               {
+                  toggleDebugConsole();
+                  return;
+               }
+            }
+            break;
+         }
+         case SDL_KEYUP:
+         {
+            switch(event.key.keysym.sym)
+            {
+               case SDLK_SPACE:
+               {
+                  dialogue->setFastModeEnabled(false);
+                  return;
+               }
+            }
+            break;
+         }
+         case SDL_QUIT:
+         {
+            finishState = true;
+            return;
+         }
+         default:
+         {
+            break;
+         }
+      }
+   }
+
+   // If the tile engine didn't consume this event, then propagate to the generic input handling
+   handleEvent(event);
+}
+
 TileEngine::~TileEngine()
 {
    delete scheduler;
+   delete consoleWindow;
    delete scriptEngine;
    delete dialogue;
    delete top;

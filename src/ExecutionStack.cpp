@@ -47,10 +47,10 @@ void ExecutionStack::execute()
 {
    while(currentState)
    {
-      if(currentState->data->step())
+      if(currentState->data->advanceFrame())
       {
          GraphicsUtil::getInstance()->clearBuffer();
-         currentState->data->draw();
+         currentState->data->drawFrame();
       }
       else
       {

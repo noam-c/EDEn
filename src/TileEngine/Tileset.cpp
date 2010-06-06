@@ -72,13 +72,13 @@ void Tileset::draw(int destX, int destY, int tileNum)
    float destTop = float(destY * TileEngine::TILE_SIZE);
    float destBottom = float((destY + 1) * TileEngine::TILE_SIZE);
 
-   float tileRight = (tilesetX + 1) * TileEngine::TILE_SIZE - 1;
-   float tileBottom = (tilesetY + 1) * TileEngine::TILE_SIZE - 1;
+   float tileRight = float((tilesetX + 1) * TileEngine::TILE_SIZE - 1);
+   float tileBottom = float((tilesetY + 1) * TileEngine::TILE_SIZE - 1);
 
    float top = float(tilesetY) / height;
-   float bottom = tileBottom / (height * TileEngine::TILE_SIZE - 1);
+   float bottom = float(tileBottom) / (height * TileEngine::TILE_SIZE - 1);
    float left = float(tilesetX) / width;
-   float right = tileRight / (width * TileEngine::TILE_SIZE - 1);
+   float right = float(tileRight) / (width * TileEngine::TILE_SIZE - 1);
 
    glBindTexture(GL_TEXTURE_2D, texture);
 

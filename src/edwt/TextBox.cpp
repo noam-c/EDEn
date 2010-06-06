@@ -68,6 +68,16 @@ namespace edwt
       return 1;
    }
    
+   void TextBox::scrollToBottom()
+   {
+      gcn::Rectangle scroll;
+      scroll.x = 0;
+      scroll.y = getFont()->getHeight() * mTextRows.size();
+      scroll.width = getFont()->getWidth(" ");
+      scroll.height = getFont()->getHeight() + 2;
+      showPart(scroll);
+   }
+
    void TextBox::setAlignment(TextAlign alignment)
    {
       align = alignment;

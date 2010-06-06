@@ -1,8 +1,10 @@
 #include "GameState.h"
 #include "GraphicsUtil.h"
+#include <SDL.h>
 #include "Container.h"
-#include "DebugUtils.h"
+#include "DebugConsoleWindow.h"
 
+#include "DebugUtils.h"
 const int debugFlag = DEBUG_GAME_STATE;
 
 GameState::GameState()
@@ -19,13 +21,23 @@ void GameState::activate()
    finished = false;
 }
 
-bool GameState::step()
+bool GameState::advanceFrame()
 {
    GraphicsUtil::getInstance()->stepGUI();
-   return true;
+   return step();
 }
 
-void GameState::draw()
+void GameState::handleEvent(SDL_Event& event)
 {
+   GraphicsUtil::getInstance()->pushInput(event);
+}
+
+void GameState::drawFrame()
+{
+   draw();
+
    GraphicsUtil::getInstance()->drawGUI();
+
+   // Make sure everything is displayed on screen
+   GraphicsUtil::getInstance()->flipScreen();
 }

@@ -15,6 +15,11 @@ class Map;
 class DialogueController;
 class Task;
 
+namespace edwt
+{
+   class DebugConsoleWindow;
+};
+
 /**
  * GameState that coordinates all the gameplay involving walking around fields
  * (towns or dungeons).
@@ -35,32 +40,61 @@ class TileEngine: public GameState
    /** The current map that the player is in. */
    Map* currMap;
 
+   /** The debug console window to be used for diagnostics. */
+   edwt::DebugConsoleWindow* consoleWindow;
+
    /** Controller for dialogue and narrations. */
    DialogueController* dialogue;
 
-   /** The Scripting Engine used for the engine's scripting */
+   /** The Scripting Engine used for the engine's scripting. */
    ScriptEngine* scriptEngine;
 
-   /** The Thread scheduler used by the tile engine */
+   /** The Thread scheduler used by the tile engine. */
    Scheduler* scheduler;
 
    /** The player character */
    PlayerCharacter* player;
 
-   /** A list of all NPCs in the map, identified by their names */
+   /** A list of all NPCs in the map, identified by their names. */
    std::map<std::string, NPC*> npcList;
 
-   /** The x-offset to draw elements of the map at */
+   /** The x-offset to draw elements of the map at. */
    int xMapOffset;
 
-   /** The y-offset to draw elements of the map at */
+   /** The y-offset to draw elements of the map at. */
    int yMapOffset;
+
+   /**
+    * Toggles the debug console on or off.
+    */
+   void toggleDebugConsole();
 
    /**
     * Recalculate the camera offset (based on map and window dimensions)
     * in order to center the map and its elements properly.
     */
    void recalculateMapOffsets();
+
+   /**
+    * Handles input events specific to the tile engine.
+    *
+    * @param finishState Returned as true if the input event quit out of the tile engine.
+    */
+   void TileEngine::handleInputEvents(bool& finishState);
+
+   protected:
+      /**
+       * Logic step.
+       * Sends time passed to all controllers so that they can update accordingly.
+       * Takes user input if there is any. 
+       */
+      bool step();
+
+      /**
+       * Draw map tiles if a map is loaded in, and then coordinate the drawing
+       * of all the controllers and widgets.
+       */
+      void draw();
 
    public:
       /** Tile size constant */
@@ -79,12 +113,6 @@ class TileEngine: public GameState
       std::string getMapName();
 
       /**
-       * Draw map tiles if a map is loaded in, and then coordinate the drawing
-       * of all the controllers and widgets.
-       */
-      void draw();
-
-      /**
        * Updates all NPCs on the map.
        *
        * @param timePassed the amount of time that has passed since the last frame. 
@@ -95,13 +123,6 @@ class TileEngine: public GameState
        * Draws all NPCs on the map.
        */
       void drawNPCs();
-
-      /**
-       * Logic step.
-       * Sends time passed to all controllers so that they can update accordingly.
-       * Takes user input if there is any. 
-       */
-      bool step();
 
       /**
        * Send a line of dialogue to the DialogueController as a narration.

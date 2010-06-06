@@ -64,6 +64,13 @@ class MainMenu: public GameState
     */
    void populateOpsList();
 
+   /**
+    * Wait for and handle the input event.
+    *
+    * @param finishState Returned as true if the input event quit out of the main menu.
+    */
+   void waitForInputEvent(bool& finishState);
+
    //Actions for the list ops - see documentation in MainMenuActions.cpp
    void NewGameAction();
    void LoadGameAction();
@@ -71,17 +78,9 @@ class MainMenu: public GameState
    void AboutAction();
    void QuitAction();
 
-   public:
+   protected:
       /**
-       * Constructor.
-       *
-       * Initializes the title screen widgets, font, image and sounds
-       */
-      MainMenu();
-
-      /**
-       * Just draws widgets, flips the buffer,
-       * and then waits a millisecond (no rush on a title screen)
+       * Waits a millisecond between draws (no rush on a title screen)
        */
       void draw();
 
@@ -93,6 +92,14 @@ class MainMenu: public GameState
        * @return true iff the title screen is not finished running (no quit event)
        */
       bool step();
+
+   public:
+      /**
+       * Constructor.
+       *
+       * Initializes the title screen widgets, font, image and sounds
+       */
+      MainMenu();
 
       /**
        * When the state is activated, set modal focus to the listbox

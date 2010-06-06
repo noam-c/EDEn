@@ -16,6 +16,13 @@ const int debugFlag = DEBUG_RES_LOAD | DEBUG_SPRITE;
 const std::string Spritesheet::IMG_EXTENSION = ".png";
 const std::string Spritesheet::DATA_EXTENSION = ".eds";
 
+/**
+ * NOTE: If this value is changed, it MUST be changed in the Ruby Spritesheet Editor tool
+ * and in any .eds files that contain the old value.
+ * Otherwise, the spritesheet parsing will fail on files with two or more untitled lines.
+ */
+const std::string Spritesheet::UNTITLED_LINE = "untitled";
+
 Spritesheet::Spritesheet(ResourceKey name)
                                      : Resource(name), frameList(NULL), numFrames(0)
 {
@@ -75,6 +82,12 @@ void Spritesheet::load(const char* path)
          std::string frameName;
          lineStream >> frameName;
 
+         if(frameName == UNTITLED_LINE)
+         {
+            // Skip untitled frames.
+            continue;
+         }
+
          // Make sure this frame name has not already been used in this file
          if(frameIndices.find(frameName) != frameIndices.end())
          {
@@ -107,9 +120,15 @@ void Spritesheet::load(const char* path)
       }
       else if(typeName == "anim")
       {
-         // Get the name of the frame
+         // Get the name of the animation
          std::string animationName;
          lineStream >> animationName;
+
+         if(animationName == UNTITLED_LINE)
+         {
+            // Skip untitled animations.
+            continue;
+         }
 
          // Make sure this animation name has not already been used in this file
          if(animationList.find(animationName) != animationList.end())
@@ -171,6 +190,13 @@ void Spritesheet::load(const char* path)
 
    // Create the new array of frames
    numFrames = frameQueue.size();
+   
+   if(numFrames == 0)
+   {
+      DEBUG("No frames found in spritesheet %s", path);
+      T_T("Empty (invalid) spritesheet constructed.");
+   }
+
    frameList = new SpriteFrame[numFrames];
 
    // Fill the new array with the accumulated frames

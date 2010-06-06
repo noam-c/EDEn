@@ -28,11 +28,19 @@ typedef LinkedListNode<int> FrameNode;
  */
 class Spritesheet : public Resource
 {
-   /** The file extension used for Spritesheet image files */
+   /** The file extension used for Spritesheet image files. */
    static const std::string IMG_EXTENSION;
 
-   /** The file extension used for Spritesheet data files */
+   /** The file extension used for Spritesheet data files. */
    static const std::string DATA_EXTENSION;
+
+   /**
+    * The default name given to an untitled frame or animation.
+    * Untitled frames are a result of unfinished work on the spritesheet file;
+    * maybe there were a lot of frames to name, so the content producer decided to work on the naming in parts.
+    * We completely skip these untitled lines.
+    */
+   static const std::string UNTITLED_LINE;
 
    /** The spritesheet texture */
    GLuint texture;

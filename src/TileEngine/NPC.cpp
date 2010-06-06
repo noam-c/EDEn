@@ -31,13 +31,38 @@ bool NPC::runInstruction(Instruction* instruction, long timePassed)
       case MOVE:
       {
          int* newCoords = static_cast<int*>(instruction->params);
-         x = newCoords[0];
-         y = newCoords[1];
+         
+         float vel = 0.1;
+         if(x < newCoords[0])
+         {
+            x += (int)(vel*timePassed);
+            x = x > newCoords[0] ? newCoords[0] : x;
+         }
+         else if(x > newCoords[0])
+         {
+            x -= (int)(vel*timePassed);
+            x = x < newCoords[0] ? newCoords[0] : x;
+         }
+         else if(y < newCoords[1])
+         {
+            y += (int)(vel*timePassed);
+            y = y > newCoords[1] ? newCoords[1] : y;
+         }
+         else if(y > newCoords[1])
+         {
+            y -= (int)(vel*timePassed);
+            y = y < newCoords[1] ? newCoords[1] : y;
+         }
 
-         DEBUG("%s is now at %d, %d", name.c_str(), x, y);
-         delete newCoords;
-
-         return true;
+         if(x == newCoords[0] && y == newCoords[1])
+         {
+            delete newCoords;
+            return true;
+         }
+         else
+         {
+            return false;
+         }
       }
       default:
       {

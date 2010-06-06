@@ -9,39 +9,40 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo Consolidate common functionality between Tileset and Spritesheet.
- * \todo The Lua script bindings need to be more strict about parameters
+ * \todo [Mandatory] Add passible tile considerations and best-path calculations for NPCs.
+ * \todo [Mandatory] Add collision detection for moving NPCs.
+ * \todo [Mandatory] Recalculate an NPC's best path dynamically if there is a problem travelling a path.
+ * \todo [Mandatory] Dialogue Controller needs a blinking cursor to indicate finished dialogue.
+ * \todo [Mandatory] Create a "Controls" class that translates pressed keys/buttons to controller-agnostic instructions based on user options.
+ * \todo [Mandatory] Create an options menu with persistence.
+ * \todo [Mandatory] Create an About/Credits screen
+ * \todo [Recommended] System tests for all the script functions
+ * \todo [Recommended] The Lua script bindings need to be more strict about parameters
    * Do type-checking, enforce strict argument counts, and write an API spec to explain the functions available
- * \todo Add smooth movement capabilities to NPCs.
- * \todo Add passible tile considerations and best-path calculations for NPCs.
- * \todo Add collision detection for moving NPCs.
- * \todo Recalculate an NPC's best path dynamically if there is a problem travelling a path.
- * \todo Fix Resource getSize functions to return an accurate size estimate for their resources
- * \todo Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
- * \todo Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?
- * \todo Dialogue Controller needs a blinking cursor to indicate finished dialogue.
- * \todo Create a console that appears on use of ~ key, and make it respond to Lua script commands (including special debug/dev functions that we come up with)
- * \todo Further integration of scripts into Tile Engine, followed by unit tests for all the script functions
- * \todo Remove references to namespace gcn outside of edwt (as many as possible if not all)
- * \todo Complete or remove ScriptException class, as it is currently empty and pointless (document it if its staying).
- * \todo Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
+ * \todo [Recommended] Fix Resource getSize functions to return an accurate size estimate for their resources
+ * \todo [Recommended] Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?
+ * \todo [Recommended] Complete or remove ScriptException class, as it is currently empty and pointless (document it if its staying).
+ * \todo [Recommended] Update ResourceLoader to include reference counting and LRU resource eviction.
+ * \todo [Recommended] Route all debug output into the debug console instead of the terminal/console window
+ * \todo [Recommended] Allow for turning debug flags on and off dynamically through the console to prevent flooding.
+ * \todo [Optional] Consolidate common functionality between Tileset and Spritesheet.
+ * \todo [Optional] Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
+ * \todo [Optional] Remove references to namespace gcn outside of edwt (as many as possible if not all)
+ * \todo [Optional] Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
    * To do this, a full rewrite of the Dialogue Controller might be necessary, due to some tight coupling in the class at the moment
- * \todo Update ResourceLoader to include reference counting and LRU resource eviction.
- * \todo Integrate GraphicsUtil stuff from Solstice (synchronous fading and texture load, mainly).
- * \todo Change OpenGLTTF to remove dependency on gcn::Image
- * \todo Create a "Controls" class that translates pressed keys/buttons to controller-agnostic instructions based on user options.
- * \todo Create some test harnesses/sandboxes for different pieces of the engine.
- * \todo Create unit tests for the various pieces of the game.
- * \todo Create an options menu with persistence.
- * \todo Create an About/Credits screen
- * \todo Organize the global code folder and try to create some new folders for organization
- * \todo Tileset passibility matrix uses a bool (1 word) for each entry; it should only need to use one bit per entry.
- * \todo Move GL drawing code in Tileset to GraphicsUtil (less coupling)
+ * \todo [Optional] Integrate GraphicsUtil stuff from Solstice (synchronous fading and texture load, mainly).
+ * \todo [Optional] Change OpenGLTTF to remove dependency on gcn::Image
+ * \todo [Optional] Create some test harnesses/sandboxes for different pieces of the engine.
+ * \todo [Optional] Create unit tests for the various pieces of the game.
+ * \todo [Optional] Organize the global code folder and try to create some new folders for organization
+ * \todo [Optional] Tileset passibility matrix uses a bool (1 word) for each entry; it should only need to use one bit per entry.
+ * \todo [Optional] Move GL drawing code in Tileset/Spritesheet to GraphicsUtil (less coupling)
  */
 void DevelopmentTodoList(void);
 
 /**
  * \todo Create a tool to make maps in regions (.edr files)
+ * \todo Extend spritesheet editor to be able to create and edit animations. 
  */
 void ToolingTodoList(void);
 
@@ -65,6 +66,9 @@ void OptionsMenuTodoList(void);
  * \todo unfreezeNPC - unfreeze a particular NPC
  * \todo fadeMusic function - fade a song out with a given time delay (possibly blocking until the song is faded)
  * \todo setLoopPoints function - set new looping points for a song (song continues playing with new points)
+ * \todo updateQuest function - Add a quest to or update a quest in the player's quest log
+ * \todo getQuestStatus function - Get the status in the quest log for a specific quest
+ * \todo fadeToColor function - Synchronous fading of the screen into a specific colour, with a specific alpha
  */
 void ScriptFunctionsTodoList(void);
 

@@ -7,6 +7,10 @@ require 'wx'
 include Wx
 
 class SpriteFrame
+  # NOTE: If this value must be changed, the UNTITLED_LINE string in the game's Spritesheet class must also change to be in sync. 
+  # As well, any .eds files with the old value must be updated to use the new value instead.
+  UNTITLED_LINE = "untitled"
+  
   attr_accessor :name
 
   attr_reader :leftEdge
@@ -19,7 +23,7 @@ class SpriteFrame
   def initialize(*args)
     
     if args.size == 0
-      name = "untitled"
+      name = UNTITLED_LINE
       leftEdge = -1
       topEdge = -1
       rightEdge = -1

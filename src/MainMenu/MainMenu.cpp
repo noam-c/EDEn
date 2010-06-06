@@ -98,8 +98,6 @@ void MainMenu::populateOpsList()
 
 bool MainMenu::step()
 {
-   GameState::step();
-
    if(finished) return false;
 
    bool done = false;
@@ -108,6 +106,13 @@ bool MainMenu::step()
    music->play();
 #endif
 
+   waitForInputEvent(done);
+
+   return !done;
+}
+
+void MainMenu::waitForInputEvent(bool& finishState)
+{
    SDL_Event event;
 
    /* Check for events */
@@ -122,27 +127,27 @@ bool MainMenu::step()
             case NEW_GAME_ACTION:
             {
                NewGameAction();
-               break;
+               return;
             }
             case LOAD_GAME_ACTION:
             {
                LoadGameAction();
-               break;
+               return;
             }
             case OPTIONS_ACTION:
             {
                OptionsAction();
-               break;
+               return;
             }
             case ABOUT_ACTION:
             {
                AboutAction();
-               break;
+               return;
             }
             case QUIT_GAME_ACTION:
             {
                QuitAction();
-               break;
+               return;
             }
          }
 
@@ -154,7 +159,8 @@ bool MainMenu::step()
          {
             case SDLK_ESCAPE:
             {
-               done = true; break;
+               finishState = true;
+               return;
             }
          }
 
@@ -162,8 +168,8 @@ bool MainMenu::step()
       }
       case SDL_QUIT:
       {
-          done = true;
-          break;
+          finishState = true;
+          return;
       }
       default:
       {
@@ -171,18 +177,12 @@ bool MainMenu::step()
       }
    }
 
-   GraphicsUtil::getInstance()->pushInput(event);
-
-   return !done;
+   // If the main menu didn't consume this event, then propagate to the generic input handling
+   handleEvent(event);
 }
 
 void MainMenu::draw()
 {
-   GameState::draw();
-
-   // Make sure everything is displayed on screen
-   GraphicsUtil::getInstance()->flipScreen();
-
    /* Don't run too fast */
    SDL_Delay (1);
 }

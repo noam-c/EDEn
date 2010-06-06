@@ -52,6 +52,11 @@ namespace edwt
          TextBox() : align(LEFT) {}
 
          /**
+          * Scroll to the bottom row of the text box.
+          */
+         void scrollToBottom();
+
+         /**
           * @param alignment The new text alignment of the text box.
           */
          void setAlignment(TextAlign alignment);
