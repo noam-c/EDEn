@@ -20,7 +20,7 @@ namespace edwt
       return listOps[i].actionFlag;
    }
 
-   void StringListModel::add(std::string label, int a)
+   void StringListModel::add(const std::string& label, int a)
    {
       listOps.push_back(ListItem(label,a));
    }

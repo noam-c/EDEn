@@ -5,7 +5,7 @@
 
 const int debugFlag = DEBUG_RES_LOAD;
 
-Region::Region(ResourceKey name) : Resource(name)
+Region::Region(const ResourceKey& name) : Resource(name)
 {
 }
 
@@ -63,7 +63,7 @@ Map* Region::getStartingMap()
    return areas.begin()->second;
 }
 
-Map* Region::getMap(std::string name)
+Map* Region::getMap(const std::string& name)
 {
    return areas[name];
 }

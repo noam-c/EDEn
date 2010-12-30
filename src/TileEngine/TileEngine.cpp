@@ -8,6 +8,7 @@
 #include "ResourceLoader.h"
 #include "Region.h"
 #include "Map.h"
+#include "Pathfinder.h"
 #include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
@@ -17,13 +18,13 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 const int TileEngine::TILE_SIZE = 32;
 
-TileEngine::TileEngine(std::string chapterName)
+TileEngine::TileEngine(const std::string& chapterName)
                                    : currMap(NULL), xMapOffset(0), yMapOffset(0)
 {
-   player = new PlayerCharacter(ResourceLoader::getSpritesheet("crono"), 320, 320);
    scheduler = new Scheduler();
-   scriptEngine = new ScriptEngine(this, scheduler);
-   dialogue = new DialogueController(top, scriptEngine);
+   player = new PlayerCharacter(ResourceLoader::getSpritesheet("crono"), 320, 320);
+   scriptEngine = new ScriptEngine(*this, *scheduler);
+   dialogue = new DialogueController(*top, *scriptEngine);
 
    consoleWindow = new edwt::DebugConsoleWindow(top, 800, 200);
 
@@ -47,7 +48,7 @@ void TileEngine::dialogueSay(const char* speech, Task* task)
    dialogue->say(speech, task);
 }
 
-bool TileEngine::setRegion(std::string regionName, std::string mapName)
+bool TileEngine::setRegion(const std::string& regionName, const std::string& mapName)
 {
    DEBUG("Loading region: %s", regionName.c_str());
    currRegion = ResourceLoader::getRegion(regionName);
@@ -76,6 +77,7 @@ void TileEngine::setMap(std::string mapName)
 
    DEBUG("Map set to: %s", mapName.c_str());
 
+   pathfinder->setMap(currMap);
    recalculateMapOffsets();
 }
 
@@ -108,7 +110,7 @@ void TileEngine::toggleDebugConsole()
    }
 }
 
-void TileEngine::addNPC(std::string npcName, std::string spritesheetName, int x, int y)
+void TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
    npcList[npcName] = new NPC(scriptEngine, scheduler, sheet,
@@ -116,25 +118,25 @@ void TileEngine::addNPC(std::string npcName, std::string spritesheetName, int x,
                            x * TILE_SIZE, y * TILE_SIZE);
 }
 
-void TileEngine::moveNPC(std::string npcName, int x, int y)
+void TileEngine::moveNPC(const std::string& npcName, int x, int y)
 {
    NPC* npcToMove = npcList[npcName];
    npcToMove->move(x, y);
 }
 
-void TileEngine::setNPCSprite(std::string npcName, std::string frameName)
+void TileEngine::setNPCSprite(const std::string& npcName, const std::string& frameName)
 {
    NPC* npcToChange = npcList[npcName];
    npcToChange->setFrame(frameName);
 }
 
-void TileEngine::setNPCAnimation(std::string npcName, std::string animationName)
+void TileEngine::setNPCAnimation(const std::string& npcName, const std::string& animationName)
 {
    NPC* npcToChange = npcList[npcName];
    npcToChange->setAnimation(animationName);
 }
 
-void TileEngine::changeNPCSpritesheet(std::string npcName, std::string spritesheetName)
+void TileEngine::changeNPCSpritesheet(const std::string& npcName, const std::string& spritesheetName)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
    NPC* npcToChange = npcList[npcName];
@@ -279,9 +281,9 @@ void TileEngine::handleInputEvents(bool& finishState)
 
 TileEngine::~TileEngine()
 {
-   delete scheduler;
    delete consoleWindow;
-   delete scriptEngine;
    delete dialogue;
-   delete top;
+   delete scriptEngine;
+   delete player;
+   delete scheduler;
 }

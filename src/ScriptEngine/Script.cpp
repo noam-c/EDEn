@@ -12,7 +12,7 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-Script::Script(std::string name) : scriptName(name), running(false)
+Script::Script(const std::string& name) : scriptName(name), running(false)
 {
 }
 

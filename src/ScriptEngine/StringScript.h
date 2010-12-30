@@ -20,7 +20,7 @@ class StringScript : public Script
        * @param luaVM The main Lua stack to fork a thread from.
        * @param scriptString The Lua code that should be run on this thread.
        */
-      StringScript(lua_State* luaVM, std::string scriptString);
+      StringScript(lua_State* luaVM, const std::string& scriptString);
 
       /**
        * Destructor.

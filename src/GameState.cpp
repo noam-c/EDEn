@@ -41,3 +41,8 @@ void GameState::drawFrame()
    // Make sure everything is displayed on screen
    GraphicsUtil::getInstance()->flipScreen();
 }
+
+GameState::~GameState()
+{
+   delete top;
+}

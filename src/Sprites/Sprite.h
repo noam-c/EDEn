@@ -48,14 +48,14 @@ class Sprite
        *
        * @param frameName The name of the static frame.
        */
-      void setFrame(std::string frameName);
+      void setFrame(const std::string& frameName);
 
       /**
        * Set an animation to draw for this sprite.
        *
        * @param animationName The name of the animation.
        */
-      void setAnimation(std::string animationName);
+      void setAnimation(const std::string& animationName);
 
       /**
        * A logic step for the sprite. Currently just advances the animation if

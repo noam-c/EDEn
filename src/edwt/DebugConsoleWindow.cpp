@@ -51,7 +51,7 @@ namespace edwt
    {
       if(keyEvent.getKey() == gcn::Key::ENTER)
       {
-         std::string text = consoleInput->getText();
+         const std::string& text = consoleInput->getText();
          if(text.length() > 0)
          {
             consoleInput->setText("");

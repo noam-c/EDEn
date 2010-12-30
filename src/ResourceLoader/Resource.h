@@ -40,7 +40,7 @@ class Resource
    /**
     * The name of the resource.
     */
-   ResourceKey name;
+   const ResourceKey& name;
 
    public:
       /**
@@ -48,7 +48,7 @@ class Resource
        *
        * @param name The unique name of this resource.
        */
-      Resource(ResourceKey name);
+      Resource(const ResourceKey& name);
 
       /**
        * Loads a resource from file and sets the resource to 'loaded' state

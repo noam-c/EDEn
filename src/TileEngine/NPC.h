@@ -61,23 +61,23 @@ class NPC
                                   {}
    };
 
-   /** The NPC's name */
-   std::string name;
+   /** A queue of instructions for the NPC to follow */
+   std::queue<Instruction*> instructions;
 
    /** The NPC's associated sprite, which is drawn on screen. */
    Sprite* sprite;
+
+   /** The NPC's thread of execution */
+   NPCScript* npcThread;
+
+   /** The NPC's name */
+   std::string name;
 
    /** The x-location of this NPC (in pixels). */
    int x;
 
    /** The y-location of this NPC (in pixels). */
    int y;
-
-   /** A queue of instructions for the NPC to follow */
-   std::queue<Instruction*> instructions;
-
-   /** The NPC's thread of execution */
-   NPCScript* npcThread;
 
    /**
     * Run an NPC instruction for a frame.
@@ -95,7 +95,7 @@ class NPC
        * 
        * @param name The name of the NPC (must also be the name of its script).
        */
-      NPC(ScriptEngine* engine, Scheduler* scheduler, Spritesheet* sheet, std::string regionName, std::string mapName, std::string name, int x, int y);
+      NPC(ScriptEngine& engine, Scheduler& scheduler, Pathfinder& pathfinder, Spritesheet* sheet, const std::string& regionName, const std::string& mapName, const std::string& name, int x, int y);
 
       /**
        * @return The name of this NPC.
@@ -170,7 +170,7 @@ class NPC
        * @param frameName The name of the frame to use.
        *
        */
-      void setFrame(std::string frameName);
+      void setFrame(const std::string& frameName);
 
       /**
        * This function changes the NPC's animation.
@@ -178,7 +178,7 @@ class NPC
        * @param animationName The name of the animation to use.
        *
        */
-      void setAnimation(std::string animationName);
+      void setAnimation(const std::string& animationName);
 
       /**
        * Destructor.

@@ -105,7 +105,7 @@ class TileEngine: public GameState
        *
        * @param chapterName The name of the chapter to load after construction
        */
-      TileEngine(std::string chapterName);
+      TileEngine(const std::string& chapterName);
 
       /**
        * @return The name of the currently loaded map.
@@ -149,7 +149,7 @@ class TileEngine: public GameState
        *
        * @return true iff the region was successfully set, and a map successfully loaded
        */
-      bool setRegion(std::string regionName, std::string mapName = "");
+      bool setRegion(const std::string& regionName, const std::string& mapName = "");
 
       /**
        * Set a new map within the current region.
@@ -167,7 +167,7 @@ class TileEngine: public GameState
        * @param x The x location where we spawn the NPC
        * @param y The y location where we spawn the NPC
        */
-      void addNPC(std::string npcName, std::string spritesheetName, int x, int y);
+      void addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y);
 
       /**
        * Move an NPC with the specified name to the specified location.
@@ -176,7 +176,7 @@ class TileEngine: public GameState
        * @param x The x location to move the NPC to
        * @param y The y location to move the NPC to
        */
-      void moveNPC(std::string npcName, int x, int y);
+      void moveNPC(const std::string& npcName, int x, int y);
 
       /**
        * Change the sprite frame of the specified NPC.
@@ -184,7 +184,7 @@ class TileEngine: public GameState
        * @param npcName The name of the NPC to change.
        * @param animationName The name of the animation to change to.
        */
-      void setNPCAnimation(std::string npcName, std::string animationName);
+      void setNPCAnimation(const std::string& npcName, const std::string& animationName);
 
       /**
        * Change the sprite frame of the specified NPC.
@@ -192,7 +192,7 @@ class TileEngine: public GameState
        * @param npcName The name of the NPC to change.
        * @param frameName The name of the frame to change to.
        */
-      void setNPCSprite(std::string npcName, std::string frameName);
+      void setNPCSprite(const std::string& npcName, const std::string& frameName);
 
       /**
        * Change the spritesheet of the specified NPC.
@@ -200,7 +200,7 @@ class TileEngine: public GameState
        * @param npcName The name of the NPC to change.
        * @param spritesheetName The name of the spritesheet to use.
        */
-      void changeNPCSpritesheet(std::string npcName, std::string spritesheetName);
+      void changeNPCSpritesheet(const std::string& npcName, const std::string& spritesheetName);
 
       /**
        * Destructor.

@@ -1,6 +1,7 @@
 #include "NPC.h"
 #include "ScriptEngine.h"
 #include "NPCScript.h"
+#include "Pathfinder.h"
 #include "Scheduler.h"
 #include "Sprite.h"
 
@@ -8,12 +9,12 @@
 
 const int debugFlag = DEBUG_NPC;
 
-NPC::NPC(ScriptEngine* engine, Scheduler* scheduler, Spritesheet* sheet,
-                       std::string regionName, std::string mapName, std::string name,
-                       int x, int y) : name(name), x(x), y(y)
+NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, Spritesheet* sheet,
+                       const std::string& regionName, const std::string& mapName, const std::string& name,
+                       int x, int y) : name(name), x(x), y(y), pathfinder(pathfinder)
 {
-   npcThread = engine->getNPCScript(this, regionName, mapName, name);
-   scheduler->start(npcThread);
+   npcThread = engine.getNPCScript(this, regionName, mapName, name);
+   scheduler.start(npcThread);
    DEBUG("NPC %s has a Thread with ID %d", name.c_str(), npcThread->getId());
 
    sprite = new Sprite(sheet);
@@ -32,7 +33,7 @@ bool NPC::runInstruction(Instruction* instruction, long timePassed)
       {
          int* newCoords = static_cast<int*>(instruction->params);
          
-         float vel = 0.1;
+         float vel = 0.1f;
          if(x < newCoords[0])
          {
             x += (int)(vel*timePassed);
@@ -112,12 +113,12 @@ void NPC::setSpritesheet(Spritesheet* sheet)
    sprite->setSheet(sheet);
 }
 
-void NPC::setFrame(std::string frameName)
+void NPC::setFrame(const std::string& frameName)
 {
    sprite->setFrame(frameName);
 }
 
-void NPC::setAnimation(std::string animationName)
+void NPC::setAnimation(const std::string& animationName)
 {
    sprite->setAnimation(animationName);
 }

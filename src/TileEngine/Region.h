@@ -40,7 +40,7 @@ class Region : public Resource
       /**
        * Constructor.
        */
-      Region(ResourceKey name);
+      Region(const ResourceKey& name);
 
       /** @return the name of the region. */
       std::string getName();
@@ -53,7 +53,7 @@ class Region : public Resource
        *
        * @return the Map with the specified name.
        */
-      Map* getMap(std::string name);
+      Map* getMap(const std::string& name);
 
       /**
        * Implementation of method in Resource class.

@@ -53,7 +53,7 @@ namespace edwt
       
       for (i = 0; i < mListModel->getNumberOfElements(); ++i)
       {
-         std::string currString = mListModel->getElementAt(i);
+         const std::string& currString = mListModel->getElementAt(i);
          int xloc = 1 + (getWidth() - getFont()->getWidth(currString))/2;
 
          if (i == mSelected)

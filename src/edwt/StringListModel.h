@@ -30,7 +30,7 @@ namespace edwt
          int actionFlag;
 
          /** Constructor. */
-         ListItem(std::string label, int action) : name(label), actionFlag(action) {}
+         ListItem(const std::string& label, int action) : name(label), actionFlag(action) {}
       };
 
       /** The string items (and associated action flags) in the list */ 
@@ -61,7 +61,7 @@ namespace edwt
           * @param label the string label for the new item
           * @param action the action flag for selecting the new item
           */
-         void add(std::string label, int action);
+         void add(const std::string& label, int action);
 
          /**
           * Removes all items from the list model

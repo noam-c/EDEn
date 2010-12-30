@@ -209,7 +209,7 @@ void Spritesheet::load(const char* path)
    DEBUG("Spritesheet constructed!");
 }
 
-int Spritesheet::getFrameIndex(std::string frameName)
+int Spritesheet::getFrameIndex(const std::string& frameName)
 {
    std::map<std::string, int>::const_iterator frameIndex = frameIndices.find(frameName);
    if(frameIndex != frameIndices.end() && frameIndex->second < numFrames)
@@ -220,7 +220,7 @@ int Spritesheet::getFrameIndex(std::string frameName)
    return -1;
 }
 
-Animation* Spritesheet::getAnimation(std::string animationName)
+Animation* Spritesheet::getAnimation(const std::string& animationName)
 {
    std::map<std::string, FrameNode*>::const_iterator animFrames = animationList.find(animationName);
    if(animFrames != animationList.end())

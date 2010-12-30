@@ -37,7 +37,7 @@ class Script : public Thread
       /**
        * Constructor.
        */
-      Script(std::string name);
+      Script(const std::string& name);
 
       /**
        * Performs a Lua resume on the thread.

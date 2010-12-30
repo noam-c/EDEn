@@ -43,16 +43,16 @@ class PlayerData
    void serializeLocation(TiXmlElement& outputXml);
 
    public:
-      void load(std::string filePath);
-      void save(std::string filePath);
+      void load(const std::string& filePath);
+      void save(const std::string& filePath);
 
       void addNewCharacter(Character* newCharacter);
       Character* getPartyLeader();
 
-      void addNewQuest(std::string questPath, std::string description, bool optionalQuest);
-      bool isQuestCompleted(std::string questPath);
-      void completeQuest(std::string questPath);
-      std::string getQuestDescription(std::string questPath);
+      void addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest);
+      bool isQuestCompleted(const std::string& questPath);
+      void completeQuest(const std::string& questPath);
+      std::string getQuestDescription(const std::string& questPath);
 
       ~PlayerData();
 };

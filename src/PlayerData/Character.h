@@ -14,7 +14,7 @@ class Character
    int characterSP;
    
    public:
-      Character(std::string name);
+      Character(const std::string& name);
       Character(TiXmlElement* charToLoad);
       void Character::serialize(TiXmlElement& characterSet);
 

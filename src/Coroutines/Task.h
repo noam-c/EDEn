@@ -18,7 +18,7 @@ class Task
    TaskId id;
    
    /** The scheduler to signal when this task is finished */
-   Scheduler* scheduler;
+   Scheduler& scheduler;
 
    /**
     *  Constructor. Assigns a new task ID and associates a Scheduler with the
@@ -27,7 +27,7 @@ class Task
     *  @param taskId The task ID for this task.
     *  @param scheduler The scheduler to signal when the task is completed.
     */
-   Task(TaskId taskId, Scheduler* scheduler);
+   Task(TaskId taskId, Scheduler& scheduler);
 
    /**
     * Destructor. Private so that Tasks (which self-destruct)
@@ -42,7 +42,7 @@ class Task
        *  @param scheduler The scheduler to signal when the new task completes.
        *  @return A newly created task associated with the given scheduler.
        */
-      static Task* getNextTask(Scheduler* scheduler);
+      static Task* getNextTask(Scheduler& scheduler);
 
       /**
        *  @return the unique identifier of this Task.

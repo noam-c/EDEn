@@ -1,6 +1,6 @@
 #include "Resource.h"
 
-Resource::Resource(ResourceKey name) : name(name), initialized(false)
+Resource::Resource(const ResourceKey& name) : name(name), initialized(false)
 {
 }
 

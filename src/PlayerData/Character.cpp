@@ -5,7 +5,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-Character::Character(std::string name) : name(name)
+Character::Character(const std::string& name) : name(name)
 {
 }
 

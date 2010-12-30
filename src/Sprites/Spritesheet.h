@@ -98,7 +98,7 @@ class Spritesheet : public Resource
        *
        * @return An index into the frame requested.
        */
-      int getFrameIndex(std::string frameName);
+      int getFrameIndex(const std::string& frameName);
 
       /**
        * Get a new animation list specified by the animation name.
@@ -108,7 +108,7 @@ class Spritesheet : public Resource
        * @return An animation structure that can outputs a frame index for the
        *         amount of time that has passed.
        */
-      Animation* getAnimation(std::string animationName);
+      Animation* getAnimation(const std::string& animationName);
 
       /**
        * Implementation of method in Resource class.

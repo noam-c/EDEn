@@ -60,6 +60,11 @@ class GameState
        */
       virtual void draw() = 0;
 
+      /**
+       * Destructor.
+       */
+      ~GameState();
+
    public:
       /**
        * State activation called every time this state is found at the top of the execution stack.

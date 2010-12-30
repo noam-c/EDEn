@@ -7,12 +7,12 @@ const int debugFlag = DEBUG_SCHEDULER;
 /** The next available unique task identifier. */
 static TaskId nextId = 0;
 
-Task* Task::getNextTask(Scheduler* scheduler)
+Task* Task::getNextTask(Scheduler& scheduler)
 {
    return new Task(nextId++, scheduler);
 }
 
-Task::Task(TaskId taskId, Scheduler* scheduler)
+Task::Task(TaskId taskId, Scheduler& scheduler)
                       : id(taskId), scheduler(scheduler)
 {}
 
@@ -23,7 +23,7 @@ TaskId Task::getTaskId()
 
 void Task::signal()
 {
-   scheduler->taskDone(id);
+   scheduler.taskDone(id);
    delete this;
 }
 

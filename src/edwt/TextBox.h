@@ -32,7 +32,7 @@ namespace edwt
          gcn::Color textColor;
 
          /** Determine the point in the x-axis where the text begins */
-         int determineX(std::string text);
+         int determineX(const std::string& text);
 
       protected:
          /**

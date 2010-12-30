@@ -6,7 +6,7 @@
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueController(edwt::Container* top, ScriptEngine* engine)
+DialogueController::DialogueController(edwt::Container& top, ScriptEngine& engine)
                      : top(top), scriptEngine(engine), currLine(NULL), fastMode(false)
 {
    initMainDialogue();
@@ -22,7 +22,7 @@ void DialogueController::initMainDialogue()
    mainDialogue->setWidth(800);
    mainDialogue->setX(0);
 
-   top->add(mainDialogue);
+   top.add(mainDialogue);
 }
 
 void DialogueController::addLine(LineType type, const char* speech, Task* task)
@@ -98,7 +98,7 @@ void DialogueController::advanceDialogue()
       {
          charsToShow = openIndex;
          std::string script = currLine->removeNextScriptString();
-         scriptEngine->runScriptString(script);
+         scriptEngine.runScriptString(script);
       }
    }
 
@@ -192,7 +192,7 @@ bool DialogueController::resume(long timePassed)
    return false;
 }
 
-DialogueController::Line::Line(LineType type, std::string dialogue, Task* task)
+DialogueController::Line::Line(LineType type, const std::string& dialogue, Task* task)
                     : type(type), dialogue(dialogue), task(task)
 {
    int openIndex = 0;

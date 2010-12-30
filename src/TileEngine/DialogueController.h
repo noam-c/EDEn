@@ -76,7 +76,7 @@ class DialogueController : public Thread
           *  Constructor. Initializes values and indexes the locations of
           *  embedded scripts in the line of dialogue for later use.
           */
-         Line(LineType type, std::string dialogue, Task* task);
+         Line(LineType type, const std::string& dialogue, Task* task);
 
          /**
           *  Gets the next embdedded script bracket pair.
@@ -96,8 +96,11 @@ class DialogueController : public Thread
    /** The queue to hold all the pending dialogue sequences. */
    std::queue<Line*> lineQueue;
 
+   /** The script engine to call when embedded instructions are found */
+   ScriptEngine& scriptEngine;
+
    /** The topmost container that will contain the dialogue boxes */
-   edwt::Container* top;
+   edwt::Container& top;
 
    /** Main dialogue box for speech or narration */
    DialogueBox* mainDialogue;
@@ -120,9 +123,6 @@ class DialogueController : public Thread
 
    /** The current line of dialogue */
    Line* currLine;
-
-   /** The script engine to call when embedded instructions are found */
-   ScriptEngine* scriptEngine;
 
    /**
     * Initialize the main dialogue box.
@@ -181,7 +181,7 @@ class DialogueController : public Thread
        * @param top The top-level widget container of the current state.
        * @param engine The scripting engine to call with embedded scripts.
        */
-      DialogueController(edwt::Container* top, ScriptEngine* engine);
+      DialogueController(edwt::Container& top, ScriptEngine& engine);
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next

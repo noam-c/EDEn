@@ -1,9 +1,10 @@
 #ifndef __MAP_H_
 #define __MAP_H_
 
-#include "Tileset.h"
 #include <fstream>
 #include <string>
+
+class Tileset;
 
 /**
  * A map is a subset of a Region consisting of a single rectangular set of tiles
@@ -40,6 +41,13 @@ class Map
 
    public:
       /**
+       * Copy constructor.
+       *
+       * @param map The Map to copy.
+       */
+      Map(const Map& map);
+
+      /**
        * Constructor. Loads map data from a Region file.
        * At the end of construction, the input stream 'in' will be at the end of
        * this Map's data.
@@ -63,6 +71,11 @@ class Map
        * @return The height of the map (in tiles).
        */
       int getHeight();
+
+      /**
+       * @return A copy of the map.
+       */
+      Map* makeCopy();
 
       /**
        * Draw an entire map's tiles.

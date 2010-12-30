@@ -11,7 +11,7 @@ const int debugFlag = DEBUG_PLAYER;
 // Uncomment this line to turn off encryption of savegames
 // #define DISABLE_ENCRYPTION
 
-void PlayerData::load(std::string filePath)
+void PlayerData::load(const std::string& filePath)
 {
    DEBUG("Loading save file %s", filePath.c_str());
 
@@ -161,7 +161,7 @@ void PlayerData::serializeLocation(TiXmlElement& outputXml)
 {
 }
 
-void PlayerData::save(std::string filePath)
+void PlayerData::save(const std::string& filePath)
 {
    TiXmlElement playerDataNode(PLAYER_DATA_ELEMENT);
    serializeCharactersAndParty(playerDataNode);
@@ -211,22 +211,22 @@ Character* PlayerData::getPartyLeader()
    return partyLeader;
 }
 
-void PlayerData::addNewQuest(std::string questPath, std::string description, bool optionalQuest)
+void PlayerData::addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest)
 {
    rootQuest->addQuest(questPath, description, optionalQuest);
 }
 
-bool PlayerData::isQuestCompleted(std::string questPath)
+bool PlayerData::isQuestCompleted(const std::string& questPath)
 {
    return rootQuest->isQuestCompleted(questPath);
 }
 
-void PlayerData::completeQuest(std::string questPath)
+void PlayerData::completeQuest(const std::string& questPath)
 {
    rootQuest->completeQuest(questPath);
 }
 
-std::string PlayerData::getQuestDescription(std::string questPath)
+std::string PlayerData::getQuestDescription(const std::string& questPath)
 {
    return rootQuest->getQuestDescription(questPath);
 }

@@ -53,7 +53,7 @@ class ScriptFactory
     * @param name The name of the script to be loaded.
     * @param type The ScriptType of the script to be loaded.
     */
-   static Script* createScript(lua_State* luaVM, std::string name, ScriptType type, ...);
+   static Script* createScript(lua_State* luaVM, const std::string& name, ScriptType type, ...);
 
    /**
     * Get the path to a certain resource based on its name and type.
@@ -63,7 +63,7 @@ class ScriptFactory
     *
     * @return A relative path to the script "name"
     */
-   static std::string getPath(std::string name, ScriptType type);
+   static std::string getPath(const std::string& name, ScriptType type);
 
    public:
       /**
@@ -74,7 +74,7 @@ class ScriptFactory
        *
        * @return The NPC script associated with the NPC requested
        */
-      static NPCScript* getNPCScript(lua_State* luaVM, NPC* npc, std::string regionName, std::string mapName, std::string npcName);
+      static NPCScript* getNPCScript(lua_State* luaVM, NPC* npc, const std::string& regionName, const std::string& mapName, const std::string& npcName);
 
       /**
        * @param luaVM The Lua VM to be used to load the script
@@ -83,7 +83,7 @@ class ScriptFactory
        *
        * @return The map script given by the specified region-map pairing
        */
-      static Script* getMapScript(lua_State* luaVM, std::string regionName, std::string mapName);
+      static Script* getMapScript(lua_State* luaVM, const std::string& regionName, const std::string& mapName);
 
       /**
        * @param luaVM The Lua VM to be used to load the script
@@ -91,7 +91,7 @@ class ScriptFactory
        *
        * @return The chapter script given by the specified chapter name
        */
-      static Script* getChapterScript(lua_State* luaVM, std::string name);
+      static Script* getChapterScript(lua_State* luaVM, const std::string& name);
 };
 
 #endif

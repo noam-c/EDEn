@@ -25,19 +25,19 @@ class Exception : public std::exception
    Exception();
    
    /**
+    * The name of the function from which this Exception was thrown.
+    */
+   const std::string& function;
+
+   /**
     * The line number from which this Exception was thrown.
     */
    int line;
 
    /**
-    * The name of the function from which this Exception was thrown.
-    */
-   std::string function;
-
-   /**
     * The message associated with the Exception.
     */
-   std::string message;
+   const std::string& message;
 
    public:
       /**
@@ -49,6 +49,11 @@ class Exception : public std::exception
        */
       Exception(const std::string& function,
              int line, const std::string& message);
+
+      /**
+       * @return The full description this Exception (includes message and exception location).
+       */
+      std::string getFullMessage() const;
 
       /**
        * @return The name of the function that threw this Exception.
@@ -68,8 +73,7 @@ class Exception : public std::exception
       /**
        * Destructor.
        */
-      ~Exception() throw();
-
+      ~Exception();
 };
 
 #endif

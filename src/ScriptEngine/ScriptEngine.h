@@ -27,19 +27,19 @@ struct lua_State;
 class ScriptEngine
 {
    /**
+    * The tile engine to execute commands on
+    */
+   TileEngine& tileEngine;
+
+   /**
     * The scheduler for the script threads
     */
-   Scheduler* scheduler;
+   Scheduler& scheduler;
 
    /**
     * The main Lua execution thread and stack
     */
    lua_State* luaVM;
-
-   /**
-    * The tile engine to execute commands on
-    */
-   TileEngine* tileEngine;
 
    /**
     * Register some functions in Lua's global space using Lua bindings
@@ -49,7 +49,7 @@ class ScriptEngine
    /**
     * Converts a script name into a relative path for the associated Lua file
     */
-   std::string getScriptPath(std::string scriptName);
+   std::string getScriptPath(const std::string& scriptName);
 
    /**
     * Run a specified script.
@@ -65,7 +65,7 @@ class ScriptEngine
        * @param tileEngine The tile engine to make calls to from scripts
        * @param scheduler The scheduler responsible for managing this engine's Script threads
        */
-      ScriptEngine(TileEngine* tileEngine, Scheduler* scheduler);
+      ScriptEngine(TileEngine& tileEngine, Scheduler& scheduler);
 
       /**
        * Get a specified NPC script.
@@ -75,7 +75,7 @@ class ScriptEngine
        * @param mapName The name of the map this NPC is found in.
        * @param npcName The name of the NPC (and its script file).
        */
-      NPCScript* getNPCScript(NPC* npc, std::string regionName, std::string mapName, std::string npcName);
+      NPCScript* getNPCScript(NPC* npc, const std::string& regionName, const std::string& mapName, const std::string& npcName);
 
       /**
        * Run a specified map script.
@@ -83,7 +83,7 @@ class ScriptEngine
        * @param regionName The region containing the map script to run.
        * @param mapName The name of the map script to be run.
        */
-      int runMapScript(std::string regionName, std::string mapName);
+      int runMapScript(const std::string& regionName, const std::string& mapName);
 
       /**
        * Run a specified map script.
@@ -91,14 +91,14 @@ class ScriptEngine
        * @param regionName The region containing the map script to run.
        * @param mapName The name of the map script to be run.
        */
-      int runChapterScript(std::string chapterName);
+      int runChapterScript(const std::string& chapterName);
 
       /**
        * Run a string of script with the specified name.
        *
        * @param scriptString The name of the script to run.
        */
-      int runScriptString(std::string scriptString);
+      int runScriptString(const std::string& scriptString);
 
       /**
        * Set the tile engine to send commands to.

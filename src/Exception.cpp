@@ -2,23 +2,31 @@
 #include <sstream>
 
 Exception::Exception()
+       : function(""),
+         line(-1),
+         message("")
 {
 }
 
 Exception::Exception(const std::string& function,
        int line, const std::string& message)
-       : message(message),
-         function(function),
-         line(line)
+       : function(function),
+         line(line),
+         message(message)
 {
 }
 
-const std::string& Exception::getMessage() const throw()
+std::string Exception::getFullMessage() const
 {
    std::stringstream err;
    err << message << "\n at line " << line << " of function " << function << '\n';
 
-   return err.str().c_str();
+   return err.str();
+}
+
+const std::string& Exception::getMessage() const
+{
+   return message;
 }
 
 const std::string& Exception::getFunction() const
@@ -31,6 +39,6 @@ int Exception::getLine() const
    return line;
 }
 
-Exception::~Exception() throw()
+Exception::~Exception()
 {
 }

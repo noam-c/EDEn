@@ -30,7 +30,7 @@ void Sprite::setSheet(Spritesheet* newSheet)
    clearCurrentFrame();
 }
 
-void Sprite::setFrame(std::string frameName)
+void Sprite::setFrame(const std::string& frameName)
 {
    int newFrameIndex = sheet->getFrameIndex(frameName);
    if(newFrameIndex < 0)
@@ -42,7 +42,7 @@ void Sprite::setFrame(std::string frameName)
    frameIndex = newFrameIndex;
 }
 
-void Sprite::setAnimation(std::string animationName)
+void Sprite::setAnimation(const std::string& animationName)
 {
    Animation* newAnimation = sheet->getAnimation(animationName);
    if(newAnimation == NULL)

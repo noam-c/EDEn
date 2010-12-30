@@ -69,7 +69,7 @@ class NPCScript : public Script
        * @param luaVM The main Lua stack to fork a thread from.
        * @param scriptPath The path to a script that should be run on this thread.
        */
-      NPCScript(lua_State* luaVM, std::string scriptPath, NPC* npc);
+      NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc);
 
       /**
        * Call a function on this NPC's script.

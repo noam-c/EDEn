@@ -17,22 +17,22 @@ class Quest
 
    QuestLog subquests;
 
-   Quest* findQuest(std::string questPath);
+   Quest* findQuest(const std::string& questPath);
 
    public:
-      Quest(std::string name, std::string description, bool optional, bool completed);
+      Quest(const std::string& name, const std::string& description, bool optional, bool completed);
       Quest(TiXmlElement* questTree);
       void Quest::serialize(TiXmlElement& outputXml);
 
-      void addQuest(std::string questPath, std::string description, bool optional, bool completed = false);
+      void addQuest(const std::string& questPath, const std::string& description, bool optional, bool completed = false);
       bool isCompleted();
       void complete();
-      bool isQuestCompleted(std::string questPath);
-      void completeQuest(std::string questPath);
+      bool isQuestCompleted(const std::string& questPath);
+      void completeQuest(const std::string& questPath);
 
       std::string getName();
       std::string getDescription();
-      std::string getQuestDescription(std::string questPath);
+      std::string getQuestDescription(const std::string& questPath);
 
       ~Quest();
 };

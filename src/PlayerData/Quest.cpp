@@ -5,7 +5,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-Quest::Quest(std::string name, std::string description, bool optional, bool completed)
+Quest::Quest(const std::string& name, const std::string& description, bool optional, bool completed)
    : name(name), optional(optional), completed(completed)
 {
 }
@@ -59,7 +59,7 @@ void Quest::serialize(TiXmlElement& outputXml)
    outputXml.InsertEndChild(questNode);
 }
 
-void Quest::addQuest(std::string questPath, std::string description, bool optional, bool completed)
+void Quest::addQuest(const std::string& questPath, const std::string& description, bool optional, bool completed)
 {
    std::string::size_type endOfRootQuest = questPath.find_first_of(".");
    if(endOfRootQuest == std::string::npos)
@@ -82,7 +82,7 @@ void Quest::addQuest(std::string questPath, std::string description, bool option
    }
 }
 
-Quest* Quest::findQuest(std::string questPath)
+Quest* Quest::findQuest(const std::string& questPath)
 {
    std::string::size_type endOfRootQuest = questPath.find_first_of(".");
    if(endOfRootQuest == std::string::npos)
@@ -105,7 +105,7 @@ Quest* Quest::findQuest(std::string questPath)
    }
 }
 
-bool Quest::isQuestCompleted(std::string questPath)
+bool Quest::isQuestCompleted(const std::string& questPath)
 {
    Quest* quest = findQuest(questPath);
    if(quest != NULL)
@@ -116,7 +116,7 @@ bool Quest::isQuestCompleted(std::string questPath)
    return false;
 }
 
-void Quest::completeQuest(std::string questPath)
+void Quest::completeQuest(const std::string& questPath)
 {
    Quest* quest = findQuest(questPath);
    if(quest != NULL)
@@ -148,7 +148,7 @@ std::string Quest::getDescription()
    return description;
 }
 
-std::string Quest::getQuestDescription(std::string questPath)
+std::string Quest::getQuestDescription(const std::string& questPath)
 {
    Quest* quest = findQuest(questPath);
    if(quest != NULL)

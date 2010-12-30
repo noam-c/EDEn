@@ -20,7 +20,7 @@ class FileScript : public Script
        * @param luaVM The main Lua stack to fork a thread from.
        * @param scriptPath The path to a script that should be run on this thread.
        */
-      FileScript(lua_State* luaVM, std::string scriptPath);
+      FileScript(lua_State* luaVM, const std::string& scriptPath);
 
       /**
        * Destructor.

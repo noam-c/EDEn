@@ -51,7 +51,7 @@ namespace edwt
       setHeight(getFont()->getHeight() * mTextRows.size());
    }
    
-   int TextBox::determineX(std::string text)
+   int TextBox::determineX(const std::string& text)
    {
       switch(align)
       {
