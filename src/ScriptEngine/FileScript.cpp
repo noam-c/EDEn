@@ -1,105 +1,23 @@
-#include "Sound.h"
-#include "Task.h"
-
+#include "FileScript.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_AUDIO;
+const int debugFlag = DEBUG_SCRIPT_ENG;
 
-std::map<int, Sound*> Sound::playingList;
-
-bool Sound::ownsChannel(Sound* sound, int channel)
+// Include the Lua libraries. Since they are written in clean C, the functions
+// need to be included in this fashion to work with the C++ code.
+extern "C"
 {
-   return sound == playingList[channel];
+   #include <lua.h>
+   #include <lualib.h>
+   #include <lauxlib.h>
 }
 
-void Sound::channelFinished(int channel)
-{
-   DEBUG("Channel %d finished playing.", channel);
-   Sound* finishedSound = playingList[channel];
-
-   if(finishedSound != NULL)
-   {  finishedSound->finished();
-   }
+FileScript::FileScript(lua_State* luaVM, std::string scriptPath) : Script(scriptPath)
+{  luaStack = lua_newthread(luaVM);
+   DEBUG("Script ID %d loading file %s", getId(), scriptPath.c_str());
+   luaL_loadfile(luaStack, scriptPath.c_str());
 }
 
-Sound::Sound(ResourceKey name) : Resource(name), playingChannel(-1)
+FileScript::~FileScript()
 {
-}
-
-void Sound::load(const char* path)
-{
-   /**
-    * \todo This should only be called once. Move it into initialization code.
-    */
-   Mix_ChannelFinished(&Sound::channelFinished);
-
-   DEBUG("Loading WAV %s", path);
-   sound = Mix_LoadWAV(path);
-
-   if(sound == NULL)
-   {
-      T_T(Mix_GetError());
-   }
-
-   DEBUG("Successfully loaded WAV %s.", path);
-}
-
-size_t Sound::getSize()
-{
-   return sizeof(Sound);
-}
-
-void Sound::play(Task* task)
-{
-   if(sound == NULL)
-   {
-      if(task)
-      {
-         task->signal();
-      }
-
-      return;
-   }
-
-   playingChannel = Mix_PlayChannel(-1, sound, 0);
-   if(playingChannel == -1)
-   {
-      DEBUG("There was a problem playing the sound ""%s"": %s", getResourceName().c_str(), Mix_GetError());
-   }
-
-   playingList[playingChannel] = this;
-   playTask = task;
-}
-
-void Sound::stop()
-{
-   if(ownsChannel(this, playingChannel))
-   {
-      Mix_HaltChannel(playingChannel);
-   }
-}
-
-void Sound::finished()
-{
-   DEBUG("Sound finished.");
-   if(playTask)
-   {
-      playTask->signal();
-      playTask = NULL;
-   }
-
-   playingChannel = -1;
-}
-
-Sound::~Sound()
-{
-   if(sound != NULL)
-   {
-      if(ownsChannel(this, playingChannel))
-      {
-         stop();
-      }
-
-      Mix_FreeChunk(sound);
-   }
 }
