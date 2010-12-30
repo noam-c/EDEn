@@ -6,12 +6,33 @@ require 'wx'
 
 include Wx
 
-class SpriteFrame
-  # NOTE: If this value must be changed, the UNTITLED_LINE string in the game's Spritesheet class must also change to be in sync. 
-  # As well, any .eds files with the old value must be updated to use the new value instead.
-  UNTITLED_LINE = "untitled"
+# NOTE: If this value must be changed, the UNTITLED_LINE string in the game's Spritesheet class must also change to be in sync 
+# As well, any .eds files with the old value must be updated to use the new value instead
+UNTITLED_LINE = "untitled"
+
+class PixelPair
+  attr_reader :x
+  attr_reader :y
   
+  def initialize(x, y)
+    @x = x
+    @y = y
+    @strHash = (x.to_s + ',' + y.to_s).hash
+  end
+
+  def eql?(other)
+    other.is_a?(PixelPair) && x == other.x && y == other.y
+  end
+
+  def hash()
+    @strHash
+  end
+end
+
+class SpriteFrame  
   attr_accessor :name
+
+  attr_reader :index
 
   attr_reader :leftEdge
   attr_reader :topEdge
@@ -23,20 +44,22 @@ class SpriteFrame
   def initialize(*args)
     
     if args.size == 0
-      name = UNTITLED_LINE
+      frameName = UNTITLED_LINE
       leftEdge = -1
       topEdge = -1
       rightEdge = -1
       bottomEdge = -1
-    elsif args.size == 5
-      name = args[0]
-      leftEdge = args[1]
-      topEdge = args[2]
-      rightEdge = args[3]
-      bottomEdge = args[4]
+    elsif args.size == 6
+      frameName = args[0]
+      frameIndex = args[1] 
+      leftEdge = args[2]
+      topEdge = args[3]
+      rightEdge = args[4]
+      bottomEdge = args[5]
     end
 
-    @name = name
+    @name = frameName
+    @index = frameIndex
 
     @leftEdge = leftEdge
     @topEdge = topEdge
@@ -101,27 +124,51 @@ class SpriteFrame
   end
 end
 
-class PixelPair
-  attr_reader :x
-  attr_reader :y
+class SpriteAnimation  
+  attr_accessor :name
+
+  def initialize(*args)
+    @name = args[0]
+    @frameList = args[1]
+  end
+
+  def get_frame(num)
+    return @frameList[num]
+  end
   
-  def initialize(x, y)
-    @x = x
-    @y = y
-    @strHash = (x.to_s + ',' + y.to_s).hash
+  def get_num_frames()
+    return @frameList.length
   end
+  
+  def insert(position, frames)
+    @frameList.insert(position, frames)
+    @frameList.flatten!
+  end
+  
+  def remove(positions)
+    positions.sort.reverse.each { |position| @frameList.delete_at(position) }
+  end
+  
+  def swap(pos1, pos2)
+    return if pos1 < 0 || pos1 >= @frameList.length
+    return if pos2 < 0 || pos2 >= @frameList.length
 
-  def eql?(other)
-    other.is_a?(PixelPair) && x == other.x && y == other.y
+    temp = @frameList[pos1]
+    @frameList[pos1] = @frameList[pos2]
+    @frameList[pos2] = temp
   end
-
-  def hash()
-    @strHash
-  end
+  
+  def to_s()
+    s = "anim " << @name
+    @frameList.each { |frame| s << ' ' << frame.name }
+    s << "\n"
+  end    
 end
 
 class FrameFinder
   def initialize(arg)
+    @animations = []
+    @frameMap = {}
 
     if arg.is_a?(String)
       load_from_data(arg)
@@ -136,16 +183,24 @@ class FrameFinder
 
     while (line = file.gets)
       tokens = line.split(' ')
-      next if tokens[0] != "frame"
-
+      kind = tokens[0]
       name = tokens[1]
-
-      leftEdge = Integer(tokens[2])
-      topEdge = Integer(tokens[3])
-      rightEdge = Integer(tokens[4])
-      bottomEdge = Integer(tokens[5])
-
-      @frames << SpriteFrame.new(name, leftEdge, topEdge, rightEdge, bottomEdge)
+      if kind == "frame"
+        leftEdge = Integer(tokens[2])
+        topEdge = Integer(tokens[3])
+        rightEdge = Integer(tokens[4])
+        bottomEdge = Integer(tokens[5])
+  
+        newFrame = SpriteFrame.new(name, @frames.length, leftEdge, topEdge, rightEdge, bottomEdge)
+        @frames << newFrame
+        if name != UNTITLED_LINE
+          @frameMap[name] = newFrame
+        end
+      elsif kind == "anim"
+        animation_length = tokens.length() - 2
+        animation_frames = Array.new(animation_length) {|i| @frameMap[tokens.last(animation_length)[i]]}
+        @animations << SpriteAnimation.new(name, animation_frames)
+      end
     end
   end
 
@@ -218,6 +273,7 @@ class FrameFinder
         frameList[pixelMappings[currPixel]].insert(currPixel)
       end
     end
+
     @frames = frameList.compact
   end
 
@@ -228,15 +284,32 @@ class FrameFinder
       return @frames.length
     end
   end
-  
+
+  def get_num_animations()
+    return @animations.length
+  end
+
   def get_frame(index)
     if @frames == nil
       return nil
     else
-      return @frames.at(index)
+      if index.is_a?(Integer)
+        return @frames.at(index)
+      elsif index.is_a?(String)
+        return @frameMap[index]
+      end
     end
   end
-    
+
+  def get_animation(index)
+    return @animations.at(index)
+  end
+
+  def add_animation()
+    @animations << SpriteAnimation.new(UNTITLED_LINE, Array.new())
+    return @animations.length - 1
+  end
+
   def save_to_file(filename)
     file = File.new(filename, "w+")
     @frames.each do |frame|
