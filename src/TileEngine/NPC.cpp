@@ -1,19 +1,24 @@
 #include "NPC.h"
 #include "ScriptEngine.h"
 #include "NPCScript.h"
-#include "Pathfinder.h"
 #include "Scheduler.h"
 #include "Sprite.h"
+#include "Map.h"
+#include "TileEngine.h"
+#include "Pathfinder.h"
 
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_NPC;
 
-NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, Spritesheet* sheet,
-                       const std::string& regionName, const std::string& mapName, const std::string& name,
-                       int x, int y) : name(name), x(x), y(y), pathfinder(pathfinder)
+const std::string WALKING_PREFIX = "walk_";
+const std::string STANDING_PREFIX = "stand_";
+
+NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, Spritesheet* sheet, const Map& map,
+                       const std::string& regionName, const std::string& name,
+                       int x, int y) : map(map), name(name), pixelLoc(x, y)
 {
-   npcThread = engine.getNPCScript(this, regionName, mapName, name);
+   npcThread = engine.getNPCScript(this, regionName, map.getName(), name);
    scheduler.start(npcThread);
    DEBUG("NPC %s has a Thread with ID %d", name.c_str(), npcThread->getId());
 
@@ -31,38 +36,97 @@ bool NPC::runInstruction(Instruction* instruction, long timePassed)
    {
       case MOVE:
       {
-         int* newCoords = static_cast<int*>(instruction->params);
-         
+         Point2D* newCoords = static_cast<Point2D*>(instruction->params);
+         MovementDirection newDirection = NONE;
+
          float vel = 0.1f;
-         if(x < newCoords[0])
+         if(pixelLoc.x < newCoords->x)
          {
-            x += (int)(vel*timePassed);
-            x = x > newCoords[0] ? newCoords[0] : x;
+            pixelLoc.x += (int)(vel*timePassed);
+            pixelLoc.x = pixelLoc.x > newCoords->x ? newCoords->x : pixelLoc.x;
+            newDirection = RIGHT;
          }
-         else if(x > newCoords[0])
+         else if(pixelLoc.x > newCoords->x)
          {
-            x -= (int)(vel*timePassed);
-            x = x < newCoords[0] ? newCoords[0] : x;
-         }
-         else if(y < newCoords[1])
-         {
-            y += (int)(vel*timePassed);
-            y = y > newCoords[1] ? newCoords[1] : y;
-         }
-         else if(y > newCoords[1])
-         {
-            y -= (int)(vel*timePassed);
-            y = y < newCoords[1] ? newCoords[1] : y;
+            pixelLoc.x -= (int)(vel*timePassed);
+            pixelLoc.x = pixelLoc.x < newCoords->x ? newCoords->x : pixelLoc.x;
+            newDirection = LEFT;
          }
 
-         if(x == newCoords[0] && y == newCoords[1])
+         if(pixelLoc.y < newCoords->y)
+         {
+            pixelLoc.y += (int)(vel*timePassed);
+            pixelLoc.y = pixelLoc.y > newCoords->y ? newCoords->y : pixelLoc.y;
+            newDirection = DOWN;
+         }
+         else if(pixelLoc.y > newCoords->y)
+         {
+            pixelLoc.y -= (int)(vel*timePassed);
+            pixelLoc.y = pixelLoc.y < newCoords->y ? newCoords->y : pixelLoc.y;
+            newDirection = UP;
+         }
+
+         if(pixelLoc.x == newCoords->x && pixelLoc.y == newCoords->y)
          {
             delete newCoords;
             return true;
          }
          else
          {
+            if(newDirection != currDirection)
+            {
+               currDirection = newDirection;
+               switch(currDirection)
+               {
+                  case LEFT:
+                  {
+                     sprite->setAnimation(WALKING_PREFIX + "left");
+                     break;
+                  }
+                  case RIGHT:
+                  {
+                     sprite->setAnimation(WALKING_PREFIX + "right");
+                     break;
+                  }
+                  case UP:
+                  {
+                     sprite->setAnimation(WALKING_PREFIX + "up");
+                     break;
+                  }
+                  case DOWN:
+                  {
+                     sprite->setAnimation(WALKING_PREFIX + "down");
+                     break;
+                  }
+               }
+            }
             return false;
+         }
+      }
+      case STAND:
+      {
+         switch(currDirection)
+         {
+            case LEFT:
+            {
+               sprite->setFrame(STANDING_PREFIX + "left");
+               break;
+            }
+            case RIGHT:
+            {
+               sprite->setFrame(STANDING_PREFIX + "right");
+               break;
+            }
+            case UP:
+            {
+               sprite->setFrame(STANDING_PREFIX + "up");
+               break;
+            }
+            case DOWN:
+            {
+               sprite->setFrame(STANDING_PREFIX + "down");
+               break;
+            }
          }
       }
       default:
@@ -100,12 +164,18 @@ void NPC::activate()
 
 void NPC::move(int x, int y)
 {
-   int* coords = new int[2];
-   coords[0] = x;
-   coords[1] = y;
+   Pathfinder* pathfinder = map.getPathfinder();
+   
+   std::queue<Point2D*> path = pathfinder->findBestPath(pixelLoc.x, pixelLoc.y, x, y);
+   while(!path.empty())
+   {
+      Point2D* coords = path.front();
+      path.pop();
 
-   Instruction* i = new Instruction(MOVE, coords);
-   instructions.push(i);
+      instructions.push(new Instruction(MOVE, coords));
+   }
+
+   instructions.push(new Instruction(STAND, NULL));
 }
 
 void NPC::setSpritesheet(Spritesheet* sheet)
@@ -127,7 +197,7 @@ void NPC::draw()
 {
    if(sprite)
    {
-      sprite->draw(x, y);
+      sprite->draw(pixelLoc.x, pixelLoc.y);
    }
 }
 

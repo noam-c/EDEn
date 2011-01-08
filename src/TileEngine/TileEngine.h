@@ -80,7 +80,12 @@ class TileEngine: public GameState
     *
     * @param finishState Returned as true if the input event quit out of the tile engine.
     */
-   void TileEngine::handleInputEvents(bool& finishState);
+   void handleInputEvents(bool& finishState);
+
+   /**
+    * @return true iff the x-y coordinate is within the map
+    */
+   bool withinMap(int x, int y);
 
    protected:
       /**

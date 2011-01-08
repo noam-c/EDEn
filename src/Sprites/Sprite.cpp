@@ -37,6 +37,10 @@ void Sprite::setFrame(const std::string& frameName)
    {
       //DEBUG("Failed to find sprite frame.");
    }
+   else if (animation == NULL && newFrameIndex == frameIndex)
+   {
+      return;
+   }
 
    clearCurrentFrame();
    frameIndex = newFrameIndex;
@@ -48,6 +52,10 @@ void Sprite::setAnimation(const std::string& animationName)
    if(newAnimation == NULL)
    {
       //DEBUG("Failed to find animation.");
+   }
+   else if (newAnimation == animation)
+   {
+      return;
    }
 
    clearCurrentFrame();

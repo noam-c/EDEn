@@ -4,6 +4,10 @@
 #include <queue>
 #include <string>
 
+#include "MovementDirection.h"
+#include "Point2D.h"
+
+class Map;
 class NPCScript;
 class Scheduler;
 class ScriptEngine;
@@ -46,6 +50,8 @@ class NPC
        * Parameters: X location to move to [int], Y location to move to [int]
        */
       MOVE,
+
+      STAND,
    };
 
    /**
@@ -73,11 +79,12 @@ class NPC
    /** The NPC's name */
    std::string name;
 
-   /** The x-location of this NPC (in pixels). */
-   int x;
+   /** The map on which this NPC is located */
+   const Map& map;
 
-   /** The y-location of this NPC (in pixels). */
-   int y;
+   Point2D pixelLoc;
+
+   MovementDirection currDirection;
 
    /**
     * Run an NPC instruction for a frame.
@@ -95,7 +102,7 @@ class NPC
        * 
        * @param name The name of the NPC (must also be the name of its script).
        */
-      NPC(ScriptEngine& engine, Scheduler& scheduler, Pathfinder& pathfinder, Spritesheet* sheet, const std::string& regionName, const std::string& mapName, const std::string& name, int x, int y);
+      NPC(ScriptEngine& engine, Scheduler& scheduler, Spritesheet* sheet, const Map& map, const std::string& regionName, const std::string& name, int x, int y);
 
       /**
        * @return The name of this NPC.

@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "MovementDirection.h"
+
 class Spritesheet;
 class Sprite;
 
@@ -11,15 +13,6 @@ class PlayerCharacter
    static const int WALKING_SPEED = 1;
    static const std::string WALKING_PREFIX;
    static const std::string STANDING_PREFIX;
-
-   enum MovementDirection
-   {
-      UP,
-      DOWN,
-      LEFT,
-      RIGHT,
-      NUM_DIRECTIONS
-   };
 
    int playerX, playerY;
    int xSpeed, ySpeed;

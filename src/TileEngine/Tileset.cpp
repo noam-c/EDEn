@@ -44,7 +44,6 @@ void Tileset::load(const char* path)
    }
 
    passibility = new bool*[width];
-
    for(int i = 0; i < width; ++i)
    {
       passibility[i] = new bool[height];
@@ -52,7 +51,9 @@ void Tileset::load(const char* path)
       {
          if(in)
          {
-            in >> passibility[i][j];
+            int c;
+            in >> c;
+            passibility[i][j] = (c != 0);
          }
          else
          {
@@ -90,11 +91,38 @@ void Tileset::draw(int destX, int destY, int tileNum)
    glEnd();
 }
 
+void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
+{
+   float destLeft = float(destX * TileEngine::TILE_SIZE);
+   float destRight = float((destX + 1) * TileEngine::TILE_SIZE);
+   float destTop = float(destY * TileEngine::TILE_SIZE);
+   float destBottom = float((destY + 1) * TileEngine::TILE_SIZE);
+
+   glDisable(GL_TEXTURE_2D);
+   glBegin(GL_QUADS);
+      glColor3f(r, g, b);
+      glVertex3f(destLeft, destTop, 0.0f);
+      glVertex3f(destRight, destTop, 0.0f);
+      glVertex3f(destRight, destBottom, 0.0f);
+      glVertex3f(destLeft, destBottom, 0.0f);
+      glColor3f(1.0f, 1.0f, 1.0f);
+   glEnd();
+   glEnable(GL_TEXTURE_2D);
+}
+
 size_t Tileset::getSize()
 {
    return sizeof(this);
 }
-   
+
+bool Tileset::isPassible(int tileNum) const
+{
+   int tilesetX = tileNum % width;
+   int tilesetY = tileNum / width;
+
+   return passibility[tilesetX][tilesetY];
+}
+
 Tileset::~Tileset()
 {
    for(int i = 0; i < width; ++i)

@@ -69,12 +69,22 @@ class Tileset : public Resource
       void draw(int destX, int destY, int tileNum);
 
       /**
-       * @param x The x location of the tile in the tileset
-       * @param y The y location of the tile in the tileset
+       * Draws the specified color to the coordinates specified
        *
-       * @return true iff the tile at x,y is passable by default
+       * @param destX The destination x-location (in tiles)
+       * @param destY The destination y-location (in tiles)
+       * @param r The red element of the color to draw
+       * @param g The green element of the color to draw
+       * @param b The blue element of the color to draw
        */
-      bool isPassable(int x, int y);
+      static void drawColorToTile(int destX, int destY, float r, float g, float b);
+
+      /**
+       * @param tileNum The index of the tile to check
+       *
+       * @return true iff the tile at tileNum is passible by default
+       */
+      bool isPassible(int tileNum) const;
 
       /**
        * Destructor.

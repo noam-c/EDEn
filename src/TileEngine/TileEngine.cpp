@@ -8,7 +8,6 @@
 #include "ResourceLoader.h"
 #include "Region.h"
 #include "Map.h"
-#include "Pathfinder.h"
 #include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
@@ -77,7 +76,6 @@ void TileEngine::setMap(std::string mapName)
 
    DEBUG("Map set to: %s", mapName.c_str());
 
-   pathfinder->setMap(currMap);
    recalculateMapOffsets();
 }
 
@@ -113,15 +111,28 @@ void TileEngine::toggleDebugConsole()
 void TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
-   npcList[npcName] = new NPC(scriptEngine, scheduler, sheet,
-                           currRegion->getName(), currMap->getName(), npcName,
+   npcList[npcName] = new NPC(*scriptEngine, *scheduler, sheet, *currMap,
+                           currRegion->getName(), npcName,
                            x * TILE_SIZE, y * TILE_SIZE);
+}
+
+bool TileEngine::withinMap(int x, int y)
+{
+   return x >= 0 && x < currMap->getWidth() * TILE_SIZE && y >= 0 && currMap->getHeight() * TILE_SIZE;
 }
 
 void TileEngine::moveNPC(const std::string& npcName, int x, int y)
 {
    NPC* npcToMove = npcList[npcName];
-   npcToMove->move(x, y);
+   if(withinMap(x,y))
+   {
+      DEBUG("Sending move order to %s: %d,%d", npcName.c_str(), x, y);
+      npcToMove->move(x, y);
+   }
+   else
+   {
+      DEBUG("%d,%d is not a place!!!", x, y);
+   }
 }
 
 void TileEngine::setNPCSprite(const std::string& npcName, const std::string& frameName)

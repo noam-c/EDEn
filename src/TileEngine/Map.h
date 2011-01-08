@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 
+class Pathfinder;
 class Tileset;
 
 /**
@@ -30,14 +31,30 @@ class Map
    /** Tileset in use by this map */
    Tileset* tileset;
 
-   /** The tiles of the map (as numbers referring to points in the Tileset */
+   /** Pathfinder used to find paths through this map */
+   Pathfinder* pathfinder;
+
+   /** The tiles of the map (as numbers referring to points in the Tileset) */
    int** tileMap;
+
+   /** The passibility of the map */
+   bool** passibilityMap;
 
    /** Width (in tiles) of this map */
    int width;
 
    /** Height (in tiles) of this map */
    int height;
+
+   /**
+    * @return true iff the tile at this location of the map is passible
+    */
+   bool isPassible(int x, int y) const;
+
+   /**
+    * Creates a 2-dimensional map that corresponds to the passibility of this Map
+    */
+   void initializePassibilityMatrix();
 
    public:
       /**
@@ -60,17 +77,27 @@ class Map
       /**
        * @return The name of this map.
        */
-      std::string getName();
+      std::string getName() const;
 
       /**
        * @return The width of the map (in tiles).
        */
-      int getWidth();
+      int getWidth() const;
 
       /**
        * @return The height of the map (in tiles).
        */
-      int getHeight();
+      int getHeight() const;
+
+      /**
+       * @return The path finder for this map
+       */
+      Pathfinder* getPathfinder() const;
+
+      /**
+       * @return The passibility map of the 
+       */
+      bool** getPassibilityMatrix() const;
 
       /**
        * @return A copy of the map.
