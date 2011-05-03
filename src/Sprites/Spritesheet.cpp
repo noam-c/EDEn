@@ -2,7 +2,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "GraphicsUtil.h"
-#include "TileEngine.h"
 #include "LinkedListNode.h"
 #include "SpriteFrame.h"
 #include "Animation.h"
@@ -209,7 +208,7 @@ void Spritesheet::load(const char* path)
    DEBUG("Spritesheet constructed!");
 }
 
-int Spritesheet::getFrameIndex(const std::string& frameName)
+int Spritesheet::getFrameIndex(const std::string& frameName) const
 {
    std::map<std::string, int>::const_iterator frameIndex = frameIndices.find(frameName);
    if(frameIndex != frameIndices.end() && frameIndex->second < numFrames)
@@ -220,7 +219,7 @@ int Spritesheet::getFrameIndex(const std::string& frameName)
    return -1;
 }
 
-Animation* Spritesheet::getAnimation(const std::string& animationName)
+Animation* Spritesheet::getAnimation(const std::string& animationName) const
 {
    std::map<std::string, FrameNode*>::const_iterator animFrames = animationList.find(animationName);
    if(animFrames != animationList.end())
@@ -231,7 +230,8 @@ Animation* Spritesheet::getAnimation(const std::string& animationName)
    return NULL;
 }
 
-void Spritesheet::draw(int x, int y, int frameIndex)
+
+void Spritesheet::draw(const int x, const int y, const int frameIndex) const
 {
    if(frameList == NULL)
    {
@@ -261,7 +261,7 @@ void Spritesheet::draw(int x, int y, int frameIndex)
    float frameRight = f.right / float(width);
 
    float destLeft = float(x);
-   float destBottom = float(y + TileEngine::TILE_SIZE);
+   float destBottom = float(y);
    float destRight = destLeft + frameWidth;
    float destTop = destBottom - frameHeight;
 

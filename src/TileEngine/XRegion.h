@@ -1,11 +1,12 @@
-#ifndef __REGION_H_
-#define __REGION_H_
+#ifndef __XREGION_H_
+#define __XREGION_H_
 
-#include "Resource.h"
+#include "Region.h"
 #include <string>
 #include <map>
 
 class Map;
+class XMap;
 
 /**
  * A Region is a large spatial area that the player can walk around within.
@@ -19,15 +20,9 @@ class Map;
  *
  * @author Noam Chitayat
  */
-class Region : public Resource
+class XRegion : public Region
 {
    protected:
-      /** The name of the region. */
-      std::string regionName;
-
-      /** The list of maps in this region, keyed by map names. */
-      std::map<std::string, Map*> areas;
-
       /**
        * Loads this region from the specified EDR file.
        *
@@ -39,32 +34,7 @@ class Region : public Resource
       /**
        * Constructor.
        */
-      Region(const ResourceKey& name);
-
-      /** @return the name of the region. */
-      std::string getName();
-
-      /** @return the starting map (first map loaded) for this Region. */
-      Map* getStartingMap();
-
-      /**
-       * @param name The name of the Map to retrieve.
-       *
-       * @return the Map with the specified name.
-       */
-      Map* getMap(const std::string& name);
-
-      /**
-       * Implementation of method in Resource class.
-       *
-       * @return The size of the region resource in memory.
-       */
-      size_t getSize();
-
-      /**
-       * Destructor.
-       */
-      ~Region();
+      XRegion(const ResourceKey& name);
 };
 
 #endif

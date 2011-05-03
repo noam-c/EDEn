@@ -71,7 +71,7 @@ class Sprite
        * @param x The x-location to draw at.
        * @param y The y-location to draw at.
        */
-      void draw(int x, int y);
+      void draw(int x, int y) const;
 
       /**
        * Destructor.

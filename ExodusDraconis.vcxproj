@@ -1,0 +1,468 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{625D5882-2997-4B60-A76C-654D7ED66A5F}</ProjectGuid>
+    <RootNamespace>ExodusDraconis</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <ExtensionsToDeleteOnClean Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">*.obj%3b*.o%3b*.ilk%3b*.tlb%3b*.tli%3b*.tlh%3b*.tmp%3b*.rsp%3b*.pgc%3b*.pgd%3b*.meta%3b$(TargetPath)</ExtensionsToDeleteOnClean>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(MSBuildProjectDirectory)\include;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(MSBuildProjectDirectory)\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Dmain=SDL_main %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>src;src\Audio;src\Coroutines;src\edwt;src\MainMenu;src\ResourceLoader;src\ScriptEngine;src\Sprites;src\TileEngine;src\PlayerData;src\tinyxml;src\Menu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;DEBUG_MODE;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <AdditionalDependencies>SDLmain.lib;lua5.1.lib;SDL_ttf.lib;SDL_image.lib;SDL_mixer.lib;SDL.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\edwt\DebugConsoleWindow.h" />
+    <ClInclude Include="src\edwt\TextField.h" />
+    <ClInclude Include="src\guichan\actionevent.hpp" />
+    <ClInclude Include="src\guichan\actionlistener.hpp" />
+    <ClInclude Include="src\guichan\widgets\adjustingcontainer.hpp" />
+    <ClInclude Include="src\Menu\Menu.h" />
+    <ClInclude Include="src\MovementDirection.h" />
+    <ClInclude Include="src\Point2D.h" />
+    <ClInclude Include="src\Sprites\Animation.h" />
+    <ClInclude Include="src\guichan\basiccontainer.hpp" />
+    <ClInclude Include="src\guichan\widgets\button.hpp" />
+    <ClInclude Include="src\PlayerData\Character.h" />
+    <ClInclude Include="src\guichan\widgets\checkbox.hpp" />
+    <ClInclude Include="src\guichan\cliprectangle.hpp" />
+    <ClInclude Include="src\guichan\color.hpp" />
+    <ClInclude Include="src\edwt\Container.h" />
+    <ClInclude Include="src\guichan\widgets\container.hpp" />
+    <ClInclude Include="src\guichan\deathlistener.hpp" />
+    <ClInclude Include="src\DebugUtils.h" />
+    <ClInclude Include="src\guichan\defaultfont.hpp" />
+    <ClInclude Include="src\TileEngine\DialogueController.h" />
+    <ClInclude Include="src\guichan\widgets\dropdown.hpp" />
+    <ClInclude Include="src\guichan\event.hpp" />
+    <ClInclude Include="src\Exception.h" />
+    <ClInclude Include="src\guichan\exception.hpp" />
+    <ClInclude Include="src\ExecutionStack.h" />
+    <ClInclude Include="src\ScriptEngine\FileScript.h" />
+    <ClInclude Include="src\guichan\focushandler.hpp" />
+    <ClInclude Include="src\guichan\focuslistener.hpp" />
+    <ClInclude Include="src\guichan\font.hpp" />
+    <ClInclude Include="src\GameState.h" />
+    <ClInclude Include="src\guichan\genericinput.hpp" />
+    <ClInclude Include="src\guichan\glut.hpp" />
+    <ClInclude Include="src\guichan\graphics.hpp" />
+    <ClInclude Include="src\GraphicsUtil.h" />
+    <ClInclude Include="src\guichan\gui.hpp" />
+    <ClInclude Include="src\guichan.hpp" />
+    <ClInclude Include="src\guichan\widgets\icon.hpp" />
+    <ClInclude Include="src\guichan\image.hpp" />
+    <ClInclude Include="src\guichan\widgets\imagebutton.hpp" />
+    <ClInclude Include="src\guichan\imagefont.hpp" />
+    <ClInclude Include="src\guichan\imageloader.hpp" />
+    <ClInclude Include="src\guichan\input.hpp" />
+    <ClInclude Include="src\guichan\inputevent.hpp" />
+    <ClInclude Include="src\guichan\key.hpp" />
+    <ClInclude Include="src\guichan\keyevent.hpp" />
+    <ClInclude Include="src\guichan\keyinput.hpp" />
+    <ClInclude Include="src\guichan\keylistener.hpp" />
+    <ClInclude Include="src\edwt\Label.h" />
+    <ClInclude Include="src\guichan\widgets\label.hpp" />
+    <ClInclude Include="src\LinkedListNode.h" />
+    <ClInclude Include="src\guichan\widgets\listbox.hpp" />
+    <ClInclude Include="src\guichan\listmodel.hpp" />
+    <ClInclude Include="src\MainMenu\MainMenu.h" />
+    <ClInclude Include="src\TileEngine\Map.h" />
+    <ClInclude Include="src\guichan\mouseevent.hpp" />
+    <ClInclude Include="src\guichan\mouseinput.hpp" />
+    <ClInclude Include="src\guichan\mouselistener.hpp" />
+    <ClInclude Include="src\Audio\Music.h" />
+    <ClInclude Include="src\TileEngine\NPC.h" />
+    <ClInclude Include="src\ScriptEngine\NPCScript.h" />
+    <ClInclude Include="src\guichan\opengl.hpp" />
+    <ClInclude Include="src\guichan\opengl\openglallegroimageloader.hpp" />
+    <ClInclude Include="src\guichan\opengl\openglgraphics.hpp" />
+    <ClInclude Include="src\guichan\opengl\openglimage.hpp" />
+    <ClInclude Include="src\guichan\opengl\openglsdlimageloader.hpp" />
+    <ClInclude Include="src\edwt\OpenGLTTF.h" />
+    <ClInclude Include="src\guichan\platform.hpp" />
+    <ClInclude Include="src\TileEngine\Obstacle.h" />
+    <ClInclude Include="src\TileEngine\Pathfinder.h" />
+    <ClInclude Include="src\TileEngine\PlayerCharacter.h" />
+    <ClInclude Include="src\PlayerData\PlayerData.h" />
+    <ClInclude Include="src\PlayerData\SaveGameItemNames.h" />
+    <ClInclude Include="src\PlayerData\Quest.h" />
+    <ClInclude Include="src\guichan\widgets\radiobutton.hpp" />
+    <ClInclude Include="src\guichan\rectangle.hpp" />
+    <ClInclude Include="src\TileEngine\Region.h" />
+    <ClInclude Include="src\ResourceLoader\Resource.h" />
+    <ClInclude Include="src\ResourceLoader\ResourceKey.h" />
+    <ClInclude Include="src\ResourceLoader\ResourceLoader.h" />
+    <ClInclude Include="src\Coroutines\Scheduler.h" />
+    <ClInclude Include="src\ScriptEngine\Script.h" />
+    <ClInclude Include="src\ScriptEngine\ScriptEngine.h" />
+    <ClInclude Include="src\ScriptEngine\ScriptException.h" />
+    <ClInclude Include="src\ScriptEngine\ScriptFactory.h" />
+    <ClInclude Include="src\guichan\widgets\scrollarea.hpp" />
+    <ClInclude Include="src\guichan\sdl.hpp" />
+    <ClInclude Include="src\guichan\sdl\sdlgraphics.hpp" />
+    <ClInclude Include="src\guichan\sdl\sdlimage.hpp" />
+    <ClInclude Include="src\guichan\sdl\sdlimageloader.hpp" />
+    <ClInclude Include="src\guichan\sdl\sdlinput.hpp" />
+    <ClInclude Include="src\guichan\sdl\sdlpixel.hpp" />
+    <ClInclude Include="src\guichan\selectionevent.hpp" />
+    <ClInclude Include="src\guichan\selectionlistener.hpp" />
+    <ClInclude Include="src\Singleton.h" />
+    <ClInclude Include="src\guichan\widgets\slider.hpp" />
+    <ClInclude Include="src\Audio\Sound.h" />
+    <ClInclude Include="src\Sprites\Sprite.h" />
+    <ClInclude Include="src\Sprites\SpriteFrame.h" />
+    <ClInclude Include="src\Sprites\Spritesheet.h" />
+    <ClInclude Include="src\edwt\StringListModel.h" />
+    <ClInclude Include="src\ScriptEngine\StringScript.h" />
+    <ClInclude Include="src\guichan\widgets\tab.hpp" />
+    <ClInclude Include="src\guichan\widgets\tabbedarea.hpp" />
+    <ClInclude Include="src\Coroutines\Task.h" />
+    <ClInclude Include="src\Coroutines\TaskId.h" />
+    <ClInclude Include="src\edwt\TextBox.h" />
+    <ClInclude Include="src\guichan\widgets\textbox.hpp" />
+    <ClInclude Include="src\guichan\widgets\textfield.hpp" />
+    <ClInclude Include="src\Coroutines\Thread.h" />
+    <ClInclude Include="src\TileEngine\TileEngine.h" />
+    <ClInclude Include="src\TileEngine\Tileset.h" />
+    <ClInclude Include="src\Coroutines\Timer.h" />
+    <ClInclude Include="src\TileEngine\XMap.h" />
+    <ClInclude Include="src\TileEngine\XRegion.h" />
+    <ClInclude Include="src\tinyxml\tinystr.h" />
+    <ClInclude Include="src\tinyxml\tinyxml.h" />
+    <ClInclude Include="src\edwt\TitleScreenListBox.h" />
+    <ClInclude Include="src\TODOLIST.h" />
+    <ClInclude Include="src\guichan\widget.hpp" />
+    <ClInclude Include="src\guichan\widgetlistener.hpp" />
+    <ClInclude Include="src\guichan\widgets\window.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\edwt\DebugConsoleWindow.cpp" />
+    <ClCompile Include="src\edwt\TextField.cpp" />
+    <ClCompile Include="src\guichan\actionevent.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\widgets\adjustingcontainer.cpp" />
+    <ClCompile Include="src\Menu\Menu.cpp" />
+    <ClCompile Include="src\Sprites\Animation.cpp" />
+    <ClCompile Include="src\guichan\basiccontainer.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\widgets\button.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\PlayerData\Character.cpp" />
+    <ClCompile Include="src\guichan\widgets\checkbox.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\cliprectangle.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\color.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\edwt\Container.cpp" />
+    <ClCompile Include="src\guichan\widgets\container.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\DebugUtils.cpp" />
+    <ClCompile Include="src\guichan\defaultfont.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\TileEngine\DialogueController.cpp" />
+    <ClCompile Include="src\guichan\widgets\dropdown.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\event.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\Exception.cpp" />
+    <ClCompile Include="src\guichan\exception.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\ExecutionStack.cpp" />
+    <ClCompile Include="src\ScriptEngine\FileScript.cpp" />
+    <ClCompile Include="src\guichan\focushandler.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\font.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\guichan\genericinput.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\graphics.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\GraphicsUtil.cpp" />
+    <ClCompile Include="src\guichan\gui.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\guichan.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\widgets\icon.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\image.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\widgets\imagebutton.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\imagefont.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\inputevent.cpp" />
+    <ClCompile Include="src\guichan\key.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\keyevent.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\keyinput.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\edwt\Label.cpp" />
+    <ClCompile Include="src\guichan\widgets\label.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\widgets\listbox.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MainMenu\MainMenu.cpp" />
+    <ClCompile Include="src\MainMenu\MainMenuActions.cpp" />
+    <ClCompile Include="src\TileEngine\Map.cpp" />
+    <ClCompile Include="src\guichan\mouseevent.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\mouseinput.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\Audio\Music.cpp" />
+    <ClCompile Include="src\TileEngine\NPC.cpp" />
+    <ClCompile Include="src\ScriptEngine\NPCScript.cpp" />
+    <ClCompile Include="src\guichan\opengl\opengl.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\opengl\openglgraphics.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\opengl\openglimage.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\edwt\OpenGLTTF.cpp" />
+    <ClCompile Include="src\TileEngine\Obstacle.cpp" />
+    <ClCompile Include="src\TileEngine\Pathfinder.cpp" />
+    <ClCompile Include="src\TileEngine\PlayerCharacter.cpp" />
+    <ClCompile Include="src\PlayerData\PlayerData.cpp" />
+    <ClCompile Include="src\PlayerData\Quest.cpp" />
+    <ClCompile Include="src\guichan\widgets\radiobutton.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\rectangle.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\TileEngine\Region.cpp" />
+    <ClCompile Include="src\ResourceLoader\Resource.cpp" />
+    <ClCompile Include="src\ResourceLoader\ResourceLoader.cpp" />
+    <ClCompile Include="src\Coroutines\Scheduler.cpp" />
+    <ClCompile Include="src\ScriptEngine\Script.cpp" />
+    <ClCompile Include="src\ScriptEngine\ScriptEngine.cpp" />
+    <ClCompile Include="src\ScriptEngine\ScriptFactory.cpp" />
+    <ClCompile Include="src\ScriptEngine\ScriptFunctions.cpp" />
+    <ClCompile Include="src\guichan\widgets\scrollarea.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\sdl\sdl.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\sdl\sdlgraphics.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\sdl\sdlimage.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\sdl\sdlimageloader.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\sdl\sdlinput.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\selectionevent.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\widgets\slider.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\Audio\Sound.cpp" />
+    <ClCompile Include="src\Sprites\Sprite.cpp" />
+    <ClCompile Include="src\Sprites\SpriteFrame.cpp" />
+    <ClCompile Include="src\Sprites\Spritesheet.cpp" />
+    <ClCompile Include="src\edwt\StringListModel.cpp" />
+    <ClCompile Include="src\ScriptEngine\StringScript.cpp" />
+    <ClCompile Include="src\guichan\widgets\tab.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\widgets\tabbedarea.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\Coroutines\Task.cpp" />
+    <ClCompile Include="src\guichan\widgets\textbox.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\edwt\TextBox.cpp" />
+    <ClCompile Include="src\guichan\widgets\textfield.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\Coroutines\Thread.cpp" />
+    <ClCompile Include="src\TileEngine\TileEngine.cpp" />
+    <ClCompile Include="src\TileEngine\Tileset.cpp" />
+    <ClCompile Include="src\Coroutines\Timer.cpp" />
+    <ClCompile Include="src\TileEngine\XMap.cpp" />
+    <ClCompile Include="src\TileEngine\XRegion.cpp" />
+    <ClCompile Include="src\tinyxml\tinystr.cpp" />
+    <ClCompile Include="src\tinyxml\tinyxml.cpp" />
+    <ClCompile Include="src\tinyxml\tinyxmlerror.cpp" />
+    <ClCompile Include="src\tinyxml\tinyxmlparser.cpp" />
+    <ClCompile Include="src\edwt\TitleScreenListBox.cpp" />
+    <ClCompile Include="src\guichan\widget.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="src\guichan\widgets\window.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="jpeg.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="libfreetype-6.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="libogg-0.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="libpng12-0.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="libvorbis-0.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="libvorbisfile-3.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="lua5.1.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="SDL.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="SDL_image.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="SDL_mixer.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="SDL_ttf.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="smpeg.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="zlib1.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

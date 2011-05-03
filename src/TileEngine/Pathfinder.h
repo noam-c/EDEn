@@ -3,26 +3,27 @@
 
 #include <queue>
 
+class Obstacle;
 class Map;
 class NPC;
 struct Point2D;
 
-enum TileState
-{
-   FREE,
-   CHARACTER,
-   OBSTACLE,
-};
-
-enum PathfindingStyle
-{
-   RFW,
-   STRAIGHT,
-   //A_STAR,
-};
-
 class Pathfinder
 {
+   enum PathfindingStyle
+   {
+      RFW,
+      STRAIGHT,
+      //A_STAR,
+   };
+
+   enum TileState
+   {
+      FREE,
+      CHARACTER,
+      OBSTACLE,
+   };
+
    static const int MOVEMENT_TILE_SIZE;
    static const float ROOT_2;
    static const float INFINITY;
@@ -50,8 +51,12 @@ class Pathfinder
    void deleteRoyFloydWarshallMatrices();
    void deleteCollisionMap();
 
+   bool occupyPoint(int x, int y, int width, int height, TileState state);
+   bool addObstacle(int x, int y, int width, int height);
+   void setPoint(int left, int top, int right, int bottom, TileState state);
+
    public:
-      Pathfinder(Map* newMap);
+      Pathfinder(Map* newMap, std::vector<Obstacle*> obstacles);
 
       std::queue<Point2D*> findBestPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle = RFW);
 

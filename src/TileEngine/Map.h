@@ -3,9 +3,11 @@
 
 #include <fstream>
 #include <string>
+#include <vector>
 
 class Pathfinder;
 class Tileset;
+class Obstacle;
 
 /**
  * A map is a subset of a Region consisting of a single rectangular set of tiles
@@ -17,52 +19,56 @@ class Tileset;
  */
 class Map
 {
-   /**
-    * The delimiter for map data read from file.
-    */
-   static const char MAP_DELIM = ':';
+   protected:
 
-   /** The name of this map */
-   std::string mapName;
+      /**
+       * The delimiter for map data read from file.
+       */
+      static const char MAP_DELIM = ':';
+
+      /** The name of this map */
+      std::string mapName;
     
-   /** The name of the tileset in use by this map */
-   std::string tilesetName;
+      /** The name of the tileset in use by this map */
+      std::string tilesetName;
 
-   /** Tileset in use by this map */
-   Tileset* tileset;
+      /** Tileset in use by this map */
+      Tileset* tileset;
 
-   /** Pathfinder used to find paths through this map */
-   Pathfinder* pathfinder;
+      /** Pathfinder used to find paths through this map */
+      Pathfinder* pathfinder;
 
-   /** The tiles of the map (as numbers referring to points in the Tileset) */
-   int** tileMap;
+      /** The tiles of the map (as numbers referring to points in the Tileset) */
+      int** tileMap;
 
-   /** The passibility of the map */
-   bool** passibilityMap;
+      /** The passibility of the map */
+      bool** passibilityMap;
 
-   /** Width (in tiles) of this map */
-   int width;
+      /** The list of the map's obstacles */
+      std::vector<Obstacle*> obstacles;
 
-   /** Height (in tiles) of this map */
-   int height;
+      /** Width (in tiles) of this map */
+      int width;
 
-   /**
-    * @return true iff the tile at this location of the map is passible
-    */
-   bool isPassible(int x, int y) const;
+      /** Height (in tiles) of this map */
+      int height;
 
-   /**
-    * Creates a 2-dimensional map that corresponds to the passibility of this Map
-    */
-   void initializePassibilityMatrix();
+      /**
+       * @return true iff the tile at this location of the map is passible
+       */
+      bool isPassible(int x, int y) const;
+
+      /**
+       * Creates a 2-dimensional map that corresponds to the passibility of this Map
+       */
+      void initializePassibilityMatrix();
+
+      /**
+       * Default constructor.
+       */
+      Map();
 
    public:
-      /**
-       * Copy constructor.
-       *
-       * @param map The Map to copy.
-       */
-      Map(const Map& map);
 
       /**
        * Constructor. Loads map data from a Region file.
@@ -99,20 +105,17 @@ class Map
        */
       bool** getPassibilityMatrix() const;
 
-      /**
-       * @return A copy of the map.
-       */
-      Map* makeCopy();
+      void step(long timePassed);
 
       /**
        * Draw an entire map's tiles.
        */
-      void draw();
+      void draw() const;
 
       /**
        * Destructor.
        */
-      ~Map();
+      virtual ~Map();
 };
 
 #endif

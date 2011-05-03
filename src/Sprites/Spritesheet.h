@@ -89,7 +89,7 @@ class Spritesheet : public Resource
        * @param y The y-location to draw at.
        * @param frameIndex The frame to draw.
        */
-      void draw(int x, int y, int frameIndex);
+      void draw(const int x, const int y, const int frameIndex) const;
 
       /**
        * Get the index of a frame specified by the frame name.
@@ -98,7 +98,7 @@ class Spritesheet : public Resource
        *
        * @return An index into the frame requested.
        */
-      int getFrameIndex(const std::string& frameName);
+      int getFrameIndex(const std::string& frameName) const;
 
       /**
        * Get a new animation list specified by the animation name.
@@ -108,7 +108,7 @@ class Spritesheet : public Resource
        * @return An animation structure that can outputs a frame index for the
        *         amount of time that has passed.
        */
-      Animation* getAnimation(const std::string& animationName);
+      Animation* getAnimation(const std::string& animationName) const;
 
       /**
        * Implementation of method in Resource class.

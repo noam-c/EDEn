@@ -49,6 +49,8 @@ class PlayerData
       void addNewCharacter(Character* newCharacter);
       Character* getPartyLeader();
 
+	  CharacterList getParty();
+
       void addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest);
       bool isQuestCompleted(const std::string& questPath);
       void completeQuest(const std::string& questPath);

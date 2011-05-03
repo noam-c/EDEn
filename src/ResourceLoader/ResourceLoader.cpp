@@ -3,7 +3,7 @@
 #include "Music.h"
 #include "Sound.h"
 #include "Tileset.h"
-#include "Region.h"
+#include "XRegion.h"
 #include "Spritesheet.h"
 
 #include <fstream>
@@ -13,7 +13,7 @@
 const int debugFlag = DEBUG_RES_LOAD;
 
 const std::string ResourceLoader::PATHS[] = {"data/sounds/", "data/regions/", "data/tilesets/", "data/music/", "data/sprites/"};
-const std::string ResourceLoader::EXTENSIONS[] = {".wav", ".edr", "", "", ""};
+const std::string ResourceLoader::EXTENSIONS[] = {".wav", "/", "", "", ""};
 
 std::map<ResourceKey, Resource*> ResourceLoader::resources;
 
@@ -49,7 +49,7 @@ Resource* ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
       case REGION:
       {
          // Create a resource to hold a region
-         newResource = new Region(name);
+         newResource = new XRegion(name);
          break;
       }
       case SPRITESHEET:

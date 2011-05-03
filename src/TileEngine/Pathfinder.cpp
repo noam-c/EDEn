@@ -1,5 +1,7 @@
 #include "Pathfinder.h"
 #include "Map.h"
+#include "XMap.h"
+#include "Obstacle.h"
 #include "TileEngine.h"
 #include "Point2D.h"
 #include <set>
@@ -8,11 +10,14 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
 
+// Movement tile size can be set to a divisor of drawn tile size to increase the pathfinding graph size
+// For now, no need for the additional granularity
 const int Pathfinder::MOVEMENT_TILE_SIZE = 32;
+
 const float Pathfinder::ROOT_2 = 1.41421356f;
 const float Pathfinder::INFINITY = std::numeric_limits<float>::infinity();
 
-Pathfinder::Pathfinder(Map* map) : map(map)
+Pathfinder::Pathfinder(Map* map, std::vector<Obstacle*> obstacles) : map(map), distanceMatrix(NULL)
 {
    if(map == NULL)
    {
@@ -37,6 +42,13 @@ Pathfinder::Pathfinder(Map* map) : map(map)
             row[i + xOffset] = passible ? FREE : OBSTACLE;
          }
       }
+   }
+
+   std::vector<Obstacle*>::const_iterator iter;
+   for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
+   {
+      Obstacle* o = *iter;
+      addObstacle(o->getTileX() * TileEngine::TILE_SIZE, o->getTileY() * TileEngine::TILE_SIZE, o->getWidth(), o->getHeight());
    }
 
    initRoyFloydWarshallMatrices();
@@ -221,8 +233,23 @@ bool Pathfinder::isWalkable(int x, int y)
    return collisionMap[x][y] == FREE;
 }
 
+bool Pathfinder::addObstacle(int x, int y, int width, int height)
+{
+   return occupyPoint(x, y, width, height, OBSTACLE);
+}
+
 bool Pathfinder::occupyPoint(int x, int y, int width, int height)
 {
+   return occupyPoint(x, y, width, height, CHARACTER);
+}
+
+bool Pathfinder::occupyPoint(int x, int y, int width, int height, TileState state)
+{
+   if(state == FREE)
+   {
+      return false;
+   }
+
    int collisionMapLeft = x/MOVEMENT_TILE_SIZE;
    int collisionMapRight = (x + width)/MOVEMENT_TILE_SIZE;
    int collisionMapTop = y/MOVEMENT_TILE_SIZE;
@@ -236,13 +263,7 @@ bool Pathfinder::occupyPoint(int x, int y, int width, int height)
       }
    }
 
-   for(int collisionMapX = collisionMapLeft; collisionMapX <= collisionMapRight; ++collisionMapX)
-   {
-      for(int collisionMapY = collisionMapTop; collisionMapY <= collisionMapBottom; ++collisionMapY)
-      {
-         collisionMap[collisionMapY][collisionMapX] = CHARACTER;
-      }
-   }
+   setPoint(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, state);
 
    return true;
 }
@@ -254,11 +275,16 @@ void Pathfinder::freePoint(int x, int y, int width, int height)
    int collisionMapTop = y/MOVEMENT_TILE_SIZE;
    int collisionMapBottom = (y + height)/MOVEMENT_TILE_SIZE;
 
-   for(int collisionMapX = collisionMapLeft; collisionMapX <= collisionMapRight; ++collisionMapX)
+   setPoint(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, FREE);
+}
+
+void Pathfinder::setPoint(int left, int top, int right, int bottom, TileState state)
+{
+   for(int collisionMapX = left; collisionMapX <= right; ++collisionMapX)
    {
-      for(int collisionMapY = collisionMapTop; collisionMapY <= collisionMapBottom; ++collisionMapY)
+      for(int collisionMapY = top; collisionMapY <= bottom; ++collisionMapY)
       {
-         collisionMap[collisionMapY][collisionMapX] = FREE;
+         collisionMap[collisionMapY][collisionMapX] = state;
       }
    }
 }
@@ -286,7 +312,8 @@ void Pathfinder::deleteRoyFloydWarshallMatrices()
 
       delete [] successorMatrix;
       successorMatrix = NULL;
-   }}
+   }
+}
 
 void Pathfinder::deleteCollisionMap()
 {

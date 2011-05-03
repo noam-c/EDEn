@@ -70,7 +70,7 @@ void Sprite::step(long timePassed)
    }
 }
 
-void Sprite::draw(int x, int y)
+void Sprite::draw(int x, int y) const
 {
    int indexToDraw = animation != NULL ? animation->getIndex() : frameIndex;
    sheet->draw(x, y, indexToDraw);

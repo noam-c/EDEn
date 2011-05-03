@@ -197,7 +197,7 @@ void NPC::draw()
 {
    if(sprite)
    {
-      sprite->draw(pixelLoc.x, pixelLoc.y);
+      sprite->draw(pixelLoc.x, pixelLoc.y + TileEngine::TILE_SIZE);
    }
 }
 

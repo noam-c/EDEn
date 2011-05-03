@@ -1,29 +1,19 @@
 #include "Map.h"
 #include "Tileset.h"
+#include "Obstacle.h"
 #include "Pathfinder.h"
 #include "ResourceLoader.h"
+#include "TileEngine.h"
 #include "DebugUtils.h"
+
+#include <sstream>
 
 const int debugFlag = DEBUG_RES_LOAD;
 
 //#define DRAW_PASSIBILITY
 
-Map::Map(const Map& map) : mapName(map.mapName), tilesetName(map.tilesetName), width(map.width), height(map.height)
+Map::Map()
 {
-   tileset = ResourceLoader::getTileset(tilesetName);
-
-   tileMap = new int*[height];
-
-   for(int i = 0; i < height; ++i)
-   {
-      tileMap[i] = new int[width];
-      for(int j = 0; j < width; ++j)
-      {
-         tileMap[i][j] = map.tileMap[i][j];
-      }
-   }
-
-   pathfinder = new Pathfinder(this);
 }
 
 Map::Map(std::ifstream& in)
@@ -63,9 +53,29 @@ Map::Map(std::ifstream& in)
       in.ignore(width<<1, '\n');
    }
 
-   initializePassibilityMatrix();
+   std::string obstacleLine;
+   std::string obstacleSheetName;
+   std::string obstacleSpriteType;
+   std::string obstacleSpriteName;
+   
+   int obstacleWidth;
+   int obstacleHeight;
+   int tileX;
+   int tileY;
 
-   pathfinder = new Pathfinder(this);
+   for(;;)
+   {
+      if(!std::getline(in, obstacleLine) || obstacleLine == "\n") break;
+
+      std::istringstream lineStream(obstacleLine);
+      lineStream >> obstacleSheetName >> obstacleSpriteType >> obstacleSpriteName >> obstacleWidth >> obstacleHeight >> tileX >> tileY;
+
+      Spritesheet* obstacleSheet = ResourceLoader::getSpritesheet(obstacleSheetName);
+      obstacles.push_back(new Obstacle(tileX, tileY, obstacleWidth, obstacleHeight, obstacleSheet, obstacleSpriteType, obstacleSpriteName));
+   }
+
+   initializePassibilityMatrix();
+   pathfinder = new Pathfinder(this, obstacles);
 
    DEBUG("Map loaded.");
 }
@@ -113,7 +123,16 @@ bool** Map::getPassibilityMatrix() const
    return passibilityMap;
 }
 
-void Map::draw()
+void Map::step(long timePassed)
+{
+   std::vector<Obstacle*>::iterator iter;
+   for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
+   {
+      (*iter)->step(timePassed);
+   }
+}
+
+void Map::draw() const
 {
    for(int i = 0; i < width; ++i)
    {
@@ -133,6 +152,12 @@ void Map::draw()
 #endif
       }
    }
+
+   std::vector<Obstacle*>::const_iterator iter;
+   for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
+   {
+      (*iter)->draw();
+   }
 }
 
 Map::~Map()
@@ -141,6 +166,11 @@ Map::~Map()
    {
       delete [] tileMap[i];
       delete [] passibilityMap[i];
+   }
+
+   for (unsigned int i = 0; i < obstacles.size(); i++)
+   {
+      delete obstacles[i];
    }
 
    delete [] tileMap;

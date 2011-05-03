@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="10" height="10" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="tilesetName" value="town"/>
+ </properties>
+ <tileset firstgid="1" source="../../tilesets/town.tsx"/>
+ <layer name="Tile Layer 1" width="10" height="10">
+  <data encoding="csv">
+1,1,1,1,1,1,1,1,1,1,
+1,2,2,2,1,1,2,2,2,1,
+1,2,1,2,1,1,2,2,2,1,
+1,2,2,2,1,1,1,1,1,1,
+1,1,1,1,2,2,1,2,2,1,
+1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,2,2,1,2,2,1,
+1,1,2,1,1,1,1,1,1,1,
+1,1,1,1,1,1,2,1,1,1,
+1,1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+</map>

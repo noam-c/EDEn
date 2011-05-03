@@ -211,6 +211,11 @@ Character* PlayerData::getPartyLeader()
    return partyLeader;
 }
 
+CharacterList PlayerData::getParty()
+{
+   return party;
+}
+
 void PlayerData::addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest)
 {
    rootQuest->addQuest(questPath, description, optionalQuest);

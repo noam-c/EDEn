@@ -9,9 +9,9 @@
 void OrganizationTodoList(void);
 
 /**
- * \todo [Mandatory] Add passible tile considerations and best-path calculations for NPCs.
  * \todo [Mandatory] Add collision detection for moving NPCs.
  * \todo [Mandatory] Recalculate an NPC's best path dynamically if there is a problem travelling a path.
+ * \todo [Mandatory] Maps should specify special keys for certain tiles (such as "entrance1" to denote one of the entrance tiles) to be referred to by scripts
  * \todo [Mandatory] Dialogue Controller needs a blinking cursor to indicate finished dialogue.
  * \todo [Mandatory] Create a "Controls" class that translates pressed keys/buttons to controller-agnostic instructions based on user options.
  * \todo [Mandatory] Create an options menu with persistence.
@@ -25,6 +25,7 @@ void OrganizationTodoList(void);
  * \todo [Recommended] Update ResourceLoader to include reference counting and LRU resource eviction.
  * \todo [Recommended] Route all debug output into the debug console instead of the terminal/console window
  * \todo [Recommended] Allow for turning debug flags on and off dynamically through the console to prevent flooding.
+ * \todo [Optional] Add support for multi-level maps.
  * \todo [Optional] Consolidate common functionality between Tileset and Spritesheet.
  * \todo [Optional] Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
  * \todo [Optional] Remove references to namespace gcn outside of edwt (as many as possible if not all)
@@ -42,7 +43,6 @@ void DevelopmentTodoList(void);
 
 /**
  * \todo Create a tool to make maps in regions (.edr files)
- * \todo Extend spritesheet editor to be able to create and edit animations. 
  */
 void ToolingTodoList(void);
 

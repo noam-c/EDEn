@@ -188,7 +188,7 @@ void TileEngine::draw()
       {
          GraphicsUtil::getInstance()->clearBuffer();
       }
-   
+
       drawNPCs();
       player->draw();
    GraphicsUtil::getInstance()->resetOffset();
@@ -211,6 +211,11 @@ bool TileEngine::step()
    handleInputEvents(done);
 
    player->step(timePassed);
+
+   if(currMap != NULL)
+   {
+      currMap->step(timePassed);
+   }
 
    stepNPCs(timePassed);
 

@@ -30,14 +30,17 @@
 #define DEBUG_EDWT       1<<4     // ED Widget Toolkit
 #define DEBUG_TITLE      1<<5     // Title Screen
 #define DEBUG_TILE_ENG   1<<6     // Tile Engine
-#define DEBUG_DIA_CONTR  1<<7     // Dialogue Controller
-#define DEBUG_RES_LOAD   1<<8     // Resource Loader
-#define DEBUG_SCRIPT_ENG 1<<9     // Script Engine
-#define DEBUG_AUDIO      1<<10    // Audio functionality
-#define DEBUG_SCHEDULER  1<<11    // Scheduler/coroutine functionality
-#define DEBUG_NPC        1<<12    // NPC functionality
-#define DEBUG_SPRITE     1<<13    // Sprite/spritesheet functionality
-#define DEBUG_PLAYER     1<<13    // Player data/Character functionality
+#define DEBUG_MENU       1<<7     // In-game Menu
+#define DEBUG_BATTLE_ENG 1<<8     // Battle Engine
+#define DEBUG_OVERWORLD  1<<9     // Overworld screen
+#define DEBUG_DIA_CONTR  1<<10    // Dialogue Controller
+#define DEBUG_RES_LOAD   1<<11    // Resource Loader
+#define DEBUG_SCRIPT_ENG 1<<12    // Script Engine
+#define DEBUG_AUDIO      1<<13    // Audio functionality
+#define DEBUG_SCHEDULER  1<<14    // Scheduler/coroutine functionality
+#define DEBUG_NPC        1<<15    // NPC functionality
+#define DEBUG_SPRITE     1<<16    // Sprite/spritesheet functionality
+#define DEBUG_PLAYER     1<<17    // Player data/Character functionality
 
 #define DEBUG_ALL           ~0    // Turn on all debug output (verbose, but handy)
 
