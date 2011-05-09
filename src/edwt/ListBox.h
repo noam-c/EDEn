@@ -15,7 +15,7 @@ namespace edwt
     *
     *  @author Noam Chitayat
     */
-   class TitleScreenListBox : public gcn::ListBox, public gcn::ActionListener
+   class ListBox : public gcn::ListBox, public gcn::ActionListener
    {
       /** Tells the GUI whether or not to draw the list box transparently */
       bool mOpaque;
@@ -30,14 +30,14 @@ namespace edwt
          /**
           * Constructor.
           */
-         TitleScreenListBox();
+         ListBox();
 
          /**
           * Constructor.
           *
           * @param listModel the list model that holds the options for this list.
           */
-         TitleScreenListBox(edwt::StringListModel *listModel);
+         ListBox(edwt::StringListModel *listModel);
 
          /**
           * Initialization of the list's basic properties.

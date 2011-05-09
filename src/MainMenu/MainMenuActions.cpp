@@ -5,6 +5,8 @@
 #include "Sound.h"
 
 #include "TileEngine.h"
+#include "Menu.h"
+#include "PlayerData.h"
 
 #define CHAP1 "chapter1"
 //Actions for each of the list ops in the title screen
@@ -21,6 +23,18 @@ void MainMenu::NewGameAction()
    chooseSound->play();
    Music::fadeOutMusic(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
+}
+
+/**
+ * 'Menu Prototype' was selected. Push a Menu state.
+ * \todo This will eventually be removed entirely, as it is only a programmer convenience right now.
+ */
+void MainMenu::MenuPrototypeAction()
+{
+   PlayerData* playerData = new PlayerData();
+   playerData->load("data/savegames/savegametest.edd");
+   Menu* menu = new Menu(*playerData);
+   ExecutionStack::getInstance()->pushState(menu);
 }
 
 /**

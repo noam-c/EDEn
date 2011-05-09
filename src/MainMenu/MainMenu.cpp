@@ -11,7 +11,7 @@
 #include "Label.h"
 #include "OpenGLTTF.h"
 #include "StringListModel.h"
-#include "TitleScreenListBox.h"
+#include "ListBox.h"
 
 #include "ExecutionStack.h"
 #include "SDL_image.h"
@@ -19,11 +19,15 @@
 
 const int debugFlag = DEBUG_TITLE;
 
-#define NEW_GAME_ACTION 0
-#define LOAD_GAME_ACTION 1
-#define OPTIONS_ACTION 2
-#define ABOUT_ACTION 3
-#define QUIT_GAME_ACTION 4
+enum MainMenuActions
+{
+	NEW_GAME_ACTION,
+	LOAD_GAME_ACTION,
+	OPTIONS_ACTION,
+	ABOUT_ACTION,
+	QUIT_GAME_ACTION,
+	MENU_PROTOTYPE_ACTION,
+};
 
 MainMenu::MainMenu()
 {
@@ -36,7 +40,7 @@ MainMenu::MainMenu()
       populateOpsList();
 
       titleLabel = new edwt::Label("Exodus Draconis");
-      actionsListBox = new edwt::TitleScreenListBox(titleOps);
+      actionsListBox = new edwt::ListBox(titleOps);
 
       titleFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 64);
       actionsFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 32);
@@ -91,6 +95,7 @@ void MainMenu::populateOpsList()
 
    titleOps->add("New Game", NEW_GAME_ACTION);
    titleOps->add("Load Game", LOAD_GAME_ACTION);
+   titleOps->add("Menu Prototype", MENU_PROTOTYPE_ACTION);
    titleOps->add("Options", OPTIONS_ACTION);
    titleOps->add("About", ABOUT_ACTION);
    titleOps->add("Quit", QUIT_GAME_ACTION);
@@ -147,6 +152,11 @@ void MainMenu::waitForInputEvent(bool& finishState)
             case QUIT_GAME_ACTION:
             {
                QuitAction();
+               return;
+            }
+            case MENU_PROTOTYPE_ACTION:
+            {
+               MenuPrototypeAction();
                return;
             }
          }

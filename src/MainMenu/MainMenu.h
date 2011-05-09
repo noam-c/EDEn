@@ -12,7 +12,7 @@ namespace gcn
 namespace edwt
 {
    class StringListModel;
-   class TitleScreenListBox;
+   class ListBox;
    class Label;
    class OpenGLTrueTypeFont;
 };
@@ -42,7 +42,7 @@ class MainMenu: public GameState
    edwt::Label* titleLabel;
 
    /** The list box for all options in the title screen */
-   edwt::TitleScreenListBox* actionsListBox;
+   edwt::ListBox* actionsListBox;
 
    /** The background image */
    gcn::Image* bgImg;
@@ -73,6 +73,7 @@ class MainMenu: public GameState
 
    //Actions for the list ops - see documentation in MainMenuActions.cpp
    void NewGameAction();
+   void MenuPrototypeAction();
    void LoadGameAction();
    void OptionsAction();
    void AboutAction();

@@ -1,4 +1,4 @@
-#include "TitleScreenListBox.h"
+#include "ListBox.h"
 #include "StringListModel.h"
 #include <SDL.h>
 #include "Sound.h"
@@ -8,18 +8,20 @@ const int debugFlag = DEBUG_EDWT;
 
 namespace edwt
 {
-   TitleScreenListBox::TitleScreenListBox()
+   ListBox::ListBox()
    {
       init();
    }
 
-   TitleScreenListBox::TitleScreenListBox(edwt::StringListModel* listModel) : gcn::ListBox(listModel)
+   ListBox::ListBox(edwt::StringListModel* listModel) : gcn::ListBox(listModel)
    {
       init();
    }
 
-   void TitleScreenListBox::init()
+   void ListBox::init()
    {
+	  reselectSound = NULL;
+	  chooseSound = NULL;
       mOpaque = true;
       addMouseListener(this);
       addActionListener(this);
@@ -27,7 +29,7 @@ namespace edwt
       gcn::ListBox::setSelected(0);
    }
 
-   void TitleScreenListBox::draw(gcn::Graphics* graphics)
+   void ListBox::draw(gcn::Graphics* graphics)
    {
       if(mOpaque)
       {
@@ -69,22 +71,22 @@ namespace edwt
       }
    }
 
-   bool TitleScreenListBox::isOpaque()
+   bool ListBox::isOpaque()
    {
       return mOpaque;
    }
 
-   void TitleScreenListBox::setOpaque(bool opaque)
+   void ListBox::setOpaque(bool opaque)
    {
       mOpaque = opaque;
    }
 
-   void TitleScreenListBox::setReselectSound(Sound* newReselect)
+   void ListBox::setReselectSound(Sound* newReselect)
    {
       reselectSound = newReselect;
    }
 
-   void TitleScreenListBox::adjustWidth()
+   void ListBox::adjustWidth()
    {
       //Find the maximum string width needed in the list box, and set the width to that       
       int maxWidth = 0;
@@ -101,12 +103,12 @@ namespace edwt
       setWidth(maxWidth);
    }
    
-   void TitleScreenListBox::mouseMoved(gcn::MouseEvent& mouseEvent)
+   void ListBox::mouseMoved(gcn::MouseEvent& mouseEvent)
    {
       setSelected(mouseEvent.getY() / getFont()->getHeight());
    }
 
-   void TitleScreenListBox::setSelected(int selected)
+   void ListBox::setSelected(int selected)
    {
       if(getSelected() != selected)
       {
@@ -119,7 +121,7 @@ namespace edwt
       gcn::ListBox::setSelected(selected);
    }
 
-   void TitleScreenListBox::action(const gcn::ActionEvent&/*actionEvent*/)
+   void ListBox::action(const gcn::ActionEvent&/*actionEvent*/)
    {
       SDL_Event event;
       event.type = SDL_USEREVENT;

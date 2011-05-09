@@ -12,7 +12,7 @@ namespace gcn
 namespace edwt
 {
    class StringListModel;
-   class TitleScreenListBox;
+   class ListBox;
    class Label;
    class OpenGLTrueTypeFont;
 };
@@ -27,6 +27,26 @@ class Sound;
  */
 class Menu: public GameState
 {
+   /** Sound for hovering over an option */
+   Sound* reselectSound;
+
+   /** Sound for picking an option */
+   Sound* chooseSound;
+
+   /** The list box for all options in the menu */
+   edwt::ListBox* actionsListBox;
+
+   /** The list model holding the options for the menu */
+   edwt::StringListModel* listOps;
+
+   /** The player data */
+   const PlayerData& playerData;
+
+   /**
+    * Populate the menu action list with required options
+    */
+   void populateOpsList();
+
    /**
     * Wait for and handle the input event.
     *
@@ -55,7 +75,7 @@ class Menu: public GameState
        *
        * Initializes the menu widgets, font, image and sounds
        */
-      Menu(PlayerData* playerData);
+      Menu(const PlayerData& playerData);
 
       /**
        * When the state is activated, set modal focus to the listbox
