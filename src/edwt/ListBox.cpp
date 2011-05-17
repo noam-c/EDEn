@@ -95,8 +95,9 @@ namespace edwt
       gcn::Font* font = getFont();
 
       //At each iteration, get the next item on the list and find its width relative to the font in use
-      for (int i = 0; i < mListModel->getNumberOfElements(); itemWidth = font->getWidth(mListModel->getElementAt(i++)))
+      for (int i = 0; i < mListModel->getNumberOfElements(); ++i)
       {
+         itemWidth = font->getWidth(mListModel->getElementAt(i));
          if(maxWidth < itemWidth)  {  maxWidth = itemWidth;  }
       }
 

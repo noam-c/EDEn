@@ -12,52 +12,58 @@
 #include "ListBox.h"
 #include "PlayerData.h"
 
+#include "ItemsPane.h"
+#include "HomePane.h"
+#include "EquipPane.h"
+#include "CharacterPane.h"
+
 #include "ExecutionStack.h"
 #include "SDL_image.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_MENU;
 
-enum ListActions
-{
-	ITEM_ACTION,
-	EQUIP_ACTION,
-	STATUS_ACTION,
-	SKILLS_ACTION,
-	FORMATION_ACTION,
-	PARTY_CHANGE_ACTION,
-	OPTIONS_ACTION,
-	DATA_ACTION,
-};
-
-Menu::Menu(const PlayerData& playerData) : playerData(playerData)
+Menu::Menu(PlayerData& playerData) : playerData(playerData)
 {
    try
    {
-      gcn::TabbedArea* menuPanel = new gcn::TabbedArea();
+      const gcn::Rectangle menuAreaRect(0, 0, top->getWidth() * 0.8, top->getHeight());
 
-	  gcn::Container* character1 = new gcn::Container();
-      gcn::Container* character2 = new gcn::Container();
-      gcn::Container* character3 = new gcn::Container();
+      gcn::TabbedArea* menuTabs = new gcn::TabbedArea();
 
-      menuPanel->addTab("Kain", character1);
-      menuPanel->addTab("Shaka", character2);
-      menuPanel->addTab("Akrom", character3);
+      gcn::Container* menuArea = new gcn::Container();
+      menuArea->setOpaque(true);
+      menuArea->setDimension(menuAreaRect);
 
-	  menuPanel->setOpaque(true);
-	  menuPanel->setHeight(top->getHeight());
-	  menuPanel->setWidth(top->getWidth() * 0.8);
+      menuTabs->addTab("Party", menuArea);
 
-      top->add(menuPanel, top->getWidth() * 0.2, 0);
+      CharacterList party = playerData.getParty();
+      for (CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
+      {
+         menuTabs->addTab(iter->first, menuArea);
+      }
+
+      HomePane* partyPanel = new HomePane(playerData, menuAreaRect);
+      menuArea->add(partyPanel);
+      menuPanes[HOME_PANEL] = partyPanel;
+
+      ItemsPane* itemsPanel = new ItemsPane(playerData, menuAreaRect);
+      menuArea->add(itemsPanel);
+      menuPanes[ITEM_PANEL] = itemsPanel;
+      itemsPanel->setVisible(false);
+
+      menuTabs->setDimension(menuAreaRect);
+      top->add(menuTabs, top->getWidth() * 0.2, 0);
 
       populateOpsList();
-	  
       actionsListBox = new edwt::ListBox(listOps);
       actionsListBox->adjustSize();
       actionsListBox->adjustWidth();
-	  actionsListBox->setOpaque(true);
+      actionsListBox->setOpaque(true);
 
-	  top->add(actionsListBox, 0, 0);
+      top->add(actionsListBox, 0, 0);
+
+      showPanel(HOME_PANEL);
    }
    catch (gcn::Exception e)
    {
@@ -69,16 +75,15 @@ void Menu::populateOpsList()
 {
    listOps = new edwt::StringListModel();
 
-   listOps->add("Items", ITEM_ACTION);
-   listOps->add("Equip", EQUIP_ACTION);
-   listOps->add("Status", STATUS_ACTION);
-   listOps->add("Skills", SKILLS_ACTION);
-   listOps->add("Formation", FORMATION_ACTION);
-   listOps->add("Party Change", PARTY_CHANGE_ACTION);
-   listOps->add("Options", OPTIONS_ACTION);
-   listOps->add("Data", DATA_ACTION);
+   listOps->add("Items", ITEM_PANEL);
+   //listOps->add("Equip", EQUIP_PANEL);
+   //listOps->add("Status", STATUS_PANEL);
+   //listOps->add("Skills", SKILLS_PANEL);
+   //listOps->add("Formation", FORMATION_PANEL);
+   //listOps->add("Party Change", PARTY_CHANGE_PANEL);
+   //listOps->add("Options", OPTIONS_PANEL);
+   //listOps->add("Data", DATA_PANEL);
 }
-
 
 void Menu::activate()
 {
@@ -105,13 +110,23 @@ void Menu::waitForInputEvent(bool& finishState)
 
    switch (event.type)
    {
+      case SDL_USEREVENT:
+      {
+         if (event.user.data1 == actionsListBox)
+         {
+            showPanel((MenuPanelType)event.user.code);
+         }
+
+         break;
+      }
       case SDL_KEYDOWN:
       {
          switch(event.key.keysym.sym)
          {
             case SDLK_ESCAPE:
             {
-               finishState = true;
+               popPanel();
+               finishState = activePaneStack.empty();
                return;
             }
          }
@@ -126,6 +141,35 @@ void Menu::waitForInputEvent(bool& finishState)
 
    // If the main menu didn't consume this event, then propagate to the generic input handling
    handleEvent(event);
+}
+
+void Menu::showPanel(MenuPanelType panelToShow)
+{
+   if(!activePaneStack.empty())
+   {
+      if(activePaneStack.top() == panelToShow)
+      {
+         return;
+      }
+
+      menuPanes[activePaneStack.top()]->setVisible(false);
+   }
+
+   activePaneStack.push(panelToShow);
+   menuPanes[panelToShow]->setVisible(true);
+}
+
+void Menu::popPanel()
+{
+   if(activePaneStack.empty()) return;
+
+   menuPanes[activePaneStack.top()]->setVisible(false);
+   activePaneStack.pop();
+
+   if(!activePaneStack.empty())
+   {
+      menuPanes[activePaneStack.top()]->setVisible(true);
+   }
 }
 
 void Menu::draw()

@@ -22,6 +22,7 @@ class PlayerData
 {
    CharacterList charactersEncountered;
    CharacterList party;
+   CharacterList reserve;
    Character* partyLeader;
 
    ItemList inventory;
@@ -49,7 +50,8 @@ class PlayerData
       void addNewCharacter(Character* newCharacter);
       Character* getPartyLeader();
 
-	  CharacterList getParty();
+	   CharacterList getParty() const;
+	   ItemList getInventory() const;
 
       void addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest);
       bool isQuestCompleted(const std::string& questPath);

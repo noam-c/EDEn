@@ -46,48 +46,53 @@ void PlayerData::load(const std::string& filePath)
 void PlayerData::parseCharactersAndParty(TiXmlElement* rootElement)
 {
    TiXmlElement* charactersElement = rootElement->FirstChildElement(CHARACTER_LIST_ELEMENT);
-   TiXmlElement* currCharacterNode = charactersElement->FirstChildElement(CHARACTER_ELEMENT);
+   TiXmlElement* partyElement = charactersElement->FirstChildElement(PARTY_ELEMENT);
+   TiXmlElement* reserveElement = charactersElement->FirstChildElement(RESERVE_ELEMENT);
+   
+   TiXmlElement* currCharacterNode = partyElement->FirstChildElement(CHARACTER_ELEMENT);
    while(currCharacterNode != NULL)
    {
       Character* currCharacter = new Character(currCharacterNode);
       charactersEncountered[currCharacter->getName()] = currCharacter;
+	  std::string name = currCharacterNode->Attribute(NAME_ATTRIBUTE);
+      party[name] = currCharacter;
 
       currCharacterNode = currCharacterNode->NextSiblingElement(CHARACTER_ELEMENT);
    }
  
-   TiXmlElement* partyElement = rootElement->FirstChildElement(PARTY_ELEMENT);
-   currCharacterNode = partyElement->FirstChildElement(CHARACTER_ELEMENT);
+   currCharacterNode = reserveElement->FirstChildElement(CHARACTER_ELEMENT);
    while(currCharacterNode != NULL)
    {
-      std::string name = currCharacterNode->Attribute(NAME_ATTRIBUTE);
-      party[name] = charactersEncountered[name];
+      Character* currCharacter = new Character(currCharacterNode);
+      charactersEncountered[currCharacter->getName()] = currCharacter;
+	  std::string name = currCharacterNode->Attribute(NAME_ATTRIBUTE);
+      reserve[name] = currCharacter;
 
-      currCharacterNode = currCharacterNode->NextSiblingElement(CHARACTER_ELEMENT);
+      currCharacterNode = currCharacterNode->NextSiblingElement(CHARACTER_ELEMENT);   
    }
 }
 
 void PlayerData::serializeCharactersAndParty(TiXmlElement& outputXml)
 {
    TiXmlElement charactersNode(CHARACTER_LIST_ELEMENT);
-   for(CharacterList::iterator iter = charactersEncountered.begin(); iter != charactersEncountered.end(); ++iter)
-   {
-      Character* character = iter->second;
-      character->serialize(charactersNode);
-   }
 
    TiXmlElement partyNode(PARTY_ELEMENT);
    for(CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
    {
       Character* character = iter->second;
-
-      TiXmlElement partyChar(CHARACTER_ELEMENT);
-      partyChar.SetAttribute(NAME_ATTRIBUTE, character->getName());
-
-      partyNode.InsertEndChild(partyChar);
+      character->serialize(partyNode);
    }
 
+   TiXmlElement reserveNode(RESERVE_ELEMENT);
+   for(CharacterList::iterator iter = reserve.begin(); iter != reserve.end(); ++iter)
+   {
+      Character* character = iter->second;
+      character->serialize(reserveNode);
+   }
+
+   charactersNode.InsertEndChild(partyNode);
+   charactersNode.InsertEndChild(reserveNode);
    outputXml.InsertEndChild(charactersNode);
-   outputXml.InsertEndChild(partyNode);
 }
 
 void PlayerData::parseQuestLog(TiXmlElement* rootElement)
@@ -211,9 +216,14 @@ Character* PlayerData::getPartyLeader()
    return partyLeader;
 }
 
-CharacterList PlayerData::getParty()
+CharacterList PlayerData::getParty() const
 {
    return party;
+}
+
+ItemList PlayerData::getInventory() const
+{
+   return inventory;
 }
 
 void PlayerData::addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest)

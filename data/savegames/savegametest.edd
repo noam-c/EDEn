@@ -1,12 +1,13 @@
 <PlayerData>
 	<Characters>
-		<Character name="Kain" hp="100" sp="50" str="5" int="8" />
-		<Character name="Akrom" hp="150" sp="30" str="7" int="6" />
+    <Party>
+		  <Character name="Kain" hp="100" sp="50" str="5" int="8" />
+		  <Character name="Akrom" hp="150" sp="30" str="7" int="6" />
+    </Party>
+    <Reserve>
+      <Character name="Shaka" hp="200" sp="30" str="9" int="4" />
+    </Reserve>
 	</Characters>
-	
-	<Party>
-		<Character name="Kain" />
-	</Party>
 	
 	<Inventory>
 		<Item itemNum="0" quantity="5" />

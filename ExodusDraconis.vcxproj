@@ -100,11 +100,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\edwt\DebugConsoleWindow.h" />
+    <ClInclude Include="src\edwt\ListBox.h" />
     <ClInclude Include="src\edwt\TextField.h" />
     <ClInclude Include="src\guichan\actionevent.hpp" />
     <ClInclude Include="src\guichan\actionlistener.hpp" />
     <ClInclude Include="src\guichan\widgets\adjustingcontainer.hpp" />
+    <ClInclude Include="src\Menu\CharacterPane.h" />
+    <ClInclude Include="src\Menu\EquipPane.h" />
+    <ClInclude Include="src\Menu\ItemsPane.h" />
     <ClInclude Include="src\Menu\Menu.h" />
+    <ClInclude Include="src\Menu\MenuPane.h" />
+    <ClInclude Include="src\Menu\HomePane.h" />
     <ClInclude Include="src\MovementDirection.h" />
     <ClInclude Include="src\Point2D.h" />
     <ClInclude Include="src\Sprites\Animation.h" />
@@ -216,7 +222,6 @@
     <ClInclude Include="src\TileEngine\XRegion.h" />
     <ClInclude Include="src\tinyxml\tinystr.h" />
     <ClInclude Include="src\tinyxml\tinyxml.h" />
-    <ClInclude Include="src\edwt\TitleScreenListBox.h" />
     <ClInclude Include="src\TODOLIST.h" />
     <ClInclude Include="src\guichan\widget.hpp" />
     <ClInclude Include="src\guichan\widgetlistener.hpp" />
@@ -224,12 +229,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\edwt\DebugConsoleWindow.cpp" />
+    <ClCompile Include="src\edwt\ListBox.cpp" />
     <ClCompile Include="src\edwt\TextField.cpp" />
     <ClCompile Include="src\guichan\actionevent.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
     </ClCompile>
     <ClCompile Include="src\guichan\widgets\adjustingcontainer.cpp" />
+    <ClCompile Include="src\Menu\CharacterPane.cpp" />
+    <ClCompile Include="src\Menu\EquipPane.cpp" />
+    <ClCompile Include="src\Menu\ItemsPane.cpp" />
     <ClCompile Include="src\Menu\Menu.cpp" />
+    <ClCompile Include="src\Menu\MenuPane.cpp" />
+    <ClCompile Include="src\Menu\HomePane.cpp" />
     <ClCompile Include="src\Sprites\Animation.cpp" />
     <ClCompile Include="src\guichan\basiccontainer.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
@@ -413,7 +424,6 @@
     <ClCompile Include="src\tinyxml\tinyxml.cpp" />
     <ClCompile Include="src\tinyxml\tinyxmlerror.cpp" />
     <ClCompile Include="src\tinyxml\tinyxmlparser.cpp" />
-    <ClCompile Include="src\edwt\TitleScreenListBox.cpp" />
     <ClCompile Include="src\guichan\widget.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
     </ClCompile>

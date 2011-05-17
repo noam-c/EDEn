@@ -2,6 +2,8 @@
 #define __MENU_H_
 
 #include "GameState.h"
+#include <stack>
+#include <map>
 
 namespace gcn
 {
@@ -17,8 +19,27 @@ namespace edwt
    class OpenGLTrueTypeFont;
 };
 
+enum MenuPanelType
+{
+	HOME_PANEL,
+   ITEM_PANEL,
+	EQUIP_PANEL,
+	STATUS_PANEL,
+	SKILLS_PANEL,
+	FORMATION_PANEL,
+	PARTY_CHANGE_PANEL,
+	OPTIONS_PANEL,
+	DATA_PANEL,
+};
+
 class PlayerData;
 class Sound;
+
+class MenuPane;
+class ItemsPane;
+class HomePane;
+class EquipPane;
+class CharacterPane;
 
 /**
  * \todo Document.
@@ -40,7 +61,13 @@ class Menu: public GameState
    edwt::StringListModel* listOps;
 
    /** The player data */
-   const PlayerData& playerData;
+   PlayerData& playerData;
+
+   /** Stack of active panels. Top panel is the one currently being shown. */
+   std::stack<MenuPanelType> activePaneStack;
+
+   /** Map of panes */
+   std::map<MenuPanelType, MenuPane*> menuPanes;
 
    /**
     * Populate the menu action list with required options
@@ -53,6 +80,16 @@ class Menu: public GameState
     * @param finishState Returned as true if the input event quit out of the main menu.
     */
    void waitForInputEvent(bool& finishState);
+
+   /**
+      * Show the specified panel, and hide the currently active panel.
+      */
+   void showPanel(MenuPanelType panelToShow);
+
+   /**
+      * Show the specified panel, and hide the currently active panel.
+      */
+   void popPanel();
 
    protected:
       /**
@@ -75,7 +112,7 @@ class Menu: public GameState
        *
        * Initializes the menu widgets, font, image and sounds
        */
-      Menu(const PlayerData& playerData);
+      Menu(PlayerData& playerData);
 
       /**
        * When the state is activated, set modal focus to the listbox
