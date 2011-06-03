@@ -1,5 +1,5 @@
-#ifndef __XREGION_H_
-#define __XREGION_H_
+#ifndef XREGION_H
+#define XREGION_H
 
 #include "Region.h"
 #include <string>

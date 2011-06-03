@@ -1,5 +1,5 @@
-#ifndef __XMAP_H_
-#define __XMAP_H_
+#ifndef XMAP_H
+#define XMAP_H
 
 #include <string>
 #include "Map.h"

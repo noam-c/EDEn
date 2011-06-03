@@ -1,5 +1,5 @@
-#ifndef __SCRIPT_H_
-#define __SCRIPT_H_
+#ifndef SCRIPT_H
+#define SCRIPT_H
 
 #include "Thread.h"
 #include <string>

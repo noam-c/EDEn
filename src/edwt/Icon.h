@@ -1,5 +1,5 @@
-#ifndef __ICON_H_
-#define __ICON_H_
+#ifndef ICON_H
+#define ICON_H
 
 #include <string>
 #include "guichan.hpp"

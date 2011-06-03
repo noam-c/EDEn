@@ -1,5 +1,5 @@
-#ifndef __REGION_H_
-#define __REGION_H_
+#ifndef REGION_H
+#define REGION_H
 
 #include "Resource.h"
 #include <string>

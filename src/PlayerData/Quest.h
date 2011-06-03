@@ -1,5 +1,5 @@
-#ifndef __QUEST_H_
-#define __QUEST_H_
+#ifndef QUEST_H
+#define QUEST_H
 
 #include <string>
 #include <map>

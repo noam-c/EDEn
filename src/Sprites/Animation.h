@@ -1,5 +1,5 @@
-#ifndef __ANIMATION_H_
-#define __ANIMATION_H_
+#ifndef ANIMATION_H
+#define ANIMATION_H
 
 template<class C> struct LinkedListNode;
 

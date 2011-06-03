@@ -1,5 +1,5 @@
-#ifndef __TILESET_H_
-#define __TILESET_H_
+#ifndef TILESET_H
+#define TILESET_H
 
 #include "Resource.h"
 

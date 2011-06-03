@@ -1,5 +1,5 @@
-#ifndef __RESOURCE_H_
-#define __RESOURCE_H_
+#ifndef RESOURCE_H
+#define RESOURCE_H
 
 #include "ResourceKey.h"
 

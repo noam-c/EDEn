@@ -1,5 +1,5 @@
-#ifndef __TASK_H_
-#define __TASK_H_
+#ifndef TASK_H
+#define TASK_H
 
 #include "TaskId.h"
 

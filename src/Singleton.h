@@ -1,5 +1,5 @@
-#ifndef __SINGLETON_H_
-#define __SINGLETON_H_
+#ifndef SINGLETON_H
+#define SINGLETON_H
 
 #ifndef NULL
    #define NULL 0

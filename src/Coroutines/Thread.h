@@ -1,5 +1,5 @@
-#ifndef __THREAD_H_
-#define __THREAD_H_
+#ifndef THREAD_H
+#define THREAD_H
 
 /**
  * A Thread is, in this case, an object that can yield, resume or block.

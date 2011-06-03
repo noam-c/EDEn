@@ -1,5 +1,5 @@
-#ifndef __MENU_H_
-#define __MENU_H_
+#ifndef MENU_H
+#define MENU_H
 
 #include "GameState.h"
 #include <stack>

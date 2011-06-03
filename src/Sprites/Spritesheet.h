@@ -1,5 +1,5 @@
-#ifndef __SPRITESHEET_H_
-#define __SPRITESHEET_H_
+#ifndef SPRITESHEET_H
+#define SPRITESHEET_H
 
 #include "Resource.h"
 #include <map>

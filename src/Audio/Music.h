@@ -1,5 +1,5 @@
-#ifndef __MUSIC_H_
-#define __MUSIC_H_
+#ifndef MUSIC_H
+#define MUSIC_H
 
 #include "Resource.h"
 #include "SDL_mixer.h"

@@ -1,5 +1,5 @@
-#ifndef __NPC_H_
-#define __NPC_H_
+#ifndef NPC_H
+#define NPC_H
 
 #include <queue>
 #include <string>

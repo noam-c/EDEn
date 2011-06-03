@@ -1,5 +1,5 @@
-#ifndef __LABEL_H_
-#define __LABEL_H_
+#ifndef LABEL_H
+#define LABEL_H
 
 #include "guichan.hpp"
 

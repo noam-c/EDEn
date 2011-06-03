@@ -1,5 +1,5 @@
-#ifndef __CONTAINER_H_
-#define __CONTAINER_H_
+#ifndef CONTAINER_H
+#define CONTAINER_H
 
 #include "guichan.hpp"
 

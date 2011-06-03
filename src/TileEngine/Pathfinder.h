@@ -1,5 +1,5 @@
-#ifndef __PATHFINDER_H_
-#define __PATHFINDER_H_
+#ifndef PATHFINDER_H
+#define PATHFINDER_H
 
 #include <queue>
 
