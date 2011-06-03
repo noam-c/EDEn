@@ -33,8 +33,7 @@ MainMenu::MainMenu()
 {
    try
    {
-      bgImg = gcn::Image::load("data/images/splash.bmp");
-      bg = new gcn::Icon(bgImg);
+      bg = new gcn::Icon("data/images/splash.bmp");
       top->add(bg,0,0);
 
       populateOpsList();
@@ -203,7 +202,6 @@ MainMenu::~MainMenu()
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 
    delete bg;
-   delete bgImg;
    delete actionsListBox;
    delete titleLabel;
    delete actionsFont;

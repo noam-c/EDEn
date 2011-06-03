@@ -14,10 +14,16 @@ static const char* CHARACTER_LIST_ELEMENT = "Characters";
 static const char* PARTY_ELEMENT = "Party";
 static const char* RESERVE_ELEMENT = "Reserve";
 static const char* CHARACTER_ELEMENT = "Character";
+
+static const char* MAX_HP_ATTRIBUTE = "maxHP";
 static const char* HP_ATTRIBUTE = "hp";
+static const char* MAX_SP_ATTRIBUTE = "maxSP";
 static const char* SP_ATTRIBUTE = "sp";
 static const char* STR_ATTRIBUTE = "str";
 static const char* INT_ATTRIBUTE = "int";
+
+static const char* PORTRAIT_ELEMENT = "Portrait";
+static const char* PATH_ATTRIBUTE = "path";
 
 static const char* QUEST_ELEMENT = "Quest";
 static const char* DESCRIPTION_ELEMENT = "Description";

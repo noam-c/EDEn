@@ -44,9 +44,6 @@ class MainMenu: public GameState
    /** The list box for all options in the title screen */
    edwt::ListBox* actionsListBox;
 
-   /** The background image */
-   gcn::Image* bgImg;
-
    /** The container for the background image */
    gcn::Icon* bg;
 

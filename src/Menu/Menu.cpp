@@ -11,6 +11,7 @@
 #include "StringListModel.h"
 #include "ListBox.h"
 #include "PlayerData.h"
+#include "Character.h"
 
 #include "ItemsPane.h"
 #include "HomePane.h"
@@ -58,10 +59,10 @@ Menu::Menu(PlayerData& playerData) : playerData(playerData)
       populateOpsList();
       actionsListBox = new edwt::ListBox(listOps);
       actionsListBox->adjustSize();
-      actionsListBox->adjustWidth();
+      actionsListBox->setWidth((top->getWidth() * 0.2) - 10);
       actionsListBox->setOpaque(true);
 
-      top->add(actionsListBox, 0, 0);
+      top->add(actionsListBox, 5, 10);
 
       showPanel(HOME_PANEL);
    }
@@ -76,13 +77,13 @@ void Menu::populateOpsList()
    listOps = new edwt::StringListModel();
 
    listOps->add("Items", ITEM_PANEL);
-   //listOps->add("Equip", EQUIP_PANEL);
-   //listOps->add("Status", STATUS_PANEL);
-   //listOps->add("Skills", SKILLS_PANEL);
-   //listOps->add("Formation", FORMATION_PANEL);
-   //listOps->add("Party Change", PARTY_CHANGE_PANEL);
-   //listOps->add("Options", OPTIONS_PANEL);
-   //listOps->add("Data", DATA_PANEL);
+   listOps->add("Equip", ITEM_PANEL);//EQUIP_PANEL);
+   listOps->add("Status", ITEM_PANEL);//STATUS_PANEL);
+   listOps->add("Skills", ITEM_PANEL);//SKILLS_PANEL);
+   listOps->add("Formation", ITEM_PANEL);//FORMATION_PANEL);
+   listOps->add("Party Change", ITEM_PANEL);//PARTY_CHANGE_PANEL);
+   listOps->add("Options", ITEM_PANEL);//OPTIONS_PANEL);
+   listOps->add("Data", ITEM_PANEL);//DATA_PANEL);
 }
 
 void Menu::activate()
