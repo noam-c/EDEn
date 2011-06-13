@@ -13,6 +13,10 @@ CharacterModule::CharacterModule() : characterPortrait(NULL)
    characterHPLabel = new edwt::Label();
    characterSPLabel = new edwt::Label();
 
+   characterName->setForegroundColor(0xFFFFFF);
+   characterHPLabel->setForegroundColor(0xFFFFFF);
+   characterSPLabel->setForegroundColor(0xFFFFFF);
+
    characterPortrait = new edwt::Icon();
 
    characterStats->setNumberOfColumns(1);
@@ -20,6 +24,7 @@ CharacterModule::CharacterModule() : characterPortrait(NULL)
    characterStats->add(characterName);
    characterStats->add(characterHPLabel);
    characterStats->add(characterSPLabel);
+   characterStats->setOpaque(false);
 
    setNumberOfColumns(2);
    setColumnAlignment(0, gcn::contrib::AdjustingContainer::LEFT);
@@ -29,6 +34,8 @@ CharacterModule::CharacterModule() : characterPortrait(NULL)
 
    add(characterPortrait);
    add(characterStats);
+
+   setOpaque(false);
 }
 
 void CharacterModule::setCharacter(Character* character)

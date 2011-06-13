@@ -102,6 +102,8 @@
     <ClInclude Include="src\edwt\DebugConsoleWindow.h" />
     <ClInclude Include="src\edwt\Icon.h" />
     <ClInclude Include="src\edwt\ListBox.h" />
+    <ClInclude Include="src\edwt\Tab.h" />
+    <ClInclude Include="src\edwt\TabbedArea.h" />
     <ClInclude Include="src\edwt\TextField.h" />
     <ClInclude Include="src\guichan\actionevent.hpp" />
     <ClInclude Include="src\guichan\actionlistener.hpp" />
@@ -233,6 +235,8 @@
     <ClCompile Include="src\edwt\DebugConsoleWindow.cpp" />
     <ClCompile Include="src\edwt\Icon.cpp" />
     <ClCompile Include="src\edwt\ListBox.cpp" />
+    <ClCompile Include="src\edwt\Tab.cpp" />
+    <ClCompile Include="src\edwt\TabbedArea.cpp" />
     <ClCompile Include="src\edwt\TextField.cpp" />
     <ClCompile Include="src\guichan\actionevent.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
@@ -436,6 +440,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\images\menubg.jpg" />
     <None Include="jpeg.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>

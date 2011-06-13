@@ -20,6 +20,9 @@ namespace edwt
       /** Tells the GUI whether or not to draw the list box transparently */
       bool mOpaque;
 
+      /** The padding between items in the list */
+      unsigned int mPadding;
+
       /** A reselection sound when the mouse or keyboard changes the selected option */
       Sound* reselectSound;
 
@@ -51,6 +54,27 @@ namespace edwt
           * @param graphics The graphics driver to draw with.
           */
          void draw(gcn::Graphics* graphics);
+
+        /**
+         * Gets the height of a row. Overridden to pad the font height slightly.
+         *
+         * @return The height of a row.
+         */
+        virtual unsigned int getRowHeight() const;
+
+        /**
+         * Gets the padding between items.
+         *
+         * @return The padding between items.
+         */
+        virtual unsigned int getRowPadding() const;
+
+        /**
+         * Sets the padding between items.
+         *
+         * @param padding The new padding to set (in pixels)
+         */
+        virtual void setRowPadding(unsigned int padding);
 
          /**
           * The mouse moved. Update the list box selection accordingly.

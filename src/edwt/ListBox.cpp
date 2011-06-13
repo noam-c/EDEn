@@ -20,9 +20,10 @@ namespace edwt
 
    void ListBox::init()
    {
-	  reselectSound = NULL;
-	  chooseSound = NULL;
+      reselectSound = NULL;
+      chooseSound = NULL;
       mOpaque = true;
+      mPadding = 0;
       addMouseListener(this);
       addActionListener(this);
       setWrappingEnabled(true);
@@ -33,6 +34,22 @@ namespace edwt
    {
       if(mOpaque)
       {
+         // Draw a border.
+         graphics->setColor(0xFFFFFF);
+         graphics->drawLine(0,
+                           0,
+                           0,
+                           getHeight() - 2);
+         graphics->setColor(0xCFCFCF);
+         graphics->drawLine(getWidth() - 1,
+                           1,
+                           getWidth() - 1,
+                           getHeight() - 1);
+         graphics->drawLine(1,
+                           getHeight() - 1,
+                           getWidth() - 1,
+                           getHeight() - 1);
+         
          graphics->setColor(getBackgroundColor());
          graphics->fillRectangle(gcn::Rectangle(0, 0, getWidth(), getHeight()));
       }
@@ -46,9 +63,9 @@ namespace edwt
       graphics->setFont(getFont());
 
       int i, fontHeight;
-      int y = 0;
+      int y = getRowPadding() >> 1;
 
-      fontHeight = getFont()->getHeight();
+      fontHeight = getRowHeight();
       gcn::Color highlight(128,128,128);
       gcn::Color base(255,255,255);
       graphics->setColor(base);
@@ -70,6 +87,21 @@ namespace edwt
          y += fontHeight;
       }
    }
+
+	unsigned int ListBox::getRowHeight() const
+	{
+      return gcn::ListBox::getRowHeight() + getRowPadding();
+	}
+
+	unsigned int ListBox::getRowPadding() const
+	{
+		return mPadding;
+	}
+
+	void ListBox::setRowPadding(unsigned int padding)
+	{
+		mPadding = padding;
+	}
 
    bool ListBox::isOpaque()
    {

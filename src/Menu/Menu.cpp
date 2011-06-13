@@ -7,6 +7,8 @@
 
 #include "Container.h"
 #include "Label.h"
+#include "TabbedArea.h"
+#include "Tab.h"
 #include "OpenGLTTF.h"
 #include "StringListModel.h"
 #include "ListBox.h"
@@ -28,13 +30,20 @@ Menu::Menu(PlayerData& playerData) : playerData(playerData)
 {
    try
    {
-      const gcn::Rectangle menuAreaRect(0, 0, top->getWidth() * 0.8, top->getHeight());
+      const gcn::Color menuBackgroundColor(50, 50, 50, 150);
+      const gcn::Rectangle menuAreaRect(0, 0, top->getWidth() * 0.8 - 5, top->getHeight() - 10);
 
-      gcn::TabbedArea* menuTabs = new gcn::TabbedArea();
+      bg = new gcn::Icon("data/images/menubg.jpg");
 
-      gcn::Container* menuArea = new gcn::Container();
-      menuArea->setOpaque(true);
+      menuTabs = new edwt::TabbedArea();
+      menuArea = new edwt::Container();
       menuArea->setDimension(menuAreaRect);
+      menuArea->setOpaque(false);
+
+      menuTabs->setDimension(menuAreaRect);
+      menuTabs->setForegroundColor(0xFFFFFF);
+      menuTabs->setBaseColor(menuBackgroundColor);
+      menuTabs->setDimension(menuAreaRect);
 
       menuTabs->addTab("Party", menuArea);
 
@@ -44,25 +53,26 @@ Menu::Menu(PlayerData& playerData) : playerData(playerData)
          menuTabs->addTab(iter->first, menuArea);
       }
 
-      HomePane* partyPanel = new HomePane(playerData, menuAreaRect);
-      menuArea->add(partyPanel);
-      menuPanes[HOME_PANEL] = partyPanel;
+      HomePane* homePanel = new HomePane(playerData, menuAreaRect);
+      menuArea->add(homePanel);
+      menuPanes[HOME_PANEL] = homePanel;
 
       ItemsPane* itemsPanel = new ItemsPane(playerData, menuAreaRect);
       menuArea->add(itemsPanel);
       menuPanes[ITEM_PANEL] = itemsPanel;
       itemsPanel->setVisible(false);
 
-      menuTabs->setDimension(menuAreaRect);
-      top->add(menuTabs, top->getWidth() * 0.2, 0);
-
       populateOpsList();
       actionsListBox = new edwt::ListBox(listOps);
       actionsListBox->adjustSize();
       actionsListBox->setWidth((top->getWidth() * 0.2) - 10);
+      actionsListBox->setBackgroundColor(menuBackgroundColor);
       actionsListBox->setOpaque(true);
+      actionsListBox->setRowPadding(5);
 
-      top->add(actionsListBox, 5, 10);
+      top->add(bg);
+      top->add(menuTabs, top->getWidth() * 0.2, 5);
+      top->add(actionsListBox, 5, menuTabs->getTabHeight() + 5);
 
       showPanel(HOME_PANEL);
    }
@@ -181,6 +191,15 @@ void Menu::draw()
 
 Menu::~Menu()
 {
+   // Delete all the menu panes
+   for (std::map<MenuPanelType, MenuPane*>::iterator iter = menuPanes.begin(); iter != menuPanes.end(); ++iter)
+   {
+      delete iter->second;
+   }
+
+   delete menuArea;
+   delete menuTabs;
 	delete listOps;
 	delete actionsListBox;
+   delete bg;
 }

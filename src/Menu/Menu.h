@@ -17,6 +17,8 @@ namespace edwt
    class ListBox;
    class Label;
    class OpenGLTrueTypeFont;
+   class Container;
+   class TabbedArea;
 };
 
 enum MenuPanelType
@@ -53,6 +55,15 @@ class Menu: public GameState
 
    /** Sound for picking an option */
    Sound* chooseSound;
+
+   /** Background for the menu */
+   gcn::Icon* bg;
+
+   /** The tabbed container for the main area of the menu */
+   edwt::TabbedArea* menuTabs;
+
+   /** The main area of the menu */
+   edwt::Container* menuArea;
 
    /** The list box for all options in the menu */
    edwt::ListBox* actionsListBox;
