@@ -20,6 +20,14 @@ HomePane::HomePane(PlayerData& playerData, const gcn::Rectangle& rect) : MenuPan
    refresh();
 }
 
+void HomePane::setCharacterSelectListener(CharacterSelectListener* listener)
+{
+   for(int i = 0; i < PARTY_SIZE; ++i)
+   {
+      characterModules[i].setCharacterSelectListener(listener);
+   }
+}
+
 void HomePane::refresh()
 {
    CharacterList party = playerData.getParty();

@@ -7,12 +7,16 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_GAME_STATE;
 
-GameState::GameState()
+GameState::GameState() : internalContainer(true)
 {
    top = new edwt::Container();
    top->setDimension(gcn::Rectangle(0, 0, 800, 600));
    top->setOpaque(false);
    top->setEnabled(true);
+}
+
+GameState::GameState(edwt::Container* container) : top(container), internalContainer(false)
+{
 }
 
 void GameState::activate()
@@ -44,5 +48,8 @@ void GameState::drawFrame()
 
 GameState::~GameState()
 {
-   delete top;
+   if(internalContainer)
+   {
+      delete top;
+   }
 }

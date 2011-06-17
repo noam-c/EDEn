@@ -5,6 +5,7 @@
 
 class PlayerData;
 class CharacterModule;
+class CharacterSelectListener;
 
 class HomePane : public MenuPane
 {
@@ -13,6 +14,7 @@ class HomePane : public MenuPane
 
    public:
       HomePane(PlayerData& playerData, const gcn::Rectangle& rect);
+      void setCharacterSelectListener(CharacterSelectListener* listener);
       void refresh();
       ~HomePane();
 };

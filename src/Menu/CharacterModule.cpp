@@ -1,19 +1,20 @@
 #include "CharacterModule.h"
 
 #include "Character.h"
+#include "CharacterSelectListener.h"
 #include <sstream>
 #include "Container.h"
 #include "Label.h"
 #include "Icon.h"
 
-CharacterModule::CharacterModule() : characterPortrait(NULL)
+CharacterModule::CharacterModule() : characterPortrait(NULL), charSelectListener(NULL)
 {
    characterStats = new gcn::contrib::AdjustingContainer();
-   characterName = new edwt::Label();
+   characterNameLabel = new edwt::Label();
    characterHPLabel = new edwt::Label();
    characterSPLabel = new edwt::Label();
 
-   characterName->setForegroundColor(0xFFFFFF);
+   characterNameLabel->setForegroundColor(0xFFFFFF);
    characterHPLabel->setForegroundColor(0xFFFFFF);
    characterSPLabel->setForegroundColor(0xFFFFFF);
 
@@ -21,7 +22,7 @@ CharacterModule::CharacterModule() : characterPortrait(NULL)
 
    characterStats->setNumberOfColumns(1);
    characterStats->setColumnAlignment(0, gcn::contrib::AdjustingContainer::LEFT);
-   characterStats->add(characterName);
+   characterStats->add(characterNameLabel);
    characterStats->add(characterHPLabel);
    characterStats->add(characterSPLabel);
    characterStats->setOpaque(false);
@@ -34,16 +35,30 @@ CharacterModule::CharacterModule() : characterPortrait(NULL)
 
    add(characterPortrait);
    add(characterStats);
-
+   addMouseListener(this);
    setOpaque(false);
+}
+
+void CharacterModule::mouseClicked(gcn::MouseEvent& mouseEvent)
+{
+   if(charSelectListener != NULL)
+   {
+      charSelectListener->characterSelected(characterName);
+   }
+}
+
+void CharacterModule::setCharacterSelectListener(CharacterSelectListener* listener)
+{
+   charSelectListener = listener;
 }
 
 void CharacterModule::setCharacter(Character* character)
 {
    if (character != NULL)
    {
-      characterName->setCaption(character->getName());
-      characterName->adjustSize();
+      characterName = character->getName();
+      characterNameLabel->setCaption(characterName);
+      characterNameLabel->adjustSize();
 
       std::stringstream hpSummary;
       hpSummary << character->getHP() << '/' << character->getMaxHP();
@@ -64,7 +79,7 @@ void CharacterModule::setCharacter(Character* character)
    }
    else
    {
-      characterName->setCaption("");
+      characterNameLabel->setCaption("");
       characterHPLabel->setCaption("");
       characterSPLabel->setCaption("");
       characterPortrait->clearImage();
@@ -74,7 +89,7 @@ void CharacterModule::setCharacter(Character* character)
 
 CharacterModule::~CharacterModule()
 {
-   delete characterName;
+   delete characterNameLabel;
    delete characterPortrait;
    delete characterHPLabel;
    delete characterSPLabel;

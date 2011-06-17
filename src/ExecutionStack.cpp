@@ -37,6 +37,7 @@ bool ExecutionStack::popState()
        */
       oldState->next = NULL;
 
+      delete oldState->data;
       delete oldState;
    }
 

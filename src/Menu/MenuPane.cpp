@@ -18,5 +18,5 @@ void MenuPane::draw(gcn::Graphics* graphics)
 MenuPane::MenuPane(const gcn::Rectangle& dimension)
 {
    setDimension(dimension);
-   setOpaque(true);
+   setOpaque(false);
 }

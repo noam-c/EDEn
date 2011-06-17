@@ -8,7 +8,7 @@
  * persistence is successfully implemented.
  */
 // Uncomment this macro to turn off music
-//#define MUSIC_OFF
+#define MUSIC_OFF
 
 /**
  * This Resource represents a song, and provides an interface for playing,

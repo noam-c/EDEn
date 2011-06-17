@@ -28,6 +28,9 @@ class GameState
       /** The container for any GUI widgets used by the state. */
       edwt::Container* top;
 
+      /** True iff the container was created internally (and thus should also be destroyed internally) */
+      bool internalContainer;
+
       /**
        * Set true to signal the state logic to terminate so that the state is destroyed.
        */
@@ -39,6 +42,13 @@ class GameState
        * Initializes the top-level GUI widget container
        */
       GameState();
+
+      /**
+       * Constructor.
+       *
+       * Initializes the state with an existing top-level container.
+       */
+      GameState(edwt::Container* container);
 
       /**
        * Runs the state's logic processing
@@ -60,11 +70,6 @@ class GameState
        */
       virtual void draw() = 0;
 
-      /**
-       * Destructor.
-       */
-      ~GameState();
-
    public:
       /**
        * State activation called every time this state is found at the top of the execution stack.
@@ -76,6 +81,11 @@ class GameState
       virtual bool advanceFrame();
 
       virtual void drawFrame();
+
+      /**
+       * Destructor.
+       */
+      virtual ~GameState();
 };
 
 #endif

@@ -15,10 +15,9 @@
 #include "PlayerData.h"
 #include "Character.h"
 
-#include "ItemsPane.h"
+#include "ItemsMenu.h"
+#include "StatusMenu.h"
 #include "HomePane.h"
-#include "EquipPane.h"
-#include "CharacterPane.h"
 
 #include "ExecutionStack.h"
 #include "SDL_image.h"
@@ -26,7 +25,7 @@
 
 const int debugFlag = DEBUG_MENU;
 
-Menu::Menu(PlayerData& playerData) : playerData(playerData)
+Menu::Menu(PlayerData& playerData) : playerData(playerData), characterAction(NONE)
 {
    try
    {
@@ -53,14 +52,9 @@ Menu::Menu(PlayerData& playerData) : playerData(playerData)
          menuTabs->addTab(iter->first, menuArea);
       }
 
-      HomePane* homePanel = new HomePane(playerData, menuAreaRect);
+      homePanel = new HomePane(playerData, menuAreaRect);
+      homePanel->setCharacterSelectListener(this);
       menuArea->add(homePanel);
-      menuPanes[HOME_PANEL] = homePanel;
-
-      ItemsPane* itemsPanel = new ItemsPane(playerData, menuAreaRect);
-      menuArea->add(itemsPanel);
-      menuPanes[ITEM_PANEL] = itemsPanel;
-      itemsPanel->setVisible(false);
 
       populateOpsList();
       actionsListBox = new edwt::ListBox(listOps);
@@ -73,8 +67,6 @@ Menu::Menu(PlayerData& playerData) : playerData(playerData)
       top->add(bg);
       top->add(menuTabs, top->getWidth() * 0.2, 5);
       top->add(actionsListBox, 5, menuTabs->getTabHeight() + 5);
-
-      showPanel(HOME_PANEL);
    }
    catch (gcn::Exception e)
    {
@@ -87,18 +79,19 @@ void Menu::populateOpsList()
    listOps = new edwt::StringListModel();
 
    listOps->add("Items", ITEM_PANEL);
-   listOps->add("Equip", ITEM_PANEL);//EQUIP_PANEL);
-   listOps->add("Status", ITEM_PANEL);//STATUS_PANEL);
-   listOps->add("Skills", ITEM_PANEL);//SKILLS_PANEL);
-   listOps->add("Formation", ITEM_PANEL);//FORMATION_PANEL);
-   listOps->add("Party Change", ITEM_PANEL);//PARTY_CHANGE_PANEL);
-   listOps->add("Options", ITEM_PANEL);//OPTIONS_PANEL);
-   listOps->add("Data", ITEM_PANEL);//DATA_PANEL);
+   listOps->add("Equip", EQUIP_PANEL);
+   listOps->add("Status", STATUS_PANEL);
+   listOps->add("Skills", SKILLS_PANEL);
+   listOps->add("Formation", FORMATION_PANEL);
+   listOps->add("Party Change", PARTY_CHANGE_PANEL);
+   listOps->add("Options", OPTIONS_PANEL);
+   listOps->add("Data", DATA_PANEL);
 }
 
 void Menu::activate()
 {
    GameState::activate();
+   homePanel->setVisible(true);
 }
 
 bool Menu::step()
@@ -107,79 +100,94 @@ bool Menu::step()
 
    bool done = false;
 
-   waitForInputEvent(done);
+   pollInputEvent(done);
 
    return !done;
 }
 
-void Menu::waitForInputEvent(bool& finishState)
+void Menu::pollInputEvent(bool& finishState)
 {
    SDL_Event event;
 
    /* Check for events */
-   SDL_WaitEvent(&event);
-
-   switch (event.type)
+   if(SDL_PollEvent(&event))
    {
-      case SDL_USEREVENT:
+      switch (event.type)
       {
-         if (event.user.data1 == actionsListBox)
+         case SDL_USEREVENT:
          {
-            showPanel((MenuPanelType)event.user.code);
-         }
-
-         break;
-      }
-      case SDL_KEYDOWN:
-      {
-         switch(event.key.keysym.sym)
-         {
-            case SDLK_ESCAPE:
+            if (event.user.data1 == actionsListBox)
             {
-               popPanel();
-               finishState = activePaneStack.empty();
-               return;
+               showPanel((MenuAction)event.user.code);
             }
+
+            break;
          }
+         case SDL_KEYDOWN:
+         {
+            switch(event.key.keysym.sym)
+            {
+               case SDLK_ESCAPE:
+               {
+                  finishState = true;
+                  return;
+               }
+            }
 
+            break;
+         }
+         default:
+         {
+             break;
+         }
+      }
+
+      // If the main menu didn't consume this event, then propagate to the generic input handling
+      handleEvent(event);
+   }
+}
+
+bool Menu::isCharacterDependent(MenuAction action)
+{
+   switch(action)
+   {
+      case EQUIP_PANEL:
+	   case STATUS_PANEL:
+	   case SKILLS_PANEL:
+         return true;
+
+	   case FORMATION_PANEL:
+	   case PARTY_CHANGE_PANEL:
+	   case OPTIONS_PANEL:
+	   case DATA_PANEL:
+      case ITEM_PANEL:
+	   default:
+         return false;
+   }
+}
+
+void Menu::showPanel(MenuAction panelToShow)
+{
+   if(isCharacterDependent(panelToShow))
+   {
+      characterAction = panelToShow;
+   }
+   else
+   {
+      ExecutionStack::getInstance()->pushState(new ItemsMenu(top, *menuArea, playerData));
+      homePanel->setVisible(false);
+   }
+}
+
+void Menu::characterSelected(const std::string& characterName)
+{
+   switch(characterAction)
+   {
+      case STATUS_PANEL:
+         Character* selected = playerData.getParty()[characterName];
+         ExecutionStack::getInstance()->pushState(new StatusMenu(top, *menuArea, *selected));
+         homePanel->setVisible(false);
          break;
-      }
-      default:
-      {
-          break;
-      }
-   }
-
-   // If the main menu didn't consume this event, then propagate to the generic input handling
-   handleEvent(event);
-}
-
-void Menu::showPanel(MenuPanelType panelToShow)
-{
-   if(!activePaneStack.empty())
-   {
-      if(activePaneStack.top() == panelToShow)
-      {
-         return;
-      }
-
-      menuPanes[activePaneStack.top()]->setVisible(false);
-   }
-
-   activePaneStack.push(panelToShow);
-   menuPanes[panelToShow]->setVisible(true);
-}
-
-void Menu::popPanel()
-{
-   if(activePaneStack.empty()) return;
-
-   menuPanes[activePaneStack.top()]->setVisible(false);
-   activePaneStack.pop();
-
-   if(!activePaneStack.empty())
-   {
-      menuPanes[activePaneStack.top()]->setVisible(true);
    }
 }
 
@@ -191,12 +199,7 @@ void Menu::draw()
 
 Menu::~Menu()
 {
-   // Delete all the menu panes
-   for (std::map<MenuPanelType, MenuPane*>::iterator iter = menuPanes.begin(); iter != menuPanes.end(); ++iter)
-   {
-      delete iter->second;
-   }
-
+   delete homePanel;
    delete menuArea;
    delete menuTabs;
 	delete listOps;

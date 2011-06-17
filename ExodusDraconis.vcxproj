@@ -109,12 +109,16 @@
     <ClInclude Include="src\guichan\actionlistener.hpp" />
     <ClInclude Include="src\guichan\widgets\adjustingcontainer.hpp" />
     <ClInclude Include="src\Menu\CharacterModule.h" />
-    <ClInclude Include="src\Menu\CharacterPane.h" />
+    <ClInclude Include="src\Menu\CharacterSelectListener.h" />
     <ClInclude Include="src\Menu\EquipPane.h" />
+    <ClInclude Include="src\Menu\ItemsMenu.h" />
     <ClInclude Include="src\Menu\ItemsPane.h" />
     <ClInclude Include="src\Menu\Menu.h" />
-    <ClInclude Include="src\Menu\MenuPane.h" />
     <ClInclude Include="src\Menu\HomePane.h" />
+    <ClInclude Include="src\Menu\MenuPane.h" />
+    <ClInclude Include="src\Menu\MenuState.h" />
+    <ClInclude Include="src\Menu\StatusMenu.h" />
+    <ClInclude Include="src\Menu\StatusPane.h" />
     <ClInclude Include="src\MovementDirection.h" />
     <ClInclude Include="src\Point2D.h" />
     <ClInclude Include="src\Sprites\Animation.h" />
@@ -243,12 +247,15 @@
     </ClCompile>
     <ClCompile Include="src\guichan\widgets\adjustingcontainer.cpp" />
     <ClCompile Include="src\Menu\CharacterModule.cpp" />
-    <ClCompile Include="src\Menu\CharacterPane.cpp" />
     <ClCompile Include="src\Menu\EquipPane.cpp" />
+    <ClCompile Include="src\Menu\ItemsMenu.cpp" />
     <ClCompile Include="src\Menu\ItemsPane.cpp" />
     <ClCompile Include="src\Menu\Menu.cpp" />
-    <ClCompile Include="src\Menu\MenuPane.cpp" />
     <ClCompile Include="src\Menu\HomePane.cpp" />
+    <ClCompile Include="src\Menu\MenuPane.cpp" />
+    <ClCompile Include="src\Menu\MenuState.cpp" />
+    <ClCompile Include="src\Menu\StatusMenu.cpp" />
+    <ClCompile Include="src\Menu\StatusPane.cpp" />
     <ClCompile Include="src\Sprites\Animation.cpp" />
     <ClCompile Include="src\guichan\basiccontainer.cpp">
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>

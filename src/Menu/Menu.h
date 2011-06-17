@@ -2,6 +2,7 @@
 #define MENU_H
 
 #include "GameState.h"
+#include "CharacterSelectListener.h"
 #include <stack>
 #include <map>
 
@@ -21,8 +22,9 @@ namespace edwt
    class TabbedArea;
 };
 
-enum MenuPanelType
+enum MenuAction
 {
+   NONE,
 	HOME_PANEL,
    ITEM_PANEL,
 	EQUIP_PANEL,
@@ -37,18 +39,14 @@ enum MenuPanelType
 class PlayerData;
 class Sound;
 
-class MenuPane;
-class ItemsPane;
 class HomePane;
-class EquipPane;
-class CharacterPane;
 
 /**
  * \todo Document.
  *
  * @author Noam Chitayat
  */
-class Menu: public GameState
+class Menu: public GameState, public CharacterSelectListener
 {
    /** Sound for hovering over an option */
    Sound* reselectSound;
@@ -74,11 +72,11 @@ class Menu: public GameState
    /** The player data */
    PlayerData& playerData;
 
-   /** Stack of active panels. Top panel is the one currently being shown. */
-   std::stack<MenuPanelType> activePaneStack;
+   /** The home panel to display */
+   HomePane* homePanel;
 
-   /** Map of panes */
-   std::map<MenuPanelType, MenuPane*> menuPanes;
+   /** The character-dependent action that is in queue after a character is selected */
+   MenuAction characterAction;
 
    /**
     * Populate the menu action list with required options
@@ -86,21 +84,21 @@ class Menu: public GameState
    void populateOpsList();
 
    /**
-    * Wait for and handle the input event.
+    * Poll for and handle the input event.
     *
     * @param finishState Returned as true if the input event quit out of the main menu.
     */
-   void waitForInputEvent(bool& finishState);
+   void pollInputEvent(bool& finishState);
+
+   /**
+    * @return true iff the action requires a character to be selected
+    */
+   bool isCharacterDependent(MenuAction action);
 
    /**
       * Show the specified panel, and hide the currently active panel.
       */
-   void showPanel(MenuPanelType panelToShow);
-
-   /**
-      * Show the specified panel, and hide the currently active panel.
-      */
-   void popPanel();
+   void showPanel(MenuAction panelToShow);
 
    protected:
       /**
@@ -129,6 +127,13 @@ class Menu: public GameState
        * When the state is activated, set modal focus to the listbox
        */
       void activate();
+
+      /**
+       * Called when a character is selected from the home pane.
+       *
+       * @param characterName the name of the character that was selected
+       */
+      void characterSelected(const std::string& characterName);
 
       /**
        * Destructor.
