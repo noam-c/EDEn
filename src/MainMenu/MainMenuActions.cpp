@@ -5,7 +5,8 @@
 #include "Sound.h"
 
 #include "TileEngine.h"
-#include "Menu.h"
+#include "MenuShell.h"
+#include "HomeMenu.h"
 #include "PlayerData.h"
 
 #define CHAP1 "chapter1"
@@ -33,7 +34,11 @@ void MainMenu::MenuPrototypeAction()
 {
    PlayerData* playerData = new PlayerData();
    playerData->load("data/savegames/savegametest.edd");
-   Menu* menu = new Menu(*playerData);
+
+   /** \todo This is never deleted, causing a memory leak. */
+   MenuShell* menuShell = new MenuShell(*playerData);
+
+   HomeMenu* menu = new HomeMenu(*menuShell, *playerData);
    ExecutionStack::getInstance()->pushState(menu);
 }
 

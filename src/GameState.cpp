@@ -10,7 +10,7 @@ const int debugFlag = DEBUG_GAME_STATE;
 GameState::GameState() : internalContainer(true)
 {
    top = new edwt::Container();
-   top->setDimension(gcn::Rectangle(0, 0, 800, 600));
+   top->setDimension(gcn::Rectangle(0, 0, GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight()));
    top->setOpaque(false);
    top->setEnabled(true);
 }

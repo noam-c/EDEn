@@ -1,11 +1,36 @@
 #include "MenuState.h"
 
 #include "guichan.hpp"
+#include "MenuShell.h"
+#include "MenuPane.h"
 #include "Container.h"
+#include "TabbedArea.h"
 #include <SDL.h>
+#include "DebugUtils.h"
 
-MenuState::MenuState(edwt::Container* top, edwt::Container& menuPane) : GameState(top), menuPane(menuPane)
+const int debugFlag = DEBUG_MENU;
+
+MenuState::MenuState(MenuShell& menuShell) : GameState(&menuShell), menuShell(menuShell), menuPane(NULL)
 {
+}
+
+void MenuState::setMenuPane(MenuPane* pane)
+{
+   menuPane = pane;
+   menuShell.addPane(menuPane);
+}
+
+void MenuState::activate()
+{
+   if(menuPane == NULL)
+   {
+      DEBUG("Missing menu pane for the menu! Please initialize it by calling setMenuPane in the subclass.");
+      T_T("Missing menu pane for the menu!");
+   }
+
+   GameState::activate();
+   menuShell.setTabChangeListener(this);
+   menuPane->setVisible(true);
 }
 
 bool MenuState::step()
@@ -55,6 +80,12 @@ void MenuState::draw()
    SDL_Delay (1);
 }
 
+void MenuState::tabChanged(const std::string& tabName)
+{
+}
+
 MenuState::~MenuState()
 {
+   menuShell.removePane(menuPane);
+   delete menuPane;
 }

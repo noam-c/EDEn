@@ -48,7 +48,8 @@ class PlayerData
       void save(const std::string& filePath);
 
       void addNewCharacter(Character* newCharacter);
-      Character* getPartyLeader();
+      Character* getPartyLeader() const;
+      Character* getPartyCharacter(const std::string& characterName) const;
 
 	   CharacterList getParty() const;
 	   ItemList getInventory() const;

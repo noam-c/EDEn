@@ -1,15 +1,13 @@
 #include "ItemsMenu.h"
 #include "ItemsPane.h"
 #include "PlayerData.h"
+#include "MenuShell.h"
 
-ItemsMenu::ItemsMenu(edwt::Container* top, edwt::Container& menuPane, PlayerData& playerData) : MenuState(top, menuPane), playerData(playerData)
+ItemsMenu::ItemsMenu(MenuShell& menuShell, PlayerData& playerData) : MenuState(menuShell), playerData(playerData)
 {
-   itemsPane = new ItemsPane(playerData, menuPane.getDimension());
-   menuPane.add(itemsPane);
+   setMenuPane(new ItemsPane(playerData, menuShell.getDimension()));
 }
 
 ItemsMenu::~ItemsMenu()
 {
-   menuPane.remove(itemsPane);
-   delete itemsPane;
 }

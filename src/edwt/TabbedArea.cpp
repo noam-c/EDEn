@@ -1,8 +1,11 @@
 #include "TabbedArea.h"
 #include "Tab.h"
+#include "TabChangeListener.h"
 
 namespace edwt
 {
+   TabbedArea::TabbedArea() : tabChangeListener(NULL) {}
+
    void TabbedArea::setBackgroundColor(gcn::Color color)
    {
       gcn::TabbedArea::setBackgroundColor(color);
@@ -31,6 +34,22 @@ namespace edwt
       mWidgetContainer->setOpaque(opaque);
    }
 
+   void TabbedArea::setSelectedTab(gcn::Tab* tab)
+   {
+      gcn::Tab* oldTab = gcn::TabbedArea::getSelectedTab();
+
+      gcn::TabbedArea::setSelectedTab(tab);
+      if (tab != oldTab && tabChangeListener != NULL)
+      {
+         tabChangeListener->tabChanged(tab->getCaption());
+      }
+   }
+
+   void TabbedArea::setTabChangeListener(TabChangeListener* listener)
+   {
+      tabChangeListener = listener;
+   }
+
    void TabbedArea::addTab(const std::string& caption, gcn::Widget* widget)
    {
         Tab* tab = new Tab();
@@ -47,7 +66,19 @@ namespace edwt
 
    void TabbedArea::addTab(gcn::Tab* tab, gcn::Widget* widget)
    {
-      gcn::TabbedArea::addTab(tab, widget);
+        tab->setTabbedArea(this);
+        tab->addActionListener(this);
+
+        mTabContainer->add(tab);
+        mTabs.push_back(std::pair<gcn::Tab*, Widget*>(tab, widget));
+
+        if (mSelectedTab == NULL)
+        {
+            gcn::TabbedArea::setSelectedTab(tab);
+        }
+
+        adjustTabPositions();
+        adjustSize();
    }
 
    int TabbedArea::getTabHeight() const

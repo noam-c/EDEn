@@ -201,6 +201,16 @@ void GraphicsUtil::loadGLTexture(const char* path, GLuint& texture, int& w, int&
    DEBUG("Texture creation complete.");
 }
 
+int GraphicsUtil::getWidth()
+{
+   return width;
+}
+
+int GraphicsUtil::getHeight()
+{
+   return height;
+}
+
 void GraphicsUtil::setInterface(gcn::Container* top)
 {
    gui->setTop(top);

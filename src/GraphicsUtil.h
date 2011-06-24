@@ -92,6 +92,16 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
    
       /** The screen height (currently HARDCODED) */
       static const int height = 600;
+   
+      /**
+       * @return The width of the screen
+       */
+      int getWidth();
+
+      /**
+       * @return The height of the screen
+       */
+      int getHeight();
 
       /**
        * Set the widget container to draw to screen.
@@ -125,7 +135,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * Draw GUI widgets to the screen
        */
       void drawGUI();
-   
+
       /**
        * Push an SDL input event to the widgets
        *

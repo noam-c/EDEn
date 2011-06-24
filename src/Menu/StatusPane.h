@@ -8,11 +8,12 @@ class Character;
 
 class StatusPane : public MenuPane
 {
-   Character& character;
+   Character* character;
    CharacterModule* module;
 
    public:
-      StatusPane(Character& character, const gcn::Rectangle& rect);
+      StatusPane(Character* character, const gcn::Rectangle& rect);
+      void setCharacter(Character* character);
       ~StatusPane();
 };
 

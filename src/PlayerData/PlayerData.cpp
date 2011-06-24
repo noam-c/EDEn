@@ -211,9 +211,14 @@ void PlayerData::addNewCharacter(Character* newCharacter)
    party[characterName] = newCharacter;
 }
 
-Character* PlayerData::getPartyLeader()
+Character* PlayerData::getPartyLeader() const
 {
    return partyLeader;
+}
+
+Character* PlayerData::getPartyCharacter(const std::string& characterName) const
+{
+   return party.at(characterName);
 }
 
 CharacterList PlayerData::getParty() const
