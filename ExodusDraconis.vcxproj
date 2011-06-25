@@ -53,7 +53,7 @@
     <ClCompile>
       <AdditionalOptions>-Dmain=SDL_main %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>src;src\Audio;src\Coroutines;src\edwt;src\MainMenu;src\ResourceLoader;src\ScriptEngine;src\Sprites;src\TileEngine;src\PlayerData;src\tinyxml;src\Menu;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;src\Audio;src\Coroutines;src\edwt;src\MainMenu;src\ResourceLoader;src\ScriptEngine;src\Sprites;src\TileEngine;src\PlayerData;src\tinyxml;src\Menu;src\MenuControls;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;DEBUG_MODE;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <ExceptionHandling>Async</ExceptionHandling>
@@ -104,17 +104,20 @@
     <ClInclude Include="src\edwt\ListBox.h" />
     <ClInclude Include="src\edwt\Tab.h" />
     <ClInclude Include="src\edwt\TabbedArea.h" />
+    <ClInclude Include="src\edwt\TabChangeListener.h" />
     <ClInclude Include="src\edwt\TextField.h" />
     <ClInclude Include="src\guichan\actionevent.hpp" />
     <ClInclude Include="src\guichan\actionlistener.hpp" />
     <ClInclude Include="src\guichan\widgets\adjustingcontainer.hpp" />
+    <ClInclude Include="src\MenuControls\MenuAction.h" />
+    <ClInclude Include="src\MenuControls\MenuShell.h" />
     <ClInclude Include="src\Menu\CharacterModule.h" />
     <ClInclude Include="src\Menu\CharacterSelectListener.h" />
     <ClInclude Include="src\Menu\EquipPane.h" />
+    <ClInclude Include="src\Menu\HomeMenu.h" />
+    <ClInclude Include="src\Menu\HomePane.h" />
     <ClInclude Include="src\Menu\ItemsMenu.h" />
     <ClInclude Include="src\Menu\ItemsPane.h" />
-    <ClInclude Include="src\Menu\Menu.h" />
-    <ClInclude Include="src\Menu\HomePane.h" />
     <ClInclude Include="src\Menu\MenuPane.h" />
     <ClInclude Include="src\Menu\MenuState.h" />
     <ClInclude Include="src\Menu\StatusMenu.h" />
@@ -246,12 +249,13 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gcn%(Filename)</ObjectFileName>
     </ClCompile>
     <ClCompile Include="src\guichan\widgets\adjustingcontainer.cpp" />
+    <ClCompile Include="src\MenuControls\MenuShell.cpp" />
     <ClCompile Include="src\Menu\CharacterModule.cpp" />
     <ClCompile Include="src\Menu\EquipPane.cpp" />
+    <ClCompile Include="src\Menu\HomeMenu.cpp" />
+    <ClCompile Include="src\Menu\HomePane.cpp" />
     <ClCompile Include="src\Menu\ItemsMenu.cpp" />
     <ClCompile Include="src\Menu\ItemsPane.cpp" />
-    <ClCompile Include="src\Menu\Menu.cpp" />
-    <ClCompile Include="src\Menu\HomePane.cpp" />
     <ClCompile Include="src\Menu\MenuPane.cpp" />
     <ClCompile Include="src\Menu\MenuState.cpp" />
     <ClCompile Include="src\Menu\StatusMenu.cpp" />
