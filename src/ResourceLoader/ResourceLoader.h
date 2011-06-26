@@ -1,5 +1,5 @@
-#ifndef __RESOURCE_LOADER_H_
-#define __RESOURCE_LOADER_H_
+#ifndef RESOURCE_LOADER_H
+#define RESOURCE_LOADER_H
 
 #include <map>
 #include <string>

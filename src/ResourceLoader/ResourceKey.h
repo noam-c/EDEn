@@ -1,26 +1,11 @@
-#ifndef __MUSIC_H_
-#define __MUSIC_H_
+#ifndef RESOURCE_KEY_H
+#define RESOURCE_KEY_H
 
-#include "Resource.h"
-#include "SDL_mixer.h"
+#include <string>
 
-class Music : public Resource
-{  static Music* currentMusic;
-   static inline bool isPlaying(Music* music);
-   static inline void setPlayingMusic(Music* music);
-   
-   Mix_Music* music;
-
-   public:
-      Music(ResourceKey name);
-      size_t getSize();
-      void load(const char* path);
-
-      void play();
-      static void fadeOutMusic(int time);
-      static void stopMusic();
-
-      ~Music();
-};
+/**
+ * A ResourceKey uniquely identifies a Resource.
+ */
+typedef std::string ResourceKey;
 
 #endif
