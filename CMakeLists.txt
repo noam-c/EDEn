@@ -207,11 +207,15 @@ add_definitions(
 
 add_executable( ExodusDraconis ${SOURCES} )
 
-INCLUDE(FindOpenGL)
-INCLUDE(FindSDL)
-INCLUDE(FindSDL_image)
-INCLUDE(FindSDL_ttf)
-INCLUDE(FindSDL_mixer)
-INCLUDE(FindLua51)
+IF(WIN32)
+	target_link_libraries( ExodusDraconis SDLmain lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
+ELSE(WIN32)
+	INCLUDE(FindOpenGL)
+	INCLUDE(FindSDL)
+	INCLUDE(FindSDL_image)
+	INCLUDE(FindSDL_ttf)
+	INCLUDE(FindSDL_mixer)
+	INCLUDE(FindLua51)
 
-target_link_libraries( ExodusDraconis SDLmain ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )
+	target_link_libraries( ExodusDraconis ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )
+ENDIF(WIN32)
