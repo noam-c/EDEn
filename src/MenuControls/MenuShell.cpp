@@ -5,7 +5,6 @@
 #include "PlayerData.h"
 #include "ListBox.h"
 #include "StringListModel.h"
-#include "MenuAction.h"
 #include "MenuPane.h"
 #include "TabChangeListener.h"
 

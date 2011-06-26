@@ -1,6 +1,5 @@
 #include "Tileset.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "GLInclude.h"
 #include <fstream>
 #include "GraphicsUtil.h"
 #include "TileEngine.h"

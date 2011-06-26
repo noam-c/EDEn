@@ -73,7 +73,7 @@ class Exception : public std::exception
       /**
        * Destructor.
        */
-      ~Exception();
+      ~Exception() throw();
 };
 
 #endif

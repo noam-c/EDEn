@@ -19,7 +19,6 @@
 #include "ItemsMenu.h"
 #include "StatusMenu.h"
 #include "HomePane.h"
-#include "MenuAction.h"
 
 #include "ExecutionStack.h"
 #include "SDL_image.h"

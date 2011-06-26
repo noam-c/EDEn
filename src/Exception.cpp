@@ -39,6 +39,6 @@ int Exception::getLine() const
    return line;
 }
 
-Exception::~Exception()
+Exception::~Exception() throw()
 {
 }

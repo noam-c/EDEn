@@ -1,6 +1,5 @@
 #include "GraphicsUtil.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "GLInclude.h"
 #include <SDL.h>
 #include "SDL_opengl.h"
 #include "SDL_image.h"

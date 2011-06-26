@@ -2,6 +2,7 @@
 #define MENU_SHELL_H
 
 #include "Container.h"
+#include "MenuAction.h"
 
 namespace gcn
 {
@@ -19,7 +20,6 @@ namespace edwt
 class MenuPane;
 class PlayerData;
 class Sound;
-enum MenuAction;
 
 class MenuShell : public edwt::Container
 {

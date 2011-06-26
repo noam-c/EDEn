@@ -202,10 +202,16 @@ include_directories(
 
 add_definitions( 
   -DDEBUG_MODE
-  -DWIN32
   -D_CONSOLE
 )
 
-add_executable( ExodusDraconis WIN32 ${SOURCES} )
+add_executable( ExodusDraconis ${SOURCES} )
 
-target_link_libraries( ExodusDraconis2 SDLmain lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
+INCLUDE(FindOpenGL)
+INCLUDE(FindSDL)
+INCLUDE(FindSDL_image)
+INCLUDE(FindSDL_ttf)
+INCLUDE(FindSDL_mixer)
+INCLUDE(FindLua51)
+
+target_link_libraries( ExodusDraconis SDLmain ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )

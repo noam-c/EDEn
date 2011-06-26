@@ -3,6 +3,7 @@
 
 #include "MenuState.h"
 #include "CharacterSelectListener.h"
+#include "MenuAction.h"
 #include <stack>
 #include <map>
 
@@ -24,9 +25,7 @@ namespace edwt
 
 class PlayerData;
 class Sound;
-
 class MenuShell;
-enum MenuAction;
 
 /**
  * \todo Document.

@@ -2,6 +2,7 @@
 #define __PLAYER_DATA_H_
 
 #include <map>
+#include <string>
 
 class Character;
 class Quest;

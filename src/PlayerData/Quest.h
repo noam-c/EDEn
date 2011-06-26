@@ -22,7 +22,7 @@ class Quest
    public:
       Quest(const std::string& name, const std::string& description, bool optional, bool completed);
       Quest(TiXmlElement* questTree);
-      void Quest::serialize(TiXmlElement& outputXml);
+      void serialize(TiXmlElement& outputXml);
 
       void addQuest(const std::string& questPath, const std::string& description, bool optional, bool completed = false);
       bool isCompleted();

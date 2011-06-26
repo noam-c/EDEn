@@ -1,6 +1,5 @@
 #include "Spritesheet.h"
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "GLInclude.h"
 #include "GraphicsUtil.h"
 #include "LinkedListNode.h"
 #include "SpriteFrame.h"
