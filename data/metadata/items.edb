@@ -1,0 +1,28 @@
+
+{
+	"data" : 
+	[
+
+		// 1-299 usable items
+		{"id" : 0,"name" : "Potion"},
+		{"id" : 1,"name" : "Ether"},
+
+		// 300-399 Body equipment (armor)
+		{"id" : 300,"name" : "Plain Clothes"},
+
+		// 400-499 Head equipment (helms and hats)
+		{"id" : 400,"name" : "Bandanna"},
+
+		// 500-699 Hand equipment (weapons/shields)
+		{"id" : 500,"name" : "Hunter's Legacy"},
+		{"id" : 501,"name" : "Quarterstaff"},
+
+		// 700-799 Foot equipment (shoes/boots)
+		{"id" : 700,"name" : "Sandals"},
+
+		// 800-999 Accessories
+		{"id" : 800,"name" : "Aventurine"},
+		{"id" : 801,"name" : "Amulet"},
+		{"id" : 802,"name" : "Red Emblem"}
+	]
+}

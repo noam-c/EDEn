@@ -3,7 +3,10 @@
 
 #include <string>
 
-class TiXmlElement;
+namespace Json
+{
+   class Value;
+};
 
 class Character
 {
@@ -26,11 +29,10 @@ class Character
    
    public:
       Character(const std::string& name);
-      Character(TiXmlElement* charToLoad);
-      void parsePortraitData(TiXmlElement* charToLoad);
-
-      void serialize(TiXmlElement& characterSet);
-      void serializePortraitData(TiXmlElement& characterSet);
+      Character(Json::Value& charToLoad);
+      void parsePortraitData(Json::Value& charToLoad);
+      void serialize(Json::Value& characterSet);
+      void serializePortraitData(Json::Value& characterSet);
 
       std::string getName();
       std::string getPortraitPath();

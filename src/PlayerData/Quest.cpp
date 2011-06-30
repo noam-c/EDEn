@@ -1,62 +1,52 @@
 #include "Quest.h"
 #include "SaveGameItemNames.h"
-#include "tinyxml.h"
+#include "json.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
 Quest::Quest(const std::string& name, const std::string& description, bool optional, bool completed)
-   : name(name), optional(optional), completed(completed)
+   : name(name), completed(completed), optional(optional)
 {
 }
 
-Quest::Quest(TiXmlElement* questTree)
+Quest::Quest(Json::Value& questTree)
 {
-   questTree->QueryStringAttribute(NAME_ATTRIBUTE, &name);
+   name = questTree[NAME_ATTRIBUTE].asString();
+   Json::Value& descriptionElement = questTree[DESCRIPTION_ELEMENT];
+   description = descriptionElement.isString() ? descriptionElement.asString() : "";
+   
+   completed = questTree[COMPLETED_ATTRIBUTE].asBool();
+   optional = questTree[OPTIONAL_ATTRIBUTE].asBool();
 
-   TiXmlElement* descriptionElement = questTree->FirstChildElement(DESCRIPTION_ELEMENT);
-   description = descriptionElement != NULL ? descriptionElement->GetText() : "";
-
-   std::string completedValue;
-   std::string optionalValue;
-
-   questTree->QueryStringAttribute(COMPLETED_ATTRIBUTE, &completedValue);
-   questTree->QueryStringAttribute(OPTIONAL_ATTRIBUTE, &optionalValue);
-
-   completed = (completedValue == "true");
-   optional = (optionalValue == "true");
-
-   TiXmlElement* subquestNode = questTree->FirstChildElement(QUEST_ELEMENT);
-   while(subquestNode != NULL)
+   Json::Value& subquestNode = questTree[QUEST_ELEMENT];
+   for(Json::Value::iterator iter = subquestNode.begin(); iter != subquestNode.end(); ++iter)
    {
-      Quest* subquest = new Quest(subquestNode);
+      Quest* subquest = new Quest(*iter);
       subquests[subquest->getName()] = subquest;
-
-      subquestNode = subquestNode->NextSiblingElement(QUEST_ELEMENT);
    }
 }
 
-void Quest::serialize(TiXmlElement& outputXml)
+void Quest::serialize(Json::Value& outputXml)
 {
-   TiXmlElement questNode(QUEST_ELEMENT);
-   questNode.SetAttribute(NAME_ATTRIBUTE, name);
-
+   Json::Value questNode(Json::objectValue);
+   questNode[NAME_ATTRIBUTE] = name;
+   
    if(!description.empty())
    {
-      TiXmlElement descriptionElement(DESCRIPTION_ELEMENT);
-      TiXmlText descriptionText(description);
-      descriptionElement.InsertEndChild(descriptionText);
-      questNode.InsertEndChild(descriptionElement);
+      questNode[DESCRIPTION_ELEMENT] = description;
    }
    
-   questNode.SetAttribute(COMPLETED_ATTRIBUTE, completed);
-   questNode.SetAttribute(OPTIONAL_ATTRIBUTE, optional);
+   questNode[COMPLETED_ATTRIBUTE] = completed;
+   questNode[OPTIONAL_ATTRIBUTE] = optional;
+   
+   Json::Value subquestsNode(Json::arrayValue);
    for(QuestLog::iterator i  = subquests.begin(); i != subquests.end(); ++i)
    {
-      i->second->serialize(questNode);
+      i->second->serialize(subquestsNode);
    }
-
-   outputXml.InsertEndChild(questNode);
+   
+   outputXml[QUEST_ELEMENT] = questNode;
 }
 
 void Quest::addQuest(const std::string& questPath, const std::string& description, bool optional, bool completed)

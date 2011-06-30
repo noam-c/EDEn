@@ -1,6 +1,6 @@
 #include "Character.h"
 #include "SaveGameItemNames.h"
-#include "tinyxml.h"
+#include "json.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
@@ -9,47 +9,46 @@ Character::Character(const std::string& name) : name(name)
 {
 }
 
-Character::Character(TiXmlElement* charToLoad)
+Character::Character(Json::Value& charToLoad)
 {
-   charToLoad->QueryStringAttribute(NAME_ATTRIBUTE, &name);
-   charToLoad->QueryIntAttribute(HP_ATTRIBUTE, &hp);
-   charToLoad->QueryIntAttribute(SP_ATTRIBUTE, &sp);
-   charToLoad->QueryIntAttribute(MAX_HP_ATTRIBUTE, &maxHP);
-   charToLoad->QueryIntAttribute(MAX_SP_ATTRIBUTE, &maxSP);
-   charToLoad->QueryIntAttribute(STR_ATTRIBUTE, &strength);
-   charToLoad->QueryIntAttribute(INT_ATTRIBUTE, &intelligence);
-
+   name = charToLoad[NAME_ATTRIBUTE].asString();
+   hp = charToLoad[HP_ATTRIBUTE].asInt();
+   sp = charToLoad[SP_ATTRIBUTE].asInt();
+   maxHP = charToLoad[MAX_HP_ATTRIBUTE].asInt();
+   maxSP = charToLoad[MAX_SP_ATTRIBUTE].asInt();
+   strength = charToLoad[STR_ATTRIBUTE].asInt();
+   intelligence = charToLoad[INT_ATTRIBUTE].asInt();
+   
    parsePortraitData(charToLoad);
 }
 
-void Character::parsePortraitData(TiXmlElement* charToLoad)
+void Character::parsePortraitData(Json::Value& charToLoad)
 {
-   TiXmlElement* portraitData = charToLoad->FirstChild(PORTRAIT_ELEMENT)->ToElement();
-   portraitData->QueryStringAttribute(PATH_ATTRIBUTE, &portraitPath);
+   Json::Value& portraitData = charToLoad[PORTRAIT_ELEMENT];
+   portraitPath = portraitData[PATH_ATTRIBUTE].asString();
 }
 
-void Character::serialize(TiXmlElement& characterSet)
+void Character::serialize(Json::Value& characterSet)
 {
-   TiXmlElement characterNode(CHARACTER_ELEMENT);
-
-   characterNode.SetAttribute(NAME_ATTRIBUTE, name);
-   characterNode.SetAttribute(HP_ATTRIBUTE, hp);
-   characterNode.SetAttribute(SP_ATTRIBUTE, sp);
-   characterNode.SetAttribute(MAX_HP_ATTRIBUTE, maxHP);
-   characterNode.SetAttribute(MAX_SP_ATTRIBUTE, maxSP);
-   characterNode.SetAttribute(STR_ATTRIBUTE, strength);
-   characterNode.SetAttribute(INT_ATTRIBUTE, intelligence);
-
-   characterSet.InsertEndChild(characterNode);
+   Json::Value characterNode(Json::objectValue);
+   
+   characterNode[NAME_ATTRIBUTE] = name;
+   characterNode[HP_ATTRIBUTE] = hp;
+   characterNode[SP_ATTRIBUTE] = sp;
+   characterNode[MAX_HP_ATTRIBUTE] = maxHP;
+   characterNode[MAX_SP_ATTRIBUTE] = maxSP;
+   characterNode[STR_ATTRIBUTE] = strength;
+   characterNode[INT_ATTRIBUTE] = intelligence;
+   
+   serializePortraitData(characterNode);
+   characterSet.append(characterNode);
 }
 
-void Character::serializePortraitData(TiXmlElement& characterNode)
+void Character::serializePortraitData(Json::Value& characterNode)
 {
-   TiXmlElement portraitNode(PORTRAIT_ELEMENT);
-
-   portraitNode.SetAttribute(PATH_ATTRIBUTE, portraitPath);
-
-   characterNode.InsertEndChild(portraitNode);
+   Json::Value portraitNode(Json::objectValue);
+   portraitNode[PATH_ATTRIBUTE] = portraitPath;
+   characterNode[PORTRAIT_ELEMENT] = portraitNode;
 }
 
 int Character::getMaxHP()

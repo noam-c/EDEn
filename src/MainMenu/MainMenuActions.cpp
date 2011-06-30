@@ -33,7 +33,7 @@ void MainMenu::NewGameAction()
 void MainMenu::MenuPrototypeAction()
 {
    PlayerData* playerData = new PlayerData();
-   playerData->load("data/savegames/savegametest.edd");
+   playerData->load("data/savegames/savegamejson.edd");
 
    /** \todo This is never deleted, causing a memory leak. */
    MenuShell* menuShell = new MenuShell(*playerData);

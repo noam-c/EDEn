@@ -3,7 +3,7 @@
 #include "Character.h"
 #include "Quest.h"
 #include <fstream>
-#include "tinyxml.h"
+#include "json.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
@@ -21,140 +21,143 @@ void PlayerData::load(const std::string& filePath)
       T_T("Failed to open save game file for reading.");
    }
 
-   TiXmlDocument xmlDoc;
-   input >> xmlDoc;
-
-   if(xmlDoc.Error())
-   {
-      DEBUG("Error occurred in save game XML parsing: %s", xmlDoc.ErrorDesc());
-      T_T("Failed to parse save data.");
-   }
-
-   TiXmlElement* root = xmlDoc.RootElement();
-   if(strcmp(root->Value(), PLAYER_DATA_ELEMENT) != 0)
+   Json::Value jsonRoot;
+   input >> jsonRoot;
+   
+   if(jsonRoot.isNull())
    {
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse save data.");
    }
    
-   parseCharactersAndParty(root);
-   parseQuestLog(root);
-   parseInventory(root);
-   parseLocation(root);
+   parseCharactersAndParty(jsonRoot);
+   parseQuestLog(jsonRoot);
+   parseInventory(jsonRoot);
+   parseLocation(jsonRoot);
 }
 
-void PlayerData::parseCharactersAndParty(TiXmlElement* rootElement)
+void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
 {
-   TiXmlElement* charactersElement = rootElement->FirstChildElement(CHARACTER_LIST_ELEMENT);
-   TiXmlElement* partyElement = charactersElement->FirstChildElement(PARTY_ELEMENT);
-   TiXmlElement* reserveElement = charactersElement->FirstChildElement(RESERVE_ELEMENT);
+   Json::Value& charactersElement = rootElement[CHARACTER_LIST_ELEMENT];
+   Json::Value& partyElement = charactersElement[PARTY_ELEMENT];
+   Json::Value& reserveElement = charactersElement[RESERVE_ELEMENT];
    
-   TiXmlElement* currCharacterNode = partyElement->FirstChildElement(CHARACTER_ELEMENT);
-   while(currCharacterNode != NULL)
+   int partySize = partyElement.size();
+   int reserveSize = reserveElement.size();
+   
+   if(partyElement.isArray() && partySize > 0)
    {
-      Character* currCharacter = new Character(currCharacterNode);
-      charactersEncountered[currCharacter->getName()] = currCharacter;
-	  std::string name = currCharacterNode->Attribute(NAME_ATTRIBUTE);
-      party[name] = currCharacter;
-
-      currCharacterNode = currCharacterNode->NextSiblingElement(CHARACTER_ELEMENT);
+      DEBUG("Loading party...");
+      for(int i = 0; i < partySize; ++i)
+      {
+         DEBUG("Adding character %d...", i+1);
+         Character* currCharacter = new Character(partyElement[i]);
+         std::string name = currCharacter->getName();
+         charactersEncountered[name] = currCharacter;
+         party[name] = currCharacter;
+      }
+      DEBUG("Party loaded.");
    }
- 
-   currCharacterNode = reserveElement->FirstChildElement(CHARACTER_ELEMENT);
-   while(currCharacterNode != NULL)
-   {
-      Character* currCharacter = new Character(currCharacterNode);
-      charactersEncountered[currCharacter->getName()] = currCharacter;
-	  std::string name = currCharacterNode->Attribute(NAME_ATTRIBUTE);
-      reserve[name] = currCharacter;
 
-      currCharacterNode = currCharacterNode->NextSiblingElement(CHARACTER_ELEMENT);   
+   if(reserveElement.isArray() && reserveSize > 0)
+   {
+      DEBUG("Loading reserve...");
+      for(int i = 0; i < reserveSize; ++i)
+      {
+         DEBUG("Adding character %d...", i+1);
+         Character* currCharacter = new Character(reserveElement[i]);
+         std::string name = currCharacter->getName();
+         charactersEncountered[name] = currCharacter;
+         reserveElement[name] = currCharacter;
+      }
+      DEBUG("Reserve loaded.");
    }
 }
 
-void PlayerData::serializeCharactersAndParty(TiXmlElement& outputXml)
+void PlayerData::serializeCharactersAndParty(Json::Value& outputXml)
 {
-   TiXmlElement charactersNode(CHARACTER_LIST_ELEMENT);
-
-   TiXmlElement partyNode(PARTY_ELEMENT);
+   Json::Value charactersNode;
+   
+   Json::Value partyNode(Json::arrayValue);
    for(CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
    {
       Character* character = iter->second;
       character->serialize(partyNode);
    }
-
-   TiXmlElement reserveNode(RESERVE_ELEMENT);
+   
+   Json::Value reserveNode(Json::arrayValue);
    for(CharacterList::iterator iter = reserve.begin(); iter != reserve.end(); ++iter)
    {
       Character* character = iter->second;
       character->serialize(reserveNode);
    }
-
-   charactersNode.InsertEndChild(partyNode);
-   charactersNode.InsertEndChild(reserveNode);
-   outputXml.InsertEndChild(charactersNode);
+   
+   charactersNode[PARTY_ELEMENT] = partyNode;
+   charactersNode[RESERVE_ELEMENT] = reserveNode;
+   
+   outputXml[CHARACTER_LIST_ELEMENT] = charactersNode;
 }
 
-void PlayerData::parseQuestLog(TiXmlElement* rootElement)
+void PlayerData::parseQuestLog(Json::Value& rootElement)
 {
-   TiXmlElement* questLog = rootElement->FirstChildElement(QUEST_ELEMENT);
+   DEBUG("Loading quest log...");
+   Json::Value questLog = rootElement[QUEST_ELEMENT];
    rootQuest = new Quest(questLog);
 }
 
-void PlayerData::serializeQuestLog(TiXmlElement& outputXml)
+void PlayerData::serializeQuestLog(Json::Value& outputXml)
 {
    rootQuest->serialize(outputXml);
 }
 
-void PlayerData::parseInventory(TiXmlElement* rootElement)
+void PlayerData::parseInventory(Json::Value& rootElement)
 {
-   TiXmlElement* itemsHeld = rootElement->FirstChildElement(INVENTORY_ELEMENT);
-   TiXmlElement* currNode = itemsHeld->FirstChildElement(ITEM_ELEMENT);
-   while(currNode != NULL)
+   DEBUG("Loading inventory data...");
+   Json::Value& itemsHeld = rootElement[INVENTORY_ELEMENT];
+   for(Json::Value::iterator iter = itemsHeld.begin(); iter != itemsHeld.end(); ++iter)
    {
       int itemNum, itemQuantity;
-      currNode->QueryIntAttribute(ITEM_NUM_ATTRIBUTE, &itemNum);
-      currNode->QueryIntAttribute(ITEM_QUANTITY_ATTRIBUTE, &itemQuantity);
-
+      itemNum = (*iter)[ITEM_NUM_ATTRIBUTE].asInt();
+      itemQuantity = (*iter)[ITEM_QUANTITY_ATTRIBUTE].asInt();
       inventory[itemNum] = itemQuantity;
-      currNode = currNode->NextSiblingElement(ITEM_ELEMENT);
-   } 
+   }
 }
 
-void PlayerData::serializeInventory(TiXmlElement& outputXml)
+void PlayerData::serializeInventory(Json::Value& outputXml)
 {
-   TiXmlElement inventoryNode(INVENTORY_ELEMENT);
+   Json::Value inventoryNode(Json::arrayValue);
    for(ItemList::iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
    {
       int itemNumber = iter->first;
       int itemQuantity = iter->second;
-
+      
       if(itemQuantity > 0)
       {
-         TiXmlElement item(ITEM_ELEMENT);
-         item.SetAttribute(ITEM_NUM_ATTRIBUTE, itemNumber);
-         item.SetAttribute(ITEM_QUANTITY_ATTRIBUTE, itemQuantity);
-
-         inventoryNode.InsertEndChild(item);
+         Json::Value itemEntry(Json::objectValue);
+         itemEntry[ITEM_NUM_ATTRIBUTE] = itemNumber;
+         itemEntry[ITEM_QUANTITY_ATTRIBUTE] = itemQuantity;
+         
+         inventoryNode.append(itemEntry);
       }
    }
-
-   outputXml.InsertEndChild(inventoryNode);
+   
+   outputXml[INVENTORY_ELEMENT] = inventoryNode;
 }
 
-void PlayerData::parseLocation(TiXmlElement* rootElement)
+void PlayerData::parseLocation(Json::Value& rootElement)
 {
-   TiXmlElement* location = rootElement->FirstChildElement(SAVE_STATE_ELEMENT);
-   if(location != NULL)
+   Json::Value& location = rootElement[SAVE_STATE_ELEMENT];
+   if(!location.isNull())
    {
-      currChapter = location->Attribute(CHAPTER_ATTRIBUTE);
-
+      DEBUG("Loading current location data...");
+      currChapter = location[CHAPTER_ATTRIBUTE].asString();
+      
       // Set the current chapter and location
       SaveLocation savePoint;
-      location->QueryStringAttribute(REGION_ATTRIBUTE, &savePoint.region);
-      location->QueryStringAttribute(MAP_ATTRIBUTE, &savePoint.map);
-      location->QueryIntAttribute(X_ATTRIBUTE, &savePoint.x);
-      location->QueryIntAttribute(Y_ATTRIBUTE, &savePoint.y);
+      savePoint.region = location[REGION_ATTRIBUTE].asString();
+      savePoint.map = location[MAP_ATTRIBUTE].asString();
+      savePoint.x = location[X_ATTRIBUTE].asInt();
+      savePoint.y = location[Y_ATTRIBUTE].asInt();
    }
    else
    {
@@ -162,13 +165,16 @@ void PlayerData::parseLocation(TiXmlElement* rootElement)
    }
 }
 
-void PlayerData::serializeLocation(TiXmlElement& outputXml)
+void PlayerData::serializeLocation(Json::Value& outputXml)
 {
+   /**
+    * \todo Determine format for current location and then correctly serialize
+    */
 }
 
 void PlayerData::save(const std::string& filePath)
 {
-   TiXmlElement playerDataNode(PLAYER_DATA_ELEMENT);
+   Json::Value playerDataNode(Json::objectValue);
    serializeCharactersAndParty(playerDataNode);
    serializeInventory(playerDataNode);
    serializeQuestLog(playerDataNode);
@@ -176,26 +182,13 @@ void PlayerData::save(const std::string& filePath)
 
    DEBUG("Saving to file %s", filePath.c_str());
 
-   TiXmlDocument xmlDoc;
-   xmlDoc.InsertEndChild(playerDataNode);
-
-#ifndef DISABLE_ENCRYPTION
    std::ofstream output(filePath.c_str());
    if(!output)
    {
       T_T("Failed to open save game file for writing.");
    }
 
-   output << xmlDoc;
-#else
-   xmlDoc.SaveFile(filePath);
-#endif
-
-   if(xmlDoc.Error())
-   {
-      DEBUG("Error occurred in saving game XML: %s", xmlDoc.ErrorDesc());
-      T_T("Failed to write save game data.");
-   }
+   output << playerDataNode;
 }
 
 void PlayerData::addNewCharacter(Character* newCharacter)

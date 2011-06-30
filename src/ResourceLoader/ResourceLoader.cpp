@@ -83,7 +83,7 @@ void ResourceLoader::tryInitialize(Resource* resource, ResourceKey name, Resourc
    catch(Exception e)
    {
       // On failure, print to debug output and return
-      DEBUG("Failed to load resource %s.\n\tReason: %s", path.c_str(), e.getMessage());
+      DEBUG("Failed to load resource %s.\n\tReason: %s", path.c_str(), e.getMessage().c_str());
    }
 }
 

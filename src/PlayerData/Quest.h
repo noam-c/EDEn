@@ -4,7 +4,10 @@
 #include <string>
 #include <map>
 
-class TiXmlElement;
+namespace Json
+{
+   class Value;
+};
 
 class Quest
 {
@@ -21,8 +24,8 @@ class Quest
 
    public:
       Quest(const std::string& name, const std::string& description, bool optional, bool completed);
-      Quest(TiXmlElement* questTree);
-      void serialize(TiXmlElement& outputXml);
+      Quest(Json::Value& questTree);
+      void serialize(Json::Value& outputXml);
 
       void addQuest(const std::string& questPath, const std::string& description, bool optional, bool completed = false);
       bool isCompleted();

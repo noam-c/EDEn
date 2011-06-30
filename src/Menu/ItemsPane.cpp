@@ -1,8 +1,14 @@
 #include "ItemsPane.h"
+#include "ItemData.h"
+#include "Item.h"
 #include "PlayerData.h"
 #include "ListBox.h"
 #include "StringListModel.h"
 #include <string>
+#include "DebugUtils.h"
+
+const int debugFlag = DEBUG_MENU;
+
 
 ItemsPane::ItemsPane(PlayerData& playerData, const gcn::Rectangle& rect) : MenuPane(rect), playerData(playerData)
 {
@@ -15,11 +21,6 @@ ItemsPane::ItemsPane(PlayerData& playerData, const gcn::Rectangle& rect) : MenuP
    refresh();
 }
 
-std::string getItemName(int itemNum)
-{
-   return "Potion";
-}
-
 void ItemsPane::refresh()
 {
    itemsList->clear();
@@ -27,7 +28,9 @@ void ItemsPane::refresh()
    
    for(ItemList::iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
    {
-      itemsList->add(getItemName(iter->first), iter->first);
+      const std::string& itemName = ItemData::getInstance()->getItem(iter->first)->getName();
+      DEBUG("Adding item '%s' to the menu...", itemName.c_str());
+      itemsList->add(itemName, iter->first);
    }
 
    listBox->adjustSize();

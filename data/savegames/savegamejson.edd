@@ -1,0 +1,85 @@
+
+{
+	"Characters" : 
+	{
+		"Party" : 
+		[
+			
+			{
+				"Portrait" : 
+				{
+					"path" : "data/images/akrom.jpg"
+				},
+				"hp" : 150,
+				"int" : 6,
+				"maxHP" : 200,
+				"maxSP" : 30,
+				"name" : "Akrom",
+				"sp" : 0,
+				"str" : 7
+			},
+			
+			{
+				"Portrait" : 
+				{
+					"path" : "data/images/kain.jpg"
+				},
+				"hp" : 100,
+				"int" : 8,
+				"maxHP" : 150,
+				"maxSP" : 60,
+				"name" : "Kain",
+				"sp" : 50,
+				"str" : 5
+			},
+			
+			{
+				"Portrait" : 
+				{
+					"path" : "data/images/shiara.png"
+				},
+				"hp" : 100,
+				"int" : 12,
+				"maxHP" : 100,
+				"maxSP" : 100,
+				"name" : "Shiara",
+				"sp" : 100,
+				"str" : 2
+			}
+		],
+		"Reserve" : []
+	},
+	"Inventory" : 
+	[
+		
+		{
+			"itemNum" : 0,
+			"quantity" : 5
+		},
+		
+		{
+			"itemNum" : 1,
+			"quantity" : 10
+		}
+	],
+	"Quest" : 
+	{
+		"Quest" : 
+		[{
+			"Description" : "The old man said he wanted five tiger pelts...",
+			"Quest" : 
+			[{
+				"Quest" : [],
+				"completed" : false,
+				"name" : "Kill five tigers",
+				"optional" : false
+			}],
+			"completed" : false,
+			"name" : "Five Tigers",
+			"optional" : false
+		}],
+		"completed" : false,
+		"name" : "root",
+		"optional" : false
+	}
+}

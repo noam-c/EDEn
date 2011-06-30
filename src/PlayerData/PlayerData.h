@@ -6,7 +6,11 @@
 
 class Character;
 class Quest;
-class TiXmlElement;
+
+namespace Json
+{
+   class Value;
+};
 
 typedef std::map<std::string, Character*> CharacterList;
 typedef std::map<int, int> ItemList;
@@ -32,18 +36,18 @@ class PlayerData
 
    std::string currChapter;
 
-   void parseCharactersAndParty(TiXmlElement* rootElement);
-   void serializeCharactersAndParty(TiXmlElement& outputXml);
-
-   void parseQuestLog(TiXmlElement* rootElement);
-   void serializeQuestLog(TiXmlElement& outputXml);
-
-   void parseInventory(TiXmlElement* rootElement);
-   void serializeInventory(TiXmlElement& outputXml);
-
-   void parseLocation(TiXmlElement* rootElement);
-   void serializeLocation(TiXmlElement& outputXml);
-
+   void parseCharactersAndParty(Json::Value& rootElement);
+   void serializeCharactersAndParty(Json::Value& outputXml);
+    
+   void parseQuestLog(Json::Value& rootElement);
+   void serializeQuestLog(Json::Value& outputXml);
+    
+   void parseInventory(Json::Value& rootElement);
+   void serializeInventory(Json::Value& outputXml);
+    
+   void parseLocation(Json::Value& rootElement);
+   void serializeLocation(Json::Value& outputXml);
+    
    public:
       void load(const std::string& filePath);
       void save(const std::string& filePath);

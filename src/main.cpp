@@ -42,7 +42,7 @@ int main (int argc, char *argv[])
    }
    catch(Exception e)
    {
-      DEBUG("Uncaught game exception: \n%s", e.getMessage());
+      DEBUG("Uncaught game exception: \n%s", e.getMessage().c_str());
       DEBUG_PAUSE;
       return 1;
    }
