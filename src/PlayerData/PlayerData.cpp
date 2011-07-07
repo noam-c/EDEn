@@ -76,7 +76,7 @@ void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
 
 void PlayerData::serializeCharactersAndParty(Json::Value& outputXml)
 {
-   Json::Value charactersNode;
+   Json::Value charactersNode(Json::objectValue);
    
    Json::Value partyNode(Json::arrayValue);
    for(CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
@@ -101,7 +101,7 @@ void PlayerData::serializeCharactersAndParty(Json::Value& outputXml)
 void PlayerData::parseQuestLog(Json::Value& rootElement)
 {
    DEBUG("Loading quest log...");
-   Json::Value questLog = rootElement[QUEST_ELEMENT];
+   Json::Value& questLog = rootElement[QUEST_ELEMENT];
    rootQuest = new Quest(questLog);
 }
 

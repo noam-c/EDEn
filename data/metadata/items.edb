@@ -1,28 +1,35 @@
-
 {
 	"data" : 
 	[
-
 		// 1-299 usable items
 		{"id" : 0,"name" : "Potion"},
 		{"id" : 1,"name" : "Ether"},
 
-		// 300-399 Body equipment (armor)
-		{"id" : 300,"name" : "Plain Clothes"},
+                // 300-399 Head equipment (helms and hats)
+                {"id" : 300,"name" : "Bandanna","equip":1},
 
-		// 400-499 Head equipment (helms and hats)
-		{"id" : 400,"name" : "Bandanna"},
+		// 400-499 Body equipment (armor)
+		{"id" : 400,"name" : "Plain Clothes","equip":2},
+		{"id" : 401,"name" : "Leather Armor","equip":2},
 
 		// 500-699 Hand equipment (weapons/shields)
-		{"id" : 500,"name" : "Hunter's Legacy"},
-		{"id" : 501,"name" : "Quarterstaff"},
+		{"id":500,"name" : "Hunter's Legacy","equip":[3,4],"weaponType":1},
+		{"id":501,"name" : "Quarterstaff","equip":[3,4],"weaponType":1},
+		{"id":502,"name" : "Sword","equip":3,"weaponType":2},
+		{"id":503,"name" : "Hatchet","equip":[3,4],"weaponType":3},
 
 		// 700-799 Foot equipment (shoes/boots)
-		{"id" : 700,"name" : "Sandals"},
+		{"id" : 700,"name" : "Sandals","type":5},
 
-		// 800-999 Accessories
-		{"id" : 800,"name" : "Aventurine"},
-		{"id" : 801,"name" : "Amulet"},
-		{"id" : 802,"name" : "Red Emblem"}
+		// 800-999 Overgarments
+		{"id" : 800,"name" : "Wool Cloak", "type":6},
+
+		// 900-1099 Accessories
+		{"id" : 900,"name" : "Aventurine Ring","type":7},
+		{"id" : 901,"name" : "Amulet","type":7},
+		{"id" : 902,"name" : "Glove","type":7}
+
+		// 1100-1199 Arm equipment
+		{"id" : 1100,"name" : "Bracers", "type":8},
 	]
 }

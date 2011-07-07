@@ -18,7 +18,8 @@ Character::Character(Json::Value& charToLoad)
    maxSP = charToLoad[MAX_SP_ATTRIBUTE].asInt();
    strength = charToLoad[STR_ATTRIBUTE].asInt();
    intelligence = charToLoad[INT_ATTRIBUTE].asInt();
-   
+   equipment.load(charToLoad["equipment"]);
+
    parsePortraitData(charToLoad);
 }
 

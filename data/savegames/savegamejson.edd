@@ -16,7 +16,22 @@
 				"maxSP" : 30,
 				"name" : "Akrom",
 				"sp" : 0,
-				"str" : 7
+				"str" : 7,
+				"Equipment" :
+				{
+					"Head":{"types":[0],"equipped":300},
+					"Body":{"types":[1],"equipped":401},
+					"Wpn1":{"types":[8,11],"equipped":503},
+					"Off1":{"types":[],"enabled":false},
+					"Wpn2":{"types":[8,11],"equipped":503},
+					"Off2":{"types":[],"enabled":false},
+					"Accessories":
+					[
+						{"types":[4],"equipped":902},
+						{"types":[4],"equipped":902}
+					],
+					"Feet":{"types":[2]}
+				}
 			},
 			
 			{
@@ -30,7 +45,22 @@
 				"maxSP" : 60,
 				"name" : "Kain",
 				"sp" : 50,
-				"str" : 5
+				"str" : 5,
+				"Equipment" :
+                                {
+                                        "Head":{"types":[0],"equipped":300},
+                                        "Body":{"types":[1],"equipped":401},
+ 					"Wpn1":{"types":[8,11],"equipped":503},
+					"Off1":{"types":[],"enabled":false},
+					"Wpn2":{"types":[8,11],"equipped":503},
+					"Off2":{"types":[],"enabled":false},
+                                        "Accessories":
+                                        [
+                                                {"types":[4],"equipped":902},
+                                                {"types":[4],"equipped":902}
+                                        ],
+					"Feet":{"types":[2]}
+                                }
 			},
 			
 			{
@@ -44,7 +74,22 @@
 				"maxSP" : 100,
 				"name" : "Shiara",
 				"sp" : 100,
-				"str" : 2
+				"str" : 2,
+				"Equipment" :
+		 		{
+                                        "Head":{"types":[0],"equipped":300},
+                                        "Body":{"types":[1],"equipped":401},
+ 					"Wpn1":{"types":[8,11],"equipped":503},
+					"Off1":{"types":[],"enabled":false},
+					"Wpn2":{"types":[8,11],"equipped":503},
+					"Off2":{"types":[],"enabled":false},
+                                        "Accessories":
+                                        [
+                                                {"types":[4],"equipped":902},
+                                                {"types":[4],"equipped":902}
+                                        ],
+                                        "Feet":{"types":[2]}
+                                }
 			}
 		],
 		"Reserve" : []

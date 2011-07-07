@@ -2,6 +2,7 @@
 #define CHARACTER_H
 
 #include <string>
+#include "EquipData.h"
 
 namespace Json
 {
@@ -11,7 +12,6 @@ namespace Json
 class Character
 {
    std::string name;
-
    std::string portraitPath;
 
    int strength;
@@ -26,7 +26,9 @@ class Character
    int maxSP;
    int hp;
    int sp;
-   
+  
+   EquipData equipment;
+ 
    public:
       Character(const std::string& name);
       Character(Json::Value& charToLoad);

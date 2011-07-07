@@ -114,6 +114,7 @@ set(HEADERS
   src/MovementDirection.h
   src/PlayerData/Character.h
   src/PlayerData/PlayerData.h
+  src/PlayerData/EquipData.h
   src/PlayerData/Quest.h
   src/PlayerData/SaveGameItemNames.h
   src/Point2D.h
@@ -238,6 +239,7 @@ set(SOURCES
   src/PlayerData/Character.cpp
   src/PlayerData/PlayerData.cpp
   src/PlayerData/Quest.cpp
+  src/PlayerData/EquipData.cpp
   src/ResourceLoader/Resource.cpp
   src/ResourceLoader/ResourceLoader.cpp
   src/ScriptEngine/FileScript.cpp
