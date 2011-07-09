@@ -1,0 +1,28 @@
+{
+	"itemTypes":
+	[
+		[0, "Usable"],
+		[1, "Weapon"],
+		[2, "Armour"],
+		[3, "Key"]
+	],
+	"equipTypes":
+	[
+		[0, "Headgear"],
+		[1, "Armour"],
+		[2, "Footgear"],
+		[3, "Garment"],
+		[4, "Accessory"],
+		[5, "Staff"],
+		[6, "1sword"],
+		[7, "2sword"],
+		[8, "Axe"],
+		[9, "Bow"],
+		[10, "Arrows"],
+		[11, "Gun"],
+		[12, "Spear"],
+		[13, "Knuckles"],
+		[14, "Whip"],
+		[15, "Mace"]
+	]
+}

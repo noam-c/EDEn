@@ -51,6 +51,8 @@ class Character
       int getFocus();
       int getEndurance();
       int getAgility();
+
+      EquipData& getEquipment();
 };
 
 #endif

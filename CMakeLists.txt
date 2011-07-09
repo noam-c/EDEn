@@ -100,6 +100,7 @@ set(HEADERS
   src/MainMenu/MainMenu.h
   src/Menu/CharacterModule.h
   src/Menu/CharacterSelectListener.h
+  src/Menu/EquipMenu.h
   src/Menu/EquipPane.h
   src/Menu/HomeMenu.h
   src/Menu/HomePane.h
@@ -226,6 +227,7 @@ set(SOURCES
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
   src/Menu/CharacterModule.cpp
+  src/Menu/EquipMenu.cpp
   src/Menu/EquipPane.cpp
   src/Menu/HomeMenu.cpp
   src/Menu/HomePane.cpp

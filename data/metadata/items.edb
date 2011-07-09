@@ -27,9 +27,9 @@
 		// 900-1099 Accessories
 		{"id" : 900,"name" : "Aventurine Ring","type":7},
 		{"id" : 901,"name" : "Amulet","type":7},
-		{"id" : 902,"name" : "Glove","type":7}
+		{"id" : 902,"name" : "Glove","type":7},
 
 		// 1100-1199 Arm equipment
-		{"id" : 1100,"name" : "Bracers", "type":8},
+		{"id" : 1100,"name" : "Bracers", "type":8}
 	]
 }

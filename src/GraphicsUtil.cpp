@@ -49,7 +49,7 @@ void GraphicsUtil::initSDL()
    }
 
    // Enable the OpenGL double buffer
-   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
 
    // On exit, run the SDL cleanup
    atexit (SDL_Quit);

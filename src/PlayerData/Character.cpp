@@ -117,3 +117,8 @@ std::string Character::getPortraitPath()
 {
    return portraitPath;
 }
+
+EquipData& Character::getEquipment()
+{
+   return equipment;
+}

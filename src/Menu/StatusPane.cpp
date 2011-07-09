@@ -5,8 +5,9 @@
 StatusPane::StatusPane(Character* character, const gcn::Rectangle& rect) : MenuPane(rect), character(character)
 {
    module = new CharacterModule();
-   module->setCharacter(character);
    add(module);
+
+   setCharacter(character);
 }
 
 void StatusPane::setCharacter(Character* character)

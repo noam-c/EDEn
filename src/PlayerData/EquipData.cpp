@@ -129,3 +129,9 @@ void EquipData::serialize(Json::Value& outputJson)
 EquipData::~EquipData()
 {
 }
+
+const std::string EquipData::getHeadEquip() const
+{
+   return head.equipped != NULL ? head.equipped->getName() : "";
+}
+

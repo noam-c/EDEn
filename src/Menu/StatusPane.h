@@ -1,5 +1,5 @@
-#ifndef STATIS_PANE_H_
-#define STATIS_PANE_H_
+#ifndef STATUS_PANE_H_
+#define STATUS_PANE_H_
 
 #include "MenuPane.h"
 

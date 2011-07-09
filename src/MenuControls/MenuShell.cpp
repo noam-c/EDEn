@@ -93,7 +93,7 @@ MenuShell::~MenuShell()
 {
    delete menuArea;
    delete menuTabs;
-	delete listOps;
-	delete actionsListBox;
+   delete listOps;
+   delete actionsListBox;
    delete bg;
 }

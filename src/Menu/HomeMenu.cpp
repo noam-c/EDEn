@@ -18,6 +18,7 @@
 #include "MenuShell.h"
 #include "ItemsMenu.h"
 #include "StatusMenu.h"
+#include "EquipMenu.h"
 #include "HomePane.h"
 
 #include "ExecutionStack.h"
@@ -28,7 +29,9 @@ const int debugFlag = DEBUG_MENU;
 
 HomeMenu::HomeMenu(MenuShell& menuShell, PlayerData& playerData) : MenuState(menuShell), playerData(playerData), characterAction(NONE)
 {
-   setMenuPane(new HomePane(playerData, menuShell.getDimension()));
+   HomePane* pane = new HomePane(playerData, menuShell.getDimension());
+   setMenuPane(pane);
+   pane->setCharacterSelectListener(this);
 }
 
 bool HomeMenu::step()
@@ -89,16 +92,16 @@ bool HomeMenu::isCharacterDependent(MenuAction action)
    switch(action)
    {
       case EQUIP_PANEL:
-	   case STATUS_PANEL:
-	   case SKILLS_PANEL:
+      case STATUS_PANEL:
+      case SKILLS_PANEL:
          return true;
 
-	   case FORMATION_PANEL:
-	   case PARTY_CHANGE_PANEL:
-	   case OPTIONS_PANEL:
-	   case DATA_PANEL:
+      case FORMATION_PANEL:
+      case PARTY_CHANGE_PANEL:
+      case OPTIONS_PANEL:
+      case DATA_PANEL:
       case ITEM_PANEL:
-	   default:
+      default:
          return false;
    }
 }
@@ -107,10 +110,12 @@ void HomeMenu::showPanel(MenuAction panelToShow)
 {
    if(isCharacterDependent(panelToShow))
    {
+      DEBUG("Character-dependent action selected");
       characterAction = panelToShow;
    }
    else
    {
+      DEBUG("Character-independent action selected");
       ExecutionStack::getInstance()->pushState(new ItemsMenu(menuShell, playerData));
       menuPane->setVisible(false);
    }
@@ -118,10 +123,17 @@ void HomeMenu::showPanel(MenuAction panelToShow)
 
 void HomeMenu::characterSelected(const std::string& characterName)
 {
+   DEBUG("Character selected: %s", characterName.c_str());
    switch(characterAction)
    {
       case STATUS_PANEL:
+         DEBUG("Creating Status menu panel...");
          ExecutionStack::getInstance()->pushState(new StatusMenu(menuShell, playerData, characterName));
+         menuPane->setVisible(false);
+         break;
+      case EQUIP_PANEL:
+         DEBUG("Creating Equip menu panel...");
+         ExecutionStack::getInstance()->pushState(new EquipMenu(menuShell, playerData, characterName));
          menuPane->setVisible(false);
          break;
    }

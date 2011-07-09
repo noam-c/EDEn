@@ -3,14 +3,24 @@
 
 #include "MenuPane.h"
 
+namespace edwt
+{
+   class Container;
+   class Label;
+};
+
+class Character;
 class PlayerData;
 
 class EquipPane : public MenuPane
 {
-   PlayerData& playerData;
-
+   Character* character;
+   edwt::Label* headLabel;
+   edwt::Label* headEquipLabel;
+ 
    public:
-      EquipPane(PlayerData& playerData, const gcn::Rectangle& rect);
+      EquipPane(Character* character, const gcn::Rectangle& rect);
+      void setCharacter(Character* character);
       ~EquipPane();
 };
 
