@@ -35,10 +35,14 @@ void MenuState::activate()
 
 bool MenuState::step()
 {
+   /* Don't run too fast */
+   SDL_Delay (1);
+
    if(finished) return false;
    bool done = false;
 
    pollInputEvent(done);
+
    return !done;
 }
 
@@ -76,8 +80,6 @@ void MenuState::pollInputEvent(bool& finishState)
 
 void MenuState::draw()
 {
-   /* Don't run too fast */
-   SDL_Delay (1);
 }
 
 void MenuState::tabChanged(const std::string& tabName)

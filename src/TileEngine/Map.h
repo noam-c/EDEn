@@ -20,7 +20,6 @@ class Obstacle;
 class Map
 {
    protected:
-
       /**
        * The delimiter for map data read from file.
        */

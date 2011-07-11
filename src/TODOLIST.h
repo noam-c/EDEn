@@ -34,17 +34,12 @@ void OrganizationTodoList(void);
  * \todo [Optional] Integrate GraphicsUtil stuff from Solstice (synchronous fading and texture load, mainly).
  * \todo [Optional] Change OpenGLTTF to remove dependency on gcn::Image
  * \todo [Optional] Create some test harnesses/sandboxes for different pieces of the engine.
- * \todo [Optional] Create unit tests for the various pieces of the game.
+ * \todo [Optional] Set up a unit testing framework and create unit tests for the various pieces of the game.
  * \todo [Optional] Organize the global code folder and try to create some new folders for organization
  * \todo [Optional] Tileset passibility matrix uses a bool (1 word) for each entry; it should only need to use one bit per entry.
  * \todo [Optional] Move GL drawing code in Tileset/Spritesheet to GraphicsUtil (less coupling)
  */
 void DevelopmentTodoList(void);
-
-/**
- * \todo Create a tool to make maps in regions (.edr files)
- */
-void ToolingTodoList(void);
 
 /**
  * \todo Create a slider for volume control of music.

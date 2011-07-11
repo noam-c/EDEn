@@ -18,19 +18,79 @@ namespace edwt
 class MenuShell;
 class MenuPane;
 
+/**
+ * The in-game menu goes through many different states based on choices that the player makes
+ * and the panels that appear. The states need to be tracked in a FIFO order so that cancelling
+ * one menu state returns the user to the previous one.
+ *
+ * In order to accomplish this, the in-game menu is split into multiple menu-specific GameStates called MenuStates.
+ * All the MenuStates share the same GUI elements, except for the menu pane on display. As a result, these shared elements
+ * are combined into a MenuShell, which is passed around between all the menu states to facilitate reuse of existing GUI objects.
+ *
+ * To create a new menu action, simply create a subclass of MenuState, and then create and set a menu pane in the subclass
+ * constructor. Ensure that the menu shell (and other common data) is passed up to the MenuState through its constructor.
+ * Override the virtual methods below to handle user input and add any special logic or drawing.
+ *
+ * @author Noam Chitayat
+ */
 class MenuState : public GameState, public edwt::TabChangeListener
 {
+   /**
+    * Polls for and acts on generic menu events.
+    *
+    * @param finishState Set to true if an event ordered the completion of this state (such as "Cancel")
+    */
+   void pollInputEvent(bool& finishState);
+
    protected:
+      /** The menu shell that encases this state's GUI. */
       MenuShell& menuShell;
+
+      /** The state's GUI panel. */
       MenuPane* menuPane;
 
+      /**
+       * Constructor.
+       *
+       * @param menuShell The menu shell to place the menu pane into.
+       */
       MenuState(MenuShell& menuShell);
+
+      /**
+       * Set the menu pane that will appear within the menu shell for this state.
+       * NOTE: The MenuState will delete the pane when cleaned up, so please DO NOT delete the menu pane from the subclass.
+       *
+       * @param pane The menu pane to display.
+       */
       void setMenuPane(MenuPane* pane);
-      void activate();
-      bool step();
-      void pollInputEvent(bool& finishState);
-      void draw();
+
+      /**
+       * When this state is active, activate makes sure this state's menu pane
+       * is visible and listening for tab change events.
+       */
+      virtual void activate();
+
+      /**
+       * Processes for events common to all menu states, such as "cancel" actions.
+       */
+      virtual bool step();
+   
+      /**
+       * Common menu drawing code should go here.
+       * Currently, the GUI takes care of all of that, so this method will remain empty for now.
+       */
+      virtual void draw();
+
+      /**
+       * Override this method to respond to menu tab events.
+       *
+       * @param tabName The name of the tab that was selected by the user.
+       */
       virtual void tabChanged(const std::string& tabName);
+
+      /**
+       * Destructor.
+       */
       virtual ~MenuState() = 0;
 };
 

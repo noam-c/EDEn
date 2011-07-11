@@ -10,12 +10,12 @@ union SDL_Event;
 
 /**
  * This class abstractly represents a potential state for the game to enter
- * States can include "Title Screen", "Battle", "Field" and more
+ * States can include "Title Screen", "Battle", "Field" and more.
  * Each GameState has a step function to perform state logic and a 
  * draw function to perform graphics work
  *
  * Game states are pushed onto the ExecutionStack, which executes the most
- * recent state of the game by causing the state to step, then draw to screen.
+ * recent state of the game by causing the state to step forward in its logic, then draw to screen.
  *
  * The activate method is called by the Execution Stack whenever
  * the state reaches the top of the stack.
@@ -78,8 +78,19 @@ class GameState
        */
       virtual void activate();
 
+      /**
+       * Called every frame in order to trigger logic processing in the game state
+       * that is at the top of the execution stack.
+       * Generic logic that happens in every game state (such as GUI logic) should go in here.
+       */
       virtual bool advanceFrame();
 
+   
+      /**
+       * Called every frame in order to trigger drawing the game state
+       * that is at the top of the execution stack.
+       * Generic drawing code that is performed in every game state (such as drawing GUI and flipping the buffer) should go in here.
+       */
       virtual void drawFrame();
 
       /**

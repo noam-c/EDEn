@@ -1,12 +1,31 @@
 #ifndef __POINT_2D_H_
 #define __POINT_2D_H_
 
+/**
+ * A point in 2D space.
+ *
+ * @author Noam Chitayat
+ */
 struct Point2D
 {
+   /** The x-coordinate of this point. */
    int x;
+   /** The y-coordinate of this point. */
    int y;
 
+   /**
+    * Constructor.
+    * Creates a point set at origin (0,0).
+    */
    Point2D() : x(0), y(0) {}
+   
+   /**
+    * Constructor.
+    * Creates a point set at (x,y).
+    *
+    * @param x The x-coordinate for the point.
+    * @param y The y-coordinate for the point.
+    */
    Point2D(int x, int y) : x(x), y(y) {}
 };
 

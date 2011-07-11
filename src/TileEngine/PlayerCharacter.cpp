@@ -10,7 +10,7 @@ const std::string PlayerCharacter::WALKING_PREFIX = "walk_";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand_";
 
 PlayerCharacter::PlayerCharacter(Spritesheet* sheet, int x, int y)
-                                              : playerX(x), playerY(y),
+                                              : playerLocation(x,y),
                                                 xSpeed(0), ySpeed(0)
 {
    sprite = new Sprite(sheet);
@@ -124,15 +124,15 @@ void PlayerCharacter::step(long timePassed)
       }
    }
 
-   playerX += xSpeed * (timePassed / 5);
-   playerY += ySpeed * (timePassed / 5);
+   playerLocation.x += xSpeed * (timePassed / 5);
+   playerLocation.y += ySpeed * (timePassed / 5);
 
    sprite->step(timePassed);
 }
 
 void PlayerCharacter::draw()
 {
-   sprite->draw(playerX, playerY);
+   sprite->draw(playerLocation.x, playerLocation.y);
 }
 
 PlayerCharacter::~PlayerCharacter()

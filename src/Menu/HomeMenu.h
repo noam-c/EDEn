@@ -28,7 +28,9 @@ class Sound;
 class MenuShell;
 
 /**
- * \todo Document.
+ * The home menu is the first menu state of the menu.
+ * It serves to summarize important information for the player and allows the player to select
+ * a character to perform further actions on.
  *
  * @author Noam Chitayat
  */

@@ -1,6 +1,11 @@
 #ifndef MENU_ACTION_H
 #define MENU_ACTION_H
 
+/**
+ * Represents one of the actions that could be invoked in the in-game menu.
+ *
+ * @author Noam Chitayat
+ */
 enum MenuAction
 {
    NONE,

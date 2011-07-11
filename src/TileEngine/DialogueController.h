@@ -31,7 +31,7 @@ class ScriptEngine;
  */
 class DialogueController : public Thread
 {
-   /** The hardcoded time-per-letter speed */
+   /** The HARDCODED time-per-letter speed */
    static const int MILLISECONDS_PER_LETTER = 100;
    
    /** Abstract the implementation of the dialogue boxes */

@@ -4,6 +4,12 @@ MenuPane::MenuPane()
 {
 }
 
+MenuPane::MenuPane(const gcn::Rectangle& dimension)
+{
+   setDimension(dimension);
+   setOpaque(false);
+}
+
 void MenuPane::draw(gcn::Graphics* graphics)
 {
    if (isOpaque())
@@ -15,8 +21,6 @@ void MenuPane::draw(gcn::Graphics* graphics)
    drawChildren(graphics);
 }
 
-MenuPane::MenuPane(const gcn::Rectangle& dimension)
+MenuPane::~MenuPane()
 {
-   setDimension(dimension);
-   setOpaque(false);
 }

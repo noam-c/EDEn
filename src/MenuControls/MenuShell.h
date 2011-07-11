@@ -21,6 +21,14 @@ class MenuPane;
 class PlayerData;
 class Sound;
 
+/**
+ * The menu shell contains the foundations of the in-game menu.
+ * All the standard GUI elements, such as the action list and the tabbed area containing the various menu panes
+ * are created in the shell, which is passed up through any menu-based GameState (MenuState types) to allow for
+ * sharing of a single shell among states.
+ *
+ * @author Noam Chitayat
+ */
 class MenuShell : public edwt::Container
 {
    /** Sound for hovering over an option */
@@ -51,13 +59,35 @@ class MenuShell : public edwt::Container
       /** The list box for all options in the menu */
       edwt::ListBox* actionsListBox;
 
+      /**
+       * Constructor.
+       *
+       * @param playerData The player data model accessed by this menu.
+       */
       MenuShell(PlayerData& playerData);
 
+      /**
+       * Push a menu pane to the central part of the menu shell.
+       *
+       * @param menuPane The menu pane to display inside the menu shell.
+       */
       void addPane(MenuPane* menuPane);
+
+      /**
+       * Remove a menu pane from the menu shell.
+       *
+       * @param menuPane The menu pane to remove from the menu shell display.
+       */
       void removePane(MenuPane* menuPane);
 
+      /**
+       * Set the state or GUI element that will capture character selections using the menu tabs.
+       */
       void setTabChangeListener(edwt::TabChangeListener* listener);
 
+      /**
+       * Destructor.
+       */
       ~MenuShell();
 
 };

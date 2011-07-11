@@ -5,6 +5,11 @@
 
 namespace edwt
 {
+   /**
+    * An interface for classes that wish to catch tab change events from a TabbedArea.
+    *
+    * @author Noam Chitayat
+    */
    class TabChangeListener
    {
       public:
