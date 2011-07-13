@@ -3,7 +3,7 @@
 #include "PlayerData.h"
 #include "MenuShell.h"
 
-StatusMenu::StatusMenu(MenuShell& menuShell, PlayerData& playerData, const std::string& characterName) : MenuState(menuShell), playerData(playerData), characterName(characterName)
+StatusMenu::StatusMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, const std::string& characterName) : MenuState(executionStack, menuShell), playerData(playerData), characterName(characterName)
 {
    setMenuPane(new StatusPane(playerData.getPartyCharacter(characterName), menuShell.getDimension()));
 }

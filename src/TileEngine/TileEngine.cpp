@@ -17,8 +17,8 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 const int TileEngine::TILE_SIZE = 32;
 
-TileEngine::TileEngine(const std::string& chapterName)
-                                   : currMap(NULL), xMapOffset(0), yMapOffset(0)
+TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName)
+                                   : GameState(executionStack), currMap(NULL), xMapOffset(0), yMapOffset(0)
 {
    scheduler = new Scheduler();
    player = new PlayerCharacter(ResourceLoader::getSpritesheet("crono"), 320, 320);

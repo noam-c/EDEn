@@ -7,7 +7,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_GAME_STATE;
 
-GameState::GameState() : internalContainer(true)
+GameState::GameState(ExecutionStack& executionStack) : executionStack(executionStack), internalContainer(true)
 {
    top = new edwt::Container();
    top->setDimension(gcn::Rectangle(0, 0, GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight()));
@@ -15,7 +15,7 @@ GameState::GameState() : internalContainer(true)
    top->setEnabled(true);
 }
 
-GameState::GameState(edwt::Container* container) : top(container), internalContainer(false)
+GameState::GameState(ExecutionStack& executionStack, edwt::Container* container) : executionStack(executionStack), top(container), internalContainer(false)
 {
 }
 

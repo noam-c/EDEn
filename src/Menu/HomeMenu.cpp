@@ -19,6 +19,7 @@
 #include "ItemsMenu.h"
 #include "StatusMenu.h"
 #include "EquipMenu.h"
+#include "DataMenu.h"
 #include "HomePane.h"
 
 #include "ExecutionStack.h"
@@ -27,7 +28,7 @@
 
 const int debugFlag = DEBUG_MENU;
 
-HomeMenu::HomeMenu(MenuShell& menuShell, PlayerData& playerData) : MenuState(menuShell), playerData(playerData), characterAction(NONE)
+HomeMenu::HomeMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData) : MenuState(executionStack, menuShell), playerData(playerData), characterAction(NONE)
 {
    HomePane* pane = new HomePane(playerData, menuShell.getDimension());
    setMenuPane(pane);
@@ -116,7 +117,20 @@ void HomeMenu::showPanel(MenuAction panelToShow)
    else
    {
       DEBUG("Character-independent action selected");
-      ExecutionStack::getInstance()->pushState(new ItemsMenu(menuShell, playerData));
+      
+      MenuState* nextState;
+      switch(panelToShow)
+      {
+         case ITEM_PANEL:
+            nextState = new ItemsMenu(executionStack, menuShell, playerData);
+            break;
+         case DATA_PANEL:
+         default:
+            nextState = new DataMenu(executionStack, menuShell, playerData);
+            break;
+      }
+
+      executionStack.pushState(nextState);
       menuPane->setVisible(false);
    }
 }
@@ -124,24 +138,28 @@ void HomeMenu::showPanel(MenuAction panelToShow)
 void HomeMenu::characterSelected(const std::string& characterName)
 {
    DEBUG("Character selected: %s", characterName.c_str());
+   
+   MenuState* nextState;
    switch(characterAction)
    {
       case STATUS_PANEL:
          DEBUG("Creating Status menu panel...");
-         ExecutionStack::getInstance()->pushState(new StatusMenu(menuShell, playerData, characterName));
-         menuPane->setVisible(false);
+         nextState = new StatusMenu(executionStack, menuShell, playerData, characterName);
          break;
       case EQUIP_PANEL:
+      default:
          DEBUG("Creating Equip menu panel...");
-         ExecutionStack::getInstance()->pushState(new EquipMenu(menuShell, playerData, characterName));
-         menuPane->setVisible(false);
+         nextState = new EquipMenu(executionStack, menuShell, playerData, characterName);
          break;
    }
+   
+   executionStack.pushState(nextState);
+   menuPane->setVisible(false);
 }
 
 void HomeMenu::tabChanged(const std::string& tabName)
 {
-   ExecutionStack::getInstance()->pushState(new StatusMenu(menuShell, playerData, tabName));
+   executionStack.pushState(new StatusMenu(executionStack, menuShell, playerData, tabName));
    menuPane->setVisible(false);
 }
 

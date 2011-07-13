@@ -10,7 +10,7 @@
 
 const int debugFlag = DEBUG_MENU;
 
-MenuState::MenuState(MenuShell& menuShell) : GameState(&menuShell), menuShell(menuShell), menuPane(NULL)
+MenuState::MenuState(ExecutionStack& executionStack, MenuShell& menuShell) : GameState(executionStack, &menuShell), menuShell(menuShell), menuPane(NULL)
 {
 }
 

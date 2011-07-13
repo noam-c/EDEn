@@ -21,7 +21,7 @@
  * -# Gaze upon your new singleton class with pride. Use getInstance() to grab
  *    a singleton instance, and use destroy() to force a cleanup of an existing
  *    singleton
- 
+ *
  * \todo At the time of writing, there is no static "manager" to clean up
  *       all instantiated singletons, but there certainly should be!
  *

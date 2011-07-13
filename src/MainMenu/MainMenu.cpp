@@ -29,7 +29,7 @@ enum MainMenuActions
 	MENU_PROTOTYPE_ACTION,
 };
 
-MainMenu::MainMenu()
+MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
 {
    try
    {

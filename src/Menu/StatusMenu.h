@@ -26,11 +26,12 @@ class StatusMenu : public MenuState
       /**
        * Constructor.
        *
-       * @param menuShell The menu shell to place the menu pane into.
-       * @param playerData The player data that the user will interact with in this menu state.
+       * @param executionStack The execution stack that the state belongs to.
+       * @param menuShell The shell to display the status GUI in.
+       * @param playerData The player data to operate on.
        * @param characterName The name of the initial character to display in the status menu.
        */
-      StatusMenu(MenuShell& menuShell, PlayerData& playerData, const std::string& characterName);
+      StatusMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, const std::string& characterName);
 
       /**
        * Fired when the player picks a new character tab.

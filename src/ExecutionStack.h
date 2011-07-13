@@ -12,11 +12,9 @@ template<class C> struct LinkedListNode;
  * and allows for easy change of state.
  * Main functionality is calling logic and draw, and destroying finished states in the execute() function.
  *
- * Note: This class is a singleton.
- *
  * @author Noam Chitayat
  */
-class ExecutionStack : public Singleton<ExecutionStack>
+class ExecutionStack
 {
    /**
     * Holds GameState objects in a linked list structure for easy access by the ExecutionStack.
@@ -35,21 +33,18 @@ class ExecutionStack : public Singleton<ExecutionStack>
     */
    bool popState();
 
-   protected:
+   public:
       /**
-       * Singleton constructor.
+       * Constructor.
        * Initializes an empty execution stack.
        */
-      void initialize();
+      ExecutionStack();
 
       /**
-       * Singleton destructor.
-       *
-       * Destroys all remaining states.
+       * Destructor.
        */
-      void finish();
+      ~ExecutionStack();
        
-   public:
       /**
        * Pushes (and activates) a new game state.
        * After this method call, newState is responsible

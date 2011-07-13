@@ -6,15 +6,13 @@
 
 const int debugFlag = DEBUG_EXEC_STACK;
 
-void ExecutionStack::initialize()
+ExecutionStack::ExecutionStack() : currentState(NULL)
 {
-   currentState = NULL;
 }
 
-void ExecutionStack::finish()
+ExecutionStack::~ExecutionStack()
 {
    while(popState());
-   instance = NULL;
 }
 
 void ExecutionStack::pushState(GameState* newState)

@@ -52,9 +52,10 @@ class MenuState : public GameState, public edwt::TabChangeListener
       /**
        * Constructor.
        *
+       * @param executionStack The execution stack that the state belongs to.
        * @param menuShell The menu shell to place the menu pane into.
        */
-      MenuState(MenuShell& menuShell);
+      MenuState(ExecutionStack& executionStack, MenuShell& menuShell);
 
       /**
        * Set the menu pane that will appear within the menu shell for this state.

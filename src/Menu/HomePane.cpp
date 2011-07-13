@@ -2,14 +2,12 @@
 #include "PlayerData.h"
 #include "CharacterModule.h"
 
-#define PARTY_SIZE 4
-
 HomePane::HomePane(PlayerData& playerData, const gcn::Rectangle& rect) : MenuPane(rect), playerData(playerData)
 {
-   characterModules = new CharacterModule[PARTY_SIZE];
+   characterModules = new CharacterModule[PlayerData::PARTY_SIZE];
 
-   const int moduleHeight = rect.height / PARTY_SIZE;
-   for(int i = 0; i < PARTY_SIZE; ++i)
+   const int moduleHeight = rect.height / PlayerData::PARTY_SIZE;
+   for(int i = 0; i < PlayerData::PARTY_SIZE; ++i)
    {
       characterModules[i].setHeight(moduleHeight);
       characterModules[i].setWidth(rect.width);
@@ -22,7 +20,7 @@ HomePane::HomePane(PlayerData& playerData, const gcn::Rectangle& rect) : MenuPan
 
 void HomePane::setCharacterSelectListener(CharacterSelectListener* listener)
 {
-   for(int i = 0; i < PARTY_SIZE; ++i)
+   for(int i = 0; i < PlayerData::PARTY_SIZE; ++i)
    {
       characterModules[i].setCharacterSelectListener(listener);
    }

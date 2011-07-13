@@ -1,6 +1,8 @@
 #ifndef __GAME_STATE_H_
 #define __GAME_STATE_H_
 
+class ExecutionStack;
+
 namespace edwt
 {
    class Container;
@@ -25,30 +27,34 @@ union SDL_Event;
 class GameState
 {
    protected:
+      /** The execution stack that the state belongs to. */
+      ExecutionStack& executionStack;
+   
       /** The container for any GUI widgets used by the state. */
       edwt::Container* top;
 
       /** True iff the container was created internally (and thus should also be destroyed internally) */
       bool internalContainer;
 
-      /**
-       * Set true to signal the state logic to terminate so that the state is destroyed.
-       */
+      /** Set true to signal the state logic to terminate so that the state is destroyed. */
       bool finished;
 
       /**
        * Constructor.
+       * Initializes the top-level GUI widget container.
        *
-       * Initializes the top-level GUI widget container
+       * @param executionStack The execution stack that the state belongs to.
        */
-      GameState();
+      GameState(ExecutionStack& executionStack);
 
       /**
        * Constructor.
-       *
        * Initializes the state with an existing top-level container.
+       *
+       * @param executionStack The execution stack that the state belongs to.
+       * @param container The top-level container to use for this state.
        */
-      GameState(edwt::Container* container);
+      GameState(ExecutionStack& executionStack, edwt::Container* container);
 
       /**
        * Runs the state's logic processing

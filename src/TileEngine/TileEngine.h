@@ -108,9 +108,10 @@ class TileEngine: public GameState
       /**
        * Constructor. Initializes widgets and controllers
        *
+       * @param executionStack The execution stack that the state belongs to.
        * @param chapterName The name of the chapter to load after construction
        */
-      TileEngine(const std::string& chapterName);
+      TileEngine(ExecutionStack& executionStack, const std::string& chapterName);
 
       /**
        * @return The name of the currently loaded map.

@@ -3,7 +3,7 @@
 #include "PlayerData.h"
 #include "MenuShell.h"
 
-EquipMenu::EquipMenu(MenuShell& menuShell, PlayerData& playerData, const std::string& characterName) : MenuState(menuShell), playerData(playerData), characterName(characterName)
+EquipMenu::EquipMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, const std::string& characterName) : MenuState(executionStack, menuShell), playerData(playerData), characterName(characterName)
 {
    setMenuPane(new EquipPane(playerData.getPartyCharacter(characterName), menuShell.getDimension()));
 }

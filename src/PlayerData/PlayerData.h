@@ -64,7 +64,7 @@ class PlayerData
 
    /** The location of the last save point used. */
    SaveLocation saveLocation;
-
+   
    void parseCharactersAndParty(Json::Value& rootElement);
    void serializeCharactersAndParty(Json::Value& outputXml);
     
@@ -78,6 +78,13 @@ class PlayerData
    void serializeLocation(Json::Value& outputXml);
     
    public:
+      static const int PARTY_SIZE = 4;
+   
+      /**
+       * Constructor.
+       */
+      PlayerData();
+   
       /**
        * Load the player data from a file.
        *

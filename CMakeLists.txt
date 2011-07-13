@@ -100,6 +100,8 @@ set(HEADERS
   src/MainMenu/MainMenu.h
   src/Menu/CharacterModule.h
   src/Menu/CharacterSelectListener.h
+  src/Menu/DataMenu.h
+  src/Menu/DataPane.h
   src/Menu/EquipMenu.h
   src/Menu/EquipPane.h
   src/Menu/HomeMenu.h
@@ -110,6 +112,7 @@ set(HEADERS
   src/Menu/MenuState.h
   src/Menu/StatusMenu.h
   src/Menu/StatusPane.h
+  src/MenuControls/SaveGameModule.h
   src/MenuControls/MenuAction.h
   src/MenuControls/MenuShell.h
   src/MovementDirection.h
@@ -227,6 +230,8 @@ set(SOURCES
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
   src/Menu/CharacterModule.cpp
+  src/Menu/DataMenu.cpp
+  src/Menu/DataPane.cpp
   src/Menu/EquipMenu.cpp
   src/Menu/EquipPane.cpp
   src/Menu/HomeMenu.cpp
@@ -237,6 +242,7 @@ set(SOURCES
   src/Menu/MenuState.cpp
   src/Menu/StatusMenu.cpp
   src/Menu/StatusPane.cpp
+  src/MenuControls/SaveGameModule.cpp
   src/MenuControls/MenuShell.cpp
   src/PlayerData/Character.cpp
   src/PlayerData/PlayerData.cpp

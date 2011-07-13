@@ -51,5 +51,9 @@ Item const* ItemData::getItem(int key)
 
 void ItemData::finish()
 {
+   for(std::map<int, Item const*>::iterator iter = items.begin(); iter != items.end(); ++iter)
+   {
+      delete iter->second;
+   }
 }
 

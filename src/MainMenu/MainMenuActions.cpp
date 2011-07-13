@@ -19,8 +19,8 @@
  */
 void MainMenu::NewGameAction()
 {
-   TileEngine* tileEngine = new TileEngine(CHAP1);
-   ExecutionStack::getInstance()->pushState(tileEngine);
+   TileEngine* tileEngine = new TileEngine(executionStack, CHAP1);
+   executionStack.pushState(tileEngine);
    chooseSound->play();
    Music::fadeOutMusic(1000);
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
@@ -38,8 +38,8 @@ void MainMenu::MenuPrototypeAction()
    /** \todo This is never deleted, causing a memory leak. */
    MenuShell* menuShell = new MenuShell(*playerData);
 
-   HomeMenu* menu = new HomeMenu(*menuShell, *playerData);
-   ExecutionStack::getInstance()->pushState(menu);
+   HomeMenu* menu = new HomeMenu(executionStack, *menuShell, *playerData);
+   executionStack.pushState(menu);
 }
 
 /**

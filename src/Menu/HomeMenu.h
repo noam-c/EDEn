@@ -74,8 +74,12 @@ class HomeMenu: public MenuState, public CharacterSelectListener
        * Constructor.
        *
        * Initializes the HomeMenu widgets, font, image and sounds
+       *
+       * @param executionStack The execution stack that the state belongs to.
+       * @param menuShell The shell to display the GUI in.
+       * @param playerData The player data to operate on.
        */
-      HomeMenu(MenuShell& top, PlayerData& playerData);
+      HomeMenu(ExecutionStack& executionStack, MenuShell& top, PlayerData& playerData);
 
       /**
        * Called when a character is selected from the home pane.

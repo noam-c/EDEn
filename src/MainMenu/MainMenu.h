@@ -94,10 +94,11 @@ class MainMenu: public GameState
    public:
       /**
        * Constructor.
+       * Initializes the title screen widgets, font, image and sounds.
        *
-       * Initializes the title screen widgets, font, image and sounds
+       * @param executionStack The execution stack that the state belongs to.
        */
-      MainMenu();
+      MainMenu(ExecutionStack& executionStack);
 
       /**
        * When the state is activated, set modal focus to the listbox

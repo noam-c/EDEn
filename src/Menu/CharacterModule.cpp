@@ -7,7 +7,7 @@
 #include "Label.h"
 #include "Icon.h"
 
-CharacterModule::CharacterModule() : characterPortrait(NULL), charSelectListener(NULL)
+CharacterModule::CharacterModule() : charSelectListener(NULL), characterPortrait(NULL)
 {
    characterStats = new gcn::contrib::AdjustingContainer();
    characterNameLabel = new edwt::Label();

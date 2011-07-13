@@ -1,17 +1,17 @@
-#ifndef ITEMS_MENU_H
-#define ITEMS_MENU_H
+#ifndef DATA_MENU_H
+#define DATA_MENU_H
 
 #include "MenuState.h"
 
 class PlayerData;
 
 /**
- * The items pane displays a list of items in the player's inventory, and allows the player to use
- * these items, if they are usable.
+ * The data pane displays a list of savegames in the player's savegames folder, and allows the player to save to
+ * these files.
  *
  * @author Noam Chitayat
  */
-class ItemsMenu : public MenuState
+class DataMenu : public MenuState
 {
    /** The player data that the menu interacts with. */
    PlayerData& playerData;
@@ -21,15 +21,15 @@ class ItemsMenu : public MenuState
        * Constructor.
        *
        * @param executionStack The execution stack that the state belongs to.
-       * @param menuShell The shell to display the items menu GUI in.
+       * @param menuShell The shell to display the data menu GUI in.
        * @param playerData The player data to operate on.
        */
-      ItemsMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData);
+      DataMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData);
 
       /**
        * Destructor.
        */
-      ~ItemsMenu();
+      ~DataMenu();
 };
 
 #endif

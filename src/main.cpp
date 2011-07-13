@@ -23,15 +23,14 @@ int main (int argc, char *argv[])
    {
       GraphicsUtil::getInstance();
       DEBUG("Initializing execution stack.");
-      ExecutionStack* stack = ExecutionStack::getInstance();
+      ExecutionStack stack;
       DEBUG("Pushing Main Menu state.");
-      stack->pushState(new MainMenu());
+      stack.pushState(new MainMenu(stack));
       DEBUG("Beginning game execution.");
-      stack->execute();
+      stack.execute();
 
       DEBUG("Game is finished. Freeing resources and destroying singletons.");
       ResourceLoader::freeAll();
-      ExecutionStack::destroy();
       GraphicsUtil::destroy();
    }
    catch (gcn::Exception e)

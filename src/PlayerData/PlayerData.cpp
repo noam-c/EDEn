@@ -11,6 +11,10 @@ const int debugFlag = DEBUG_PLAYER;
 // Uncomment this line to turn off encryption of savegames
 // #define DISABLE_ENCRYPTION
 
+PlayerData::PlayerData() : partyLeader(NULL)
+{
+}
+
 void PlayerData::load(const std::string& filePath)
 {
    DEBUG("Loading save file %s", filePath.c_str());
@@ -246,10 +250,13 @@ std::string PlayerData::getQuestDescription(const std::string& questPath)
 
 PlayerData::~PlayerData()
 {
-   delete rootQuest;
-
    for(CharacterList::iterator iter = charactersEncountered.begin(); iter != charactersEncountered.end(); ++iter)
    {
       delete iter->second;
+   }
+   
+   if(rootQuest != NULL)
+   {
+      delete rootQuest;
    }
 }
