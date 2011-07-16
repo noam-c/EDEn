@@ -7,7 +7,7 @@
 const int debugFlag = DEBUG_DIA_CONTR;
 
 DialogueController::DialogueController(edwt::Container& top, ScriptEngine& engine)
-                     : top(top), scriptEngine(engine), currLine(NULL), fastMode(false)
+                     : scriptEngine(engine), top(top), fastMode(false), currLine(NULL)
 {
    initMainDialogue();
    clearDialogue();

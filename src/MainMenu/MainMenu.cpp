@@ -171,6 +171,10 @@ void MainMenu::waitForInputEvent(bool& finishState)
                finishState = true;
                return;
             }
+            default:
+            {
+               break;
+            }
          }
 
          break;

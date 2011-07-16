@@ -1,6 +1,6 @@
 #include "ListBox.h"
 #include "StringListModel.h"
-#include <SDL.h>
+#include "SDL.h"
 #include "Sound.h"
 
 #include "DebugUtils.h"
@@ -88,20 +88,20 @@ namespace edwt
       }
    }
 
-	unsigned int ListBox::getRowHeight() const
-	{
+   unsigned int ListBox::getRowHeight() const
+   {
       return gcn::ListBox::getRowHeight() + getRowPadding();
-	}
+   }
 
-	unsigned int ListBox::getRowPadding() const
-	{
-		return mPadding;
-	}
+   unsigned int ListBox::getRowPadding() const
+   {
+      return mPadding;
+   }
 
-	void ListBox::setRowPadding(unsigned int padding)
-	{
-		mPadding = padding;
-	}
+   void ListBox::setRowPadding(unsigned int padding)
+   {
+      mPadding = padding;
+   }
 
    bool ListBox::isOpaque()
    {
@@ -138,7 +138,7 @@ namespace edwt
    
    void ListBox::mouseMoved(gcn::MouseEvent& mouseEvent)
    {
-      setSelected(mouseEvent.getY() / getFont()->getHeight());
+      setSelected(mouseEvent.getY() / getRowHeight());
    }
 
    void ListBox::setSelected(int selected)

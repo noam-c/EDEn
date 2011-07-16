@@ -36,28 +36,23 @@ int main (int argc, char *argv[])
    catch (gcn::Exception e)
    {
       DEBUG("Uncaught Guichan exception: \n%s", e.getMessage().c_str());
-      DEBUG_PAUSE;
       return 1;
    }
    catch(Exception e)
    {
       DEBUG("Uncaught game exception: \n%s", e.getMessage().c_str());
-      DEBUG_PAUSE;
       return 1;
    }
    catch(std::exception e)
    {
       DEBUG("Uncaught STL exception: \n%s", e.what());
-      DEBUG_PAUSE;
       return 1;
    }
    catch(...)
    {
       DEBUG("Uncaught general exception.");
-      DEBUG_PAUSE;
       return 1;
    }
 
-   DEBUG_PAUSE;
    return 0;
 }
