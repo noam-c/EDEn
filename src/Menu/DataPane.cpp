@@ -42,7 +42,7 @@ DataPane::DataPane(PlayerData& playerData, const gcn::Rectangle& rect) : MenuPan
    closedir(dp);
 
    const int moduleHeight = 200;
-   for(int i = 0; i < saveGameModules.size(); ++i)
+   for(unsigned int i = 0; i < saveGameModules.size(); ++i)
    {
       saveGameModules[i]->setHeight(moduleHeight);
       saveGameModules[i]->setWidth(rect.width);

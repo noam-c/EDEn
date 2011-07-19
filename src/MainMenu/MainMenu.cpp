@@ -48,6 +48,8 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
       titleLabel->setFont(titleFont);
       titleLabel->adjustSize();
 
+      actionsListBox->addActionListener(this);
+      actionsListBox->addSelectionListener(this);
       actionsListBox->setFont(actionsFont);
 
       actionsListBox->adjustSize();
@@ -56,8 +58,6 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
 
       chooseSound = ResourceLoader::getSound("choose");
       reselectSound = ResourceLoader::getSound("reselect");
-
-      actionsListBox->setReselectSound(reselectSound);
 
       top->add(titleLabel, 400 - titleLabel->getWidth() / 2, 50);
       top->add(actionsListBox, 400 - actionsListBox->getWidth() / 2, 600 - (actionsListBox->getHeight() + 50));
@@ -115,6 +115,52 @@ bool MainMenu::step()
    return !done;
 }
 
+void MainMenu::valueChanged(const gcn::SelectionEvent& event)
+{
+   reselectSound->play();
+}
+
+void MainMenu::action(const gcn::ActionEvent& event)
+{
+   chooseSound->play();
+   if(event.getSource() == actionsListBox)
+   {
+      switch(titleOps->getActionAt(actionsListBox->getSelected()))
+      {
+         case NEW_GAME_ACTION:
+         {
+            NewGameAction();
+            break;
+         }
+         case LOAD_GAME_ACTION:
+         {
+            LoadGameAction();
+            break;
+         }
+         case OPTIONS_ACTION:
+         {
+            OptionsAction();
+            break;
+         }
+         case ABOUT_ACTION:
+         {
+            AboutAction();
+            break;
+         }
+         case QUIT_GAME_ACTION:
+         {
+            QuitAction();
+            break;
+         }
+         case MENU_PROTOTYPE_ACTION:
+         {
+            MenuPrototypeAction();
+            break;
+         }
+      }
+   }
+}
+
 void MainMenu::waitForInputEvent(bool& finishState)
 {
    SDL_Event event;
@@ -124,44 +170,6 @@ void MainMenu::waitForInputEvent(bool& finishState)
 
    switch (event.type)
    {
-      case SDL_USEREVENT:
-      {
-         switch(event.user.code)
-         {
-            case NEW_GAME_ACTION:
-            {
-               NewGameAction();
-               return;
-            }
-            case LOAD_GAME_ACTION:
-            {
-               LoadGameAction();
-               return;
-            }
-            case OPTIONS_ACTION:
-            {
-               OptionsAction();
-               return;
-            }
-            case ABOUT_ACTION:
-            {
-               AboutAction();
-               return;
-            }
-            case QUIT_GAME_ACTION:
-            {
-               QuitAction();
-               return;
-            }
-            case MENU_PROTOTYPE_ACTION:
-            {
-               MenuPrototypeAction();
-               return;
-            }
-         }
-
-         break;
-      }
       case SDL_KEYDOWN:
       {
          switch(event.key.keysym.sym)

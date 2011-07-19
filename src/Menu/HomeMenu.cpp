@@ -55,15 +55,6 @@ void HomeMenu::pollInputEvent(bool& finishState)
    {
       switch (event.type)
       {
-         case SDL_USEREVENT:
-         {
-            if (event.user.data1 == menuShell.actionsListBox)
-            {
-               showPanel((MenuAction)event.user.code);
-            }
-
-            break;
-         }
          case SDL_KEYDOWN:
          {
             switch(event.key.keysym.sym)
@@ -73,8 +64,11 @@ void HomeMenu::pollInputEvent(bool& finishState)
                   finishState = true;
                   return;
                }
+               default:
+               {
+                  break;
+               }
             }
-
             break;
          }
          default:
@@ -161,6 +155,11 @@ void HomeMenu::tabChanged(const std::string& tabName)
 {
    executionStack.pushState(new StatusMenu(executionStack, menuShell, playerData, tabName));
    menuPane->setVisible(false);
+}
+
+void HomeMenu::action(const gcn::ActionEvent& event)
+{
+   
 }
 
 HomeMenu::~HomeMenu()

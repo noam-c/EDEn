@@ -94,6 +94,10 @@ void PlayerCharacter::step(long timePassed)
                sprite->setAnimation(WALKING_PREFIX + "down");
                break;
             }
+            default:
+            {
+               break;
+            }
          }
       }
    }
@@ -119,6 +123,10 @@ void PlayerCharacter::step(long timePassed)
          case DOWN:
          {
             sprite->setFrame(STANDING_PREFIX + "down");
+            break;
+         }
+         default:
+         {
             break;
          }
       }

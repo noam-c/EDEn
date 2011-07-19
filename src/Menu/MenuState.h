@@ -3,6 +3,7 @@
 
 #include "GameState.h"
 #include "TabChangeListener.h"
+#include "MenuAction.h"
 
 namespace gcn
 {
@@ -56,7 +57,7 @@ class MenuState : public GameState, public edwt::TabChangeListener
        * @param menuShell The menu shell to place the menu pane into.
        */
       MenuState(ExecutionStack& executionStack, MenuShell& menuShell);
-
+   
       /**
        * Set the menu pane that will appear within the menu shell for this state.
        * NOTE: The MenuState will delete the pane when cleaned up, so please DO NOT delete the menu pane from the subclass.
@@ -64,12 +65,6 @@ class MenuState : public GameState, public edwt::TabChangeListener
        * @param pane The menu pane to display.
        */
       void setMenuPane(MenuPane* pane);
-
-      /**
-       * When this state is active, activate makes sure this state's menu pane
-       * is visible and listening for tab change events.
-       */
-      virtual void activate();
 
       /**
        * Processes for events common to all menu states, such as "cancel" actions.
@@ -83,16 +78,30 @@ class MenuState : public GameState, public edwt::TabChangeListener
       virtual void draw();
 
       /**
+       * Destructor.
+       */
+      virtual ~MenuState() = 0;
+
+   public:      
+      /**
+       * When this state is active, activate makes sure this state's menu pane
+       * is visible and listening for tab change events.
+       */
+      virtual void activate();
+
+      /**
        * Override this method to respond to menu tab events.
        *
        * @param tabName The name of the tab that was selected by the user.
        */
       virtual void tabChanged(const std::string& tabName);
-
+      
       /**
-       * Destructor.
+       * Respond to a new action being chosen from the menu list.
+       *
+       * @param The selected menu action.
        */
-      virtual ~MenuState() = 0;
+      virtual void showPanel(MenuAction panelToShow);
 };
 
 #endif

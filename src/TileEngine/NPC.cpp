@@ -98,6 +98,10 @@ bool NPC::runInstruction(Instruction* instruction, long timePassed)
                      sprite->setAnimation(WALKING_PREFIX + "down");
                      break;
                   }
+                  default:
+                  {
+                     break;
+                  }
                }
             }
             return false;
@@ -125,6 +129,10 @@ bool NPC::runInstruction(Instruction* instruction, long timePassed)
             case DOWN:
             {
                sprite->setFrame(STANDING_PREFIX + "down");
+               break;
+            }
+            default:
+            {
                break;
             }
          }

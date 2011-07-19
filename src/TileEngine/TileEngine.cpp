@@ -264,6 +264,10 @@ void TileEngine::handleInputEvents(bool& finishState)
                   toggleDebugConsole();
                   return;
                }
+               default:
+               {
+                  break;
+               }
             }
             break;
          }
@@ -275,6 +279,10 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   dialogue->setFastModeEnabled(false);
                   return;
+               }
+               default:
+               {
+                  break;
                }
             }
             break;

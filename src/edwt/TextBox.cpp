@@ -63,9 +63,12 @@ namespace edwt
          {
             return (getWidth() - getFont()->getWidth(text)) - 1;
          }
+         case LEFT:
+         default:
+         {
+            return 1;
+         }   
       }
-   
-      return 1;
    }
    
    void TextBox::scrollToBottom()

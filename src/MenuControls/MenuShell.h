@@ -17,6 +17,7 @@ namespace edwt
    class TabChangeListener;
 };
 
+class MenuState;
 class MenuPane;
 class PlayerData;
 class Sound;
@@ -29,17 +30,17 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class MenuShell : public edwt::Container
+class MenuShell : public edwt::Container, public gcn::ActionListener, public gcn::SelectionListener
 {
    /** Sound for hovering over an option */
-   Sound* reselectSound;
-
-   /** Sound for picking an option */
-   Sound* chooseSound;
+   Sound* selectSound;
 
    /** Background for the menu */
    gcn::Icon* bg;
 
+   /** The list box for all options in the menu */
+   edwt::ListBox* actionsListBox;
+   
    /** The list model holding the options for the menu */
    edwt::StringListModel* listOps;
 
@@ -49,16 +50,15 @@ class MenuShell : public edwt::Container
    /** The main area of the menu */
    edwt::Container* menuArea;
 
+   /** The active menu state */
+   MenuState* activeState;
+   
    /**
     * Populate the action list with required options
     */
    void populateOpsList();
 
    public:
-      /** \todo THIS PUBLIC FIELD IS LIKE OMG TEMPORARY. REMOVE IMMEDIATELY! */
-      /** The list box for all options in the menu */
-      edwt::ListBox* actionsListBox;
-
       /**
        * Constructor.
        *
@@ -81,10 +81,27 @@ class MenuShell : public edwt::Container
       void removePane(MenuPane* menuPane);
 
       /**
-       * Set the state or GUI element that will capture character selections using the menu tabs.
+       * Sets the menu state that will listen for events from
+       * the action list.
+       *
+       * @param menuState The menu state that will respond to events.
        */
-      void setTabChangeListener(edwt::TabChangeListener* listener);
-
+      void setActiveState(MenuState* menuState);
+   
+      /**
+       * Picks up and sends action events to the current menu state.
+       *
+       * @param event The action event to send to the menu state.
+       */
+      void action(const gcn::ActionEvent& event);
+      
+      /**
+       * Responds to selection events from the listbox.
+       *
+       * @param event The selection event to respond to.
+       */
+      void valueChanged(const gcn::SelectionEvent& event);
+   
       /**
        * Destructor.
        */

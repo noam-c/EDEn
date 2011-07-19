@@ -6,13 +6,16 @@
 #include "ListBox.h"
 #include "StringListModel.h"
 #include "MenuPane.h"
+#include "MenuState.h"
 #include "TabChangeListener.h"
+#include "Sound.h"
+#include "ResourceLoader.h"
 
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_MENU;
 
-MenuShell::MenuShell(PlayerData& playerData)
+MenuShell::MenuShell(PlayerData& playerData) : activeState(NULL)
 {
    try
    {
@@ -23,6 +26,7 @@ MenuShell::MenuShell(PlayerData& playerData)
       const gcn::Rectangle menuAreaRect(0, 0, getWidth() * 0.8 - 5, getHeight() - 10);
 
       bg = new gcn::Icon("data/images/menubg.jpg");
+      selectSound = ResourceLoader::getSound("reselect");
 
       menuTabs = new edwt::TabbedArea();
       menuArea = new edwt::Container();
@@ -49,6 +53,8 @@ MenuShell::MenuShell(PlayerData& playerData)
       actionsListBox->setBackgroundColor(menuBackgroundColor);
       actionsListBox->setOpaque(true);
       actionsListBox->setRowPadding(5);
+      actionsListBox->addActionListener(this);
+      actionsListBox->addSelectionListener(this);
 
       add(bg);
       add(menuTabs, getWidth() * 0.2, 5);
@@ -84,9 +90,26 @@ void MenuShell::removePane(MenuPane* menuPane)
    menuArea->remove(menuPane);
 }
 
-void MenuShell::setTabChangeListener(edwt::TabChangeListener* listener)
+void MenuShell::setActiveState(MenuState* menuState)
 {
-   menuTabs->setTabChangeListener(listener);
+   menuTabs->setTabChangeListener(menuState);
+   activeState = menuState;
+}
+
+void MenuShell::action(const gcn::ActionEvent& event)
+{
+   if(event.getSource() == actionsListBox)
+   {
+      selectSound->play();
+
+      MenuAction selectedAction = (MenuAction)listOps->getActionAt(actionsListBox->getSelected());
+      activeState->showPanel(selectedAction);
+   }
+}
+
+void MenuShell::valueChanged(const gcn::SelectionEvent& event)
+{
+   selectSound->play();
 }
 
 MenuShell::~MenuShell()

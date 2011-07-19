@@ -16,11 +16,11 @@ class Character;
  */
 class StatusMenu : public MenuState
 {
-   /** The name of the character displayed. */
-   std::string characterName;
-
    /** The player data operated on by this menu state. */
    PlayerData& playerData;
+
+   /** The name of the character displayed. */
+   std::string characterName;
 
    public:
       /**

@@ -20,14 +20,9 @@ namespace edwt
 
    void ListBox::init()
    {
-      reselectSound = NULL;
-      chooseSound = NULL;
       mOpaque = true;
       mPadding = 0;
-      addMouseListener(this);
-      addActionListener(this);
       setWrappingEnabled(true);
-      gcn::ListBox::setSelected(0);
    }
 
    void ListBox::draw(gcn::Graphics* graphics)
@@ -113,11 +108,6 @@ namespace edwt
       mOpaque = opaque;
    }
 
-   void ListBox::setReselectSound(Sound* newReselect)
-   {
-      reselectSound = newReselect;
-   }
-
    void ListBox::adjustWidth()
    {
       //Find the maximum string width needed in the list box, and set the width to that       
@@ -140,28 +130,12 @@ namespace edwt
    {
       setSelected(mouseEvent.getY() / getRowHeight());
    }
-
+   
    void ListBox::setSelected(int selected)
    {
-      if(getSelected() != selected)
+      if(selected != mSelected)
       {
-         if(reselectSound != NULL)
-         {
-            reselectSound->play();
-         }
+         gcn::ListBox::setSelected(selected);
       }
-
-      gcn::ListBox::setSelected(selected);
    }
-
-   void ListBox::action(const gcn::ActionEvent&/*actionEvent*/)
-   {
-      SDL_Event event;
-      event.type = SDL_USEREVENT;
-      event.user.code = ((StringListModel*)mListModel)->getActionAt(getSelected());
-      event.user.data1 = this;
-      event.user.data2 = 0;
-      SDL_PushEvent(&event);
-   }
-
 };

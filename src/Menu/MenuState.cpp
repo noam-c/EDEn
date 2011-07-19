@@ -18,6 +18,7 @@ void MenuState::setMenuPane(MenuPane* pane)
 {
    menuPane = pane;
    menuShell.addPane(menuPane);
+   menuShell.setActiveState(this);
 }
 
 void MenuState::activate()
@@ -29,7 +30,7 @@ void MenuState::activate()
    }
 
    GameState::activate();
-   menuShell.setTabChangeListener(this);
+   menuShell.setActiveState(this);
    menuPane->setVisible(true);
 }
 
@@ -63,6 +64,10 @@ void MenuState::pollInputEvent(bool& finishState)
                   finishState = true;
                   return;
                }
+               default:
+               {
+                  break;
+               }
             }
 
             break;
@@ -83,6 +88,10 @@ void MenuState::draw()
 }
 
 void MenuState::tabChanged(const std::string& tabName)
+{
+}
+
+void MenuState::showPanel(MenuAction panelToShow)
 {
 }
 

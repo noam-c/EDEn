@@ -31,16 +31,16 @@ class Resource
     * False iff the resource is currently in an uninitialized stub/zombie state.
     */
    bool initialized;
+   
+   /**
+    * The name of the resource.
+    */
+   const ResourceKey& name;
 
    /**
     * Loading function for initialization of the resource from file.
     */
    virtual void load(const char* path) = 0;
-
-   /**
-    * The name of the resource.
-    */
-   const ResourceKey& name;
 
    public:
       /**
