@@ -66,7 +66,7 @@ class Quest
       /**
        * \todo Document.
        */
-      void serialize(Json::Value& outputXml);
+      Json::Value serialize();
 
    
       /**

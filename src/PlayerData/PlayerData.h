@@ -66,16 +66,16 @@ class PlayerData
    SaveLocation saveLocation;
    
    void parseCharactersAndParty(Json::Value& rootElement);
-   void serializeCharactersAndParty(Json::Value& outputXml);
+   void serializeCharactersAndParty(Json::Value& outputJson);
     
    void parseQuestLog(Json::Value& rootElement);
-   void serializeQuestLog(Json::Value& outputXml);
+   void serializeQuestLog(Json::Value& outputJson);
     
    void parseInventory(Json::Value& rootElement);
-   void serializeInventory(Json::Value& outputXml);
+   void serializeInventory(Json::Value& outputJson);
     
    void parseLocation(Json::Value& rootElement);
-   void serializeLocation(Json::Value& outputXml);
+   void serializeLocation(Json::Value& outputJson);
     
    public:
       static const int PARTY_SIZE = 4;

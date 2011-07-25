@@ -2,12 +2,12 @@
 
 #include "PlayerData.h"
 #include "Character.h"
-#include <sstream>
+#include "SaveGameSelectListener.h"
 #include "Container.h"
 #include "Label.h"
 #include "Icon.h"
 
-SaveGameModule::SaveGameModule(PlayerData& playerData) : playerData(playerData)
+SaveGameModule::SaveGameModule(PlayerData& playerData, const std::string& path) : playerData(playerData), path(path), saveGameSelectListener(NULL)
 {
    setNumberOfColumns(PlayerData::PARTY_SIZE);
    setHorizontalSpacing(10);
@@ -29,6 +29,15 @@ SaveGameModule::SaveGameModule(PlayerData& playerData) : playerData(playerData)
 
 void SaveGameModule::mouseClicked(gcn::MouseEvent& mouseEvent)
 {
+   if(saveGameSelectListener != NULL)
+   {
+      saveGameSelectListener->saveGameSelected(path);
+   }
+}
+
+void SaveGameModule::setSaveGameSelectListener(SaveGameSelectListener* listener)
+{
+   saveGameSelectListener = listener;
 }
 
 SaveGameModule::~SaveGameModule()

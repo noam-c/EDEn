@@ -27,7 +27,7 @@ Quest::Quest(Json::Value& questTree)
    }
 }
 
-void Quest::serialize(Json::Value& outputXml)
+Json::Value Quest::serialize()
 {
    Json::Value questNode(Json::objectValue);
    questNode[NAME_ATTRIBUTE] = name;
@@ -41,12 +41,15 @@ void Quest::serialize(Json::Value& outputXml)
    questNode[OPTIONAL_ATTRIBUTE] = optional;
    
    Json::Value subquestsNode(Json::arrayValue);
-   for(QuestLog::iterator i  = subquests.begin(); i != subquests.end(); ++i)
+   for(QuestLog::iterator iter  = subquests.begin(); iter != subquests.end(); ++iter)
    {
-      i->second->serialize(subquestsNode);
+      Json::Value subquestNode = iter->second->serialize();
+      subquestsNode.append(subquestNode);
    }
    
-   outputXml[QUEST_ELEMENT] = questNode;
+   questNode[QUEST_ELEMENT] = subquestsNode;
+   
+   return questNode;
 }
 
 void Quest::addQuest(const std::string& questPath, const std::string& description, bool optional, bool completed)

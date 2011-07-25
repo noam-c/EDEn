@@ -18,6 +18,13 @@ namespace edwt
           * Constructor.
           */
          Container();
+      
+         /**
+          * @param widget The widget to search for,
+          * @returns true iff this container includes the widget.
+          */
+         bool containsWidget(const gcn::Widget* widget);
+      
    };
 };
 

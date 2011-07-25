@@ -2,6 +2,9 @@
 #define DATA_MENU_H
 
 #include "MenuState.h"
+#include "guichan.hpp"
+#include "SaveGameSelectListener.h"
+#include "ConfirmStateListener.h"
 
 class PlayerData;
 
@@ -11,10 +14,13 @@ class PlayerData;
  *
  * @author Noam Chitayat
  */
-class DataMenu : public MenuState
+class DataMenu : public MenuState, public SaveGameSelectListener, public ConfirmStateListener
 {
    /** The player data that the menu interacts with. */
    PlayerData& playerData;
+   
+   /** Selected save game when the confirmation dialog is raised */
+   std::string selectedSavePath;
    
    public:
       /**
@@ -26,6 +32,30 @@ class DataMenu : public MenuState
        */
       DataMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData);
 
+      /**
+       * Refreshes the savegame directory and sends the savegame data to the display.
+       */
+      void refresh();
+   
+      /**
+       * Signals that a save game was selected in the data menu.
+       *
+       * @param path The path of the save game to save over.
+       */
+      void saveGameSelected(const std::string& path);
+      
+      /**
+       * 'Yes' was clicked in the confirmation dialog.
+       * Save the selected game.
+       */
+      void yesClicked();
+      
+      /**
+       * 'No' was clicked in the confirmation dialog.
+       * Do not save the selected game.
+       */
+      void noClicked();
+   
       /**
        * Destructor.
        */

@@ -9,6 +9,7 @@
 #include "guichan/sdl.hpp"
 #include "guichan/opengl.hpp"
 #include "guichan/opengl/openglsdlimageloader.hpp"
+#include "Container.h"
 #include "OpenGLTTF.h"
 
 #include "DebugUtils.h"
@@ -107,10 +108,23 @@ void GraphicsUtil::initGuichan()
    input = new gcn::SDLInput();
 
    gui = new gcn::Gui();
+
    // Set gui to use the SDLGraphics object.
    gui->setGraphics(graphics);
+
    // Set gui to use the SDLInput object
    gui->setInput(input);
+
+   // Set top-level container for the gui
+   guiContainer = new edwt::Container();
+   gui->setTop(guiContainer);
+   guiContainer->setWidth(width);
+   guiContainer->setHeight(height);
+   guiContainer->setVisible(true);
+   
+   // Set the top-level container to be null for now
+   top = NULL;
+
    // Load the image font.
    font = new edwt::OpenGLTrueTypeFont("data/fonts/LDSRegular.ttf", 16);
 
@@ -210,9 +224,26 @@ int GraphicsUtil::getHeight()
    return height;
 }
 
-void GraphicsUtil::setInterface(gcn::Container* top)
+void GraphicsUtil::setInterface(gcn::Container* newTop)
 {
-   gui->setTop(top);
+   if(top != NULL)
+   {
+      top->setVisible(false);
+   }
+   
+   if(newTop != NULL)
+   {
+      if(guiContainer->containsWidget(newTop))
+      {
+         newTop->setVisible(true);
+      }
+      else
+      {
+         guiContainer->add(newTop);
+      }
+   }
+
+   top = newTop;
 }
 
 void GraphicsUtil::stepGUI()
@@ -305,6 +336,7 @@ void GraphicsUtil::finish()
 {
    //Destroys some Guichan stuff
    delete font;
+   delete guiContainer;
    delete gui;
    delete imageLoader;
    delete graphics;

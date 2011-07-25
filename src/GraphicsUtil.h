@@ -17,6 +17,7 @@ namespace gcn
     
 namespace edwt
 {
+   class Container;
    class OpenGLTrueTypeFont;
 };
 
@@ -46,6 +47,12 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
 
    /** A Gui object - binds all the drivers together */
    gcn::Gui* gui;
+   
+   /** A top-level container bound to the GUI. */
+   edwt::Container* guiContainer;
+   
+   /** The current container shown inside the top-level container. */
+   gcn::Container* top;
 
    /** The global default font */
    edwt::OpenGLTrueTypeFont* font;

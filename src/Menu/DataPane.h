@@ -1,11 +1,13 @@
-#ifndef ITEMS_PANE_H_
-#define ITEMS_PANE_H_
+#ifndef DATA_PANE_H_
+#define DATA_PANE_H_
 
 #include "MenuPane.h"
+#include <map>
 #include <vector>
 
 class PlayerData;
 class SaveGameModule;
+class SaveGameSelectListener;
 
 /**
  * The pane to display when showing the items menu state.
@@ -14,15 +16,17 @@ class SaveGameModule;
  */
 class DataPane : public MenuPane
 {
-   /** The player data with the inventory to display. */
-   PlayerData& playerData;
-
-   /** The list of files that can be saved or loaded. */
-   std::vector<PlayerData*> saveGames;
-
    /** Save game GUI elements. */
    std::vector<SaveGameModule*> saveGameModules;
-
+   
+   /** The listener for the save game selection events. */
+   SaveGameSelectListener* saveGameSelectListener;
+   
+   /**
+    * Clear out old modules to refresh the GUI.
+    */
+   void clearModules();
+   
    public:
       /**
        * Constructor.
@@ -30,8 +34,22 @@ class DataPane : public MenuPane
        * @param playerData The player data to display in the pane.
        * @param rect The preferred dimensions of this pane.
        */
-      DataPane(PlayerData& playerData, const gcn::Rectangle& rect);
+      DataPane(const gcn::Rectangle& rect);
 
+      /**
+       * Set the save games to display.
+       *
+       * @param saveGames The savegames to set and display in the pane.
+       */
+      void setSaveGames(std::map<std::string, PlayerData*> saveGames);
+   
+      /**
+       * Sets a new listener to catch save game selection events.
+       *
+       * @param listener The listener that will respond to save data selection.
+       */
+      void setSaveGameSelectListener(SaveGameSelectListener* listener);
+   
       /**
        * Destructor.
        */

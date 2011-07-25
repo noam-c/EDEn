@@ -78,7 +78,7 @@ void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
    }
 }
 
-void PlayerData::serializeCharactersAndParty(Json::Value& outputXml)
+void PlayerData::serializeCharactersAndParty(Json::Value& outputJson)
 {
    Json::Value charactersNode(Json::objectValue);
    
@@ -99,7 +99,7 @@ void PlayerData::serializeCharactersAndParty(Json::Value& outputXml)
    charactersNode[PARTY_ELEMENT] = partyNode;
    charactersNode[RESERVE_ELEMENT] = reserveNode;
    
-   outputXml[CHARACTER_LIST_ELEMENT] = charactersNode;
+   outputJson[CHARACTER_LIST_ELEMENT] = charactersNode;
 }
 
 void PlayerData::parseQuestLog(Json::Value& rootElement)
@@ -109,9 +109,9 @@ void PlayerData::parseQuestLog(Json::Value& rootElement)
    rootQuest = new Quest(questLog);
 }
 
-void PlayerData::serializeQuestLog(Json::Value& outputXml)
+void PlayerData::serializeQuestLog(Json::Value& outputJson)
 {
-   rootQuest->serialize(outputXml);
+   outputJson[QUEST_ELEMENT] = rootQuest->serialize();
 }
 
 void PlayerData::parseInventory(Json::Value& rootElement)
@@ -127,7 +127,7 @@ void PlayerData::parseInventory(Json::Value& rootElement)
    }
 }
 
-void PlayerData::serializeInventory(Json::Value& outputXml)
+void PlayerData::serializeInventory(Json::Value& outputJson)
 {
    Json::Value inventoryNode(Json::arrayValue);
    for(ItemList::iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
@@ -145,7 +145,7 @@ void PlayerData::serializeInventory(Json::Value& outputXml)
       }
    }
    
-   outputXml[INVENTORY_ELEMENT] = inventoryNode;
+   outputJson[INVENTORY_ELEMENT] = inventoryNode;
 }
 
 void PlayerData::parseLocation(Json::Value& rootElement)
@@ -169,7 +169,7 @@ void PlayerData::parseLocation(Json::Value& rootElement)
    }
 }
 
-void PlayerData::serializeLocation(Json::Value& outputXml)
+void PlayerData::serializeLocation(Json::Value& outputJson)
 {
    /**
     * \todo Determine format for current location and then correctly serialize
