@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.5)
 
 project( ExodusDraconis )
 
@@ -286,11 +286,31 @@ set(SOURCES
   src/GraphicsUtil.cpp
 )
 
+SET(SOURCE_GROUP_DELIMITER "/")
+
+source_group(\\ REGULAR_EXPRESSION src/[^/]*)
+source_group(Audio REGULAR_EXPRESSION src/Audio/.*)
+source_group(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
+source_group(GameData REGULAR_EXPRESSION src/GameData/.*)
+source_group(guichan REGULAR_EXPRESSION src/guichan/.*)
+source_group(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
+source_group(Menu REGULAR_EXPRESSION src/Menu/.*)
+source_group(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
+source_group(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
+source_group(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
+source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
+source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
+source_group(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
+source_group(json REGULAR_EXPRESSION src/json/.*)
+source_group(edwt REGULAR_EXPRESSION src/edwt/.*)
+source_group(tinyxml REGULAR_EXPRESSION src/tinyxml/.*)
+
 include_directories( 
   src
   src/Audio
   src/Coroutines
   src/GameData
+  src/guichan
   src/MainMenu
   src/Menu
   src/MenuControls
