@@ -89,7 +89,7 @@ void DialogueController::setFastModeEnabled(bool enabled)
 void DialogueController::advanceDialogue()
 {
    // See if we ran over any embedded scripts that we should execute
-   int openIndex, closeIndex;
+   unsigned int openIndex, closeIndex;
    if(currLine->getNextBracketPair(openIndex, closeIndex))
    {
       // If there is a bracket pair coming up and we're past the point of the
@@ -239,7 +239,7 @@ DialogueController::Line::Line(LineType type, const std::string& dialogue, Task*
    }
 }
 
-bool DialogueController::Line::getNextBracketPair(int& openIndex, int& closeIndex)
+bool DialogueController::Line::getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex)
 {
    if(openScriptBrackets.empty())
    {
@@ -254,7 +254,7 @@ bool DialogueController::Line::getNextBracketPair(int& openIndex, int& closeInde
 
 std::string DialogueController::Line::removeNextScriptString()
 {
-   int openIndex, closeIndex;
+   unsigned int openIndex, closeIndex;
    getNextBracketPair(openIndex, closeIndex);
 
    openScriptBrackets.pop();

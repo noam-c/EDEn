@@ -111,9 +111,9 @@ void TileEngine::toggleDebugConsole()
 void TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
-   npcList[npcName] = new NPC(*scriptEngine, *scheduler, sheet, *currMap,
-                           currRegion->getName(), npcName,
-                           x * TILE_SIZE, y * TILE_SIZE);
+   npcList[npcName] = new NPC(*scriptEngine, *scheduler, npcName, sheet,
+                              *currMap, currRegion->getName(),
+                              x * TILE_SIZE, y * TILE_SIZE);
 }
 
 bool TileEngine::withinMap(int x, int y)

@@ -102,7 +102,7 @@ class NPC
        * 
        * @param name The name of the NPC (must also be the name of its script).
        */
-      NPC(ScriptEngine& engine, Scheduler& scheduler, Spritesheet* sheet, const Map& map, const std::string& regionName, const std::string& name, int x, int y);
+      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, const Map& map, const std::string& regionName, int x, int y);
 
       /**
        * @return The name of this NPC.

@@ -51,11 +51,11 @@ class Spritesheet : public Resource
    /** Height (in pixels) */
    int height;
 
-   /** The number of frames available in the spritesheet. */
-   int numFrames;
-
    /** The array of frames, which hold locations of different sprites in the sheet. */
    SpriteFrame* frameList;
+
+   /** The number of frames available in the spritesheet. */
+   int numFrames;
 
    /** The mapping of frame names to their indices in the frameList array. */
    std::map<std::string, int> frameIndices;

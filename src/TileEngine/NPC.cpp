@@ -14,9 +14,9 @@ const int debugFlag = DEBUG_NPC;
 const std::string WALKING_PREFIX = "walk_";
 const std::string STANDING_PREFIX = "stand_";
 
-NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, Spritesheet* sheet, const Map& map,
-                       const std::string& regionName, const std::string& name,
-                       int x, int y) : map(map), name(name), pixelLoc(x, y)
+NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, const Map& map,
+                       const std::string& regionName,
+                       int x, int y) : name(name), map(map), pixelLoc(x, y)
 {
    npcThread = engine.getNPCScript(this, regionName, map.getName(), name);
    scheduler.start(npcThread);

@@ -17,6 +17,6 @@ namespace edwt
    {
       gcn::Window::mousePressed(mouseEvent);
       int mouseY = mouseEvent.getY();
-      mMoved = mouseY <= mTitleBarHeight && mouseY >= 0;
+      mMoved = mouseY >= 0 && mouseY <= (int)mTitleBarHeight;
    }
 };

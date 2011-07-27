@@ -83,7 +83,7 @@ class DialogueController : public Thread
           *
           *  @return true iff there are embedded script brackets left in the string
           */
-         bool getNextBracketPair(int& openIndex, int& closeIndex);
+         bool getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex);
 
          /**
           *  Gets the next embedded script and removes it from the dialogue line.
@@ -114,7 +114,7 @@ class DialogueController : public Thread
    /**
     * The number of characters that should be placed on the screen.
     */
-   int charsToShow;
+   unsigned int charsToShow;
 
    /**
     * \todo Document.
