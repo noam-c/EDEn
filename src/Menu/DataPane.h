@@ -5,22 +5,22 @@
 #include <map>
 #include <vector>
 
+class ModuleSelectListener;
 class PlayerData;
 class SaveGameModule;
-class SaveGameSelectListener;
 
 /**
  * The pane to display when showing the items menu state.
  *
  * @author Noam Chitayat
  */
-class DataPane : public MenuPane
+class DataPane : public MenuPane, public gcn::ActionListener
 {
+   /** The module selection listener */
+   ModuleSelectListener* moduleSelectListener;
+   
    /** Save game GUI elements. */
    std::vector<SaveGameModule*> saveGameModules;
-   
-   /** The listener for the save game selection events. */
-   SaveGameSelectListener* saveGameSelectListener;
    
    /**
     * Clear out old modules to refresh the GUI.
@@ -36,19 +36,16 @@ class DataPane : public MenuPane
        */
       DataPane(const gcn::Rectangle& rect);
 
+      void action(const gcn::ActionEvent& event);
+   
       /**
        * Set the save games to display.
        *
        * @param saveGames The savegames to set and display in the pane.
        */
-      void setSaveGames(std::map<std::string, PlayerData*> saveGames);
-   
-      /**
-       * Sets a new listener to catch save game selection events.
-       *
-       * @param listener The listener that will respond to save data selection.
-       */
-      void setSaveGameSelectListener(SaveGameSelectListener* listener);
+      void setSaveGames(std::vector<PlayerData*> saveGames);
+
+      void setModuleSelectListener(ModuleSelectListener* listener);
    
       /**
        * Destructor.

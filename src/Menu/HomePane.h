@@ -5,20 +5,23 @@
 
 class PlayerData;
 class CharacterModule;
-class CharacterSelectListener;
+class ModuleSelectListener;
 
 /**
  * The GUI elements of the home pane, which is the first menu pane that is shown.
  *
  * @author Noam Chitayat
  */
-class HomePane : public MenuPane
+class HomePane : public MenuPane, public gcn::ActionListener
 {
    /** The player data to summarize in this pane. */
    PlayerData& playerData;
 
    /** The modules used to summarize attributes for all the characters in the party. */
    CharacterModule* characterModules;
+   
+   /** The listener for character selection events from this pane. */
+   ModuleSelectListener* moduleSelectListener;
 
    public:
       /**
@@ -36,13 +39,20 @@ class HomePane : public MenuPane
        *
        * @param listener The new listener to set.
        */
-      void setCharacterSelectListener(CharacterSelectListener* listener);
+      void setModuleSelectListener(ModuleSelectListener* listener);
 
       /**
        * Refreshes the character information displayed in the pane.
        */
       void refresh();
 
+      /**
+       * Fires when a character is selected in the pane.
+       *
+       * @param event The action event from the selected module.
+       */
+      void action(const gcn::ActionEvent& event);
+   
       /**
        * Destructor.
        */

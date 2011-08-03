@@ -10,6 +10,7 @@
 #include "TabChangeListener.h"
 #include "Sound.h"
 #include "ResourceLoader.h"
+#include "Character.h"
 
 #include "DebugUtils.h"
 
@@ -43,7 +44,7 @@ MenuShell::MenuShell(PlayerData& playerData) : activeState(NULL)
       CharacterList party = playerData.getParty();
       for (CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
       {
-         menuTabs->addTab(iter->first, menuArea);
+         menuTabs->addTab((*iter)->getName(), menuArea);
       }
 
       populateOpsList();

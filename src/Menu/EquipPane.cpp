@@ -1,6 +1,8 @@
 #include "EquipPane.h"
 #include "PlayerData.h"
 #include "Character.h"
+#include "EquipSlot.h"
+#include "Item.h"
 #include "Label.h"
 
 EquipPane::EquipPane(Character* character, const gcn::Rectangle& rect) : MenuPane(rect), character(character)
@@ -15,8 +17,9 @@ EquipPane::EquipPane(Character* character, const gcn::Rectangle& rect) : MenuPan
 
 void EquipPane::setCharacter(Character* character)
 {
-   std::string headEquipName = character->getEquipment().getHeadEquip();
+   std::string headEquipName = character->getEquipment().getHeadEquip().equipped->getName();
    headEquipLabel->setCaption(headEquipName);
+   headEquipLabel->adjustSize();
 }
 
 EquipPane::~EquipPane()

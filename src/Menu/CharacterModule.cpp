@@ -1,13 +1,12 @@
 #include "CharacterModule.h"
 
 #include "Character.h"
-#include "CharacterSelectListener.h"
 #include <sstream>
 #include "Container.h"
 #include "Label.h"
 #include "Icon.h"
 
-CharacterModule::CharacterModule() : charSelectListener(NULL), characterPortrait(NULL)
+CharacterModule::CharacterModule() : characterPortrait(NULL)
 {
    characterStats = new gcn::contrib::AdjustingContainer();
    characterNameLabel = new edwt::Label();
@@ -41,15 +40,7 @@ CharacterModule::CharacterModule() : charSelectListener(NULL), characterPortrait
 
 void CharacterModule::mouseClicked(gcn::MouseEvent& mouseEvent)
 {
-   if(charSelectListener != NULL)
-   {
-      charSelectListener->characterSelected(characterName);
-   }
-}
-
-void CharacterModule::setCharacterSelectListener(CharacterSelectListener* listener)
-{
-   charSelectListener = listener;
+   distributeActionEvent();
 }
 
 void CharacterModule::setCharacter(Character* character)

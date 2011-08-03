@@ -13,7 +13,7 @@ namespace edwt
       init();
    }
 
-   ListBox::ListBox(edwt::StringListModel* listModel) : gcn::ListBox(listModel)
+   ListBox::ListBox(gcn::ListModel* listModel) : gcn::ListBox(listModel)
    {
       init();
    }

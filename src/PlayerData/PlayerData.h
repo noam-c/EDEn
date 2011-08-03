@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 class Character;
 class Quest;
@@ -12,7 +13,7 @@ namespace Json
    class Value;
 };
 
-typedef std::map<std::string, Character*> CharacterList;
+typedef std::vector<Character*> CharacterList;
 typedef std::map<int, int> ItemList;
 
 /**
@@ -36,6 +37,9 @@ struct SaveLocation
  */
 class PlayerData
 {
+   /** The file from which this player data was last saved/loaded. */
+   std::string filePath;
+   
    /**
     * A list of all playable characters encountered.
     * This includes characters in the party and the reserve,
@@ -86,19 +90,24 @@ class PlayerData
       PlayerData();
    
       /**
+       * @return The file path that this player data was last associated with (saved to or loaded from).
+       */
+      const std::string& getFilePath();
+
+      /**
        * Load the player data from a file.
        *
        * @param filePath The path to load the player data from.
        */
-      void load(const std::string& filePath);
+      void load(const std::string& path);
 
       /**
        * Save the player data to a file.
        *
        * @param filePath The path to save the player data to.
        */
-      void save(const std::string& filePath);
-
+      void save(const std::string& path);
+   
       void addNewCharacter(Character* newCharacter);
       Character* getPartyLeader() const;
       Character* getPartyCharacter(const std::string& characterName) const;

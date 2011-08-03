@@ -7,23 +7,22 @@
 #include "SaveGameModule.h"
 #include <string>
 #include "DebugUtils.h"
-#include "SaveGameSelectListener.h"
+#include "ModuleSelectListener.h"
 
 const int debugFlag = DEBUG_MENU;
 
-DataPane::DataPane(const gcn::Rectangle& rect) : MenuPane(rect), saveGameSelectListener(NULL)
+DataPane::DataPane(const gcn::Rectangle& rect) : MenuPane(rect), moduleSelectListener(NULL)
 {
+   addActionListener(this);
 }
 
-void DataPane::setSaveGames(std::map<std::string, PlayerData*> saveGames)
+void DataPane::setSaveGames(std::vector<PlayerData*> saveGames)
 {
    clearModules();
 
-   for(std::map<std::string, PlayerData*>::iterator iter = saveGames.begin(); iter != saveGames.end(); ++iter)
+   for(std::vector<PlayerData*>::iterator iter = saveGames.begin(); iter != saveGames.end(); ++iter)
    {
-      SaveGameModule* module = new SaveGameModule(*(iter->second), iter->first);
-      module->setSaveGameSelectListener(saveGameSelectListener);
-      saveGameModules.push_back(module);
+      saveGameModules.push_back(new SaveGameModule(**iter));
    }
    
    const int moduleHeight = 200;
@@ -33,18 +32,32 @@ void DataPane::setSaveGames(std::map<std::string, PlayerData*> saveGames)
    {
       (*iter)->setHeight(moduleHeight);
       (*iter)->setWidth(getWidth());
+      (*iter)->addActionListener(this);
       
       add(*iter, 0, moduleY);
       moduleY += moduleHeight;
    }
 }
 
-void DataPane::setSaveGameSelectListener(SaveGameSelectListener* listener)
+void DataPane::setModuleSelectListener(ModuleSelectListener* listener)
 {
-   saveGameSelectListener = listener;
-   for(std::vector<SaveGameModule*>::iterator iter = saveGameModules.begin(); iter != saveGameModules.end(); ++iter)
+   moduleSelectListener = listener;
+}
+
+void DataPane::action(const gcn::ActionEvent& event)
+{
+   int numSaveGames = saveGameModules.size();
+   for(int i = 0; i < numSaveGames; ++i)
    {
-      (*iter)->setSaveGameSelectListener(listener);
+      if(saveGameModules[i] == event.getSource())
+      {
+         if(moduleSelectListener != NULL)
+         {
+            moduleSelectListener->moduleSelected(i);
+         }
+
+         break;
+      }
    }
 }
 

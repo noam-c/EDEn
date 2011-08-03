@@ -11,7 +11,6 @@ namespace edwt
 };
 
 class PlayerData;
-class SaveGameSelectListener;
 
 /**
  * A GUI element used to display summarized character information in a small area of a menu.
@@ -25,9 +24,6 @@ class SaveGameModule : public gcn::contrib::AdjustingContainer, public gcn::Mous
    
    /** Path to the save game file. */
    const std::string path;
-   
-   /** Save game selection listener. */
-   SaveGameSelectListener* saveGameSelectListener;
 
    /** The icons holding the portraits of the characters. */
    std::vector<edwt::Icon*> characterPortraits;
@@ -39,24 +35,10 @@ class SaveGameModule : public gcn::contrib::AdjustingContainer, public gcn::Mous
        * @param playerData The player data contained in the save game.
        * @param path The path to the save game file.
        */
-      SaveGameModule(PlayerData& playerData, const std::string& path);
+      SaveGameModule(PlayerData& playerData);
 
-      /**
-       * Captures mouse-click events and fires a character selection listener if needed.
-       *
-       * @param mouseEvent The mouse input event.
-       */
-      void mouseClicked(gcn::MouseEvent& mouseEvent);
-      
-      /**
-       * Sets the listener for save game selection events
-       * (when a save game in the data pane is clicked).
-       * If a listener is already set, it will be disconnected when the new one is set.
-       *
-       * @param listener The new listener to set.
-       */
-      void setSaveGameSelectListener(SaveGameSelectListener* listener);
-
+      void mouseClicked(gcn::MouseEvent& event);
+   
       /**
        * Destructor.
        */

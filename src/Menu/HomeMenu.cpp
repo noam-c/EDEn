@@ -32,7 +32,7 @@ HomeMenu::HomeMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerD
 {
    HomePane* pane = new HomePane(playerData, menuShell.getDimension());
    setMenuPane(pane);
-   pane->setCharacterSelectListener(this);
+   pane->setModuleSelectListener(this);
 }
 
 bool HomeMenu::step()
@@ -129,8 +129,10 @@ void HomeMenu::showPanel(MenuAction panelToShow)
    }
 }
 
-void HomeMenu::characterSelected(const std::string& characterName)
+void HomeMenu::moduleSelected(int index)
 {
+   const std::string& characterName = playerData.getParty()[index]->getName();
+   
    DEBUG("Character selected: %s", characterName.c_str());
    
    MenuState* nextState;

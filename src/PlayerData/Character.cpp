@@ -18,7 +18,7 @@ Character::Character(Json::Value& charToLoad)
    maxSP = charToLoad[MAX_SP_ATTRIBUTE].asInt();
    strength = charToLoad[STR_ATTRIBUTE].asInt();
    intelligence = charToLoad[INT_ATTRIBUTE].asInt();
-   equipment.load(charToLoad["equipment"]);
+   equipment.load(charToLoad["Equipment"]);
 
    parsePortraitData(charToLoad);
 }
@@ -40,6 +40,7 @@ void Character::serialize(Json::Value& characterSet)
    characterNode[MAX_SP_ATTRIBUTE] = maxSP;
    characterNode[STR_ATTRIBUTE] = strength;
    characterNode[INT_ATTRIBUTE] = intelligence;
+   equipment.serialize(characterNode["Equipment"]);
    
    serializePortraitData(characterNode);
    characterSet.append(characterNode);

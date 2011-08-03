@@ -15,11 +15,16 @@ PlayerData::PlayerData() : partyLeader(NULL)
 {
 }
 
-void PlayerData::load(const std::string& filePath)
+const std::string& PlayerData::getFilePath()
 {
-   DEBUG("Loading save file %s", filePath.c_str());
+   return filePath;
+}
 
-   std::ifstream input(filePath.c_str());
+void PlayerData::load(const std::string& path)
+{
+   DEBUG("Loading save file %s", path.c_str());
+
+   std::ifstream input(path.c_str());
    if(!input)
    {
       T_T("Failed to open save game file for reading.");
@@ -38,6 +43,8 @@ void PlayerData::load(const std::string& filePath)
    parseQuestLog(jsonRoot);
    parseInventory(jsonRoot);
    parseLocation(jsonRoot);
+   
+   filePath = path;
 }
 
 void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
@@ -57,8 +64,8 @@ void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
          DEBUG("Adding character %d...", i+1);
          Character* currCharacter = new Character(partyElement[i]);
          std::string name = currCharacter->getName();
-         charactersEncountered[name] = currCharacter;
-         party[name] = currCharacter;
+         charactersEncountered.push_back(currCharacter);
+         party.push_back(currCharacter);
       }
       DEBUG("Party loaded.");
    }
@@ -71,8 +78,8 @@ void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
          DEBUG("Adding character %d...", i+1);
          Character* currCharacter = new Character(reserveElement[i]);
          std::string name = currCharacter->getName();
-         charactersEncountered[name] = currCharacter;
-         reserveElement[name] = currCharacter;
+         charactersEncountered.push_back(currCharacter);
+         reserve.push_back(currCharacter);
       }
       DEBUG("Reserve loaded.");
    }
@@ -85,14 +92,14 @@ void PlayerData::serializeCharactersAndParty(Json::Value& outputJson)
    Json::Value partyNode(Json::arrayValue);
    for(CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
    {
-      Character* character = iter->second;
+      Character* character = *iter;
       character->serialize(partyNode);
    }
    
    Json::Value reserveNode(Json::arrayValue);
    for(CharacterList::iterator iter = reserve.begin(); iter != reserve.end(); ++iter)
    {
-      Character* character = iter->second;
+      Character* character = *iter;
       character->serialize(reserveNode);
    }
    
@@ -176,7 +183,7 @@ void PlayerData::serializeLocation(Json::Value& outputJson)
     */
 }
 
-void PlayerData::save(const std::string& filePath)
+void PlayerData::save(const std::string& path)
 {
    Json::Value playerDataNode(Json::objectValue);
    serializeCharactersAndParty(playerDataNode);
@@ -184,28 +191,30 @@ void PlayerData::save(const std::string& filePath)
    serializeQuestLog(playerDataNode);
    serializeLocation(playerDataNode);
 
-   DEBUG("Saving to file %s", filePath.c_str());
+   DEBUG("Saving to file %s", path.c_str());
 
-   std::ofstream output(filePath.c_str());
+   std::ofstream output(path.c_str());
    if(!output)
    {
       T_T("Failed to open save game file for writing.");
    }
 
    output << playerDataNode;
+   
+   filePath = path;
 }
 
 void PlayerData::addNewCharacter(Character* newCharacter)
 {
    std::string characterName = newCharacter->getName();
-   charactersEncountered[characterName] = newCharacter;
+   charactersEncountered.push_back(newCharacter);
    
    if(party.empty())
    {
       partyLeader = newCharacter;
    }
 
-   party[characterName] = newCharacter;
+   party.push_back(newCharacter);
 }
 
 Character* PlayerData::getPartyLeader() const
@@ -215,7 +224,15 @@ Character* PlayerData::getPartyLeader() const
 
 Character* PlayerData::getPartyCharacter(const std::string& characterName) const
 {
-   return party.at(characterName);
+   for(CharacterList::const_iterator iter = party.begin(); iter != party.end(); ++iter)
+   {
+      if((*iter)->getName() == characterName)
+      {
+         return *iter;
+      }
+   }
+
+   return NULL;
 }
 
 CharacterList PlayerData::getParty() const
@@ -252,7 +269,7 @@ PlayerData::~PlayerData()
 {
    for(CharacterList::iterator iter = charactersEncountered.begin(); iter != charactersEncountered.end(); ++iter)
    {
-      delete iter->second;
+      delete *iter;
    }
    
    if(rootQuest != NULL)

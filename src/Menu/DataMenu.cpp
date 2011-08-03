@@ -12,16 +12,17 @@ const int debugFlag = DEBUG_MENU;
 DataMenu::DataMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData) : MenuState(executionStack, menuShell), playerData(playerData)
 {
    DataPane* pane = new DataPane(menuShell.getDimension());
+   pane->setModuleSelectListener(this);
    setMenuPane(pane);
-   pane->setSaveGameSelectListener(this);
    refresh();
 }
 
 void DataMenu::refresh()
 {
+   saveGames.clear();
+   
    struct dirent *entry;
    DIR *dp;
-   std::map<std::string, PlayerData*> saveGames;
    
    /** \todo Extract HARDCODED path into a constant. */
    dp = opendir("data/savegames");
@@ -41,7 +42,7 @@ void DataMenu::refresh()
          std::string path = "data/savegames/" + filename;
          data->load(path);
          
-         saveGames[path] = data;
+         saveGames.push_back(data);
       }
    }
    
@@ -50,10 +51,10 @@ void DataMenu::refresh()
    ((DataPane*)menuPane)->setSaveGames(saveGames);
 }
 
-void DataMenu::saveGameSelected(const std::string& path)
+void DataMenu::moduleSelected(int index)
 {
-   selectedSavePath = path;
-   executionStack.pushState(new ConfirmState(executionStack, top, *this, "Save Game?", path));
+   selectedSavePath = saveGames[index]->getFilePath();
+   executionStack.pushState(new ConfirmState(executionStack, top, *this, "Save Game?", selectedSavePath));
 }
 
 void DataMenu::yesClicked()

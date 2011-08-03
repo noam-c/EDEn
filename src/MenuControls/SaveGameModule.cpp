@@ -2,12 +2,11 @@
 
 #include "PlayerData.h"
 #include "Character.h"
-#include "SaveGameSelectListener.h"
 #include "Container.h"
 #include "Label.h"
 #include "Icon.h"
 
-SaveGameModule::SaveGameModule(PlayerData& playerData, const std::string& path) : playerData(playerData), path(path), saveGameSelectListener(NULL)
+SaveGameModule::SaveGameModule(PlayerData& playerData) : playerData(playerData)
 {
    setNumberOfColumns(PlayerData::PARTY_SIZE);
    setHorizontalSpacing(10);
@@ -16,28 +15,21 @@ SaveGameModule::SaveGameModule(PlayerData& playerData, const std::string& path) 
    CharacterList party = playerData.getParty();
    for(CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
    {
-      edwt::Icon* characterPicture = new edwt::Icon(iter->second->getPortraitPath());
+      edwt::Icon* characterPicture = new edwt::Icon((*iter)->getPortraitPath());
 
       add(characterPicture);
       characterPortraits.push_back(characterPicture);
    }
    
    adjustContent();
-   addMouseListener(this);
    setOpaque(false);
+   
+   addMouseListener(this);
 }
 
-void SaveGameModule::mouseClicked(gcn::MouseEvent& mouseEvent)
+void SaveGameModule::mouseClicked(gcn::MouseEvent& event)
 {
-   if(saveGameSelectListener != NULL)
-   {
-      saveGameSelectListener->saveGameSelected(path);
-   }
-}
-
-void SaveGameModule::setSaveGameSelectListener(SaveGameSelectListener* listener)
-{
-   saveGameSelectListener = listener;
+   distributeActionEvent();
 }
 
 SaveGameModule::~SaveGameModule()

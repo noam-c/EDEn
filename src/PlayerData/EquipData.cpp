@@ -7,74 +7,6 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-EquipData::Slot::Slot() : equipped(NULL), numAcceptedTypes(0), acceptedTypes(NULL), enabled(true)
-{
-}
-
-void EquipData::Slot::load(Json::Value& inputJson)
-{
-   if(inputJson.isNull())
-   {
-      return;
-   }
-
-   Json::Value& equippedIdNode = inputJson["equipped"];
-   if(equippedIdNode.isInt())
-   {
-      equipped = ItemData::getInstance()->getItem(equippedIdNode.asInt());
-   }
-
-   Json::Value& acceptedTypesNode = inputJson["types"];
-   numAcceptedTypes = acceptedTypesNode.size();
-   if(numAcceptedTypes > 0)
-   {
-      acceptedTypes = new int[acceptedTypesNode.size()];
-      for(int i = 0; i < numAcceptedTypes; ++i)
-      {
-         acceptedTypes[i] = acceptedTypesNode[i].asInt();
-      }
-   }
-   
-   Json::Value& enabledNode = inputJson["enabled"];
-   if(enabledNode.isBool())
-   {
-      enabled = enabledNode.asBool();
-   }
-}
-
-void EquipData::Slot::serialize(Json::Value& slotNode)
-{
-   if(equipped != NULL)
-   {
-      slotNode["equipped"] = equipped->getId();
-   }
-   
-   if(numAcceptedTypes > 0)
-   {
-      Json::Value acceptedTypesNode(Json::arrayValue);
-      acceptedTypesNode.resize(numAcceptedTypes);
-      for(int i = 0; i < numAcceptedTypes; ++i)
-      {
-         acceptedTypesNode[i] = acceptedTypes[i];
-      }
-      
-      slotNode["types"] = acceptedTypesNode;
-   }
-   
-   if(!enabled)
-   {
-      slotNode["enabled"] = false;
-   }
-}
-
-EquipData::Slot::~Slot()
-{
-   if(acceptedTypes != NULL)
-   {
-      delete [] acceptedTypes;
-   }
-}
-
 EquipData::EquipData()
 {
 }
@@ -130,8 +62,8 @@ EquipData::~EquipData()
 {
 }
 
-const std::string EquipData::getHeadEquip() const
+EquipSlot& EquipData::getHeadEquip()
 {
-   return head.equipped != NULL ? head.equipped->getName() : "";
+   return head;
 }
 

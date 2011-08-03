@@ -16,6 +16,7 @@ set(HEADERS
   src/edwt/Icon.h
   src/edwt/Label.h
   src/edwt/ListBox.h
+  src/edwt/ModuleSelectListener.h
   src/edwt/OpenGLTTF.h
   src/edwt/StringListModel.h
   src/edwt/Tab.h
@@ -100,7 +101,6 @@ set(HEADERS
   src/LinkedListNode.h
   src/MainMenu/MainMenu.h
   src/Menu/CharacterModule.h
-  src/Menu/CharacterSelectListener.h
   src/Menu/ConfirmStateListener.h
   src/Menu/ConfirmState.h
   src/Menu/DataMenu.h
@@ -115,7 +115,6 @@ set(HEADERS
   src/Menu/MenuState.h
   src/Menu/StatusMenu.h
   src/Menu/StatusPane.h
-  src/MenuControls/SaveGameSelectListener.h
   src/MenuControls/SaveGameModule.h
   src/MenuControls/MenuAction.h
   src/MenuControls/MenuShell.h
@@ -123,6 +122,7 @@ set(HEADERS
   src/PlayerData/Character.h
   src/PlayerData/PlayerData.h
   src/PlayerData/EquipData.h
+  src/PlayerData/EquipSlot.h
   src/PlayerData/Quest.h
   src/PlayerData/SaveGameItemNames.h
   src/Point2D.h
@@ -254,6 +254,7 @@ set(SOURCES
   src/PlayerData/PlayerData.cpp
   src/PlayerData/Quest.cpp
   src/PlayerData/EquipData.cpp
+  src/PlayerData/EquipSlot.cpp
   src/ResourceLoader/Resource.cpp
   src/ResourceLoader/ResourceLoader.cpp
   src/ScriptEngine/FileScript.cpp

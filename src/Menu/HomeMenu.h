@@ -2,7 +2,7 @@
 #define MENU_H
 
 #include "MenuState.h"
-#include "CharacterSelectListener.h"
+#include "ModuleSelectListener.h"
 #include "MenuAction.h"
 #include <stack>
 #include <map>
@@ -29,7 +29,7 @@ class MenuShell;
  *
  * @author Noam Chitayat
  */
-class HomeMenu: public MenuState, public CharacterSelectListener, public gcn::ActionListener
+class HomeMenu: public MenuState, public ModuleSelectListener, public gcn::ActionListener
 {
    /** The player data */
    PlayerData& playerData;
@@ -74,9 +74,9 @@ class HomeMenu: public MenuState, public CharacterSelectListener, public gcn::Ac
       /**
        * Called when a character is selected from the home pane.
        *
-       * @param characterName the name of the character that was selected
+       * @param index the index of the character that was selected
        */
-      void characterSelected(const std::string& characterName);
+      void moduleSelected(int index);
 
       /**
        * Called when a new tab in a tabbed area is selected.

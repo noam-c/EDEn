@@ -34,7 +34,7 @@ namespace edwt
           *
           * @param listModel the list model that holds the options for this list.
           */
-         ListBox(edwt::StringListModel *listModel);
+         ListBox(gcn::ListModel *listModel);
 
          /**
           * Initialization of the list's basic properties.

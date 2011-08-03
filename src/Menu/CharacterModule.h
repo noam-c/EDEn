@@ -11,7 +11,6 @@ namespace edwt
 };
 
 class Character;
-class CharacterSelectListener;
 
 /**
  * A GUI element used to display summarized character information in a small area of a menu.
@@ -22,9 +21,6 @@ class CharacterModule : public gcn::contrib::AdjustingContainer, public gcn::Mou
 {
    /** A resizing container that displays some important character attributes. */
    gcn::contrib::AdjustingContainer* characterStats;
-
-   /** Character selection listener. */
-   CharacterSelectListener* charSelectListener;
 
    /** The name of the character displayed in this module. */
    std::string characterName;
@@ -53,15 +49,6 @@ class CharacterModule : public gcn::contrib::AdjustingContainer, public gcn::Mou
        * @param mouseEvent The mouse input event.
        */
       void mouseClicked(gcn::MouseEvent& mouseEvent);
-
-      /**
-       * Sets the listener for character selection events
-       * (when a character in the home pane is clicked).
-       * If a listener is already set, it will be disconnected when the new one is set.
-       *
-       * @param listener The new listener to set.
-       */
-      void setCharacterSelectListener(CharacterSelectListener* listener);
 
       /**
        * Sets the character for the module to summarize.

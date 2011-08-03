@@ -3,7 +3,7 @@
 
 #include "MenuState.h"
 #include "guichan.hpp"
-#include "SaveGameSelectListener.h"
+#include "ModuleSelectListener.h"
 #include "ConfirmStateListener.h"
 
 class PlayerData;
@@ -14,10 +14,12 @@ class PlayerData;
  *
  * @author Noam Chitayat
  */
-class DataMenu : public MenuState, public SaveGameSelectListener, public ConfirmStateListener
+class DataMenu : public MenuState, public ModuleSelectListener, public ConfirmStateListener
 {
    /** The player data that the menu interacts with. */
    PlayerData& playerData;
+   
+   std::vector<PlayerData*> saveGames;
    
    /** Selected save game when the confirmation dialog is raised */
    std::string selectedSavePath;
@@ -40,9 +42,9 @@ class DataMenu : public MenuState, public SaveGameSelectListener, public Confirm
       /**
        * Signals that a save game was selected in the data menu.
        *
-       * @param path The path of the save game to save over.
+       * @param index The index of the save game to save over.
        */
-      void saveGameSelected(const std::string& path);
+      void moduleSelected(int index);
       
       /**
        * 'Yes' was clicked in the confirmation dialog.
