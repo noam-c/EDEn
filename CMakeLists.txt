@@ -22,6 +22,7 @@ set(HEADERS
   src/edwt/Tab.h
   src/edwt/TabbedArea.h
   src/edwt/TabChangeListener.h
+  src/edwt/TextAlignment.h
   src/edwt/TextBox.h
   src/edwt/TextField.h
   src/edwt/Window.h
@@ -292,7 +293,7 @@ set(SOURCES
 
 SET(SOURCE_GROUP_DELIMITER "/")
 
-source_group(\\ REGULAR_EXPRESSION src/[^/]*)
+source_group("//" REGULAR_EXPRESSION src/[^/]*)
 source_group(Audio REGULAR_EXPRESSION src/Audio/.*)
 source_group(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 source_group(GameData REGULAR_EXPRESSION src/GameData/.*)

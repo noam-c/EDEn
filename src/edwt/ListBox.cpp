@@ -1,6 +1,5 @@
 #include "ListBox.h"
 #include "StringListModel.h"
-#include "SDL.h"
 #include "Sound.h"
 
 #include "DebugUtils.h"

@@ -1,5 +1,5 @@
-#ifndef __LIST_BOX_H_
-#define __LIST_BOX_H_
+#ifndef LIST_BOX_H_
+#define LIST_BOX_H_
 
 #include "guichan.hpp"
 

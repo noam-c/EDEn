@@ -1,7 +1,8 @@
-#ifndef __TEXT_BOX_H_
-#define __TEXT_BOX_H_
+#ifndef TEXT_BOX_H_
+#define TEXT_BOX_H_
 
 #include "guichan.hpp"
+#include "TextAlignment.h"
 
 namespace edwt
 {
@@ -12,21 +13,9 @@ namespace edwt
     */
    class TextBox : public gcn::TextBox
    {
-      public:
-         /** Enumeration for text box text alignment. */
-         enum TextAlign
-         {
-            /** Text is left-aligned */
-            LEFT,
-            /** Text is centered */
-            CENTER,
-            /** Text is right-aligned */
-            RIGHT
-         };
-
       private:
          /** The text alignment of this TextBox */
-         TextAlign align;
+         TextAlignment align;
 
          /** The text color of the TextBox */
          gcn::Color textColor;
@@ -59,12 +48,12 @@ namespace edwt
          /**
           * @param alignment The new text alignment of the text box.
           */
-         void setAlignment(TextAlign alignment);
+         void setAlignment(TextAlignment alignment);
 
          /**
           * @return the current text alignment of this text box.
           */
-         TextAlign getAlignment();
+         TextAlignment getAlignment();
 
          /**
           * Border drawing is overridden to prevent drawing

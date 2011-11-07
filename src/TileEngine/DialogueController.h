@@ -1,5 +1,5 @@
-#ifndef __DIALOGUE_CONTROL_H_
-#define __DIALOGUE_CONTROL_H_
+#ifndef DIALOGUE_CONTROLLER_H
+#define DIALOGUE_CONTROLLER_H
 
 #include <queue>
 #include <string>

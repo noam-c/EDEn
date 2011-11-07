@@ -81,12 +81,12 @@ namespace edwt
       showPart(scroll);
    }
 
-   void TextBox::setAlignment(TextAlign alignment)
+   void TextBox::setAlignment(TextAlignment alignment)
    {
       align = alignment;
    }
    
-   TextBox::TextAlign TextBox::getAlignment()
+   TextAlignment TextBox::getAlignment()
    {
       return align;
    }

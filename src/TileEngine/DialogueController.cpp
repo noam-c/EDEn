@@ -56,7 +56,7 @@ void DialogueController::setDialogue(LineType type)
       case NARRATE:
       {
          mainDialogue->setOpaque(false);
-         mainDialogue->setAlignment(edwt::TextBox::CENTER);
+         mainDialogue->setAlignment(edwt::CENTER);
       
          mainDialogue->setY(600/2 - mainDialogue->getHeight()/2);
          mainDialogue->setForegroundColor(gcn::Color(255,255,255));   
@@ -66,7 +66,7 @@ void DialogueController::setDialogue(LineType type)
       case SAY:
       {
          mainDialogue->setOpaque(true);
-         mainDialogue->setAlignment(edwt::TextBox::LEFT);
+         mainDialogue->setAlignment(edwt::LEFT);
       
          mainDialogue->setHeight(100);
          mainDialogue->setY(600 - mainDialogue->getHeight());
