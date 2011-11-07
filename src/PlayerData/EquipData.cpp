@@ -62,8 +62,23 @@ EquipData::~EquipData()
 {
 }
 
-EquipSlot& EquipData::getHeadEquip()
+std::vector<EquipSlot*> EquipData::getSlots()
 {
-   return head;
+   std::vector<EquipSlot*> slots;
+   slots.push_back(&head);
+   slots.push_back(&body);
+   slots.push_back(&primaryWeapon);
+   slots.push_back(&primaryOffhand);
+   slots.push_back(&secondaryWeapon);
+   slots.push_back(&secondaryOffhand);
+   slots.push_back(&garment);
+   slots.push_back(&feet);
+   
+   for(std::vector<EquipSlot>::iterator iter = accessories.begin(); iter != accessories.end(); ++iter)
+   {
+      slots.push_back(&(*iter));
+   }
+   
+   return slots;
 }
 

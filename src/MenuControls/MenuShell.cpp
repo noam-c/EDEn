@@ -49,6 +49,7 @@ MenuShell::MenuShell(PlayerData& playerData) : activeState(NULL)
 
       populateOpsList();
       actionsListBox = new edwt::ListBox(listOps);
+      actionsListBox->setBaseColor(0xFFFFFF);
       actionsListBox->adjustSize();
       actionsListBox->setWidth((getWidth() * 0.2) - 10);
       actionsListBox->setBackgroundColor(menuBackgroundColor);

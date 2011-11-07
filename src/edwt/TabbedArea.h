@@ -29,6 +29,11 @@ namespace edwt
          TabbedArea();
       
          /**
+          * Updates the children of the tabbed area.
+          */
+         virtual void logic();
+      
+         /**
           * Set the background color of the tabbed area.
           *
           * @param color The new color to use.

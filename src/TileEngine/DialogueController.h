@@ -20,7 +20,7 @@ class ScriptEngine;
  * character speech, thought, or narration of any kind.
  * When there is dialogue, it appears letter by letter at a predetermined
  * pace. Ideally, this pace would be chosen/changed by the user, but it is
- * HARDCODED for now. 
+ * HARDCODED for now until an options menu is implemented. 
  *
  * If there is already text in the main dialogue box that is not finished,
  * any new text is enqueued in preparation.
@@ -117,7 +117,7 @@ class DialogueController : public Thread
    unsigned int charsToShow;
 
    /**
-    * \todo Document.
+    * True iff the user has indicated that dialogue should flow more quickly.
     */
    bool fastMode;
 
@@ -209,7 +209,9 @@ class DialogueController : public Thread
       void narrate(const char* speech, Task* task);
 
       /**
-       * \todo Document.
+       * Enables or disables fast mode.
+       *
+       * @param enabled true iff fast mode should be turned on.
        */
       void setFastModeEnabled(bool enabled);
 

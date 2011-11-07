@@ -51,7 +51,7 @@ void DataMenu::refresh()
    ((DataPane*)menuPane)->setSaveGames(saveGames);
 }
 
-void DataMenu::moduleSelected(int index)
+void DataMenu::moduleSelected(int index, const std::string& eventId)
 {
    selectedSavePath = saveGames[index]->getFilePath();
    executionStack.pushState(new ConfirmState(executionStack, top, *this, "Save Game?", selectedSavePath));

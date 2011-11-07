@@ -24,7 +24,6 @@ namespace edwt
           * @returns true iff this container includes the widget.
           */
          bool containsWidget(const gcn::Widget* widget);
-      
    };
 };
 

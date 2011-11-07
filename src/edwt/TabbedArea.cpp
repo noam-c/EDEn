@@ -6,6 +6,11 @@ namespace edwt
 {
    TabbedArea::TabbedArea() : tabChangeListener(NULL) {}
 
+   void TabbedArea::logic()
+   {
+      logicChildren();
+   }
+
    void TabbedArea::setBackgroundColor(gcn::Color color)
    {
       gcn::TabbedArea::setBackgroundColor(color);

@@ -10,6 +10,11 @@ MenuPane::MenuPane(const gcn::Rectangle& dimension)
    setOpaque(false);
 }
 
+void MenuPane::logic()
+{
+   edwt::Container::logic();
+}
+
 void MenuPane::draw(gcn::Graphics* graphics)
 {
    if (isOpaque())

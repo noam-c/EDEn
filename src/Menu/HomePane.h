@@ -3,9 +3,13 @@
 
 #include "MenuPane.h"
 
+namespace edwt
+{
+   class ModuleSelectListener;
+};
+
 class PlayerData;
 class CharacterModule;
-class ModuleSelectListener;
 
 /**
  * The GUI elements of the home pane, which is the first menu pane that is shown.
@@ -21,7 +25,7 @@ class HomePane : public MenuPane, public gcn::ActionListener
    CharacterModule* characterModules;
    
    /** The listener for character selection events from this pane. */
-   ModuleSelectListener* moduleSelectListener;
+   edwt::ModuleSelectListener* moduleSelectListener;
 
    public:
       /**
@@ -39,7 +43,7 @@ class HomePane : public MenuPane, public gcn::ActionListener
        *
        * @param listener The new listener to set.
        */
-      void setModuleSelectListener(ModuleSelectListener* listener);
+      void setModuleSelectListener(edwt::ModuleSelectListener* listener);
 
       /**
        * Refreshes the character information displayed in the pane.

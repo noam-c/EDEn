@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "ItemList.h"
+
 class Character;
 class Quest;
 
@@ -14,7 +16,6 @@ namespace Json
 };
 
 typedef std::vector<Character*> CharacterList;
-typedef std::map<int, int> ItemList;
 
 /**
  * The exact location where the game was last saved, for reloading game state.
@@ -114,6 +115,7 @@ class PlayerData
 
 	   CharacterList getParty() const;
 	   ItemList getInventory() const;
+      ItemList getItemsByTypes(std::vector<int> acceptedTypes) const;
 
       void addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest);
       bool isQuestCompleted(const std::string& questPath);

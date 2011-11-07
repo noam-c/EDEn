@@ -47,6 +47,8 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
       titleLabel->setForegroundColor(gcn::Color(255,255,255));
       titleLabel->setFont(titleFont);
       titleLabel->adjustSize();
+      
+      actionsListBox->setBaseColor(0xFFFFFF);
 
       actionsListBox->addActionListener(this);
       actionsListBox->addSelectionListener(this);

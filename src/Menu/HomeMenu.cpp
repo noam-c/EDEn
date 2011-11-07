@@ -129,7 +129,7 @@ void HomeMenu::showPanel(MenuAction panelToShow)
    }
 }
 
-void HomeMenu::moduleSelected(int index)
+void HomeMenu::moduleSelected(int index, const std::string& eventId)
 {
    const std::string& characterName = playerData.getParty()[index]->getName();
    

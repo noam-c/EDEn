@@ -5,7 +5,11 @@
 #include <map>
 #include <vector>
 
-class ModuleSelectListener;
+namespace edwt
+{
+   class ModuleSelectListener;
+};
+
 class PlayerData;
 class SaveGameModule;
 
@@ -17,7 +21,7 @@ class SaveGameModule;
 class DataPane : public MenuPane, public gcn::ActionListener
 {
    /** The module selection listener */
-   ModuleSelectListener* moduleSelectListener;
+   edwt::ModuleSelectListener* moduleSelectListener;
    
    /** Save game GUI elements. */
    std::vector<SaveGameModule*> saveGameModules;
@@ -45,7 +49,7 @@ class DataPane : public MenuPane, public gcn::ActionListener
        */
       void setSaveGames(std::vector<PlayerData*> saveGames);
 
-      void setModuleSelectListener(ModuleSelectListener* listener);
+   void setModuleSelectListener(edwt::ModuleSelectListener* listener);
    
       /**
        * Destructor.

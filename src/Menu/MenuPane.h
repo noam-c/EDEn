@@ -24,6 +24,11 @@ class MenuPane : public edwt::Container
        * @param dimension The preferred dimensions of this menu pane.
        */
       MenuPane(const gcn::Rectangle& dimension);
+   
+      /**
+       * Updates the menu pane.
+       */
+      virtual void logic();
 
       /**
        * Draws the menu pane.

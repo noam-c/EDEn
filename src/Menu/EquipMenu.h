@@ -2,25 +2,40 @@
 #define EQUIP_MENU_H
 
 #include "MenuState.h"
+#include "guichan.hpp"
+#include "ModuleSelectListener.h"
+#include "ItemListModel.h"
 #include <string>
+#include <vector>
 
 class EquipPane;
+class EquipSlot;
 class PlayerData;
 class Character;
+class Item;
 
 /**
  * The menu state that allows the player to view and change the equipment of characters in the party.
  *
  * @author Noam Chitayat
  */
-class EquipMenu : public MenuState
+class EquipMenu : public MenuState, public edwt::ModuleSelectListener
 {
    /** The player data model to operate on. */
    PlayerData& playerData;
    
+   /** The equipment slots of the character. */
+   std::vector<EquipSlot*> equipSlots;
+   
+   /** The items that can be equipped in the selected slot. */
+   ItemListModel equippableItems;
+
+   /** The slot selected for re-equipping. */
+   EquipSlot* selectedSlot;
+   
    /** The name of the character to display equipment info for. */
    std::string characterName;
-
+   
    public:
       /**
        * Constructor.
@@ -40,6 +55,13 @@ class EquipMenu : public MenuState
        */
       void tabChanged(const std::string& tabName);
 
+      /**
+       * Fires when an equipment slot has been selected.
+       *
+       * @param index The index of the equipment slot.
+       */
+      void moduleSelected(int index, const std::string& eventId);
+   
       /**
        * Sets the character to be displayed in the menu.
        *

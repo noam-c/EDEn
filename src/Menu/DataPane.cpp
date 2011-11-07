@@ -39,7 +39,7 @@ void DataPane::setSaveGames(std::vector<PlayerData*> saveGames)
    }
 }
 
-void DataPane::setModuleSelectListener(ModuleSelectListener* listener)
+void DataPane::setModuleSelectListener(edwt::ModuleSelectListener* listener)
 {
    moduleSelectListener = listener;
 }
@@ -53,7 +53,7 @@ void DataPane::action(const gcn::ActionEvent& event)
       {
          if(moduleSelectListener != NULL)
          {
-            moduleSelectListener->moduleSelected(i);
+            moduleSelectListener->moduleSelected(i, saveGameModules[i]->getActionEventId());
          }
 
          break;

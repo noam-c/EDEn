@@ -73,9 +73,9 @@ class EquipData
       ~EquipData();
 
       /**
-       * @return The name of the item equipped to the head slot.
+       * @return The list of equipment slots on the character.
        */
-      EquipSlot& getHeadEquip();
+      std::vector<EquipSlot*> getSlots();
 };
 
 #endif

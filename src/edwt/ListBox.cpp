@@ -62,8 +62,8 @@ namespace edwt
 
       fontHeight = getRowHeight();
       gcn::Color highlight(128,128,128);
-      gcn::Color base(255,255,255);
-      graphics->setColor(base);
+      gcn::Color base = getBaseColor();
+      graphics->setColor(getBaseColor());
       
       for (i = 0; i < mListModel->getNumberOfElements(); ++i)
       {

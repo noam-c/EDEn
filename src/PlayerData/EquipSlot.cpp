@@ -3,7 +3,7 @@
 #include "Item.h"
 #include "json.h"
 
-EquipSlot::EquipSlot() : equipped(NULL), numAcceptedTypes(0), acceptedTypes(NULL), enabled(true)
+EquipSlot::EquipSlot() : equipped(NULL), acceptedTypes(NULL), enabled(true)
 {
 }
 
@@ -21,10 +21,10 @@ void EquipSlot::load(Json::Value& inputJson)
    }
    
    Json::Value& acceptedTypesNode = inputJson["types"];
-   numAcceptedTypes = acceptedTypesNode.size();
+   int numAcceptedTypes = acceptedTypesNode.size();
    if(numAcceptedTypes > 0)
    {
-      acceptedTypes = new int[acceptedTypesNode.size()];
+      acceptedTypes.resize(numAcceptedTypes);
       for(int i = 0; i < numAcceptedTypes; ++i)
       {
          acceptedTypes[i] = acceptedTypesNode[i].asInt();
@@ -45,6 +45,7 @@ void EquipSlot::serialize(Json::Value& slotNode)
       slotNode["equipped"] = equipped->getId();
    }
    
+   int numAcceptedTypes = acceptedTypes.size();
    if(numAcceptedTypes > 0)
    {
       Json::Value acceptedTypesNode(Json::arrayValue);
@@ -65,8 +66,4 @@ void EquipSlot::serialize(Json::Value& slotNode)
 
 EquipSlot::~EquipSlot()
 {
-   if(acceptedTypes != NULL)
-   {
-      delete [] acceptedTypes;
-   }
 }

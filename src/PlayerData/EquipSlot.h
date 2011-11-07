@@ -2,6 +2,7 @@
 #define EQUIP_SLOT_H
 
 #include <string>
+#include <vector>
 
 namespace Json
 {
@@ -20,12 +21,9 @@ struct EquipSlot
 {
    /** The currently equipped item (NULL if nothing is equipped). */
    const Item* equipped;
-   
-   /** The number of accepted types */
-   int numAcceptedTypes;
-   
+
    /** The list of accepted types */
-   int* acceptedTypes;
+   std::vector<int> acceptedTypes;
    
    /** 
     * True iff the slot can be used. False if it is unusable due to another piece of equipment.

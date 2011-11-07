@@ -14,7 +14,7 @@ class PlayerData;
  *
  * @author Noam Chitayat
  */
-class DataMenu : public MenuState, public ModuleSelectListener, public ConfirmStateListener
+class DataMenu : public MenuState, public edwt::ModuleSelectListener, public ConfirmStateListener
 {
    /** The player data that the menu interacts with. */
    PlayerData& playerData;
@@ -44,7 +44,7 @@ class DataMenu : public MenuState, public ModuleSelectListener, public ConfirmSt
        *
        * @param index The index of the save game to save over.
        */
-      void moduleSelected(int index);
+      void moduleSelected(int index, const std::string& eventId);
       
       /**
        * 'Yes' was clicked in the confirmation dialog.

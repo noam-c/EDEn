@@ -1,6 +1,8 @@
 #include "PlayerData.h"
 #include "SaveGameItemNames.h"
 #include "Character.h"
+#include "ItemData.h"
+#include "Item.h"
 #include "Quest.h"
 #include <fstream>
 #include "json.h"
@@ -130,7 +132,7 @@ void PlayerData::parseInventory(Json::Value& rootElement)
       int itemNum, itemQuantity;
       itemNum = (*iter)[ITEM_NUM_ATTRIBUTE].asInt();
       itemQuantity = (*iter)[ITEM_QUANTITY_ATTRIBUTE].asInt();
-      inventory[itemNum] = itemQuantity;
+      inventory.push_back(std::pair<int,int>(itemNum, itemQuantity));
    }
 }
 
@@ -242,6 +244,15 @@ CharacterList PlayerData::getParty() const
 
 ItemList PlayerData::getInventory() const
 {
+   return inventory;
+}
+
+ItemList PlayerData::getItemsByTypes(std::vector<int> acceptedTypes) const
+{
+   /**
+    * \todo This method needs to properly filter through the inventory by type,
+    * This must be done once item type is loaded into the Item structure.
+    */
    return inventory;
 }
 

@@ -20,7 +20,7 @@ HomePane::HomePane(PlayerData& playerData, const gcn::Rectangle& rect) : MenuPan
    refresh();
 }
 
-void HomePane::setModuleSelectListener(ModuleSelectListener* listener)
+void HomePane::setModuleSelectListener(edwt::ModuleSelectListener* listener)
 {
    moduleSelectListener = listener;
 }
@@ -49,7 +49,7 @@ void HomePane::action(const gcn::ActionEvent& event)
       {
          if(moduleSelectListener != NULL)
          {
-            moduleSelectListener->moduleSelected(i);
+            moduleSelectListener->moduleSelected(i, characterModules[i].getId());
          }
          
          break;

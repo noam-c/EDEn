@@ -29,7 +29,7 @@ class MenuShell;
  *
  * @author Noam Chitayat
  */
-class HomeMenu: public MenuState, public ModuleSelectListener, public gcn::ActionListener
+class HomeMenu: public MenuState, public edwt::ModuleSelectListener, public gcn::ActionListener
 {
    /** The player data */
    PlayerData& playerData;
@@ -76,7 +76,7 @@ class HomeMenu: public MenuState, public ModuleSelectListener, public gcn::Actio
        *
        * @param index the index of the character that was selected
        */
-      void moduleSelected(int index);
+      void moduleSelected(int index, const std::string& eventId);
 
       /**
        * Called when a new tab in a tabbed area is selected.

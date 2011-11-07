@@ -98,6 +98,7 @@ set(HEADERS
   src/json/json-forwards.h
   src/GameData/ItemData.h
   src/GameData/Item.h
+  src/GameData/ItemList.h
   src/LinkedListNode.h
   src/MainMenu/MainMenu.h
   src/Menu/CharacterModule.h
@@ -118,6 +119,7 @@ set(HEADERS
   src/MenuControls/SaveGameModule.h
   src/MenuControls/MenuAction.h
   src/MenuControls/MenuShell.h
+  src/MenuControls/ItemListModel.h
   src/MovementDirection.h
   src/PlayerData/Character.h
   src/PlayerData/PlayerData.h
@@ -250,6 +252,7 @@ set(SOURCES
   src/Menu/StatusPane.cpp
   src/MenuControls/SaveGameModule.cpp
   src/MenuControls/MenuShell.cpp
+  src/MenuControls/ItemListModel.cpp
   src/PlayerData/Character.cpp
   src/PlayerData/PlayerData.cpp
   src/PlayerData/Quest.cpp
