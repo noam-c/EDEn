@@ -256,6 +256,69 @@ ItemList PlayerData::getItemsByTypes(std::vector<int> acceptedTypes) const
    return inventory;
 }
 
+bool PlayerData::addToInventory(const Item* item, int quantity)
+{
+   if(quantity < 1)
+   {
+      return false;
+   }
+   
+   int itemId = item->getId();
+   for(ItemList::iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
+   {
+      if(iter->first == itemId)
+      {
+         iter->second += quantity;
+         return true;
+      }
+   }
+   
+   inventory.push_back(std::pair<int, int>(item->getId(), quantity));
+   return true;
+}
+
+bool PlayerData::removeFromInventory(const Item* item, int quantity)
+{
+   if(quantity < 1)
+   {
+      return false;
+   }
+
+   int itemId = item->getId();
+   for(ItemList::iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
+   {
+      int& existingQuantity = iter->second;
+      if(iter->first == itemId)
+      {
+         if(existingQuantity >= quantity)
+         {
+            // If the item is in the inventory in sufficient quantity, remove 'quantity' items
+            // and return true.
+            existingQuantity -= quantity;
+            if(existingQuantity == 0)
+            {
+               inventory.erase(iter);
+            }
+
+            return true;
+         }
+
+         break;
+      }
+   }
+   
+   // If the item is not in inventory, return false.
+   return false;
+}
+
+bool PlayerData::changeEquipment(Character* character, EquipSlot* slot, const Item* newEquipment)
+{
+   addToInventory(slot->equipped);
+   removeFromInventory(newEquipment);
+   slot->equipped = newEquipment;
+   return true;
+}
+
 void PlayerData::addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest)
 {
    rootQuest->addQuest(questPath, description, optionalQuest);

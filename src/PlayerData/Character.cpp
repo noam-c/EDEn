@@ -123,3 +123,15 @@ EquipData& Character::getEquipment()
 {
    return equipment;
 }
+
+bool Character::equip(EquipSlot& slot, const Item* newEquipment)
+{
+   slot.equipped = newEquipment;
+   return true;
+}
+
+bool Character::unequip(EquipSlot& slot)
+{
+   slot.equipped = NULL;
+   return true;
+}

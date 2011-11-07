@@ -8,7 +8,9 @@
 #include "ItemList.h"
 
 class Character;
+class Item;
 class Quest;
+struct EquipSlot;
 
 namespace Json
 {
@@ -116,6 +118,11 @@ class PlayerData
 	   CharacterList getParty() const;
 	   ItemList getInventory() const;
       ItemList getItemsByTypes(std::vector<int> acceptedTypes) const;
+   
+      bool addToInventory(const Item* item, int quantity = 1);
+      bool removeFromInventory(const Item* item, int quantity = 1);
+   
+      bool changeEquipment(Character* character, EquipSlot* slot, const Item* newEquipment);
 
       void addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest);
       bool isQuestCompleted(const std::string& questPath);

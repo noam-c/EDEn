@@ -39,6 +39,12 @@ void EquipMenu::moduleSelected(int index, const std::string& eventId)
       // An item was selected from the list of available equipment.
       DEBUG("Item %d selected.", index);
       
+      if(playerData.changeEquipment(playerData.getPartyCharacter(characterName), selectedSlot, equippableItems.getItemAt(index)))
+      {
+         selectedSlot = NULL;
+         equippableItems.clear();
+      }
+
       ((EquipPane*)menuPane)->invalidate();   
    }
    else if(eventId == EquipPane::SlotModuleEventId)

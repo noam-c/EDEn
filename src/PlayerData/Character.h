@@ -102,11 +102,26 @@ class Character
       int getFocus();
       int getEndurance();
       int getAgility();
-
+      
       /**
        * @return The character's equipment information.
        */
       EquipData& getEquipment();
+      
+      /**
+       * Sets a piece of equipment, and changes the character's stat bonuses accordingly.
+       *
+       * @param slot The equipment slot to equip.
+       * @param newEquipment The new piece of equipment to put into the slot.
+       */
+      bool equip(EquipSlot& slot, const Item* newEquipment);
+      
+      /**
+       * Removes a piece equipment, and changes the character's stat bonuses accordingly.
+       *
+       * @param slot The equipment slot to unequip.
+       */
+      bool unequip(EquipSlot& slot);
 };
 
 #endif
