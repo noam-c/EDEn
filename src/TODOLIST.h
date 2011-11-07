@@ -66,12 +66,3 @@ void OptionsMenuTodoList(void);
  * \todo fadeToColor function - Synchronous fading of the screen into a specific colour, with a specific alpha
  */
 void ScriptFunctionsTodoList(void);
-
-/**
- * \todo Add Academic Magic descriptions and crests from DA page
- * \todo Come up with a title for Part 2.
- * \todo Finish descriptions of Parts 1-3.
- * \todo Complete the description of the Crystal Guardian, and come up with a name for her.
- * \todo Fill in other blanks as necessary.
- */
-void StoryTodoList(void);
