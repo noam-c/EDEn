@@ -50,6 +50,7 @@ GameState::~GameState()
 {
    if(internalContainer)
    {
+      GraphicsUtil::getInstance()->setInterface(NULL);
       delete top;
    }
 }

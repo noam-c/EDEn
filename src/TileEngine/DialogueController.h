@@ -29,13 +29,35 @@ class ScriptEngine;
  *
  * @author Noam Chitayat
  */
-class DialogueController : public Thread
-{
+class DialogueController
+{  
    /** The HARDCODED time-per-letter speed */
    static const int MILLISECONDS_PER_LETTER = 100;
    
    /** Abstract the implementation of the dialogue boxes */
    typedef edwt::TextBox DialogueBox;
+
+   
+   class DialogueThread : public Thread
+   {
+      DialogueController& dialogueController;
+      
+      public:
+         /**
+          * Constructor.
+          *
+          * @param dialogueController The dialogue controller that this thread should control.
+          */
+         DialogueThread(DialogueController& dialogueController);
+         
+         /**
+          * Resumes the associated dialogue controller.
+          *
+          * @param timePassed The number of milliseconds that has passed since the last frame.
+          * @return the result of the parent dialogue controller's resumption
+          */
+         bool resume(long time);
+   };
 
    /**
     * There are two kinds of dialogues (for now); speech and narration/thought.
@@ -179,9 +201,10 @@ class DialogueController : public Thread
        * Constructor.
        *
        * @param top The top-level widget container of the current state.
+       * @param scheduler The scheduler that will manage the dialogue controller's execution.
        * @param engine The scripting engine to call with embedded scripts.
        */
-      DialogueController(edwt::Container& top, ScriptEngine& engine);
+      DialogueController(edwt::Container& top, Scheduler& scheduler, ScriptEngine& engine);
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next

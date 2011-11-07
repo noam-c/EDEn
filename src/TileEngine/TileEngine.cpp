@@ -20,15 +20,13 @@ const int TileEngine::TILE_SIZE = 32;
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName)
                                    : GameState(executionStack), currMap(NULL), xMapOffset(0), yMapOffset(0)
 {
-   scheduler = new Scheduler();
    player = new PlayerCharacter(ResourceLoader::getSpritesheet("crono"), 320, 320);
-   scriptEngine = new ScriptEngine(*this, *scheduler);
-   dialogue = new DialogueController(*top, *scriptEngine);
+   scriptEngine = new ScriptEngine(*this, scheduler);
+   dialogue = new DialogueController(*top, scheduler, *scriptEngine);
 
-   consoleWindow = new edwt::DebugConsoleWindow(top, 800, 200);
+   consoleWindow = new edwt::DebugConsoleWindow(top, top->getWidth(), top->getHeight() * 0.2);
 
    time = SDL_GetTicks();
-   scheduler->start(dialogue);
    scriptEngine->runChapterScript(chapterName);
 }
 
@@ -111,14 +109,14 @@ void TileEngine::toggleDebugConsole()
 void TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
-   npcList[npcName] = new NPC(*scriptEngine, *scheduler, npcName, sheet,
+   npcList[npcName] = new NPC(*scriptEngine, scheduler, npcName, sheet,
                               *currMap, currRegion->getName(),
                               x * TILE_SIZE, y * TILE_SIZE);
 }
 
 bool TileEngine::withinMap(int x, int y)
 {
-   return x >= 0 && x < currMap->getWidth() * TILE_SIZE && y >= 0 && currMap->getHeight() * TILE_SIZE;
+   return x >= 0 && x < currMap->getWidth() * TILE_SIZE && y >= 0 && y < currMap->getHeight() * TILE_SIZE;
 }
 
 void TileEngine::moveNPC(const std::string& npcName, int x, int y)
@@ -206,7 +204,7 @@ bool TileEngine::step()
    }
 
    bool done = false;
-   scheduler->runThreads(timePassed);
+   scheduler.runThreads(timePassed);
 
    handleInputEvents(done);
 
@@ -309,5 +307,4 @@ TileEngine::~TileEngine()
    delete dialogue;
    delete scriptEngine;
    delete player;
-   delete scheduler;
 }

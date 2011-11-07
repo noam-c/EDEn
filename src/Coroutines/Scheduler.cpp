@@ -154,11 +154,11 @@ void Scheduler::runThreads(long timePassed)
       try
       {
          // Run/resume the thread
-         bool scriptIsFinished = (*iter)->resume(timePassed);
+         bool scriptIsFinished = runningThread->resume(timePassed);
    
          if(scriptIsFinished)
          {
-            finished(*iter);
+            finished(runningThread);
          }
       }
       catch(Exception e)
@@ -178,17 +178,18 @@ void Scheduler::runThreads(long timePassed)
    while(!finishedThreads.empty())
    {
       Thread* thread = finishedThreads.front();
-      DEBUG("Removing thread %d", thread->getId());
+      DEBUG("Removing thread %d from ready list...", thread->getId());
 
       readyThreads.erase(thread);
       finishedThreads.pop();
    }
 
    // If there are any threads that are done and need deleting, delete them
-   if(!deletedThreads.empty()) DEBUG("Deleting threads.");
    while(!deletedThreads.empty())
    {
-      delete deletedThreads.front();
+      Thread* thread = deletedThreads.front();
+      DEBUG("Deleting thread %d", thread->getId());
+      delete thread;
       deletedThreads.pop();
    }
 }

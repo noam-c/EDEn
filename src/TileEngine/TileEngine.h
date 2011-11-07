@@ -3,11 +3,12 @@
 
 #include "GameState.h"
 
+#include "Scheduler.h"
+
 #include <map>
 #include <string>
 
 class NPC;
-class Scheduler;
 class ScriptEngine;
 class PlayerCharacter;
 class Region;
@@ -50,7 +51,7 @@ class TileEngine: public GameState
    ScriptEngine* scriptEngine;
 
    /** The Thread scheduler used by the tile engine. */
-   Scheduler* scheduler;
+   Scheduler scheduler;
 
    /** The player character */
    PlayerCharacter* player;

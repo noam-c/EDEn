@@ -13,8 +13,10 @@ const int debugFlag = DEBUG_RES_LOAD;
 
 //#define DRAW_PASSIBILITY
 
-XMap::XMap(const std::string& filePath)
-{
+XMap::XMap(const std::string& name, const std::string& filePath)
+{  
+   mapName = name;
+
    DEBUG("Loading map file %s", filePath.c_str());
 
    std::ifstream input(filePath.c_str());

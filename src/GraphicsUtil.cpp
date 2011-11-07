@@ -121,6 +121,7 @@ void GraphicsUtil::initGuichan()
    guiContainer->setWidth(width);
    guiContainer->setHeight(height);
    guiContainer->setVisible(true);
+   guiContainer->setOpaque(false);
    
    // Set the top-level container to be null for now
    top = NULL;

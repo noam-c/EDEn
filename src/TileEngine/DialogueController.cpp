@@ -1,16 +1,28 @@
 #include "DialogueController.h"
 #include "TextBox.h"
 #include "Container.h"
+#include "Scheduler.h"
 #include "ScriptEngine.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueController(edwt::Container& top, ScriptEngine& engine)
+DialogueController::DialogueThread::DialogueThread(DialogueController& controller) : dialogueController(controller)
+{
+}
+
+bool DialogueController::DialogueThread::resume(long timePassed)
+{
+   return dialogueController.resume(timePassed);
+}
+
+DialogueController::DialogueController(edwt::Container& top, Scheduler& scheduler, ScriptEngine& engine)
                      : scriptEngine(engine), top(top), fastMode(false), currLine(NULL)
 {
    initMainDialogue();
    clearDialogue();
+
+   scheduler.start(new DialogueThread(*this));
 }
 
 void DialogueController::initMainDialogue()

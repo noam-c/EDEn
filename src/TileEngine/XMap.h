@@ -24,7 +24,7 @@ class XMap : public Map
        * @param in The region file stream, currently pointing at the
        *           beginning of this Map's data.
        */
-      XMap(const std::string& filePath);
+      XMap(const std::string& name, const std::string& filePath);
 };
 
 #endif

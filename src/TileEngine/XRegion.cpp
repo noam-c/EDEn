@@ -38,7 +38,7 @@ void XRegion::load(const char* path)
       std::string mapFile(std::string(path) + *iter);
       try
       {
-         Map* nextMap = new XMap(mapFile);
+         Map* nextMap = new XMap(iter->substr(0, iter->length() - 4), mapFile);
          areas[nextMap->getName()] = nextMap;
       }
       catch(Exception e)

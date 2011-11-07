@@ -5,7 +5,7 @@
 
 const int debugFlag = DEBUG_RES_LOAD;
 
-Region::Region(const ResourceKey& name) : Resource(name)
+Region::Region(const ResourceKey& name) : Resource(name), regionName(name)
 {
 }
 
