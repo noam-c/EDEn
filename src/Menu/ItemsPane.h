@@ -2,13 +2,14 @@
 #define ITEMS_PANE_H_
 
 #include "MenuPane.h"
+#include "ListBox.h"
 
 class ItemListModel;
 class PlayerData;
 
 namespace edwt
 {
-   class ListBox;
+   class ModuleSelectListener;
 };
 
 /**
@@ -16,30 +17,52 @@ namespace edwt
  *
  * @author Noam Chitayat
  */
-class ItemsPane : public MenuPane
+class ItemsPane : public MenuPane, public gcn::ActionListener
 {
-   /** The player data with the inventory to display. */
-   PlayerData& playerData;
-
-   /** A listbox containing all the items in the inventory. */
-   edwt::ListBox* listBox;
+   bool invalidated;
 
    /** The model holding the item list. */
-   ItemListModel* itemsList;
+   ItemListModel& itemListModel;
 
+   /** A listbox containing all the items in the inventory. */
+   edwt::ListBox listBox;
+   
+   /** The module selection listener to call when an item is selected. */
+   edwt::ModuleSelectListener* moduleSelectListener;
+   
+   /**
+    * Refresh of the list of items from the player data.
+    */
+   void refresh();
+
+   protected:
+      void logic();
+   
    public:
+      /** The event ID for an item list selection event. */
+      static const std::string ItemListEventId;
+
       /**
        * Constructor.
        *
-       * @param playerData The player data to display in the pane.
+       * @param itemList The items display in the pane.
        * @param rect The preferred dimensions of this pane.
        */
-      ItemsPane(PlayerData& playerData, const gcn::Rectangle& rect);
+      ItemsPane(ItemListModel& itemList, const gcn::Rectangle& rect);
+      
+      void setModuleSelectListener(edwt::ModuleSelectListener* listener);
 
       /**
-       * Refresh the list of items from the player data.
+       * Response to UI actions.
+       *
+       * @param event The GUI action event.
        */
-      void refresh();
+      void action(const gcn::ActionEvent& event);
+
+      /**
+       * Request a refresh of the list of items from the player data.
+       */
+      void invalidate();
 
       /**
        * Destructor.

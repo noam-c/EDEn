@@ -67,6 +67,11 @@ class EquipPane : public MenuPane, public gcn::ActionListener
 
       void setModuleSelectListener(edwt::ModuleSelectListener* listener);
    
+      /**
+       * Response to UI actions.
+       *
+       * @param event The GUI action event.
+       */
       void action(const gcn::ActionEvent& event);
    
       /**

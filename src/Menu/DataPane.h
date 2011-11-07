@@ -49,7 +49,7 @@ class DataPane : public MenuPane, public gcn::ActionListener
        */
       void setSaveGames(std::vector<PlayerData*> saveGames);
 
-   void setModuleSelectListener(edwt::ModuleSelectListener* listener);
+      void setModuleSelectListener(edwt::ModuleSelectListener* listener);
    
       /**
        * Destructor.

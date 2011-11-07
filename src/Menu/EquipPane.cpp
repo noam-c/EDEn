@@ -9,7 +9,7 @@
 const int debugFlag = DEBUG_MENU;
 
 const std::string EquipPane::SlotModuleEventId = "SlotModuleEvent";
-const std::string EquipPane::ItemListEventId = "ItemListEvent";
+const std::string EquipPane::ItemListEventId = "EquipItemListEvent";
 
 EquipPane::EquipSlotModule::EquipSlotModule()
 {
@@ -26,7 +26,7 @@ void EquipPane::EquipSlotModule::mouseClicked(gcn::MouseEvent& event)
    distributeActionEvent();
 }
 
-EquipPane::EquipPane(std::vector<EquipSlot*>& slotList, ItemListModel& equippableItemList, const gcn::Rectangle& rect) : MenuPane(rect), invalidated(false), equipSlots(slotList), equippableItems(equippableItemList)
+EquipPane::EquipPane(std::vector<EquipSlot*>& slotList, ItemListModel& equippableItemList, const gcn::Rectangle& rect) : MenuPane(rect), invalidated(false), equipSlots(slotList), equippableItems(equippableItemList), itemListBox(&equippableItemList)
 {
    slotContainer.setNumberOfColumns(1);
    slotContainer.setHeight(rect.height / 2);
@@ -35,8 +35,8 @@ EquipPane::EquipPane(std::vector<EquipSlot*>& slotList, ItemListModel& equippabl
    itemListBox.setColumnPadding(5);
    itemListBox.setBaseColor(0xFFFFFF);
    itemListBox.setActionEventId(ItemListEventId);
+   itemListBox.addActionListener(this);
    itemListBox.setOpaque(false);
-   itemListBox.setListModel(&equippableItems);
 
    add(&slotContainer);
    add(&itemListBox, 0, rect.height / 2);

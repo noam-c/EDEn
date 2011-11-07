@@ -4,39 +4,62 @@
 #include "PlayerData.h"
 #include "ListBox.h"
 #include "ItemListModel.h"
-#include <string>
+#include "ModuleSelectListener.h"
+
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_MENU;
 
+const std::string ItemsPane::ItemListEventId = "ItemListEvent";
 
-ItemsPane::ItemsPane(PlayerData& playerData, const gcn::Rectangle& rect) : MenuPane(rect), playerData(playerData)
+ItemsPane::ItemsPane(ItemListModel& itemList, const gcn::Rectangle& rect) : MenuPane(rect), itemListModel(itemList), listBox(&itemList)
 {
-   itemsList = new ItemListModel();
+   listBox.setNumColumns(2);
+   listBox.setMinColumnWidth(0, 200);
+   listBox.setMinColumnWidth(1, 20);
+   listBox.setColumnAlignment(0, edwt::LEFT);
+   listBox.setColumnAlignment(1, edwt::RIGHT);
+   listBox.setActionEventId(ItemListEventId);
+   listBox.addActionListener(this);
 
-   listBox = new edwt::ListBox(itemsList);
-   listBox->setNumColumns(2);
-   listBox->setMinColumnWidth(0, 100);
-   listBox->setMinColumnWidth(1, 20);
-   listBox->setColumnAlignment(0, edwt::LEFT);
-   listBox->setColumnAlignment(1, edwt::RIGHT);
-
-   add(listBox);
+   add(&listBox);
    
    refresh();
 }
 
+void ItemsPane::setModuleSelectListener(edwt::ModuleSelectListener* listener)
+{
+   moduleSelectListener = listener;
+}
+
+void ItemsPane::action(const gcn::ActionEvent& event)
+{
+   if(event.getId() == ItemListEventId)
+   {
+      moduleSelectListener->moduleSelected(listBox.getSelected(), ItemListEventId);
+   }
+}
+
+void ItemsPane::logic()
+{
+   MenuPane::logic();
+   if(invalidated)
+   {
+      refresh();
+   }
+}
+
+void ItemsPane::invalidate()
+{
+   invalidated = true;
+}
+
 void ItemsPane::refresh()
 {
-   ItemList inventory = playerData.getInventory();
-   itemsList->setItems(inventory);
-   
-   listBox->adjustSize();
-   listBox->adjustWidth();
+   listBox.adjustSize();
+   listBox.adjustWidth();
 }
 
 ItemsPane::~ItemsPane()
 {
-   delete listBox;
-   delete itemsList;
 }

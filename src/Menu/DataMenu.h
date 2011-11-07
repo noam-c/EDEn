@@ -2,9 +2,10 @@
 #define DATA_MENU_H
 
 #include "MenuState.h"
-#include "guichan.hpp"
 #include "ModuleSelectListener.h"
 #include "ConfirmStateListener.h"
+
+#include <vector>
 
 class PlayerData;
 

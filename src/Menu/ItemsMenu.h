@@ -2,6 +2,8 @@
 #define ITEMS_MENU_H
 
 #include "MenuState.h"
+#include "ModuleSelectListener.h"
+#include "ItemListModel.h"
 
 class PlayerData;
 
@@ -11,10 +13,13 @@ class PlayerData;
  *
  * @author Noam Chitayat
  */
-class ItemsMenu : public MenuState
+class ItemsMenu : public MenuState, public edwt::ModuleSelectListener
 {
    /** The player data that the menu interacts with. */
    PlayerData& playerData;
+   
+   /** The list of items in the player's inventory. */
+   ItemListModel inventoryList;
    
    public:
       /**
@@ -26,6 +31,13 @@ class ItemsMenu : public MenuState
        */
       ItemsMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData);
 
+      /**
+       * Signals that an item was selected in the data menu.
+       *
+       * @param index The index of the item in the inventory.
+       */
+      void moduleSelected(int index, const std::string& eventId);
+   
       /**
        * Destructor.
        */
