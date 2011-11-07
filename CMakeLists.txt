@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.5)
 
-project( ExodusDraconis )
+project( eden )
 
 set(HEADERS
   src/Audio/Music.h
@@ -334,10 +334,10 @@ add_definitions(
   -D_CONSOLE
 )
 
-add_executable( ExodusDraconis ${SOURCES} ${HEADERS} )
+add_executable( eden ${SOURCES} ${HEADERS} )
 
 IF(WIN32)
-	target_link_libraries( ExodusDraconis SDLmain lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
+	target_link_libraries( eden SDLmain lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
 ELSE(WIN32)
 	INCLUDE(FindOpenGL)
 	INCLUDE(FindSDL)
@@ -357,6 +357,6 @@ ELSE(WIN32)
 
 	include_directories(BEFORE SYSTEM ${INCL_HEADERS})
 
-	target_link_libraries( ExodusDraconis ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )
+	target_link_libraries( eden ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )
 ENDIF(WIN32)
 
