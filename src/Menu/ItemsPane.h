@@ -3,12 +3,12 @@
 
 #include "MenuPane.h"
 
+class ItemListModel;
 class PlayerData;
 
 namespace edwt
 {
    class ListBox;
-   class StringListModel;
 };
 
 /**
@@ -25,7 +25,7 @@ class ItemsPane : public MenuPane
    edwt::ListBox* listBox;
 
    /** The model holding the item list. */
-   edwt::StringListModel* itemsList;
+   ItemListModel* itemsList;
 
    public:
       /**
