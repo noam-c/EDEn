@@ -2,6 +2,7 @@
 #define LIST_BOX_H_
 
 #include "guichan.hpp"
+#include "TextAlignment.h"
 
 class Sound;
 
@@ -19,9 +20,24 @@ namespace edwt
    {
       /** Tells the GUI whether or not to draw the list box transparently */
       bool mOpaque;
-
+      
       /** The padding between items in the list */
-      unsigned int mPadding;
+      unsigned int mRowPadding;
+      
+      /** The padding between columns in the list */
+      unsigned int mColumnPadding;
+      
+      /** The number of columns in the list */
+      unsigned int mColumns;
+      
+      /** The widths of the list columns */
+      std::vector<unsigned int> mColumnWidths;
+      
+      /** The widths of the list columns */
+      std::vector<unsigned int> mMinColumnWidths;
+      
+      /** The widths of the list columns */
+      std::vector<TextAlignment> mColumnAlignments;
 
       public:
          /**
@@ -40,7 +56,70 @@ namespace edwt
           * Initialization of the list's basic properties.
           */
          void init();
+         
+         /**
+          * @return The number of columns in this list box.
+          */
+         unsigned int getNumColumns();
+         
+         /**
+          * Sets the number of columns in this list box.
+          *
+          * @param numColumns The number of columns that this list box will display.
+          * @throws gcn::Exception if numColumns is 0, since a list cannot have no columns.
+          */
+         void setNumColumns(unsigned int numColumns);
 
+         /**
+          * Gets the minimum width of a specified column.
+          *
+          * @param column The column to check.
+          * @return The minimum width of the specified column.
+          * @throws gcn::Exception if the specified column is higher than the number of columns set.
+          */
+         unsigned int getMinColumnWidth(unsigned int column);
+
+         /**
+          * Sets the minimum width of a specified column.
+          *
+          * @param column The column to change.
+          * @param minWidth The minimum width that the specified column should take.
+          * @throws gcn::Exception if the specified column is higher than the number of columns set.
+          */
+         void setMinColumnWidth(unsigned int column, unsigned int minWidth);
+
+         /**
+          * Sets the minimum width of the list.
+          *
+          * @param minWidth The minimum width that the list should take.
+          */
+         void setMinWidth(unsigned int minWidth);
+      
+         /**
+          * Gets the alignment of a specified column.
+          *
+          * @param column The column to check.
+          * @return The alignment of the specified column.
+          * @throws gcn::Exception if the specified column is higher than the number of columns set.
+          */
+         TextAlignment getColumnAlignment(unsigned int column);
+         
+         /**
+          * Sets the minimum width of a specified column.
+          *
+          * @param column The column to change.
+          * @param alignment The text alignment that the specified column should take.
+          * @throws gcn::Exception if the specified column is higher than the number of columns set.
+          */
+         void setColumnAlignment(unsigned int column, TextAlignment alignment);
+         
+         /**
+          * Sets the alignment of the list.
+          *
+          * @param alignment The alignment that the list should take.
+          */
+         void setAlignment(TextAlignment alignment);
+         
          /**
           * Draw the list box. 
           * Overridden to provide special drawing properties, including transparency.
@@ -55,20 +134,34 @@ namespace edwt
          * @return The height of a row.
          */
         virtual unsigned int getRowHeight() const;
-
-        /**
-         * Gets the padding between items.
-         *
-         * @return The padding between items.
-         */
-        virtual unsigned int getRowPadding() const;
-
-        /**
-         * Sets the padding between items.
-         *
-         * @param padding The new padding to set (in pixels)
-         */
-        virtual void setRowPadding(unsigned int padding);
+      
+         /**
+          * Gets the padding between items.
+          *
+          * @return The padding between items.
+          */
+         virtual unsigned int getRowPadding() const;
+         
+         /**
+          * Sets the padding between items.
+          *
+          * @param padding The new row padding to set (in pixels)
+          */
+         virtual void setRowPadding(unsigned int padding);
+         
+         /**
+          * Gets the padding between columns.
+          *
+          * @return The padding between columns.
+          */
+         virtual unsigned int getColumnPadding() const;
+         
+         /**
+          * Sets the padding between columns.
+          *
+          * @param padding The new column padding to set (in pixels)
+          */
+         virtual void setColumnPadding(unsigned int padding);
 
          /**
           * The mouse moved. Update the list box selection accordingly.

@@ -1,6 +1,7 @@
 #include "ListBox.h"
 #include "StringListModel.h"
 #include "Sound.h"
+#include <sstream>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_EDWT;
@@ -20,10 +21,89 @@ namespace edwt
    void ListBox::init()
    {
       mOpaque = true;
-      mPadding = 0;
+      mRowPadding = 0;
+      mColumnPadding = 0;
+      setNumColumns(1);
+      setColumnAlignment(0, LEFT);
+
       setWrappingEnabled(true);
    }
+   
+   unsigned int ListBox::getNumColumns()
+   {
+      return mColumns;
+   }
+   
+   void ListBox::setNumColumns(unsigned int numColumns)
+   {
+      if(numColumns == 0)
+      {
+         throw GCN_EXCEPTION("ListBox needs to have at least one column.");
+      }
 
+      mColumns = numColumns;
+      mMinColumnWidths.resize(numColumns);
+      mColumnAlignments.resize(numColumns);
+   }
+   
+   unsigned int ListBox::getMinColumnWidth(unsigned int column)
+   {
+      if (column >= mColumns)
+      {
+         throw GCN_EXCEPTION("ListBox column index out of bounds.");
+      }
+      else
+      {
+         return mMinColumnWidths[column];
+      }
+   }
+   
+   void ListBox::setMinColumnWidth(unsigned int column, unsigned int minWidth)
+   {
+      if (column >= mColumns)
+      {
+         throw GCN_EXCEPTION("ListBox column index out of bounds.");
+      }
+      else
+      {
+         mMinColumnWidths[column] = minWidth;
+      }
+   }
+   
+   void ListBox::setMinWidth(unsigned int minWidth)
+   {
+      setMinColumnWidth(0, minWidth);
+   }
+   
+   TextAlignment ListBox::getColumnAlignment(unsigned int column)
+   {
+      if (column >= mColumns)
+      {
+         throw GCN_EXCEPTION("ListBox column index out of bounds.");
+      }
+      else
+      {
+         return mColumnAlignments[column];
+      }
+   }
+   
+   void ListBox::setColumnAlignment(unsigned int column, TextAlignment alignment)
+   {
+      if (column >= mColumns)
+      {
+         throw GCN_EXCEPTION("ListBox column index out of bounds.");
+      }
+      else
+      {
+         mColumnAlignments[column] = alignment;
+      }
+   }
+   
+   void ListBox::setAlignment(TextAlignment alignment)
+   {
+      setColumnAlignment(0, alignment);
+   }
+   
    void ListBox::draw(gcn::Graphics* graphics)
    {
       if(mOpaque)
@@ -62,20 +142,54 @@ namespace edwt
       fontHeight = getRowHeight();
       gcn::Color highlight(128,128,128);
       gcn::Color base = getBaseColor();
-      graphics->setColor(getBaseColor());
-      
+      graphics->setColor(base);
+
       for (i = 0; i < mListModel->getNumberOfElements(); ++i)
       {
-         const std::string& currString = mListModel->getElementAt(i);
-         int xloc = 1 + (getWidth() - getFont()->getWidth(currString))/2;
+         int columnBeginning = 0;
+         std::string elementText = mListModel->getElementAt(i);
+         std::stringstream columnText(elementText);
+         
+         for(unsigned int j = 0; j < mColumns; ++j)
+         {
+            std::string currString;
+            if(!std::getline(columnText, currString, '\t')) break;
 
-         if (i == mSelected)
-         {  graphics->setColor(highlight);
-            graphics->drawText(currString, xloc, y);
-            graphics->setColor(base);
-         }
-         else
-         {  graphics->drawText(currString, xloc, y);
+            int columnWidth = mColumnWidths[j] > mMinColumnWidths[j] ? mColumnWidths[j] : mMinColumnWidths[j];
+            int xloc;
+            
+            switch(mColumnAlignments[j])
+            {
+               case RIGHT:
+               {
+                  xloc = columnBeginning + 1 + columnWidth - getFont()->getWidth(currString);
+                  break;
+               }
+               case CENTER:
+               {
+                  xloc = columnBeginning + 1 + (columnWidth - getFont()->getWidth(currString))/2;
+                  break;
+               }
+               case LEFT:
+               default:
+               {
+                  xloc = columnBeginning + 1;
+                  break;
+               }
+            }
+            
+            if (i == mSelected)
+            {
+               graphics->setColor(highlight);
+               graphics->drawText(currString, xloc, y);
+               graphics->setColor(base);
+            }
+            else
+            {
+               graphics->drawText(currString, xloc, y);
+            }
+
+            columnBeginning += columnWidth + getColumnPadding();
          }
 
          y += fontHeight;
@@ -86,15 +200,25 @@ namespace edwt
    {
       return gcn::ListBox::getRowHeight() + getRowPadding();
    }
-
+   
    unsigned int ListBox::getRowPadding() const
    {
-      return mPadding;
+      return mRowPadding;
    }
-
+   
    void ListBox::setRowPadding(unsigned int padding)
    {
-      mPadding = padding;
+      mRowPadding = padding;
+   }
+   
+   unsigned int ListBox::getColumnPadding() const
+   {
+      return mColumnPadding;
+   }
+   
+   void ListBox::setColumnPadding(unsigned int padding)
+   {
+      mColumnPadding = padding;
    }
 
    bool ListBox::isOpaque()
@@ -109,19 +233,57 @@ namespace edwt
 
    void ListBox::adjustWidth()
    {
-      //Find the maximum string width needed in the list box, and set the width to that       
-      int maxWidth = 0;
-      int itemWidth = 0;
+      mColumnWidths.clear();
+      mColumnWidths.resize(mColumns);
+
+      // Find the maximum string width needed in each column, and set the widths to those maxima
 
       gcn::Font* font = getFont();
 
-      //At each iteration, get the next item on the list and find its width relative to the font in use
+      // At each iteration, get the next item on the list and find its width relative to the font in use
       for (int i = 0; i < mListModel->getNumberOfElements(); ++i)
       {
-         itemWidth = font->getWidth(mListModel->getElementAt(i));
-         if(maxWidth < itemWidth)  {  maxWidth = itemWidth;  }
+         std::stringstream itemStream(mListModel->getElementAt(i));
+         std::vector<unsigned int>::iterator iter = mColumnWidths.begin();
+         std::vector<unsigned int>::iterator minWidthIter = mMinColumnWidths.begin();
+
+         // Split the string into columns based on the presence of tab characters.
+         std::string column;
+         while(iter != mColumnWidths.end() && std::getline(itemStream, column, '\t'))
+         {
+            // Get the minimum width of the column.
+            int minWidth = *minWidthIter;
+            
+            // Get the width of the column relative to the font.
+            int itemWidth = font->getWidth(column);
+
+            // If this item's width in the current column is larger, then set a new maximum.
+            int currWidth = *iter;
+
+            // If the current width is smaller than the item width, set the current maximum to the item width.
+            currWidth = itemWidth < currWidth ? currWidth : itemWidth;
+            
+            // If the current width is smaller than the minimum width, set the current maximum to the minimum width.
+            currWidth = minWidth < currWidth ? currWidth : minWidth;
+            
+            // Set the column's width to the current maximum. 
+            *iter = currWidth;
+            ++iter;
+            ++minWidthIter;
+         }
       }
 
+      // Accumulate all the maximum column widths
+      int maxWidth = 0;
+      for(std::vector<unsigned int>::iterator iter = mColumnWidths.begin(); iter != mColumnWidths.end(); ++iter)
+      {
+         maxWidth += *iter;
+      }
+      
+      // Add the width of all the padding
+      maxWidth += getColumnPadding() * (mColumns - 1);
+
+      // Set the new total list box width
       setWidth(maxWidth);
    }
    

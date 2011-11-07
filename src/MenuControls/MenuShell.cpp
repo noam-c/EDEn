@@ -50,10 +50,12 @@ MenuShell::MenuShell(PlayerData& playerData) : activeState(NULL)
       populateOpsList();
       actionsListBox = new edwt::ListBox(listOps);
       actionsListBox->setBaseColor(0xFFFFFF);
+      actionsListBox->setMinWidth((getWidth() * 0.2) - 10);
+      actionsListBox->setAlignment(edwt::RIGHT);
       actionsListBox->adjustSize();
-      actionsListBox->setWidth((getWidth() * 0.2) - 10);
+      actionsListBox->adjustWidth();
       actionsListBox->setBackgroundColor(menuBackgroundColor);
-      actionsListBox->setOpaque(true);
+      actionsListBox->setOpaque(false);
       actionsListBox->setRowPadding(5);
       actionsListBox->addActionListener(this);
       actionsListBox->addSelectionListener(this);

@@ -56,6 +56,7 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
 
       actionsListBox->adjustSize();
       actionsListBox->adjustWidth();
+      actionsListBox->setAlignment(edwt::CENTER);
       actionsListBox->setOpaque(false);
 
       chooseSound = ResourceLoader::getSound("choose");

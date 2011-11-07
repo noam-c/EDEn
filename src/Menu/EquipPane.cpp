@@ -31,6 +31,8 @@ EquipPane::EquipPane(std::vector<EquipSlot*>& slotList, ItemListModel& equippabl
    slotContainer.setNumberOfColumns(1);
    slotContainer.setHeight(rect.height / 2);
 
+   itemListBox.setNumColumns(2);
+   itemListBox.setColumnPadding(5);
    itemListBox.setBaseColor(0xFFFFFF);
    itemListBox.setActionEventId(ItemListEventId);
    itemListBox.setOpaque(false);
