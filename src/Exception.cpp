@@ -1,13 +1,6 @@
 #include "Exception.h"
 #include <sstream>
 
-Exception::Exception()
-       : function(""),
-         line(-1),
-         message("")
-{
-}
-
 Exception::Exception(const std::string& function,
        int line, const std::string& message)
        : function(function),

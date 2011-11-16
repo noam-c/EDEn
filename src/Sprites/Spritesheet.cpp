@@ -248,7 +248,7 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    SpriteFrame f = frameList[frameIndex];
 
    /**
-    * \todo Maybe we can do all these calculations when the frames are initialized
+    * \todo We can do all these calculations when the frames are initialized
     *       in order to optimize the drawing code a bit more!
     */
    int frameHeight = f.bottom - f.top;
@@ -258,7 +258,7 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    float frameBottom = f.bottom / float(height);
    float frameLeft = f.left / float(width);
    float frameRight = f.right / float(width);
-
+   
    float destLeft = float(x);
    float destBottom = float(y);
    float destRight = destLeft + frameWidth;
@@ -267,19 +267,21 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    // NOTE: Alpha testing doesn't do transparency; it either draws a pixel or it doesn't
    // If we want fades or something like that, we would need to use alpha blending
 
-   // Retain old alpha test state, function and threshold
-   int oldAlphaFunction;
-   float oldAlphaThreshold;
-   glGetIntegerv(GL_ALPHA_TEST_FUNC, &oldAlphaFunction);
-   glGetFloatv(GL_ALPHA_TEST_REF, &oldAlphaThreshold);
+   /** \todo Alpha testing is currently bugged. Investigate and fix. */
 
-   bool alphaTestEnabled = glIsEnabled(GL_ALPHA_TEST);
+   // Retain old alpha test state, function and threshold
+   //int oldAlphaFunction;
+   //float oldAlphaThreshold;
+   //glGetIntegerv(GL_ALPHA_TEST_FUNC, &oldAlphaFunction);
+   //glGetFloatv(GL_ALPHA_TEST_REF, &oldAlphaThreshold);
+
+   //bool alphaTestEnabled = glIsEnabled(GL_ALPHA_TEST);
 
    // Enable alpha testing
-   glEnable(GL_ALPHA_TEST);
+   //glEnable(GL_ALPHA_TEST);
 
    // Set the alpha blending evaluation function
-   glAlphaFunc(GL_GREATER, 0.1);
+   //glAlphaFunc(GL_GREATER, 0.1);
 
    glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -291,8 +293,8 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    glEnd();
 
    // We're done with alpha testing, return to default state
-   glAlphaFunc(oldAlphaFunction, oldAlphaThreshold);
-   if(!alphaTestEnabled) glDisable(GL_ALPHA_TEST);
+   //glAlphaFunc(oldAlphaFunction, oldAlphaThreshold);
+   //if(!alphaTestEnabled) glDisable(GL_ALPHA_TEST);
 }
 
 size_t Spritesheet::getSize()

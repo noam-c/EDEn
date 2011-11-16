@@ -33,17 +33,17 @@ int main (int argc, char *argv[])
       ResourceLoader::freeAll();
       GraphicsUtil::destroy();
    }
-   catch (gcn::Exception e)
+   catch (gcn::Exception& e)
    {
       DEBUG("Uncaught Guichan exception: \n%s", e.getMessage().c_str());
       return 1;
    }
-   catch(Exception e)
+   catch(Exception& e)
    {
       DEBUG("Uncaught game exception: \n%s", e.getMessage().c_str());
       return 1;
    }
-   catch(std::exception e)
+   catch(std::exception& e)
    {
       DEBUG("Uncaught STL exception: \n%s", e.what());
       return 1;
@@ -54,5 +54,5 @@ int main (int argc, char *argv[])
       return 1;
    }
 
-   return 0;
+	return 0;
 }

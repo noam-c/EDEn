@@ -1,0 +1,8 @@
+frame stand_down 7 0 37 65
+frame stand_up 7 66 37 126
+frame stand_left 0 127 38 193
+frame stand_right 7 194 45 256
+anim walk_down stand_down
+anim walk_up stand_up
+anim walk_left stand_left
+anim walk_right stand_right
