@@ -38,6 +38,9 @@ namespace edwt
       
       /** The widths of the list columns */
       std::vector<TextAlignment> mColumnAlignments;
+      
+      /** The color to use when drawing a selected (highlighted) element */
+      gcn::Color highlightColor;
 
       public:
          /**
@@ -194,6 +197,18 @@ namespace edwt
           * @param selected The index of the option that should be selected.
           */
          void setSelected(int selected);
+      
+         /**
+          * Sets the highlight color.
+          *
+          * @param color The highlight color.
+          */
+         void setHighlightColor(const gcn::Color& color);
+         
+         /**
+          * Gets the highlight color.
+          */
+         const gcn::Color& getHighlightColor() const;
    };
 };
 

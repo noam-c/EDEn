@@ -16,11 +16,10 @@ Most of the code is Copyright 2011 Noam Chitayat. Contributors retain copyright 
 
 The EDEn source is released under the terms of the Ruby License, with the following exceptions:
 
-	- Code in the guichan folder or under the gcn namespace is part of the Guichan GUI library. Guichan is copyright 2004-2011 Olof Naessén and Per Larsson. All rights reserved. The Guichan source code is made available by the developers under the terms of the 3-clause BSD license.
-
-Art and audio assets are copyright their creators. Specifically:
-	- Schroeder's Failure, by Trash80, is used as a title theme
-	- Sprite artwork is from Chrono Trigger, copyright Square Enix. All rights reserved.
+	Code in the guichan folder or under the gcn namespace is part of the Guichan GUI library version 0.8.2.
+	Guichan is copyright 2004-2011 Olof Naessén and Per Larsson. All rights reserved. 
+ 
+Art and audio assets are copyright their creators. For specific asset credits, please refer to ASSETS.txt.
 
 For the full text of the Ruby license in use, please refer to the LICENSE.txt file.
 

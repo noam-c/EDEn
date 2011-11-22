@@ -33,22 +33,24 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
 {
    try
    {
-      bg = new gcn::Icon("data/images/splash.bmp");
+      bg = new gcn::Icon("data/images/splash.jpg");
+      bg->setDimension(top->getDimension());
       top->add(bg,0,0);
 
       populateOpsList();
 
-      titleLabel = new edwt::Label("Exodus Draconis");
+      titleLabel = new edwt::Label("Exodus Draconis Engine");
       actionsListBox = new edwt::ListBox(titleOps);
 
       titleFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 64);
       actionsFont = new edwt::OpenGLTrueTypeFont("data/fonts/FairyDustB.ttf", 32);
 
-      titleLabel->setForegroundColor(gcn::Color(255,255,255));
+      titleLabel->setForegroundColor(0x666655);
       titleLabel->setFont(titleFont);
       titleLabel->adjustSize();
       
-      actionsListBox->setBaseColor(0xFFFFFF);
+      actionsListBox->setBaseColor(0xBBBBAA);
+      actionsListBox->setHighlightColor(0x333322);
 
       actionsListBox->addActionListener(this);
       actionsListBox->addSelectionListener(this);

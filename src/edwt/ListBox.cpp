@@ -27,6 +27,7 @@ namespace edwt
       setColumnAlignment(0, LEFT);
 
       setWrappingEnabled(true);
+      setHighlightColor(gcn::Color(128,128,128));
    }
    
    unsigned int ListBox::getNumColumns()
@@ -140,7 +141,7 @@ namespace edwt
       int y = getRowPadding() >> 1;
 
       fontHeight = getRowHeight();
-      gcn::Color highlight(128,128,128);
+      gcn::Color highlight = getHighlightColor();
       gcn::Color base = getBaseColor();
       graphics->setColor(base);
 
@@ -299,4 +300,15 @@ namespace edwt
          gcn::ListBox::setSelected(selected);
       }
    }
+   
+   void ListBox::setHighlightColor(const gcn::Color& color)
+   {
+      highlightColor = color;
+   }
+   
+   const gcn::Color& ListBox::getHighlightColor() const
+   {
+      return highlightColor;
+   }
+
 };

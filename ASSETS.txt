@@ -1,0 +1,10 @@
+Below is a list of all third-party art assets currently used by EDEn, as well as the artists responsible and their websites.
+
+Audio assets:
+Title theme - Schroeder's Failure, by trash80 (http://www.trash80.net).
+
+Art assets:
+Menu background - In the Deep, by darkwood67 (http://darkwood67.deviantart.com)
+Title background - Fields, by darkwood67 (http://darkwood67.deviantart.com)
+NPC 1 sprite - 2D RPG character, by arikel (http://opengameart.org/users/arikel)
+Menu portraits - Kain, Shiara, and Akrom, by Noam Chitayat (http://github.com/noam-c)
