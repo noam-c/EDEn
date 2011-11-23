@@ -20,7 +20,7 @@ const int TileEngine::TILE_SIZE = 32;
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName)
                                    : GameState(executionStack), currMap(NULL), xMapOffset(0), yMapOffset(0)
 {
-   player = new PlayerCharacter(ResourceLoader::getSpritesheet("crono"), 320, 320);
+   player = new PlayerCharacter(ResourceLoader::getSpritesheet("npc1"), 320, 320);
    scriptEngine = new ScriptEngine(*this, scheduler);
    dialogue = new DialogueController(*top, scheduler, *scriptEngine);
 
