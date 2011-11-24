@@ -2,6 +2,8 @@ Below is a list of all third-party art assets currently used by EDEn, as well as
 
 Audio assets:
 Title theme - Schroeder's Failure, by trash80 (http://www.trash80.net).
+Menu sound (reselect) - Interface Beeps, by Bart Kelsey (http://www.opengameart.org/users/bart)
+Menu sound (choose) - Random SFX, by Écrivain (http://www.opengameart.org/users/Écrivain)
 
 Art assets:
 Menu background - In the Deep, by darkwood67 (http://darkwood67.deviantart.com)
