@@ -214,7 +214,7 @@ set(SOURCES
   src/tinyxml/tinyxml.cpp
   src/tinyxml/tinyxmlerror.cpp
   src/tinyxml/tinyxmlparser.cpp
-  src/jsoncpp.cpp
+  src/json/jsoncpp.cpp
   src/Audio/Music.cpp
   src/Audio/Sound.cpp
   src/Coroutines/Scheduler.cpp
