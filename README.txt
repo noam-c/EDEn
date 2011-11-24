@@ -46,8 +46,10 @@ LINKS
 =====
 
 SDL Cross-platform Library - http://www.libsdl.org
-Guichan GUI library - 
+Guichan GUI library - http://guichan.sourceforge.net
 Lua Programming Language - http://www.lua.org
+JsonCpp library - http://jsoncpp.sourceforge.net/
+TinyXml library - http://www.grinninglizard.com/tinyxml/
 
 RUNNING EDEN
 ============
