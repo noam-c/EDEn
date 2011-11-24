@@ -1,5 +1,11 @@
-#ifndef __LINKED_LIST_NODE_H_
-#define __LINKED_LIST_NODE_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef LINKED_LIST_NODE_H
+#define LINKED_LIST_NODE_H
 
 #ifndef NULL
    #define NULL 0

@@ -1,5 +1,11 @@
-#ifndef __MAIN_MENU_H_
-#define __MAIN_MENU_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef MAIN_MENU_H
+#define MAIN_MENU_H
 
 #include "GameState.h"
 #include "guichan.hpp"

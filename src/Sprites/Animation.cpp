@@ -1,3 +1,9 @@
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
 #include "Animation.h"
 #include "LinkedListNode.h"
 #include "DebugUtils.h"

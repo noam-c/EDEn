@@ -1,5 +1,11 @@
-#ifndef __SPRITE_FRAME_H_
-#define __SPRITE_FRAME_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef SPRITE_FRAME_H
+#define SPRITE_FRAME_H
 
 /**
  * A sprite frame is a single, non-animated (static) frame represented by

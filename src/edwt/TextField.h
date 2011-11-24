@@ -1,5 +1,11 @@
-#ifndef __TEXT_FIELD_H_
-#define __TEXT_FIELD_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef TEXT_FIELD_H
+#define TEXT_FIELD_H
 
 #include "guichan.hpp"
 

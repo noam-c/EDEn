@@ -1,5 +1,11 @@
-#ifndef __SCRIPT_FACTORY_H_
-#define __SCRIPT_FACTORY_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef SCRIPT_FACTORY_H
+#define SCRIPT_FACTORY_H
 
 #include <string>
 

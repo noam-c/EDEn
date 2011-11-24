@@ -1,3 +1,9 @@
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
 #ifndef XMAP_H
 #define XMAP_H
 

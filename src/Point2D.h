@@ -1,5 +1,11 @@
-#ifndef __POINT_2D_H_
-#define __POINT_2D_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef POINT_2D_H
+#define POINT_2D_H
 
 /**
  * A point in 2D space.

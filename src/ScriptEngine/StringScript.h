@@ -1,5 +1,11 @@
-#ifndef __STRING_SCRIPT_H_
-#define __STRING_SCRIPT_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef STRING_SCRIPT_H
+#define STRING_SCRIPT_H
 
 #include "Script.h"
 

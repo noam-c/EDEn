@@ -1,5 +1,11 @@
-#ifndef __GAME_STATE_H_
-#define __GAME_STATE_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef GAME_STATE_H
+#define GAME_STATE_H
 
 class ExecutionStack;
 

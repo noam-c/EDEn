@@ -1,5 +1,11 @@
-#ifndef __SCRIPT_SCHEDULER_H_
-#define __SCRIPT_SCHEDULER_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef SCRIPT_SCHEDULER_H
+#define SCRIPT_SCHEDULER_H
 
 #include "TaskId.h"
 

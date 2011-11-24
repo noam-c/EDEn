@@ -1,5 +1,11 @@
-#ifndef __TILE_ENGINE_H_
-#define __TILE_ENGINE_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef TILE_ENGINE_H
+#define TILE_ENGINE_H
 
 #include "GameState.h"
 

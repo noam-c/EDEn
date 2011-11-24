@@ -1,3 +1,9 @@
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
 #error "This file (TODOLIST.h) should NOT be compiled. It is only in the source tree for use by Doxygen."
 
 /**

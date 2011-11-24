@@ -1,5 +1,11 @@
-#ifndef __SCRIPT_ENGINE_H_
-#define __SCRIPT_ENGINE_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef SCRIPT_ENGINE_H
+#define SCRIPT_ENGINE_H
 
 #include <stack>
 #include <string>

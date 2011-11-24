@@ -1,5 +1,11 @@
-#ifndef __TASK_ID_H_
-#define __TASK_ID_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef TASK_ID_H
+#define TASK_ID_H
 
 /**
  *  Currently an unsigned integer; there should be no way to reach 4 billion tasks

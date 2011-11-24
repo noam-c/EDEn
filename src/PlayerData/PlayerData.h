@@ -1,5 +1,11 @@
-#ifndef __PLAYER_DATA_H_
-#define __PLAYER_DATA_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef PLAYER_DATA_H
+#define PLAYER_DATA_H
 
 #include <map>
 #include <string>

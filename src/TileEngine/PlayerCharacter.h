@@ -1,5 +1,11 @@
-#ifndef __PLAYER_CHARACTER_H_
-#define __PLAYER_CHARACTER_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef PLAYER_CHARACTER_H
+#define PLAYER_CHARACTER_H
 
 #include <string>
 

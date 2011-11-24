@@ -1,5 +1,11 @@
-#ifndef __SAVE_GAME_ITEM_NAMES_H_
-#define __SAVE_GAME_ITEM_NAMES_H_
+/**
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
+ */
+
+#ifndef SAVE_GAME_ITEM_NAMES_H
+#define SAVE_GAME_ITEM_NAMES_H
 
 static const char* PLAYER_DATA_ELEMENT = "PlayerData";
 
