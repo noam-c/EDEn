@@ -100,7 +100,6 @@ set(HEADERS
   src/GameData/ItemData.h
   src/GameData/Item.h
   src/GameData/ItemList.h
-  src/LinkedListNode.h
   src/MainMenu/MainMenu.h
   src/Menu/CharacterModule.h
   src/Menu/ConfirmStateListener.h

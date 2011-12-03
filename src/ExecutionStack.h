@@ -8,43 +8,32 @@
 #define EXECUTION_STACK_H
 
 #include "Singleton.h"
+#include <stack>
 
 class GameState;
-template<class C> struct LinkedListNode;
 
 /**
  * The heart of the game's execution.
  * Holds different states of the game (Title Screen, Tile Engine, etc.) 
  * and allows for easy change of state.
- * Main functionality is calling logic and draw, and destroying finished states in the execute() function.
+ * Main functionality is calling advanceFrame and drawFrame, and destroying finished states in the execute() function.
  *
  * @author Noam Chitayat
  */
 class ExecutionStack
 {
    /**
-    * Holds GameState objects in a linked list structure for easy access by the ExecutionStack.
-    *
-    * @author Noam Chitayat
+    * The stack that holds the various states that the player
+    * has transitioned through.
     */
-   typedef LinkedListNode<GameState*> StateNode;
-
-   /** The state stack (stored as a linked list) */
-   StateNode* currentState;
+   std::stack<GameState*> stateStack;
 
    /**
-    * Remove the most recent state pushed on the stack
-    *
-    * @return false iff there is no remaining state (stack is empty)
+    * Remove and delete the most recent state pushed on the stack.
     */
-   bool popState();
+   void popState();
 
    public:
-      /**
-       * Constructor.
-       * Initializes an empty execution stack.
-       */
-      ExecutionStack();
 
       /**
        * Destructor.

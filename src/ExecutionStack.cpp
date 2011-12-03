@@ -5,63 +5,53 @@
  */
 
 #include "ExecutionStack.h"
-#include "LinkedListNode.h"
 #include "GraphicsUtil.h"
 #include "DebugUtils.h"
 #include "GameState.h"
 
 const int debugFlag = DEBUG_EXEC_STACK;
 
-ExecutionStack::ExecutionStack() : currentState(NULL)
-{
-}
-
 ExecutionStack::~ExecutionStack()
 {
-   while(popState());
+   // Delete all states on the stack
+   while(stateStack.empty())
+   {
+      popState();
+   }
+}
+
+void ExecutionStack::popState()
+{
+   GameState* topState = stateStack.top();
+   stateStack.pop();
+   delete topState;
 }
 
 void ExecutionStack::pushState(GameState* newState)
 {
-   StateNode* node = new StateNode(newState, currentState);
-   currentState = node;
+   stateStack.push(newState);
    newState->activate();
-}
-
-bool ExecutionStack::popState()
-{
-   if(currentState)
-   {
-      StateNode* oldState = currentState;
-      currentState = currentState->next;
-
-      /** 
-       *  \todo This might be kind of a hacky solution.
-       *  Maybe encapsulate this in LinkedListNode if it's going to actually happen?
-       */
-      oldState->next = NULL;
-
-      delete oldState->data;
-      delete oldState;
-   }
-
-   return currentState;
 }
 
 void ExecutionStack::execute()
 {
-   while(currentState)
+   while(!stateStack.empty())
    {
-      if(currentState->data->advanceFrame())
+      GameState* currentState = stateStack.top();
+      if(currentState->advanceFrame())
       {
+         // The state is still active, so draw its results
          GraphicsUtil::getInstance()->clearBuffer();
-         currentState->data->drawFrame();
+         currentState->drawFrame();
       }
       else
       {
-         if(popState())
+         // Delete the current state if it is finished, then
+         // reactivate the state below it.
+         popState();
+         if(!stateStack.empty())
          {
-            currentState->data->activate();
+            stateStack.top()->activate();
          }
       }
    }
