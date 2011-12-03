@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef DATA_PANE_H_
-#define DATA_PANE_H_
+#ifndef DATA_PANE_H
+#define DATA_PANE_H
 
 #include "MenuPane.h"
 #include <map>

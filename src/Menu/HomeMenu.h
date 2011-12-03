@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef MENU_H
-#define MENU_H
+#ifndef HOME_MENU_H
+#define HOME_MENU_H
 
 #include "MenuState.h"
 #include "ModuleSelectListener.h"

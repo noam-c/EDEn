@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef MOVEMENT_DIRECTION_H_
-#define MOVEMENT_DIRECTION_H_
+#ifndef MOVEMENT_DIRECTION_H
+#define MOVEMENT_DIRECTION_H
 
 /**
  * Represents one of the eight directions of movement used by NPCs and the player in the game.

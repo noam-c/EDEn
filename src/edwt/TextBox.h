@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef TEXT_BOX_H_
-#define TEXT_BOX_H_
+#ifndef TEXT_BOX_H
+#define TEXT_BOX_H
 
 #include "guichan.hpp"
 #include "TextAlignment.h"

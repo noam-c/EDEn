@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef LIST_BOX_H_
-#define LIST_BOX_H_
+#ifndef LIST_BOX_H
+#define LIST_BOX_H
 
 #include "guichan.hpp"
 #include "TextAlignment.h"

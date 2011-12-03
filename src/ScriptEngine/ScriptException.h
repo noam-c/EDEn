@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef _SCRIPT_EXCEPTION_H_
-#define _SCRIPT_EXCEPTION_H_
+#ifndef SCRIPT_EXCEPTION_H
+#define SCRIPT_EXCEPTION_H
 
 #include "Exception.h"
 

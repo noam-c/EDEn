@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef MENU_PANE_H_
-#define MENU_PANE_H_
+#ifndef MENU_PANE_H
+#define MENU_PANE_H
 
 #include "Container.h"
 

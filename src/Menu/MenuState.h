@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef MENU_STATE_H_
-#define MENU_STATE_H_
+#ifndef MENU_STATE_H
+#define MENU_STATE_H
 
 #include "GameState.h"
 #include "TabChangeListener.h"

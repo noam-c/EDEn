@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef OBSTACLE_H_
-#define OBSTACLE_H_
+#ifndef OBSTACLE_H
+#define OBSTACLE_H
 
 #include <string>
 #include <iostream>

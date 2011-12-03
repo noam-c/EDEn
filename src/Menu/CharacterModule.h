@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef CHARACTER_MODULE_H_
-#define CHARACTER_MODULE_H_
+#ifndef CHARACTER_MODULE_H
+#define CHARACTER_MODULE_H
 
 #include "guichan.hpp"
 

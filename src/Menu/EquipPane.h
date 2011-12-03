@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef EQUIP_PANE_H_
-#define EQUIP_PANE_H_
+#ifndef EQUIP_PANE_H
+#define EQUIP_PANE_H
 
 #include "MenuPane.h"
 #include "Label.h"

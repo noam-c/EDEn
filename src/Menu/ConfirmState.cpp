@@ -21,9 +21,11 @@ ConfirmState::ConfirmDialog::ConfirmDialog(ConfirmState& confirmState, ConfirmSt
    yesButton.addActionListener(this);
    noButton.addActionListener(this);
    
+   int buttonsY = 50;
+   
    add(&messageLabel);
-   add(&yesButton);
-   add(&noButton);
+   add(&yesButton, 30, buttonsY);
+   add(&noButton, getWidth() - noButton.getWidth() - 30, buttonsY);
 }
 
 void ConfirmState::ConfirmDialog::action(const gcn::ActionEvent& event)

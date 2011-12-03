@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef STATUS_PANE_H_
-#define STATUS_PANE_H_
+#ifndef STATUS_PANE_H
+#define STATUS_PANE_H
 
 #include "MenuPane.h"
 

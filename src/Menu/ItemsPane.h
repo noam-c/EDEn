@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef ITEMS_PANE_H_
-#define ITEMS_PANE_H_
+#ifndef ITEMS_PANE_H
+#define ITEMS_PANE_H
 
 #include "MenuPane.h"
 #include "ListBox.h"

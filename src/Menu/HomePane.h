@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2011 Noam Chitayat. All rights reserved.
  */
 
-#ifndef HOME_PANE_H_
-#define HOME_PANE_H_
+#ifndef HOME_PANE_H
+#define HOME_PANE_H
 
 #include "MenuPane.h"
 
