@@ -7,24 +7,6 @@
 #error "This file (TODOLIST.h) should NOT be compiled. It is only in the source tree for use by Doxygen."
 
 /**
- * \todo Complete and populate the Exodus Draconis website (PLEASE).
- * \todo Find a better way to do the todo list and to prioritize tasks.
- * \todo Consolidate Story and Reqs wikis.
- * \todo Create new Code wiki.
- */
-void OrganizationTodoList(void);
-
-/**
- * \todo [Mandatory] Add collision detection for moving NPCs.
- * \todo [Mandatory] Recalculate an NPC's best path dynamically if there is a problem travelling a path.
- * \todo [Mandatory] Maps should specify special keys for certain tiles (such as "entrance1" to denote one of the entrance tiles) to be referred to by scripts
- * \todo [Mandatory] Dialogue Controller needs a blinking cursor to indicate finished dialogue.
- * \todo [Mandatory] Create a "Controls" class that translates pressed keys/buttons to controller-agnostic instructions based on user options.
- * \todo [Mandatory] Create an options menu with persistence.
- * \todo [Mandatory] Create an About/Credits screen
- * \todo [Recommended] System tests for all the script functions
- * \todo [Recommended] The Lua script bindings need to be more strict about parameters
-   * Do type-checking, enforce strict argument counts, and write an API spec to explain the functions available
  * \todo [Recommended] Fix Resource getSize functions to return an accurate size estimate for their resources
  * \todo [Recommended] Potential deadlock: What if a dialogue line has an embedded script that calls to the dialogue controller and yields? Is this important?
  * \todo [Recommended] Complete or remove ScriptException class, as it is currently empty and pointless (document it if its staying).
@@ -34,7 +16,6 @@ void OrganizationTodoList(void);
  * \todo [Optional] Add support for multi-level maps.
  * \todo [Optional] Consolidate common functionality between Tileset and Spritesheet.
  * \todo [Optional] Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
- * \todo [Optional] Remove references to namespace gcn outside of edwt (as many as possible if not all)
  * \todo [Optional] Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
    * To do this, a full rewrite of the Dialogue Controller might be necessary, due to some tight coupling in the class at the moment
  * \todo [Optional] Integrate GraphicsUtil stuff from Solstice (synchronous fading and texture load, mainly).
