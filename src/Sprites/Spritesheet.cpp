@@ -7,7 +7,6 @@
 #include "Spritesheet.h"
 #include "GLInclude.h"
 #include "GraphicsUtil.h"
-#include "LinkedListNode.h"
 #include "SpriteFrame.h"
 #include "Animation.h"
 #include <queue>
@@ -143,7 +142,7 @@ void Spritesheet::load(const char* path)
 
          // Get the frames of the animation
          std::string frameName;
-         FrameNode* listTail = NULL;
+         FrameSequence* frameSequence = new FrameSequence();
          for(;;)
          {
             lineStream >> frameName;
@@ -157,21 +156,13 @@ void Spritesheet::load(const char* path)
 
             DEBUG("Animation %s: Adding node with index %d", animationName.c_str(), frameIndex);
 
-            if(listTail == NULL)
-            {
-               listTail = new FrameNode(frameIndex, NULL);
-               listTail->next = listTail;
-            }
-            else
-            {
-               FrameNode* nextNode = new FrameNode(frameIndex, listTail->next);
-               listTail->next = nextNode;
-               listTail = nextNode;
-            }
+            frameSequence->push_back(frameIndex);
+            
+            // If the line is done, there are no animations left to read
             if(lineStream.eof())
             {
-               // If the line is done, there are no animations left to read
-               if(listTail == NULL)
+               // If the line finished before any frames were added to the animation, then it is invalid.
+               if(frameSequence->empty())
                {
                   DEBUG("Empty animation %s in spritesheet %s", animationName.c_str(), path);
                   T_T("Parse error reading spritesheet.");
@@ -180,11 +171,8 @@ void Spritesheet::load(const char* path)
             }
          }
 
-         //DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
-         //                frameName.c_str(), coords[0], coords[1], coords[2], coords[3]);
-
          // Bind the animation name to the next available animation index
-         animationList[animationName] = listTail->next;
+         animationList[animationName] = frameSequence;
       }
 
       // Flush any remaining line data in the stream
@@ -226,10 +214,10 @@ int Spritesheet::getFrameIndex(const std::string& frameName) const
 
 Animation* Spritesheet::getAnimation(const std::string& animationName) const
 {
-   std::map<std::string, FrameNode*>::const_iterator animFrames = animationList.find(animationName);
+   std::map<std::string, const FrameSequence*>::const_iterator animFrames = animationList.find(animationName);
    if(animFrames != animationList.end())
    {
-      return new Animation(animFrames->second);
+      return new Animation(*(animFrames->second));
    }
 
    return NULL;
@@ -310,18 +298,11 @@ size_t Spritesheet::getSize()
 
 Spritesheet::~Spritesheet()
 {
-   // Delete the list of animations
-   std::map<std::string, FrameNode*>::iterator iter;
+   // Delete the frame lists for the animations
+   std::map<std::string, const FrameSequence*>::iterator iter;
    for(iter = animationList.begin(); iter != animationList.end(); ++iter)
    {
-      // To delete a circularly linked list, we need to first make it a linear
-      // list by breaking one of the links, and then deleting from the beginning
-      // of the chain to make sure every node is deleted.
-      FrameNode* firstNode = iter->second;
-      FrameNode* secondNode = firstNode->next;
-      firstNode->next = NULL;
-
-      delete secondNode;
+      delete iter->second;
    }
 
    // Delete all the static frames

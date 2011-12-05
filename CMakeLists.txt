@@ -140,6 +140,7 @@ set(HEADERS
   src/ScriptEngine/StringScript.h
   src/Singleton.h
   src/Sprites/Animation.h
+  src/Sprites/FrameSequence.h
   src/Sprites/Sprite.h
   src/Sprites/SpriteFrame.h
   src/Sprites/Spritesheet.h

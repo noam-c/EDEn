@@ -8,21 +8,14 @@
 #define SPRITESHEET_H
 
 #include "Resource.h"
+#include "FrameSequence.h"
 #include <map>
 #include <string>
 
 struct SpriteFrame;
 class Animation;
-template<class C> struct LinkedListNode;
 
 typedef unsigned int GLuint;
-
-/**
- * Holds integers in a linked list structure to signify frames of an animation
- *
- * @author Noam Chitayat
- */
-typedef LinkedListNode<int> FrameNode;
 
 /**
  * The Spritesheet class represents an entire spritesheet image. It holds a
@@ -70,7 +63,7 @@ class Spritesheet : public Resource
    int numAnimations;
 
    /** The mapping of animation names to their frame lists. */
-   std::map<std::string, FrameNode*> animationList;
+   std::map<std::string, const FrameSequence*> animationList;
 
    /**
     * Loads the spritesheet image into an OpenGL texture, and loads the

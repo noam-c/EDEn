@@ -7,14 +7,7 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-template<class C> struct LinkedListNode;
-
-/**
- * Holds integers in a linked list structure to signify frames of an animation
- *
- * @author Noam Chitayat
- */
-typedef LinkedListNode<int> FrameNode;
+#include "FrameSequence.h"
 
 /**
  * An Animation iterates through different frame indices based on the time that
@@ -24,39 +17,42 @@ typedef LinkedListNode<int> FrameNode;
  */
 class Animation
 {
+   /** The sequence of frames in this animation. */
+   const FrameSequence& frameSequence;
+   
    /** The current frame that we are at in the list. */
-   FrameNode* curr;
-
+   FrameSequence::const_iterator curr;
+   
    /** The time left until the Animation needs to move to the next frame. */
    long timeToNextAnimation;
-
-   public:
-      /**
-       * Constructor.
-       * Creates an animation with a given linked list of frame indices.
-       *
-       * @param frameNode The list of frames in a given animation.
-       */
-      Animation(FrameNode* frameNode);
-
-      /**
-       * Updates the animation based on the time that has passed since the
-       * last call.
-       *
-       * @param timePassed The amount of time that has passed.
-       */
-      void update(long timePassed);
-
-      /**
-       * @return The current node index (the index for the frame this animation
-       *         is currently on).
-       */
-      int getIndex();
-
-      /**
-       * Destructor.
-       */
-      ~Animation();
+   
+public:
+   /**
+    * Constructor.
+    * Creates an animation with a given linked list of frame indices.
+    *
+    * @param frameSequence The sequence of frames in a given animation.
+    */
+   Animation(const FrameSequence& frameSequence);
+   
+   /**
+    * Updates the animation based on the time that has passed since the
+    * last call.
+    *
+    * @param timePassed The amount of time that has passed.
+    */
+   void update(long timePassed);
+   
+   /**
+    * @return The current node index (the index for the frame this animation
+    *         is currently on).
+    */
+   int getIndex() const;
+   
+   /**
+    * Destructor.
+    */
+   ~Animation();
 };
 
 #endif
