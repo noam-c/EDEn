@@ -5,6 +5,10 @@
  */
 
 #include "NPC.h"
+
+#include <algorithm>
+#include "stdlib.h"
+
 #include "ScriptEngine.h"
 #include "NPCScript.h"
 #include "Scheduler.h"
@@ -20,9 +24,39 @@ const int debugFlag = DEBUG_NPC;
 const std::string WALKING_PREFIX = "walk_";
 const std::string STANDING_PREFIX = "stand_";
 
+class NPC::NPCTask
+{
+   protected:
+      NPC& npc;
+      NPCTask(NPC& npc) : npc(npc) {}
+      
+   public:
+      virtual bool perform(long timePassed) = 0;
+      virtual ~NPCTask() {}
+};
+
+class NPC::StandTask : public NPC::NPCTask
+{
+   public:
+      bool perform(long timePassed);
+};
+
+class NPC::MoveTask : public NPC::NPCTask
+{
+   const Point2D src;
+   const Point2D dst;
+   Point2D currentLocation;
+   Pathfinder& pathfinder;
+   std::queue<Point2D> path;
+
+   public:
+      MoveTask(NPC& npc, const Point2D& destination, const Map& map);
+      bool perform(long timePassed);
+};
+
 NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, const Map& map,
                        const std::string& regionName,
-                       int x, int y) : name(name), map(map), pixelLoc(x, y)
+                       int x, int y) : name(name), map(map), pixelLoc(x, y), movementSpeed(0.1f)
 {
    npcThread = engine.getNPCScript(this, regionName, map.getName(), name);
    scheduler.start(npcThread);
@@ -31,124 +65,48 @@ NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Sp
    sprite = new Sprite(sheet);
 }
 
-std::string NPC::getName()
+NPC::~NPC()
+{
+   delete sprite;
+   npcThread->finish();
+}
+
+std::string NPC::getName() const
 {
    return name;
 }
 
-bool NPC::runInstruction(Instruction* instruction, long timePassed)
+bool NPC::StandTask::perform(long timePassed)
 {
-   switch(instruction->type)
+   switch(npc.getDirection())
    {
-      case MOVE:
+      case LEFT:
       {
-         Point2D* newCoords = static_cast<Point2D*>(instruction->params);
-         MovementDirection newDirection = NONE;
-
-         float vel = 0.1f;
-         if(pixelLoc.x < newCoords->x)
-         {
-            pixelLoc.x += (int)(vel*timePassed);
-            pixelLoc.x = pixelLoc.x > newCoords->x ? newCoords->x : pixelLoc.x;
-            newDirection = RIGHT;
-         }
-         else if(pixelLoc.x > newCoords->x)
-         {
-            pixelLoc.x -= (int)(vel*timePassed);
-            pixelLoc.x = pixelLoc.x < newCoords->x ? newCoords->x : pixelLoc.x;
-            newDirection = LEFT;
-         }
-
-         if(pixelLoc.y < newCoords->y)
-         {
-            pixelLoc.y += (int)(vel*timePassed);
-            pixelLoc.y = pixelLoc.y > newCoords->y ? newCoords->y : pixelLoc.y;
-            newDirection = DOWN;
-         }
-         else if(pixelLoc.y > newCoords->y)
-         {
-            pixelLoc.y -= (int)(vel*timePassed);
-            pixelLoc.y = pixelLoc.y < newCoords->y ? newCoords->y : pixelLoc.y;
-            newDirection = UP;
-         }
-
-         if(pixelLoc.x == newCoords->x && pixelLoc.y == newCoords->y)
-         {
-            delete newCoords;
-            return true;
-         }
-         else
-         {
-            if(newDirection != currDirection)
-            {
-               currDirection = newDirection;
-               switch(currDirection)
-               {
-                  case LEFT:
-                  {
-                     sprite->setAnimation(WALKING_PREFIX + "left");
-                     break;
-                  }
-                  case RIGHT:
-                  {
-                     sprite->setAnimation(WALKING_PREFIX + "right");
-                     break;
-                  }
-                  case UP:
-                  {
-                     sprite->setAnimation(WALKING_PREFIX + "up");
-                     break;
-                  }
-                  case DOWN:
-                  {
-                     sprite->setAnimation(WALKING_PREFIX + "down");
-                     break;
-                  }
-                  default:
-                  {
-                     break;
-                  }
-               }
-            }
-            return false;
-         }
+         npc.setFrame(STANDING_PREFIX + "left");
+         break;
       }
-      case STAND:
+      case RIGHT:
       {
-         switch(currDirection)
-         {
-            case LEFT:
-            {
-               sprite->setFrame(STANDING_PREFIX + "left");
-               break;
-            }
-            case RIGHT:
-            {
-               sprite->setFrame(STANDING_PREFIX + "right");
-               break;
-            }
-            case UP:
-            {
-               sprite->setFrame(STANDING_PREFIX + "up");
-               break;
-            }
-            case DOWN:
-            {
-               sprite->setFrame(STANDING_PREFIX + "down");
-               break;
-            }
-            default:
-            {
-               break;
-            }
-         }
+         npc.setFrame(STANDING_PREFIX + "right");
+         break;
+      }
+      case UP:
+      {
+         npc.setFrame(STANDING_PREFIX + "up");
+         break;
+      }
+      case DOWN:
+      {
+         npc.setFrame(STANDING_PREFIX + "down");
+         break;
       }
       default:
       {
-         // Unknown instruction type; mark it finished and move on
-         return true;
+         break;
       }
    }
+   
+   return true;
 }
 
 void NPC::step(long timePassed)
@@ -157,18 +115,18 @@ void NPC::step(long timePassed)
 
    if(!isIdle())
    {
-      Instruction* currentInstruction = instructions.front();
-      if(runInstruction(currentInstruction, timePassed))
+      NPCTask* currentTask = tasks.front();
+      if(currentTask->perform(timePassed))
       {
-         instructions.pop();
-         delete currentInstruction;
+         tasks.pop();
+         delete currentTask;
       }
    }
 }
 
-bool NPC::isIdle()
+bool NPC::isIdle() const
 {
-   return instructions.empty();
+   return tasks.empty();
 }
 
 void NPC::activate()
@@ -178,18 +136,10 @@ void NPC::activate()
 
 void NPC::move(int x, int y)
 {
-   Pathfinder* pathfinder = map.getPathfinder();
+   Point2D dst(x, y);
    
-   std::queue<Point2D*> path = pathfinder->findBestPath(pixelLoc.x, pixelLoc.y, x, y);
-   while(!path.empty())
-   {
-      Point2D* coords = path.front();
-      path.pop();
-
-      instructions.push(new Instruction(MOVE, coords));
-   }
-
-   instructions.push(new Instruction(STAND, NULL));
+   MoveTask* task = new MoveTask(*this, dst, map);
+   tasks.push(task);
 }
 
 void NPC::setSpritesheet(Spritesheet* sheet)
@@ -207,6 +157,36 @@ void NPC::setAnimation(const std::string& animationName)
    sprite->setAnimation(animationName);
 }
 
+void NPC::setLocation(Point2D location)
+{
+   pixelLoc = location;
+}
+
+Point2D NPC::getLocation() const
+{
+   return pixelLoc;
+}
+
+void NPC::setDirection(MovementDirection direction)
+{
+   currDirection = direction;
+}
+
+MovementDirection NPC::getDirection() const
+{
+   return currDirection;
+}
+
+void NPC::setMovementSpeed(float speed)
+{
+   movementSpeed = speed;
+}
+
+float NPC::getMovementSpeed() const
+{
+   return movementSpeed;
+}
+
 void NPC::draw()
 {
    if(sprite)
@@ -215,8 +195,123 @@ void NPC::draw()
    }
 }
 
-NPC::~NPC()
+NPC::MoveTask::MoveTask(NPC& npc, const Point2D& destination, const Map& map)
+: NPCTask(npc), src(npc.getLocation()), dst(destination), currentLocation(src), pathfinder(*map.getPathfinder())
 {
-   delete sprite;
-   npcThread->finish();
+   path = pathfinder.findPath(src.x, src.y, dst.x, dst.y);
+}
+
+bool NPC::MoveTask::perform(long timePassed)
+{
+   MovementDirection currDirection = npc.getDirection();
+   MovementDirection newDirection = currDirection;
+   Point2D location = npc.getLocation();
+
+   float vel = npc.getMovementSpeed();
+   long distanceCovered = timePassed * vel;
+   if(path.empty())
+   {
+      if(location == dst)
+      {
+         return true;
+      }
+      else
+      {
+         path = pathfinder.findPath(location.x, location.y, dst.x, dst.y);
+      }
+   }
+
+   while(!path.empty())
+   {
+      Point2D newCoords = path.front();
+
+      // Set the direction based on where the next tile is relative to the current location.
+      // For now, when the NPC must move diagonally, it will always face up or down
+      if(location.y < newCoords.y)
+      {
+         newDirection = DOWN;
+      }
+      else if(location.y > newCoords.y)
+      {
+         newDirection = UP;
+      }
+      else if(location.x < newCoords.x)
+      {
+         newDirection = RIGHT;
+      }
+      else if(location.x > newCoords.x)
+      {
+         newDirection = LEFT;
+      } 
+
+      const long stepDistance = std::max(abs(location.x - newCoords.x), abs(location.y - newCoords.y));
+      
+      if (distanceCovered < stepDistance)
+      {
+         if(location.x < newCoords.x)
+         {
+            location.x += distanceCovered;
+            if(location.x > newCoords.x) location.x = newCoords.x;
+         }
+         else if(location.x > newCoords.x)
+         {
+            location.x -= distanceCovered;
+            if(location.x < newCoords.x) location.x = newCoords.x;
+         }
+
+         if(location.y < newCoords.y)
+         {
+            location.y += distanceCovered;
+            if(location.y > newCoords.y) location.y = newCoords.y;
+         }
+         else if(location.y > newCoords.y)
+         {
+            location.y -= distanceCovered;
+            if(location.y < newCoords.y) location.y = newCoords.y;
+         }
+
+         break;
+      }
+
+      distanceCovered -= stepDistance;
+      location = newCoords;
+      currentLocation = newCoords;
+      path.pop();
+   }
+   
+   npc.setLocation(location);
+   
+   if(newDirection != currDirection)
+   {
+      npc.setDirection(newDirection);
+      switch(newDirection)
+      {
+         case LEFT:
+         {
+            npc.setAnimation(WALKING_PREFIX + "left");
+            break;
+         }
+         case RIGHT:
+         {
+            npc.setAnimation(WALKING_PREFIX + "right");
+            break;
+         }
+         case UP:
+         {
+            npc.setAnimation(WALKING_PREFIX + "up");
+            break;
+         }
+         case DOWN:
+         {
+            npc.setAnimation(WALKING_PREFIX + "down");
+            break;
+         }
+         default:
+         {
+            break;
+         }
+      }
+   }
+
+   return path.empty();
 }

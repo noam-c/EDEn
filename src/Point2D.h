@@ -33,6 +33,14 @@ struct Point2D
     * @param y The y-coordinate for the point.
     */
    Point2D(int x, int y) : x(x), y(y) {}
+   
+   /**
+    * Equality operator.
+    */
+   bool operator==(const Point2D& rhs)
+   {
+      return x == rhs.x && y == rhs.y;
+   }
 };
 
 #endif

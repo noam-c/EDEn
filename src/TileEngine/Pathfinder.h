@@ -23,11 +23,21 @@ class Pathfinder
       //A_STAR,
    };
 
-   enum TileState
+   enum OccupantType
    {
       FREE,
       CHARACTER,
       OBSTACLE,
+   };
+
+   struct TileState
+   {
+      OccupantType occupantType;
+      void* occupant;
+      
+      TileState() : occupantType(FREE), occupant(NULL) {}
+      TileState(OccupantType type) : occupantType(type), occupant(NULL) {}
+      TileState(OccupantType type, void* occupant) : occupantType(type), occupant(occupant) {}
    };
 
    static const int MOVEMENT_TILE_SIZE;
@@ -51,8 +61,8 @@ class Pathfinder
 
    void initRoyFloydWarshallMatrices();
    bool isWalkable(int x, int y);
-   std::queue<Point2D*> findRFWPath(int srcX, int srcY, int dstX, int dstY);
-   std::queue<Point2D*> getStraightPath(int srcX, int srcY, int dstX, int dstY);
+   std::queue<Point2D> findRFWPath(int srcX, int srcY, int dstX, int dstY);
+   std::queue<Point2D> getStraightPath(int srcX, int srcY, int dstX, int dstY);
 
    void deleteRoyFloydWarshallMatrices();
    void deleteCollisionMap();
@@ -64,9 +74,9 @@ class Pathfinder
    public:
       Pathfinder(Map* newMap, std::vector<Obstacle*> obstacles);
 
-      std::queue<Point2D*> findBestPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle = RFW);
+      std::queue<Point2D> findPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle = RFW);
 
-      bool occupyPoint(int x, int y, int width, int height);
+      bool occupyPoint(int x, int y, int width, int height, NPC* npc);
       void freePoint(int x, int y, int width, int height);
 
       ~Pathfinder();

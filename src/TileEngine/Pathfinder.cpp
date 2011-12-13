@@ -10,6 +10,7 @@
 #include "Obstacle.h"
 #include "TileEngine.h"
 #include "Point2D.h"
+#include "stdlib.h"
 #include <set>
 #include <limits>
 
@@ -45,7 +46,7 @@ Pathfinder::Pathfinder(Map* map, std::vector<Obstacle*> obstacles) : map(map), d
          bool passible = passibilityMap[y][x];
          for(int i = 0; i < collisionTileRatio; ++i)
          {
-            row[i + xOffset] = passible ? FREE : OBSTACLE;
+            row[i + xOffset].occupantType = passible ? FREE : OBSTACLE;
          }
       }
    }
@@ -62,7 +63,8 @@ Pathfinder::Pathfinder(Map* map, std::vector<Obstacle*> obstacles) : map(map), d
 
 Point2D Pathfinder::tileNumToCoords(int tileNum)
 {
-   return Point2D(tileNum / collisionMapWidth, tileNum % collisionMapWidth);
+   div_t result = div(tileNum, collisionMapWidth);
+   return Point2D(result.rem, result.quot);
 }
 
 Point2D Pathfinder::tileNumToPixels(int tileNum)
@@ -112,7 +114,7 @@ void Pathfinder::initRoyFloydWarshallMatrices()
          else
          {
             bTile = tileNumToCoords(b);
-            if(collisionMap[aTile.y][aTile.x] == OBSTACLE || collisionMap[bTile.y][bTile.x] == OBSTACLE)
+            if(collisionMap[aTile.y][aTile.x].occupantType == OBSTACLE || collisionMap[bTile.y][bTile.x].occupantType == OBSTACLE)
             {
                distanceMatrix[a][b] = INFINITY;
                successorMatrix[a][b] = -1;
@@ -162,7 +164,7 @@ void Pathfinder::initRoyFloydWarshallMatrices()
    }
 }
 
-std::queue<Point2D*> Pathfinder::findBestPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle style)
+std::queue<Point2D> Pathfinder::findPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle style)
 {
    switch(style)
    {
@@ -178,39 +180,39 @@ std::queue<Point2D*> Pathfinder::findBestPath(int srcX, int srcY, int dstX, int 
    }
 }
 
-std::queue<Point2D*> Pathfinder::getStraightPath(int srcX, int srcY, int dstX, int dstY)
+std::queue<Point2D> Pathfinder::getStraightPath(int srcX, int srcY, int dstX, int dstY)
 {
-   std::queue<Point2D*> path;
+   std::queue<Point2D> path;
    while(srcX > dstX + MOVEMENT_TILE_SIZE)
    {
       srcX -= MOVEMENT_TILE_SIZE;
-      path.push(new Point2D(srcX, srcY));
+      path.push(Point2D(srcX, srcY));
    }
 
    while(srcX < dstX - MOVEMENT_TILE_SIZE)
    {
       srcX += MOVEMENT_TILE_SIZE;
-      path.push(new Point2D(srcX, srcY));
+      path.push(Point2D(srcX, srcY));
    }
 
    while(srcY > dstY + MOVEMENT_TILE_SIZE)
    {
       srcY -= MOVEMENT_TILE_SIZE;
-      path.push(new Point2D(srcX, srcY));
+      path.push(Point2D(srcX, srcY));
    }
 
    while(srcY < dstY - MOVEMENT_TILE_SIZE)
    {
       srcY += MOVEMENT_TILE_SIZE;
-      path.push(new Point2D(srcX, srcY));
+      path.push(Point2D(srcX, srcY));
    }
 
    return path;
 }
 
-std::queue<Point2D*> Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int dstY)
+std::queue<Point2D> Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int dstY)
 {
-   std::queue<Point2D*> path;
+   std::queue<Point2D> path;
 
    int srcTileNum = pixelsToTileNum(srcX, srcY);
    const int dstTileNum = pixelsToTileNum(dstX, dstY);
@@ -223,7 +225,7 @@ std::queue<Point2D*> Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int d
          break;
       }
       
-      path.push(new Point2D(tileNumToPixels(nextTile)));
+      path.push(Point2D(tileNumToPixels(nextTile)));
       srcTileNum = nextTile;
    }
 
@@ -236,22 +238,22 @@ bool Pathfinder::isWalkable(int x, int y)
    if(x >= collisionMapWidth) return false;
    if(y >= collisionMapHeight) return false;
 
-   return collisionMap[x][y] == FREE;
+   return collisionMap[x][y].occupantType == FREE;
 }
 
 bool Pathfinder::addObstacle(int x, int y, int width, int height)
 {
-   return occupyPoint(x, y, width, height, OBSTACLE);
+   return occupyPoint(x, y, width, height, TileState(OBSTACLE));
 }
 
-bool Pathfinder::occupyPoint(int x, int y, int width, int height)
+bool Pathfinder::occupyPoint(int x, int y, int width, int height, NPC* npc)
 {
-   return occupyPoint(x, y, width, height, CHARACTER);
+   return occupyPoint(x, y, width, height, TileState(CHARACTER, npc));
 }
 
 bool Pathfinder::occupyPoint(int x, int y, int width, int height, TileState state)
 {
-   if(state == FREE)
+   if(state.occupantType == FREE)
    {
       return false;
    }
@@ -265,7 +267,7 @@ bool Pathfinder::occupyPoint(int x, int y, int width, int height, TileState stat
    {
       for(int collisionMapY = collisionMapTop; collisionMapY <= collisionMapBottom; ++collisionMapY)
       {
-         if(!collisionMap[collisionMapY][collisionMapX] != FREE) return false;
+         if(!collisionMap[collisionMapY][collisionMapX].occupantType != FREE) return false;
       }
    }
 
@@ -281,7 +283,7 @@ void Pathfinder::freePoint(int x, int y, int width, int height)
    int collisionMapTop = y/MOVEMENT_TILE_SIZE;
    int collisionMapBottom = (y + height)/MOVEMENT_TILE_SIZE;
 
-   setPoint(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, FREE);
+   setPoint(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, TileState(FREE));
 }
 
 void Pathfinder::setPoint(int left, int top, int right, int bottom, TileState state)
