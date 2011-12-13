@@ -14,7 +14,7 @@ const int debugFlag = DEBUG_EXEC_STACK;
 ExecutionStack::~ExecutionStack()
 {
    // Delete all states on the stack
-   while(stateStack.empty())
+   while(!stateStack.empty())
    {
       popState();
    }
