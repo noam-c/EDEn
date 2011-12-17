@@ -7,7 +7,8 @@
 #ifndef PATHFINDER_H
 #define PATHFINDER_H
 
-#include <queue>
+#include <list>
+#include <vector>
 
 class Obstacle;
 class Map;
@@ -61,8 +62,6 @@ class Pathfinder
 
    void initRoyFloydWarshallMatrices();
    bool isWalkable(int x, int y);
-   std::queue<Point2D> findRFWPath(int srcX, int srcY, int dstX, int dstY);
-   std::queue<Point2D> getStraightPath(int srcX, int srcY, int dstX, int dstY);
 
    void deleteRoyFloydWarshallMatrices();
    void deleteCollisionMap();
@@ -72,14 +71,21 @@ class Pathfinder
    void setPoint(int left, int top, int right, int bottom, TileState state);
 
    public:
+      typedef std::list<Point2D> Path;
+
       Pathfinder(Map* newMap, std::vector<Obstacle*> obstacles);
 
-      std::queue<Point2D> findPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle = RFW);
+      Path findPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle = RFW);
 
       bool occupyPoint(int x, int y, int width, int height, NPC* npc);
       void freePoint(int x, int y, int width, int height);
 
       ~Pathfinder();
+
+   private:
+      Path findRFWPath(int srcX, int srcY, int dstX, int dstY);
+      Path getStraightPath(int srcX, int srcY, int dstX, int dstY);
+
 };
 
 #endif

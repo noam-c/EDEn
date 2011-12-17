@@ -114,46 +114,42 @@ void Pathfinder::initRoyFloydWarshallMatrices()
          else
          {
             bTile = tileNumToCoords(b);
-            if(collisionMap[aTile.y][aTile.x].occupantType == OBSTACLE || collisionMap[bTile.y][bTile.x].occupantType == OBSTACLE)
+
+            bool xAdjacent = aTile.x - 1 <= bTile.x && bTile.x <= aTile.x + 1;
+            bool yAdjacent = aTile.y - 1 <= bTile.y && bTile.y <= aTile.y + 1;
+            
+            bool adjacent = xAdjacent && yAdjacent;
+            
+            if(!adjacent 
+               || collisionMap[aTile.y][aTile.x].occupantType == OBSTACLE 
+               || collisionMap[bTile.y][bTile.x].occupantType == OBSTACLE)
             {
                distanceMatrix[a][b] = INFINITY;
                successorMatrix[a][b] = -1;
             }
             else
             {
-               bool xAdjacent = aTile.x - 1 <= bTile.x && bTile.x <= aTile.x + 1;
-               bool yAdjacent = aTile.y - 1 <= bTile.y && bTile.y <= aTile.y + 1;
-
-               if(!xAdjacent || !yAdjacent)
+               successorMatrix[a][b] = b;
+               if(aTile.x != bTile.x && aTile.y != bTile.y)
                {
-                  distanceMatrix[a][b] = INFINITY;
-                  successorMatrix[a][b] = -1;
+                  distanceMatrix[a][b] = ROOT_2;
                }
                else
                {
-                  successorMatrix[a][b] = b;
-                  if(aTile.x != bTile.x && aTile.y != bTile.y)
-                  {
-                     distanceMatrix[a][b] = ROOT_2;
-                  }
-                  else
-                  {
-                     distanceMatrix[a][b] = 1;
-                  }
+                  distanceMatrix[a][b] = 1;
                }
             }
          }
       }
    }
 
-   float distance;
    for(int i = 0; i < numTiles; ++i)
    {
       for(int a = 0; a < numTiles; ++a)
       {
          for(int b = 0; b < numTiles; ++b)
          {
-            distance = distanceMatrix[a][i] + distanceMatrix[i][b];
+            float distance = distanceMatrix[a][i] + distanceMatrix[i][b];
             if(distance < distanceMatrix[a][b])
             {
                distanceMatrix[a][b] = distance;
@@ -164,7 +160,7 @@ void Pathfinder::initRoyFloydWarshallMatrices()
    }
 }
 
-std::queue<Point2D> Pathfinder::findPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle style)
+Pathfinder::Path Pathfinder::findPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle style)
 {
    switch(style)
    {
@@ -180,39 +176,39 @@ std::queue<Point2D> Pathfinder::findPath(int srcX, int srcY, int dstX, int dstY,
    }
 }
 
-std::queue<Point2D> Pathfinder::getStraightPath(int srcX, int srcY, int dstX, int dstY)
+Pathfinder::Path Pathfinder::getStraightPath(int srcX, int srcY, int dstX, int dstY)
 {
-   std::queue<Point2D> path;
+   Path path;
    while(srcX > dstX + MOVEMENT_TILE_SIZE)
    {
       srcX -= MOVEMENT_TILE_SIZE;
-      path.push(Point2D(srcX, srcY));
+      path.push_back(Point2D(srcX, srcY));
    }
 
    while(srcX < dstX - MOVEMENT_TILE_SIZE)
    {
       srcX += MOVEMENT_TILE_SIZE;
-      path.push(Point2D(srcX, srcY));
+      path.push_back(Point2D(srcX, srcY));
    }
 
    while(srcY > dstY + MOVEMENT_TILE_SIZE)
    {
       srcY -= MOVEMENT_TILE_SIZE;
-      path.push(Point2D(srcX, srcY));
+      path.push_back(Point2D(srcX, srcY));
    }
 
    while(srcY < dstY - MOVEMENT_TILE_SIZE)
    {
       srcY += MOVEMENT_TILE_SIZE;
-      path.push(Point2D(srcX, srcY));
+      path.push_back(Point2D(srcX, srcY));
    }
 
    return path;
 }
 
-std::queue<Point2D> Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int dstY)
+Pathfinder::Path Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int dstY)
 {
-   std::queue<Point2D> path;
+   Path path;
 
    int srcTileNum = pixelsToTileNum(srcX, srcY);
    const int dstTileNum = pixelsToTileNum(dstX, dstY);
@@ -225,7 +221,7 @@ std::queue<Point2D> Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int ds
          break;
       }
       
-      path.push(Point2D(tileNumToPixels(nextTile)));
+      path.push_back(Point2D(tileNumToPixels(nextTile)));
       srcTileNum = nextTile;
    }
 

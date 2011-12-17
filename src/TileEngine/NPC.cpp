@@ -16,6 +16,7 @@
 #include "Map.h"
 #include "TileEngine.h"
 #include "Pathfinder.h"
+#include "GLInclude.h"
 
 #include "DebugUtils.h"
 
@@ -32,6 +33,7 @@ class NPC::NPCTask
       
    public:
       virtual bool perform(long timePassed) = 0;
+      virtual void draw() {}
       virtual ~NPCTask() {}
 };
 
@@ -43,15 +45,15 @@ class NPC::StandTask : public NPC::NPCTask
 
 class NPC::MoveTask : public NPC::NPCTask
 {
-   const Point2D src;
    const Point2D dst;
    Point2D currentLocation;
    Pathfinder& pathfinder;
-   std::queue<Point2D> path;
+   Pathfinder::Path path;
 
    public:
       MoveTask(NPC& npc, const Point2D& destination, const Map& map);
       bool perform(long timePassed);
+      void draw();
 };
 
 NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, const Map& map,
@@ -193,12 +195,16 @@ void NPC::draw()
    {
       sprite->draw(pixelLoc.x, pixelLoc.y + TileEngine::TILE_SIZE);
    }
+   
+   if(!tasks.empty())
+   {
+      tasks.front()->draw();
+   }
 }
 
 NPC::MoveTask::MoveTask(NPC& npc, const Point2D& destination, const Map& map)
-: NPCTask(npc), src(npc.getLocation()), dst(destination), currentLocation(src), pathfinder(*map.getPathfinder())
+: NPCTask(npc), dst(destination), currentLocation(npc.getLocation()), pathfinder(*map.getPathfinder())
 {
-   path = pathfinder.findPath(src.x, src.y, dst.x, dst.y);
 }
 
 bool NPC::MoveTask::perform(long timePassed)
@@ -276,7 +282,7 @@ bool NPC::MoveTask::perform(long timePassed)
       distanceCovered -= stepDistance;
       location = newCoords;
       currentLocation = newCoords;
-      path.pop();
+      path.pop_front();
    }
    
    npc.setLocation(location);
@@ -314,4 +320,23 @@ bool NPC::MoveTask::perform(long timePassed)
    }
 
    return path.empty();
+}
+
+void NPC::MoveTask::draw()
+{
+   glDisable(GL_TEXTURE_2D);
+   glColor3f(1.0f, 0.0f, 0.0f);
+   glBegin(GL_LINE_STRIP);
+   for(Pathfinder::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
+   {
+      Point2D point = *iter;
+      point.x += TileEngine::TILE_SIZE / 2;
+
+      point.y += TileEngine::TILE_SIZE / 2;
+
+      glVertex3d(point.x, point.y, 0);
+   }
+   glEnd();
+   
+   glEnable(GL_TEXTURE_2D);
 }
