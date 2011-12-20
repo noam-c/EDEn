@@ -17,6 +17,7 @@
 const int debugFlag = DEBUG_RES_LOAD;
 
 //#define DRAW_PASSIBILITY
+//#define DRAW_PATHFINDER
 
 Map::Map()
 {
@@ -140,6 +141,9 @@ void Map::step(long timePassed)
 
 void Map::draw() const
 {
+#ifdef DRAW_PATHFINDER
+   pathfinder->draw();
+#else
    for(int i = 0; i < width; ++i)
    {
       for(int j = 0; j < height; ++j)
@@ -164,6 +168,7 @@ void Map::draw() const
    {
       (*iter)->draw();
    }
+#endif
 }
 
 Map::~Map()

@@ -10,9 +10,10 @@
 #include "Obstacle.h"
 #include "TileEngine.h"
 #include "Point2D.h"
+#include "GLInclude.h"
 #include "stdlib.h"
-#include <set>
 #include <limits>
+#include <algorithm>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
@@ -55,7 +56,7 @@ Pathfinder::Pathfinder(Map* map, std::vector<Obstacle*> obstacles) : map(map), d
    for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
    {
       Obstacle* o = *iter;
-      addObstacle(o->getTileX() * TileEngine::TILE_SIZE, o->getTileY() * TileEngine::TILE_SIZE, o->getWidth(), o->getHeight());
+      addObstacle(o->getTileX() * MOVEMENT_TILE_SIZE, o->getTileY() * MOVEMENT_TILE_SIZE, o->getWidth(), o->getHeight());
    }
 
    initRoyFloydWarshallMatrices();
@@ -70,8 +71,8 @@ Point2D Pathfinder::tileNumToCoords(int tileNum)
 Point2D Pathfinder::tileNumToPixels(int tileNum)
 {
    Point2D p = tileNumToCoords(tileNum);
-   p.x *= TileEngine::TILE_SIZE;
-   p.y *= TileEngine::TILE_SIZE;
+   p.x *= MOVEMENT_TILE_SIZE;
+   p.y *= MOVEMENT_TILE_SIZE;
    return p;
 }
 
@@ -82,29 +83,29 @@ int Pathfinder::coordsToTileNum(int x, int y)
 
 int Pathfinder::pixelsToTileNum(int x, int y)
 {
-   return (y * collisionMapWidth + x) / TileEngine::TILE_SIZE;
+   return (y * collisionMapWidth + x) / MOVEMENT_TILE_SIZE;
 }
 
 void Pathfinder::initRoyFloydWarshallMatrices()
 {
-   const int numTiles = collisionMapWidth*collisionMapHeight;
+   const int NUM_TILES = collisionMapWidth*collisionMapHeight;
    
-   distanceMatrix = new float*[numTiles];
-   successorMatrix = new int*[numTiles];
+   distanceMatrix = new float*[NUM_TILES];
+   successorMatrix = new int*[NUM_TILES];
 
-   for(int i = 0; i < numTiles; ++i)
+   for(int i = 0; i < NUM_TILES; ++i)
    {
-      distanceMatrix[i] = new float[numTiles];
-      successorMatrix[i] = new int[numTiles];
+      distanceMatrix[i] = new float[NUM_TILES];
+      successorMatrix[i] = new int[NUM_TILES];
    }
 
    Point2D aTile;
    Point2D bTile;
 
-   for(int a = 0; a < numTiles; ++a)
+   for(int a = 0; a < NUM_TILES; ++a)
    {
       aTile = tileNumToCoords(a);
-      for(int b = 0; b < numTiles; ++b)
+      for(int b = 0; b < NUM_TILES; ++b)
       {
          if(a == b)
          {
@@ -143,11 +144,11 @@ void Pathfinder::initRoyFloydWarshallMatrices()
       }
    }
 
-   for(int i = 0; i < numTiles; ++i)
+   for(int i = 0; i < NUM_TILES; ++i)
    {
-      for(int a = 0; a < numTiles; ++a)
+      for(int a = 0; a < NUM_TILES; ++a)
       {
-         for(int b = 0; b < numTiles; ++b)
+         for(int b = 0; b < NUM_TILES; ++b)
          {
             float distance = distanceMatrix[a][i] + distanceMatrix[i][b];
             if(distance < distanceMatrix[a][b])
@@ -167,6 +168,10 @@ Pathfinder::Path Pathfinder::findPath(int srcX, int srcY, int dstX, int dstY, Pa
       case RFW:
       {
          return findRFWPath(srcX, srcY, dstX, dstY);
+      }
+      case A_STAR:
+      {
+         return findAStarPath(srcX, srcY, dstX, dstY);
       }
       case STRAIGHT:
       default:
@@ -206,6 +211,175 @@ Pathfinder::Path Pathfinder::getStraightPath(int srcX, int srcY, int dstX, int d
    return path;
 }
 
+class Pathfinder::AStarPoint : public Point2D
+{
+   private:
+      const AStarPoint* parent;
+      
+      float gCost;
+      float hCost;
+
+      float fCost;
+
+   public:
+      AStarPoint(const AStarPoint* parent, int x, int y, float gCost, float hCost) : Point2D(x,y), parent(parent), gCost(gCost), hCost(hCost), fCost(gCost + hCost) {}
+
+      void setParent(const AStarPoint* newParent)
+      {
+         parent = newParent;
+      }
+   
+      void setGCost(float newCost)
+      {
+         gCost = newCost;
+         fCost = gCost + hCost;
+      }
+      
+      void setHCost(float newCost)
+      {
+         hCost = newCost;
+         fCost = gCost + hCost;
+      }
+      
+      const AStarPoint* getParent() const
+      {
+         return parent;
+      }
+   
+      float getGCost() const
+      {
+         return gCost;
+      }
+      
+      float getHCost() const
+      {
+         return hCost;
+      }
+
+      float getFCost() const
+      {
+         return fCost;
+      }
+   
+      struct IsLowerPriority
+      {
+         bool operator()(const AStarPoint* lhs, const AStarPoint* rhs) const
+         {
+            // We consider lhs to have a lower priority if it has a higher total f() cost.
+            // In case of a tie, this point will have lower priority if it has a lower g() cost,
+            // indicating that it is not as deep in the search tree.
+            return lhs->fCost > rhs->fCost || (lhs->fCost == rhs->fCost && lhs->gCost < rhs->gCost);
+         }
+      };
+   
+      struct ArePointsEqual
+      {
+         const Point2D& point;
+         
+         bool operator()(const AStarPoint* other) const
+         {
+            return point == *other;
+         }
+      };
+};
+
+Pathfinder::Path Pathfinder::findAStarPath(int srcX, int srcY, int dstX, int dstY)
+{
+   std::vector<AStarPoint*> openSet;
+   std::vector<const AStarPoint*> closedSet;
+   
+   const int NUM_TILES = collisionMapWidth*collisionMapHeight;
+   std::vector<bool> discovered(NUM_TILES, false);
+   
+   openSet.push_back(new AStarPoint(NULL, srcX / MOVEMENT_TILE_SIZE, srcY / MOVEMENT_TILE_SIZE, 0, 0));
+   std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+
+   const int sourceTileNum = pixelsToTileNum(srcX, srcY);
+   const int destinationTileNum = pixelsToTileNum(dstX, dstY);
+
+   discovered[sourceTileNum] = true;
+   Point2D destinationPoint(dstX / MOVEMENT_TILE_SIZE, dstY / MOVEMENT_TILE_SIZE);
+
+   Path path;
+
+   while(!openSet.empty())
+   {
+      // Get the lowest-cost point in the open set, and remove it from the open set
+      const AStarPoint* cheapestPoint = openSet.front();
+      std::pop_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+      openSet.pop_back();
+      closedSet.push_back(cheapestPoint);
+
+      if(*cheapestPoint == destinationPoint)
+      {
+         DEBUG("Found goal point %d,%d", cheapestPoint->x, cheapestPoint->y);
+         const AStarPoint* curr = cheapestPoint;
+         while(curr != NULL)
+         {
+            path.push_front(Point2D(curr->x * MOVEMENT_TILE_SIZE, curr->y * MOVEMENT_TILE_SIZE));
+            curr = curr->getParent();
+         }
+         break;
+      }
+      
+      DEBUG("Evaluating point %d,%d", cheapestPoint->x, cheapestPoint->y);
+
+      // Evaluate all the existing laterally adjacent points,
+      // adding 1 as the cost of reaching the point from our current cheapest point.
+      const std::vector<Point2D> lateralPoints = Point2D::getLaterallyAdjacentPoints(*cheapestPoint, collisionMapWidth, collisionMapHeight);
+      evaluateAdjacentNodes(lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered);
+
+      // Evaluate all the existing diagonally adjacent points,
+      // adding the square root of 2 as the cost of reaching the point from our current cheapest point.
+      const std::vector<Point2D> diagonalPoints = Point2D::getDiagonallyAdjacentPoints(*cheapestPoint, collisionMapWidth, collisionMapHeight);
+      evaluateAdjacentNodes(diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered);
+   }
+   
+   for(std::vector<AStarPoint*>::const_iterator iter = openSet.begin(); iter != openSet.end(); ++iter)
+   {
+      delete *iter;
+   }
+   
+   for(std::vector<const AStarPoint*>::const_iterator iter = closedSet.begin(); iter != closedSet.end(); ++iter)
+   {
+      delete *iter;
+   }
+   
+   return path;
+}
+
+void Pathfinder::evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes, const AStarPoint* cheapestPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered)
+{
+   for(std::vector<Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
+   {
+      int adjacentTileNum = coordsToTileNum(iter->x, iter->y);
+      float tileGCost = cheapestPoint->getGCost() + traversalCost;
+      float tileHCost = distanceMatrix[adjacentTileNum][destinationTileNum];
+      if(!discovered[adjacentTileNum])
+      {
+         if(collisionMap[iter->y][iter->x].occupantType == FREE)
+         {
+            DEBUG("Pushing point %d,%d onto open set with g()=%f and f()=%f.", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
+            discovered[adjacentTileNum] = true;
+            openSet.push_back(new AStarPoint(cheapestPoint, iter->x, iter->y, tileGCost, tileHCost));
+            std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+         }
+      }
+      else
+      {
+         AStarPoint::ArePointsEqual equality = { *iter };
+         std::vector<AStarPoint*>::const_iterator tileInOpenSet = std::find_if(openSet.begin(), openSet.end(), equality);
+         if(tileInOpenSet != openSet.end() && (*tileInOpenSet)->getGCost() > tileGCost)
+         {
+            DEBUG("Altering cost of discovered point %d, %d to g()=%f and f()=%f", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
+            (*tileInOpenSet)->setGCost(tileGCost);
+            (*tileInOpenSet)->setParent(cheapestPoint);
+            std::make_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+         }
+      }
+   }
+}
+
 Pathfinder::Path Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int dstY)
 {
    Path path;
@@ -234,17 +408,12 @@ bool Pathfinder::isWalkable(int x, int y)
    if(x >= collisionMapWidth) return false;
    if(y >= collisionMapHeight) return false;
 
-   return collisionMap[x][y].occupantType == FREE;
+   return collisionMap[y][x].occupantType == FREE;
 }
 
 bool Pathfinder::addObstacle(int x, int y, int width, int height)
 {
    return occupyPoint(x, y, width, height, TileState(OBSTACLE));
-}
-
-bool Pathfinder::occupyPoint(int x, int y, int width, int height, NPC* npc)
-{
-   return occupyPoint(x, y, width, height, TileState(CHARACTER, npc));
 }
 
 bool Pathfinder::occupyPoint(int x, int y, int width, int height, TileState state)
@@ -263,7 +432,17 @@ bool Pathfinder::occupyPoint(int x, int y, int width, int height, TileState stat
    {
       for(int collisionMapY = collisionMapTop; collisionMapY <= collisionMapBottom; ++collisionMapY)
       {
-         if(!collisionMap[collisionMapY][collisionMapX].occupantType != FREE) return false;
+         // We cannot occupy the point if it is reserved by an entity other than the occupant attempting to occupy it.
+         // For instance, we cannot occupy a tile already occupied by an obstacle or a different character.
+         const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX].occupantType;
+         if(collisionTile.occupantType == CHARACTER && collisionTile.occupant != state.occupant)
+         {
+            return false;
+         }
+         else if(collisionTile.occupantType != FREE)
+         {
+            return false;
+         }
       }
    }
 
@@ -278,8 +457,18 @@ void Pathfinder::freePoint(int x, int y, int width, int height)
    int collisionMapRight = (x + width)/MOVEMENT_TILE_SIZE;
    int collisionMapTop = y/MOVEMENT_TILE_SIZE;
    int collisionMapBottom = (y + height)/MOVEMENT_TILE_SIZE;
-
+   
    setPoint(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, TileState(FREE));
+}
+
+bool Pathfinder::beginMovement(NPC* npc, int srcX, int srcY, int dstX, int dstY, int width, int height)
+{
+   return occupyPoint(dstX, dstY, width, height, TileState(CHARACTER, npc));
+}
+
+void Pathfinder::endMovement(int srcX, int srcY, int dstX, int dstY, int width, int height)
+{
+   freePoint(srcX, srcY, width, height);
 }
 
 void Pathfinder::setPoint(int left, int top, int right, int bottom, TileState state)
@@ -289,6 +478,51 @@ void Pathfinder::setPoint(int left, int top, int right, int bottom, TileState st
       for(int collisionMapY = top; collisionMapY <= bottom; ++collisionMapY)
       {
          collisionMap[collisionMapY][collisionMapX] = state;
+      }
+   }
+}
+
+void Pathfinder::draw()
+{
+   for(int y = 0; y < collisionMapHeight; ++y)
+   {
+      for(int x = 0; x < collisionMapWidth; ++x)
+      {
+         float destLeft = float(x * MOVEMENT_TILE_SIZE);
+         float destRight = float((x + 1) * MOVEMENT_TILE_SIZE);
+         float destTop = float(y * MOVEMENT_TILE_SIZE);
+         float destBottom = float((y + 1) * MOVEMENT_TILE_SIZE);
+         
+         glDisable(GL_TEXTURE_2D);
+         glBegin(GL_QUADS);
+         
+         switch(collisionMap[y][x].occupantType)
+         {
+            case FREE:
+            {
+               glColor3f(0.0f, 0.5f, 0.0f);
+               break;
+            }
+            case CHARACTER:
+            {
+               glColor3f(0.0f, 0.0f, 0.5f);
+               break;
+            }
+            case OBSTACLE:
+            default:
+            {
+               glColor3f(0.5f, 0.5f, 0.0f);
+               break;
+            }
+         }
+         
+         glVertex3f(destLeft, destTop, 0.0f);
+         glVertex3f(destRight, destTop, 0.0f);
+         glVertex3f(destRight, destBottom, 0.0f);
+         glVertex3f(destLeft, destBottom, 0.0f);
+         glColor3f(1.0f, 1.0f, 1.0f);
+         glEnd();
+         glEnable(GL_TEXTURE_2D);
       }
    }
 }
