@@ -25,23 +25,18 @@ const int Pathfinder::MOVEMENT_TILE_SIZE = 32;
 const float Pathfinder::ROOT_2 = 1.41421356f;
 const float Pathfinder::INFINITY = std::numeric_limits<float>::infinity();
 
-Pathfinder::Pathfinder(Map* map, std::vector<Obstacle*> obstacles) : map(map), distanceMatrix(NULL)
+Pathfinder::Pathfinder(const Map& map, std::vector<Obstacle*> obstacles) : map(map), distanceMatrix(NULL)
 {
-   if(map == NULL)
-   {
-      T_T("Null map encountered when trying to create the collision map.");
-   }
-
    const int collisionTileRatio = TileEngine::TILE_SIZE / MOVEMENT_TILE_SIZE;
-   collisionMapWidth = map->getWidth() * collisionTileRatio;
-   collisionMapHeight = map->getHeight() * collisionTileRatio;
+   collisionMapWidth = map.getWidth() * collisionTileRatio;
+   collisionMapHeight = map.getHeight() * collisionTileRatio;
 
-   bool** passibilityMap = map->getPassibilityMatrix();
+   bool** passibilityMap = map.getPassibilityMatrix();
    collisionMap = new TileState*[collisionMapHeight];
-   for(int y = 0; y < map->getHeight(); ++y)
+   for(int y = 0; y < map.getHeight(); ++y)
    {
       TileState* row = collisionMap[y] = new TileState[collisionMapWidth];
-      for(int x = 0; x < map->getWidth(); ++x)
+      for(int x = 0; x < map.getWidth(); ++x)
       {
          int xOffset = x * collisionTileRatio;
          bool passible = passibilityMap[y][x];
@@ -402,21 +397,12 @@ Pathfinder::Path Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int dstY)
    return path;
 }
 
-bool Pathfinder::isWalkable(int x, int y)
-{
-   if(x < 0 || y < 0) return false;
-   if(x >= collisionMapWidth) return false;
-   if(y >= collisionMapHeight) return false;
-
-   return collisionMap[y][x].occupantType == FREE;
-}
-
 bool Pathfinder::addObstacle(int x, int y, int width, int height)
 {
-   return occupyPoint(x, y, width, height, TileState(OBSTACLE));
+   return occupyArea(x, y, width, height, TileState(OBSTACLE));
 }
 
-bool Pathfinder::occupyPoint(int x, int y, int width, int height, TileState state)
+bool Pathfinder::occupyArea(int x, int y, int width, int height, TileState state)
 {
    if(state.occupantType == FREE)
    {
@@ -446,32 +432,32 @@ bool Pathfinder::occupyPoint(int x, int y, int width, int height, TileState stat
       }
    }
 
-   setPoint(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, state);
+   setArea(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, state);
 
    return true;
 }
 
-void Pathfinder::freePoint(int x, int y, int width, int height)
+void Pathfinder::freeArea(int x, int y, int width, int height)
 {
    int collisionMapLeft = x/MOVEMENT_TILE_SIZE;
    int collisionMapRight = (x + width)/MOVEMENT_TILE_SIZE;
    int collisionMapTop = y/MOVEMENT_TILE_SIZE;
    int collisionMapBottom = (y + height)/MOVEMENT_TILE_SIZE;
    
-   setPoint(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, TileState(FREE));
+   setArea(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, TileState(FREE));
 }
 
 bool Pathfinder::beginMovement(NPC* npc, int srcX, int srcY, int dstX, int dstY, int width, int height)
 {
-   return occupyPoint(dstX, dstY, width, height, TileState(CHARACTER, npc));
+   return occupyArea(dstX, dstY, width, height, TileState(CHARACTER, npc));
 }
 
 void Pathfinder::endMovement(int srcX, int srcY, int dstX, int dstY, int width, int height)
 {
-   freePoint(srcX, srcY, width, height);
+   freeArea(srcX, srcY, width, height);
 }
 
-void Pathfinder::setPoint(int left, int top, int right, int bottom, TileState state)
+void Pathfinder::setArea(int left, int top, int right, int bottom, TileState state)
 {
    for(int collisionMapX = left; collisionMapX <= right; ++collisionMapX)
    {

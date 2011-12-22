@@ -82,7 +82,7 @@ Map::Map(std::ifstream& in)
    }
 
    initializePassibilityMatrix();
-   pathfinder = new Pathfinder(this, obstacles);
+   pathfinder = new Pathfinder(*this, obstacles);
 
    DEBUG("Map loaded.");
 }

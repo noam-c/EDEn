@@ -49,12 +49,12 @@ class NPC
    /**
     * A class for asynchronous NPC instructions.
     */
-   class NPCTask;
-   class MoveTask;
-   class StandTask;
+   class Order;
+   class MoveOrder;
+   class StandOrder;
 
-   /** A queue of tasks for the NPC to perform */
-   std::queue<NPCTask*> tasks;
+   /** A queue of orders for the NPC to perform */
+   std::queue<Order*> orders;
 
    /** The NPC's associated sprite, which is drawn on screen. */
    Sprite* sprite;
