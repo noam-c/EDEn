@@ -10,93 +10,17 @@
 #include "TileEngine.h"
 #include "Map.h"
 
+#include "DebugUtils.h"
+const int debugFlag = DEBUG_NPC;
+
 NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, const Map& map)
-: Order(npc), dst(destination), currentLocation(npc.getLocation()), pathfinder(*map.getPathfinder())
+: Order(npc), dst(destination), currLocation(npc.getLocation()), pathfinder(*map.getPathfinder())
 {
 }
 
-bool NPC::MoveOrder::perform(long timePassed)
+void NPC::MoveOrder::updateDirection(MovementDirection newDirection)
 {
-   MovementDirection currDirection = npc.getDirection();
-   MovementDirection newDirection = currDirection;
-   Point2D location = npc.getLocation();
-   
-   float vel = npc.getMovementSpeed();
-   long distanceCovered = timePassed * vel;
-   if(path.empty())
-   {
-      if(location == dst)
-      {
-         return true;
-      }
-      else
-      {
-         path = pathfinder.findPath(location.x, location.y, dst.x, dst.y);
-         return false;
-      }
-   }
-   
-   while(!path.empty())
-   {
-      Point2D newCoords = path.front();
-
-      // Set the direction based on where the next tile is relative to the current location.
-      // For now, when the NPC must move diagonally, it will always face up or down
-      if(location.y < newCoords.y)
-      {
-         newDirection = DOWN;
-      }
-      else if(location.y > newCoords.y)
-      {
-         newDirection = UP;
-      }
-      else if(location.x < newCoords.x)
-      {
-         newDirection = RIGHT;
-      }
-      else if(location.x > newCoords.x)
-      {
-         newDirection = LEFT;
-      } 
-      
-      const long stepDistance = std::max(abs(location.x - newCoords.x), abs(location.y - newCoords.y));
-      
-      if (distanceCovered < stepDistance)
-      {
-         if(location.x < newCoords.x)
-         {
-            location.x += distanceCovered;
-            if(location.x > newCoords.x) location.x = newCoords.x;
-         }
-         else if(location.x > newCoords.x)
-         {
-            location.x -= distanceCovered;
-            if(location.x < newCoords.x) location.x = newCoords.x;
-         }
-         
-         if(location.y < newCoords.y)
-         {
-            location.y += distanceCovered;
-            if(location.y > newCoords.y) location.y = newCoords.y;
-         }
-         else if(location.y > newCoords.y)
-         {
-            location.y -= distanceCovered;
-            if(location.y < newCoords.y) location.y = newCoords.y;
-         }
-         
-         break;
-      }
-      
-      distanceCovered -= stepDistance;
-      location = newCoords;
-      currentLocation = newCoords;
-      path.pop_front();
-   }
-   
-   npc.setLocation(location);
-   
-   if(newDirection != currDirection)
+   if(newDirection != npc.getDirection())
    {
       npc.setDirection(newDirection);
       switch(newDirection)
@@ -127,7 +51,159 @@ bool NPC::MoveOrder::perform(long timePassed)
          }
       }
    }
+}
+
+void NPC::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& direction)
+{
+   nextLocation = path.front();
    
+   // Set the direction based on where the next tile is relative to the current location.
+   // For now, when the NPC must move diagonally, it will always face up or down
+   if(location.y < nextLocation.y)
+   {
+      direction = DOWN;
+   }
+   else if(location.y > nextLocation.y)
+   {
+      direction = UP;
+   }
+   else if(location.x < nextLocation.x)
+   {
+      direction = RIGHT;
+   }
+   else if(location.x > nextLocation.x)
+   {
+      direction = LEFT;
+   }
+}
+
+bool NPC::MoveOrder::perform(long timePassed)
+{
+   MovementDirection newDirection = npc.getDirection();
+   Point2D location = npc.getLocation();
+   
+   float vel = npc.getMovementSpeed();
+   long distanceCovered = timePassed * vel;
+   if(path.empty())
+   {
+      if(location == dst)
+      {
+         return true;
+      }
+      else
+      {
+         DEBUG("Finding an ideal path from %d,%d to %d,%d", location.x, location.y, dst.x, dst.y);  
+         path = pathfinder.findBestPath(location, dst);
+         if(path.empty())
+         {
+            /** 
+             * \todo This line will fire if the goal cannot possibly be reached.
+                     It would be better to return an error to the coroutine that initiated this move.
+             */
+            DEBUG("Goal is currently unreachable!");  
+            return true;
+         }
+
+         DEBUG("Found ideal path:");
+         for(Pathfinder::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
+         {
+            DEBUG("\t(%d,%d)", iter->x, iter->y);
+         }
+
+         // If the path exists, set the next waypoint
+         updateNextWaypoint(location, newDirection);
+
+         updateDirection(newDirection);
+         return false;
+      }
+   }
+   
+   while(true)
+   {
+      const long stepDistance = std::max(abs(location.x - nextLocation.x), abs(location.y - nextLocation.y));
+
+      if (distanceCovered < stepDistance)
+      {
+         // The NPC will not be able to make it to the next waypoint in this frame
+         // Move towards the waypoint as much as possible.
+         if(location.x < nextLocation.x)
+         {
+            location.x += distanceCovered;
+            if(location.x > nextLocation.x) location.x = nextLocation.x;
+         }
+         else if(location.x > nextLocation.x)
+         {
+            location.x -= distanceCovered;
+            if(location.x < nextLocation.x) location.x = nextLocation.x;
+         }
+         
+         if(location.y < nextLocation.y)
+         {
+            location.y += distanceCovered;
+            if(location.y > nextLocation.y) location.y = nextLocation.y;
+         }
+         else if(location.y > nextLocation.y)
+         {
+            location.y -= distanceCovered;
+            if(location.y < nextLocation.y) location.y = nextLocation.y;
+         }
+         
+         // Movement for this frame is finished
+         break;
+      }
+      else
+      {
+         // The NPC can reach the next waypoint in this frame
+         distanceCovered -= stepDistance;
+
+         DEBUG("Reached waypoint %d,%d", nextLocation.x, nextLocation.y);
+         pathfinder.endMovement(currLocation, nextLocation, 32, 32);
+         
+         // Update the current waypoint and dequeue it from the path
+         currLocation = location = nextLocation;
+         path.pop_front();
+         
+         // If there are no more nodes, the NPC is finished for this frame
+         // Unless something went wrong, the NPC reached the destination
+         if(path.empty())
+         {
+            DEBUG("Path completed.");
+            break;
+         }
+         
+         // Get the next waypoint, and reroute if it is obstructed.
+         updateNextWaypoint(location, newDirection);
+         DEBUG("Next waypoint: %d,%d", nextLocation.x, nextLocation.y);
+
+         bool canMove = pathfinder.beginMovement(&npc, currLocation, nextLocation, 32, 32);
+         if(!canMove)
+         {
+            DEBUG("Path from %d,%d to %d,%d is obstructed. Rerouting...", currLocation.x, currLocation.y, nextLocation.x, nextLocation.y);
+            path = pathfinder.findReroutedPath(location, dst);
+            if(path.empty())
+            {
+               /** 
+                * \todo This line will fire if the goal cannot be reached because of a dynamic obstruction.
+                        It would be better to return an error to the coroutine that initiated this move so different coroutines can react in different ways.
+                */
+               DEBUG("Failed to reroute. Destination is completely obstructed.");
+               break;
+            }
+
+            DEBUG("Found rerouted path:");
+            for(Pathfinder::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
+            {
+               DEBUG("\t(%d,%d)", iter->x, iter->y);
+            }
+
+            // If the path exists, set the next waypoint and finish the frame
+            updateNextWaypoint(location, newDirection);
+         }
+      }
+   }
+   
+   npc.setLocation(location);
+   updateDirection(newDirection);
    return false;
 }
 
@@ -138,11 +214,7 @@ void NPC::MoveOrder::draw()
    glBegin(GL_LINE_STRIP);
    for(Pathfinder::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
    {
-      Point2D point = *iter;
-      point.x += TileEngine::TILE_SIZE / 2;
-      
-      point.y += TileEngine::TILE_SIZE / 2;
-      
+      Point2D point(iter->x + TileEngine::TILE_SIZE / 2, iter->y + TileEngine::TILE_SIZE / 2);
       glVertex3d(point.x, point.y, 0);
    }
    glEnd();

@@ -25,29 +25,6 @@ struct Point2D;
 class Pathfinder
 {
    /**
-    * The algorithm to use in order to find the best path.
-    */
-   enum PathfindingStyle
-   {
-      /** 
-       * Indicates that the Roy-Floyd-Warshall algorithm
-       * should be used to find a path.
-       */
-      RFW,
-      
-      /** 
-       * Indicates that the path should be a straight line.
-       */
-      STRAIGHT,
-
-      /** 
-       * Indicates that the A* search algorithm
-       * should be used to find a path.
-       */
-      A_STAR,
-   };
-
-   /**
     * The kinds of entities that can occupy a tile.
     */
    enum OccupantType
@@ -132,10 +109,9 @@ class Pathfinder
    /**
     * Convert pixel coordinates into a tile number.
     *
-    * @param x The x-coordinate of the location (in pixels)
-    * @param y The y-coordinate of the location (in pixels)
+    * @param pixelLocation The coordinates of the location (in pixels)
     */
-   inline int pixelsToTileNum(int x, int y);
+   inline int pixelsToTileNum(Point2D pixelLocation);
 
    /**
     * Convert a tile number into tile coordinates.
@@ -147,10 +123,9 @@ class Pathfinder
    /**
     * Convert tile coordinates into a tile number.
     *
-    * @param x The x-coordinate of the location (in tiles)
-    * @param y The y-coordinate of the location (in tiles)
+    * @param tileLocation The coordinates of the location (in tiles)
     */
-   inline int coordsToTileNum(int x, int y);
+   inline int coordsToTileNum(Point2D tileLocation);
    
    /** 
     * Runs the Roy-Floyd-Warshall algorithm on the map
@@ -172,46 +147,43 @@ class Pathfinder
     * If an area is available, occupy it and set the tiles within it to the new state. 
     * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
     *
-    * @param x The x-coordinate of the left edge of the area to occupy (in pixels)
-    * @param y The y-coordinate of the top edge of the area to occupy (in pixels)
+    * @param area The coordinates of the top-left corner of the area to occupy (in pixels)
     * @param width The width of the area to occupy (in pixels)
     * @param height The height of the area to occupy (in pixels)
     * @param state The new state of the area (occupant and type)
     *
     * @return true if the area has been successfully occupied, false if there was something else in the area.
     */
-   bool occupyArea(int x, int y, int width, int height, TileState state);
+   bool occupyArea(Point2D area, int width, int height, TileState state);
 
    /**
     * Free the tiles belonging to a given entity within a specified area. 
     *
-    * @param x The x-coordinate of the left edge of the area to free (in pixels)
-    * @param y The y-coordinate of the top edge of the area to free (in pixels)
+    * @param area The coordinates of the top-left corner of the area to free (in pixels)
     * @param width The width of the area to free (in pixels)
     * @param height The height of the area to free (in pixels)
     */
-   void freeArea(int x, int y, int width, int height);
+   void freeArea(Point2D area, int width, int height);
 
    /**
     * Add an obstacle and occupy the tiles under it.
     * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
     *
-    * @param x The x-coordinate of the left edge of the obstacle (in pixels)
-    * @param y The y-coordinate of the top edge of the obstacle (in pixels)
+    * @param area The coordinates of the top-left corner of the obstacle (in pixels)
     * @param width The width of the obstacle (in pixels)
     * @param height The height of the obstacle (in pixels)
     *
     * @return true if the obstacle has been successfully placed in the area, false if there was something else in the area.
     */
-   bool addObstacle(int x, int y, int width, int height);
+   bool addObstacle(Point2D area, int width, int height);
 
    /**
     * Helper function to unconditionally set the tiles in an area to a given state. 
     *
-    * @param x The x-coordinate of the left edge of the area to set (in pixels)
-    * @param y The y-coordinate of the top edge of the area to set (in pixels)
-    * @param width The width of the area to set (in pixels)
-    * @param height The height of the area to set (in pixels)
+    * @param left The x-coordinate of the left edge of the area to set (in tiles)
+    * @param top The y-coordinate of the top edge of the area to set (in tiles)
+    * @param right The x-coordinate of the right edge of the area to set (in tiles)
+    * @param bottom The y-coordinate of the bottom edge of the area to set (in tiles)
     * @param state The new state of the area (occupant and type)
     */
    void setArea(int left, int top, int right, int bottom, TileState state);
@@ -232,43 +204,47 @@ class Pathfinder
       /**
        * Finds an ideal path from the source coordinates to the destination.
        *
-       * @param srcX The x-coordinate of the source (in pixels).
-       * @param srcY The y-coordinate of the source (in pixels).
-       * @param dstX The x-coordinate of the destination (in pixels).
-       * @param dstY The y-coordinate of the destination (in pixels).
-       * @param style The style to use in creating the path.
+       * @param src The coordinates of the source (in pixels).
+       * @param dst The coordinates of the destination (in pixels).
        *
-       * @return The path from the source point to the destination point.
+       * @return The ideal best path from the source point to the destination point.
        */
-      Path findPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle style = A_STAR);
-
+      Path findBestPath(Point2D src, Point2D dst);
+      
+      /**
+       * Finds the shortest path from the source coordinates to the destination
+       * around all obstacles and entities.
+       *
+       * @param src The coordinates of the source (in pixels).
+       * @param dst The coordinates of the destination (in pixels).
+       *
+       * @return The shortest unobstructed path from the source point to the destination point.
+       */
+      Path findReroutedPath(Point2D src, Point2D dst);
+      
       /**
        * Request permission from the Pathfinder to move an NPC from the source to the given destination.
        * NOTE: After the NPC has completed this movement, endMovement MUST be called in order to notify the Pathfinder to perform the appropriate clean-up.
        *
        * @param npc The NPC that is moving.
-       * @param srcX The x-coordinate of the source (in pixels).
-       * @param srcY The y-coordinate of the source (in pixels).
-       * @param dstX The x-coordinate of the destination (in pixels).
-       * @param dstY The y-coordinate of the destination (in pixels).
+       * @param src The coordinates of the source (in pixels).
+       * @param dst The coordinates of the destination (in pixels).
        * @param width Width of the NPC.
        * @param height Height of the NPC.
        *
        * @return true iff the NPC can move from the source to the destination.
        */
-      bool beginMovement(NPC* npc, int srcX, int srcY, int dstX, int dstY, int width, int height);
+      bool beginMovement(NPC* npc, Point2D src, Point2D dst, int width, int height);
 
       /**
        * Notifies the Pathfinder that the NPC moved successfully from the source to the given destination and no longer occupies the source coordinates.
        *
-       * @param srcX The x-coordinate of the source (in pixels).
-       * @param srcY The y-coordinate of the source (in pixels).
-       * @param dstX The x-coordinate of the destination (in pixels).
-       * @param dstY The y-coordinate of the destination (in pixels).
+       * @param src The coordinates of the source (in pixels).
+       * @param dst The coordinates of the destination (in pixels).
        * @param width Width of the entity that moved.
        * @param height Height of the entity that moved.
        */
-      void endMovement(int srcX, int srcY, int dstX, int dstY, int width, int height);
+      void endMovement(Point2D src, Point2D dst, int width, int height);
 
       /**
        * Draw the collision map for diagnostic purposes.
@@ -282,35 +258,34 @@ class Pathfinder
 
    private:
       /**
-       * @return A straight-line path from origin to goal, regardless of anything being in the way.
+       * @param src The coordinates of the source (in pixels).
+       * @param dst The coordinates of the destination (in pixels).
+
+       * @return A straight path from origin to goal, regardless of anything being in the way.
        */
-      Path getStraightPath(int srcX, int srcY, int dstX, int dstY);
+      Path getStraightPath(Point2D src, Point2D dst);
 
       /**
        * Uses the successor matrix computed on Pathfinder construction to determine the best path.
        * This path does not take into account moving entities like NPCs or the player, and does not take dynamically added obstacles into account.
        *
-       * @param srcX The x-coordinate of the source (in pixels).
-       * @param srcY The y-coordinate of the source (in pixels).
-       * @param dstX The x-coordinate of the destination (in pixels).
-       * @param dstY The y-coordinate of the destination (in pixels).
+       * @param src The coordinates of the source (in pixels).
+       * @param dst The coordinates of the destination (in pixels).
        *
        * @return The best path computed by the Roy-Floyd-Warshall algorithm. 
        */
-      Path findRFWPath(int srcX, int srcY, int dstX, int dstY);
+      Path findRFWPath(Point2D src, Point2D dst);
 
       /**
        * Uses the A* algorithm to dynamically find the best possible path. Uses the Roy-Floyd-Warshall distance matrix as a heuristic when determining the best path.
        * This path will route around any dynamically added obstacles or moving entities based on their locations when this function is called.
        *
-       * @param srcX The x-coordinate of the source (in pixels).
-       * @param srcY The y-coordinate of the source (in pixels).
-       * @param dstX The x-coordinate of the destination (in pixels).
-       * @param dstY The y-coordinate of the destination (in pixels).
+       * @param src The coordinates of the source (in pixels).
+       * @param dst The coordinates of the destination (in pixels).
        *
        * @return The best path computed by the A* algorithm.
        */
-      Path findAStarPath(int srcX, int srcY, int dstX, int dstY);
+      Path findAStarPath(Point2D src, Point2D dst);
 
       /**
        * A node used in A* search.

@@ -30,10 +30,14 @@ class NPC::StandOrder : public NPC::Order
 class NPC::MoveOrder : public NPC::Order
 {
    const Point2D dst;
-   Point2D currentLocation;
+   Point2D currLocation;
+   Point2D nextLocation;
    Pathfinder& pathfinder;
    Pathfinder::Path path;
-   
+
+   void updateDirection(MovementDirection newDirection);
+   void updateNextWaypoint(Point2D location, MovementDirection& direction);
+
    public:
       MoveOrder(NPC& npc, const Point2D& destination, const Map& map);
       bool perform(long timePassed);

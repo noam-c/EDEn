@@ -51,7 +51,7 @@ Pathfinder::Pathfinder(const Map& map, std::vector<Obstacle*> obstacles) : map(m
    for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
    {
       Obstacle* o = *iter;
-      addObstacle(o->getTileX() * MOVEMENT_TILE_SIZE, o->getTileY() * MOVEMENT_TILE_SIZE, o->getWidth(), o->getHeight());
+      addObstacle(Point2D(o->getTileX() * MOVEMENT_TILE_SIZE, o->getTileY() * MOVEMENT_TILE_SIZE), o->getWidth(), o->getHeight());
    }
 
    initRoyFloydWarshallMatrices();
@@ -71,14 +71,16 @@ Point2D Pathfinder::tileNumToPixels(int tileNum)
    return p;
 }
 
-int Pathfinder::coordsToTileNum(int x, int y)
+int Pathfinder::coordsToTileNum(Point2D tileLocation)
 {
-   return (y * collisionMapWidth + x);
+   return (tileLocation.y * collisionMapWidth + tileLocation.x);
 }
 
-int Pathfinder::pixelsToTileNum(int x, int y)
+int Pathfinder::pixelsToTileNum(Point2D pixelLocation)
 {
-   return (y * collisionMapWidth + x) / MOVEMENT_TILE_SIZE;
+   pixelLocation.x /= MOVEMENT_TILE_SIZE;
+   pixelLocation.y /= MOVEMENT_TILE_SIZE;
+   return coordsToTileNum(pixelLocation);
 }
 
 void Pathfinder::initRoyFloydWarshallMatrices()
@@ -156,51 +158,41 @@ void Pathfinder::initRoyFloydWarshallMatrices()
    }
 }
 
-Pathfinder::Path Pathfinder::findPath(int srcX, int srcY, int dstX, int dstY, PathfindingStyle style)
+Pathfinder::Path Pathfinder::findBestPath(Point2D src, Point2D dst)
 {
-   switch(style)
-   {
-      case RFW:
-      {
-         return findRFWPath(srcX, srcY, dstX, dstY);
-      }
-      case A_STAR:
-      {
-         return findAStarPath(srcX, srcY, dstX, dstY);
-      }
-      case STRAIGHT:
-      default:
-      {
-         return getStraightPath(srcX, srcY, dstX, dstY);
-      }
-   }
+   return findRFWPath(src, dst);
 }
 
-Pathfinder::Path Pathfinder::getStraightPath(int srcX, int srcY, int dstX, int dstY)
+Pathfinder::Path Pathfinder::findReroutedPath(Point2D src, Point2D dst)
+{
+   return findAStarPath(src, dst);
+}
+
+Pathfinder::Path Pathfinder::getStraightPath(Point2D src, Point2D dst)
 {
    Path path;
-   while(srcX > dstX + MOVEMENT_TILE_SIZE)
+   while(src.x > dst.x + MOVEMENT_TILE_SIZE)
    {
-      srcX -= MOVEMENT_TILE_SIZE;
-      path.push_back(Point2D(srcX, srcY));
+      src.x -= MOVEMENT_TILE_SIZE;
+      path.push_back(src);
    }
 
-   while(srcX < dstX - MOVEMENT_TILE_SIZE)
+   while(src.x < dst.x - MOVEMENT_TILE_SIZE)
    {
-      srcX += MOVEMENT_TILE_SIZE;
-      path.push_back(Point2D(srcX, srcY));
+      src.x += MOVEMENT_TILE_SIZE;
+      path.push_back(src);
    }
 
-   while(srcY > dstY + MOVEMENT_TILE_SIZE)
+   while(src.y > dst.y + MOVEMENT_TILE_SIZE)
    {
-      srcY -= MOVEMENT_TILE_SIZE;
-      path.push_back(Point2D(srcX, srcY));
+      src.y -= MOVEMENT_TILE_SIZE;
+      path.push_back(src);
    }
 
-   while(srcY < dstY - MOVEMENT_TILE_SIZE)
+   while(src.y < dst.y - MOVEMENT_TILE_SIZE)
    {
-      srcY += MOVEMENT_TILE_SIZE;
-      path.push_back(Point2D(srcX, srcY));
+      src.y += MOVEMENT_TILE_SIZE;
+      path.push_back(src);
    }
 
    return path;
@@ -278,25 +270,27 @@ class Pathfinder::AStarPoint : public Point2D
       };
 };
 
-Pathfinder::Path Pathfinder::findAStarPath(int srcX, int srcY, int dstX, int dstY)
+Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst)
 {
+   Point2D destinationPoint(dst.x / MOVEMENT_TILE_SIZE, dst.y / MOVEMENT_TILE_SIZE);
+   if(collisionMap[destinationPoint.y][destinationPoint.x].occupantType != FREE) return Path();
+
    std::vector<AStarPoint*> openSet;
    std::vector<const AStarPoint*> closedSet;
    
    const int NUM_TILES = collisionMapWidth*collisionMapHeight;
    std::vector<bool> discovered(NUM_TILES, false);
    
-   openSet.push_back(new AStarPoint(NULL, srcX / MOVEMENT_TILE_SIZE, srcY / MOVEMENT_TILE_SIZE, 0, 0));
+   openSet.push_back(new AStarPoint(NULL, src.x / MOVEMENT_TILE_SIZE, src.y / MOVEMENT_TILE_SIZE, 0, 0));
    std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
 
-   const int sourceTileNum = pixelsToTileNum(srcX, srcY);
-   const int destinationTileNum = pixelsToTileNum(dstX, dstY);
+   const int sourceTileNum = pixelsToTileNum(src);
+   const int destinationTileNum = pixelsToTileNum(dst);
 
    discovered[sourceTileNum] = true;
-   Point2D destinationPoint(dstX / MOVEMENT_TILE_SIZE, dstY / MOVEMENT_TILE_SIZE);
 
    Path path;
-
+      
    while(!openSet.empty())
    {
       // Get the lowest-cost point in the open set, and remove it from the open set
@@ -347,7 +341,7 @@ void Pathfinder::evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes
 {
    for(std::vector<Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
    {
-      int adjacentTileNum = coordsToTileNum(iter->x, iter->y);
+      int adjacentTileNum = coordsToTileNum(*iter);
       float tileGCost = cheapestPoint->getGCost() + traversalCost;
       float tileHCost = distanceMatrix[adjacentTileNum][destinationTileNum];
       if(!discovered[adjacentTileNum])
@@ -375,12 +369,12 @@ void Pathfinder::evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes
    }
 }
 
-Pathfinder::Path Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int dstY)
+Pathfinder::Path Pathfinder::findRFWPath(Point2D src, Point2D dst)
 {
    Path path;
 
-   int srcTileNum = pixelsToTileNum(srcX, srcY);
-   const int dstTileNum = pixelsToTileNum(dstX, dstY);
+   int srcTileNum = pixelsToTileNum(src);
+   const int dstTileNum = pixelsToTileNum(dst);
 
    for(;;)
    {
@@ -397,22 +391,22 @@ Pathfinder::Path Pathfinder::findRFWPath(int srcX, int srcY, int dstX, int dstY)
    return path;
 }
 
-bool Pathfinder::addObstacle(int x, int y, int width, int height)
+bool Pathfinder::addObstacle(Point2D area, int width, int height)
 {
-   return occupyArea(x, y, width, height, TileState(OBSTACLE));
+   return occupyArea(area, width, height, TileState(OBSTACLE));
 }
 
-bool Pathfinder::occupyArea(int x, int y, int width, int height, TileState state)
+bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state)
 {
    if(state.occupantType == FREE)
    {
       return false;
    }
 
-   int collisionMapLeft = x/MOVEMENT_TILE_SIZE;
-   int collisionMapRight = (x + width)/MOVEMENT_TILE_SIZE;
-   int collisionMapTop = y/MOVEMENT_TILE_SIZE;
-   int collisionMapBottom = (y + height)/MOVEMENT_TILE_SIZE;
+   int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
+   int collisionMapRight = (area.x + width - 1)/MOVEMENT_TILE_SIZE;
+   int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
+   int collisionMapBottom = (area.y + height - 1)/MOVEMENT_TILE_SIZE;
 
    for(int collisionMapX = collisionMapLeft; collisionMapX <= collisionMapRight; ++collisionMapX)
    {
@@ -437,24 +431,24 @@ bool Pathfinder::occupyArea(int x, int y, int width, int height, TileState state
    return true;
 }
 
-void Pathfinder::freeArea(int x, int y, int width, int height)
+void Pathfinder::freeArea(Point2D area, int width, int height)
 {
-   int collisionMapLeft = x/MOVEMENT_TILE_SIZE;
-   int collisionMapRight = (x + width)/MOVEMENT_TILE_SIZE;
-   int collisionMapTop = y/MOVEMENT_TILE_SIZE;
-   int collisionMapBottom = (y + height)/MOVEMENT_TILE_SIZE;
+   int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
+   int collisionMapRight = (area.x + width - 1)/MOVEMENT_TILE_SIZE;
+   int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
+   int collisionMapBottom = (area.y + height - 1)/MOVEMENT_TILE_SIZE;
    
    setArea(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, TileState(FREE));
 }
 
-bool Pathfinder::beginMovement(NPC* npc, int srcX, int srcY, int dstX, int dstY, int width, int height)
+bool Pathfinder::beginMovement(NPC* npc, Point2D src, Point2D dst, int width, int height)
 {
-   return occupyArea(dstX, dstY, width, height, TileState(CHARACTER, npc));
+   return occupyArea(dst, width, height, TileState(CHARACTER, npc));
 }
 
-void Pathfinder::endMovement(int srcX, int srcY, int dstX, int dstY, int width, int height)
+void Pathfinder::endMovement(Point2D src, Point2D dst, int width, int height)
 {
-   freeArea(srcX, srcY, width, height);
+   freeArea(src, width, height);
 }
 
 void Pathfinder::setArea(int left, int top, int right, int bottom, TileState state)
