@@ -167,9 +167,10 @@ void Scheduler::runThreads(long timePassed)
             finished(runningThread);
          }
       }
-      catch(Exception e)
+      catch(Exception& e)
       {
          // This coroutine malfunctioned in some terminal way. We should not run it again.
+         /** \todo These debug messages cause a segmentation fault when a map script throws an exception. */
          DEBUG("Thread failure encountered! Removing thread %d", runningThread->getId());
          DEBUG("Reason: %s", e.getMessage().c_str());
          finished(*iter);

@@ -1,0 +1,9 @@
+TileEngine now holds a Pathfinder instance that holds a reference to a Map resource, instead of the Map owning a Pathfinder and keeping its state beyond the duration of the TileEngine.
+
+1) Making TileEngine use Pathfinder instead of Map, and  adding helper functions to Pathfinder to prevent TileEngine code from needing to know too much about Pathfinder's inner data.
+
+2) Made NPC and NPC::MoveOrder take a Pathfinder instead of a Map.
+
+3) Made Map more of a const, stateless class (though the step function needs to still be removed).
+
+At this point, the Pathfinder class is a bit big and should be broken apart. However, the new functionality works, so I'm fine with calling the pathfinding branch a success and integrating it in.

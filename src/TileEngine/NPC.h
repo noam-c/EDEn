@@ -13,7 +13,7 @@
 #include "MovementDirection.h"
 #include "Point2D.h"
 
-class Map;
+class Pathfinder;
 class NPCScript;
 class Scheduler;
 class ScriptEngine;
@@ -26,7 +26,7 @@ class Spritesheet;
  *
  * NPCs each run a semi-coroutine, so that when scripts execute, they can yield
  * to the game code to complete instructions before resuming execution. This is
- * facilitated by an instruction queue and a coroutine provided for the NPC via
+ * facilitated by a task queue and a coroutine provided for the NPC via
  * the scripting engine.
  *
  * How NPCs work:
@@ -47,34 +47,14 @@ class Spritesheet;
 class NPC
 {
    /**
-    * Types of instructions that an NPC can perform. Each instruction
-    * has a set of required parameters, which are noted in each instruction type.
+    * A class for asynchronous NPC instructions.
     */
-   enum InstructionType
-   {
-      /** Instructs the NPC to move.
-       * Parameters: X location to move to [int], Y location to move to [int]
-       */
-      MOVE,
+   class Order;
+   class MoveOrder;
+   class StandOrder;
 
-      STAND,
-   };
-
-   /**
-    * A container for NPC instructions, as well as their parameters.
-    */
-   struct Instruction
-   {
-      InstructionType type;
-      void* params;
-
-      Instruction(InstructionType type, void* parameters)
-                                  : type(type), params(parameters)
-                                  {}
-   };
-
-   /** A queue of instructions for the NPC to follow */
-   std::queue<Instruction*> instructions;
+   /** A queue of orders for the NPC to perform */
+   std::queue<Order*> orders;
 
    /** The NPC's associated sprite, which is drawn on screen. */
    Sprite* sprite;
@@ -85,35 +65,39 @@ class NPC
    /** The NPC's name */
    std::string name;
 
-   /** The map on which this NPC is located */
-   const Map& map;
+   /** The map which this NPC interacts with */
+   Pathfinder& pathfinder;
 
+   /** The current location of the NPC (in pixels) */
    Point2D pixelLoc;
 
+   /** The direction that the NPC is currently facing */
    MovementDirection currDirection;
-
-   /**
-    * Run an NPC instruction for a frame.
-    *
-    * @param instruction The instruction for the NPC to run.
-    * @param timePassed The amount of time that has passed since the last frame.
-    */
-   bool runInstruction(Instruction* instruction, long timePassed); 
+   
+   /** The movement speed of the NPC */
+   float movementSpeed;
 
    public:
       /**
        * Constructor for the NPC.
-       * Initializes the NPC's thread and loads the associated script.
-       * \todo Finish documenting.
+       * Initializes the NPC's coroutine and loads the associated script.
+       * Loads a sprite for the NPC based on a given Spritesheet.
        * 
+       * @param engine The scripting engine that provides the NPC's coroutine.
+       * @param scheduler The scheduler that owns the NPC's coroutine
        * @param name The name of the NPC (must also be the name of its script).
+       * @param sheet The spritesheet to use for rendering the NPC.
+       * @param pathfinder The map that this NPC will be interacting in.
+       * @param regionName The name of the region that this NPC is interacting in.
+       * @param x The x-location (in pixels) where the NPC will start off.
+       * @param y The y-location (in pixels) where the NPC will start off.
        */
-      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, const Map& map, const std::string& regionName, int x, int y);
+      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, Pathfinder& pathfinder, const std::string& regionName, int x, int y);
 
       /**
        * @return The name of this NPC.
        */
-      std::string getName();
+      std::string getName() const;
 
       /**
        * A logic step for the NPC. Every frame, the NPC works on completing a
@@ -135,7 +119,7 @@ class NPC
        * @return true iff the NPC is not chewing on any instructions
        *              (i.e. it is doing absolutely nothing)
        */
-      bool isIdle();
+      bool isIdle() const;
 
       /**
        * The NPC is currently not doing anything, nor has it been asked to do
@@ -173,7 +157,6 @@ class NPC
        * This function changes the NPC's spritesheet.
        *
        * @param spritesheet A valid spritesheet.
-       *
        */
       void setSpritesheet(Spritesheet* sheet);
 
@@ -181,7 +164,6 @@ class NPC
        * This function changes the NPC's frame.
        *
        * @param frameName The name of the frame to use.
-       *
        */
       void setFrame(const std::string& frameName);
 
@@ -192,7 +174,46 @@ class NPC
        *
        */
       void setAnimation(const std::string& animationName);
-
+   
+      /**
+       * Change the location of the NPC.
+       * NOTE: This method is used for instantly changing the
+       * location of the NPC. To have the NPC move to a new location,
+       * please invoke NPC::move instead.
+       *
+       * @param location The new location of the NPC.
+       */
+      void setLocation(Point2D location);
+      
+      /**
+       * @return The location of the NPC.
+       */
+      Point2D getLocation() const;
+      
+      /**
+       * This function changes the direction that the NPC is facing.
+       *
+       * @param direction The new direction for the NPC to face.
+       */
+      void setDirection(MovementDirection direction);
+   
+      /**
+       * @return The direction that the NPC is currently facing.
+       */
+      MovementDirection getDirection() const;
+   
+      /**
+       * This function changes the movement speed of the NPC.
+       *
+       * @param speed The new movement speed of the NPC.
+       */
+      void setMovementSpeed(float speed);
+   
+      /**
+       * @return The current movement speed of the NPC.
+       */
+      float getMovementSpeed() const;
+   
       /**
        * Destructor.
        */

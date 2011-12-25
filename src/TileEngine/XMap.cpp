@@ -97,7 +97,5 @@ XMap::XMap(const std::string& name, const std::string& filePath)
 
    std::vector<Obstacle*> obstacles;
 
-   pathfinder = new Pathfinder(this, obstacles);
-
    DEBUG("XMap loaded.");
 }

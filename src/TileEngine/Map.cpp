@@ -81,7 +81,6 @@ Map::Map(std::ifstream& in)
    }
 
    initializePassibilityMatrix();
-   pathfinder = new Pathfinder(this, obstacles);
 
    DEBUG("Map loaded.");
 }
@@ -119,9 +118,9 @@ int Map::getHeight() const
    return height;
 }
 
-Pathfinder* Map::getPathfinder() const
+const std::vector<Obstacle*> Map::getObstacles() const
 {
-   return pathfinder;
+   return obstacles;
 }
 
 bool** Map::getPassibilityMatrix() const
@@ -129,9 +128,9 @@ bool** Map::getPassibilityMatrix() const
    return passibilityMap;
 }
 
-void Map::step(long timePassed)
+void Map::step(long timePassed) const
 {
-   std::vector<Obstacle*>::iterator iter;
+   std::vector<Obstacle*>::const_iterator iter;
    for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
    {
       (*iter)->step(timePassed);
@@ -181,6 +180,4 @@ Map::~Map()
 
    delete [] tileMap;
    delete [] passibilityMap;
-
-   delete pathfinder;
 }
