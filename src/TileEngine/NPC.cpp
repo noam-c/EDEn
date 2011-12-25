@@ -23,11 +23,11 @@
 
 const int debugFlag = DEBUG_NPC;
 
-NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, const Map& map,
+NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, Pathfinder& pathfinder,
                        const std::string& regionName,
-                       int x, int y) : name(name), map(map), pixelLoc(x, y), movementSpeed(0.1f)
+                       int x, int y) : name(name), pathfinder(pathfinder), pixelLoc(x, y), movementSpeed(0.1f)
 {
-   npcThread = engine.getNPCScript(this, regionName, map.getName(), name);
+   npcThread = engine.getNPCScript(this, regionName, pathfinder.getMapData()->getName(), name);
    scheduler.start(npcThread);
    DEBUG("NPC %s has a Thread with ID %d", name.c_str(), npcThread->getId());
 
@@ -73,7 +73,7 @@ void NPC::activate()
 void NPC::move(int x, int y)
 {
    Point2D dst(x, y);
-   orders.push(new MoveOrder(*this, dst, map));
+   orders.push(new MoveOrder(*this, dst, pathfinder));
 }
 
 void NPC::setSpritesheet(Spritesheet* sheet)

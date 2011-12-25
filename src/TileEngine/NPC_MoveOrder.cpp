@@ -13,8 +13,8 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_NPC;
 
-NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, const Map& map)
-: Order(npc), dst(destination), pathfinder(*map.getPathfinder())
+NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& pathfinder)
+: Order(npc), dst(destination), pathfinder(pathfinder)
 {
 }
 

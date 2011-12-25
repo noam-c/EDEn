@@ -81,8 +81,8 @@ class Pathfinder
    /** Floating-point notation for infinity. */
    static const float INFINITY;
 
-   /** The map that this pathfinder is tracking. */
-   const Map& map;
+   /** The map that the pathfinder is tracking. */
+   const Map* map;
 
    /** The width of the pathfinder map. */
    int collisionMapWidth;
@@ -181,14 +181,43 @@ class Pathfinder
       typedef std::list<Point2D> Path;
 
       /**
-       * Constructor. Initializes the collision map and
+       * Constructor.
+       */
+      Pathfinder();
+      
+      /**
+       * @return The map data that the Pathfinder is operating on.
+       */
+      const Map* getMapData() const;
+      
+      /**
+       * Sets a new map to operate on. Initializes the collision map and
        * runs computations on it to inform heuristics for best path calculations.
        *
-       * @param map The map that the Pathfinder will operate on.
-       * @param obstacles A set of obstacles found on the map.
+       * @param newMapData The new map to operate on.
        */
-      Pathfinder(const Map& map, std::vector<Obstacle*> obstacles);
+      void setMapData(const Map* newMapData);
+   
+      /**
+       * @return The name of the map.
+       */
+      std::string getName() const;
+      
+      /**
+       * @return The width of the map.
+       */
+      int getWidth() const;
+      
+      /**
+       * @return The height of the map.
+       */
+      int getHeight() const;
 
+      /**
+       * Process logic for the map and its obstacles.
+       */
+      void step(long timePassed);
+   
       /**
        * Finds an ideal path from the source coordinates to the destination.
        *

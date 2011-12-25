@@ -13,7 +13,7 @@
 #include "MovementDirection.h"
 #include "Point2D.h"
 
-class Map;
+class Pathfinder;
 class NPCScript;
 class Scheduler;
 class ScriptEngine;
@@ -65,8 +65,8 @@ class NPC
    /** The NPC's name */
    std::string name;
 
-   /** The map on which this NPC is located */
-   const Map& map;
+   /** The map which this NPC interacts with */
+   Pathfinder& pathfinder;
 
    /** The current location of the NPC (in pixels) */
    Point2D pixelLoc;
@@ -87,12 +87,12 @@ class NPC
        * @param scheduler The scheduler that owns the NPC's coroutine
        * @param name The name of the NPC (must also be the name of its script).
        * @param sheet The spritesheet to use for rendering the NPC.
-       * @param map The map that this NPC will be interacting in.
+       * @param pathfinder The map that this NPC will be interacting in.
        * @param regionName The name of the region that this NPC is interacting in.
        * @param x The x-location (in pixels) where the NPC will start off.
        * @param y The y-location (in pixels) where the NPC will start off.
        */
-      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, const Map& map, const std::string& regionName, int x, int y);
+      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, Pathfinder& pathfinder, const std::string& regionName, int x, int y);
 
       /**
        * @return The name of this NPC.

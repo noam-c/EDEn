@@ -25,7 +25,7 @@ const int debugFlag = DEBUG_TILE_ENG;
 const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName)
-                                   : GameState(executionStack), currMap(NULL), xMapOffset(0), yMapOffset(0)
+                                   : GameState(executionStack), xMapOffset(0), yMapOffset(0)
 {
    player = new PlayerCharacter(ResourceLoader::getSpritesheet("npc1"), 320, 320);
    scriptEngine = new ScriptEngine(*this, scheduler);
@@ -39,7 +39,7 @@ TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapte
 
 std::string TileEngine::getMapName()
 {
-   return currMap->getName();
+   return currMap.getName();
 }
 
 void TileEngine::dialogueNarrate(const char* narration, Task* task)
@@ -60,7 +60,7 @@ bool TileEngine::setRegion(const std::string& regionName, const std::string& map
 
    setMap(mapName);
 
-   DEBUG("Running map script: %s/%s", regionName.c_str(), currMap->getName().c_str());
+   DEBUG("Running map script: %s/%s", regionName.c_str(), currMap.getName().c_str());
    return true;
 }
 
@@ -70,13 +70,13 @@ void TileEngine::setMap(std::string mapName)
    if(!mapName.empty())
    {
       // If a map name was supplied, then we set this map and run its script
-      currMap = currRegion->getMap(mapName);
+      currMap.setMapData(currRegion->getMap(mapName));
    }
    else
    {
       // Otherwise, we use the region's default starting map
-      currMap = currRegion->getStartingMap();
-      mapName = currMap->getName();
+      currMap.setMapData(currRegion->getStartingMap());
+      mapName = currMap.getName();
    }
 
    DEBUG("Map set to: %s", mapName.c_str());
@@ -86,8 +86,8 @@ void TileEngine::setMap(std::string mapName)
 
 void TileEngine::recalculateMapOffsets()
 {
-   const int mapPixelWidth = currMap->getWidth() * TILE_SIZE;
-   const int mapPixelHeight = currMap->getHeight() * TILE_SIZE;
+   const int mapPixelWidth = currMap.getWidth() * TILE_SIZE;
+   const int mapPixelHeight = currMap.getHeight() * TILE_SIZE;
 
    xMapOffset = mapPixelWidth < GraphicsUtil::width ? 
               (GraphicsUtil::width - mapPixelWidth) >> 1 : 0;
@@ -116,14 +116,14 @@ void TileEngine::toggleDebugConsole()
 void TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y)
 {
    Point2D npcLocation(x * TILE_SIZE, y * TILE_SIZE);
-   if(currMap->getPathfinder()->isAreaFree(npcLocation, 32, 32))
+   if(currMap.isAreaFree(npcLocation, 32, 32))
    {
       Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
       NPC* npcToAdd = new NPC(*scriptEngine, scheduler, npcName, sheet,
-                                 *currMap, currRegion->getName(),
+                                 currMap, currRegion->getName(),
                                  npcLocation.x, npcLocation.y);
       npcList[npcName] = npcToAdd;
-      currMap->getPathfinder()->addNPC(npcToAdd, npcLocation, 32, 32);
+      currMap.addNPC(npcToAdd, npcLocation, 32, 32);
    }
    else
    {
@@ -133,7 +133,7 @@ void TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
 
 bool TileEngine::withinMap(int x, int y)
 {
-   return x >= 0 && x < currMap->getWidth() * TILE_SIZE && y >= 0 && y < currMap->getHeight() * TILE_SIZE;
+   return x >= 0 && x < currMap.getWidth() * TILE_SIZE && y >= 0 && y < currMap.getHeight() * TILE_SIZE;
 }
 
 void TileEngine::moveNPC(const std::string& npcName, int x, int y)
@@ -195,9 +195,9 @@ void TileEngine::draw()
 {
    GraphicsUtil::getInstance()->setOffset(xMapOffset, yMapOffset);
       // Draw the map and NPCs against an offset (to center all the map elements)
-      if(currMap != NULL)
+      if(currMap.getMapData() != NULL)
       {
-         currMap->draw();
+         currMap.draw();
       }
       else
       {
@@ -227,10 +227,7 @@ bool TileEngine::step()
 
    player->step(timePassed);
 
-   if(currMap != NULL)
-   {
-      currMap->step(timePassed);
-   }
+   currMap.step(timePassed);
 
    stepNPCs(timePassed);
 

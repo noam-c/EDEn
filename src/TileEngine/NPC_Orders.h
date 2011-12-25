@@ -39,7 +39,7 @@ class NPC::MoveOrder : public NPC::Order
    void updateNextWaypoint(Point2D location, MovementDirection& direction);
 
    public:
-      MoveOrder(NPC& npc, const Point2D& destination, const Map& map);
+      MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& pathfinder);
       bool perform(long timePassed);
       void draw();
 };

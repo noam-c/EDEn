@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 
-class Pathfinder;
 class Tileset;
 class Obstacle;
 
@@ -39,9 +38,6 @@ class Map
 
       /** Tileset in use by this map */
       Tileset* tileset;
-
-      /** Pathfinder used to find paths through this map */
-      Pathfinder* pathfinder;
 
       /** The tiles of the map (as numbers referring to points in the Tileset) */
       int** tileMap;
@@ -101,16 +97,20 @@ class Map
       int getHeight() const;
 
       /**
-       * @return The path finder for this map
+       * @return The list of obstacles for this map
        */
-      Pathfinder* getPathfinder() const;
+      const std::vector<Obstacle*> getObstacles() const;
 
       /**
        * @return The passibility map of the 
        */
       bool** getPassibilityMatrix() const;
 
-      void step(long timePassed);
+      /**
+       * Perform logic for the obstacles on the map.
+       * \todo This function should be removed, since this map data should be stateless.
+       */
+      void step(long timePassed) const;
 
       /**
        * Draw an entire map's tiles.

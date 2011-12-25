@@ -18,6 +18,8 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
 
+//#define DRAW_PATHFINDER
+
 // Movement tile size can be set to a divisor of drawn tile size to increase the pathfinding graph size
 // For now, no need for the additional granularity
 const int Pathfinder::MOVEMENT_TILE_SIZE = 32;
@@ -25,18 +27,36 @@ const int Pathfinder::MOVEMENT_TILE_SIZE = 32;
 const float Pathfinder::ROOT_2 = 1.41421356f;
 const float Pathfinder::INFINITY = std::numeric_limits<float>::infinity();
 
-Pathfinder::Pathfinder(const Map& map, std::vector<Obstacle*> obstacles) : map(map), distanceMatrix(NULL)
+Pathfinder::Pathfinder() : map(NULL), distanceMatrix(NULL)
 {
-   const int collisionTileRatio = TileEngine::TILE_SIZE / MOVEMENT_TILE_SIZE;
-   collisionMapWidth = map.getWidth() * collisionTileRatio;
-   collisionMapHeight = map.getHeight() * collisionTileRatio;
+}
 
-   bool** passibilityMap = map.getPassibilityMatrix();
+const Map* Pathfinder::getMapData() const
+{
+   return map;
+}
+
+void Pathfinder::setMapData(const Map* newMapData)
+{
+   if(map != NULL)
+   {
+      deleteRoyFloydWarshallMatrices();
+      deleteCollisionMap();
+   }
+
+   map = newMapData;   
+   if(map == NULL) return;
+
+   const int collisionTileRatio = TileEngine::TILE_SIZE / MOVEMENT_TILE_SIZE;
+   collisionMapWidth = map->getWidth() * collisionTileRatio;
+   collisionMapHeight = map->getHeight() * collisionTileRatio;
+
+   bool** passibilityMap = map->getPassibilityMatrix();
    collisionMap = new TileState*[collisionMapHeight];
-   for(int y = 0; y < map.getHeight(); ++y)
+   for(int y = 0; y < map->getHeight(); ++y)
    {
       TileState* row = collisionMap[y] = new TileState[collisionMapWidth];
-      for(int x = 0; x < map.getWidth(); ++x)
+      for(int x = 0; x < map->getWidth(); ++x)
       {
          int xOffset = x * collisionTileRatio;
          bool passible = passibilityMap[y][x];
@@ -47,6 +67,7 @@ Pathfinder::Pathfinder(const Map& map, std::vector<Obstacle*> obstacles) : map(m
       }
    }
 
+   std::vector<Obstacle*> obstacles = map->getObstacles();
    std::vector<Obstacle*>::const_iterator iter;
    for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
    {
@@ -55,6 +76,32 @@ Pathfinder::Pathfinder(const Map& map, std::vector<Obstacle*> obstacles) : map(m
    }
 
    initRoyFloydWarshallMatrices();
+}
+
+std::string Pathfinder::getName() const
+{
+   if(map) return map->getName();
+   
+   T_T("Requested map name when map does not exist.");
+}
+
+int Pathfinder::getWidth() const
+{
+   if(map) return map->getWidth();
+   
+   T_T("Requested map width when map does not exist.");
+}
+
+int Pathfinder::getHeight() const
+{
+   if(map) return map->getHeight();
+   
+   T_T("Requested map height when map does not exist.");
+}
+
+void Pathfinder::step(long timePassed)
+{
+   if(map) map->step(timePassed);
 }
 
 Point2D Pathfinder::tileNumToCoords(int tileNum)
@@ -273,7 +320,7 @@ class Pathfinder::AStarPoint : public Point2D
 Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst)
 {
    Point2D destinationPoint(dst.x / MOVEMENT_TILE_SIZE, dst.y / MOVEMENT_TILE_SIZE);
-   if(collisionMap[destinationPoint.y][destinationPoint.x].occupantType != FREE) return Path();
+   if(collisionMap == NULL || collisionMap[destinationPoint.y][destinationPoint.x].occupantType != FREE) return Path();
 
    std::vector<AStarPoint*> openSet;
    std::vector<const AStarPoint*> closedSet;
@@ -403,7 +450,7 @@ bool Pathfinder::addNPC(NPC* npc, Point2D area, int width, int height)
 
 bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state)
 {
-   if(state.occupantType == FREE)
+   if(collisionMap == NULL || state.occupantType == FREE)
    {
       return false;
    }
@@ -452,6 +499,8 @@ void Pathfinder::freeArea(Point2D area, int width, int height)
 
 bool Pathfinder::isAreaFree(Point2D area, int width, int height) const
 {
+   if(collisionMap == NULL) return false;
+
    int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
    int collisionMapRight = (area.x + width)/MOVEMENT_TILE_SIZE;
    int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
@@ -496,6 +545,11 @@ void Pathfinder::setArea(int left, int top, int right, int bottom, TileState sta
 
 void Pathfinder::draw()
 {
+   if(map == NULL) return;
+
+#ifndef DRAW_PATHFINDER
+   map->draw();
+#else
    for(int y = 0; y < collisionMapHeight; ++y)
    {
       for(int x = 0; x < collisionMapWidth; ++x)
@@ -537,6 +591,7 @@ void Pathfinder::draw()
          glEnable(GL_TEXTURE_2D);
       }
    }
+#endif
 }
 
 void Pathfinder::deleteRoyFloydWarshallMatrices()

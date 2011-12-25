@@ -10,6 +10,7 @@
 #include "GameState.h"
 
 #include "Scheduler.h"
+#include "Pathfinder.h"
 
 #include <map>
 #include <string>
@@ -18,7 +19,6 @@ class NPC;
 class ScriptEngine;
 class PlayerCharacter;
 class Region;
-class Map;
 class DialogueController;
 class Task;
 
@@ -45,7 +45,7 @@ class TileEngine: public GameState
    Region* currRegion;
 
    /** The current map that the player is in. */
-   Map* currMap;
+   Pathfinder currMap;
 
    /** The debug console window to be used for diagnostics. */
    edwt::DebugConsoleWindow* consoleWindow;
