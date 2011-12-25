@@ -396,6 +396,11 @@ bool Pathfinder::addObstacle(Point2D area, int width, int height)
    return occupyArea(area, width, height, TileState(OBSTACLE));
 }
 
+bool Pathfinder::addNPC(NPC* npc, Point2D area, int width, int height)
+{
+   return occupyArea(area, width, height, TileState(CHARACTER, npc));
+}
+
 bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state)
 {
    if(state.occupantType == FREE)
@@ -404,13 +409,15 @@ bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state
    }
 
    int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
-   int collisionMapRight = (area.x + width - 1)/MOVEMENT_TILE_SIZE;
+   int collisionMapRight = (area.x + width)/MOVEMENT_TILE_SIZE;
    int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
-   int collisionMapBottom = (area.y + height - 1)/MOVEMENT_TILE_SIZE;
+   int collisionMapBottom = (area.y + height)/MOVEMENT_TILE_SIZE;
 
-   for(int collisionMapX = collisionMapLeft; collisionMapX <= collisionMapRight; ++collisionMapX)
+   DEBUG("Occupying tiles from %d,%d to %d,%d", collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom);
+
+   for(int collisionMapX = collisionMapLeft; collisionMapX < collisionMapRight; ++collisionMapX)
    {
-      for(int collisionMapY = collisionMapTop; collisionMapY <= collisionMapBottom; ++collisionMapY)
+      for(int collisionMapY = collisionMapTop; collisionMapY <  collisionMapBottom; ++collisionMapY)
       {
          // We cannot occupy the point if it is reserved by an entity other than the occupant attempting to occupy it.
          // For instance, we cannot occupy a tile already occupied by an obstacle or a different character.
@@ -434,11 +441,36 @@ bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state
 void Pathfinder::freeArea(Point2D area, int width, int height)
 {
    int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
-   int collisionMapRight = (area.x + width - 1)/MOVEMENT_TILE_SIZE;
+   int collisionMapRight = (area.x + width)/MOVEMENT_TILE_SIZE;
    int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
-   int collisionMapBottom = (area.y + height - 1)/MOVEMENT_TILE_SIZE;
+   int collisionMapBottom = (area.y + height)/MOVEMENT_TILE_SIZE;
+   
+   DEBUG("Freeing tiles from %d,%d to %d,%d", collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom);
    
    setArea(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, TileState(FREE));
+}
+
+bool Pathfinder::isAreaFree(Point2D area, int width, int height) const
+{
+   int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
+   int collisionMapRight = (area.x + width)/MOVEMENT_TILE_SIZE;
+   int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
+   int collisionMapBottom = (area.y + height)/MOVEMENT_TILE_SIZE;
+   
+   for(int collisionMapX = collisionMapLeft; collisionMapX < collisionMapRight; ++collisionMapX)
+   {
+      for(int collisionMapY = collisionMapTop; collisionMapY < collisionMapBottom; ++collisionMapY)
+      {
+         // We cannot occupy the point if it is reserved by an obstacle or a character.
+         const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX].occupantType;
+         if(collisionTile.occupantType != FREE)
+         {
+            return false;
+         }
+      }
+   }
+   
+   return true;
 }
 
 bool Pathfinder::beginMovement(NPC* npc, Point2D src, Point2D dst, int width, int height)
@@ -453,9 +485,9 @@ void Pathfinder::endMovement(Point2D src, Point2D dst, int width, int height)
 
 void Pathfinder::setArea(int left, int top, int right, int bottom, TileState state)
 {
-   for(int collisionMapX = left; collisionMapX <= right; ++collisionMapX)
+   for(int collisionMapX = left; collisionMapX < right; ++collisionMapX)
    {
-      for(int collisionMapY = top; collisionMapY <= bottom; ++collisionMapY)
+      for(int collisionMapY = top; collisionMapY < bottom; ++collisionMapY)
       {
          collisionMap[collisionMapY][collisionMapX] = state;
       }

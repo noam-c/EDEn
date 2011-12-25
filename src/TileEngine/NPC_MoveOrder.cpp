@@ -14,7 +14,7 @@
 const int debugFlag = DEBUG_NPC;
 
 NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, const Map& map)
-: Order(npc), dst(destination), currLocation(npc.getLocation()), pathfinder(*map.getPathfinder())
+: Order(npc), dst(destination), pathfinder(*map.getPathfinder())
 {
 }
 
@@ -55,6 +55,7 @@ void NPC::MoveOrder::updateDirection(MovementDirection newDirection)
 
 void NPC::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& direction)
 {
+   currLocation = location;
    nextLocation = path.front();
    
    // Set the direction based on where the next tile is relative to the current location.
@@ -112,6 +113,10 @@ bool NPC::MoveOrder::perform(long timePassed)
 
          // If the path exists, set the next waypoint
          updateNextWaypoint(location, newDirection);
+         if(!pathfinder.beginMovement(&npc, location, nextLocation, 32, 32))
+         {
+            path = pathfinder.findReroutedPath(location, dst);
+         }
 
          updateDirection(newDirection);
          return false;
@@ -158,9 +163,9 @@ bool NPC::MoveOrder::perform(long timePassed)
 
          DEBUG("Reached waypoint %d,%d", nextLocation.x, nextLocation.y);
          pathfinder.endMovement(currLocation, nextLocation, 32, 32);
-         
+
          // Update the current waypoint and dequeue it from the path
-         currLocation = location = nextLocation;
+         location = nextLocation;
          path.pop_front();
          
          // If there are no more nodes, the NPC is finished for this frame

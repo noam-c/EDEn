@@ -14,6 +14,7 @@
 #include "ResourceLoader.h"
 #include "Region.h"
 #include "Map.h"
+#include "Pathfinder.h"
 #include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
@@ -114,10 +115,20 @@ void TileEngine::toggleDebugConsole()
 
 void TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y)
 {
-   Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
-   npcList[npcName] = new NPC(*scriptEngine, scheduler, npcName, sheet,
-                              *currMap, currRegion->getName(),
-                              x * TILE_SIZE, y * TILE_SIZE);
+   Point2D npcLocation(x * TILE_SIZE, y * TILE_SIZE);
+   if(currMap->getPathfinder()->isAreaFree(npcLocation, 32, 32))
+   {
+      Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
+      NPC* npcToAdd = new NPC(*scriptEngine, scheduler, npcName, sheet,
+                                 *currMap, currRegion->getName(),
+                                 npcLocation.x, npcLocation.y);
+      npcList[npcName] = npcToAdd;
+      currMap->getPathfinder()->addNPC(npcToAdd, npcLocation, 32, 32);
+   }
+   else
+   {
+      DEBUG("Cannot place NPC at this location; something is in the way.");
+   }
 }
 
 bool TileEngine::withinMap(int x, int y)

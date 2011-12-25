@@ -166,18 +166,6 @@ class Pathfinder
    void freeArea(Point2D area, int width, int height);
 
    /**
-    * Add an obstacle and occupy the tiles under it.
-    * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
-    *
-    * @param area The coordinates of the top-left corner of the obstacle (in pixels)
-    * @param width The width of the obstacle (in pixels)
-    * @param height The height of the obstacle (in pixels)
-    *
-    * @return true if the obstacle has been successfully placed in the area, false if there was something else in the area.
-    */
-   bool addObstacle(Point2D area, int width, int height);
-
-   /**
     * Helper function to unconditionally set the tiles in an area to a given state. 
     *
     * @param left The x-coordinate of the left edge of the area to set (in tiles)
@@ -222,6 +210,42 @@ class Pathfinder
        */
       Path findReroutedPath(Point2D src, Point2D dst);
       
+      /**
+       * Checks an area for obstacles or entities.
+       *
+       * @param area The coordinates of the top-left corner of the area (in pixels)
+       * @param width The width of the area (in pixels)
+       * @param height The height of the area (in pixels)
+       *
+       * @return true iff a given area is entirely free of obstacles and entities.
+       */
+      bool isAreaFree(Point2D area, int width, int height) const;
+   
+      /**
+       * Add an obstacle and occupy the tiles under it.
+       * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
+       *
+       * @param area The coordinates of the top-left corner of the obstacle (in pixels)
+       * @param width The width of the obstacle (in pixels)
+       * @param height The height of the obstacle (in pixels)
+       *
+       * @return true if the obstacle has been successfully placed in the area, false if there was something else in the area.
+       */
+      bool addObstacle(Point2D area, int width, int height);
+
+      /**
+       * Add an NPC and occupy the tiles under it.
+       * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
+       *
+       * @param npc The NPC to add.
+       * @param area The coordinates of the top-left corner of the obstacle (in pixels)
+       * @param width The width of the obstacle (in pixels)
+       * @param height The height of the obstacle (in pixels)
+       *
+       * @return true if the NPC has been successfully placed in the area, false if there was something else in the area.
+       */
+      bool addNPC(NPC* npc, Point2D area, int width, int height);
+   
       /**
        * Request permission from the Pathfinder to move an NPC from the source to the given destination.
        * NOTE: After the NPC has completed this movement, endMovement MUST be called in order to notify the Pathfinder to perform the appropriate clean-up.
