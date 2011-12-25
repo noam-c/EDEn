@@ -45,8 +45,9 @@
 #define DEBUG_AUDIO      1<<13    // Audio functionality
 #define DEBUG_SCHEDULER  1<<14    // Scheduler/coroutine functionality
 #define DEBUG_NPC        1<<15    // NPC functionality
-#define DEBUG_SPRITE     1<<16    // Sprite/spritesheet functionality
-#define DEBUG_PLAYER     1<<17    // Player data/Character functionality
+#define DEBUG_PATHFINDER 1<<16    // NPC functionality
+#define DEBUG_SPRITE     1<<17    // Sprite/spritesheet functionality
+#define DEBUG_PLAYER     1<<18    // Player data/Character functionality
 
 #define DEBUG_ALL           ~0    // Turn on all debug output (verbose, but handy)
 

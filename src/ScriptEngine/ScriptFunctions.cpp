@@ -126,7 +126,7 @@ static int luaRandom(lua_State* luaVM)
    }
 
    /** \todo Random number generation is currently unseeded. Use a good seed. */
-   lua_pushnumber(luaVM, (rand() % max) + min);
+   lua_pushnumber(luaVM, (rand() % (max - min)) + min);
    return 1;
 }
 

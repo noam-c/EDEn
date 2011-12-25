@@ -16,7 +16,7 @@
 #include <algorithm>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_TILE_ENG;
+const int debugFlag = DEBUG_PATHFINDER;
 
 //#define DRAW_PATHFINDER
 

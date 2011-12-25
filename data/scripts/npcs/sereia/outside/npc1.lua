@@ -1,4 +1,4 @@
-function idle()
-   delay(10000)
-   print("NPC 1: I'm idling after a 10 second wait!")
+function idle(me)
+   delay(1000)
+   move('npc1', tilesToPixels(random(0,9)), tilesToPixels(random(0,9)))
 end
