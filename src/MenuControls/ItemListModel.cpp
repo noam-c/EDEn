@@ -7,7 +7,7 @@
 #include "ItemListModel.h"
 #include "ItemData.h"
 #include "Item.h"
-#include <stdio.h>
+#include <sstream>
 
 void ItemListModel::setItems(ItemList& newList)
 {
@@ -26,11 +26,12 @@ int ItemListModel::getNumberOfElements()
 
 std::string ItemListModel::getElementAt(int i)
 {
-   std::string itemName = getItemAt(i)->getName();
-   int itemQuantity = itemList[i].second;
+   std::stringstream stream;
+   stream << getItemAt(i)->getName();
+   stream << '\t';
+   stream << itemList[i].second;
 
-   char buffer[itemName.length() + 40];
-   return std::string(buffer, sprintf(buffer, "%s\t%d", itemName.c_str(), itemQuantity));
+   return stream.str();
 }
 
 const Item* ItemListModel::getItemAt(int i)
