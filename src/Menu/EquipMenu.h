@@ -15,7 +15,7 @@
 #include <vector>
 
 class EquipPane;
-class EquipSlot;
+struct EquipSlot;
 class PlayerData;
 class Character;
 class Item;
