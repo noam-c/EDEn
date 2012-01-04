@@ -14,6 +14,7 @@ class Obstacle;
 class Map;
 class NPC;
 struct Point2D;
+struct Rectangle;
 
 /**
  * The Pathfinder class binds to a Map and stores the locations of entities.
@@ -54,22 +55,22 @@ class Pathfinder
       /**
        * Default constructor.
        */
-      TileState() : occupantType(FREE), occupant(NULL) {}
+      TileState();
 
       /**
        * Constructor.
        *
        * @param type The type of entity occupying the tile.
        */
-      TileState(OccupantType type) : occupantType(type), occupant(NULL) {}
-
+      TileState(OccupantType type);
+      
       /**
        * Constructor.
        *
        * @param type The type of entity occupying the tile.
        * @param occupant The occupant in the tile.
        */
-      TileState(OccupantType type, void* occupant) : occupantType(type), occupant(occupant) {}
+      TileState(OccupantType type, void* occupant);
    };
 
    /** The size of a movement tile (used to control pathfinding granularity) */
@@ -143,6 +144,8 @@ class Pathfinder
     */
    void deleteCollisionMap();
 
+   Rectangle getCollisionMapEdges(Rectangle area) const;
+
    /**
     * If an area is available, occupy it and set the tiles within it to the new state. 
     * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
@@ -168,13 +171,10 @@ class Pathfinder
    /**
     * Helper function to unconditionally set the tiles in an area to a given state. 
     *
-    * @param left The x-coordinate of the left edge of the area to set (in tiles)
-    * @param top The y-coordinate of the top edge of the area to set (in tiles)
-    * @param right The x-coordinate of the right edge of the area to set (in tiles)
-    * @param bottom The y-coordinate of the bottom edge of the area to set (in tiles)
+    * @param area The rectangular area to set (with edge coordinates in tiles)
     * @param state The new state of the area (occupant and type)
     */
-   void setArea(int left, int top, int right, int bottom, TileState state);
+   void setArea(const Rectangle& area, TileState state);
 
    public:
       /** A set of waypoints to move through in order to go from one point to another. */
@@ -288,7 +288,18 @@ class Pathfinder
        * @return true iff the NPC can move from the source to the destination.
        */
       bool beginMovement(NPC* npc, Point2D src, Point2D dst, int width, int height);
-
+      
+      /**
+       * Notifies the Pathfinder that the NPC failed to complete movement from the source to the given destination and occupies some area between the source and destination.
+       *
+       * @param src The coordinates of the source (in pixels).
+       * @param dst The coordinates of the original destination (in pixels).
+       * @param currentLocation The coordinates that the entity is currently occupying (in pixels).
+       * @param width Width of the entity that moved.
+       * @param height Height of the entity that moved.
+       */
+      void abortMovement(Point2D src, Point2D dst, Point2D currentLocation, int width, int height);
+      
       /**
        * Notifies the Pathfinder that the NPC moved successfully from the source to the given destination and no longer occupies the source coordinates.
        *
@@ -299,6 +310,15 @@ class Pathfinder
        */
       void endMovement(Point2D src, Point2D dst, int width, int height);
 
+      /**
+       * Gets the NPC occupying the specified area, if one exists.
+       *
+       * @param location The coordinates of the top left corner of the area to search.
+       * @param width The width of the area to search
+       * @param height The height of the area to search
+       */
+      NPC* getOccupantNPC(Point2D location, int width, int height) const;
+   
       /**
        * Draw the collision map for diagnostic purposes.
        */

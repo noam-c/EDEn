@@ -77,6 +77,11 @@ class NPC
    /** The movement speed of the NPC */
    float movementSpeed;
 
+   /**
+    * Clears the queue of NPC orders.
+    */
+   void flushOrders();
+   
    public:
       /**
        * Constructor for the NPC.

@@ -36,8 +36,19 @@ NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Sp
 
 NPC::~NPC()
 {
+   flushOrders();
    delete sprite;
    npcThread->finish();
+}
+
+void NPC::flushOrders()
+{
+   while(!orders.empty())
+   {
+      Order* order = orders.front();
+      orders.pop();
+      delete order;
+   }
 }
 
 std::string NPC::getName() const
@@ -67,6 +78,7 @@ bool NPC::isIdle() const
 
 void NPC::activate()
 {
+   flushOrders();
    npcThread->activate();
 }
 

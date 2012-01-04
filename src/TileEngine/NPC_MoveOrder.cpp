@@ -14,8 +14,16 @@
 const int debugFlag = DEBUG_NPC;
 
 NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& pathfinder)
-: Order(npc), dst(destination), pathfinder(pathfinder)
+: Order(npc), movementBegun(false), dst(destination), pathfinder(pathfinder)
 {
+}
+
+NPC::MoveOrder::~MoveOrder()
+{
+   if(movementBegun)
+   {
+      pathfinder.abortMovement(currLocation, nextLocation, npc.getLocation(), 32, 32);
+   }
 }
 
 void NPC::MoveOrder::updateDirection(MovementDirection newDirection, bool moving)
@@ -85,7 +93,8 @@ bool NPC::MoveOrder::perform(long timePassed)
 
          // If the path exists, set the next waypoint
          updateNextWaypoint(location, newDirection);
-         if(!pathfinder.beginMovement(&npc, location, nextLocation, 32, 32))
+         movementBegun = pathfinder.beginMovement(&npc, location, nextLocation, 32, 32);
+         if(!movementBegun)
          {
             path = pathfinder.findReroutedPath(location, dst);
          }
@@ -135,6 +144,7 @@ bool NPC::MoveOrder::perform(long timePassed)
 
          DEBUG("Reached waypoint %d,%d", nextLocation.x, nextLocation.y);
          pathfinder.endMovement(currLocation, nextLocation, 32, 32);
+         movementBegun = false;
 
          // Update the current waypoint and dequeue it from the path
          location = nextLocation;
@@ -152,8 +162,8 @@ bool NPC::MoveOrder::perform(long timePassed)
          updateNextWaypoint(location, newDirection);
          DEBUG("Next waypoint: %d,%d", nextLocation.x, nextLocation.y);
 
-         bool canMove = pathfinder.beginMovement(&npc, currLocation, nextLocation, 32, 32);
-         if(!canMove)
+         movementBegun = pathfinder.beginMovement(&npc, currLocation, nextLocation, 32, 32);
+         if(!movementBegun)
          {
             DEBUG("Path from %d,%d to %d,%d is obstructed. Rerouting...", currLocation.x, currLocation.y, nextLocation.x, nextLocation.y);
             path = pathfinder.findReroutedPath(location, dst);

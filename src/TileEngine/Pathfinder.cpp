@@ -10,6 +10,7 @@
 #include "Obstacle.h"
 #include "TileEngine.h"
 #include "Point2D.h"
+#include "Rectangle.h"
 #include "GLInclude.h"
 #include "stdlib.h"
 #include <limits>
@@ -27,8 +28,30 @@ const int Pathfinder::MOVEMENT_TILE_SIZE = 32;
 const float Pathfinder::ROOT_2 = 1.41421356f;
 const float Pathfinder::INFINITY = std::numeric_limits<float>::infinity();
 
+Pathfinder::TileState::TileState() : occupantType(FREE), occupant(NULL)
+{
+}
+
+Pathfinder::TileState::TileState(OccupantType type) : occupantType(type), occupant(NULL)
+{
+}
+
+Pathfinder::TileState::TileState(OccupantType type, void* occupant) : occupantType(type), occupant(occupant)
+{
+}
+
 Pathfinder::Pathfinder() : map(NULL), distanceMatrix(NULL)
 {
+}
+
+Rectangle Pathfinder::getCollisionMapEdges(Rectangle area) const
+{
+   int collisionMapLeft = area.left/MOVEMENT_TILE_SIZE;
+   int collisionMapRight = (area.right - 1)/MOVEMENT_TILE_SIZE;
+   int collisionMapTop = area.top/MOVEMENT_TILE_SIZE;
+   int collisionMapBottom = (area.bottom - 1)/MOVEMENT_TILE_SIZE;
+
+   return Rectangle(collisionMapTop, collisionMapLeft, collisionMapBottom, collisionMapRight);
 }
 
 const Map* Pathfinder::getMapData() const
@@ -63,6 +86,7 @@ void Pathfinder::setMapData(const Map* newMapData)
          for(int i = 0; i < collisionTileRatio; ++i)
          {
             row[i + xOffset].occupantType = passible ? FREE : OBSTACLE;
+            row[i + xOffset].occupant = NULL;
          }
       }
    }
@@ -455,63 +479,52 @@ bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state
       return false;
    }
 
-   int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
-   int collisionMapRight = (area.x + width)/MOVEMENT_TILE_SIZE;
-   int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
-   int collisionMapBottom = (area.y + height)/MOVEMENT_TILE_SIZE;
+   Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
 
-   DEBUG("Occupying tiles from %d,%d to %d,%d", collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom);
+   DEBUG("Occupying tiles from %d,%d to %d,%d", areaRect.left, areaRect.top, areaRect.right, areaRect.bottom);
 
-   for(int collisionMapX = collisionMapLeft; collisionMapX < collisionMapRight; ++collisionMapX)
+   for(int collisionMapY = areaRect.top; collisionMapY <=  areaRect.bottom; ++collisionMapY)
    {
-      for(int collisionMapY = collisionMapTop; collisionMapY <  collisionMapBottom; ++collisionMapY)
+      for(int collisionMapX = areaRect.left; collisionMapX <= areaRect.right; ++collisionMapX)
       {
          // We cannot occupy the point if it is reserved by an entity other than the occupant attempting to occupy it.
          // For instance, we cannot occupy a tile already occupied by an obstacle or a different character.
-         const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX].occupantType;
-         if(collisionTile.occupantType == CHARACTER && collisionTile.occupant != state.occupant)
+         const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX];
+         if(collisionTile.occupantType != FREE)
          {
-            return false;
-         }
-         else if(collisionTile.occupantType != FREE)
-         {
-            return false;
-         }
+            if(collisionTile.occupantType != CHARACTER || collisionTile.occupant != state.occupant)
+            {
+               return false;
+            } 
+         } 
       }
    }
 
-   setArea(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, state);
-
+   setArea(areaRect, state);
    return true;
 }
 
 void Pathfinder::freeArea(Point2D area, int width, int height)
 {
-   int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
-   int collisionMapRight = (area.x + width)/MOVEMENT_TILE_SIZE;
-   int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
-   int collisionMapBottom = (area.y + height)/MOVEMENT_TILE_SIZE;
+   Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
    
-   DEBUG("Freeing tiles from %d,%d to %d,%d", collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom);
+   DEBUG("Freeing tiles from %d,%d to %d,%d", areaRect.left, areaRect.top, areaRect.right, areaRect.bottom);
    
-   setArea(collisionMapLeft, collisionMapTop, collisionMapRight, collisionMapBottom, TileState(FREE));
+   setArea(areaRect, TileState(FREE));
 }
 
 bool Pathfinder::isAreaFree(Point2D area, int width, int height) const
 {
    if(collisionMap == NULL) return false;
 
-   int collisionMapLeft = area.x/MOVEMENT_TILE_SIZE;
-   int collisionMapRight = (area.x + width)/MOVEMENT_TILE_SIZE;
-   int collisionMapTop = area.y/MOVEMENT_TILE_SIZE;
-   int collisionMapBottom = (area.y + height)/MOVEMENT_TILE_SIZE;
-   
-   for(int collisionMapX = collisionMapLeft; collisionMapX < collisionMapRight; ++collisionMapX)
+   Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
+
+   for(int collisionMapY = areaRect.top; collisionMapY < areaRect.bottom; ++collisionMapY)
    {
-      for(int collisionMapY = collisionMapTop; collisionMapY < collisionMapBottom; ++collisionMapY)
+      for(int collisionMapX = areaRect.left; collisionMapX < areaRect.right; ++collisionMapX)
       {
          // We cannot occupy the point if it is reserved by an obstacle or a character.
-         const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX].occupantType;
+         const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX];
          if(collisionTile.occupantType != FREE)
          {
             return false;
@@ -527,20 +540,65 @@ bool Pathfinder::beginMovement(NPC* npc, Point2D src, Point2D dst, int width, in
    return occupyArea(dst, width, height, TileState(CHARACTER, npc));
 }
 
+void Pathfinder::abortMovement(Point2D src, Point2D dst, Point2D currentLocation, int width, int height)
+{
+   Rectangle sourceRect = getCollisionMapEdges(Rectangle(src, width, height));
+   Rectangle destRect = getCollisionMapEdges(Rectangle(dst, width, height));
+
+   Rectangle currentOccupiedArea = getCollisionMapEdges(Rectangle(currentLocation, width, height));
+   
+   if(!sourceRect.intersects(currentOccupiedArea))
+   {
+      freeArea(src, width, height);
+   }
+
+   if(!destRect.intersects(currentOccupiedArea)) 
+   {
+      freeArea(dst, width, height);
+   }
+}
+
 void Pathfinder::endMovement(Point2D src, Point2D dst, int width, int height)
 {
    freeArea(src, width, height);
 }
 
-void Pathfinder::setArea(int left, int top, int right, int bottom, TileState state)
+void Pathfinder::setArea(const Rectangle& area, TileState state)
 {
-   for(int collisionMapX = left; collisionMapX < right; ++collisionMapX)
+   for(int collisionMapY = area.top; collisionMapY <= area.bottom; ++collisionMapY)
    {
-      for(int collisionMapY = top; collisionMapY < bottom; ++collisionMapY)
+      for(int collisionMapX = area.left; collisionMapX <= area.right; ++collisionMapX)
       {
          collisionMap[collisionMapY][collisionMapX] = state;
       }
    }
+}
+
+NPC* Pathfinder::getOccupantNPC(Point2D location, int width, int height) const
+{
+   if(collisionMap == NULL)
+   {
+      return NULL;
+   }
+   
+   int collisionMapLeft = location.x/MOVEMENT_TILE_SIZE;
+   int collisionMapRight = (location.x + width - 1)/MOVEMENT_TILE_SIZE;
+   int collisionMapTop = location.y/MOVEMENT_TILE_SIZE;
+   int collisionMapBottom = (location.y + height - 1)/MOVEMENT_TILE_SIZE;
+   
+   for(int collisionMapY = collisionMapTop; collisionMapY <=  collisionMapBottom; ++collisionMapY)
+   {
+      for(int collisionMapX = collisionMapLeft; collisionMapX <= collisionMapRight; ++collisionMapX)
+      {
+         const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX];
+         if(collisionTile.occupantType == CHARACTER)
+         {
+            return reinterpret_cast<NPC*>(collisionTile.occupant);
+         }
+      }
+   }
+
+   return NULL;
 }
 
 void Pathfinder::draw()
@@ -571,7 +629,14 @@ void Pathfinder::draw()
             }
             case CHARACTER:
             {
-               glColor3f(0.0f, 0.0f, 0.5f);
+               if(collisionMap[y][x].occupant == NULL)
+               {
+                  glColor3f(0.5f, 0.0f, 0.0f);
+               }
+               else
+               {
+                  glColor3f(0.0f, 0.0f, 0.5f);
+               }
                break;
             }
             case OBSTACLE:

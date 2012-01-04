@@ -128,6 +128,7 @@ set(HEADERS
   src/PlayerData/Quest.h
   src/PlayerData/SaveGameItemNames.h
   src/Point2D.h
+  src/Rectangle.h
   src/ResourceLoader/Resource.h
   src/ResourceLoader/ResourceKey.h
   src/ResourceLoader/ResourceLoader.h
@@ -292,6 +293,8 @@ set(SOURCES
   src/ExecutionStack.cpp
   src/GameState.cpp
   src/GraphicsUtil.cpp
+  src/Point2D.cpp
+  src/Rectangle.cpp
 )
 
 SET(SOURCE_GROUP_DELIMITER "/")

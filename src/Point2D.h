@@ -25,8 +25,8 @@ struct Point2D
     * Constructor.
     * Creates a point set at origin (0,0).
     */
-   Point2D() : x(0), y(0) {}
-   
+   Point2D();
+
    /**
     * Constructor.
     * Creates a point set at (x,y).
@@ -34,69 +34,16 @@ struct Point2D
     * @param x The x-coordinate for the point.
     * @param y The y-coordinate for the point.
     */
-   Point2D(int x, int y) : x(x), y(y) {}
+   Point2D(int x, int y);
    
    /**
     * Equality operator.
     */
-   bool operator==(const Point2D& rhs) const
-   {
-      return x == rhs.x && y == rhs.y;
-   }
+   bool operator==(const Point2D& rhs) const;
 
-   static std::vector<Point2D> getDiagonallyAdjacentPoints(const Point2D& point, int mapWidth, int mapHeight)
-   {
-      std::vector<Point2D> diagonalPoints;
-      
-      if(point.x > 0 && point.y > 0)
-      {
-         diagonalPoints.push_back(Point2D(point.x - 1, point.y - 1));
-      }
-      
-      if(point.x > 0 && point.y < mapHeight - 1)
-      {
-         diagonalPoints.push_back(Point2D(point.x - 1, point.y + 1));
-      }
-      
-      if(point.x < mapWidth - 1 && point.y > 0)
-      {
-         diagonalPoints.push_back(Point2D(point.x + 1, point.y - 1));
-      }
-      
-      if(point.x < mapWidth - 1 && point.y < mapHeight - 1)
-      {
-         diagonalPoints.push_back(Point2D(point.x + 1, point.y + 1));
-      }
-      
-      return diagonalPoints;
-   }
+   static std::vector<Point2D> getDiagonallyAdjacentPoints(const Point2D& point, int mapWidth, int mapHeight);
    
-   static std::vector<Point2D> getLaterallyAdjacentPoints(const Point2D& point, int mapWidth, int mapHeight)
-   {
-      std::vector<Point2D> lateralPoints;
-      
-      if(point.x > 0)
-      {
-         lateralPoints.push_back(Point2D(point.x - 1, point.y));
-      }
-      
-      if(point.x < mapWidth - 1)
-      {
-         lateralPoints.push_back(Point2D(point.x + 1, point.y));
-      }
-      
-      if(point.y > 0)
-      {
-         lateralPoints.push_back(Point2D(point.x, point.y - 1));
-      }
-      
-      if(point.y < mapHeight - 1)
-      {
-         lateralPoints.push_back(Point2D(point.x, point.y + 1));
-      }
-      
-      return lateralPoints;
-   }
+   static std::vector<Point2D> getLaterallyAdjacentPoints(const Point2D& point, int mapWidth, int mapHeight);
 };
 
 #endif

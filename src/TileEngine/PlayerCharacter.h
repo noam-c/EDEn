@@ -54,6 +54,16 @@ class PlayerCharacter
        * @param y The y-location of the player character.
        */
       PlayerCharacter(Spritesheet* sheet, int x, int y);
+      
+      /**
+       * @return The location of the player character.
+       */
+      Point2D getLocation() const;
+      
+      /**
+       * @return The direction that the player character is facing.
+       */
+      MovementDirection getDirection() const;
    
       /**
        * Takes player input and determines the character's direction and speed,

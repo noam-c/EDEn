@@ -158,11 +158,6 @@ class DialogueController
    void initMainDialogue();
 
    /**
-    * @return true iff there is currently a line of dialogue being shown.
-    */
-   bool hasDialogue();
-
-   /**
     * @return true iff the current line of dialogue is finished writing to screen
     */
    bool dialogueComplete();
@@ -220,6 +215,11 @@ class DialogueController
        * @return true iff the controller was able to respond to the nextLine request
        */
       bool nextLine();
+      
+      /**
+       * @return true iff there is currently a line of dialogue being shown.
+       */
+      bool hasDialogue();
 
       /**
        * Enqueue a line of speech said by a character.

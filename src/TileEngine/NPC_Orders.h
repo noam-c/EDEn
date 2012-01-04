@@ -31,6 +31,7 @@ class NPC::StandOrder : public NPC::Order
 class NPC::MoveOrder : public NPC::Order
 {
    const Point2D dst;
+   bool movementBegun;
    Point2D currLocation;
    Point2D nextLocation;
    Pathfinder& pathfinder;
@@ -41,6 +42,7 @@ class NPC::MoveOrder : public NPC::Order
 
    public:
       MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& pathfinder);
+      ~MoveOrder();
       bool perform(long timePassed);
       void draw();
 };

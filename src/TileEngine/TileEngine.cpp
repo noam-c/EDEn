@@ -131,7 +131,13 @@ void TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
    }
 }
 
-bool TileEngine::withinMap(int x, int y)
+bool TileEngine::withinMap(Point2D point) const
+{
+   return withinMap(point.x, point.y);
+}
+
+
+bool TileEngine::withinMap(const int x, const int y) const
 {
    return x >= 0 && x < currMap.getWidth() * TILE_SIZE && y >= 0 && y < currMap.getHeight() * TILE_SIZE;
 }
@@ -289,7 +295,14 @@ void TileEngine::handleInputEvents(bool& finishState)
             {
                case SDLK_SPACE:
                {
-                  dialogue->setFastModeEnabled(false);
+                  if(dialogue->hasDialogue())
+                  {
+                     dialogue->setFastModeEnabled(false);
+                  }
+                  else
+                  {
+                     action();
+                  }
                   return;
                }
                default:
@@ -313,6 +326,63 @@ void TileEngine::handleInputEvents(bool& finishState)
 
    // If the tile engine didn't consume this event, then propagate to the generic input handling
    handleEvent(event);
+}
+
+void TileEngine::action()
+{
+   Point2D activationLocation = player->getLocation();
+   switch(player->getDirection())
+   {
+      case UP_LEFT:
+      case LEFT:
+      case DOWN_LEFT:
+      {
+         activationLocation.x -= TILE_SIZE;
+         break;
+      }
+      case UP_RIGHT:
+      case RIGHT:
+      case DOWN_RIGHT:
+      {
+         activationLocation.x += TILE_SIZE;
+         break;
+      }
+      default:
+      {
+         break;
+      }   
+   }
+
+   switch(player->getDirection())
+   {
+      case UP_RIGHT:
+      case UP:
+      case UP_LEFT:
+      {
+         activationLocation.y -= TILE_SIZE;
+         break;
+      }
+      case DOWN_LEFT:
+      case DOWN:
+      case DOWN_RIGHT:
+      {
+         activationLocation.y += TILE_SIZE;
+         break;
+      }
+      default:
+      {
+         break;
+      }
+   }
+   
+   if(withinMap(activationLocation))
+   {
+      NPC* npcToActivate = currMap.getOccupantNPC(activationLocation, TILE_SIZE, TILE_SIZE);
+      if(npcToActivate != NULL)
+      {
+         npcToActivate->activate();
+      }
+   }
 }
 
 TileEngine::~TileEngine()

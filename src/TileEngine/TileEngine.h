@@ -90,9 +90,24 @@ class TileEngine: public GameState
    void handleInputEvents(bool& finishState);
 
    /**
+    * Handles activation of NPCs when the player presses the action key.
+    */
+   void action();
+   
+   /**
+    * @param point The coordinates to check (in pixels)
+    *
+    * @return true iff the point is within the map
+    */
+   bool withinMap(Point2D point) const;
+   
+   /**
+    * @param x The x-coordinate to check (in pixels)
+    * @param y The y-coordinate to check (in pixels)
+    *
     * @return true iff the x-y coordinate is within the map
     */
-   bool withinMap(int x, int y);
+   bool withinMap(const int x, const int y) const;
 
    protected:
       /**

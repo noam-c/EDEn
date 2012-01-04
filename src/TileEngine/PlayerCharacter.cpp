@@ -6,6 +6,7 @@
 
 #include "PlayerCharacter.h"
 #include "Sprite.h"
+#include "TileEngine.h"
 
 #include <SDL.h>
 
@@ -21,7 +22,17 @@ PlayerCharacter::PlayerCharacter(Spritesheet* sheet, int x, int y)
                                                 currDirection(DOWN)
 {
    sprite = new Sprite(sheet);
-} 
+}
+
+Point2D PlayerCharacter::getLocation() const
+{
+   return playerLocation;
+}
+
+MovementDirection PlayerCharacter::getDirection() const
+{
+   return currDirection;
+}
 
 void PlayerCharacter::step(long timePassed)
 {
@@ -92,7 +103,7 @@ void PlayerCharacter::step(long timePassed)
 
 void PlayerCharacter::draw()
 {
-   sprite->draw(playerLocation.x, playerLocation.y);
+   sprite->draw(playerLocation.x, playerLocation.y + TileEngine::TILE_SIZE);
 }
 
 PlayerCharacter::~PlayerCharacter()
