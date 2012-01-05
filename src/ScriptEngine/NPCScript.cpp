@@ -21,7 +21,7 @@ extern "C"
 
 const char* NPCScript::FUNCTION_NAMES[] = { "idle", "activate" };
 
-NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) : Script(scriptPath), npc(npc), finished(false)
+NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) : Script(scriptPath), npc(npc), activated(false), finished(false)
 {
    luaStack = lua_newthread(luaVM);
 
@@ -121,6 +121,13 @@ bool NPCScript::callFunction(NPCFunction function)
 bool NPCScript::resume(long timePassed)
 {
    if(finished) return true;
+   
+   if(activated)
+   {
+      activated = false;
+      callFunction(ACTIVATE);
+   }
+
    if(running)
    {
       DEBUG("NPC Thread %d resuming running script.", getId());
@@ -139,7 +146,7 @@ bool NPCScript::resume(long timePassed)
 
 void NPCScript::activate()
 {
-   callFunction(ACTIVATE);
+   activated = true;
 }
 
 void NPCScript::finish()

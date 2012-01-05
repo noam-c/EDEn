@@ -23,15 +23,17 @@ class NPC::Order
 
 class NPC::StandOrder : public NPC::Order
 {
+   MovementDirection direction;
+
    public:
-      StandOrder(NPC& npc);
+      StandOrder(NPC& npc, MovementDirection direction);
       bool perform(long timePassed);
 };
 
 class NPC::MoveOrder : public NPC::Order
 {
-   const Point2D dst;
    bool movementBegun;
+   const Point2D dst;
    Point2D currLocation;
    Point2D nextLocation;
    Pathfinder& pathfinder;

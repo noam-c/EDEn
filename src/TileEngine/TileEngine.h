@@ -231,6 +231,13 @@ class TileEngine: public GameState
       void changeNPCSpritesheet(const std::string& npcName, const std::string& spritesheetName);
 
       /**
+       * Change the direction of the specified NPC so that it is facing the player character.
+       *
+       * @param npcName The name of the NPC to turn.
+       */
+      void turnNPCTowardsPlayer(const std::string& npcName);
+   
+      /**
        * Destructor.
        */
       ~TileEngine();

@@ -149,6 +149,13 @@ class NPC
        * sprite animation frame.
        */
       void draw();
+   
+      /**
+       * This function enqueues an instruction to stand facing a specified direction.
+       *
+       * @param The direction for the NPC to face when standing.
+       */
+      void stand(MovementDirection direction);
 
       /**
        * This function enqueues a movement instruction.

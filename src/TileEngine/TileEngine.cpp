@@ -18,6 +18,7 @@
 #include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
+#include "stdlib.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
@@ -173,6 +174,42 @@ void TileEngine::changeNPCSpritesheet(const std::string& npcName, const std::str
    Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
    NPC* npcToChange = npcList[npcName];
    npcToChange->setSpritesheet(sheet);
+}
+
+void TileEngine::turnNPCTowardsPlayer(const std::string& npcName)
+{
+   NPC* npcToChange = npcList[npcName];
+   Point2D playerLocation = player->getLocation();
+   Point2D npcLocation = npcToChange->getLocation();
+   MovementDirection directionToPlayer = npcToChange->getDirection();
+   
+   int xDiff = npcLocation.x - playerLocation.x;
+   int yDiff = npcLocation.y - playerLocation.y;
+   
+   if(abs(xDiff) > abs(yDiff))
+   {
+      if(xDiff < 0)
+      {
+         directionToPlayer = RIGHT;
+      }
+      else if(xDiff > 0)
+      {
+         directionToPlayer = LEFT;
+      }  
+   }
+   else
+   {
+      if(yDiff < 0)
+      {
+         directionToPlayer = DOWN;
+      }
+      else if(yDiff > 0)
+      {
+         directionToPlayer = UP;
+      }
+   }
+
+   npcToChange->stand(directionToPlayer);
 }
 
 void TileEngine::stepNPCs(long timePassed)

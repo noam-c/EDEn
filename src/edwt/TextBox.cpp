@@ -54,7 +54,9 @@ namespace edwt
       }
    
       setWidth(width + 1);
-      setHeight(getFont()->getHeight() * mTextRows.size());
+      
+      int minHeight = getFont()->getHeight() * mTextRows.size();
+      if(getHeight() < minHeight) setHeight(minHeight);
    }
    
    int TextBox::determineX(const std::string& text)

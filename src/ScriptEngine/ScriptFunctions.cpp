@@ -91,6 +91,11 @@ static int luaNPCChangeSpritesheet(lua_State* luaVM)
    return getEngine(luaVM)->changeNPCSpritesheet(luaVM);
 }
 
+static int luaNPCLookAtPlayer(lua_State* luaVM)
+{
+   return getEngine(luaVM)->turnNPCTowardsPlayer(luaVM);
+}
+
 static int luaTilesToPixels(lua_State* luaVM)
 { 
    int numInTiles = (int)luaL_checknumber(luaVM, 1);
@@ -145,6 +150,7 @@ void ScriptEngine::registerFunctions()
    REGISTER("changeSpritesheet", luaNPCChangeSpritesheet);
    REGISTER("setSprite", luaNPCSetSprite);
    REGISTER("setAnimation", luaNPCSetAnimation);
+   REGISTER("lookAtPlayer", luaNPCLookAtPlayer);
 
    // Utility functions (calculations)
    REGISTER("tilesToPixels", luaTilesToPixels);

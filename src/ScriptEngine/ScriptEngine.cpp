@@ -286,7 +286,6 @@ int ScriptEngine::setNPCAnimation(lua_State* luaStack)
 int ScriptEngine::changeNPCSpritesheet(lua_State* luaStack)
 {
    int nargs = lua_gettop(luaStack);
-   bool waitForFinish = false;
 
    switch(nargs)
    {
@@ -299,6 +298,23 @@ int ScriptEngine::changeNPCSpritesheet(lua_State* luaStack)
       }
    }
 
+   return 0;
+}
+
+int ScriptEngine::turnNPCTowardsPlayer(lua_State* luaStack)
+{
+   int nargs = lua_gettop(luaStack);
+   
+   switch(nargs)
+   {
+      case 1:
+      {
+         std::string npcName(lua_tostring(luaStack, 1));
+         tileEngine.turnNPCTowardsPlayer(npcName);
+         break;
+      }
+   }
+   
    return 0;
 }
 

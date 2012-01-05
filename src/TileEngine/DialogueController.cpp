@@ -127,7 +127,6 @@ void DialogueController::advanceDialogue()
    if(dialogue.size() <= charsToShow)
    {
       charsToShow = dialogue.size();
-      currLine->task->signal();
    }
 
    // Display the necessary piece of text in the text box
@@ -152,6 +151,7 @@ void DialogueController::clearDialogue()
 
    if(currLine)
    {
+      currLine->task->signal();
       delete currLine;
       currLine = NULL;
    }

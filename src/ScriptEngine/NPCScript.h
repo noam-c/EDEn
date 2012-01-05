@@ -61,6 +61,9 @@ class NPCScript : public Script
    /** The NPC controlled by this script's execution. */
    NPC* npc;
 
+   /** True iff the NPC script received a signal to call the NPC's activate function. */
+   bool activated;
+
    /** True iff the NPC script is finished and should be unscheduled. */
    bool finished;
 

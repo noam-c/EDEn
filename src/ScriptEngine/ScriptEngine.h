@@ -148,6 +148,7 @@ class ScriptEngine
       int setNPCSprite(lua_State* luaStack);
       int setNPCAnimation(lua_State* luaStack);
       int changeNPCSpritesheet(lua_State* luaStack);
+      int turnNPCTowardsPlayer(lua_State* luaStack);
       int delay(lua_State* luaStack);
 };
 

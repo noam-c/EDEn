@@ -88,6 +88,11 @@ void NPC::move(int x, int y)
    orders.push(new MoveOrder(*this, dst, pathfinder));
 }
 
+void NPC::stand(MovementDirection direction)
+{
+   orders.push(new StandOrder(*this, direction));
+}
+
 void NPC::setSpritesheet(Spritesheet* sheet)
 {
    sprite->setSheet(sheet);
