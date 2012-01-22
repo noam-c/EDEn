@@ -12,6 +12,11 @@
 #include <map>
 #include <string>
 
+namespace Json
+{
+   class Value;
+};
+
 struct SpriteFrame;
 class Animation;
 
@@ -72,6 +77,20 @@ class Spritesheet : public Resource
     * @param path The path to the spritesheet image and data.
     */
    void load(const char* path);
+
+   /**
+    * Loads the sprite frames from the spritesheet data. 
+    *
+    * @param rootElement The element containing the sprite frames.
+    */
+   void parseFrames(Json::Value& rootElement);
+   
+   /**
+    * Loads the sprite animations from the spritesheet data. 
+    *
+    * @param rootElement The element containing the sprite frames.
+    */
+   void parseAnimations(Json::Value& rootElement);
 
    public:
       /**

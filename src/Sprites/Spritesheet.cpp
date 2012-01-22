@@ -12,6 +12,8 @@
 #include <queue>
 #include <fstream>
 #include <sstream>
+#include "json.h"
+
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_RES_LOAD | DEBUG_SPRITE;
@@ -26,8 +28,7 @@ const std::string Spritesheet::DATA_EXTENSION = ".eds";
  */
 const std::string Spritesheet::UNTITLED_LINE = "untitled";
 
-Spritesheet::Spritesheet(ResourceKey name)
-                                     : Resource(name), frameList(NULL), numFrames(0)
+Spritesheet::Spritesheet(ResourceKey name) : Resource(name), frameList(NULL), numFrames(0)
 {
 }
 
@@ -46,159 +47,149 @@ void Spritesheet::load(const char* path)
    dataPath += DATA_EXTENSION;
    DEBUG("Loading spritesheet data \"%s\"...", dataPath.c_str());
 
-   std::ifstream in(dataPath.c_str());
-   if(!in.is_open())
+   std::ifstream input(dataPath.c_str());
+   if(!input.is_open())
    {
       T_T(std::string("Error opening file: ") + dataPath);
    }
-
-   std::string line;
-   std::queue<SpriteFrame> frameQueue;
-
-   for(;;)
-   {
-      // Get the next line
-      getline(in, line);
-
-      if(in.eof())
-      {
-         // If the file is done, we are done
-         break;
-      }
-
-      if(!in)
-      {
-         // If there is some other error, throw an exception
-         T_T(std::string("Error reading from file: ") + path);
-      }
-
-      // Send the loaded line into a string stream for parsing
-      std::stringstream lineStream(line, std::stringstream::in | std::stringstream::out);
-
-      // Get the type of the line's content (static frame, or animation?)
-      std::string typeName;
-      lineStream >> typeName;
-
-      if(typeName == "frame")
-      {
-         // Get the name of the frame
-         std::string frameName;
-         lineStream >> frameName;
-
-         if(frameName == UNTITLED_LINE)
-         {
-            // Skip untitled frames.
-            continue;
-         }
-
-         // Make sure this frame name has not already been used in this file
-         if(frameIndices.find(frameName) != frameIndices.end())
-         {
-            DEBUG("Duplicated name %s in spritesheet %s", frameName.c_str(), path);
-            T_T("Parse error reading spritesheet.");
-         }
-
-         // Get the four coordinates of the frame
-         int coords[4];
-         for(int i = 0; i < 4; ++i)
-         {
-            lineStream >> coords[i];
-            if(!lineStream)
-            {
-               DEBUG("Error reading frame %s in spritesheet %s", frameName.c_str(), path);
-               T_T("Parse error reading spritesheet.");
-            }
-         }
-
-         // Create a new frame with the read coordinates
-         SpriteFrame f(coords[0], coords[1], coords[2], coords[3]);
-         DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
-                         frameName.c_str(), coords[0], coords[1], coords[2], coords[3]);
-
-         // Bind the frame name to the next available frame index
-         frameIndices[frameName] = frameQueue.size();
-
-         // Push the frame into a queue for later processing
-         frameQueue.push(f);
-      }
-      else if(typeName == "anim")
-      {
-         // Get the name of the animation
-         std::string animationName;
-         lineStream >> animationName;
-
-         if(animationName == UNTITLED_LINE)
-         {
-            // Skip untitled animations.
-            continue;
-         }
-
-         // Make sure this animation name has not already been used in this file
-         if(animationList.find(animationName) != animationList.end())
-         {
-            DEBUG("Duplicated animation name %s in spritesheet %s", animationName.c_str(), path);
-            T_T("Parse error reading spritesheet.");
-         }
-
-         // Get the frames of the animation
-         std::string frameName;
-         FrameSequence* frameSequence = new FrameSequence();
-         for(;;)
-         {
-            lineStream >> frameName;
-
-            int frameIndex = frameIndices[frameName];
-            if(frameIndex < 0)
-            {
-               DEBUG("Found invalid frame name '%s' in animation %s", frameName.c_str(), animationName.c_str());
-               T_T("Parse error reading spritesheet.");
-            }
-
-            DEBUG("Animation %s: Adding node with index %d", animationName.c_str(), frameIndex);
-
-            frameSequence->push_back(frameIndex);
-            
-            // If the line is done, there are no animations left to read
-            if(lineStream.eof())
-            {
-               // If the line finished before any frames were added to the animation, then it is invalid.
-               if(frameSequence->empty())
-               {
-                  DEBUG("Empty animation %s in spritesheet %s", animationName.c_str(), path);
-                  T_T("Parse error reading spritesheet.");
-               }
-               break;
-            }
-         }
-
-         // Bind the animation name to the next available animation index
-         animationList[animationName] = frameSequence;
-      }
-
-      // Flush any remaining line data in the stream
-      /** \todo Should we be doing this? Or failing on extraneous text? */
-      lineStream.flush();
-   }
-
-   // Create the new array of frames
-   numFrames = frameQueue.size();
    
-   if(numFrames == 0)
+   // Read in the JSON data in the file
+   Json::Value jsonRoot;
+   input >> jsonRoot;
+   
+   if(jsonRoot.isNull())
    {
-      DEBUG("No frames found in spritesheet %s", path);
+      DEBUG("Unexpected root element name.");
+      T_T("Failed to parse spritesheet data.");
+   }
+   
+   parseFrames(jsonRoot);
+   parseAnimations(jsonRoot);
+
+   DEBUG("Spritesheet constructed!");
+}
+
+void Spritesheet::parseFrames(Json::Value& rootElement)
+{
+   // Get the frames array in the spritesheet data
+   Json::Value& framesElement = rootElement["frames"];
+   numFrames = framesElement.size();
+   
+   // This spritesheet is well-formed only if the "frames" element is a non-empty array
+   // (i.e. there are frames in the spritesheet)
+   if(!framesElement.isArray() || numFrames <= 0)
+   {
+      DEBUG("No frames found in spritesheet.");
       T_T("Empty (invalid) spritesheet constructed.");
    }
 
+   DEBUG("Loading frames...");
    frameList = new SpriteFrame[numFrames];
-
-   // Fill the new array with the accumulated frames
-   int frameNum = 0;
-   while(!frameQueue.empty())
+   for(int i = 0; i < numFrames; ++i)
    {
-      frameList[frameNum++] = frameQueue.front(); frameQueue.pop();
+      Json::Value& currFrame = framesElement[i];
+      
+      // Get the current frame name
+      std::string frameName = currFrame["name"].asString();
+      if(frameName == UNTITLED_LINE)
+      {
+         // Skip untitled frames.
+         continue;
+      }
+      
+      // Make sure this frame name has not already been used in this file
+      if(frameIndices.find(frameName) != frameIndices.end())
+      {
+         DEBUG("Duplicated name %s in spritesheet.", frameName.c_str());
+         T_T("Parse error reading spritesheet.");
+      }
+      else
+      {
+         DEBUG("Adding frame %s...", frameName.c_str());
+      }
+
+      // Get the frame rectangle coordinates
+      int left = currFrame["left"].asInt();
+      int top = currFrame["top"].asInt();
+      int right = currFrame["right"].asInt();
+      int bottom = currFrame["bottom"].asInt();
+
+      frameList[i] = SpriteFrame(left, top, right, bottom);
+      DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
+            frameName.c_str(), left, top, right, bottom);
+
+      frameIndices[frameName] = i;
    }
 
-   DEBUG("Spritesheet constructed!");
+   DEBUG("Frames loaded.");
+}
+
+void Spritesheet::parseAnimations(Json::Value& rootElement)
+{
+   Json::Value& animsElement = rootElement["animations"];
+   int numAnimations = animsElement.size();
+
+   if(!animsElement.isArray() || numAnimations <= 0)
+   {
+      DEBUG("No animations found in spritesheet.");
+      return;
+   }
+   
+   for(int i = 0; i < numAnimations; ++i)
+   {
+      Json::Value& currAnimation = animsElement[i];
+
+      // Get the name of the animation
+      std::string animationName = currAnimation["name"].asString();
+      if(animationName == UNTITLED_LINE)
+      {
+         // Skip untitled animations
+         continue;
+      }
+      
+      // Make sure this animation name has not already been used in this file
+      if(animationList.find(animationName) != animationList.end())
+      {
+         DEBUG("Duplicated animation name %s in spritesheet.", animationName.c_str());
+         T_T("Parse error reading spritesheet.");
+      }
+      
+      // Get the frames of the animation
+      FrameSequence* frameSequence = new FrameSequence();
+
+      Json::Value& frameArray = currAnimation["frames"];
+      int sequenceLength = frameArray.size();
+      if(!frameArray.isArray() || sequenceLength <= 0)
+      {
+         // There should be no such thing as an animation without a non-empty array of frames
+         DEBUG("Encountered malformed animation %s.", animationName.c_str());
+         T_T("Parse error reading spritesheet.");
+      }
+
+      for(int i = 0; i < sequenceLength; ++i)
+      {
+         // Get the name of the next frame in the animation
+         std::string frameName = frameArray[i].asString();
+
+         // Ensure that the frame exists in the frame list and grab the associated frame index
+         std::map<std::string, int>::const_iterator frameIndexIter = frameIndices.find(frameName);
+         if(frameIndexIter == frameIndices.end())
+         {
+            DEBUG("Found invalid frame name '%s' in animation %s", frameName.c_str(), animationName.c_str());
+            T_T("Parse error reading spritesheet.");
+         }
+         
+         int frameIndex = frameIndexIter->second;
+
+         DEBUG("Animation %s: Adding node with index %d", animationName.c_str(), frameIndex);
+
+         // Add the retrieved frame index into the sequence of frames
+         frameSequence->push_back(frameIndex);
+      }
+
+      // Bind the animation name to the next available animation index
+      animationList[animationName] = frameSequence;
+   }
 }
 
 int Spritesheet::getFrameIndex(const std::string& frameName) const
