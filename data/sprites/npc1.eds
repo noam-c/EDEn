@@ -229,7 +229,6 @@
    {
       "name": "walk_left",
       "frames": [
-        "stand_left",
         "walk_left2",
         "walk_left3",
         "walk_left4",
@@ -242,7 +241,6 @@
    {
       "name": "walk_right",
       "frames": [
-        "stand_right",
         "walk_right2",
         "walk_right3",
         "walk_right4",
@@ -255,7 +253,6 @@
    {
       "name": "walk_up",
       "frames": [
-        "stand_up",
         "walk_up2",
         "walk_up3",
         "walk_up4",
@@ -268,7 +265,6 @@
    {
       "name": "walk_down",
       "frames": [
-        "stand_down",
         "walk_down2",
         "walk_down3",
         "walk_down4",

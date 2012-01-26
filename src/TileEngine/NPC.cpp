@@ -25,7 +25,7 @@ const int debugFlag = DEBUG_NPC;
 
 NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, Pathfinder& pathfinder,
                        const std::string& regionName,
-                       int x, int y) : name(name), pathfinder(pathfinder), pixelLoc(x, y), movementSpeed(0.1f)
+                       int x, int y) : name(name), pathfinder(pathfinder), pixelLoc(x, y), currDirection(DOWN), movementSpeed(0.1f)
 {
    npcThread = engine.getNPCScript(this, regionName, pathfinder.getMapData()->getName(), name);
    scheduler.start(npcThread);
@@ -83,12 +83,12 @@ void NPC::setSpritesheet(Spritesheet* sheet)
 
 void NPC::setFrame(const std::string& frameName)
 {
-   sprite->setFrame(frameName);
+   sprite->setFrame(frameName, currDirection);
 }
 
 void NPC::setAnimation(const std::string& animationName)
 {
-   sprite->setAnimation(animationName);
+   sprite->setAnimation(animationName, currDirection);
 }
 
 void NPC::setLocation(Point2D location)

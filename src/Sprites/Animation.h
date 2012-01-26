@@ -17,6 +17,9 @@
  */
 class Animation
 {
+   /** The name of this animation. */
+   const std::string& name;
+   
    /** The sequence of frames in this animation. */
    const FrameSequence& frameSequence;
    
@@ -33,7 +36,7 @@ public:
     *
     * @param frameSequence The sequence of frames in a given animation.
     */
-   Animation(const FrameSequence& frameSequence);
+   Animation(const std::string& animation, const FrameSequence& frameSequence);
    
    /**
     * Updates the animation based on the time that has passed since the
@@ -48,6 +51,11 @@ public:
     *         is currently on).
     */
    int getIndex() const;
+   
+   /**
+    * @return name The name of the animation.
+    */
+   const std::string& getName() const;
    
    /**
     * Destructor.

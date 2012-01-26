@@ -18,39 +18,10 @@ NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& path
 {
 }
 
-void NPC::MoveOrder::updateDirection(MovementDirection newDirection)
+void NPC::MoveOrder::updateDirection(MovementDirection newDirection, bool moving)
 {
-   if(newDirection != npc.getDirection())
-   {
-      npc.setDirection(newDirection);
-      switch(newDirection)
-      {
-         case LEFT:
-         {
-            npc.setAnimation(WALKING_PREFIX + "left");
-            break;
-         }
-         case RIGHT:
-         {
-            npc.setAnimation(WALKING_PREFIX + "right");
-            break;
-         }
-         case UP:
-         {
-            npc.setAnimation(WALKING_PREFIX + "up");
-            break;
-         }
-         case DOWN:
-         {
-            npc.setAnimation(WALKING_PREFIX + "down");
-            break;
-         }
-         default:
-         {
-            break;
-         }
-      }
-   }
+   npc.setDirection(newDirection);
+   npc.setAnimation(moving ? WALKING_PREFIX : STANDING_PREFIX);
 }
 
 void NPC::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& direction)
@@ -89,6 +60,7 @@ bool NPC::MoveOrder::perform(long timePassed)
    {
       if(location == dst)
       {
+         updateDirection(newDirection, false);
          return true;
       }
       else
@@ -118,7 +90,7 @@ bool NPC::MoveOrder::perform(long timePassed)
             path = pathfinder.findReroutedPath(location, dst);
          }
 
-         updateDirection(newDirection);
+         updateDirection(newDirection, false);
          return false;
       }
    }
@@ -208,7 +180,7 @@ bool NPC::MoveOrder::perform(long timePassed)
    }
    
    npc.setLocation(location);
-   updateDirection(newDirection);
+   updateDirection(newDirection, true);
    return false;
 }
 

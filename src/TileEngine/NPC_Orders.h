@@ -24,6 +24,7 @@ class NPC::Order
 class NPC::StandOrder : public NPC::Order
 {
    public:
+      StandOrder(NPC& npc);
       bool perform(long timePassed);
 };
 
@@ -35,7 +36,7 @@ class NPC::MoveOrder : public NPC::Order
    Pathfinder& pathfinder;
    Pathfinder::Path path;
 
-   void updateDirection(MovementDirection newDirection);
+   void updateDirection(MovementDirection newDirection, bool moving);
    void updateNextWaypoint(Point2D location, MovementDirection& direction);
 
    public:
@@ -44,7 +45,7 @@ class NPC::MoveOrder : public NPC::Order
       void draw();
 };
 
-const std::string WALKING_PREFIX = "walk_";
-const std::string STANDING_PREFIX = "stand_";
+const std::string WALKING_PREFIX = "walk";
+const std::string STANDING_PREFIX = "stand";
 
 #endif

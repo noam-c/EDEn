@@ -7,35 +7,12 @@
 #include "NPC.h"
 #include "NPC_Orders.h"
 
+NPC::StandOrder::StandOrder(NPC& npc) : Order(npc)
+{
+}
+
 bool NPC::StandOrder::perform(long timePassed)
 {
-   switch(npc.getDirection())
-   {
-      case LEFT:
-      {
-         npc.setFrame(STANDING_PREFIX + "left");
-         break;
-      }
-      case RIGHT:
-      {
-         npc.setFrame(STANDING_PREFIX + "right");
-         break;
-      }
-      case UP:
-      {
-         npc.setFrame(STANDING_PREFIX + "up");
-         break;
-      }
-      case DOWN:
-      {
-         npc.setFrame(STANDING_PREFIX + "down");
-         break;
-      }
-      default:
-      {
-         break;
-      }
-   }
-   
+   npc.setFrame(STANDING_PREFIX);
    return true;
 }

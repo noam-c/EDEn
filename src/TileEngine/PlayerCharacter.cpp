@@ -12,12 +12,13 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
 
-const std::string PlayerCharacter::WALKING_PREFIX = "walk_";
-const std::string PlayerCharacter::STANDING_PREFIX = "stand_";
+const std::string PlayerCharacter::WALKING_PREFIX = "walk";
+const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(Spritesheet* sheet, int x, int y)
                                               : playerLocation(x,y),
-                                                xSpeed(0), ySpeed(0)
+                                                xSpeed(0), ySpeed(0),
+                                                currDirection(DOWN)
 {
    sprite = new Sprite(sheet);
 } 
@@ -58,13 +59,13 @@ void PlayerCharacter::step(long timePassed)
    {
       // Positive velocity in the x-axis
       xSpeed = WALKING_SPEED;
-      direction = RIGHT;
+      direction = direction == UP ? UP_RIGHT : direction == DOWN ? DOWN_RIGHT : RIGHT;
    }
    else if(keystate[SDLK_LEFT])
    {
       // Negative velocity in the x-axis
       xSpeed = -WALKING_SPEED;
-      direction = LEFT;
+      direction = direction == UP ? UP_LEFT : direction == DOWN ? DOWN_LEFT : LEFT;
    }
    else
    {
@@ -75,72 +76,17 @@ void PlayerCharacter::step(long timePassed)
 
    if(moving)   
    {
-      if(currDirection != direction)
-      {
-         currDirection = direction;
-         switch(direction)
-         {
-            case LEFT:
-            {
-               sprite->setAnimation(WALKING_PREFIX + "left");
-               break;
-            }
-            case RIGHT:
-            {
-               sprite->setAnimation(WALKING_PREFIX + "right");
-               break;
-            }
-            case UP:
-            {
-               sprite->setAnimation(WALKING_PREFIX + "up");
-               break;
-            }
-            case DOWN:
-            {
-               sprite->setAnimation(WALKING_PREFIX + "down");
-               break;
-            }
-            default:
-            {
-               break;
-            }
-         }
-      }
+      sprite->setAnimation(WALKING_PREFIX, direction);
    }
    else
    {
-      switch(direction)
-      {
-         case LEFT:
-         {
-            sprite->setFrame(STANDING_PREFIX + "left");
-            break;
-         }
-         case RIGHT:
-         {
-            sprite->setFrame(STANDING_PREFIX + "right");
-            break;
-         }
-         case UP:
-         {
-            sprite->setFrame(STANDING_PREFIX + "up");
-            break;
-         }
-         case DOWN:
-         {
-            sprite->setFrame(STANDING_PREFIX + "down");
-            break;
-         }
-         default:
-         {
-            break;
-         }
-      }
+      sprite->setFrame(STANDING_PREFIX, direction);
    }
 
+   currDirection = direction;
    playerLocation.x += xSpeed * (timePassed / 5);
    playerLocation.y += ySpeed * (timePassed / 5);
-
+   
    sprite->step(timePassed);
 }
 

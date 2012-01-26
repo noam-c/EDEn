@@ -12,7 +12,7 @@
 
 const int debugFlag = DEBUG_SPRITE;
 
-Sprite::Sprite(Spritesheet* sheet) : sheet(sheet), frameIndex(0), animation(NULL)
+Sprite::Sprite(Spritesheet* sheet) : sheet(sheet), frameIndex(0), animation(NULL), currDirection(NONE)
 {
 }
 
@@ -26,6 +26,9 @@ void Sprite::clearCurrentFrame()
 
    // Default to frame 0 for now.
    frameIndex = 0;
+
+   currDirection = NONE;
+   currName = "";
 }
 
 void Sprite::setSheet(Spritesheet* newSheet)
@@ -36,35 +39,79 @@ void Sprite::setSheet(Spritesheet* newSheet)
    clearCurrentFrame();
 }
 
-void Sprite::setFrame(const std::string& frameName)
+std::string Sprite::toDirectionString(MovementDirection direction)
 {
-   int newFrameIndex = sheet->getFrameIndex(frameName);
+   switch(direction)
+   {
+      case UP:
+      case UP_LEFT:
+      case UP_RIGHT:
+      {
+         return "_up";
+      }
+      case DOWN:
+      case DOWN_LEFT:
+      case DOWN_RIGHT:
+      {
+         return "_down";
+      }
+      case LEFT:
+      {
+         return "_left";
+      }
+      case RIGHT:
+      {
+         return "_right";
+      }
+      case NONE:
+      default:
+      {
+         return "";
+      }
+   }
+}
+
+void Sprite::setFrame(const std::string& frameName, MovementDirection direction)
+{
+   if(animation == NULL && frameName == currName && direction == currDirection) return;
+
+   int newFrameIndex;
+   
+   if(direction == NONE || (newFrameIndex = sheet->getFrameIndex(frameName + toDirectionString(direction))) < 0)
+   {
+      newFrameIndex = sheet->getFrameIndex(frameName);
+   }
+   
    if(newFrameIndex < 0)
    {
       //DEBUG("Failed to find sprite frame.");
    }
-   else if (animation == NULL && newFrameIndex == frameIndex)
-   {
-      return;
-   }
 
    clearCurrentFrame();
+   currName = frameName;
+   currDirection = direction;
    frameIndex = newFrameIndex;
 }
 
-void Sprite::setAnimation(const std::string& animationName)
+void Sprite::setAnimation(const std::string& animationName, MovementDirection direction)
 {
-   Animation* newAnimation = sheet->getAnimation(animationName);
+   if(animation != NULL && animationName == currName && direction == currDirection) return;
+
+   Animation* newAnimation;
+
+   if(direction == NULL || (newAnimation = sheet->getAnimation(animationName + toDirectionString(direction))) == NULL)
+   {
+      newAnimation = sheet->getAnimation(animationName);
+   }
+
    if(newAnimation == NULL)
    {
-      //DEBUG("Failed to find animation.");
-   }
-   else if (newAnimation == animation)
-   {
-      return;
+      DEBUG("Failed to find animation.");
    }
 
    clearCurrentFrame();
+   currName = animationName;
+   currDirection = direction;
    animation = newAnimation;
 }
 

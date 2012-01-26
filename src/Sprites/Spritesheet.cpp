@@ -208,7 +208,7 @@ Animation* Spritesheet::getAnimation(const std::string& animationName) const
    std::map<std::string, const FrameSequence*>::const_iterator animFrames = animationList.find(animationName);
    if(animFrames != animationList.end())
    {
-      return new Animation(*(animFrames->second));
+      return new Animation(animationName, *(animFrames->second));
    }
 
    return NULL;

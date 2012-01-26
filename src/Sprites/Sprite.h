@@ -9,6 +9,8 @@
 
 #include <string>
 
+#include "MovementDirection.h"
+
 class Spritesheet;
 class Animation;
 
@@ -24,9 +26,22 @@ class Sprite
 
    /** The index of the current static frame within the sheet. -1 if an animation is used instead. */
    int frameIndex;
-
+   
    /** The animation structure to use to animate this sprite. NULL if a static frame is used instead. */
    Animation* animation;
+   
+   /** The name of the current frame/animation being used. */
+   std::string currName;
+   
+   /** The direction that the current frame/animation is facing. */
+   MovementDirection currDirection;
+   
+   /**
+    * @param direction A direction to convert to a string.
+    *
+    * @return The string to append to a frame or animation for a given direction.
+    */
+   std::string toDirectionString(MovementDirection direction);
 
    public:
 
@@ -48,20 +63,22 @@ class Sprite
        * @param newSheet The new Spritesheet to use.
        */
       void setSheet(Spritesheet* newSheet);
-
+   
       /**
        * Set a static frame to draw for this sprite.
        *
        * @param frameName The name of the static frame.
+       * @param direction The direction that the new sprite should face.
        */
-      void setFrame(const std::string& frameName);
+      void setFrame(const std::string& frameName, MovementDirection direction);
 
       /**
        * Set an animation to draw for this sprite.
        *
        * @param animationName The name of the animation.
+       * @param direction The direction that the new sprite should face.
        */
-      void setAnimation(const std::string& animationName);
+      void setAnimation(const std::string& animationName, MovementDirection direction);
 
       /**
        * A logic step for the sprite. Currently just advances the animation if

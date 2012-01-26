@@ -19,11 +19,11 @@ Obstacle::Obstacle(const int tileX, const int tileY, const int width, const int 
 
    if(spriteType == "anim")
    {
-      sprite->setAnimation(spriteName);
+      sprite->setAnimation(spriteName, NONE);
    }
    else if(spriteType == "frame")
    {
-      sprite->setFrame(spriteName);
+      sprite->setFrame(spriteName, NONE);
    }
    else
    {
