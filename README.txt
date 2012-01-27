@@ -12,18 +12,18 @@ In general, EDEn aims to help game designers quickly turn RPG stories, gameplay 
 LICENSE AND COPYRIGHT
 =====================
 
-Most of the code is Copyright 2011 Noam Chitayat. Contributors retain copyright to their original contributions.
+Most of the code is Copyright 2012 Noam Chitayat. Contributors retain copyright to their original contributions.
 
 The EDEn source is released under the terms of the Ruby License, with the following exceptions:
 
 	Code in the guichan folder or under the gcn namespace is part of the Guichan GUI library version 0.8.2.
-	Guichan is copyright 2004-2011 Olof Naessén and Per Larsson. All rights reserved. 
+	Guichan is copyright 2004-2012 Olof Naessén and Per Larsson. All rights reserved. 
 
 	Code in the json folder or under the Json namespace is part of the JsonCpp JSON parsing library.
-	JsonCpp is copryright 2007-2011 Baptiste Lepilleur. Distributed under MIT license, or public domain if desired and recognized in your jurisdiction.
+	JsonCpp is copryright 2007-2012 Baptiste Lepilleur. Distributed under MIT license, or public domain if desired and recognized in your jurisdiction.
 
 	Code in the tinyxml folder is part of the TinyXML XML parsing library.
-	TinyXML is copyright 2000-2011 Lee Thomason. 
+	TinyXML is copyright 2000-2012 Lee Thomason. 
 
 Art and audio assets are copyright their creators. For specific asset credits, please refer to ASSETS.txt.
 
