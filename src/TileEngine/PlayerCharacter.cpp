@@ -7,6 +7,7 @@
 #include "PlayerCharacter.h"
 #include "Sprite.h"
 #include "TileEngine.h"
+#include "Pathfinder.h"
 
 #include <SDL.h>
 
@@ -16,9 +17,8 @@ const int debugFlag = DEBUG_TILE_ENG;
 const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
-PlayerCharacter::PlayerCharacter(Spritesheet* sheet, int x, int y)
-                                              : playerLocation(x,y),
-                                                xSpeed(0), ySpeed(0),
+PlayerCharacter::PlayerCharacter(Pathfinder& map, Spritesheet* sheet, int x, int y)
+                                              : map(map), playerLocation(x,y),
                                                 currDirection(DOWN)
 {
    sprite = new Sprite(sheet);
@@ -29,6 +29,11 @@ Point2D PlayerCharacter::getLocation() const
    return playerLocation;
 }
 
+void PlayerCharacter::setLocation(Point2D location)
+{
+   playerLocation = location;
+}
+
 MovementDirection PlayerCharacter::getDirection() const
 {
    return currDirection;
@@ -36,68 +41,52 @@ MovementDirection PlayerCharacter::getDirection() const
 
 void PlayerCharacter::step(long timePassed)
 {
-   MovementDirection direction = currDirection;
+   MovementDirection direction = NONE;
+   int speed = WALKING_SPEED;
+   int xDirection = 0;
+   int yDirection = 0;
 
    Uint8 *keystate = SDL_GetKeyState(NULL);
-   if(keystate[SDLK_UP] && keystate[SDLK_DOWN])
-   {
-      // Both vertical keys are pressed. Move neither up nor down.
-      ySpeed = 0;
-   }
-   else if(keystate[SDLK_DOWN])
+   if(!keystate[SDLK_UP] && keystate[SDLK_DOWN])
    {
       // Positive velocity in the y-axis
-      ySpeed = WALKING_SPEED;
       direction = DOWN;
+      yDirection = 1;      
    }
-   else if(keystate[SDLK_UP])
+   else if(keystate[SDLK_UP] && !keystate[SDLK_DOWN])
    {
       // Negative velocity in the y-axis
-      ySpeed = -WALKING_SPEED;
       direction = UP;
-   }
-   else
-   {
-      ySpeed = 0;
+      yDirection = -1;
    }
 
-   if(keystate[SDLK_LEFT] && keystate[SDLK_RIGHT])
-   {
-      // Both horizontal keys are pressed. Move neither left nor right.
-      xSpeed = 0;
-   }
-   else if(keystate[SDLK_RIGHT])
+   if(!keystate[SDLK_LEFT] && keystate[SDLK_RIGHT])
    {
       // Positive velocity in the x-axis
-      xSpeed = WALKING_SPEED;
       direction = direction == UP ? UP_RIGHT : direction == DOWN ? DOWN_RIGHT : RIGHT;
+      xDirection = 1;
    }
-   else if(keystate[SDLK_LEFT])
+   else if(keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT])
    {
       // Negative velocity in the x-axis
-      xSpeed = -WALKING_SPEED;
       direction = direction == UP ? UP_LEFT : direction == DOWN ? DOWN_LEFT : LEFT;
-   }
-   else
-   {
-      xSpeed = 0;
+      xDirection = -1;
    }
 
-   bool moving = xSpeed != 0 || ySpeed != 0;
+   bool moving = xDirection != 0 || yDirection != 0;
 
    if(moving)   
    {
+      int distanceTraversed = speed * (timePassed / 5);
       sprite->setAnimation(WALKING_PREFIX, direction);
+      currDirection = direction;
+      map.moveToClosestPoint(this, 32, 32, xDirection, yDirection, distanceTraversed);
    }
    else
    {
-      sprite->setFrame(STANDING_PREFIX, direction);
+      sprite->setFrame(STANDING_PREFIX, currDirection);
    }
 
-   currDirection = direction;
-   playerLocation.x += xSpeed * (timePassed / 5);
-   playerLocation.y += ySpeed * (timePassed / 5);
-   
    sprite->step(timePassed);
 }
 

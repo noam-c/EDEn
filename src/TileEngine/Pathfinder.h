@@ -13,6 +13,7 @@
 class Obstacle;
 class Map;
 class NPC;
+class PlayerCharacter;
 struct Point2D;
 struct Rectangle;
 
@@ -33,9 +34,12 @@ class Pathfinder
       /** No entity is on the tile */
       FREE,
 
-      /** A character is on the tile */
-      CHARACTER,
-
+      /** A non-player character is on the tile */
+      NPC_CHARACTER,
+      
+      /** The player character is on the tile */
+      PLAYER_CHARACTER,
+      
       /** An obstacle (or impassable terrain) is on the tile */
       OBSTACLE,
    };
@@ -267,13 +271,31 @@ class Pathfinder
        * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
        *
        * @param npc The NPC to add.
-       * @param area The coordinates of the top-left corner of the obstacle (in pixels)
-       * @param width The width of the obstacle (in pixels)
-       * @param height The height of the obstacle (in pixels)
+       * @param area The coordinates of the top-left corner of the NPC (in pixels)
+       * @param width The width of the NPC (in pixels)
+       * @param height The height of the NPC (in pixels)
        *
        * @return true if the NPC has been successfully placed in the area, false if there was something else in the area.
        */
       bool addNPC(NPC* npc, Point2D area, int width, int height);
+      
+      /**
+       * Add the player and occupy the tiles under it.
+       * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
+       *
+       * @param player The player character instance.
+       * @param area The coordinates of the top-left corner of the player character (in pixels)
+       * @param width The width of the player character (in pixels)
+       * @param height The height of the player character (in pixels)
+       *
+       * @return true if the player character has been successfully placed in the area, false if there was something else in the area.
+       */
+      bool addPlayer(PlayerCharacter* player, Point2D area, int width, int height);
+      
+      /**
+       *
+       */
+      void moveToClosestPoint(PlayerCharacter* player, int playerWidth, int playerHeight, int xDirection, int yDirection, int distance);
    
       /**
        * Request permission from the Pathfinder to move an NPC from the source to the given destination.

@@ -28,7 +28,7 @@ const int TileEngine::TILE_SIZE = 32;
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName)
                                    : GameState(executionStack), xMapOffset(0), yMapOffset(0)
 {
-   player = new PlayerCharacter(ResourceLoader::getSpritesheet("npc1"), 320, 320);
+   player = new PlayerCharacter(currMap, ResourceLoader::getSpritesheet("npc1"), 100, 100);
    scriptEngine = new ScriptEngine(*this, scheduler);
    dialogue = new DialogueController(*top, scheduler, *scriptEngine);
 
@@ -82,6 +82,7 @@ void TileEngine::setMap(std::string mapName)
 
    DEBUG("Map set to: %s", mapName.c_str());
 
+   currMap.addPlayer(player, player->getLocation(), 32, 32);
    recalculateMapOffsets();
 }
 

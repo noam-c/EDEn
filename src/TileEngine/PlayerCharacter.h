@@ -12,6 +12,7 @@
 #include "MovementDirection.h"
 #include "Point2D.h"
 
+class Pathfinder;
 class Spritesheet;
 class Sprite;
 
@@ -31,12 +32,12 @@ class PlayerCharacter
 
    /** The standing prefix used to load standing sprites. */
    static const std::string STANDING_PREFIX;
+
+   /** The map that the player character is standing in. */
+   Pathfinder& map;
    
    /** The player's location on the map. */
    Point2D playerLocation;
-   
-   /** The player's horizontal and vertical speed. */
-   int xSpeed, ySpeed;
    
    /** The current direction that the character is facing. */
    MovementDirection currDirection;
@@ -49,17 +50,25 @@ class PlayerCharacter
       /**
        * Constructor.
        *
+       * @param map The map that the player character will be sitting in.
        * @param sheet The spritesheet to use for drawing the player character.
        * @param x The x-location of the player character.
        * @param y The y-location of the player character.
        */
-      PlayerCharacter(Spritesheet* sheet, int x, int y);
+      PlayerCharacter(Pathfinder& map, Spritesheet* sheet, int x, int y);
       
       /**
        * @return The location of the player character.
        */
       Point2D getLocation() const;
-      
+
+      /**
+       * Sets a new location for the player.
+       *
+       * @param location The new location to set.
+       */
+      void setLocation(Point2D location);
+   
       /**
        * @return The direction that the player character is facing.
        */

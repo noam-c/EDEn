@@ -40,6 +40,16 @@ struct Point2D
     * Equality operator.
     */
    bool operator==(const Point2D& rhs) const;
+   
+   /**
+    * Multiplication operator.
+    */
+   Point2D operator*(int coeff) const;
+
+   /**
+    * Division operator.
+    */
+   Point2D operator/(int coeff) const;
 
    static std::vector<Point2D> getDiagonallyAdjacentPoints(const Point2D& point, int mapWidth, int mapHeight);
    

@@ -22,7 +22,7 @@ const std::string Spritesheet::IMG_EXTENSION = ".png";
 const std::string Spritesheet::DATA_EXTENSION = ".eds";
 
 /**
- * NOTE: If this value is changed, it MUST be changed in the Ruby Spritesheet Editor tool
+ * NOTE: If this value is changed, it MUST be changed in the TagSprite Editor tool
  * and in any .eds files that contain the old value.
  * Otherwise, the spritesheet parsing will fail on files with two or more untitled lines.
  */

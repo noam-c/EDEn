@@ -15,6 +15,16 @@ bool Point2D::operator==(const Point2D& rhs) const
    return x == rhs.x && y == rhs.y;
 }
 
+Point2D Point2D::operator*(int coeff) const
+{
+   return Point2D(x * coeff, y * coeff);
+}
+
+Point2D Point2D::operator/(int coeff) const
+{
+   return Point2D(x / coeff, y / coeff);
+}
+
 std::vector<Point2D> Point2D::getDiagonallyAdjacentPoints(const Point2D& point, int mapWidth, int mapHeight)
 {
    std::vector<Point2D> diagonalPoints;

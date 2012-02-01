@@ -11,6 +11,7 @@
 #include "TileEngine.h"
 #include "Point2D.h"
 #include "Rectangle.h"
+#include "PlayerCharacter.h"
 #include "GLInclude.h"
 #include "stdlib.h"
 #include <limits>
@@ -469,7 +470,12 @@ bool Pathfinder::addObstacle(Point2D area, int width, int height)
 
 bool Pathfinder::addNPC(NPC* npc, Point2D area, int width, int height)
 {
-   return occupyArea(area, width, height, TileState(CHARACTER, npc));
+   return occupyArea(area, width, height, TileState(NPC_CHARACTER, npc));
+}
+
+bool Pathfinder::addPlayer(PlayerCharacter* player, Point2D area, int width, int height)
+{
+   return occupyArea(area, width, height, TileState(PLAYER_CHARACTER, player));
 }
 
 bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state)
@@ -492,7 +498,7 @@ bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state
          const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX];
          if(collisionTile.occupantType != FREE)
          {
-            if(collisionTile.occupantType != CHARACTER || collisionTile.occupant != state.occupant)
+            if(collisionTile.occupantType != state.occupantType || collisionTile.occupant != state.occupant)
             {
                return false;
             } 
@@ -535,9 +541,60 @@ bool Pathfinder::isAreaFree(Point2D area, int width, int height) const
    return true;
 }
 
+void Pathfinder::moveToClosestPoint(PlayerCharacter* player, int playerWidth, int playerHeight, int xDirection, int yDirection, int distance)
+{
+   if(xDirection == 0 && yDirection == 0) return;
+   if(distance == 0) return;
+
+   TileState playerState(PLAYER_CHARACTER, player);
+
+   const Point2D source = player->getLocation();
+   
+   const int mapPixelWidth = (collisionMapWidth - 1) * MOVEMENT_TILE_SIZE;
+   const int mapPixelHeight = (collisionMapHeight - 1) * MOVEMENT_TILE_SIZE; 
+   
+   Point2D lineEndpoint = source;
+   
+   while(distance > 0)
+   {
+      int distanceTraversed = std::min(distance, MOVEMENT_TILE_SIZE / 2);
+      distance -= distanceTraversed;
+      
+      Point2D nextEndpoint;
+      nextEndpoint.x = lineEndpoint.x + xDirection * distanceTraversed;
+      nextEndpoint.x = std::max(nextEndpoint.x, 0);
+      nextEndpoint.x = std::min(nextEndpoint.x, mapPixelWidth);
+
+      nextEndpoint.y = lineEndpoint.y + yDirection * distanceTraversed;
+      nextEndpoint.y = std::max(nextEndpoint.y, 0);
+      nextEndpoint.y = std::min(nextEndpoint.y, mapPixelHeight);
+
+      if(lineEndpoint == nextEndpoint)
+      {
+         // We haven't moved any further, so we are at a dead end
+         break;
+      }
+
+      freeArea(lineEndpoint, playerWidth, playerHeight);
+      if(!occupyArea(nextEndpoint, playerWidth, playerHeight, playerState))
+      {
+         break;
+      }
+
+      lineEndpoint = nextEndpoint;      
+   }
+   
+   if(!occupyArea(lineEndpoint, playerWidth, playerHeight, playerState))
+   {
+      occupyArea(source, playerWidth, playerHeight, playerState);
+   }
+
+   player->setLocation(lineEndpoint);
+}
+
 bool Pathfinder::beginMovement(NPC* npc, Point2D src, Point2D dst, int width, int height)
 {
-   return occupyArea(dst, width, height, TileState(CHARACTER, npc));
+   return occupyArea(dst, width, height, TileState(NPC_CHARACTER, npc));
 }
 
 void Pathfinder::abortMovement(Point2D src, Point2D dst, Point2D currentLocation, int width, int height)
@@ -591,7 +648,7 @@ NPC* Pathfinder::getOccupantNPC(Point2D location, int width, int height) const
       for(int collisionMapX = collisionMapLeft; collisionMapX <= collisionMapRight; ++collisionMapX)
       {
          const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX];
-         if(collisionTile.occupantType == CHARACTER)
+         if(collisionTile.occupantType == NPC_CHARACTER)
          {
             return reinterpret_cast<NPC*>(collisionTile.occupant);
          }
@@ -627,7 +684,7 @@ void Pathfinder::draw()
                glColor3f(0.0f, 0.5f, 0.0f);
                break;
             }
-            case CHARACTER:
+            case NPC_CHARACTER:
             {
                if(collisionMap[y][x].occupant == NULL)
                {
@@ -639,10 +696,15 @@ void Pathfinder::draw()
                }
                break;
             }
+            case PLAYER_CHARACTER:
+            {
+               glColor3f(0.6f, 0.6f, 0.85f);
+               break;
+            }
             case OBSTACLE:
             default:
             {
-               glColor3f(0.5f, 0.5f, 0.0f);
+               glColor3f(0.25f, 0.5f, 0.0f);
                break;
             }
          }
