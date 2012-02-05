@@ -1,5 +1,5 @@
 EDEn README
-====================
+===========
 
 EDEn (the Exodus Draconis Engine) is a free and open-source engine used to create top-down, 2D RPGs with 3D effects. Aside from the usual trimmings one would expect from the genre, the engine aims to also enable some gameplay elements typically found in adventure games.
 
@@ -9,50 +9,53 @@ EDEn is programmed in C++ and uses SDL for graphics and audio. By exposing C++ f
 
 In general, EDEn aims to help game designers quickly turn RPG stories, gameplay and level designs into playable RPGs. 
 
-LICENSE AND COPYRIGHT
-=====================
+License and Copyright
+---------------------
 
 Most of the code is Copyright 2012 Noam Chitayat. Contributors retain copyright to their original contributions.
 
 The EDEn source is released under the terms of the Ruby License, with the following exceptions:
 
-	Code in the guichan folder or under the gcn namespace is part of the Guichan GUI library version 0.8.2.
+* Code in the guichan folder or under the gcn namespace is part of the Guichan GUI library version 0.8.2.
+
 	Guichan is copyright 2004-2012 Olof Naessén and Per Larsson. All rights reserved. 
 
-	Code in the json folder or under the Json namespace is part of the JsonCpp JSON parsing library.
+* Code in the json folder or under the Json namespace is part of the JsonCpp JSON parsing library.
+
 	JsonCpp is copryright 2007-2012 Baptiste Lepilleur. Distributed under MIT license, or public domain if desired and recognized in your jurisdiction.
 
-	Code in the tinyxml folder is part of the TinyXML XML parsing library.
+* Code in the tinyxml folder is part of the TinyXML XML parsing library.
+
 	TinyXML is copyright 2000-2012 Lee Thomason. 
 
 Art and audio assets are copyright their creators. For specific asset credits, please refer to ASSETS.txt.
 
 For the full text of the Ruby license in use, please refer to the LICENSE.txt file.
 
-DEPENDENCIES
-============
+Dependencies
+------------
 
 EDEn depends on the following development libraries to build the source:
 
-SDL 1.2
-SDL_image 1.2
-SDL_ttf 2.0
-SDL_mixer 1.2
-Lua 5.1
+* SDL 1.2
+* SDL_image 1.2
+* SDL_ttf 2.0
+* SDL_mixer 1.2
+* Lua 5.1
 
 EDEn requires the equivalent runtime libraries to execute.
 
-LINKS
-=====
+Links
+-----
 
-SDL Cross-platform Library - http://www.libsdl.org
-Guichan GUI library - http://guichan.sourceforge.net
-Lua Programming Language - http://www.lua.org
-JsonCpp library - http://jsoncpp.sourceforge.net/
-TinyXml library - http://www.grinninglizard.com/tinyxml/
+* SDL Cross-platform Library - http://www.libsdl.org
+* Guichan GUI library - http://guichan.sourceforge.net
+* Lua Programming Language - http://www.lua.org
+* JsonCpp library - http://jsoncpp.sourceforge.net/
+* TinyXml library - http://www.grinninglizard.com/tinyxml/
 
-RUNNING EDEN
-============
+Running EDEn
+------------
 
 To build EDEn by command-line, navigate to the root directory and run the following commands:
 
