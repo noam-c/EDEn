@@ -151,6 +151,18 @@ class Pathfinder
    Rectangle getCollisionMapEdges(Rectangle area) const;
 
    /**
+    * Checks if an area is available.
+    *
+    * @param area The coordinates of the top-left corner of the area to occupy (in pixels)
+    * @param width The width of the area to occupy (in pixels)
+    * @param height The height of the area to occupy (in pixels)
+    * @param state The new state of the area (occupant and type)
+    *
+    * @return true if the area can be successfully occupied, false if there was something else in the area.
+    */
+   bool canOccupyArea(Point2D area, int width, int height, TileState state);
+   
+   /**
     * If an area is available, occupy it and set the tiles within it to the new state. 
     * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
     *
@@ -238,10 +250,12 @@ class Pathfinder
        *
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
+       * @param width The width of the moving entity.
+       * @param height The width of the moving entity.
        *
        * @return The shortest unobstructed path from the source point to the destination point.
        */
-      Path findReroutedPath(Point2D src, Point2D dst);
+      Path findReroutedPath(Point2D src, Point2D dst, int width, int height);
       
       /**
        * Checks an area for obstacles or entities.
@@ -377,10 +391,12 @@ class Pathfinder
        *
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
+       * @param width The width of the moving entity.
+       * @param height The height of the moving entity.
        *
        * @return The best path computed by the A* algorithm.
        */
-      Path findAStarPath(Point2D src, Point2D dst);
+      Path findAStarPath(Point2D src, Point2D dst, int width, int height);
 
       /**
        * A node used in A* search.
@@ -398,8 +414,10 @@ class Pathfinder
        * @param destinationTileNum The tile number of the goal point.
        * @param openSet The open set used to accumulate undiscovered points.
        * @param discovered A mapping from tile numbers to whether or not they have been discovered.
+       * @param widthTileRatio The ratio between the entity width and the movement tile width.
+       * @param heightTileRatio The ratio between the entity width and the movement tile width.
        */
-      void evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered);
+      void evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int widthTileRatio, int heightTileRatio);
 };
 
 #endif

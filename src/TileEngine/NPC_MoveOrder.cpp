@@ -96,7 +96,7 @@ bool NPC::MoveOrder::perform(long timePassed)
          movementBegun = pathfinder.beginMovement(&npc, location, nextLocation, 32, 32);
          if(!movementBegun)
          {
-            path = pathfinder.findReroutedPath(location, dst);
+            path = pathfinder.findReroutedPath(location, dst, 32, 32);
          }
 
          updateDirection(newDirection, false);
@@ -166,7 +166,7 @@ bool NPC::MoveOrder::perform(long timePassed)
          if(!movementBegun)
          {
             DEBUG("Path from %d,%d to %d,%d is obstructed. Rerouting...", currLocation.x, currLocation.y, nextLocation.x, nextLocation.y);
-            path = pathfinder.findReroutedPath(location, dst);
+            path = pathfinder.findReroutedPath(location, dst, 32, 32);
             if(path.empty())
             {
                /** 
@@ -185,6 +185,7 @@ bool NPC::MoveOrder::perform(long timePassed)
 
             // If the path exists, set the next waypoint and finish the frame
             updateNextWaypoint(location, newDirection);
+            break;
          }
       }
    }

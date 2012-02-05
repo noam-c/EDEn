@@ -24,7 +24,7 @@ const int debugFlag = DEBUG_PATHFINDER;
 
 // Movement tile size can be set to a divisor of drawn tile size to increase the pathfinding graph size
 // For now, no need for the additional granularity
-const int Pathfinder::MOVEMENT_TILE_SIZE = 32;
+const int Pathfinder::MOVEMENT_TILE_SIZE = 16;
 
 const float Pathfinder::ROOT_2 = 1.41421356f;
 const float Pathfinder::INFINITY = std::numeric_limits<float>::infinity();
@@ -77,18 +77,14 @@ void Pathfinder::setMapData(const Map* newMapData)
 
    bool** passibilityMap = map->getPassibilityMatrix();
    collisionMap = new TileState*[collisionMapHeight];
-   for(int y = 0; y < map->getHeight(); ++y)
+   for(int y = 0; y < collisionMapHeight; ++y)
    {
       TileState* row = collisionMap[y] = new TileState[collisionMapWidth];
-      for(int x = 0; x < map->getWidth(); ++x)
+      for(int x = 0; x < collisionMapWidth; ++x)
       {
-         int xOffset = x * collisionTileRatio;
-         bool passible = passibilityMap[y][x];
-         for(int i = 0; i < collisionTileRatio; ++i)
-         {
-            row[i + xOffset].occupantType = passible ? FREE : OBSTACLE;
-            row[i + xOffset].occupant = NULL;
-         }
+         bool passible = passibilityMap[y / collisionTileRatio][x / collisionTileRatio];
+         row[x].occupantType = passible ? FREE : OBSTACLE;
+         row[x].occupant = NULL;
       }
    }
 
@@ -235,9 +231,9 @@ Pathfinder::Path Pathfinder::findBestPath(Point2D src, Point2D dst)
    return findRFWPath(src, dst);
 }
 
-Pathfinder::Path Pathfinder::findReroutedPath(Point2D src, Point2D dst)
+Pathfinder::Path Pathfinder::findReroutedPath(Point2D src, Point2D dst, int width, int height)
 {
-   return findAStarPath(src, dst);
+   return findAStarPath(src, dst, width, height);
 }
 
 Pathfinder::Path Pathfinder::getStraightPath(Point2D src, Point2D dst)
@@ -342,7 +338,7 @@ class Pathfinder::AStarPoint : public Point2D
       };
 };
 
-Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst)
+Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst, int width, int height)
 {
    Point2D destinationPoint(dst.x / MOVEMENT_TILE_SIZE, dst.y / MOVEMENT_TILE_SIZE);
    if(collisionMap == NULL || collisionMap[destinationPoint.y][destinationPoint.x].occupantType != FREE) return Path();
@@ -353,8 +349,18 @@ Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst)
    const int NUM_TILES = collisionMapWidth*collisionMapHeight;
    std::vector<bool> discovered(NUM_TILES, false);
    
-   openSet.push_back(new AStarPoint(NULL, src.x / MOVEMENT_TILE_SIZE, src.y / MOVEMENT_TILE_SIZE, 0, 0));
-   std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+   const int widthTileRatio = width / MOVEMENT_TILE_SIZE;
+   const int heightTileRatio = height / MOVEMENT_TILE_SIZE;
+   const Point2D srcTile(src.x / MOVEMENT_TILE_SIZE, src.y / MOVEMENT_TILE_SIZE);
+   
+   for(int xOffset = 0; xOffset < widthTileRatio; ++xOffset)
+   {
+      for(int yOffset = 0; yOffset < heightTileRatio; ++yOffset)
+      {
+         openSet.push_back(new AStarPoint(NULL, srcTile.x + xOffset, srcTile.y + yOffset, 0, 0));
+         std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());         
+      }
+   }
 
    const int sourceTileNum = pixelsToTileNum(src);
    const int destinationTileNum = pixelsToTileNum(dst);
@@ -388,12 +394,12 @@ Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst)
       // Evaluate all the existing laterally adjacent points,
       // adding 1 as the cost of reaching the point from our current cheapest point.
       const std::vector<Point2D> lateralPoints = Point2D::getLaterallyAdjacentPoints(*cheapestPoint, collisionMapWidth, collisionMapHeight);
-      evaluateAdjacentNodes(lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered);
+      evaluateAdjacentNodes(lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered, widthTileRatio, heightTileRatio);
 
       // Evaluate all the existing diagonally adjacent points,
       // adding the square root of 2 as the cost of reaching the point from our current cheapest point.
       const std::vector<Point2D> diagonalPoints = Point2D::getDiagonallyAdjacentPoints(*cheapestPoint, collisionMapWidth, collisionMapHeight);
-      evaluateAdjacentNodes(diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered);
+      evaluateAdjacentNodes(diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered, widthTileRatio, heightTileRatio);
    }
    
    for(std::vector<AStarPoint*>::const_iterator iter = openSet.begin(); iter != openSet.end(); ++iter)
@@ -409,7 +415,7 @@ Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst)
    return path;
 }
 
-void Pathfinder::evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes, const AStarPoint* cheapestPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered)
+void Pathfinder::evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes, const AStarPoint* cheapestPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int widthTileRatio, int heightTileRatio)
 {
    for(std::vector<Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
    {
@@ -418,12 +424,31 @@ void Pathfinder::evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes
       float tileHCost = distanceMatrix[adjacentTileNum][destinationTileNum];
       if(!discovered[adjacentTileNum])
       {
-         if(collisionMap[iter->y][iter->x].occupantType == FREE)
+         const int x = iter->x;
+         const int y = iter->y;
+         
+         if(x + widthTileRatio < collisionMapWidth && y + heightTileRatio < collisionMapHeight)
          {
-            DEBUG("Pushing point %d,%d onto open set with g()=%f and f()=%f.", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
-            discovered[adjacentTileNum] = true;
-            openSet.push_back(new AStarPoint(cheapestPoint, iter->x, iter->y, tileGCost, tileHCost));
-            std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+            bool freeTile = true;
+            for(int xOffset = 0; xOffset < widthTileRatio; ++xOffset)
+            {
+               for(int yOffset = 0; yOffset < heightTileRatio; ++yOffset)
+               {
+                  if(collisionMap[y + yOffset][x + xOffset].occupantType != FREE)
+                  {
+                     freeTile = false;
+                     break;
+                  }
+               }
+            }
+            
+            if(freeTile)
+            {
+               DEBUG("Pushing point %d,%d onto open set with g()=%f and f()=%f.", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
+               discovered[adjacentTileNum] = true;
+               openSet.push_back(new AStarPoint(cheapestPoint, iter->x, iter->y, tileGCost, tileHCost));
+               std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+            }
          }
       }
       else
@@ -478,17 +503,20 @@ bool Pathfinder::addPlayer(PlayerCharacter* player, Point2D area, int width, int
    return occupyArea(area, width, height, TileState(PLAYER_CHARACTER, player));
 }
 
-bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state)
+bool Pathfinder::canOccupyArea(Point2D area, int width, int height, TileState state)
 {
    if(collisionMap == NULL || state.occupantType == FREE)
    {
       return false;
    }
-
+   
    Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
-
-   DEBUG("Occupying tiles from %d,%d to %d,%d", areaRect.left, areaRect.top, areaRect.right, areaRect.bottom);
-
+   
+   if(areaRect.right >= collisionMapWidth || areaRect.bottom >= collisionMapHeight)
+   {
+      return false;
+   }
+   
    for(int collisionMapY = areaRect.top; collisionMapY <=  areaRect.bottom; ++collisionMapY)
    {
       for(int collisionMapX = areaRect.left; collisionMapX <= areaRect.right; ++collisionMapX)
@@ -506,8 +534,23 @@ bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state
       }
    }
 
-   setArea(areaRect, state);
    return true;
+}
+
+bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state)
+{
+   Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
+
+   if(canOccupyArea(area, width, height, state))
+   {
+      DEBUG("Occupying tiles from %d,%d to %d,%d", areaRect.left, areaRect.top, areaRect.right, areaRect.bottom);
+      
+      setArea(areaRect, state);
+      return true;
+   }
+
+   DEBUG("Couldn't occupy tiles from %d,%d to %d,%d", areaRect.left, areaRect.top, areaRect.right, areaRect.bottom);
+   return false;
 }
 
 void Pathfinder::freeArea(Point2D area, int width, int height)
@@ -553,43 +596,52 @@ void Pathfinder::moveToClosestPoint(PlayerCharacter* player, int playerWidth, in
    const int mapPixelWidth = (collisionMapWidth - 1) * MOVEMENT_TILE_SIZE;
    const int mapPixelHeight = (collisionMapHeight - 1) * MOVEMENT_TILE_SIZE; 
    
-   Point2D lineEndpoint = source;
+   Point2D lastAvailablePoint = source;
    
    while(distance > 0)
    {
       int distanceTraversed = std::min(distance, MOVEMENT_TILE_SIZE / 2);
       distance -= distanceTraversed;
       
-      Point2D nextEndpoint;
-      nextEndpoint.x = lineEndpoint.x + xDirection * distanceTraversed;
-      nextEndpoint.x = std::max(nextEndpoint.x, 0);
-      nextEndpoint.x = std::min(nextEndpoint.x, mapPixelWidth);
+      // Get the next point for movement, and clamp it to the map dimensions
+      Point2D nextPoint;
+      nextPoint.x = lastAvailablePoint.x + xDirection * distanceTraversed;
+      nextPoint.x = std::max(nextPoint.x, 0);
+      nextPoint.x = std::min(nextPoint.x, mapPixelWidth - MOVEMENT_TILE_SIZE);
 
-      nextEndpoint.y = lineEndpoint.y + yDirection * distanceTraversed;
-      nextEndpoint.y = std::max(nextEndpoint.y, 0);
-      nextEndpoint.y = std::min(nextEndpoint.y, mapPixelHeight);
+      nextPoint.y = lastAvailablePoint.y + yDirection * distanceTraversed;
+      nextPoint.y = std::max(nextPoint.y, 0);
+      nextPoint.y = std::min(nextPoint.y, mapPixelHeight - MOVEMENT_TILE_SIZE);
 
-      if(lineEndpoint == nextEndpoint)
+      if(lastAvailablePoint == nextPoint)
       {
          // We haven't moved any further, so we are at a dead end
          break;
       }
 
-      freeArea(lineEndpoint, playerWidth, playerHeight);
-      if(!occupyArea(nextEndpoint, playerWidth, playerHeight, playerState))
+      if(!canOccupyArea(nextPoint, playerWidth, playerHeight, playerState))
       {
          break;
       }
 
-      lineEndpoint = nextEndpoint;      
+      lastAvailablePoint = nextPoint;      
    }
    
-   if(!occupyArea(lineEndpoint, playerWidth, playerHeight, playerState))
+   
+   if(lastAvailablePoint != source)
    {
-      occupyArea(source, playerWidth, playerHeight, playerState);
+      // If we moved, update the map accordingly
+      freeArea(source, playerWidth, playerHeight);
+      if(!occupyArea(lastAvailablePoint, playerWidth, playerHeight, playerState))
+      {
+         // If updating failed, just stick with the start location
+         occupyArea(source, playerWidth, playerHeight, playerState);
+      }
+      else
+      {
+         player->setLocation(lastAvailablePoint);
+      }
    }
-
-   player->setLocation(lineEndpoint);
 }
 
 bool Pathfinder::beginMovement(NPC* npc, Point2D src, Point2D dst, int width, int height)

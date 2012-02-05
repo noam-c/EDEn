@@ -42,6 +42,11 @@ struct Point2D
    bool operator==(const Point2D& rhs) const;
    
    /**
+    * Inequality operator.
+    */
+   bool operator!=(const Point2D& rhs) const;
+   
+   /**
     * Multiplication operator.
     */
    Point2D operator*(int coeff) const;
