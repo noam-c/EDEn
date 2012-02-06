@@ -41,7 +41,7 @@ Pathfinder::TileState::TileState(OccupantType type, void* occupant) : occupantTy
 {
 }
 
-Pathfinder::Pathfinder() : map(NULL), distanceMatrix(NULL)
+Pathfinder::Pathfinder() : map(NULL), collisionMap(NULL), distanceMatrix(NULL), successorMatrix(NULL)
 {
 }
 
