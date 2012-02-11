@@ -14,7 +14,7 @@
 const int debugFlag = DEBUG_NPC;
 
 NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& pathfinder)
-: Order(npc), movementBegun(false), dst(destination), pathfinder(pathfinder)
+: Order(npc), pathInitialized(false), movementBegun(false), dst(destination), pathfinder(pathfinder)
 {
 }
 
@@ -22,36 +22,43 @@ NPC::MoveOrder::~MoveOrder()
 {
    if(movementBegun)
    {
-      pathfinder.abortMovement(currLocation, nextLocation, npc.getLocation(), 32, 32);
+      pathfinder.abortMovement(&npc, lastWaypoint, nextWaypoint, npc.getLocation(), 32, 32);
    }
 }
 
 void NPC::MoveOrder::updateDirection(MovementDirection newDirection, bool moving)
 {
    npc.setDirection(newDirection);
-   npc.setAnimation(moving ? WALKING_PREFIX : STANDING_PREFIX);
+   if(moving)
+   {
+      npc.setAnimation(WALKING_PREFIX);
+   }
+   else
+   {
+      npc.setFrame(STANDING_PREFIX);
+   }
 }
 
 void NPC::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& direction)
 {
-   currLocation = location;
-   nextLocation = path.front();
+   lastWaypoint = location;
+   nextWaypoint = path.front();
    
    // Set the direction based on where the next tile is relative to the current location.
    // For now, when the NPC must move diagonally, it will always face up or down
-   if(location.y < nextLocation.y)
+   if(location.y < nextWaypoint.y)
    {
       direction = DOWN;
    }
-   else if(location.y > nextLocation.y)
+   else if(location.y > nextWaypoint.y)
    {
       direction = UP;
    }
-   else if(location.x < nextLocation.x)
+   else if(location.x < nextWaypoint.x)
    {
       direction = RIGHT;
    }
-   else if(location.x > nextLocation.x)
+   else if(location.x > nextWaypoint.x)
    {
       direction = LEFT;
    }
@@ -59,139 +66,122 @@ void NPC::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& dir
 
 bool NPC::MoveOrder::perform(long timePassed)
 {
-   MovementDirection newDirection = npc.getDirection();
    Point2D location = npc.getLocation();
-   
-   float vel = npc.getMovementSpeed();
+   MovementDirection newDirection = npc.getDirection();
+   const float vel = npc.getMovementSpeed();
    long distanceCovered = timePassed * vel;
-   if(path.empty())
+   
+   // If first run, get the best computed path (RFW), end frame
+   // loop infinitely
+   //      if there is no next vertex
+   //          if NPC is at the destination
+   //             end task
+   //          else
+   //             create a rerouted path (A*)
+   //             end frame
+   //          
+   //      face next vertex
+   //      if vertex isn't yet acquired
+   //          try acquire vertex
+   //          if acquire failed
+   //             create a rerouted path (A*)
+   //             end frame
+   //
+   //      if vertex is within step
+   //          move to vertex
+   //          free previous vertex
+   //      else
+   //          move as close as possible to vertex
+   //          break
+   //
+   // end frame
+
+   if(!pathInitialized)
    {
-      if(location == dst)
+      DEBUG("Finding an ideal path from %d,%d to %d,%d", location.x, location.y, dst.x, dst.y);  
+      path = pathfinder.findBestPath(location, dst);
+      pathInitialized = true;
+      return false;
+   }
+
+   for(;;)
+   {
+      if(path.empty())
       {
-         updateDirection(newDirection, false);
+         updateDirection(npc.getDirection(), false);
+         npc.setLocation(location);
+         if(location != dst)
+         {
+            path = pathfinder.findReroutedPath(location, dst, 32, 32);
+            return false;
+         }
+
          return true;
       }
-      else
+      
+      if(!movementBegun)
       {
-         DEBUG("Finding an ideal path from %d,%d to %d,%d", location.x, location.y, dst.x, dst.y);  
-         path = pathfinder.findBestPath(location, dst);
-         if(path.empty())
-         {
-            /** 
-             * \todo This line will fire if the goal cannot possibly be reached.
-                     It would be better to return an error to the coroutine that initiated this move.
-             */
-            DEBUG("Goal is currently unreachable!");  
-            return true;
-         }
-
-         DEBUG("Found ideal path:");
-         for(Pathfinder::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
-         {
-            DEBUG("\t(%d,%d)", iter->x, iter->y);
-         }
-
-         // If the path exists, set the next waypoint
-         updateNextWaypoint(location, newDirection);
-         movementBegun = pathfinder.beginMovement(&npc, location, nextLocation, 32, 32);
+         movementBegun = pathfinder.beginMovement(&npc, location, path.front(), 32, 32);
          if(!movementBegun)
          {
             path = pathfinder.findReroutedPath(location, dst, 32, 32);
+            updateDirection(npc.getDirection(), false);
+            npc.setLocation(location);
+            return false;
          }
 
-         updateDirection(newDirection, false);
-         return false;
+         DEBUG("Next waypoint: %d,%d", nextWaypoint.x, nextWaypoint.y);
       }
-   }
-   
-   while(true)
-   {
-      const long stepDistance = std::max(abs(location.x - nextLocation.x), abs(location.y - nextLocation.y));
-
+      
+      updateNextWaypoint(location, newDirection);
+      updateDirection(newDirection, true);
+      lastWaypoint = location;
+      
+      const long stepDistance = std::max(abs(location.x - nextWaypoint.x), abs(location.y - nextWaypoint.y));
+      
       if (distanceCovered < stepDistance)
       {
          // The NPC will not be able to make it to the next waypoint in this frame
          // Move towards the waypoint as much as possible.
-         if(location.x < nextLocation.x)
+         if(location.x < nextWaypoint.x)
          {
             location.x += distanceCovered;
-            if(location.x > nextLocation.x) location.x = nextLocation.x;
+            if(location.x > nextWaypoint.x) location.x = nextWaypoint.x;
          }
-         else if(location.x > nextLocation.x)
+         else if(location.x > nextWaypoint.x)
          {
             location.x -= distanceCovered;
-            if(location.x < nextLocation.x) location.x = nextLocation.x;
+            if(location.x < nextWaypoint.x) location.x = nextWaypoint.x;
          }
          
-         if(location.y < nextLocation.y)
+         if(location.y < nextWaypoint.y)
          {
             location.y += distanceCovered;
-            if(location.y > nextLocation.y) location.y = nextLocation.y;
+            if(location.y > nextWaypoint.y) location.y = nextWaypoint.y;
          }
-         else if(location.y > nextLocation.y)
+         else if(location.y > nextWaypoint.y)
          {
             location.y -= distanceCovered;
-            if(location.y < nextLocation.y) location.y = nextLocation.y;
+            if(location.y < nextWaypoint.y) location.y = nextWaypoint.y;
          }
          
          // Movement for this frame is finished
-         break;
+         npc.setLocation(location);
+         return false;
       }
-      else
-      {
-         // The NPC can reach the next waypoint in this frame
-         distanceCovered -= stepDistance;
+      
+      // The NPC can reach the next waypoint in this frame
+      distanceCovered -= stepDistance;
+      
+      DEBUG("Reached waypoint %d,%d", nextWaypoint.x, nextWaypoint.y);
+      pathfinder.endMovement(&npc, lastWaypoint, nextWaypoint, 32, 32);
+      movementBegun = false;
 
-         DEBUG("Reached waypoint %d,%d", nextLocation.x, nextLocation.y);
-         pathfinder.endMovement(currLocation, nextLocation, 32, 32);
-         movementBegun = false;
-
-         // Update the current waypoint and dequeue it from the path
-         location = nextLocation;
-         path.pop_front();
-         
-         // If there are no more nodes, the NPC is finished for this frame
-         // Unless something went wrong, the NPC reached the destination
-         if(path.empty())
-         {
-            DEBUG("Path completed.");
-            break;
-         }
-         
-         // Get the next waypoint, and reroute if it is obstructed.
-         updateNextWaypoint(location, newDirection);
-         DEBUG("Next waypoint: %d,%d", nextLocation.x, nextLocation.y);
-
-         movementBegun = pathfinder.beginMovement(&npc, currLocation, nextLocation, 32, 32);
-         if(!movementBegun)
-         {
-            DEBUG("Path from %d,%d to %d,%d is obstructed. Rerouting...", currLocation.x, currLocation.y, nextLocation.x, nextLocation.y);
-            path = pathfinder.findReroutedPath(location, dst, 32, 32);
-            if(path.empty())
-            {
-               /** 
-                * \todo This line will fire if the goal cannot be reached because of a dynamic obstruction.
-                        It would be better to return an error to the coroutine that initiated this move so different coroutines can react in different ways.
-                */
-               DEBUG("Failed to reroute. Destination is completely obstructed.");
-               break;
-            }
-
-            DEBUG("Found rerouted path:");
-            for(Pathfinder::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
-            {
-               DEBUG("\t(%d,%d)", iter->x, iter->y);
-            }
-
-            // If the path exists, set the next waypoint and finish the frame
-            updateNextWaypoint(location, newDirection);
-            break;
-         }
-      }
+      // Update the current waypoint and dequeue it from the path
+      location = nextWaypoint;
+      path.pop_front();
    }
-   
-   npc.setLocation(location);
-   updateDirection(newDirection, true);
+
    return false;
 }
 

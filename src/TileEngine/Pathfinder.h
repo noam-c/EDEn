@@ -160,7 +160,7 @@ class Pathfinder
     *
     * @return true if the area can be successfully occupied, false if there was something else in the area.
     */
-   bool canOccupyArea(Point2D area, int width, int height, TileState state);
+   bool canOccupyArea(Point2D area, int width, int height, TileState state) const;
    
    /**
     * If an area is available, occupy it and set the tiles within it to the new state. 
@@ -178,11 +178,13 @@ class Pathfinder
    /**
     * Free the tiles belonging to a given entity within a specified area. 
     *
-    * @param area The coordinates of the top-left corner of the area to free (in pixels)
+    * @param previousLocation The coordinates of the top-left corner of the area to free (in pixels)
+    * @param currentLocation The coordinates of the top-left corner of the area to keep in the current state (in pixels)
     * @param width The width of the area to free (in pixels)
     * @param height The height of the area to free (in pixels)
+    * @param state The state to remove from the tiles
     */
-   void freeArea(Point2D area, int width, int height);
+   void freeArea(Point2D previousLocation, Point2D currentLocation, int width, int height, TileState state);
 
    /**
     * Helper function to unconditionally set the tiles in an area to a given state. 
@@ -328,23 +330,25 @@ class Pathfinder
       /**
        * Notifies the Pathfinder that the NPC failed to complete movement from the source to the given destination and occupies some area between the source and destination.
        *
+       * @param npc The NPC that was moving.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the original destination (in pixels).
        * @param currentLocation The coordinates that the entity is currently occupying (in pixels).
-       * @param width Width of the entity that moved.
-       * @param height Height of the entity that moved.
+       * @param width Width of the NPC that moved.
+       * @param height Height of the NPC that moved.
        */
-      void abortMovement(Point2D src, Point2D dst, Point2D currentLocation, int width, int height);
+      void abortMovement(NPC* npc, Point2D src, Point2D dst, Point2D currentLocation, int width, int height);
       
       /**
        * Notifies the Pathfinder that the NPC moved successfully from the source to the given destination and no longer occupies the source coordinates.
        *
+       * @param npc The NPC that was moving.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
-       * @param width Width of the entity that moved.
-       * @param height Height of the entity that moved.
+       * @param width Width of the NPC that moved.
+       * @param height Height of the NPC that moved.
        */
-      void endMovement(Point2D src, Point2D dst, int width, int height);
+      void endMovement(NPC* npc, Point2D src, Point2D dst, int width, int height);
 
       /**
        * Gets the NPC occupying the specified area, if one exists.

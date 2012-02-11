@@ -20,7 +20,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PATHFINDER;
 
-//#define DRAW_PATHFINDER
+#define DRAW_PATHFINDER
 
 // Movement tile size can be set to a divisor of drawn tile size to increase the pathfinding graph size
 // For now, no need for the additional granularity
@@ -503,7 +503,7 @@ bool Pathfinder::addPlayer(PlayerCharacter* player, Point2D area, int width, int
    return occupyArea(area, width, height, TileState(PLAYER_CHARACTER, player));
 }
 
-bool Pathfinder::canOccupyArea(Point2D area, int width, int height, TileState state)
+bool Pathfinder::canOccupyArea(Point2D area, int width, int height, TileState state) const
 {
    if(collisionMap == NULL || state.occupantType == FREE)
    {
@@ -530,7 +530,7 @@ bool Pathfinder::canOccupyArea(Point2D area, int width, int height, TileState st
             {
                return false;
             } 
-         } 
+         }
       }
    }
 
@@ -553,13 +553,15 @@ bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state
    return false;
 }
 
-void Pathfinder::freeArea(Point2D area, int width, int height)
+void Pathfinder::freeArea(Point2D previousLocation, Point2D currentLocation, int width, int height, TileState state)
 {
-   Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
+   Rectangle previousRect = getCollisionMapEdges(Rectangle(previousLocation, width, height));
+   Rectangle currentRect = getCollisionMapEdges(Rectangle(currentLocation, width, height));
    
-   DEBUG("Freeing tiles from %d,%d to %d,%d", areaRect.left, areaRect.top, areaRect.right, areaRect.bottom);
+   DEBUG("Freeing tiles from %d,%d to %d,%d", previousRect.left, previousRect.top, previousRect.right, previousRect.bottom);
    
-   setArea(areaRect, TileState(FREE));
+   setArea(previousRect, TileState(FREE));
+   setArea(currentRect, state);
 }
 
 bool Pathfinder::isAreaFree(Point2D area, int width, int height) const
@@ -630,8 +632,6 @@ void Pathfinder::moveToClosestPoint(PlayerCharacter* player, int playerWidth, in
    
    if(lastAvailablePoint != source)
    {
-      // If we moved, update the map accordingly
-      freeArea(source, playerWidth, playerHeight);
       if(!occupyArea(lastAvailablePoint, playerWidth, playerHeight, playerState))
       {
          // If updating failed, just stick with the start location
@@ -639,6 +639,9 @@ void Pathfinder::moveToClosestPoint(PlayerCharacter* player, int playerWidth, in
       }
       else
       {
+         // If we moved, update the map accordingly
+         freeArea(source, lastAvailablePoint, playerWidth, playerHeight, playerState);
+
          player->setLocation(lastAvailablePoint);
       }
    }
@@ -649,27 +652,15 @@ bool Pathfinder::beginMovement(NPC* npc, Point2D src, Point2D dst, int width, in
    return occupyArea(dst, width, height, TileState(NPC_CHARACTER, npc));
 }
 
-void Pathfinder::abortMovement(Point2D src, Point2D dst, Point2D currentLocation, int width, int height)
+void Pathfinder::abortMovement(NPC* npc, Point2D src, Point2D dst, Point2D currentLocation, int width, int height)
 {
-   Rectangle sourceRect = getCollisionMapEdges(Rectangle(src, width, height));
-   Rectangle destRect = getCollisionMapEdges(Rectangle(dst, width, height));
-
-   Rectangle currentOccupiedArea = getCollisionMapEdges(Rectangle(currentLocation, width, height));
-   
-   if(!sourceRect.intersects(currentOccupiedArea))
-   {
-      freeArea(src, width, height);
-   }
-
-   if(!destRect.intersects(currentOccupiedArea)) 
-   {
-      freeArea(dst, width, height);
-   }
+   freeArea(src, currentLocation, width, height, TileState(NPC_CHARACTER, npc));
+   freeArea(dst, currentLocation, width, height, TileState(NPC_CHARACTER, npc));
 }
 
-void Pathfinder::endMovement(Point2D src, Point2D dst, int width, int height)
+void Pathfinder::endMovement(NPC* npc, Point2D src, Point2D dst, int width, int height)
 {
-   freeArea(src, width, height);
+   freeArea(src, dst, width, height, TileState(NPC_CHARACTER, npc));
 }
 
 void Pathfinder::setArea(const Rectangle& area, TileState state)
@@ -756,7 +747,7 @@ void Pathfinder::draw()
             case OBSTACLE:
             default:
             {
-               glColor3f(0.25f, 0.5f, 0.0f);
+               glColor3f(0.5f, 0.5f, 0.0f);
                break;
             }
          }

@@ -32,10 +32,11 @@ class NPC::StandOrder : public NPC::Order
 
 class NPC::MoveOrder : public NPC::Order
 {
+   bool pathInitialized;
    bool movementBegun;
    const Point2D dst;
-   Point2D currLocation;
-   Point2D nextLocation;
+   Point2D lastWaypoint;
+   Point2D nextWaypoint;
    Pathfinder& pathfinder;
    Pathfinder::Path path;
 
