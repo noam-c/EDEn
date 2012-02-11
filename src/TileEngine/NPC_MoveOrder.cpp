@@ -131,11 +131,9 @@ bool NPC::MoveOrder::perform(long timePassed)
          }
 
          DEBUG("Next waypoint: %d,%d", nextWaypoint.x, nextWaypoint.y);
+         updateNextWaypoint(location, newDirection);
+         updateDirection(newDirection, true);
       }
-      
-      updateNextWaypoint(location, newDirection);
-      updateDirection(newDirection, true);
-      lastWaypoint = location;
       
       const long stepDistance = std::max(abs(location.x - nextWaypoint.x), abs(location.y - nextWaypoint.y));
       
