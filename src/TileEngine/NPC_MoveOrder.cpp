@@ -13,6 +13,8 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_NPC;
 
+//#define DRAW_PATH
+
 NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& pathfinder)
 : Order(npc), pathInitialized(false), movementBegun(false), dst(destination), pathfinder(pathfinder)
 {
@@ -185,6 +187,9 @@ bool NPC::MoveOrder::perform(long timePassed)
 
 void NPC::MoveOrder::draw()
 {
+#if DRAW_PATH
+   if(path.empty()) return;
+
    glDisable(GL_TEXTURE_2D);
    glColor3f(1.0f, 0.0f, 0.0f);
    glBegin(GL_LINE_STRIP);
@@ -196,4 +201,5 @@ void NPC::MoveOrder::draw()
    glEnd();
    
    glEnable(GL_TEXTURE_2D);
+#endif
 }

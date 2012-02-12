@@ -20,7 +20,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PATHFINDER;
 
-#define DRAW_PATHFINDER
+//#define DRAW_PATHFINDER
 
 // Movement tile size can be set to a divisor of drawn tile size to increase the pathfinding graph size
 // For now, no need for the additional granularity
@@ -340,27 +340,23 @@ class Pathfinder::AStarPoint : public Point2D
 
 Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst, int width, int height)
 {
+   if(collisionMap == NULL) return Path();
+
+   const TileState& entityState = collisionMap[src.y / MOVEMENT_TILE_SIZE][src.x / MOVEMENT_TILE_SIZE];
+
+   if(!canOccupyArea(dst, width, height, entityState)) return Path();
+
    Point2D destinationPoint(dst.x / MOVEMENT_TILE_SIZE, dst.y / MOVEMENT_TILE_SIZE);
-   if(collisionMap == NULL || collisionMap[destinationPoint.y][destinationPoint.x].occupantType != FREE) return Path();
 
    std::vector<AStarPoint*> openSet;
    std::vector<const AStarPoint*> closedSet;
    
    const int NUM_TILES = collisionMapWidth*collisionMapHeight;
    std::vector<bool> discovered(NUM_TILES, false);
-   
-   const int widthTileRatio = width / MOVEMENT_TILE_SIZE;
-   const int heightTileRatio = height / MOVEMENT_TILE_SIZE;
    const Point2D srcTile(src.x / MOVEMENT_TILE_SIZE, src.y / MOVEMENT_TILE_SIZE);
    
-   for(int xOffset = 0; xOffset < widthTileRatio; ++xOffset)
-   {
-      for(int yOffset = 0; yOffset < heightTileRatio; ++yOffset)
-      {
-         openSet.push_back(new AStarPoint(NULL, srcTile.x + xOffset, srcTile.y + yOffset, 0, 0));
-         std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());         
-      }
-   }
+   openSet.push_back(new AStarPoint(NULL, srcTile.x, srcTile.y, 0, 0));
+   std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());         
 
    const int sourceTileNum = pixelsToTileNum(src);
    const int destinationTileNum = pixelsToTileNum(dst);
@@ -394,12 +390,12 @@ Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst, int width, 
       // Evaluate all the existing laterally adjacent points,
       // adding 1 as the cost of reaching the point from our current cheapest point.
       const std::vector<Point2D> lateralPoints = Point2D::getLaterallyAdjacentPoints(*cheapestPoint, collisionMapWidth, collisionMapHeight);
-      evaluateAdjacentNodes(lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered, widthTileRatio, heightTileRatio);
+      evaluateAdjacentNodes(entityState, lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered, width, height);
 
       // Evaluate all the existing diagonally adjacent points,
       // adding the square root of 2 as the cost of reaching the point from our current cheapest point.
       const std::vector<Point2D> diagonalPoints = Point2D::getDiagonallyAdjacentPoints(*cheapestPoint, collisionMapWidth, collisionMapHeight);
-      evaluateAdjacentNodes(diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered, widthTileRatio, heightTileRatio);
+      evaluateAdjacentNodes(entityState, diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered, width, height, true);
    }
    
    for(std::vector<AStarPoint*>::const_iterator iter = openSet.begin(); iter != openSet.end(); ++iter)
@@ -415,40 +411,32 @@ Pathfinder::Path Pathfinder::findAStarPath(Point2D src, Point2D dst, int width, 
    return path;
 }
 
-void Pathfinder::evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes, const AStarPoint* cheapestPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int widthTileRatio, int heightTileRatio)
+void Pathfinder::evaluateAdjacentNodes(const TileState& entityState, const std::vector<Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int width, int height, bool diagonalMovement)
 {
    for(std::vector<Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
    {
       int adjacentTileNum = coordsToTileNum(*iter);
-      float tileGCost = cheapestPoint->getGCost() + traversalCost;
+      float tileGCost = evaluatedPoint->getGCost() + traversalCost;
       float tileHCost = distanceMatrix[adjacentTileNum][destinationTileNum];
       if(!discovered[adjacentTileNum])
       {
+         discovered[adjacentTileNum] = true;
          const int x = iter->x;
          const int y = iter->y;
          
-         if(x + widthTileRatio < collisionMapWidth && y + heightTileRatio < collisionMapHeight)
+         bool freeTile = canOccupyArea(Point2D(x, y) * MOVEMENT_TILE_SIZE, width, height, entityState);
+
+         if(diagonalMovement)
          {
-            bool freeTile = true;
-            for(int xOffset = 0; xOffset < widthTileRatio; ++xOffset)
-            {
-               for(int yOffset = 0; yOffset < heightTileRatio; ++yOffset)
-               {
-                  if(collisionMap[y + yOffset][x + xOffset].occupantType != FREE)
-                  {
-                     freeTile = false;
-                     break;
-                  }
-               }
-            }
-            
-            if(freeTile)
-            {
-               DEBUG("Pushing point %d,%d onto open set with g()=%f and f()=%f.", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
-               discovered[adjacentTileNum] = true;
-               openSet.push_back(new AStarPoint(cheapestPoint, iter->x, iter->y, tileGCost, tileHCost));
-               std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
-            }
+            freeTile = freeTile && canOccupyArea(Point2D(evaluatedPoint->x, y), width, height, entityState)
+                                && canOccupyArea(Point2D(x, evaluatedPoint->y), width, height, entityState);
+         }
+
+         if(freeTile)
+         {
+            DEBUG("Pushing point %d,%d onto open set with g()=%f and f()=%f.", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
+            openSet.push_back(new AStarPoint(evaluatedPoint, iter->x, iter->y, tileGCost, tileHCost));
+            std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
          }
       }
       else
@@ -459,7 +447,7 @@ void Pathfinder::evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes
          {
             DEBUG("Altering cost of discovered point %d, %d to g()=%f and f()=%f", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
             (*tileInOpenSet)->setGCost(tileGCost);
-            (*tileInOpenSet)->setParent(cheapestPoint);
+            (*tileInOpenSet)->setParent(evaluatedPoint);
             std::make_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
          }
       }

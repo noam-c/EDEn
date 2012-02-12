@@ -406,22 +406,24 @@ class Pathfinder
        * A node used in A* search.
        */
       class AStarPoint;
-
+      
       /**
        * Evaluate a group of neighbour nodes in A* search.
        * Alters costs in the open set if cheaper paths are found,
        * and adds undiscovered tiles to the open set.
        *
+       * @param entityState The state of the entity trying to move to the nodes.
        * @param adjacentNodes The neighbour nodes to evaluate.
        * @param evaluatedPoint The point that is currently being evaluated.
        * @param traversalCost The cost to move from evaluatedPoint to any of the adjacent nodes.
        * @param destinationTileNum The tile number of the goal point.
        * @param openSet The open set used to accumulate undiscovered points.
        * @param discovered A mapping from tile numbers to whether or not they have been discovered.
-       * @param widthTileRatio The ratio between the entity width and the movement tile width.
-       * @param heightTileRatio The ratio between the entity width and the movement tile width.
+       * @param width The entity width.
+       * @param height The entity height.
+       * @param diagonalNodes Whether or not the nodes being evaluated are diagonal from the evaluated point.
        */
-      void evaluateAdjacentNodes(const std::vector<Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int widthTileRatio, int heightTileRatio);
+      void evaluateAdjacentNodes(const TileState& entityState, const std::vector<Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int width, int height, bool diagonalNodes = false);
 };
 
 #endif
