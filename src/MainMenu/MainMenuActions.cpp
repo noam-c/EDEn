@@ -16,6 +16,7 @@
 #include "PlayerData.h"
 
 #define CHAP1 "chapter1"
+#define SAVE_GAME "data/savegames/savegamejson.edd"
 //Actions for each of the list ops in the title screen
 
 /**
@@ -39,7 +40,7 @@ void MainMenu::NewGameAction()
 void MainMenu::MenuPrototypeAction()
 {
    PlayerData* playerData = new PlayerData();
-   playerData->load("data/savegames/savegamejson.edd");
+   playerData->load(SAVE_GAME);
 
    /** \todo This is never deleted, causing a memory leak. */
    MenuShell* menuShell = new MenuShell(*playerData);

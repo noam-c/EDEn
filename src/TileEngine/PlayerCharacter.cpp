@@ -17,8 +17,8 @@ const int debugFlag = DEBUG_TILE_ENG;
 const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
-PlayerCharacter::PlayerCharacter(Pathfinder& map, Spritesheet* sheet, int x, int y)
-                                              : map(map), playerLocation(x,y),
+PlayerCharacter::PlayerCharacter(Pathfinder& map, Spritesheet* sheet)
+                                              : map(map), active(false), playerLocation(0, 0),
                                                 currDirection(DOWN)
 {
    sprite = new Sprite(sheet);
@@ -31,7 +31,25 @@ Point2D PlayerCharacter::getLocation() const
 
 void PlayerCharacter::setLocation(Point2D location)
 {
-   playerLocation = location;
+   if(map.changePlayerLocation(this, playerLocation, location, 32, 32))
+   {
+      playerLocation = location;
+   }
+}
+
+void PlayerCharacter::addToMap(Point2D location)
+{
+   if(map.addPlayer(this, location, 32, 32))
+   {
+      playerLocation = location;
+      active = true;
+   }
+}
+
+void PlayerCharacter::removeFromMap()
+{
+   map.removePlayer(this, playerLocation, 32, 32);
+   active = false;
 }
 
 MovementDirection PlayerCharacter::getDirection() const
@@ -41,6 +59,8 @@ MovementDirection PlayerCharacter::getDirection() const
 
 void PlayerCharacter::step(long timePassed)
 {
+   if(!active) return;
+
    MovementDirection direction = NONE;
    int speed = WALKING_SPEED;
    int xDirection = 0;
@@ -92,7 +112,10 @@ void PlayerCharacter::step(long timePassed)
 
 void PlayerCharacter::draw()
 {
-   sprite->draw(playerLocation.x, playerLocation.y + TileEngine::TILE_SIZE);
+   if(active)
+   {
+      sprite->draw(playerLocation.x, playerLocation.y + TileEngine::TILE_SIZE);
+   }
 }
 
 PlayerCharacter::~PlayerCharacter()

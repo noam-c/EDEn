@@ -28,8 +28,8 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-ScriptEngine::ScriptEngine(TileEngine& tileEngine, Scheduler& scheduler)
-                                  : tileEngine(tileEngine), scheduler(scheduler)
+ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Scheduler& scheduler)
+                                  : tileEngine(tileEngine), playerData(playerData), scheduler(scheduler)
 {
    luaVM = luaL_newstate();
 
@@ -165,6 +165,51 @@ int ScriptEngine::stopMusic(lua_State* luaStack)
    }
 
    return 0;
+}
+
+int ScriptEngine::delay(lua_State* luaStack)
+{
+   int nargs = lua_gettop(luaStack);
+   long timeToWait = (long)lua_tonumber(luaStack, 1);
+   DEBUG("Waiting %d milliseconds", timeToWait);
+   
+   Timer* waitTimer = new Timer(timeToWait);
+   scheduler.start(waitTimer);
+   
+   return scheduler.join(waitTimer);
+}
+
+int ScriptEngine::generateRandom(lua_State* luaStack)
+{
+   int nargs = lua_gettop(luaStack);
+   int min, max;
+   
+   switch(nargs)
+   {
+      case 1:
+      {
+         min = 0;
+         max = (int)luaL_checknumber(luaStack, 1);
+      }
+      case 2:
+      {
+         min = (int)luaL_checknumber(luaStack, 1);
+         max = (int)luaL_checknumber(luaStack, 2);
+         break;
+      }
+      default:
+      {
+         /** \todo Error case. */
+         min = 0;
+         max = 0;
+         break;
+      }
+   }
+   
+   /** \todo Random number generation is currently unseeded. Use a good seed. */
+   lua_pushnumber(luaVM, (rand() % (max - min)) + min);
+
+   return 1;
 }
 
 int ScriptEngine::setRegion(lua_State* luaStack)
@@ -314,20 +359,62 @@ int ScriptEngine::turnNPCTowardsPlayer(lua_State* luaStack)
          break;
       }
    }
-   
+
    return 0;
 }
 
-int ScriptEngine::delay(lua_State* luaStack)
+int ScriptEngine::convertTilesToPixels(lua_State* luaStack)
+{
+   int numInTiles = (int)luaL_checknumber(luaStack, 1);
+   lua_pushnumber(luaStack, numInTiles * TileEngine::TILE_SIZE);
+   return 1;
+}
+
+int ScriptEngine::showPlayer(lua_State* luaStack)
 {
    int nargs = lua_gettop(luaStack);
-   long timeToWait = (long)lua_tonumber(luaStack, 1);
-   DEBUG("Waiting %d milliseconds", timeToWait);
+   
+   int x = 0;
+   int y = 0;
+   
+   switch(nargs)
+   {
+      case 2:
+      {
+         y = lua_tointeger(luaStack, 2);
+         x = lua_tointeger(luaStack, 1);
+         tileEngine.showPlayer(x, y);
+         break;
+      }
+   }
+   return 0;
+}
 
-   Timer* waitTimer = new Timer(timeToWait);
-   scheduler.start(waitTimer);
+int ScriptEngine::hidePlayer(lua_State* luaStack)
+{
+   tileEngine.hidePlayer();
+   return 0;
+}
 
-   return scheduler.join(waitTimer);
+int ScriptEngine::setPlayerLocation(lua_State* luaStack)
+{
+   int nargs = lua_gettop(luaStack);
+
+   int x = 0;
+   int y = 0;
+
+   switch(nargs)
+   {
+      case 2:
+      {
+         y = lua_tointeger(luaStack, 2);
+         x = lua_tointeger(luaStack, 1);
+         tileEngine.setPlayerLocation(x, y);
+         break;
+      }
+   }
+
+   return 0;
 }
 
 NPCScript* ScriptEngine::getNPCScript(NPC* npc, const std::string& regionName, const std::string& mapName, const std::string& npcName)

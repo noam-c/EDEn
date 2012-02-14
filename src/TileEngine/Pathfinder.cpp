@@ -491,6 +491,23 @@ bool Pathfinder::addPlayer(PlayerCharacter* player, Point2D area, int width, int
    return occupyArea(area, width, height, TileState(PLAYER_CHARACTER, player));
 }
 
+bool Pathfinder::changePlayerLocation(PlayerCharacter* player, Point2D src, Point2D dst, int width, int height)
+{
+   TileState playerState(PLAYER_CHARACTER, player);
+   if(occupyArea(dst, width, height, playerState))
+   {
+      freeArea(src, dst, width, height, playerState);
+      return true;
+   }
+
+   return false;
+}
+
+void Pathfinder::removePlayer(PlayerCharacter* player, Point2D currentLocation, int width, int height)
+{
+   freeArea(currentLocation, width, height);
+}
+
 bool Pathfinder::canOccupyArea(Point2D area, int width, int height, TileState state) const
 {
    if(collisionMap == NULL || state.occupantType == FREE)
@@ -541,14 +558,20 @@ bool Pathfinder::occupyArea(Point2D area, int width, int height, TileState state
    return false;
 }
 
+void Pathfinder::freeArea(Point2D locationToFree, int width, int height)
+{
+   Rectangle rectToFree = getCollisionMapEdges(Rectangle(locationToFree, width, height));
+   
+   DEBUG("Freeing tiles from %d,%d to %d,%d", rectToFree.left, rectToFree.top, rectToFree.right, rectToFree.bottom);
+   
+   setArea(rectToFree, TileState(FREE));
+}
+
 void Pathfinder::freeArea(Point2D previousLocation, Point2D currentLocation, int width, int height, TileState state)
 {
-   Rectangle previousRect = getCollisionMapEdges(Rectangle(previousLocation, width, height));
+   freeArea(previousLocation, width, height);
+
    Rectangle currentRect = getCollisionMapEdges(Rectangle(currentLocation, width, height));
-   
-   DEBUG("Freeing tiles from %d,%d to %d,%d", previousRect.left, previousRect.top, previousRect.right, previousRect.bottom);
-   
-   setArea(previousRect, TileState(FREE));
    setArea(currentRect, state);
 }
 
@@ -653,6 +676,8 @@ void Pathfinder::endMovement(NPC* npc, Point2D src, Point2D dst, int width, int 
 
 void Pathfinder::setArea(const Rectangle& area, TileState state)
 {
+   if(collisionMap == NULL) return;
+
    for(int collisionMapY = area.top; collisionMapY <= area.bottom; ++collisionMapY)
    {
       for(int collisionMapX = area.left; collisionMapX <= area.right; ++collisionMapX)

@@ -5,7 +5,6 @@
  */
 
 #include "ScriptEngine.h"
-#include "TileEngine.h"
 #include "NPC.h"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
@@ -96,65 +95,51 @@ static int luaNPCLookAtPlayer(lua_State* luaVM)
    return getEngine(luaVM)->turnNPCTowardsPlayer(luaVM);
 }
 
+static int luaShowPlayer(lua_State* luaVM)
+{
+   return getEngine(luaVM)->showPlayer(luaVM);
+}
+
+static int luaSetPlayerLocation(lua_State* luaVM)
+{
+   return getEngine(luaVM)->changeNPCSpritesheet(luaVM);
+}
+
+static int luaRemovePlayer(lua_State* luaVM)
+{
+   return getEngine(luaVM)->hidePlayer(luaVM);
+}
+
 static int luaTilesToPixels(lua_State* luaVM)
 { 
-   int numInTiles = (int)luaL_checknumber(luaVM, 1);
-   lua_pushnumber(luaVM, numInTiles * TileEngine::TILE_SIZE);
-   return 1;
+   return getEngine(luaVM)->convertTilesToPixels(luaVM);
 }
 
 static int luaRandom(lua_State* luaVM)
 {
-   int nargs = lua_gettop(luaVM);
-   int min, max;
-
-   switch(nargs)
-   {
-      case 1:
-      {
-         min = 0;
-         max = (int)luaL_checknumber(luaVM, 1);
-      }
-      case 2:
-      {
-         min = (int)luaL_checknumber(luaVM, 1);
-         max = (int)luaL_checknumber(luaVM, 2);
-         break;
-      }
-      default:
-      {
-         /** \todo Error case. */
-         min = 0;
-         max = 0;
-         break;
-      }
-   }
-
-   /** \todo Random number generation is currently unseeded. Use a good seed. */
-   lua_pushnumber(luaVM, (rand() % (max - min)) + min);
-   return 1;
+   return getEngine(luaVM)->generateRandom(luaVM);
 }
 
 void ScriptEngine::registerFunctions()
 {
-   // Tile Engine functions
    REGISTER("narrate", luaNarrate);
    REGISTER("say", luaSay);
-   REGISTER("setRegion", luaSetRegion);
    REGISTER("playSound", luaPlaySound);
    REGISTER("playMusic", luaPlayMusic);
    REGISTER("stopMusic", luaStopMusic);
-   REGISTER("addNPC", luaAddNPC);
    REGISTER("delay", luaDelay);
-   REGISTER("move", luaNPCMove);
-   REGISTER("changeSpritesheet", luaNPCChangeSpritesheet);
-   REGISTER("setSprite", luaNPCSetSprite);
-   REGISTER("setAnimation", luaNPCSetAnimation);
-   REGISTER("lookAtPlayer", luaNPCLookAtPlayer);
-
-   // Utility functions (calculations)
-   REGISTER("tilesToPixels", luaTilesToPixels);
    REGISTER("random", luaRandom);
 
-//   REGISTER("setMap", luaSetMap);
+   // Tile Engine functions
+   REGISTER("setRegion", luaSetRegion);
+   REGISTER("addNPC", luaAddNPC);
+   REGISTER("move", luaNPCMove);
+   REGISTER("setSprite", luaNPCSetSprite);
+   REGISTER("setAnimation", luaNPCSetAnimation);
+   REGISTER("changeSpritesheet", luaNPCChangeSpritesheet);
+   REGISTER("lookAtPlayer", luaNPCLookAtPlayer);
+   REGISTER("tilesToPixels", luaTilesToPixels);
+   REGISTER("showPlayer", luaShowPlayer);
+   REGISTER("removePlayer", luaRemovePlayer);
+   REGISTER("setPlayerLocation", luaSetPlayerLocation);
 }

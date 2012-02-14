@@ -12,8 +12,10 @@
 #include "Singleton.h"
 #include "Task.h"
 
-// We will need to talk to the tile engine from Lua
+// We will need to talk to the tile engine and player data from Lua
 class TileEngine;
+class PlayerData;
+
 class Scheduler;
 class NPC;
 class Script;
@@ -36,6 +38,11 @@ class ScriptEngine
     * The tile engine to execute commands on
     */
    TileEngine& tileEngine;
+   
+   /**
+    * The player data to execute commands on
+    */
+   PlayerData& playerData;
 
    /**
     * The scheduler for the script threads
@@ -69,9 +76,10 @@ class ScriptEngine
        * Constructor. Initializes a Lua VM and initializes members as needed.
        *
        * @param tileEngine The tile engine to make calls to from scripts
+       * @param playerData The player data that the scripts will reference
        * @param scheduler The scheduler responsible for managing this engine's Script threads
        */
-      ScriptEngine(TileEngine& tileEngine, Scheduler& scheduler);
+      ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Scheduler& scheduler);
 
       /**
        * Get a specified NPC script.
@@ -92,10 +100,9 @@ class ScriptEngine
       int runMapScript(const std::string& regionName, const std::string& mapName);
 
       /**
-       * Run a specified map script.
+       * Run a specified chapter script.
        *
-       * @param regionName The region containing the map script to run.
-       * @param mapName The name of the map script to be run.
+       * @param chapterName The name of the chapter script to run.
        */
       int runChapterScript(const std::string& chapterName);
 
@@ -142,6 +149,10 @@ class ScriptEngine
       int playMusic(lua_State* luaStack);
       int fadeMusic(lua_State* luaStack);
       int stopMusic(lua_State* luaStack);
+      int delay(lua_State* luaStack);
+      int generateRandom(lua_State* luaStack);
+
+      ///////////////// Tile engine functions /////////////////
       int setRegion(lua_State* luaStack);
       int addNPC(lua_State* luaStack);
       int moveNPC(lua_State* luaStack);
@@ -149,7 +160,10 @@ class ScriptEngine
       int setNPCAnimation(lua_State* luaStack);
       int changeNPCSpritesheet(lua_State* luaStack);
       int turnNPCTowardsPlayer(lua_State* luaStack);
-      int delay(lua_State* luaStack);
+      int convertTilesToPixels(lua_State* luaStack);
+      int showPlayer(lua_State* luaStack);
+      int hidePlayer(lua_State* luaStack);
+      int setPlayerLocation(lua_State* luaStack);
 };
 
 #endif

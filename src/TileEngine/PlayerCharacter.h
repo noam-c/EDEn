@@ -24,7 +24,7 @@ class Sprite;
  */
 class PlayerCharacter
 {
-   /** The speed of movement for the player character when walking (as opposed to running. */
+   /** The speed of movement for the player character when walking (as opposed to running). */
    static const int WALKING_SPEED = 1;
 
    /** The walking prefix used to load walking sprites. */
@@ -35,6 +35,9 @@ class PlayerCharacter
 
    /** The map that the player character is standing in. */
    Pathfinder& map;
+   
+   /** True iff the player entity is active on the map. */
+   bool active;
    
    /** The player's location on the map. */
    Point2D playerLocation;
@@ -52,10 +55,8 @@ class PlayerCharacter
        *
        * @param map The map that the player character will be sitting in.
        * @param sheet The spritesheet to use for drawing the player character.
-       * @param x The x-location of the player character.
-       * @param y The y-location of the player character.
        */
-      PlayerCharacter(Pathfinder& map, Spritesheet* sheet, int x, int y);
+      PlayerCharacter(Pathfinder& map, Spritesheet* sheet);
       
       /**
        * @return The location of the player character.
@@ -68,12 +69,22 @@ class PlayerCharacter
        * @param location The new location to set.
        */
       void setLocation(Point2D location);
-   
+
+      /**
+       * Adds the player entity to the map at the specified location.
+       */
+      void addToMap(Point2D location);
+
+      /**
+       * Deactivates the player entity.
+       */
+      void removeFromMap();
+
       /**
        * @return The direction that the player character is facing.
        */
       MovementDirection getDirection() const;
-   
+
       /**
        * Takes player input and determines the character's direction and speed,
        * as well as updating the location based on the speed.

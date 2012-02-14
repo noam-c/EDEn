@@ -11,6 +11,7 @@
 
 #include "Scheduler.h"
 #include "Pathfinder.h"
+#include "PlayerData.h"
 
 #include <map>
 #include <string>
@@ -58,9 +59,12 @@ class TileEngine: public GameState
 
    /** The Thread scheduler used by the tile engine. */
    Scheduler scheduler;
+   
+   /** The player data */
+   PlayerData playerData;
 
-   /** The player character */
-   PlayerCharacter* player;
+   /** The entity representing the player character on the map */
+   PlayerCharacter* playerEntity;
 
    /** A list of all NPCs in the map, identified by their names. */
    std::map<std::string, NPC*> npcList;
@@ -70,7 +74,21 @@ class TileEngine: public GameState
 
    /** The y-offset to draw elements of the map at. */
    int yMapOffset;
-
+   
+   /**
+    * Loads new player data.
+    *
+    * @param path The path to the chapter script.
+    */
+   void loadPlayerData(const std::string& path);
+   
+   /**
+    * Loads a chapter script.
+    *
+    * @param chapterName The name of the chapter.
+    */
+   void startChapter(const std::string& chapterName);
+   
    /**
     * Toggles the debug console on or off.
     */
@@ -128,12 +146,13 @@ class TileEngine: public GameState
       static const int TILE_SIZE;
 
       /**
-       * Constructor. Initializes widgets and controllers
+       * Constructor.
        *
        * @param executionStack The execution stack that the state belongs to.
        * @param chapterName The name of the chapter to load after construction
+       * @param playerDataPath The path to the player's data.
        */
-      TileEngine(ExecutionStack& executionStack, const std::string& chapterName);
+      TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath = "");
 
       /**
        * @return The name of the currently loaded map.
@@ -187,6 +206,27 @@ class TileEngine: public GameState
        */
       void setMap(std::string mapName = "");
 
+      /**
+       * Reveal the player entity and make it an active part of the game map at the specified point.
+       *
+       * @param x The x-location to place the player entity.
+       * @param y The y-location to place the player entity.
+       */
+      void showPlayer(int x, int y);
+      
+      /**
+       * Hide the player entity and remove it from the game map.
+       */
+      void hidePlayer();
+
+      /**
+       * Change the location of the player entity on the map.
+       *
+       * @param x The new x-coordinate of the player.
+       * @param y The new y-coordinate of the player.
+       */
+      void setPlayerLocation(int x, int y);
+      
       /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.
        *

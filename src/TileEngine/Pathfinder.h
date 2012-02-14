@@ -178,6 +178,15 @@ class Pathfinder
    /**
     * Free the tiles belonging to a given entity within a specified area. 
     *
+    * @param locationToFree The coordinates of the top-left corner of the area to free (in pixels)
+    * @param width The width of the area to free (in pixels)
+    * @param height The height of the area to free (in pixels)
+    */
+   void freeArea(Point2D locationToFree, int width, int height);
+   
+   /**
+    * Free the tiles belonging to a given entity within a specified area. 
+    *
     * @param previousLocation The coordinates of the top-left corner of the area to free (in pixels)
     * @param currentLocation The coordinates of the top-left corner of the area to keep in the current state (in pixels)
     * @param width The width of the area to free (in pixels)
@@ -307,9 +316,39 @@ class Pathfinder
        * @return true if the player character has been successfully placed in the area, false if there was something else in the area.
        */
       bool addPlayer(PlayerCharacter* player, Point2D area, int width, int height);
-      
+
       /**
+       * Change the player location, if the destination tiles are available to occupy.
+       * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the destination from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
        *
+       * @param player The player character instance.
+       * @param area The coordinates of the top-left corner of the player character (in pixels)
+       * @param width The width of the player character (in pixels)
+       * @param height The height of the player character (in pixels)
+       *
+       * @return true if the player character has been successfully moved to the destination, false if there was something else in the destination.
+       */
+      bool changePlayerLocation(PlayerCharacter* player, Point2D src, Point2D dst, int width, int height);
+
+      /**
+       * Remove the player and free the tiles under it.
+       *
+       * @param player The player character instance.
+       * @param area The prior coordinates of the top-left corner of the player character (in pixels)
+       * @param width The width of the player character (in pixels)
+       * @param height The height of the player character (in pixels)
+       */
+      void removePlayer(PlayerCharacter* player, Point2D currentLocation, int width, int height);
+
+      /**
+       * Given the distance the entity can move and the direction, moves as far as possible until an obstacle is encountered.
+       *
+       * @param player The player character instance.
+       * @param playerWidth The width of the player character (in pixels)
+       * @param playerHeight The height of the player character (in pixels)
+       * @param xDirection The direction moved on the x-axis.
+       * @param yDirection The direction moved on the y-axis.
+       * @param distance The total distance that the player character can be moved in this call.
        */
       void moveToClosestPoint(PlayerCharacter* player, int playerWidth, int playerHeight, int xDirection, int yDirection, int distance);
    

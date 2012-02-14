@@ -17,18 +17,13 @@ std::string ScriptFactory::getPath(const std::string& name, ScriptType type)
    return PATHS[type] + name + EXTENSION;
 }
 
-Script* ScriptFactory::createScript(lua_State* luaVM, const std::string& name, ScriptType type, ...)
+Script* ScriptFactory::createScript(lua_State* luaVM, const std::string& name, ScriptType type, NPC* npc)
 {
    std::string path = getPath(name, type);
 
-   if(type == NPC_SCRIPT)
+   if(type == NPC_SCRIPT && npc != NULL)
    {
-      va_list args;
-      va_start(args, type);
-      NPC* npcToBind = va_arg(args, NPC*);
-      va_end(args);
-
-      return new NPCScript(luaVM, path, npcToBind);
+      return new NPCScript(luaVM, path, npc);
    }
 
    return new FileScript(luaVM, path);

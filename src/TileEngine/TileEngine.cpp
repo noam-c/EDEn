@@ -8,6 +8,7 @@
 #include "ScriptEngine.h"
 #include "NPC.h"
 #include "PlayerCharacter.h"
+#include "PlayerData.h"
 #include "Scheduler.h"
 #include "Container.h"
 #include "GraphicsUtil.h"
@@ -25,16 +26,37 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 const int TileEngine::TILE_SIZE = 32;
 
-TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName)
-                                   : GameState(executionStack), xMapOffset(0), yMapOffset(0)
+TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath)
+: GameState(executionStack), xMapOffset(0), yMapOffset(0)
 {
-   player = new PlayerCharacter(currMap, ResourceLoader::getSpritesheet("npc1"), 100, 100);
-   scriptEngine = new ScriptEngine(*this, scheduler);
+   playerEntity = new PlayerCharacter(currMap, ResourceLoader::getSpritesheet("npc1"));
+   scriptEngine = new ScriptEngine(*this, playerData, scheduler);
    dialogue = new DialogueController(*top, scheduler, *scriptEngine);
-
    consoleWindow = new edwt::DebugConsoleWindow(top, top->getWidth(), top->getHeight() * 0.2);
-
+   
    time = SDL_GetTicks();
+   loadPlayerData(playerDataPath);
+   startChapter(chapterName);
+}
+
+TileEngine::~TileEngine()
+{
+   delete consoleWindow;
+   delete dialogue;
+   delete scriptEngine;
+   delete playerEntity;
+}
+
+void TileEngine::loadPlayerData(const std::string& path)
+{
+   if(!path.empty())
+   {
+      playerData.load(path);
+   }
+}
+
+void TileEngine::startChapter(const std::string& chapterName)
+{
    scriptEngine->runChapterScript(chapterName);
 }
 
@@ -67,6 +89,8 @@ bool TileEngine::setRegion(const std::string& regionName, const std::string& map
 
 void TileEngine::setMap(std::string mapName)
 {
+   playerEntity->removeFromMap();
+
    DEBUG("Setting map...");
    if(!mapName.empty())
    {
@@ -82,7 +106,6 @@ void TileEngine::setMap(std::string mapName)
 
    DEBUG("Map set to: %s", mapName.c_str());
 
-   currMap.addPlayer(player, player->getLocation(), 32, 32);
    recalculateMapOffsets();
 }
 
@@ -115,9 +138,24 @@ void TileEngine::toggleDebugConsole()
    }
 }
 
+void TileEngine::showPlayer(int x, int y)
+{
+   playerEntity->addToMap(Point2D(x,y));
+}
+
+void TileEngine::hidePlayer()
+{
+   playerEntity->removeFromMap();   
+}
+
+void TileEngine::setPlayerLocation(int x, int y)
+{
+   playerEntity->setLocation(Point2D(x,y));
+}
+
 void TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y)
 {
-   Point2D npcLocation(x * TILE_SIZE, y * TILE_SIZE);
+   Point2D npcLocation(x, y);
    if(currMap.isAreaFree(npcLocation, 32, 32))
    {
       Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
@@ -180,7 +218,7 @@ void TileEngine::changeNPCSpritesheet(const std::string& npcName, const std::str
 void TileEngine::turnNPCTowardsPlayer(const std::string& npcName)
 {
    NPC* npcToChange = npcList[npcName];
-   Point2D playerLocation = player->getLocation();
+   Point2D playerLocation = playerEntity->getLocation();
    Point2D npcLocation = npcToChange->getLocation();
    MovementDirection directionToPlayer = npcToChange->getDirection();
    
@@ -249,7 +287,7 @@ void TileEngine::draw()
       }
 
       drawNPCs();
-      player->draw();
+      playerEntity->draw();
    GraphicsUtil::getInstance()->resetOffset();
 }
 
@@ -269,7 +307,7 @@ bool TileEngine::step()
 
    handleInputEvents(done);
 
-   player->step(timePassed);
+   playerEntity->step(timePassed);
 
    currMap.step(timePassed);
 
@@ -368,8 +406,8 @@ void TileEngine::handleInputEvents(bool& finishState)
 
 void TileEngine::action()
 {
-   Point2D activationLocation = player->getLocation();
-   switch(player->getDirection())
+   Point2D activationLocation = playerEntity->getLocation();
+   switch(playerEntity->getDirection())
    {
       case UP_LEFT:
       case LEFT:
@@ -391,7 +429,7 @@ void TileEngine::action()
       }   
    }
 
-   switch(player->getDirection())
+   switch(playerEntity->getDirection())
    {
       case UP_RIGHT:
       case UP:
@@ -421,12 +459,4 @@ void TileEngine::action()
          npcToActivate->activate();
       }
    }
-}
-
-TileEngine::~TileEngine()
-{
-   delete consoleWindow;
-   delete dialogue;
-   delete scriptEngine;
-   delete player;
 }

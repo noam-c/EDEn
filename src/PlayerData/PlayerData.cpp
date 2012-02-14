@@ -19,7 +19,7 @@ const int debugFlag = DEBUG_PLAYER;
 // Uncomment this line to turn off encryption of savegames
 // #define DISABLE_ENCRYPTION
 
-PlayerData::PlayerData() : partyLeader(NULL)
+PlayerData::PlayerData() : partyLeader(NULL), rootQuest(NULL)
 {
 }
 

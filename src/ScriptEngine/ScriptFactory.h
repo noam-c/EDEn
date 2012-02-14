@@ -58,8 +58,9 @@ class ScriptFactory
     * @param luaVM The Lua VM used to create the script.
     * @param name The name of the script to be loaded.
     * @param type The ScriptType of the script to be loaded.
+    * @param npc If the script is an NPC script, an NPC to bind it to
     */
-   static Script* createScript(lua_State* luaVM, const std::string& name, ScriptType type, ...);
+   static Script* createScript(lua_State* luaVM, const std::string& name, ScriptType type, NPC* npc = NULL);
 
    /**
     * Get the path to a certain resource based on its name and type.
