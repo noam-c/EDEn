@@ -28,6 +28,10 @@ The EDEn source is released under the terms of the Ruby License, with the follow
 
 	TinyXML is copyright 2000-2012 Lee Thomason. 
 
+* Code in the LuaWrapper folder is part of the LuaWrapper library.
+
+	LuaWrapper is copyright 2010-2012 Alexander Ameson.
+
 Art and audio assets are copyright their creators. For specific asset credits, please refer to ASSETS.txt.
 
 For the full text of the Ruby license in use, please refer to the LICENSE.txt file.

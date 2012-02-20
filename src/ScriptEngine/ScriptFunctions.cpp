@@ -95,26 +95,6 @@ static int luaNPCLookAtPlayer(lua_State* luaVM)
    return getEngine(luaVM)->turnNPCTowardsPlayer(luaVM);
 }
 
-static int luaShowPlayer(lua_State* luaVM)
-{
-   return getEngine(luaVM)->showPlayer(luaVM);
-}
-
-static int luaSetPlayerLocation(lua_State* luaVM)
-{
-   return getEngine(luaVM)->changeNPCSpritesheet(luaVM);
-}
-
-static int luaRemovePlayer(lua_State* luaVM)
-{
-   return getEngine(luaVM)->hidePlayer(luaVM);
-}
-
-static int luaTilesToPixels(lua_State* luaVM)
-{ 
-   return getEngine(luaVM)->convertTilesToPixels(luaVM);
-}
-
 static int luaRandom(lua_State* luaVM)
 {
    return getEngine(luaVM)->generateRandom(luaVM);
@@ -138,8 +118,4 @@ void ScriptEngine::registerFunctions()
    REGISTER("setAnimation", luaNPCSetAnimation);
    REGISTER("changeSpritesheet", luaNPCChangeSpritesheet);
    REGISTER("lookAtPlayer", luaNPCLookAtPlayer);
-   REGISTER("tilesToPixels", luaTilesToPixels);
-   REGISTER("showPlayer", luaShowPlayer);
-   REGISTER("removePlayer", luaRemovePlayer);
-   REGISTER("setPlayerLocation", luaSetPlayerLocation);
 }

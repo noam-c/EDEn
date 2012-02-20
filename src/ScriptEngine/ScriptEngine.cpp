@@ -6,6 +6,7 @@
 
 #include "ScriptEngine.h"
 #include "TileEngine.h"
+#include "LuaTileEngine.h"
 #include "Scheduler.h"
 #include "ResourceLoader.h"
 #include "Music.h"
@@ -15,6 +16,8 @@
 #include "FileScript.h"
 #include "StringScript.h"
 #include "ScriptFactory.h"
+
+#include "LuaWrapper.hpp"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -50,6 +53,10 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
    // (thus eliminating the need for a global ScriptEngine instance or singleton)
    lua_pushlightuserdata(luaVM, this);
    lua_setglobal(luaVM, SCRIPT_ENG_LUA_NAME);
+   
+   luaopen_TileEngine(luaVM);
+   luaW_push<TileEngine>(luaVM, &tileEngine);
+   lua_setglobal(luaVM, "tileEngine");
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
@@ -356,60 +363,6 @@ int ScriptEngine::turnNPCTowardsPlayer(lua_State* luaStack)
       {
          std::string npcName(lua_tostring(luaStack, 1));
          tileEngine.turnNPCTowardsPlayer(npcName);
-         break;
-      }
-   }
-
-   return 0;
-}
-
-int ScriptEngine::convertTilesToPixels(lua_State* luaStack)
-{
-   int numInTiles = (int)luaL_checknumber(luaStack, 1);
-   lua_pushnumber(luaStack, numInTiles * TileEngine::TILE_SIZE);
-   return 1;
-}
-
-int ScriptEngine::showPlayer(lua_State* luaStack)
-{
-   int nargs = lua_gettop(luaStack);
-   
-   int x = 0;
-   int y = 0;
-   
-   switch(nargs)
-   {
-      case 2:
-      {
-         y = lua_tointeger(luaStack, 2);
-         x = lua_tointeger(luaStack, 1);
-         tileEngine.showPlayer(x, y);
-         break;
-      }
-   }
-   return 0;
-}
-
-int ScriptEngine::hidePlayer(lua_State* luaStack)
-{
-   tileEngine.hidePlayer();
-   return 0;
-}
-
-int ScriptEngine::setPlayerLocation(lua_State* luaStack)
-{
-   int nargs = lua_gettop(luaStack);
-
-   int x = 0;
-   int y = 0;
-
-   switch(nargs)
-   {
-      case 2:
-      {
-         y = lua_tointeger(luaStack, 2);
-         x = lua_tointeger(luaStack, 1);
-         tileEngine.setPlayerLocation(x, y);
          break;
       }
    }

@@ -100,6 +100,7 @@ set(HEADERS
   src/GameData/ItemData.h
   src/GameData/Item.h
   src/GameData/ItemList.h
+  src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
   src/Menu/CharacterModule.h
   src/Menu/ConfirmStateListener.h
@@ -152,8 +153,10 @@ set(HEADERS
   src/TileEngine/Obstacle.h
   src/TileEngine/Pathfinder.h
   src/TileEngine/PlayerCharacter.h
+  src/TileEngine/LuaPlayerCharacter.h
   src/TileEngine/Region.h
   src/TileEngine/TileEngine.h
+  src/TileEngine/LuaTileEngine.h
   src/TileEngine/Tileset.h
   src/TileEngine/XMap.h
   src/TileEngine/XRegion.h
@@ -281,9 +284,11 @@ set(SOURCES
   src/TileEngine/NPC_StandOrder.cpp
   src/TileEngine/Obstacle.cpp
   src/TileEngine/PlayerCharacter.cpp
+  src/TileEngine/LuaPlayerCharacter.cpp
   src/TileEngine/Pathfinder.cpp
   src/TileEngine/Region.cpp
   src/TileEngine/TileEngine.cpp
+  src/TileEngine/LuaTileEngine.cpp
   src/TileEngine/Tileset.cpp
   src/TileEngine/XMap.cpp
   src/TileEngine/XRegion.cpp
@@ -313,6 +318,7 @@ source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
 source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
 source_group(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
 source_group(json REGULAR_EXPRESSION src/json/.*)
+source_group(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
 source_group(edwt REGULAR_EXPRESSION src/edwt/.*)
 source_group(tinyxml REGULAR_EXPRESSION src/tinyxml/.*)
 
@@ -331,6 +337,7 @@ include_directories(
   src/Sprites
   src/TileEngine
   src/json
+  src/LuaWrapper
   src/edwt
   src/tinyxml
 )

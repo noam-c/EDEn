@@ -39,7 +39,7 @@ void PlayerCharacter::setLocation(Point2D location)
 
 void PlayerCharacter::addToMap(Point2D location)
 {
-   if(map.addPlayer(this, location, 32, 32))
+   if(!active && map.addPlayer(this, location, 32, 32))
    {
       playerLocation = location;
       active = true;
@@ -48,8 +48,11 @@ void PlayerCharacter::addToMap(Point2D location)
 
 void PlayerCharacter::removeFromMap()
 {
-   map.removePlayer(this, playerLocation, 32, 32);
-   active = false;
+   if(active)
+   {
+      map.removePlayer(this, playerLocation, 32, 32);
+      active = false;
+   }
 }
 
 MovementDirection PlayerCharacter::getDirection() const

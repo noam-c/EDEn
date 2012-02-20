@@ -15,7 +15,6 @@
  * \todo [Recommended] Allow for turning debug flags on and off dynamically through the console to prevent flooding.
  * \todo [Optional] Add support for multi-level maps.
  * \todo [Optional] Consolidate common functionality between Tileset and Spritesheet.
- * \todo [Optional] Perhaps make NPCs a type of Lua userdata so that we don't need C-like global functions on them? (Might want to get the Lunar library to bind the NPCs to Lua)
  * \todo [Optional] Dialogue Controller should inherit from a generic "scrolling text controller" that takes a textbox argument to write to
    * To do this, a full rewrite of the Dialogue Controller might be necessary, due to some tight coupling in the class at the moment
  * \todo [Optional] Integrate GraphicsUtil stuff from Solstice (synchronous fading and texture load, mainly).

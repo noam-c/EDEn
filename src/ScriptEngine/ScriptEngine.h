@@ -160,10 +160,6 @@ class ScriptEngine
       int setNPCAnimation(lua_State* luaStack);
       int changeNPCSpritesheet(lua_State* luaStack);
       int turnNPCTowardsPlayer(lua_State* luaStack);
-      int convertTilesToPixels(lua_State* luaStack);
-      int showPlayer(lua_State* luaStack);
-      int hidePlayer(lua_State* luaStack);
-      int setPlayerLocation(lua_State* luaStack);
 };
 
 #endif
