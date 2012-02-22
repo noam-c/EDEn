@@ -154,8 +154,6 @@ class ScriptEngine
 
       ///////////////// Tile engine functions /////////////////
       int setRegion(lua_State* luaStack);
-      int addNPC(lua_State* luaStack);
-      int moveNPC(lua_State* luaStack);
       int setNPCSprite(lua_State* luaStack);
       int setNPCAnimation(lua_State* luaStack);
       int changeNPCSpritesheet(lua_State* luaStack);

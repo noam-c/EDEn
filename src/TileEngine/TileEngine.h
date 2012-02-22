@@ -112,21 +112,6 @@ class TileEngine: public GameState
     */
    void action();
    
-   /**
-    * @param point The coordinates to check (in pixels)
-    *
-    * @return true iff the point is within the map
-    */
-   bool withinMap(Point2D point) const;
-   
-   /**
-    * @param x The x-coordinate to check (in pixels)
-    * @param y The y-coordinate to check (in pixels)
-    *
-    * @return true iff the x-y coordinate is within the map
-    */
-   bool withinMap(const int x, const int y) const;
-
    protected:
       /**
        * Logic step.
@@ -207,44 +192,27 @@ class TileEngine: public GameState
       void setMap(std::string mapName = "");
 
       /**
-       * Reveal the player entity and make it an active part of the game map at the specified point.
-       *
-       * @param x The x-location to place the player entity.
-       * @param y The y-location to place the player entity.
-       */
-      void showPlayer(int x, int y);
-      
-      /**
-       * Hide the player entity and remove it from the game map.
-       */
-      void hidePlayer();
-
-      /**
-       * Change the location of the player entity on the map.
-       *
-       * @param x The new x-coordinate of the player.
-       * @param y The new y-coordinate of the player.
-       */
-      void setPlayerLocation(int x, int y);
-      
-      /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.
        *
        * @param npcName The name of the npc to add
        * @param spritesheetName The name of the spritesheet to draw the NPC with
-       * @param x The x location where we spawn the NPC
-       * @param y The y location where we spawn the NPC
+       * @param npcLocation The location where we spawn the NPC
+       *
+       * @return The created NPC (or NULL if it could not be placed in the map).
        */
-      void addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y);
+      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName, Point2D npcLocation);
 
       /**
-       * Move an NPC with the specified name to the specified location.
+       * @param npcName The name of the NPC to find.
        *
-       * @param npcName The name of the npc to move
-       * @param x The x location to move the NPC to
-       * @param y The y location to move the NPC to
+       * @return The NPC in the current map with the specified name.
        */
-      void moveNPC(const std::string& npcName, int x, int y);
+      NPC* getNPC(const std::string& npcName) const;
+
+      /**
+       * @return The player character in the tile engine.
+       */
+      PlayerCharacter* getPlayerCharacter() const;
 
       /**
        * Change the sprite frame of the specified NPC.

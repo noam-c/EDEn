@@ -22,7 +22,7 @@ Script::Script(const std::string& name) : scriptName(name), running(false)
 {
 }
 
-bool Script::runScript()
+bool Script::runScript(int numArgs)
 {
    if(!luaStack)
    {
@@ -34,7 +34,7 @@ bool Script::runScript()
    DEBUG("Resuming script with name %s, thread ID %d...", scriptName.c_str(), threadId);
    DEBUG("Lua Thread Address: 0x%x", luaStack);
 
-   int returnCode = lua_resume(luaStack, 0);
+   int returnCode = lua_resume(luaStack, numArgs);
    switch(returnCode)
    {
       case 0:
@@ -56,7 +56,6 @@ bool Script::runScript()
          T_T("An error occured running this script.");
       }
    }
-
 }
 
 bool Script::resume(long /*timePassed*/)

@@ -120,6 +120,16 @@ int Pathfinder::getHeight() const
    T_T("Requested map height when map does not exist.");
 }
 
+bool Pathfinder::withinMap(Point2D point) const
+{
+   return withinMap(point.x, point.y);
+}
+
+bool Pathfinder::withinMap(const int x, const int y) const
+{
+   return map != NULL && x >= 0 && x < getWidth() * TileEngine::TILE_SIZE && y >= 0 && y < getHeight() * TileEngine::TILE_SIZE;
+}
+
 void Pathfinder::step(long timePassed)
 {
    if(map) map->step(timePassed);

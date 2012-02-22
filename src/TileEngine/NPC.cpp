@@ -84,8 +84,16 @@ void NPC::activate()
 
 void NPC::move(int x, int y)
 {
-   Point2D dst(x, y);
-   orders.push(new MoveOrder(*this, dst, pathfinder));
+   if(pathfinder.withinMap(x,y))
+   {
+      DEBUG("Sending move order to %s: %d,%d", name.c_str(), x, y);
+      Point2D dst(x, y);
+      orders.push(new MoveOrder(*this, dst, pathfinder));
+   }
+   else
+   {
+      DEBUG("%d,%d is not a place!!!", x, y);
+   }
 }
 
 void NPC::stand(MovementDirection direction)

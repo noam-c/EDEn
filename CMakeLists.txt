@@ -149,6 +149,7 @@ set(HEADERS
   src/TileEngine/DialogueController.h
   src/TileEngine/Map.h
   src/TileEngine/NPC.h
+  src/TileEngine/LuaNPC.h
   src/TileEngine/NPC_Orders.h
   src/TileEngine/Obstacle.h
   src/TileEngine/Pathfinder.h
@@ -280,6 +281,7 @@ set(SOURCES
   src/TileEngine/DialogueController.cpp
   src/TileEngine/Map.cpp
   src/TileEngine/NPC.cpp
+  src/TileEngine/LuaNPC.cpp
   src/TileEngine/NPC_MoveOrder.cpp
   src/TileEngine/NPC_StandOrder.cpp
   src/TileEngine/Obstacle.cpp

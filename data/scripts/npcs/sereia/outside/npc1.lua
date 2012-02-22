@@ -1,6 +1,6 @@
 function idle(me)
    delay(1000)
-   move('npc1', tilesToPixels(random(0,9)), tilesToPixels(random(0,9)))
+   me:move(map:tilesToPixels(random(0,9)), map:tilesToPixels(random(0,9)))
 end
 
 function activate(me)

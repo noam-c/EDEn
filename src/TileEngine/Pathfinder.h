@@ -241,6 +241,21 @@ class Pathfinder
       int getHeight() const;
 
       /**
+       * @param point The coordinates to check (in pixels)
+       *
+       * @return true iff the point is within the map
+       */
+      bool withinMap(Point2D point) const;
+      
+      /**
+       * @param x The x-coordinate to check (in pixels)
+       * @param y The y-coordinate to check (in pixels)
+       *
+       * @return true iff the x-y coordinate is within the map
+       */
+      bool withinMap(const int x, const int y) const;
+
+      /**
        * Process logic for the map and its obstacles.
        */
       void step(long timePassed);

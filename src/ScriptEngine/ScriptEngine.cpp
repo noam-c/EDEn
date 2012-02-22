@@ -6,7 +6,6 @@
 
 #include "ScriptEngine.h"
 #include "TileEngine.h"
-#include "LuaTileEngine.h"
 #include "Scheduler.h"
 #include "ResourceLoader.h"
 #include "Music.h"
@@ -16,6 +15,10 @@
 #include "FileScript.h"
 #include "StringScript.h"
 #include "ScriptFactory.h"
+
+#include "LuaPlayerCharacter.h"
+#include "LuaNPC.h"
+#include "LuaTileEngine.h"
 
 #include "LuaWrapper.hpp"
 
@@ -56,7 +59,13 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
    
    luaopen_TileEngine(luaVM);
    luaW_push<TileEngine>(luaVM, &tileEngine);
-   lua_setglobal(luaVM, "tileEngine");
+   lua_setglobal(luaVM, "map");
+   
+   luaopen_PlayerCharacter(luaVM);
+   luaW_push<PlayerCharacter>(luaVM, tileEngine.getPlayerCharacter());
+   lua_setglobal(luaVM, "player");
+
+   luaopen_NPC(luaVM);
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
@@ -234,58 +243,6 @@ int ScriptEngine::setRegion(lua_State* luaStack)
 
       std::string mapName = tileEngine.getMapName();
       return runMapScript(regionName, mapName);
-   }
-
-   return 0;
-}
-
-int ScriptEngine::addNPC(lua_State* luaStack)
-{
-   int nargs = lua_gettop(luaStack);
-   bool waitForFinish = false;
-
-   int x = 0;
-   int y = 0;
-
-   switch(nargs)
-   {
-      case 4:
-      {
-         y = lua_tointeger(luaStack, 4);
-         x = lua_tointeger(luaStack, 3);
-      }
-      case 2:
-      {
-         std::string spritesheetName(lua_tostring(luaStack, 2));
-         std::string npcName(lua_tostring(luaStack, 1));
-         DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
-         DEBUG("NPC Location will be (%d, %d)", x, y);
-         tileEngine.addNPC(npcName, spritesheetName, x, y);
-         break;
-      }
-   }
-
-   return 0;
-}
-
-int ScriptEngine::moveNPC(lua_State* luaStack)
-{
-   int nargs = lua_gettop(luaStack);
-   bool waitForFinish = false;
-
-   int x = 0;
-   int y = 0;
-    
-   switch(nargs)
-   {
-      case 3:
-      {
-         y = lua_tointeger(luaStack, 3);
-         x = lua_tointeger(luaStack, 2);
-         std::string npcName(lua_tostring(luaStack, 1));
-         tileEngine.moveNPC(npcName, x, y);
-         break;
-      }
    }
 
    return 0;

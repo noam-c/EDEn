@@ -138,28 +138,14 @@ void TileEngine::toggleDebugConsole()
    }
 }
 
-void TileEngine::showPlayer(int x, int y)
+NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, Point2D npcLocation)
 {
-   playerEntity->addToMap(Point2D(x,y));
-}
-
-void TileEngine::hidePlayer()
-{
-   playerEntity->removeFromMap();   
-}
-
-void TileEngine::setPlayerLocation(int x, int y)
-{
-   playerEntity->setLocation(Point2D(x,y));
-}
-
-void TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, int x, int y)
-{
-   Point2D npcLocation(x, y);
+   NPC* npcToAdd = NULL;
+   
    if(currMap.isAreaFree(npcLocation, 32, 32))
    {
       Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
-      NPC* npcToAdd = new NPC(*scriptEngine, scheduler, npcName, sheet,
+      npcToAdd = new NPC(*scriptEngine, scheduler, npcName, sheet,
                                  currMap, currRegion->getName(),
                                  npcLocation.x, npcLocation.y);
       npcList[npcName] = npcToAdd;
@@ -169,31 +155,24 @@ void TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
    {
       DEBUG("Cannot place NPC at this location; something is in the way.");
    }
+
+   return npcToAdd;
 }
 
-bool TileEngine::withinMap(Point2D point) const
+NPC* TileEngine::getNPC(const std::string& npcName) const
 {
-   return withinMap(point.x, point.y);
-}
-
-
-bool TileEngine::withinMap(const int x, const int y) const
-{
-   return x >= 0 && x < currMap.getWidth() * TILE_SIZE && y >= 0 && y < currMap.getHeight() * TILE_SIZE;
-}
-
-void TileEngine::moveNPC(const std::string& npcName, int x, int y)
-{
-   NPC* npcToMove = npcList[npcName];
-   if(withinMap(x,y))
+   std::map<std::string, NPC*>::const_iterator npcIterator = npcList.find(npcName);
+   if(npcIterator != npcList.end())
    {
-      DEBUG("Sending move order to %s: %d,%d", npcName.c_str(), x, y);
-      npcToMove->move(x, y);
+      return npcIterator->second;
    }
-   else
-   {
-      DEBUG("%d,%d is not a place!!!", x, y);
-   }
+
+   return NULL;
+}
+
+PlayerCharacter* TileEngine::getPlayerCharacter() const
+{
+   return playerEntity;
 }
 
 void TileEngine::setNPCSprite(const std::string& npcName, const std::string& frameName)
@@ -451,7 +430,7 @@ void TileEngine::action()
       }
    }
    
-   if(withinMap(activationLocation))
+   if(currMap.withinMap(activationLocation))
    {
       NPC* npcToActivate = currMap.getOccupantNPC(activationLocation, TILE_SIZE, TILE_SIZE);
       if(npcToActivate != NULL)

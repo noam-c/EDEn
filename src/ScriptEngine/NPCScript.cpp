@@ -10,6 +10,8 @@
 
 const int debugFlag = DEBUG_NPC;
 
+#include "LuaWrapper.hpp"
+
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
 extern "C"
@@ -111,8 +113,11 @@ bool NPCScript::callFunction(NPCFunction function)
       lua_pushstring(luaStack, functionName);
       lua_gettable(luaStack, -2);
 
+      // Push NPC as argument
+      luaW_push<NPC>(luaStack, npc);
+
       // Run the script
-      return runScript();
+      return runScript(1);
    }
 
    return true;
