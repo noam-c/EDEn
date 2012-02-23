@@ -248,50 +248,6 @@ int ScriptEngine::setRegion(lua_State* luaStack)
    return 0;
 }
 
-int ScriptEngine::setNPCSprite(lua_State* luaStack)
-{
-   int nargs = lua_gettop(luaStack);
-   bool waitForFinish = false;
-
-   int x = 0;
-   int y = 0;
-    
-   switch(nargs)
-   {
-      case 2:
-      {
-         std::string frameName(lua_tostring(luaStack, 2));
-         std::string npcName(lua_tostring(luaStack, 1));
-         tileEngine.setNPCSprite(npcName, frameName);
-         break;
-      }
-   }
-
-   return 0;
-}
-
-int ScriptEngine::setNPCAnimation(lua_State* luaStack)
-{
-   int nargs = lua_gettop(luaStack);
-   bool waitForFinish = false;
-
-   int x = 0;
-   int y = 0;
-    
-   switch(nargs)
-   {
-      case 2:
-      {
-         std::string animationName(lua_tostring(luaStack, 2));
-         std::string npcName(lua_tostring(luaStack, 1));
-         tileEngine.setNPCAnimation(npcName, animationName);
-         break;
-      }
-   }
-
-   return 0;
-}
-
 int ScriptEngine::changeNPCSpritesheet(lua_State* luaStack)
 {
    int nargs = lua_gettop(luaStack);

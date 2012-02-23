@@ -215,22 +215,6 @@ class TileEngine: public GameState
       PlayerCharacter* getPlayerCharacter() const;
 
       /**
-       * Change the sprite frame of the specified NPC.
-       *
-       * @param npcName The name of the NPC to change.
-       * @param animationName The name of the animation to change to.
-       */
-      void setNPCAnimation(const std::string& npcName, const std::string& animationName);
-
-      /**
-       * Change the sprite frame of the specified NPC.
-       *
-       * @param npcName The name of the NPC to change.
-       * @param frameName The name of the frame to change to.
-       */
-      void setNPCSprite(const std::string& npcName, const std::string& frameName);
-
-      /**
        * Change the spritesheet of the specified NPC.
        *
        * @param npcName The name of the NPC to change.

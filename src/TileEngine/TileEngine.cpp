@@ -175,18 +175,6 @@ PlayerCharacter* TileEngine::getPlayerCharacter() const
    return playerEntity;
 }
 
-void TileEngine::setNPCSprite(const std::string& npcName, const std::string& frameName)
-{
-   NPC* npcToChange = npcList[npcName];
-   npcToChange->setFrame(frameName);
-}
-
-void TileEngine::setNPCAnimation(const std::string& npcName, const std::string& animationName)
-{
-   NPC* npcToChange = npcList[npcName];
-   npcToChange->setAnimation(animationName);
-}
-
 void TileEngine::changeNPCSpritesheet(const std::string& npcName, const std::string& spritesheetName)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);

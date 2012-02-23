@@ -65,16 +65,6 @@ static int luaDelay(lua_State* luaVM)
    return getEngine(luaVM)->delay(luaVM);
 }
 
-static int luaNPCSetSprite(lua_State* luaVM)
-{
-   return getEngine(luaVM)->setNPCSprite(luaVM);
-}
-
-static int luaNPCSetAnimation(lua_State* luaVM)
-{
-   return getEngine(luaVM)->setNPCAnimation(luaVM);
-}
-
 static int luaNPCChangeSpritesheet(lua_State* luaVM)
 {
    return getEngine(luaVM)->changeNPCSpritesheet(luaVM);
@@ -102,8 +92,6 @@ void ScriptEngine::registerFunctions()
 
    // Tile Engine functions
    REGISTER("setRegion", luaSetRegion);
-   REGISTER("setSprite", luaNPCSetSprite);
-   REGISTER("setAnimation", luaNPCSetAnimation);
    REGISTER("changeSpritesheet", luaNPCChangeSpritesheet);
    REGISTER("lookAtPlayer", luaNPCLookAtPlayer);
 }

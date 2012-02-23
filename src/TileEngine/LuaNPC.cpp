@@ -32,9 +32,53 @@ static int NPCL_Move(lua_State* luaVM)
    return 0;
 }
 
+static int NPCL_SetSprite(lua_State* luaVM)
+{
+   int nargs = lua_gettop(luaVM);
+   
+   switch(nargs)
+   {
+      case 2:
+      {
+         NPC* npc = luaW_check<NPC>(luaVM, 1);
+         if (npc)
+         {
+            std::string frameName(lua_tostring(luaVM, 2));
+            npc->setFrame(frameName);
+         }
+         break;
+      }
+   }
+   
+   return 0;
+}
+
+static int NPCL_SetAnimation(lua_State* luaVM)
+{
+   int nargs = lua_gettop(luaVM);
+   
+   switch(nargs)
+   {
+      case 2:
+      {
+         NPC* npc = luaW_check<NPC>(luaVM, 1);
+         if (npc)
+         {
+            std::string animationName(lua_tostring(luaVM, 2));
+            npc->setAnimation(animationName);
+         }
+         break;
+      }
+   }
+   
+   return 0;
+}
+
 static luaL_reg npcMetatable[] =
 {
    { "move", NPCL_Move },
+   { "setSprite", NPCL_SetSprite },
+   { "setAnimation", NPCL_SetAnimation },
    { NULL, NULL }
 };
 
