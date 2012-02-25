@@ -12,15 +12,14 @@
 
 class Obstacle;
 class Map;
-class NPC;
-class PlayerCharacter;
+class Actor;
 struct Point2D;
 struct Rectangle;
 
 /**
  * The Pathfinder class binds to a Map and stores the locations of entities.
  * In doing so, it applies pathfinding algorithms to dynamically compute best paths around entities on the map.
- * Pathfinder instances provide an interface to entities like the NPC and PlayerCharacter to detect collisions and route around them.
+ * Pathfinder instances provide an interface to entities like the actor and PlayerCharacter to detect collisions and route around them.
  *
  * @author Noam Chitayat
  */
@@ -34,11 +33,8 @@ class Pathfinder
       /** No entity is on the tile */
       FREE,
 
-      /** A non-player character is on the tile */
-      NPC_CHARACTER,
-      
-      /** The player character is on the tile */
-      PLAYER_CHARACTER,
+      /** A character is on the tile */
+      ACTOR,
       
       /** An obstacle (or impassable terrain) is on the tile */
       OBSTACLE,
@@ -307,111 +303,98 @@ class Pathfinder
       bool addObstacle(Point2D area, int width, int height);
 
       /**
-       * Add an NPC and occupy the tiles under it.
+       * Add an Actor and occupy the tiles under it.
        * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
        *
-       * @param npc The NPC to add.
-       * @param area The coordinates of the top-left corner of the NPC (in pixels)
-       * @param width The width of the NPC (in pixels)
-       * @param height The height of the NPC (in pixels)
+       * @param actor The actor to add.
+       * @param area The coordinates of the top-left corner of the actor (in pixels)
+       * @param width The width of the actor (in pixels)
+       * @param height The height of the actor (in pixels)
        *
-       * @return true if the NPC has been successfully placed in the area, false if there was something else in the area.
+       * @return true if the actor has been successfully placed in the area, false if there was something else in the area.
        */
-      bool addNPC(NPC* npc, Point2D area, int width, int height);
-      
-      /**
-       * Add the player and occupy the tiles under it.
-       * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
-       *
-       * @param player The player character instance.
-       * @param area The coordinates of the top-left corner of the player character (in pixels)
-       * @param width The width of the player character (in pixels)
-       * @param height The height of the player character (in pixels)
-       *
-       * @return true if the player character has been successfully placed in the area, false if there was something else in the area.
-       */
-      bool addPlayer(PlayerCharacter* player, Point2D area, int width, int height);
+      bool addActor(Actor* actor, Point2D area, int width, int height);
 
       /**
-       * Change the player location, if the destination tiles are available to occupy.
+       * Change the actor location, if the destination tiles are available to occupy.
        * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the destination from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
        *
-       * @param player The player character instance.
+       * @param actor The actor to relocate.
        * @param area The coordinates of the top-left corner of the player character (in pixels)
        * @param width The width of the player character (in pixels)
        * @param height The height of the player character (in pixels)
        *
        * @return true if the player character has been successfully moved to the destination, false if there was something else in the destination.
        */
-      bool changePlayerLocation(PlayerCharacter* player, Point2D src, Point2D dst, int width, int height);
+      bool changeActorLocation(Actor* actor, Point2D src, Point2D dst, int width, int height);
 
       /**
        * Remove the player and free the tiles under it.
        *
-       * @param player The player character instance.
+       * @param actor The actor that is being removed.
        * @param area The prior coordinates of the top-left corner of the player character (in pixels)
-       * @param width The width of the player character (in pixels)
-       * @param height The height of the player character (in pixels)
+       * @param width The width of the actor (in pixels)
+       * @param height The height of the actor (in pixels)
        */
-      void removePlayer(PlayerCharacter* player, Point2D currentLocation, int width, int height);
+      void removeActor(Actor* actor, Point2D currentLocation, int width, int height);
 
       /**
        * Given the distance the entity can move and the direction, moves as far as possible until an obstacle is encountered.
        *
-       * @param player The player character instance.
-       * @param playerWidth The width of the player character (in pixels)
-       * @param playerHeight The height of the player character (in pixels)
+       * @param actor The actor to move.
+       * @param width The width of the actor (in pixels)
+       * @param height The height of the actor (in pixels)
        * @param xDirection The direction moved on the x-axis.
        * @param yDirection The direction moved on the y-axis.
        * @param distance The total distance that the player character can be moved in this call.
        */
-      void moveToClosestPoint(PlayerCharacter* player, int playerWidth, int playerHeight, int xDirection, int yDirection, int distance);
+      void moveToClosestPoint(Actor* actor, int width, int height, int xDirection, int yDirection, int distance);
    
       /**
-       * Request permission from the Pathfinder to move an NPC from the source to the given destination.
-       * NOTE: After the NPC has completed this movement, endMovement MUST be called in order to notify the Pathfinder to perform the appropriate clean-up.
+       * Request permission from the Pathfinder to move an Actor from the source to the given destination.
+       * NOTE: After the actor has completed this movement, endMovement MUST be called in order to notify the Pathfinder to perform the appropriate clean-up.
        *
-       * @param npc The NPC that is moving.
+       * @param actor The actor that is moving.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
-       * @param width Width of the NPC.
-       * @param height Height of the NPC.
+       * @param width Width of the actor.
+       * @param height Height of the actor.
        *
-       * @return true iff the NPC can move from the source to the destination.
+       * @return true iff the actor can move from the source to the destination.
        */
-      bool beginMovement(NPC* npc, Point2D src, Point2D dst, int width, int height);
+      bool beginMovement(Actor* actor, Point2D src, Point2D dst, int width, int height);
       
       /**
-       * Notifies the Pathfinder that the NPC failed to complete movement from the source to the given destination and occupies some area between the source and destination.
+       * Notifies the Pathfinder that the actor failed to complete movement from the source to the given destination and occupies some area between the source and destination.
        *
-       * @param npc The NPC that was moving.
+       * @param actor The actor that was moving.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the original destination (in pixels).
        * @param currentLocation The coordinates that the entity is currently occupying (in pixels).
-       * @param width Width of the NPC that moved.
-       * @param height Height of the NPC that moved.
+       * @param width Width of the actor that moved.
+       * @param height Height of the actor that moved.
        */
-      void abortMovement(NPC* npc, Point2D src, Point2D dst, Point2D currentLocation, int width, int height);
+      void abortMovement(Actor* actor, Point2D src, Point2D dst, Point2D currentLocation, int width, int height);
       
       /**
-       * Notifies the Pathfinder that the NPC moved successfully from the source to the given destination and no longer occupies the source coordinates.
+       * Notifies the Pathfinder that the actor moved successfully from the source to the given destination and no longer occupies the source coordinates.
        *
-       * @param npc The NPC that was moving.
+       * @param actor The actor that was moving.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
-       * @param width Width of the NPC that moved.
-       * @param height Height of the NPC that moved.
+       * @param width Width of the actor that moved.
+       * @param height Height of the actor that moved.
        */
-      void endMovement(NPC* npc, Point2D src, Point2D dst, int width, int height);
+      void endMovement(Actor* actor, Point2D src, Point2D dst, int width, int height);
 
       /**
-       * Gets the NPC occupying the specified area, if one exists.
+       * Gets the actor occupying the specified area, if one exists.
        *
        * @param location The coordinates of the top left corner of the area to search.
        * @param width The width of the area to search
        * @param height The height of the area to search
        */
-      NPC* getOccupantNPC(Point2D location, int width, int height) const;
+      Actor* getOccupantActor(Point2D location, int width, int height) const;
    
       /**
        * Draw the collision map for diagnostic purposes.
@@ -434,7 +417,7 @@ class Pathfinder
 
       /**
        * Uses the successor matrix computed on Pathfinder construction to determine the best path.
-       * This path does not take into account moving entities like NPCs or the player, and does not take dynamically added obstacles into account.
+       * This path does not take into account moving entities like Actors or the player, and does not take dynamically added obstacles into account.
        *
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).

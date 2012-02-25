@@ -29,7 +29,7 @@ const int TileEngine::TILE_SIZE = 32;
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath)
 : GameState(executionStack), xMapOffset(0), yMapOffset(0)
 {
-   playerEntity = new PlayerCharacter(currMap, ResourceLoader::getSpritesheet("npc1"));
+   playerActor = new PlayerCharacter(currMap, "npc1");
    scriptEngine = new ScriptEngine(*this, playerData, scheduler);
    dialogue = new DialogueController(*top, scheduler, *scriptEngine);
    consoleWindow = new edwt::DebugConsoleWindow(top, top->getWidth(), top->getHeight() * 0.2);
@@ -44,7 +44,7 @@ TileEngine::~TileEngine()
    delete consoleWindow;
    delete dialogue;
    delete scriptEngine;
-   delete playerEntity;
+   delete playerActor;
 }
 
 void TileEngine::loadPlayerData(const std::string& path)
@@ -89,7 +89,7 @@ bool TileEngine::setRegion(const std::string& regionName, const std::string& map
 
 void TileEngine::setMap(std::string mapName)
 {
-   playerEntity->removeFromMap();
+   playerActor->removeFromMap();
 
    DEBUG("Setting map...");
    if(!mapName.empty())
@@ -144,12 +144,11 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
    
    if(currMap.isAreaFree(npcLocation, 32, 32))
    {
-      Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
-      npcToAdd = new NPC(*scriptEngine, scheduler, npcName, sheet,
+      npcToAdd = new NPC(*scriptEngine, scheduler, npcName, spritesheetName,
                                  currMap, currRegion->getName(),
                                  npcLocation.x, npcLocation.y);
       npcList[npcName] = npcToAdd;
-      currMap.addNPC(npcToAdd, npcLocation, 32, 32);
+      currMap.addActor(npcToAdd, npcLocation, 32, 32);
    }
    else
    {
@@ -172,50 +171,7 @@ NPC* TileEngine::getNPC(const std::string& npcName) const
 
 PlayerCharacter* TileEngine::getPlayerCharacter() const
 {
-   return playerEntity;
-}
-
-void TileEngine::changeNPCSpritesheet(const std::string& npcName, const std::string& spritesheetName)
-{
-   Spritesheet* sheet = ResourceLoader::getSpritesheet(spritesheetName);
-   NPC* npcToChange = npcList[npcName];
-   npcToChange->setSpritesheet(sheet);
-}
-
-void TileEngine::turnNPCTowardsPlayer(const std::string& npcName)
-{
-   NPC* npcToChange = npcList[npcName];
-   Point2D playerLocation = playerEntity->getLocation();
-   Point2D npcLocation = npcToChange->getLocation();
-   MovementDirection directionToPlayer = npcToChange->getDirection();
-   
-   int xDiff = npcLocation.x - playerLocation.x;
-   int yDiff = npcLocation.y - playerLocation.y;
-   
-   if(abs(xDiff) > abs(yDiff))
-   {
-      if(xDiff < 0)
-      {
-         directionToPlayer = RIGHT;
-      }
-      else if(xDiff > 0)
-      {
-         directionToPlayer = LEFT;
-      }  
-   }
-   else
-   {
-      if(yDiff < 0)
-      {
-         directionToPlayer = DOWN;
-      }
-      else if(yDiff > 0)
-      {
-         directionToPlayer = UP;
-      }
-   }
-
-   npcToChange->stand(directionToPlayer);
+   return playerActor;
 }
 
 void TileEngine::stepNPCs(long timePassed)
@@ -254,7 +210,7 @@ void TileEngine::draw()
       }
 
       drawNPCs();
-      playerEntity->draw();
+      playerActor->draw();
    GraphicsUtil::getInstance()->resetOffset();
 }
 
@@ -274,7 +230,7 @@ bool TileEngine::step()
 
    handleInputEvents(done);
 
-   playerEntity->step(timePassed);
+   playerActor->step(timePassed);
 
    currMap.step(timePassed);
 
@@ -373,8 +329,8 @@ void TileEngine::handleInputEvents(bool& finishState)
 
 void TileEngine::action()
 {
-   Point2D activationLocation = playerEntity->getLocation();
-   switch(playerEntity->getDirection())
+   Point2D activationLocation = playerActor->getLocation();
+   switch(playerActor->getDirection())
    {
       case UP_LEFT:
       case LEFT:
@@ -396,7 +352,7 @@ void TileEngine::action()
       }   
    }
 
-   switch(playerEntity->getDirection())
+   switch(playerActor->getDirection())
    {
       case UP_RIGHT:
       case UP:
@@ -420,7 +376,7 @@ void TileEngine::action()
    
    if(currMap.withinMap(activationLocation))
    {
-      NPC* npcToActivate = currMap.getOccupantNPC(activationLocation, TILE_SIZE, TILE_SIZE);
+      NPC* npcToActivate = static_cast<NPC*>(currMap.getOccupantActor(activationLocation, TILE_SIZE, TILE_SIZE));
       if(npcToActivate != NULL)
       {
          npcToActivate->activate();

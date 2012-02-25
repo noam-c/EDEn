@@ -17,7 +17,7 @@
 #include "ScriptFactory.h"
 
 #include "LuaPlayerCharacter.h"
-#include "LuaNPC.h"
+#include "LuaActor.h"
 #include "LuaTileEngine.h"
 
 #include "LuaWrapper.hpp"
@@ -61,11 +61,11 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
    luaW_push<TileEngine>(luaVM, &tileEngine);
    lua_setglobal(luaVM, "map");
    
+   luaopen_Actor(luaVM);
+
    luaopen_PlayerCharacter(luaVM);
    luaW_push<PlayerCharacter>(luaVM, tileEngine.getPlayerCharacter());
    lua_setglobal(luaVM, "player");
-
-   luaopen_NPC(luaVM);
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
@@ -185,7 +185,6 @@ int ScriptEngine::stopMusic(lua_State* luaStack)
 
 int ScriptEngine::delay(lua_State* luaStack)
 {
-   int nargs = lua_gettop(luaStack);
    long timeToWait = (long)lua_tonumber(luaStack, 1);
    DEBUG("Waiting %d milliseconds", timeToWait);
    
@@ -243,41 +242,6 @@ int ScriptEngine::setRegion(lua_State* luaStack)
 
       std::string mapName = tileEngine.getMapName();
       return runMapScript(regionName, mapName);
-   }
-
-   return 0;
-}
-
-int ScriptEngine::changeNPCSpritesheet(lua_State* luaStack)
-{
-   int nargs = lua_gettop(luaStack);
-
-   switch(nargs)
-   {
-      case 2:
-      {
-         std::string spritesheetName(lua_tostring(luaStack, 2));
-         std::string npcName(lua_tostring(luaStack, 1));
-         tileEngine.changeNPCSpritesheet(npcName, spritesheetName);
-         break;
-      }
-   }
-
-   return 0;
-}
-
-int ScriptEngine::turnNPCTowardsPlayer(lua_State* luaStack)
-{
-   int nargs = lua_gettop(luaStack);
-   
-   switch(nargs)
-   {
-      case 1:
-      {
-         std::string npcName(lua_tostring(luaStack, 1));
-         tileEngine.turnNPCTowardsPlayer(npcName);
-         break;
-      }
    }
 
    return 0;

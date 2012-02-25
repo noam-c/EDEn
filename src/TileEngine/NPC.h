@@ -7,18 +7,11 @@
 #ifndef NPC_H
 #define NPC_H
 
-#include <queue>
-#include <string>
+#include "Actor.h"
 
-#include "MovementDirection.h"
-#include "Point2D.h"
-
-class Pathfinder;
 class NPCScript;
 class Scheduler;
 class ScriptEngine;
-class Sprite;
-class Spritesheet;
 
 /**
  * An NPC (non-player character) is an animate being on the map that can
@@ -30,58 +23,24 @@ class Spritesheet;
  * the scripting engine.
  *
  * How NPCs work:
- * NPCs contain NPCThreads, which are separate entities that managed the
- * thread/script state of an NPC's AI behaviour. An NPCThread contains (for now)
- * and runs an NPCScript based on whether or not the script is currently in the
- * middle of a run or if the NPC itself currently has instructions to work on.
+ * NPCs contain NPCScripts, which are separate coroutines that manage the
+ * script state of an NPC's AI behaviour. An NPCScript runs based on whether 
+ * or not the script is currently in the middle of a run or if the NPC itself
+ * currently has instructions to work on.
  * If the script is not running and the NPC is idle, the NPCThread runs the
  * NPC's idle function (if it exists).
- * The NPC itself is updated by the TileEngine, and the NPCThread is given time
+ * The NPC itself is updated by Lua bindings, and the NPCThread is given time
  * to run by the Scheduler as necessary, and updates the NPC's instruction queue
- * via the script instructions (which don't exist yet, but will).
- *
- * \todo Update this documentation when NPCThread and NPCScript are merged.
+ * via the script instructions.
  *
  * @author Noam Chitayat
  */
-class NPC
+class NPC : public Actor
 {
-   /**
-    * A class for asynchronous NPC instructions.
-    */
-   class Order;
-   class MoveOrder;
-   class StandOrder;
-
-   /** A queue of orders for the NPC to perform */
-   std::queue<Order*> orders;
-
-   /** The NPC's associated sprite, which is drawn on screen. */
-   Sprite* sprite;
 
    /** The NPC's thread of execution */
    NPCScript* npcThread;
 
-   /** The NPC's name */
-   std::string name;
-
-   /** The map which this NPC interacts with */
-   Pathfinder& pathfinder;
-
-   /** The current location of the NPC (in pixels) */
-   Point2D pixelLoc;
-
-   /** The direction that the NPC is currently facing */
-   MovementDirection currDirection;
-   
-   /** The movement speed of the NPC */
-   float movementSpeed;
-
-   /**
-    * Clears the queue of NPC orders.
-    */
-   void flushOrders();
-   
    public:
       /**
        * Constructor for the NPC.
@@ -91,40 +50,13 @@ class NPC
        * @param engine The scripting engine that provides the NPC's coroutine.
        * @param scheduler The scheduler that owns the NPC's coroutine
        * @param name The name of the NPC (must also be the name of its script).
-       * @param sheet The spritesheet to use for rendering the NPC.
+       * @param sheetName The name of the spritesheet to use for rendering the NPC.
        * @param pathfinder The map that this NPC will be interacting in.
        * @param regionName The name of the region that this NPC is interacting in.
        * @param x The x-location (in pixels) where the NPC will start off.
        * @param y The y-location (in pixels) where the NPC will start off.
        */
-      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, Spritesheet* sheet, Pathfinder& pathfinder, const std::string& regionName, int x, int y);
-
-      /**
-       * @return The name of this NPC.
-       */
-      std::string getName() const;
-
-      /**
-       * A logic step for the NPC. Every frame, the NPC works on completing a
-       * queued instruction (instructions may take several frames), and notifies
-       * the scripting engine when the queue is empty. This function also alters
-       * the sprite animation frame and NPC location.
-       */
-      void step();
-
-      /**
-       * Performs a logic step of this NPC. During the step, the NPC works on
-       * enqueued Instructions if there are any.
-       *
-       * @param timePassed The amount of time that has passed since the last frame.
-       */
-      void step(long timePassed);
-
-      /**
-       * @return true iff the NPC is not chewing on any instructions
-       *              (i.e. it is doing absolutely nothing)
-       */
-      bool isIdle() const;
+      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName, Pathfinder& pathfinder, const std::string& regionName, int x, int y);
 
       /**
        * The NPC is currently not doing anything, nor has it been asked to do
@@ -143,88 +75,6 @@ class NPC
        * player, etc.  
        */
       void activate();
-
-      /**
-       * This function draws the NPC in its current location with its current
-       * sprite animation frame.
-       */
-      void draw();
-   
-      /**
-       * This function enqueues an instruction to stand facing a specified direction.
-       *
-       * @param The direction for the NPC to face when standing.
-       */
-      void stand(MovementDirection direction);
-
-      /**
-       * This function enqueues a movement instruction.
-       *
-       * @param x The x coordinate (in pixels) for the NPC to move to
-       * @param y The y coordinate (in pixels) for the NPC to move to
-       */
-      void move(int x, int y);
-
-      /**
-       * This function changes the NPC's spritesheet.
-       *
-       * @param spritesheet A valid spritesheet.
-       */
-      void setSpritesheet(Spritesheet* sheet);
-
-      /**
-       * This function changes the NPC's frame.
-       *
-       * @param frameName The name of the frame to use.
-       */
-      void setFrame(const std::string& frameName);
-
-      /**
-       * This function changes the NPC's animation.
-       *
-       * @param animationName The name of the animation to use.
-       *
-       */
-      void setAnimation(const std::string& animationName);
-   
-      /**
-       * Change the location of the NPC.
-       * NOTE: This method is used for instantly changing the
-       * location of the NPC. To have the NPC move to a new location,
-       * please invoke NPC::move instead.
-       *
-       * @param location The new location of the NPC.
-       */
-      void setLocation(Point2D location);
-      
-      /**
-       * @return The location of the NPC.
-       */
-      Point2D getLocation() const;
-      
-      /**
-       * This function changes the direction that the NPC is facing.
-       *
-       * @param direction The new direction for the NPC to face.
-       */
-      void setDirection(MovementDirection direction);
-   
-      /**
-       * @return The direction that the NPC is currently facing.
-       */
-      MovementDirection getDirection() const;
-   
-      /**
-       * This function changes the movement speed of the NPC.
-       *
-       * @param speed The new movement speed of the NPC.
-       */
-      void setMovementSpeed(float speed);
-   
-      /**
-       * @return The current movement speed of the NPC.
-       */
-      float getMovementSpeed() const;
    
       /**
        * Destructor.

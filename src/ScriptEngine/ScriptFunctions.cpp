@@ -65,16 +65,6 @@ static int luaDelay(lua_State* luaVM)
    return getEngine(luaVM)->delay(luaVM);
 }
 
-static int luaNPCChangeSpritesheet(lua_State* luaVM)
-{
-   return getEngine(luaVM)->changeNPCSpritesheet(luaVM);
-}
-
-static int luaNPCLookAtPlayer(lua_State* luaVM)
-{
-   return getEngine(luaVM)->turnNPCTowardsPlayer(luaVM);
-}
-
 static int luaRandom(lua_State* luaVM)
 {
    return getEngine(luaVM)->generateRandom(luaVM);
@@ -92,6 +82,4 @@ void ScriptEngine::registerFunctions()
 
    // Tile Engine functions
    REGISTER("setRegion", luaSetRegion);
-   REGISTER("changeSpritesheet", luaNPCChangeSpritesheet);
-   REGISTER("lookAtPlayer", luaNPCLookAtPlayer);
 }

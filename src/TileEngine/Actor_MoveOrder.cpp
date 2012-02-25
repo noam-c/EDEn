@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#include "NPC.h"
-#include "NPC_Orders.h"
+#include "Actor.h"
+#include "Actor_Orders.h"
 #include "GLInclude.h"
 #include "TileEngine.h"
 #include "Map.h"
@@ -15,39 +15,39 @@ const int debugFlag = DEBUG_NPC;
 
 //#define DRAW_PATH
 
-NPC::MoveOrder::MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& pathfinder)
-: Order(npc), pathInitialized(false), movementBegun(false), dst(destination), pathfinder(pathfinder)
+Actor::MoveOrder::MoveOrder(Actor& actor, const Point2D& destination, Pathfinder& pathfinder)
+: Order(actor), pathInitialized(false), movementBegun(false), dst(destination), pathfinder(pathfinder)
 {
 }
 
-NPC::MoveOrder::~MoveOrder()
+Actor::MoveOrder::~MoveOrder()
 {
    if(movementBegun)
    {
-      pathfinder.abortMovement(&npc, lastWaypoint, nextWaypoint, npc.getLocation(), 32, 32);
+      pathfinder.abortMovement(&actor, lastWaypoint, nextWaypoint, actor.getLocation(), 32, 32);
    }
 }
 
-void NPC::MoveOrder::updateDirection(MovementDirection newDirection, bool moving)
+void Actor::MoveOrder::updateDirection(MovementDirection newDirection, bool moving)
 {
-   npc.setDirection(newDirection);
+   actor.setDirection(newDirection);
    if(moving)
    {
-      npc.setAnimation(WALKING_PREFIX);
+      actor.setAnimation(WALKING_PREFIX);
    }
    else
    {
-      npc.setFrame(STANDING_PREFIX);
+      actor.setFrame(STANDING_PREFIX);
    }
 }
 
-void NPC::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& direction)
+void Actor::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& direction)
 {
    lastWaypoint = location;
    nextWaypoint = path.front();
    
    // Set the direction based on where the next tile is relative to the current location.
-   // For now, when the NPC must move diagonally, it will always face up or down
+   // For now, when the Actor must move diagonally, it will always face up or down
    if(location.y < nextWaypoint.y)
    {
       direction = DOWN;
@@ -66,17 +66,17 @@ void NPC::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& dir
    }
 }
 
-bool NPC::MoveOrder::perform(long timePassed)
+bool Actor::MoveOrder::perform(long timePassed)
 {
-   Point2D location = npc.getLocation();
-   MovementDirection newDirection = npc.getDirection();
-   const float vel = npc.getMovementSpeed();
+   Point2D location = actor.getLocation();
+   MovementDirection newDirection = actor.getDirection();
+   const float vel = actor.getMovementSpeed();
    long distanceCovered = timePassed * vel;
    
    // If first run, get the best computed path (RFW), end frame
    // loop infinitely
    //      if there is no next vertex
-   //          if NPC is at the destination
+   //          if Actor is at the destination
    //             end task
    //          else
    //             create a rerouted path (A*)
@@ -110,8 +110,8 @@ bool NPC::MoveOrder::perform(long timePassed)
    {
       if(path.empty())
       {
-         updateDirection(npc.getDirection(), false);
-         npc.setLocation(location);
+         updateDirection(actor.getDirection(), false);
+         actor.setLocation(location);
          if(location != dst)
          {
             path = pathfinder.findReroutedPath(location, dst, 32, 32);
@@ -123,12 +123,12 @@ bool NPC::MoveOrder::perform(long timePassed)
       
       if(!movementBegun)
       {
-         movementBegun = pathfinder.beginMovement(&npc, location, path.front(), 32, 32);
+         movementBegun = pathfinder.beginMovement(&actor, location, path.front(), 32, 32);
          if(!movementBegun)
          {
             path = pathfinder.findReroutedPath(location, dst, 32, 32);
-            updateDirection(npc.getDirection(), false);
-            npc.setLocation(location);
+            updateDirection(actor.getDirection(), false);
+            actor.setLocation(location);
             return false;
          }
 
@@ -141,7 +141,7 @@ bool NPC::MoveOrder::perform(long timePassed)
       
       if (distanceCovered < stepDistance)
       {
-         // The NPC will not be able to make it to the next waypoint in this frame
+         // The Actor will not be able to make it to the next waypoint in this frame
          // Move towards the waypoint as much as possible.
          if(location.x < nextWaypoint.x)
          {
@@ -166,15 +166,15 @@ bool NPC::MoveOrder::perform(long timePassed)
          }
          
          // Movement for this frame is finished
-         npc.setLocation(location);
+         actor.setLocation(location);
          return false;
       }
       
-      // The NPC can reach the next waypoint in this frame
+      // The Actor can reach the next waypoint in this frame
       distanceCovered -= stepDistance;
       
       DEBUG("Reached waypoint %d,%d", nextWaypoint.x, nextWaypoint.y);
-      pathfinder.endMovement(&npc, lastWaypoint, nextWaypoint, 32, 32);
+      pathfinder.endMovement(&actor, lastWaypoint, nextWaypoint, 32, 32);
       movementBegun = false;
 
       // Update the current waypoint and dequeue it from the path
@@ -185,7 +185,7 @@ bool NPC::MoveOrder::perform(long timePassed)
    return false;
 }
 
-void NPC::MoveOrder::draw()
+void Actor::MoveOrder::draw()
 {
 #if DRAW_PATH
    if(path.empty()) return;

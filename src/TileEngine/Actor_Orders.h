@@ -4,16 +4,16 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef NPC_ORDER_H
-#define NPC_ORDER_H
+#ifndef ACTOR_ORDER_H
+#define ACTOR_ORDER_H
 
 #include "Pathfinder.h"
 
-class NPC::Order
+class Actor::Order
 {
    protected:
-      NPC& npc;
-      Order(NPC& npc) : npc(npc) {}
+      Actor& actor;
+      Order(Actor& actor) : actor(actor) {}
    
    public:
       virtual bool perform(long timePassed) = 0;
@@ -21,16 +21,16 @@ class NPC::Order
       virtual ~Order() {}
 };
 
-class NPC::StandOrder : public NPC::Order
+class Actor::StandOrder : public Actor::Order
 {
    MovementDirection direction;
 
    public:
-      StandOrder(NPC& npc, MovementDirection direction);
+      StandOrder(Actor& actor, MovementDirection direction);
       bool perform(long timePassed);
 };
 
-class NPC::MoveOrder : public NPC::Order
+class Actor::MoveOrder : public Actor::Order
 {
    bool pathInitialized;
    bool movementBegun;
@@ -44,7 +44,7 @@ class NPC::MoveOrder : public NPC::Order
    void updateNextWaypoint(Point2D location, MovementDirection& direction);
 
    public:
-      MoveOrder(NPC& npc, const Point2D& destination, Pathfinder& pathfinder);
+      MoveOrder(Actor& actor, const Point2D& destination, Pathfinder& pathfinder);
       ~MoveOrder();
       bool perform(long timePassed);
       void draw();

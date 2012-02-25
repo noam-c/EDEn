@@ -154,8 +154,6 @@ class ScriptEngine
 
       ///////////////// Tile engine functions /////////////////
       int setRegion(lua_State* luaStack);
-      int changeNPCSpritesheet(lua_State* luaStack);
-      int turnNPCTowardsPlayer(lua_State* luaStack);
 };
 
 #endif

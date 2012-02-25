@@ -11,7 +11,7 @@
 #include "TileEngine.h"
 #include "Point2D.h"
 #include "Rectangle.h"
-#include "PlayerCharacter.h"
+#include "Actor.h"
 #include "GLInclude.h"
 #include "stdlib.h"
 #include <limits>
@@ -491,29 +491,24 @@ bool Pathfinder::addObstacle(Point2D area, int width, int height)
    return occupyArea(area, width, height, TileState(OBSTACLE));
 }
 
-bool Pathfinder::addNPC(NPC* npc, Point2D area, int width, int height)
+bool Pathfinder::addActor(Actor* actor, Point2D area, int width, int height)
 {
-   return occupyArea(area, width, height, TileState(NPC_CHARACTER, npc));
+   return occupyArea(area, width, height, TileState(ACTOR, actor));
 }
 
-bool Pathfinder::addPlayer(PlayerCharacter* player, Point2D area, int width, int height)
+bool Pathfinder::changeActorLocation(Actor* actor, Point2D src, Point2D dst, int width, int height)
 {
-   return occupyArea(area, width, height, TileState(PLAYER_CHARACTER, player));
-}
-
-bool Pathfinder::changePlayerLocation(PlayerCharacter* player, Point2D src, Point2D dst, int width, int height)
-{
-   TileState playerState(PLAYER_CHARACTER, player);
-   if(occupyArea(dst, width, height, playerState))
+   TileState actorState(ACTOR, actor);
+   if(occupyArea(dst, width, height, actorState))
    {
-      freeArea(src, dst, width, height, playerState);
+      freeArea(src, dst, width, height, actorState);
       return true;
    }
 
    return false;
 }
 
-void Pathfinder::removePlayer(PlayerCharacter* player, Point2D currentLocation, int width, int height)
+void Pathfinder::removeActor(Actor* actor, Point2D currentLocation, int width, int height)
 {
    freeArea(currentLocation, width, height);
 }
@@ -607,14 +602,14 @@ bool Pathfinder::isAreaFree(Point2D area, int width, int height) const
    return true;
 }
 
-void Pathfinder::moveToClosestPoint(PlayerCharacter* player, int playerWidth, int playerHeight, int xDirection, int yDirection, int distance)
+void Pathfinder::moveToClosestPoint(Actor* actor, int width, int height, int xDirection, int yDirection, int distance)
 {
    if(xDirection == 0 && yDirection == 0) return;
    if(distance == 0) return;
 
-   TileState playerState(PLAYER_CHARACTER, player);
+   TileState playerState(ACTOR, actor);
 
-   const Point2D source = player->getLocation();
+   const Point2D source = actor->getLocation();
    
    const int mapPixelWidth = (collisionMapWidth - 1) * MOVEMENT_TILE_SIZE;
    const int mapPixelHeight = (collisionMapHeight - 1) * MOVEMENT_TILE_SIZE; 
@@ -642,7 +637,7 @@ void Pathfinder::moveToClosestPoint(PlayerCharacter* player, int playerWidth, in
          break;
       }
 
-      if(!canOccupyArea(nextPoint, playerWidth, playerHeight, playerState))
+      if(!canOccupyArea(nextPoint, width, height, playerState))
       {
          break;
       }
@@ -653,35 +648,35 @@ void Pathfinder::moveToClosestPoint(PlayerCharacter* player, int playerWidth, in
    
    if(lastAvailablePoint != source)
    {
-      if(!occupyArea(lastAvailablePoint, playerWidth, playerHeight, playerState))
+      if(!occupyArea(lastAvailablePoint, width, height, playerState))
       {
          // If updating failed, just stick with the start location
-         occupyArea(source, playerWidth, playerHeight, playerState);
+         occupyArea(source, width, height, playerState);
       }
       else
       {
          // If we moved, update the map accordingly
-         freeArea(source, lastAvailablePoint, playerWidth, playerHeight, playerState);
+         freeArea(source, lastAvailablePoint, width, height, playerState);
 
-         player->setLocation(lastAvailablePoint);
+         actor->setLocation(lastAvailablePoint);
       }
    }
 }
 
-bool Pathfinder::beginMovement(NPC* npc, Point2D src, Point2D dst, int width, int height)
+bool Pathfinder::beginMovement(Actor* actor, Point2D src, Point2D dst, int width, int height)
 {
-   return occupyArea(dst, width, height, TileState(NPC_CHARACTER, npc));
+   return occupyArea(dst, width, height, TileState(ACTOR, actor));
 }
 
-void Pathfinder::abortMovement(NPC* npc, Point2D src, Point2D dst, Point2D currentLocation, int width, int height)
+void Pathfinder::abortMovement(Actor* actor, Point2D src, Point2D dst, Point2D currentLocation, int width, int height)
 {
-   freeArea(src, currentLocation, width, height, TileState(NPC_CHARACTER, npc));
-   freeArea(dst, currentLocation, width, height, TileState(NPC_CHARACTER, npc));
+   freeArea(src, currentLocation, width, height, TileState(ACTOR, actor));
+   freeArea(dst, currentLocation, width, height, TileState(ACTOR, actor));
 }
 
-void Pathfinder::endMovement(NPC* npc, Point2D src, Point2D dst, int width, int height)
+void Pathfinder::endMovement(Actor* actor, Point2D src, Point2D dst, int width, int height)
 {
-   freeArea(src, dst, width, height, TileState(NPC_CHARACTER, npc));
+   freeArea(src, dst, width, height, TileState(ACTOR, actor));
 }
 
 void Pathfinder::setArea(const Rectangle& area, TileState state)
@@ -697,7 +692,7 @@ void Pathfinder::setArea(const Rectangle& area, TileState state)
    }
 }
 
-NPC* Pathfinder::getOccupantNPC(Point2D location, int width, int height) const
+Actor* Pathfinder::getOccupantActor(Point2D location, int width, int height) const
 {
    if(collisionMap == NULL)
    {
@@ -714,9 +709,9 @@ NPC* Pathfinder::getOccupantNPC(Point2D location, int width, int height) const
       for(int collisionMapX = collisionMapLeft; collisionMapX <= collisionMapRight; ++collisionMapX)
       {
          const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX];
-         if(collisionTile.occupantType == NPC_CHARACTER)
+         if(collisionTile.occupantType == ACTOR)
          {
-            return reinterpret_cast<NPC*>(collisionTile.occupant);
+            return reinterpret_cast<Actor*>(collisionTile.occupant);
          }
       }
    }

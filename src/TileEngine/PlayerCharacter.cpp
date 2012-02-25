@@ -17,31 +17,16 @@ const int debugFlag = DEBUG_TILE_ENG;
 const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
-PlayerCharacter::PlayerCharacter(Pathfinder& map, Spritesheet* sheet)
-                                              : map(map), active(false), playerLocation(0, 0),
-                                                currDirection(DOWN)
+PlayerCharacter::PlayerCharacter(Pathfinder& map, const std::string& sheetName)
+                                              : Actor("player", sheetName, map, 0, 0, 1.0f, DOWN), active(false)
 {
-   sprite = new Sprite(sheet);
-}
-
-Point2D PlayerCharacter::getLocation() const
-{
-   return playerLocation;
-}
-
-void PlayerCharacter::setLocation(Point2D location)
-{
-   if(map.changePlayerLocation(this, playerLocation, location, 32, 32))
-   {
-      playerLocation = location;
-   }
 }
 
 void PlayerCharacter::addToMap(Point2D location)
 {
-   if(!active && map.addPlayer(this, location, 32, 32))
+   if(!active && pathfinder.addActor(this, location, 32, 32))
    {
-      playerLocation = location;
+      setLocation(location);
       active = true;
    }
 }
@@ -50,14 +35,9 @@ void PlayerCharacter::removeFromMap()
 {
    if(active)
    {
-      map.removePlayer(this, playerLocation, 32, 32);
+      pathfinder.removeActor(this, getLocation(), 32, 32);
       active = false;
    }
-}
-
-MovementDirection PlayerCharacter::getDirection() const
-{
-   return currDirection;
 }
 
 void PlayerCharacter::step(long timePassed)
@@ -65,7 +45,6 @@ void PlayerCharacter::step(long timePassed)
    if(!active) return;
 
    MovementDirection direction = NONE;
-   int speed = WALKING_SPEED;
    int xDirection = 0;
    int yDirection = 0;
 
@@ -98,30 +77,26 @@ void PlayerCharacter::step(long timePassed)
 
    bool moving = xDirection != 0 || yDirection != 0;
 
-   if(moving)   
+   if(moving)
    {
-      int distanceTraversed = speed * (timePassed / 5);
+      flushOrders();
+      int distanceTraversed = getMovementSpeed() * (timePassed / 5);
       sprite->setAnimation(WALKING_PREFIX, direction);
-      currDirection = direction;
-      map.moveToClosestPoint(this, 32, 32, xDirection, yDirection, distanceTraversed);
+      setDirection(direction);
+      pathfinder.moveToClosestPoint(this, 32, 32, xDirection, yDirection, distanceTraversed);
    }
-   else
+   else if(isIdle())
    {
-      sprite->setFrame(STANDING_PREFIX, currDirection);
+      sprite->setFrame(STANDING_PREFIX, getDirection());
    }
 
-   sprite->step(timePassed);
+   Actor::step(timePassed);
 }
 
 void PlayerCharacter::draw()
 {
    if(active)
    {
-      sprite->draw(playerLocation.x, playerLocation.y + TileEngine::TILE_SIZE);
+      Actor::draw();
    }
-}
-
-PlayerCharacter::~PlayerCharacter()
-{
-   delete sprite;               
 }

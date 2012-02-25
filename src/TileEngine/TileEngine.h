@@ -63,8 +63,8 @@ class TileEngine: public GameState
    /** The player data */
    PlayerData playerData;
 
-   /** The entity representing the player character on the map */
-   PlayerCharacter* playerEntity;
+   /** The actor representing the player character on the map */
+   PlayerCharacter* playerActor;
 
    /** A list of all NPCs in the map, identified by their names. */
    std::map<std::string, NPC*> npcList;
@@ -214,21 +214,6 @@ class TileEngine: public GameState
        */
       PlayerCharacter* getPlayerCharacter() const;
 
-      /**
-       * Change the spritesheet of the specified NPC.
-       *
-       * @param npcName The name of the NPC to change.
-       * @param spritesheetName The name of the spritesheet to use.
-       */
-      void changeNPCSpritesheet(const std::string& npcName, const std::string& spritesheetName);
-
-      /**
-       * Change the direction of the specified NPC so that it is facing the player character.
-       *
-       * @param npcName The name of the NPC to turn.
-       */
-      void turnNPCTowardsPlayer(const std::string& npcName);
-   
       /**
        * Destructor.
        */

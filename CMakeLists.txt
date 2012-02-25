@@ -146,11 +146,12 @@ set(HEADERS
   src/Sprites/Sprite.h
   src/Sprites/SpriteFrame.h
   src/Sprites/Spritesheet.h
+  src/TileEngine/Actor.h
+  src/TileEngine/Actor_Orders.h 
+  src/TileEngine/LuaActor.h
   src/TileEngine/DialogueController.h
   src/TileEngine/Map.h
   src/TileEngine/NPC.h
-  src/TileEngine/LuaNPC.h
-  src/TileEngine/NPC_Orders.h
   src/TileEngine/Obstacle.h
   src/TileEngine/Pathfinder.h
   src/TileEngine/PlayerCharacter.h
@@ -278,12 +279,13 @@ set(SOURCES
   src/Sprites/Sprite.cpp
   src/Sprites/SpriteFrame.cpp
   src/Sprites/Spritesheet.cpp
+  src/TileEngine/Actor.cpp
+  src/TileEngine/Actor_MoveOrder.cpp
+  src/TileEngine/Actor_StandOrder.cpp
+  src/TileEngine/LuaActor.cpp
   src/TileEngine/DialogueController.cpp
   src/TileEngine/Map.cpp
   src/TileEngine/NPC.cpp
-  src/TileEngine/LuaNPC.cpp
-  src/TileEngine/NPC_MoveOrder.cpp
-  src/TileEngine/NPC_StandOrder.cpp
   src/TileEngine/Obstacle.cpp
   src/TileEngine/PlayerCharacter.cpp
   src/TileEngine/LuaPlayerCharacter.cpp
