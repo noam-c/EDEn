@@ -150,6 +150,7 @@ set(HEADERS
   src/TileEngine/Actor_Orders.h 
   src/TileEngine/LuaActor.h
   src/TileEngine/DialogueController.h
+  src/TileEngine/EntityGrid.h
   src/TileEngine/Map.h
   src/TileEngine/NPC.h
   src/TileEngine/Obstacle.h
@@ -160,6 +161,7 @@ set(HEADERS
   src/TileEngine/TileEngine.h
   src/TileEngine/LuaTileEngine.h
   src/TileEngine/Tileset.h
+  src/TileEngine/TileState.h
   src/TileEngine/XMap.h
   src/TileEngine/XRegion.h
   src/tinyxml/tinystr.h
@@ -284,6 +286,7 @@ set(SOURCES
   src/TileEngine/Actor_StandOrder.cpp
   src/TileEngine/LuaActor.cpp
   src/TileEngine/DialogueController.cpp
+  src/TileEngine/EntityGrid.cpp
   src/TileEngine/Map.cpp
   src/TileEngine/NPC.cpp
   src/TileEngine/Obstacle.cpp
@@ -294,6 +297,7 @@ set(SOURCES
   src/TileEngine/TileEngine.cpp
   src/TileEngine/LuaTileEngine.cpp
   src/TileEngine/Tileset.cpp
+  src/TileEngine/TileState.cpp
   src/TileEngine/XMap.cpp
   src/TileEngine/XRegion.cpp
   src/main.cpp

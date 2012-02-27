@@ -95,7 +95,7 @@ static int ActorL_SetSpritesheet(lua_State* luaVM)
    return 0;
 }
 
-static int ActorL_TurnToFace(lua_State* luaVM)
+static int ActorL_LookAt(lua_State* luaVM)
 {
    int nargs = lua_gettop(luaVM);
    
@@ -120,7 +120,7 @@ static luaL_reg actorMetatable[] =
    { "setSprite", ActorL_SetSprite },
    { "setAnimation", ActorL_SetAnimation },
    { "setSpritesheet", ActorL_SetSpritesheet },
-   { "turnToFace", ActorL_TurnToFace },
+   { "lookAt", ActorL_LookAt },
    { NULL, NULL }
 };
 

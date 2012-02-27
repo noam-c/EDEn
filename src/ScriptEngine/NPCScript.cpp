@@ -114,7 +114,7 @@ bool NPCScript::callFunction(NPCFunction function)
       lua_gettable(luaStack, -2);
 
       // Push NPC as argument
-      luaW_push<NPC>(luaStack, npc);
+      luaW_push<Actor>(luaStack, npc);
 
       // Run the script
       return runScript(1);

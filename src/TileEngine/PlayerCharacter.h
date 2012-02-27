@@ -9,7 +9,7 @@
 
 #include "Actor.h"
 
-class Pathfinder;
+class EntityGrid;
 
 /**
  * The playable character in the TileEngine state. Has the same components as the NPC, but is controlled by
@@ -32,10 +32,10 @@ class PlayerCharacter : public Actor
       /**
        * Constructor.
        *
-       * @param map The map that the player character will be sitting in.
+       * @param map The map that the player character will be interacting in.
        * @param sheetName The name of the spritesheet to use for drawing the player character.
        */
-      PlayerCharacter(Pathfinder& map, const std::string& sheetName);
+      PlayerCharacter(EntityGrid& map, const std::string& sheetName);
 
       /**
        * Adds the player entity to the map at the specified location.

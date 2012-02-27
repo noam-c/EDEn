@@ -4,6 +4,6 @@ function idle(me)
 end
 
 function activate(me)
-   lookAtPlayer('npc1')
+   me:lookAt(player)
    say('Oh, hello!', true)
 end

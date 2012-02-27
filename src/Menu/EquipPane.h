@@ -18,7 +18,7 @@ namespace edwt
    class ModuleSelectListener;
 };
 
-class EquipSlot;
+struct EquipSlot;
 class Item;
 class ItemListModel;
 

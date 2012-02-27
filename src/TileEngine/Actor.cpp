@@ -1,6 +1,6 @@
 #include "Actor.h"
 #include "ResourceLoader.h"
-#include "Pathfinder.h"
+#include "EntityGrid.h"
 #include "Sprite.h"
 #include "TileEngine.h"
 #include "Actor_Orders.h"
@@ -8,8 +8,8 @@
 
 const int debugFlag = DEBUG_NPC;
 
-Actor::Actor(const std::string& name, const std::string& sheetName, Pathfinder& pathfinder, int x, int y, double movementSpeed, MovementDirection direction)
-   : name(name), pixelLoc(x, y), movementSpeed(movementSpeed), currDirection(direction), pathfinder(pathfinder)
+Actor::Actor(const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, int x, int y, double movementSpeed, MovementDirection direction)
+   : name(name), width(32), height(32), pixelLoc(x, y), movementSpeed(movementSpeed), currDirection(direction), entityGrid(entityGrid)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
    sprite = new Sprite(sheet);
@@ -34,6 +34,16 @@ void Actor::flushOrders()
 std::string Actor::getName() const
 {
    return name;
+}
+
+int Actor::getWidth() const
+{
+   return width;
+}
+
+int Actor::getHeight() const
+{
+   return height;
 }
 
 void Actor::step(long timePassed)
@@ -71,11 +81,11 @@ bool Actor::isIdle() const
 
 void Actor::move(int x, int y)
 {
-   if(pathfinder.withinMap(x,y))
+   if(entityGrid.withinMap(x,y))
    {
       DEBUG("Sending move order to %s: %d,%d", name.c_str(), x, y);
       Point2D dst(x, y);
-      orders.push(new MoveOrder(*this, dst, pathfinder));
+      orders.push(new MoveOrder(*this, dst, entityGrid));
    }
    else
    {

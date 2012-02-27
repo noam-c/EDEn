@@ -51,12 +51,12 @@ class NPC : public Actor
        * @param scheduler The scheduler that owns the NPC's coroutine
        * @param name The name of the NPC (must also be the name of its script).
        * @param sheetName The name of the spritesheet to use for rendering the NPC.
-       * @param pathfinder The map that this NPC will be interacting in.
+       * @param entityGrid The map that this NPC will be interacting in.
        * @param regionName The name of the region that this NPC is interacting in.
        * @param x The x-location (in pixels) where the NPC will start off.
        * @param y The y-location (in pixels) where the NPC will start off.
        */
-      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName, Pathfinder& pathfinder, const std::string& regionName, int x, int y);
+      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, const std::string& regionName, int x, int y);
 
       /**
        * The NPC is currently not doing anything, nor has it been asked to do

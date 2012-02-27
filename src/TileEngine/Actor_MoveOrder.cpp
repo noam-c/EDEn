@@ -15,8 +15,8 @@ const int debugFlag = DEBUG_NPC;
 
 //#define DRAW_PATH
 
-Actor::MoveOrder::MoveOrder(Actor& actor, const Point2D& destination, Pathfinder& pathfinder)
-: Order(actor), pathInitialized(false), movementBegun(false), dst(destination), pathfinder(pathfinder)
+Actor::MoveOrder::MoveOrder(Actor& actor, const Point2D& destination, EntityGrid& entityGrid)
+: Order(actor), pathInitialized(false), movementBegun(false), dst(destination), entityGrid(entityGrid)
 {
 }
 
@@ -24,7 +24,7 @@ Actor::MoveOrder::~MoveOrder()
 {
    if(movementBegun)
    {
-      pathfinder.abortMovement(&actor, lastWaypoint, nextWaypoint, actor.getLocation(), 32, 32);
+      entityGrid.abortMovement(&actor, lastWaypoint, nextWaypoint, actor.getLocation(), actor.getWidth(), actor.getHeight());
    }
 }
 
@@ -101,7 +101,7 @@ bool Actor::MoveOrder::perform(long timePassed)
    if(!pathInitialized)
    {
       DEBUG("Finding an ideal path from %d,%d to %d,%d", location.x, location.y, dst.x, dst.y);  
-      path = pathfinder.findBestPath(location, dst);
+      path = entityGrid.findBestPath(location, dst);
       pathInitialized = true;
       return false;
    }
@@ -114,7 +114,7 @@ bool Actor::MoveOrder::perform(long timePassed)
          actor.setLocation(location);
          if(location != dst)
          {
-            path = pathfinder.findReroutedPath(location, dst, 32, 32);
+            path = entityGrid.findReroutedPath(location, dst, actor.getWidth(), actor.getHeight());
             return false;
          }
 
@@ -123,10 +123,10 @@ bool Actor::MoveOrder::perform(long timePassed)
       
       if(!movementBegun)
       {
-         movementBegun = pathfinder.beginMovement(&actor, location, path.front(), 32, 32);
+         movementBegun = entityGrid.beginMovement(&actor, location, path.front(), actor.getWidth(), actor.getHeight());
          if(!movementBegun)
          {
-            path = pathfinder.findReroutedPath(location, dst, 32, 32);
+            path = entityGrid.findReroutedPath(location, dst, actor.getWidth(), actor.getHeight());
             updateDirection(actor.getDirection(), false);
             actor.setLocation(location);
             return false;
@@ -174,7 +174,7 @@ bool Actor::MoveOrder::perform(long timePassed)
       distanceCovered -= stepDistance;
       
       DEBUG("Reached waypoint %d,%d", nextWaypoint.x, nextWaypoint.y);
-      pathfinder.endMovement(&actor, lastWaypoint, nextWaypoint, 32, 32);
+      entityGrid.endMovement(&actor, lastWaypoint, nextWaypoint, actor.getWidth(), actor.getHeight());
       movementBegun = false;
 
       // Update the current waypoint and dequeue it from the path
@@ -193,7 +193,7 @@ void Actor::MoveOrder::draw()
    glDisable(GL_TEXTURE_2D);
    glColor3f(1.0f, 0.0f, 0.0f);
    glBegin(GL_LINE_STRIP);
-   for(Pathfinder::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
+   for(EntityGrid::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
    {
       Point2D point(iter->x + TileEngine::TILE_SIZE / 2, iter->y + TileEngine::TILE_SIZE / 2);
       glVertex3d(point.x, point.y, 0);

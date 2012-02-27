@@ -7,7 +7,7 @@
 #include "MovementDirection.h"
 #include "Point2D.h"
 
-class Pathfinder;
+class EntityGrid;
 class Sprite;
 class Spritesheet;
 
@@ -26,6 +26,12 @@ class Actor
    /** A queue of orders for the actor to perform */
    std::queue<Order*> orders;
 
+   /** The width of the actor (in pixels) */
+   int width;
+   
+   /** The height of the actor (in pixels) */
+   int height;
+   
    /** The current location of the actor (in pixels) */
    Point2D pixelLoc;
    
@@ -39,8 +45,8 @@ class Actor
       /** The Actor's associated sprite, which is drawn on screen. */
       Sprite* sprite;
       
-      /** The map which this Actor interacts with */
-      Pathfinder& pathfinder;
+      /** The grid of actors which this Actor interacts with */
+      EntityGrid& entityGrid;
       
       /**
        * Constructor for the actor.
@@ -49,14 +55,14 @@ class Actor
        * 
        * @param name The name of the actor (must also be the name of its script).
        * @param sheetName The name of the spritesheet to use for rendering the actor.
-       * @param pathfinder The map that this actor will be interacting in.
+       * @param entityGrid The map that this actor will be interacting in.
        * @param regionName The name of the region that this Actor is interacting in.
        * @param x The x-location (in pixels) where the actor will start off.
        * @param y The y-location (in pixels) where the actor will start off.
        * @param movementSpeed The speed of the actor's movement.
        * @param direction The starting direction of the actor.
        */
-      Actor(const std::string& name, const std::string& sheetName, Pathfinder& pathfinder, int x, int y, double movementSpeed, MovementDirection direction);
+      Actor(const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, int x, int y, double movementSpeed, MovementDirection direction);
 
       /**
        * Destructor.
@@ -68,11 +74,21 @@ class Actor
        */
       void flushOrders();
 
-   public:
+public:
       /**
        * @return The name of this Actor.
        */
       std::string getName() const;
+
+      /**
+       * @return The height of this Actor (in pixels).
+       */
+      int getWidth() const;
+
+      /**
+       * @return The height of this Actor (in pixels).
+       */
+      int getHeight() const;
 
       /**
        * Performs a logic step of this NPC. During the step, the NPC works on

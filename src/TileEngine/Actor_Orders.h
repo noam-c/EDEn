@@ -7,7 +7,7 @@
 #ifndef ACTOR_ORDER_H
 #define ACTOR_ORDER_H
 
-#include "Pathfinder.h"
+#include "EntityGrid.h"
 
 class Actor::Order
 {
@@ -37,14 +37,14 @@ class Actor::MoveOrder : public Actor::Order
    const Point2D dst;
    Point2D lastWaypoint;
    Point2D nextWaypoint;
-   Pathfinder& pathfinder;
-   Pathfinder::Path path;
+   EntityGrid& entityGrid;
+   EntityGrid::Path path;
 
    void updateDirection(MovementDirection newDirection, bool moving);
    void updateNextWaypoint(Point2D location, MovementDirection& direction);
 
    public:
-      MoveOrder(Actor& actor, const Point2D& destination, Pathfinder& pathfinder);
+      MoveOrder(Actor& actor, const Point2D& destination, EntityGrid& entityGrid);
       ~MoveOrder();
       bool perform(long timePassed);
       void draw();

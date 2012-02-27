@@ -8,6 +8,7 @@
 #include "Sprite.h"
 #include "TileEngine.h"
 #include "Pathfinder.h"
+#include "EntityGrid.h"
 
 #include <SDL.h>
 
@@ -17,14 +18,14 @@ const int debugFlag = DEBUG_TILE_ENG;
 const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
-PlayerCharacter::PlayerCharacter(Pathfinder& map, const std::string& sheetName)
+PlayerCharacter::PlayerCharacter(EntityGrid& map, const std::string& sheetName)
                                               : Actor("player", sheetName, map, 0, 0, 1.0f, DOWN), active(false)
 {
 }
 
 void PlayerCharacter::addToMap(Point2D location)
 {
-   if(!active && pathfinder.addActor(this, location, 32, 32))
+   if(!active && entityGrid.addActor(this, location, getWidth(), getHeight()))
    {
       setLocation(location);
       active = true;
@@ -35,7 +36,7 @@ void PlayerCharacter::removeFromMap()
 {
    if(active)
    {
-      pathfinder.removeActor(this, getLocation(), 32, 32);
+      entityGrid.removeActor(this, getLocation(), getWidth(), getHeight());
       active = false;
    }
 }
@@ -83,7 +84,7 @@ void PlayerCharacter::step(long timePassed)
       int distanceTraversed = getMovementSpeed() * (timePassed / 5);
       sprite->setAnimation(WALKING_PREFIX, direction);
       setDirection(direction);
-      pathfinder.moveToClosestPoint(this, 32, 32, xDirection, yDirection, distanceTraversed);
+      entityGrid.moveToClosestPoint(this, getWidth(), getHeight(), xDirection, yDirection, distanceTraversed);
    }
    else if(isIdle())
    {

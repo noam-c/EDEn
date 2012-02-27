@@ -10,17 +10,17 @@
 #include "NPCScript.h"
 #include "Scheduler.h"
 #include "Map.h"
-#include "Pathfinder.h"
+#include "EntityGrid.h"
 
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_NPC;
 
-NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName, Pathfinder& pathfinder,
+NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName, EntityGrid& entityGrid,
                        const std::string& regionName,
-                       int x, int y) : Actor(name, sheetName, pathfinder, x, y, 0.1f, DOWN)
+                       int x, int y) : Actor(name, sheetName, entityGrid, x, y, 0.1f, DOWN)
 {
-   npcThread = engine.getNPCScript(this, regionName, pathfinder.getMapData()->getName(), name);
+   npcThread = engine.getNPCScript(this, regionName, entityGrid.getMapData()->getName(), name);
    scheduler.start(npcThread);
    DEBUG("NPC %s has a Thread with ID %d", name.c_str(), npcThread->getId());
 }

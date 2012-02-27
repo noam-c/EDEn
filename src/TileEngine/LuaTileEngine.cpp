@@ -1,5 +1,6 @@
 #include "LuaTileEngine.h"
 #include "TileEngine.h"
+#include "NPC.h"
 #include "Point2D.h"
 #include "LuaWrapper.hpp"
 
@@ -40,7 +41,7 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
       }
    }
    
-   luaW_push<NPC>(luaVM, npc);
+   luaW_push<Actor>(luaVM, npc);
    return 1;
 }
 

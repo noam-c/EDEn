@@ -14,7 +14,7 @@
  */
 enum MenuAction
 {
-   NONE,
+   NO_ACTION,
 	HOME_PANEL,
    ITEM_PANEL,
 	EQUIP_PANEL,

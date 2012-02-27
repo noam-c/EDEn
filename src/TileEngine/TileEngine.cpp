@@ -29,7 +29,7 @@ const int TileEngine::TILE_SIZE = 32;
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath)
 : GameState(executionStack), xMapOffset(0), yMapOffset(0)
 {
-   playerActor = new PlayerCharacter(currMap, "npc1");
+   playerActor = new PlayerCharacter(entityGrid, "npc1");
    scriptEngine = new ScriptEngine(*this, playerData, scheduler);
    dialogue = new DialogueController(*top, scheduler, *scriptEngine);
    consoleWindow = new edwt::DebugConsoleWindow(top, top->getWidth(), top->getHeight() * 0.2);
@@ -62,7 +62,7 @@ void TileEngine::startChapter(const std::string& chapterName)
 
 std::string TileEngine::getMapName()
 {
-   return currMap.getName();
+   return entityGrid.getName();
 }
 
 void TileEngine::dialogueNarrate(const char* narration, Task* task)
@@ -83,7 +83,7 @@ bool TileEngine::setRegion(const std::string& regionName, const std::string& map
 
    setMap(mapName);
 
-   DEBUG("Running map script: %s/%s", regionName.c_str(), currMap.getName().c_str());
+   DEBUG("Running map script: %s/%s", regionName.c_str(), entityGrid.getName().c_str());
    return true;
 }
 
@@ -95,13 +95,13 @@ void TileEngine::setMap(std::string mapName)
    if(!mapName.empty())
    {
       // If a map name was supplied, then we set this map and run its script
-      currMap.setMapData(currRegion->getMap(mapName));
+      entityGrid.setMapData(currRegion->getMap(mapName));
    }
    else
    {
       // Otherwise, we use the region's default starting map
-      currMap.setMapData(currRegion->getStartingMap());
-      mapName = currMap.getName();
+      entityGrid.setMapData(currRegion->getStartingMap());
+      mapName = entityGrid.getName();
    }
 
    DEBUG("Map set to: %s", mapName.c_str());
@@ -111,8 +111,8 @@ void TileEngine::setMap(std::string mapName)
 
 void TileEngine::recalculateMapOffsets()
 {
-   const int mapPixelWidth = currMap.getWidth() * TILE_SIZE;
-   const int mapPixelHeight = currMap.getHeight() * TILE_SIZE;
+   const int mapPixelWidth = entityGrid.getWidth() * TILE_SIZE;
+   const int mapPixelHeight = entityGrid.getHeight() * TILE_SIZE;
 
    xMapOffset = mapPixelWidth < GraphicsUtil::width ? 
               (GraphicsUtil::width - mapPixelWidth) >> 1 : 0;
@@ -142,13 +142,13 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
 {
    NPC* npcToAdd = NULL;
    
-   if(currMap.isAreaFree(npcLocation, 32, 32))
+   if(entityGrid.isAreaFree(npcLocation, 32, 32))
    {
       npcToAdd = new NPC(*scriptEngine, scheduler, npcName, spritesheetName,
-                                 currMap, currRegion->getName(),
+                                 entityGrid, currRegion->getName(),
                                  npcLocation.x, npcLocation.y);
       npcList[npcName] = npcToAdd;
-      currMap.addActor(npcToAdd, npcLocation, 32, 32);
+      entityGrid.addActor(npcToAdd, npcLocation, npcToAdd->getWidth(), npcToAdd->getHeight());
    }
    else
    {
@@ -200,9 +200,9 @@ void TileEngine::draw()
 {
    GraphicsUtil::getInstance()->setOffset(xMapOffset, yMapOffset);
       // Draw the map and NPCs against an offset (to center all the map elements)
-      if(currMap.getMapData() != NULL)
+      if(entityGrid.getMapData() != NULL)
       {
-         currMap.draw();
+         entityGrid.draw();
       }
       else
       {
@@ -232,7 +232,7 @@ bool TileEngine::step()
 
    playerActor->step(timePassed);
 
-   currMap.step(timePassed);
+   entityGrid.step(timePassed);
 
    stepNPCs(timePassed);
 
@@ -329,57 +329,9 @@ void TileEngine::handleInputEvents(bool& finishState)
 
 void TileEngine::action()
 {
-   Point2D activationLocation = playerActor->getLocation();
-   switch(playerActor->getDirection())
+   NPC* npcToActivate = static_cast<NPC*>(entityGrid.getAdjacentActor(playerActor));
+   if(npcToActivate != NULL)
    {
-      case UP_LEFT:
-      case LEFT:
-      case DOWN_LEFT:
-      {
-         activationLocation.x -= TILE_SIZE;
-         break;
-      }
-      case UP_RIGHT:
-      case RIGHT:
-      case DOWN_RIGHT:
-      {
-         activationLocation.x += TILE_SIZE;
-         break;
-      }
-      default:
-      {
-         break;
-      }   
-   }
-
-   switch(playerActor->getDirection())
-   {
-      case UP_RIGHT:
-      case UP:
-      case UP_LEFT:
-      {
-         activationLocation.y -= TILE_SIZE;
-         break;
-      }
-      case DOWN_LEFT:
-      case DOWN:
-      case DOWN_RIGHT:
-      {
-         activationLocation.y += TILE_SIZE;
-         break;
-      }
-      default:
-      {
-         break;
-      }
-   }
-   
-   if(currMap.withinMap(activationLocation))
-   {
-      NPC* npcToActivate = static_cast<NPC*>(currMap.getOccupantActor(activationLocation, TILE_SIZE, TILE_SIZE));
-      if(npcToActivate != NULL)
-      {
-         npcToActivate->activate();
-      }
+      npcToActivate->activate();
    }
 }

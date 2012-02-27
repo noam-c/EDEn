@@ -34,7 +34,7 @@
 
 const int debugFlag = DEBUG_MENU;
 
-HomeMenu::HomeMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData) : MenuState(executionStack, menuShell), playerData(playerData), characterAction(NONE)
+HomeMenu::HomeMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData) : MenuState(executionStack, menuShell), playerData(playerData), characterAction(NO_ACTION)
 {
    HomePane* pane = new HomePane(playerData, menuShell.getDimension());
    setMenuPane(pane);

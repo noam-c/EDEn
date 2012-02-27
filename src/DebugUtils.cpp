@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-long DebugUtils::debugFlags = DEBUG_ALL;
+long DebugUtils::debugFlags = DEBUG_ALL & ~DEBUG_ENTITY_GRID;
 
 void DebugUtils::print(long flag, std::string str)
 {
