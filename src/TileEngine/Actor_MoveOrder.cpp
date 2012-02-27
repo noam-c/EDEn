@@ -24,7 +24,7 @@ Actor::MoveOrder::~MoveOrder()
 {
    if(movementBegun)
    {
-      entityGrid.abortMovement(&actor, lastWaypoint, nextWaypoint, actor.getLocation(), actor.getWidth(), actor.getHeight());
+      entityGrid.abortMovement(&actor, lastWaypoint, nextWaypoint);
    }
 }
 
@@ -123,7 +123,7 @@ bool Actor::MoveOrder::perform(long timePassed)
       
       if(!movementBegun)
       {
-         movementBegun = entityGrid.beginMovement(&actor, location, path.front(), actor.getWidth(), actor.getHeight());
+         movementBegun = entityGrid.beginMovement(&actor, path.front());
          if(!movementBegun)
          {
             path = entityGrid.findReroutedPath(location, dst, actor.getWidth(), actor.getHeight());
@@ -174,7 +174,7 @@ bool Actor::MoveOrder::perform(long timePassed)
       distanceCovered -= stepDistance;
       
       DEBUG("Reached waypoint %d,%d", nextWaypoint.x, nextWaypoint.y);
-      entityGrid.endMovement(&actor, lastWaypoint, nextWaypoint, actor.getWidth(), actor.getHeight());
+      entityGrid.endMovement(&actor, lastWaypoint, nextWaypoint);
       movementBegun = false;
 
       // Update the current waypoint and dequeue it from the path

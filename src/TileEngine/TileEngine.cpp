@@ -148,7 +148,7 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
                                  entityGrid, currRegion->getName(),
                                  npcLocation.x, npcLocation.y);
       npcList[npcName] = npcToAdd;
-      entityGrid.addActor(npcToAdd, npcLocation, npcToAdd->getWidth(), npcToAdd->getHeight());
+      entityGrid.addActor(npcToAdd, npcLocation);
    }
    else
    {

@@ -129,26 +129,26 @@ bool EntityGrid::addObstacle(const Point2D& area, int width, int height)
    return occupyArea(area, width, height, TileState(TileState::OBSTACLE));
 }
 
-bool EntityGrid::addActor(Actor* actor, const Point2D& area, int width, int height)
+bool EntityGrid::addActor(Actor* actor, const Point2D& area)
 {
-   return occupyArea(area, width, height, TileState(TileState::ACTOR, actor));
+   return occupyArea(area, actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
 }
 
-bool EntityGrid::changeActorLocation(Actor* actor, const Point2D& src, const Point2D& dst, int width, int height)
+bool EntityGrid::changeActorLocation(Actor* actor, const Point2D& dst)
 {
    TileState actorState(TileState::ACTOR, actor);
-   if(occupyArea(dst, width, height, actorState))
+   if(occupyArea(dst, actor->getWidth(), actor->getHeight(), actorState))
    {
-      freeArea(src, dst, width, height, actorState);
+      freeArea(actor->getLocation(), dst, actor->getWidth(), actor->getHeight(), actorState);
       return true;
    }
 
    return false;
 }
 
-void EntityGrid::removeActor(Actor* actor, const Point2D& currentLocation, int width, int height)
+void EntityGrid::removeActor(Actor* actor)
 {
-   freeArea(currentLocation, width, height);
+   freeArea(actor->getLocation(), actor->getWidth(), actor->getHeight());
 }
 
 Actor* EntityGrid::getAdjacentActor(Actor* actor) const
@@ -315,14 +315,16 @@ bool EntityGrid::isAreaFree(const Point2D& area, int width, int height) const
    return true;
 }
 
-void EntityGrid::moveToClosestPoint(Actor* actor, int width, int height, int xDirection, int yDirection, int distance)
+void EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance)
 {
    if(xDirection == 0 && yDirection == 0) return;
    if(distance == 0) return;
 
-   TileState playerState(TileState::ACTOR, actor);
+   TileState actorState(TileState::ACTOR, actor);
 
    const Point2D source = actor->getLocation();
+   const int actorWidth = actor->getWidth();
+   const int actorHeight = actor->getHeight();
    
    const int mapPixelWidth = (collisionMapWidth - 1) * MOVEMENT_TILE_SIZE;
    const int mapPixelHeight = (collisionMapHeight - 1) * MOVEMENT_TILE_SIZE; 
@@ -350,7 +352,7 @@ void EntityGrid::moveToClosestPoint(Actor* actor, int width, int height, int xDi
          break;
       }
 
-      if(!canOccupyArea(nextPoint, width, height, playerState))
+      if(!canOccupyArea(nextPoint, actorWidth, actorHeight, actorState))
       {
          break;
       }
@@ -360,35 +362,35 @@ void EntityGrid::moveToClosestPoint(Actor* actor, int width, int height, int xDi
 
    if(lastAvailablePoint != source)
    {
-      if(!occupyArea(lastAvailablePoint, width, height, playerState))
+      if(!occupyArea(lastAvailablePoint, actor->getWidth(), actor->getHeight(), actorState))
       {
          // If updating failed, just stick with the start location
-         occupyArea(source, width, height, playerState);
+         occupyArea(source, actorWidth, actorHeight, actorState);
       }
       else
       {
          // If we moved, update the map accordingly
-         freeArea(source, lastAvailablePoint, width, height, playerState);
+         freeArea(source, lastAvailablePoint, actorWidth, actorHeight, actorState);
 
          actor->setLocation(lastAvailablePoint);
       }
    }
 }
 
-bool EntityGrid::beginMovement(Actor* actor, const Point2D& src, const Point2D& dst, int width, int height)
+bool EntityGrid::beginMovement(Actor* actor, const Point2D& dst)
 {
-   return occupyArea(dst, width, height, TileState(TileState::ACTOR, actor));
+   return occupyArea(dst, actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
 }
 
-void EntityGrid::abortMovement(Actor* actor, const Point2D& src, const Point2D& dst, const Point2D& currentLocation, int width, int height)
+void EntityGrid::abortMovement(Actor* actor, const Point2D& src, const Point2D& dst)
 {
-   freeArea(src, currentLocation, width, height, TileState(TileState::ACTOR, actor));
-   freeArea(dst, currentLocation, width, height, TileState(TileState::ACTOR, actor));
+   freeArea(src, actor->getLocation(), actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
+   freeArea(dst, actor->getLocation(), actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
 }
 
-void EntityGrid::endMovement(Actor* actor, const Point2D& src, const Point2D& dst, int width, int height)
+void EntityGrid::endMovement(Actor* actor, const Point2D& src, const Point2D& dst)
 {
-   freeArea(src, dst, width, height, TileState(TileState::ACTOR, actor));
+   freeArea(src, dst, actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
 }
 
 void EntityGrid::setArea(const Rectangle& area, TileState state)
@@ -402,33 +404,6 @@ void EntityGrid::setArea(const Rectangle& area, TileState state)
          collisionMap[collisionMapY][collisionMapX] = state;
       }
    }
-}
-
-Actor* EntityGrid::getEntityActor(const Point2D& location, int width, int height) const
-{
-   if(collisionMap == NULL)
-   {
-      return NULL;
-   }
-   
-   int collisionMapLeft = location.x/MOVEMENT_TILE_SIZE;
-   int collisionMapRight = (location.x + width - 1)/MOVEMENT_TILE_SIZE;
-   int collisionMapTop = location.y/MOVEMENT_TILE_SIZE;
-   int collisionMapBottom = (location.y + height - 1)/MOVEMENT_TILE_SIZE;
-   
-   for(int collisionMapY = collisionMapTop; collisionMapY <=  collisionMapBottom; ++collisionMapY)
-   {
-      for(int collisionMapX = collisionMapLeft; collisionMapX <= collisionMapRight; ++collisionMapX)
-      {
-         const TileState& collisionTile = collisionMap[collisionMapY][collisionMapX];
-         if(collisionTile.entityType == TileState::ACTOR)
-         {
-            return reinterpret_cast<Actor*>(collisionTile.entity);
-         }
-      }
-   }
-
-   return NULL;
 }
 
 void EntityGrid::draw()

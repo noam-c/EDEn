@@ -227,26 +227,22 @@ class EntityGrid
        * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
        *
        * @param actor The actor to add.
-       * @param area The coordinates of the top-left corner of the actor (in pixels)
-       * @param width The width of the actor (in pixels)
-       * @param height The height of the actor (in pixels)
+       * @param area The area to add the actor to.
        *
        * @return true if the actor has been successfully placed in the area, false if there was something else in the area.
        */
-      bool addActor(Actor* actor, const Point2D& area, int width, int height);
+      bool addActor(Actor* actor, const Point2D& area);
 
       /**
        * Change the actor location, if the destination tiles are available to occupy.
        * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the destination from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
        *
        * @param actor The actor to relocate.
-       * @param area The coordinates of the top-left corner of the player character (in pixels)
-       * @param width The width of the player character (in pixels)
-       * @param height The height of the player character (in pixels)
+       * @param dst The coordinates to relocate the actor to (in pixels)
        *
        * @return true if the player character has been successfully moved to the destination, false if there was something else in the destination.
        */
-      bool changeActorLocation(Actor* actor, const Point2D& src, const Point2D& dst, int width, int height);
+      bool changeActorLocation(Actor* actor, const Point2D& dst);
 
       /**
        * Remove the player and free the tiles under it.
@@ -256,7 +252,7 @@ class EntityGrid
        * @param width The width of the actor (in pixels)
        * @param height The height of the actor (in pixels)
        */
-      void removeActor(Actor* actor, const Point2D& currentLocation, int width, int height);
+      void removeActor(Actor* actor);
 
       /**
        * Gets the actor occupying the area in front of the specified actor, if one exists.
@@ -269,27 +265,22 @@ class EntityGrid
        * Given the distance the entity can move and the direction, moves as far as possible until an obstacle is encountered.
        *
        * @param actor The actor to move.
-       * @param width The width of the actor (in pixels)
-       * @param height The height of the actor (in pixels)
        * @param xDirection The direction moved on the x-axis.
        * @param yDirection The direction moved on the y-axis.
        * @param distance The total distance that the player character can be moved in this call.
        */
-      void moveToClosestPoint(Actor* actor, int width, int height, int xDirection, int yDirection, int distance);
+      void moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance);
    
       /**
        * Request permission from the EntityGrid to move an Actor from the source to the given destination.
        * NOTE: After the actor has completed this movement, endMovement MUST be called in order to notify the EntityGrid to perform the appropriate clean-up.
        *
        * @param actor The actor that is moving.
-       * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
-       * @param width Width of the actor.
-       * @param height Height of the actor.
        *
        * @return true iff the actor can move from the source to the destination.
        */
-      bool beginMovement(Actor* actor, const Point2D& src, const Point2D& dst, int width, int height);
+      bool beginMovement(Actor* actor, const Point2D& dst);
       
       /**
        * Notifies the EntityGrid that the actor failed to complete movement from the source to the given destination and occupies some area between the source and destination.
@@ -297,11 +288,8 @@ class EntityGrid
        * @param actor The actor that was moving.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the original destination (in pixels).
-       * @param currentLocation The coordinates that the entity is currently occupying (in pixels).
-       * @param width Width of the actor that moved.
-       * @param height Height of the actor that moved.
        */
-      void abortMovement(Actor* actor, const Point2D& src, const Point2D& dst, const Point2D& currentLocation, int width, int height);
+      void abortMovement(Actor* actor, const Point2D& src, const Point2D& dst);
       
       /**
        * Notifies the EntityGrid that the actor moved successfully from the source to the given destination and no longer occupies the source coordinates.
@@ -309,19 +297,8 @@ class EntityGrid
        * @param actor The actor that was moving.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
-       * @param width Width of the actor that moved.
-       * @param height Height of the actor that moved.
        */
-      void endMovement(Actor* actor, const Point2D& src, const Point2D& dst, int width, int height);
-
-      /**
-       * Gets the actor occupying the specified area, if one exists.
-       *
-       * @param location The coordinates of the top left corner of the area to search.
-       * @param width The width of the area to search
-       * @param height The height of the area to search
-       */
-      Actor* getEntityActor(const Point2D& location, int width, int height) const;
+      void endMovement(Actor* actor, const Point2D& src, const Point2D& dst);
    
       /**
        * Draw the collision map for diagnostic purposes.

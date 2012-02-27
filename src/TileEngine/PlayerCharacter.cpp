@@ -25,7 +25,7 @@ PlayerCharacter::PlayerCharacter(EntityGrid& map, const std::string& sheetName)
 
 void PlayerCharacter::addToMap(Point2D location)
 {
-   if(!active && entityGrid.addActor(this, location, getWidth(), getHeight()))
+   if(!active && entityGrid.addActor(this, location))
    {
       setLocation(location);
       active = true;
@@ -36,7 +36,7 @@ void PlayerCharacter::removeFromMap()
 {
    if(active)
    {
-      entityGrid.removeActor(this, getLocation(), getWidth(), getHeight());
+      entityGrid.removeActor(this);
       active = false;
    }
 }
@@ -84,7 +84,7 @@ void PlayerCharacter::step(long timePassed)
       int distanceTraversed = getMovementSpeed() * (timePassed / 5);
       sprite->setAnimation(WALKING_PREFIX, direction);
       setDirection(direction);
-      entityGrid.moveToClosestPoint(this, getWidth(), getHeight(), xDirection, yDirection, distanceTraversed);
+      entityGrid.moveToClosestPoint(this, xDirection, yDirection, distanceTraversed);
    }
    else if(isIdle())
    {
