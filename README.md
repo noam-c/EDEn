@@ -47,6 +47,8 @@ EDEn depends on the following development libraries to build the source:
 * SDL_mixer 1.2
 * Lua 5.1
 
+Windows developers will also need the Windows implementation of dirent.h.
+
 EDEn requires the equivalent runtime libraries to execute.
 
 Links
@@ -57,6 +59,7 @@ Links
 * Lua Programming Language - http://www.lua.org
 * JsonCpp library - http://jsoncpp.sourceforge.net/
 * TinyXml library - http://www.grinninglizard.com/tinyxml/
+* dirent.h implementation for Windows - http://www.softagalleria.net/dirent.php
 
 Running EDEn
 ------------
