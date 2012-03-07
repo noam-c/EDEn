@@ -200,7 +200,7 @@ class TileEngine: public GameState
        *
        * @return The created NPC (or NULL if it could not be placed in the map).
        */
-      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName, Point2D npcLocation);
+      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName, shapes::Point2D npcLocation);
 
       /**
        * @param npcName The name of the NPC to find.

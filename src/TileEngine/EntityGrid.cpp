@@ -12,7 +12,7 @@
 #include "TileState.h"
 #include "Rectangle.h"
 #include "Actor.h"
-#include "GLInclude.h"
+#include "SDL_opengl.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_ENTITY_GRID;
@@ -30,14 +30,14 @@ EntityGrid::EntityGrid() : map(NULL), collisionMap(NULL)
 {
 }
 
-Rectangle EntityGrid::getCollisionMapEdges(const Rectangle& area) const
+shapes::Rectangle EntityGrid::getCollisionMapEdges(const shapes::Rectangle& area) const
 {
    int collisionMapLeft = area.left/MOVEMENT_TILE_SIZE;
    int collisionMapRight = (area.right - 1)/MOVEMENT_TILE_SIZE;
    int collisionMapTop = area.top/MOVEMENT_TILE_SIZE;
    int collisionMapBottom = (area.bottom - 1)/MOVEMENT_TILE_SIZE;
 
-   return Rectangle(collisionMapTop, collisionMapLeft, collisionMapBottom, collisionMapRight);
+   return shapes::Rectangle(collisionMapTop, collisionMapLeft, collisionMapBottom, collisionMapRight);
 }
 
 const Map* EntityGrid::getMapData() const
@@ -72,7 +72,7 @@ void EntityGrid::setMapData(const Map* newMapData)
    for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
    {
       Obstacle* o = *iter;
-      addObstacle(Point2D(o->getTileX() * MOVEMENT_TILE_SIZE, o->getTileY() * MOVEMENT_TILE_SIZE), o->getWidth(), o->getHeight());
+      addObstacle(shapes::Point2D(o->getTileX() * MOVEMENT_TILE_SIZE, o->getTileY() * MOVEMENT_TILE_SIZE), o->getWidth(), o->getHeight());
    }
 
    pathfinder.initialize(collisionMap, MOVEMENT_TILE_SIZE, collisionMapWidth, collisionMapHeight);
@@ -99,7 +99,7 @@ int EntityGrid::getHeight() const
    T_T("Requested map height when map does not exist.");
 }
 
-bool EntityGrid::withinMap(const Point2D& point) const
+bool EntityGrid::withinMap(const shapes::Point2D& point) const
 {
    return withinMap(point.x, point.y);
 }
@@ -114,27 +114,27 @@ void EntityGrid::step(long timePassed)
    if(map) map->step(timePassed);
 }
 
-EntityGrid::Path EntityGrid::findBestPath(const Point2D& src, const Point2D& dst)
+EntityGrid::Path EntityGrid::findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst)
 {
    return pathfinder.findBestPath(src, dst);
 }
 
-EntityGrid::Path EntityGrid::findReroutedPath(const Point2D& src, const Point2D& dst, int width, int height)
+EntityGrid::Path EntityGrid::findReroutedPath(const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height)
 {
    return pathfinder.findReroutedPath(*this, src, dst, width, height);
 }
 
-bool EntityGrid::addObstacle(const Point2D& area, int width, int height)
+bool EntityGrid::addObstacle(const shapes::Point2D& area, int width, int height)
 {
    return occupyArea(area, width, height, TileState(TileState::OBSTACLE));
 }
 
-bool EntityGrid::addActor(Actor* actor, const Point2D& area)
+bool EntityGrid::addActor(Actor* actor, const shapes::Point2D& area)
 {
    return occupyArea(area, actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
 }
 
-bool EntityGrid::changeActorLocation(Actor* actor, const Point2D& dst)
+bool EntityGrid::changeActorLocation(Actor* actor, const shapes::Point2D& dst)
 {
    TileState actorState(TileState::ACTOR, actor);
    if(occupyArea(dst, actor->getWidth(), actor->getHeight(), actorState))
@@ -158,7 +158,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
       return NULL;
    }
    
-   Point2D adjacentLocation = actor->getLocation();
+   shapes::Point2D adjacentLocation = actor->getLocation();
    const int width = actor->getWidth();
    const int height = actor->getHeight();
    const MovementDirection direction = actor->getDirection();
@@ -226,14 +226,14 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
    return NULL;
 }
 
-bool EntityGrid::canOccupyArea(const Point2D& area, int width, int height, TileState state) const
+bool EntityGrid::canOccupyArea(const shapes::Point2D& area, int width, int height, TileState state) const
 {
    if(collisionMap == NULL || state.entityType == TileState::FREE)
    {
       return false;
    }
    
-   Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
+   shapes::Rectangle areaRect = getCollisionMapEdges(shapes::Rectangle(area, width, height));
    
    if(areaRect.right >= collisionMapWidth || areaRect.bottom >= collisionMapHeight)
    {
@@ -260,9 +260,9 @@ bool EntityGrid::canOccupyArea(const Point2D& area, int width, int height, TileS
    return true;
 }
 
-bool EntityGrid::occupyArea(const Point2D& area, int width, int height, TileState state)
+bool EntityGrid::occupyArea(const shapes::Point2D& area, int width, int height, TileState state)
 {
-   Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
+   shapes::Rectangle areaRect = getCollisionMapEdges(shapes::Rectangle(area, width, height));
 
    if(canOccupyArea(area, width, height, state))
    {
@@ -276,28 +276,28 @@ bool EntityGrid::occupyArea(const Point2D& area, int width, int height, TileStat
    return false;
 }
 
-void EntityGrid::freeArea(const Point2D& locationToFree, int width, int height)
+void EntityGrid::freeArea(const shapes::Point2D& locationToFree, int width, int height)
 {
-   Rectangle rectToFree = getCollisionMapEdges(Rectangle(locationToFree, width, height));
+   shapes::Rectangle rectToFree = getCollisionMapEdges(shapes::Rectangle(locationToFree, width, height));
    
    DEBUG("Freeing tiles from %d,%d to %d,%d", rectToFree.left, rectToFree.top, rectToFree.right, rectToFree.bottom);
    
    setArea(rectToFree, TileState(TileState::FREE));
 }
 
-void EntityGrid::freeArea(const Point2D& previousLocation, const Point2D& currentLocation, int width, int height, TileState state)
+void EntityGrid::freeArea(const shapes::Point2D& previousLocation, const shapes::Point2D& currentLocation, int width, int height, TileState state)
 {
    freeArea(previousLocation, width, height);
 
-   Rectangle currentRect = getCollisionMapEdges(Rectangle(currentLocation, width, height));
+   shapes::Rectangle currentRect = getCollisionMapEdges(shapes::Rectangle(currentLocation, width, height));
    setArea(currentRect, state);
 }
 
-bool EntityGrid::isAreaFree(const Point2D& area, int width, int height) const
+bool EntityGrid::isAreaFree(const shapes::Point2D& area, int width, int height) const
 {
    if(collisionMap == NULL) return false;
 
-   Rectangle areaRect = getCollisionMapEdges(Rectangle(area, width, height));
+   shapes::Rectangle areaRect = getCollisionMapEdges(shapes::Rectangle(area, width, height));
 
    for(int collisionMapY = areaRect.top; collisionMapY < areaRect.bottom; ++collisionMapY)
    {
@@ -322,14 +322,14 @@ void EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
 
    TileState actorState(TileState::ACTOR, actor);
 
-   const Point2D source = actor->getLocation();
+   const shapes::Point2D source = actor->getLocation();
    const int actorWidth = actor->getWidth();
    const int actorHeight = actor->getHeight();
    
    const int mapPixelWidth = (collisionMapWidth - 1) * MOVEMENT_TILE_SIZE;
    const int mapPixelHeight = (collisionMapHeight - 1) * MOVEMENT_TILE_SIZE; 
    
-   Point2D lastAvailablePoint = source;
+   shapes::Point2D lastAvailablePoint = source;
    
    while(distance > 0)
    {
@@ -337,7 +337,7 @@ void EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
       distance -= distanceTraversed;
       
       // Get the next point for movement, and clamp it to the map dimensions
-      Point2D nextPoint;
+      shapes::Point2D nextPoint;
       nextPoint.x = lastAvailablePoint.x + xDirection * distanceTraversed;
       nextPoint.x = std::max(nextPoint.x, 0);
       nextPoint.x = std::min(nextPoint.x, mapPixelWidth - MOVEMENT_TILE_SIZE);
@@ -377,23 +377,23 @@ void EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
    }
 }
 
-bool EntityGrid::beginMovement(Actor* actor, const Point2D& dst)
+bool EntityGrid::beginMovement(Actor* actor, const shapes::Point2D& dst)
 {
    return occupyArea(dst, actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
 }
 
-void EntityGrid::abortMovement(Actor* actor, const Point2D& src, const Point2D& dst)
+void EntityGrid::abortMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst)
 {
    freeArea(src, actor->getLocation(), actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
    freeArea(dst, actor->getLocation(), actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
 }
 
-void EntityGrid::endMovement(Actor* actor, const Point2D& src, const Point2D& dst)
+void EntityGrid::endMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst)
 {
    freeArea(src, dst, actor->getWidth(), actor->getHeight(), TileState(TileState::ACTOR, actor));
 }
 
-void EntityGrid::setArea(const Rectangle& area, TileState state)
+void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
 {
    if(collisionMap == NULL) return;
 

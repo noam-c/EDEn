@@ -17,24 +17,24 @@ const int debugFlag = DEBUG_PATHFINDER;
 const float Pathfinder::ROOT_2 = 1.41421356f;
 const float Pathfinder::INFINITY = std::numeric_limits<float>::infinity();
 
-Point2D Pathfinder::tileNumToCoords(int tileNum)
+shapes::Point2D Pathfinder::tileNumToCoords(int tileNum)
 {
    div_t result = div(tileNum, collisionGridWidth);
-   return Point2D(result.rem, result.quot);
+   return shapes::Point2D(result.rem, result.quot);
 }
 
-Point2D Pathfinder::tileNumToPixels(int tileNum)
+shapes::Point2D Pathfinder::tileNumToPixels(int tileNum)
 {
-   Point2D p = tileNumToCoords(tileNum);
+   shapes::Point2D p = tileNumToCoords(tileNum);
    return p * movementTileSize;
 }
 
-int Pathfinder::coordsToTileNum(const Point2D& tileLocation)
+int Pathfinder::coordsToTileNum(const shapes::Point2D& tileLocation)
 {
    return (tileLocation.y * collisionGridWidth + tileLocation.x);
 }
 
-int Pathfinder::pixelsToTileNum(const Point2D& pixelLocation)
+int Pathfinder::pixelsToTileNum(const shapes::Point2D& pixelLocation)
 {
    return coordsToTileNum(pixelLocation / movementTileSize);
 }
@@ -66,8 +66,8 @@ void Pathfinder::initRoyFloydWarshallMatrices()
       successorMatrix[i] = new int[NUM_TILES];
    }
 
-   Point2D aTile;
-   Point2D bTile;
+   shapes::Point2D aTile;
+   shapes::Point2D bTile;
 
    for(int a = 0; a < NUM_TILES; ++a)
    {
@@ -128,17 +128,17 @@ void Pathfinder::initRoyFloydWarshallMatrices()
    }
 }
 
-Pathfinder::Path Pathfinder::findBestPath(const Point2D& src, const Point2D& dst)
+Pathfinder::Path Pathfinder::findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst)
 {
    return findRFWPath(src, dst);
 }
 
-Pathfinder::Path Pathfinder::findReroutedPath(const EntityGrid& entityGrid, const Point2D& src, const Point2D& dst, int width, int height)
+Pathfinder::Path Pathfinder::findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height)
 {
    return findAStarPath(entityGrid, src, dst, width, height);
 }
 
-class Pathfinder::AStarPoint : public Point2D
+class Pathfinder::AStarPoint : public shapes::Point2D
 {
    private:
       const AStarPoint* parent;
@@ -149,7 +149,7 @@ class Pathfinder::AStarPoint : public Point2D
       float fCost;
 
    public:
-      AStarPoint(const AStarPoint* parent, int x, int y, float gCost, float hCost) : Point2D(x,y), parent(parent), gCost(gCost), hCost(hCost), fCost(gCost + hCost) {}
+      AStarPoint(const AStarPoint* parent, int x, int y, float gCost, float hCost) : shapes::Point2D(x,y), parent(parent), gCost(gCost), hCost(hCost), fCost(gCost + hCost) {}
 
       void setParent(const AStarPoint* newParent)
       {
@@ -201,7 +201,7 @@ class Pathfinder::AStarPoint : public Point2D
    
       struct ArePointsEqual
       {
-         const Point2D& point;
+         const shapes::Point2D& point;
          
          bool operator()(const AStarPoint* other) const
          {
@@ -210,7 +210,7 @@ class Pathfinder::AStarPoint : public Point2D
       };
 };
 
-Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const Point2D& src, const Point2D& dst, int width, int height)
+Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height)
 {
    if(collisionGrid == NULL) return Path();
 
@@ -218,14 +218,14 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const P
 
    if(!entityGrid.canOccupyArea(dst, width, height, entityState)) return Path();
 
-   Point2D destinationPoint(dst.x / movementTileSize, dst.y / movementTileSize);
+   shapes::Point2D destinationPoint(dst.x / movementTileSize, dst.y / movementTileSize);
 
    std::vector<AStarPoint*> openSet;
    std::vector<const AStarPoint*> closedSet;
    
    const int NUM_TILES = collisionGridWidth*collisionGridHeight;
    std::vector<bool> discovered(NUM_TILES, false);
-   const Point2D srcTile(src.x / movementTileSize, src.y / movementTileSize);
+   const shapes::Point2D srcTile(src.x / movementTileSize, src.y / movementTileSize);
    
    openSet.push_back(new AStarPoint(NULL, srcTile.x, srcTile.y, 0, 0));
    std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());         
@@ -251,7 +251,7 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const P
          const AStarPoint* curr = cheapestPoint;
          while(curr != NULL)
          {
-            path.push_front(Point2D(curr->x * movementTileSize, curr->y * movementTileSize));
+            path.push_front(shapes::Point2D(curr->x * movementTileSize, curr->y * movementTileSize));
             curr = curr->getParent();
          }
          break;
@@ -261,12 +261,12 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const P
 
       // Evaluate all the existing laterally adjacent points,
       // adding 1 as the cost of reaching the point from our current cheapest point.
-      const std::vector<Point2D> lateralPoints = Point2D::getLaterallyAdjacentPoints(*cheapestPoint, collisionGridWidth, collisionGridHeight);
+      const std::vector<shapes::Point2D> lateralPoints = shapes::Point2D::getLaterallyAdjacentPoints(*cheapestPoint, collisionGridWidth, collisionGridHeight);
       evaluateAdjacentNodes(entityGrid, entityState, lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered, width, height);
 
       // Evaluate all the existing diagonally adjacent points,
       // adding the square root of 2 as the cost of reaching the point from our current cheapest point.
-      const std::vector<Point2D> diagonalPoints = Point2D::getDiagonallyAdjacentPoints(*cheapestPoint, collisionGridWidth, collisionGridHeight);
+      const std::vector<shapes::Point2D> diagonalPoints = shapes::Point2D::getDiagonallyAdjacentPoints(*cheapestPoint, collisionGridWidth, collisionGridHeight);
       evaluateAdjacentNodes(entityGrid, entityState, diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered, width, height, true);
    }
    
@@ -283,9 +283,9 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const P
    return path;
 }
 
-void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int width, int height, bool diagonalMovement)
+void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int width, int height, bool diagonalMovement)
 {
-   for(std::vector<Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
+   for(std::vector<shapes::Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
    {
       int adjacentTileNum = coordsToTileNum(*iter);
       float tileGCost = evaluatedPoint->getGCost() + traversalCost;
@@ -296,12 +296,12 @@ void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileS
          const int x = iter->x;
          const int y = iter->y;
          
-         bool freeTile = entityGrid.canOccupyArea(Point2D(x, y) * movementTileSize, width, height, entityState);
+         bool freeTile = entityGrid.canOccupyArea(shapes::Point2D(x, y) * movementTileSize, width, height, entityState);
 
          if(diagonalMovement)
          {
-            freeTile = freeTile && entityGrid.canOccupyArea(Point2D(evaluatedPoint->x, y), width, height, entityState)
-                                && entityGrid.canOccupyArea(Point2D(x, evaluatedPoint->y), width, height, entityState);
+            freeTile = freeTile && entityGrid.canOccupyArea(shapes::Point2D(evaluatedPoint->x, y), width, height, entityState)
+                                && entityGrid.canOccupyArea(shapes::Point2D(x, evaluatedPoint->y), width, height, entityState);
          }
 
          if(freeTile)
@@ -326,7 +326,7 @@ void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileS
    }
 }
 
-Pathfinder::Path Pathfinder::findRFWPath(const Point2D& src, const Point2D& dst)
+Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shapes::Point2D& dst)
 {
    Path path;
 
@@ -341,7 +341,7 @@ Pathfinder::Path Pathfinder::findRFWPath(const Point2D& src, const Point2D& dst)
          break;
       }
       
-      path.push_back(Point2D(tileNumToPixels(nextTile)));
+      path.push_back(shapes::Point2D(tileNumToPixels(nextTile)));
       srcTileNum = nextTile;
    }
 

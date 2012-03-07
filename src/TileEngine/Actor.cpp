@@ -84,7 +84,7 @@ void Actor::move(int x, int y)
    if(entityGrid.withinMap(x,y))
    {
       DEBUG("Sending move order to %s: %d,%d", name.c_str(), x, y);
-      Point2D dst(x, y);
+      shapes::Point2D dst(x, y);
       orders.push(new MoveOrder(*this, dst, entityGrid));
    }
    else
@@ -100,8 +100,8 @@ void Actor::stand(MovementDirection direction)
 
 void Actor::faceActor(Actor* other)
 {
-   Point2D currentLocation = getLocation();
-   Point2D otherLocation = other->getLocation();
+   shapes::Point2D currentLocation = getLocation();
+   shapes::Point2D otherLocation = other->getLocation();
    MovementDirection directionToOther = getDirection();
 
    int xDiff = currentLocation.x - otherLocation.x;
@@ -149,12 +149,12 @@ void Actor::setAnimation(const std::string& animationName)
    sprite->setAnimation(animationName, currDirection);
 }
 
-void Actor::setLocation(Point2D location)
+void Actor::setLocation(shapes::Point2D location)
 {
    pixelLoc = location;
 }
 
-Point2D Actor::getLocation() const
+shapes::Point2D Actor::getLocation() const
 {
    return pixelLoc;
 }

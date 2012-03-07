@@ -25,7 +25,7 @@ static int PlayerCharacterL_Show(lua_State* luaVM)
          {
             int x = lua_tointeger(luaVM, 2);
             int y = lua_tointeger(luaVM, 3);
-            playerCharacter->addToMap(Point2D(x, y));
+            playerCharacter->addToMap(shapes::Point2D(x, y));
          }
          break;
       }
@@ -65,7 +65,7 @@ static int PlayerCharacterL_SetLocation(lua_State* luaVM)
          {
             int x = lua_tointeger(luaVM, 2);
             int y = lua_tointeger(luaVM, 3);
-            playerCharacter->setLocation(Point2D(x, y));
+            playerCharacter->setLocation(shapes::Point2D(x, y));
          }
          break;
       }

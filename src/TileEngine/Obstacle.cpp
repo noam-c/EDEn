@@ -13,7 +13,7 @@
 const int DEBUG_FLAG = DEBUG_SPRITE;
 
 Obstacle::Obstacle(const int tileX, const int tileY, const int width, const int height, Spritesheet* spritesheet, const std::string& spriteType, const std::string& spriteName) 
-   : tileCoords(Point2D(tileX, tileY)), width(width), height(height)
+   : tileCoords(shapes::Point2D(tileX, tileY)), width(width), height(height)
                                                                                                                                                                                                                {
    sprite = new Sprite(spritesheet);
 

@@ -36,7 +36,7 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
 
             DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
             DEBUG("NPC Location will be (%d, %d)", x, y);
-            npc = tileEngine->addNPC(npcName, spritesheetName, Point2D(x, y));
+            npc = tileEngine->addNPC(npcName, spritesheetName, shapes::Point2D(x, y));
          }
       }
    }

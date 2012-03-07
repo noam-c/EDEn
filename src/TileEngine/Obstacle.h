@@ -17,7 +17,7 @@ class Spritesheet;
 
 class Obstacle
 {
-   const Point2D tileCoords;
+   const shapes::Point2D tileCoords;
 
    const int width;
    const int height;

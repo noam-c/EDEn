@@ -33,7 +33,7 @@ class Actor
    int height;
    
    /** The current location of the actor (in pixels) */
-   Point2D pixelLoc;
+   shapes::Point2D pixelLoc;
    
    /** The movement speed of the actor */
    float movementSpeed;
@@ -162,12 +162,12 @@ public:
        *
        * @param location The new location of the actor.
        */
-      void setLocation(Point2D location);
+      void setLocation(shapes::Point2D location);
       
       /**
        * @return The location of the actor.
        */
-      Point2D getLocation() const;
+      shapes::Point2D getLocation() const;
       
       /**
        * This function changes the direction that the actor is facing.

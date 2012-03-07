@@ -5,7 +5,6 @@
  */
 
 #include "GraphicsUtil.h"
-#include "GLInclude.h"
 #include <SDL.h>
 #include "SDL_opengl.h"
 #include "SDL_image.h"

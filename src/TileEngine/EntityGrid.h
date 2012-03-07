@@ -15,8 +15,8 @@
 class Obstacle;
 class Map;
 class Actor;
-struct Point2D;
-struct Rectangle;
+struct shapes::Point2D;
+struct shapes::Rectangle;
 struct TileState;
 
 /**
@@ -64,7 +64,7 @@ class EntityGrid
     *
     * @return Get the tile boundaries of the specified rectangle.
     */
-   Rectangle getCollisionMapEdges(const Rectangle& area) const;
+   shapes::Rectangle getCollisionMapEdges(const shapes::Rectangle& area) const;
 
    /**
     * Checks if an area is available.
@@ -76,7 +76,7 @@ class EntityGrid
     *
     * @return true if the area can be successfully occupied, false if there was something else in the area.
     */
-   bool canOccupyArea(const Point2D& area, int width, int height, TileState state) const;
+   bool canOccupyArea(const shapes::Point2D& area, int width, int height, TileState state) const;
    
    /**
     * If an area is available, occupy it and set the tiles within it to the new state. 
@@ -89,7 +89,7 @@ class EntityGrid
     *
     * @return true if the area has been successfully occupied, false if there was something else in the area.
     */
-   bool occupyArea(const Point2D& area, int width, int height, TileState state);
+   bool occupyArea(const shapes::Point2D& area, int width, int height, TileState state);
 
    /**
     * Free the tiles belonging to a given entity within a specified area. 
@@ -98,7 +98,7 @@ class EntityGrid
     * @param width The width of the area to free (in pixels)
     * @param height The height of the area to free (in pixels)
     */
-   void freeArea(const Point2D& locationToFree, int width, int height);
+   void freeArea(const shapes::Point2D& locationToFree, int width, int height);
    
    /**
     * Free the tiles belonging to a given entity within a specified area. 
@@ -109,7 +109,7 @@ class EntityGrid
     * @param height The height of the area to free (in pixels)
     * @param state The state to remove from the tiles
     */
-   void freeArea(const Point2D& previousLocation, const Point2D& currentLocation, int width, int height, TileState state);
+   void freeArea(const shapes::Point2D& previousLocation, const shapes::Point2D& currentLocation, int width, int height, TileState state);
 
    /**
     * Helper function to unconditionally set the tiles in an area to a given state. 
@@ -117,11 +117,11 @@ class EntityGrid
     * @param area The rectangular area to set (with edge coordinates in tiles)
     * @param state The new state of the area (entity and type)
     */
-   void setArea(const Rectangle& area, TileState state);
+   void setArea(const shapes::Rectangle& area, TileState state);
 
    public:
       /** A set of waypoints to move through in order to go from one point to another. */
-      typedef std::list<Point2D> Path;
+      typedef std::list<shapes::Point2D> Path;
 
       /**
        * Constructor.
@@ -161,7 +161,7 @@ class EntityGrid
        *
        * @return true iff the point is within the map
        */
-      bool withinMap(const Point2D& point) const;
+      bool withinMap(const shapes::Point2D& point) const;
       
       /**
        * @param x The x-coordinate to check (in pixels)
@@ -184,7 +184,7 @@ class EntityGrid
        *
        * @return The ideal best path from the source point to the destination point.
        */
-      Path findBestPath(const Point2D& src, const Point2D& dst);
+      Path findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst);
       
       /**
        * Finds the shortest path from the source coordinates to the destination
@@ -197,7 +197,7 @@ class EntityGrid
        *
        * @return The shortest unobstructed path from the source point to the destination point.
        */
-      Path findReroutedPath(const Point2D& src, const Point2D& dst, int width, int height);
+      Path findReroutedPath(const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height);
       
       /**
        * Checks an area for obstacles or entities.
@@ -208,7 +208,7 @@ class EntityGrid
        *
        * @return true iff a given area is entirely free of obstacles and entities.
        */
-      bool isAreaFree(const Point2D& area, int width, int height) const;
+      bool isAreaFree(const shapes::Point2D& area, int width, int height) const;
    
       /**
        * Add an obstacle and occupy the tiles under it.
@@ -220,7 +220,7 @@ class EntityGrid
        *
        * @return true if the obstacle has been successfully placed in the area, false if there was something else in the area.
        */
-      bool addObstacle(const Point2D& area, int width, int height);
+      bool addObstacle(const shapes::Point2D& area, int width, int height);
 
       /**
        * Add an Actor and occupy the tiles under it.
@@ -231,7 +231,7 @@ class EntityGrid
        *
        * @return true if the actor has been successfully placed in the area, false if there was something else in the area.
        */
-      bool addActor(Actor* actor, const Point2D& area);
+      bool addActor(Actor* actor, const shapes::Point2D& area);
 
       /**
        * Change the actor location, if the destination tiles are available to occupy.
@@ -242,7 +242,7 @@ class EntityGrid
        *
        * @return true if the player character has been successfully moved to the destination, false if there was something else in the destination.
        */
-      bool changeActorLocation(Actor* actor, const Point2D& dst);
+      bool changeActorLocation(Actor* actor, const shapes::Point2D& dst);
 
       /**
        * Remove the player and free the tiles under it.
@@ -280,7 +280,7 @@ class EntityGrid
        *
        * @return true iff the actor can move from the source to the destination.
        */
-      bool beginMovement(Actor* actor, const Point2D& dst);
+      bool beginMovement(Actor* actor, const shapes::Point2D& dst);
       
       /**
        * Notifies the EntityGrid that the actor failed to complete movement from the source to the given destination and occupies some area between the source and destination.
@@ -289,7 +289,7 @@ class EntityGrid
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the original destination (in pixels).
        */
-      void abortMovement(Actor* actor, const Point2D& src, const Point2D& dst);
+      void abortMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst);
       
       /**
        * Notifies the EntityGrid that the actor moved successfully from the source to the given destination and no longer occupies the source coordinates.
@@ -298,7 +298,7 @@ class EntityGrid
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
        */
-      void endMovement(Actor* actor, const Point2D& src, const Point2D& dst);
+      void endMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst);
    
       /**
        * Draw the collision map for diagnostic purposes.

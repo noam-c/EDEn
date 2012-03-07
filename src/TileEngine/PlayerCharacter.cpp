@@ -23,7 +23,7 @@ PlayerCharacter::PlayerCharacter(EntityGrid& map, const std::string& sheetName)
 {
 }
 
-void PlayerCharacter::addToMap(Point2D location)
+void PlayerCharacter::addToMap(shapes::Point2D location)
 {
    if(!active && entityGrid.addActor(this, location))
    {

@@ -5,7 +5,7 @@
  */
 
 #include "Spritesheet.h"
-#include "GLInclude.h"
+#include "SDL_opengl.h"
 #include "GraphicsUtil.h"
 #include "SpriteFrame.h"
 #include "Animation.h"

@@ -29,7 +29,6 @@ set(HEADERS
   src/Exception.h
   src/ExecutionStack.h
   src/GameState.h
-  src/GLInclude.h
   src/GraphicsUtil.h
   src/guichan/actionevent.hpp
   src/guichan/actionlistener.hpp

@@ -34,17 +34,17 @@ class Actor::MoveOrder : public Actor::Order
 {
    bool pathInitialized;
    bool movementBegun;
-   const Point2D dst;
-   Point2D lastWaypoint;
-   Point2D nextWaypoint;
+   const shapes::Point2D dst;
+   shapes::Point2D lastWaypoint;
+   shapes::Point2D nextWaypoint;
    EntityGrid& entityGrid;
    EntityGrid::Path path;
 
    void updateDirection(MovementDirection newDirection, bool moving);
-   void updateNextWaypoint(Point2D location, MovementDirection& direction);
+   void updateNextWaypoint(shapes::Point2D location, MovementDirection& direction);
 
    public:
-      MoveOrder(Actor& actor, const Point2D& destination, EntityGrid& entityGrid);
+      MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid);
       ~MoveOrder();
       bool perform(long timePassed);
       void draw();

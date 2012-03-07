@@ -5,7 +5,7 @@
  */
 
 #include "Tileset.h"
-#include "GLInclude.h"
+#include "SDL_opengl.h"
 #include <fstream>
 #include "GraphicsUtil.h"
 #include "TileEngine.h"

@@ -138,7 +138,7 @@ void TileEngine::toggleDebugConsole()
    }
 }
 
-NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, Point2D npcLocation)
+NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, shapes::Point2D npcLocation)
 {
    NPC* npcToAdd = NULL;
    

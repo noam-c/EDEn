@@ -40,7 +40,7 @@ class PlayerCharacter : public Actor
       /**
        * Adds the player entity to the map at the specified location.
        */
-      void addToMap(Point2D location);
+      void addToMap(shapes::Point2D location);
 
       /**
        * Deactivates the player entity.

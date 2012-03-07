@@ -6,7 +6,7 @@
 
 #include "Actor.h"
 #include "Actor_Orders.h"
-#include "GLInclude.h"
+#include "SDL_opengl.h"
 #include "TileEngine.h"
 #include "Map.h"
 
@@ -15,7 +15,7 @@ const int debugFlag = DEBUG_NPC;
 
 //#define DRAW_PATH
 
-Actor::MoveOrder::MoveOrder(Actor& actor, const Point2D& destination, EntityGrid& entityGrid)
+Actor::MoveOrder::MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid)
 : Order(actor), pathInitialized(false), movementBegun(false), dst(destination), entityGrid(entityGrid)
 {
 }
@@ -41,7 +41,7 @@ void Actor::MoveOrder::updateDirection(MovementDirection newDirection, bool movi
    }
 }
 
-void Actor::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& direction)
+void Actor::MoveOrder::updateNextWaypoint(shapes::Point2D location, MovementDirection& direction)
 {
    lastWaypoint = location;
    nextWaypoint = path.front();
@@ -68,7 +68,7 @@ void Actor::MoveOrder::updateNextWaypoint(Point2D location, MovementDirection& d
 
 bool Actor::MoveOrder::perform(long timePassed)
 {
-   Point2D location = actor.getLocation();
+   shapes::Point2D location = actor.getLocation();
    MovementDirection newDirection = actor.getDirection();
    const float vel = actor.getMovementSpeed();
    long distanceCovered = timePassed * vel;
@@ -195,7 +195,7 @@ void Actor::MoveOrder::draw()
    glBegin(GL_LINE_STRIP);
    for(EntityGrid::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
    {
-      Point2D point(iter->x + TileEngine::TILE_SIZE / 2, iter->y + TileEngine::TILE_SIZE / 2);
+      shapes::Point2D point(iter->x + TileEngine::TILE_SIZE / 2, iter->y + TileEngine::TILE_SIZE / 2);
       glVertex3d(point.x, point.y, 0);
    }
    glEnd();
