@@ -205,6 +205,7 @@ int ScriptEngine::generateRandom(lua_State* luaStack)
       {
          min = 0;
          max = (int)luaL_checknumber(luaStack, 1);
+         break;
       }
       case 2:
       {
@@ -222,7 +223,7 @@ int ScriptEngine::generateRandom(lua_State* luaStack)
    }
    
    /** \todo Random number generation is currently unseeded. Use a good seed. */
-   lua_pushnumber(luaVM, (rand() % (max - min)) + min);
+   lua_pushnumber(luaStack, (rand() % (max - min)) + min);
 
    return 1;
 }
