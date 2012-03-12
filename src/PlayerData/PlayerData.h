@@ -12,10 +12,10 @@
 #include <vector>
 
 #include "ItemList.h"
+#include "Quest.h"
 
 class Character;
 class Item;
-class Quest;
 struct EquipSlot;
 
 namespace Json
@@ -70,7 +70,7 @@ class PlayerData
    ItemList inventory;
 
    /** The top-level quest for the game. Contains all the quests that the player can complete. */
-   Quest* rootQuest;
+   Quest rootQuest;
 
    /** The current chapter being played (if the game was saved in the middle of a chapter. */
    std::string currChapter;
@@ -79,16 +79,16 @@ class PlayerData
    SaveLocation saveLocation;
    
    void parseCharactersAndParty(Json::Value& rootElement);
-   void serializeCharactersAndParty(Json::Value& outputJson);
+   void serializeCharactersAndParty(Json::Value& outputJson) const;
     
    void parseQuestLog(Json::Value& rootElement);
-   void serializeQuestLog(Json::Value& outputJson);
+   void serializeQuestLog(Json::Value& outputJson) const;
     
    void parseInventory(Json::Value& rootElement);
-   void serializeInventory(Json::Value& outputJson);
+   void serializeInventory(Json::Value& outputJson) const;
     
    void parseLocation(Json::Value& rootElement);
-   void serializeLocation(Json::Value& outputJson);
+   void serializeLocation(Json::Value& outputJson) const;
     
    public:
       static const int PARTY_SIZE = 4;
@@ -111,7 +111,7 @@ class PlayerData
       void load(const std::string& path);
 
       /**
-       * Save the player data to a file.
+       * Save the player data to a file and set a new default file path.
        *
        * @param filePath The path to save the player data to.
        */
@@ -122,7 +122,7 @@ class PlayerData
       Character* getPartyCharacter(const std::string& characterName) const;
 
 	   CharacterList getParty() const;
-	   ItemList getInventory() const;
+	   const ItemList& getInventory() const;
       ItemList getItemsByTypes(std::vector<int> acceptedTypes) const;
    
       bool addToInventory(const Item* item, int quantity = 1);
@@ -130,10 +130,7 @@ class PlayerData
    
       bool changeEquipment(Character* character, EquipSlot* slot, const Item* newEquipment);
 
-      void addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest);
-      bool isQuestCompleted(const std::string& questPath);
-      void completeQuest(const std::string& questPath);
-      std::string getQuestDescription(const std::string& questPath);
+      Quest* getRootQuest();
 
       ~PlayerData();
 };

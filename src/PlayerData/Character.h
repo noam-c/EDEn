@@ -59,7 +59,7 @@ class Character
     *
     * @param characterNode The JSON node representing the character to add the portrait data to.
     */
-   void serializePortraitData(Json::Value& characterNode);
+   void serializePortraitData(Json::Value& characterNode) const;
    
    public:
       /**
@@ -81,33 +81,33 @@ class Character
        *
        * @param characterSet The character array to serialize the character into.
        */
-      void serialize(Json::Value& characterSet);
+      void serialize(Json::Value& characterSet) const;
    
       /**
        * @return The name of the character.
        */
-      std::string getName();
+      std::string getName() const;
    
       /**
        * @return The relative file path containing the picture of this character.
        * \todo The character portrait data should just contain an ID for the picture instead of a filepath.
        */
-      std::string getPortraitPath();
+      std::string getPortraitPath() const;
 
       // Getters for the health and stamina.
-      int getMaxHP();
-      int getMaxSP();
-      int getHP();
-      int getSP();
+      int getMaxHP() const;
+      int getMaxSP() const;
+      int getHP() const;
+      int getSP() const;
 
       // Getters for the character attributes.
-      int getStrength();
-      int getIntelligence();
-      int getVitality();
-      int getReflex();
-      int getFocus();
-      int getEndurance();
-      int getAgility();
+      int getStrength() const;
+      int getIntelligence() const;
+      int getVitality() const;
+      int getReflex() const;
+      int getFocus() const;
+      int getEndurance() const;
+      int getAgility() const;
       
       /**
        * @return The character's equipment information.

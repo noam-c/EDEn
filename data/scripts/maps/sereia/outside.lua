@@ -8,4 +8,4 @@ map:addNPC('npc2', 'npc1', map:tilesToPixels(0), map:tilesToPixels(3))
 --map:addNPC('npc8', 'npc1', map:tilesToPixels(9), map:tilesToPixels(4))
 --map:addNPC('npc9', 'npc1', map:tilesToPixels(9), map:tilesToPixels(9))
 
-player:show(map:tilesToPixels(6), map:tilesToPixels(6))
+playerSprite:show(map:tilesToPixels(6), map:tilesToPixels(6))

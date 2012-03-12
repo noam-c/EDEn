@@ -1,3 +1,4 @@
+quests:add('chapter1')
 narrate("Exodus Draconis", true)
 --narrate('Our story begins four centuries after the angels left this world.')
 setRegion('sereia')

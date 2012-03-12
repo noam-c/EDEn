@@ -55,7 +55,7 @@ struct EquipSlot
     *
     * @param slotNode The JSON node into which the slot information should be saved.
     */
-   void serialize(Json::Value& slotNode);
+   void serialize(Json::Value& slotNode) const;
       
    /**
     * Destructor.

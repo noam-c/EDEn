@@ -6,6 +6,7 @@
 
 #include "ScriptEngine.h"
 #include "TileEngine.h"
+#include "PlayerData.h"
 #include "Scheduler.h"
 #include "ResourceLoader.h"
 #include "Music.h"
@@ -19,6 +20,8 @@
 #include "LuaPlayerCharacter.h"
 #include "LuaActor.h"
 #include "LuaTileEngine.h"
+
+#include "LuaQuest.h"
 
 #include "LuaWrapper.hpp"
 
@@ -65,7 +68,11 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
 
    luaopen_PlayerCharacter(luaVM);
    luaW_push<PlayerCharacter>(luaVM, tileEngine.getPlayerCharacter());
-   lua_setglobal(luaVM, "player");
+   lua_setglobal(luaVM, "playerSprite");
+
+   luaopen_Quest(luaVM);
+   luaW_push<Quest>(luaVM, playerData.getRootQuest());
+   lua_setglobal(luaVM, "quests");
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)

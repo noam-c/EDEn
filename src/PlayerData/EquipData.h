@@ -71,7 +71,7 @@ class EquipData
        *
        * @param outputJson The JSON node to serialize the equipment into.
        */
-      void serialize(Json::Value& outputJson);
+      void serialize(Json::Value& outputJson) const;
    
       /**
        * Destructor.

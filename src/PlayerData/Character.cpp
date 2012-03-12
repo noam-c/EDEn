@@ -35,7 +35,7 @@ void Character::parsePortraitData(Json::Value& charToLoad)
    portraitPath = portraitData[PATH_ATTRIBUTE].asString();
 }
 
-void Character::serialize(Json::Value& characterSet)
+void Character::serialize(Json::Value& characterSet) const
 {
    Json::Value characterNode(Json::objectValue);
    
@@ -52,75 +52,75 @@ void Character::serialize(Json::Value& characterSet)
    characterSet.append(characterNode);
 }
 
-void Character::serializePortraitData(Json::Value& characterNode)
+void Character::serializePortraitData(Json::Value& characterNode) const
 {
    Json::Value portraitNode(Json::objectValue);
    portraitNode[PATH_ATTRIBUTE] = portraitPath;
    characterNode[PORTRAIT_ELEMENT] = portraitNode;
 }
 
-int Character::getMaxHP()
+int Character::getMaxHP() const
 {
    return maxHP;
 }
 
-int Character::getMaxSP()
+int Character::getMaxSP() const
 {
    return maxSP;
 }
 
-int Character::getHP()
+int Character::getHP() const
 {
    return hp;
 }
 
-int Character::getSP()
+int Character::getSP() const
 {
    return sp;
 }
 
-int Character::getStrength()
+int Character::getStrength() const
 {
    return strength;
 }
 
-int Character::getIntelligence()
+int Character::getIntelligence() const
 {
    return intelligence;
 }
 
-int Character::getVitality()
+int Character::getVitality() const
 {
 
    return vitality;
 }
 
-int Character::getReflex()
+int Character::getReflex() const
 {
    return reflex;
 }
 
-int Character::getFocus()
+int Character::getFocus() const
 {
    return focus;
 }
 
-int Character::getEndurance()
+int Character::getEndurance() const
 {
    return endurance;
 }
 
-int Character::getAgility()
+int Character::getAgility() const
 {
    return agility;
 }
 
-std::string Character::getName()
+std::string Character::getName() const
 {
    return name;
 }
 
-std::string Character::getPortraitPath()
+std::string Character::getPortraitPath() const
 {
    return portraitPath;
 }

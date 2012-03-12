@@ -43,7 +43,7 @@ void EquipData::load(Json::Value& equipment)
    }
 }
 
-void EquipData::serialize(Json::Value& outputJson)
+void EquipData::serialize(Json::Value& outputJson) const
 {
    head.serialize(outputJson["Head"]);
    body.serialize(outputJson["Body"]);

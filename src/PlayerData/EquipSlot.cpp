@@ -44,7 +44,7 @@ void EquipSlot::load(Json::Value& inputJson)
    }
 }
 
-void EquipSlot::serialize(Json::Value& slotNode)
+void EquipSlot::serialize(Json::Value& slotNode) const
 {
    if(equipped != NULL)
    {

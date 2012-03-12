@@ -126,6 +126,7 @@ set(HEADERS
   src/PlayerData/EquipData.h
   src/PlayerData/EquipSlot.h
   src/PlayerData/Quest.h
+  src/PlayerData/LuaQuest.h
   src/PlayerData/SaveGameItemNames.h
   src/Point2D.h
   src/Rectangle.h
@@ -265,6 +266,7 @@ set(SOURCES
   src/PlayerData/Character.cpp
   src/PlayerData/PlayerData.cpp
   src/PlayerData/Quest.cpp
+  src/PlayerData/LuaQuest.cpp
   src/PlayerData/EquipData.cpp
   src/PlayerData/EquipSlot.cpp
   src/ResourceLoader/Resource.cpp

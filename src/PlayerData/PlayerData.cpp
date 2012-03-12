@@ -9,7 +9,6 @@
 #include "Character.h"
 #include "ItemData.h"
 #include "Item.h"
-#include "Quest.h"
 #include <fstream>
 #include "json.h"
 
@@ -19,8 +18,16 @@ const int debugFlag = DEBUG_PLAYER;
 // Uncomment this line to turn off encryption of savegames
 // #define DISABLE_ENCRYPTION
 
-PlayerData::PlayerData() : partyLeader(NULL), rootQuest(NULL)
+PlayerData::PlayerData() : partyLeader(NULL), rootQuest("root")
 {
+}
+
+PlayerData::~PlayerData()
+{
+   for(CharacterList::iterator iter = charactersEncountered.begin(); iter != charactersEncountered.end(); ++iter)
+   {
+      delete *iter;
+   }
 }
 
 const std::string& PlayerData::getFilePath()
@@ -93,19 +100,19 @@ void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
    }
 }
 
-void PlayerData::serializeCharactersAndParty(Json::Value& outputJson)
+void PlayerData::serializeCharactersAndParty(Json::Value& outputJson) const
 {
    Json::Value charactersNode(Json::objectValue);
    
    Json::Value partyNode(Json::arrayValue);
-   for(CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
+   for(CharacterList::const_iterator iter = party.begin(); iter != party.end(); ++iter)
    {
       Character* character = *iter;
       character->serialize(partyNode);
    }
    
    Json::Value reserveNode(Json::arrayValue);
-   for(CharacterList::iterator iter = reserve.begin(); iter != reserve.end(); ++iter)
+   for(CharacterList::const_iterator iter = reserve.begin(); iter != reserve.end(); ++iter)
    {
       Character* character = *iter;
       character->serialize(reserveNode);
@@ -121,12 +128,12 @@ void PlayerData::parseQuestLog(Json::Value& rootElement)
 {
    DEBUG("Loading quest log...");
    Json::Value& questLog = rootElement[QUEST_ELEMENT];
-   rootQuest = new Quest(questLog);
+   rootQuest.load(questLog);
 }
 
-void PlayerData::serializeQuestLog(Json::Value& outputJson)
+void PlayerData::serializeQuestLog(Json::Value& outputJson) const
 {
-   outputJson[QUEST_ELEMENT] = rootQuest->serialize();
+   outputJson[QUEST_ELEMENT] = rootQuest.serialize();
 }
 
 void PlayerData::parseInventory(Json::Value& rootElement)
@@ -142,10 +149,10 @@ void PlayerData::parseInventory(Json::Value& rootElement)
    }
 }
 
-void PlayerData::serializeInventory(Json::Value& outputJson)
+void PlayerData::serializeInventory(Json::Value& outputJson) const
 {
    Json::Value inventoryNode(Json::arrayValue);
-   for(ItemList::iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
+   for(ItemList::const_iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
    {
       int itemNumber = iter->first;
       int itemQuantity = iter->second;
@@ -184,7 +191,7 @@ void PlayerData::parseLocation(Json::Value& rootElement)
    }
 }
 
-void PlayerData::serializeLocation(Json::Value& outputJson)
+void PlayerData::serializeLocation(Json::Value& outputJson) const
 {
    /**
     * \todo Determine format for current location and then correctly serialize
@@ -248,7 +255,7 @@ CharacterList PlayerData::getParty() const
    return party;
 }
 
-ItemList PlayerData::getInventory() const
+const ItemList& PlayerData::getInventory() const
 {
    return inventory;
 }
@@ -325,35 +332,7 @@ bool PlayerData::changeEquipment(Character* character, EquipSlot* slot, const It
    return true;
 }
 
-void PlayerData::addNewQuest(const std::string& questPath, const std::string& description, bool optionalQuest)
+Quest* PlayerData::getRootQuest()
 {
-   rootQuest->addQuest(questPath, description, optionalQuest);
-}
-
-bool PlayerData::isQuestCompleted(const std::string& questPath)
-{
-   return rootQuest->isQuestCompleted(questPath);
-}
-
-void PlayerData::completeQuest(const std::string& questPath)
-{
-   rootQuest->completeQuest(questPath);
-}
-
-std::string PlayerData::getQuestDescription(const std::string& questPath)
-{
-   return rootQuest->getQuestDescription(questPath);
-}
-
-PlayerData::~PlayerData()
-{
-   for(CharacterList::iterator iter = charactersEncountered.begin(); iter != charactersEncountered.end(); ++iter)
-   {
-      delete *iter;
-   }
-   
-   if(rootQuest != NULL)
-   {
-      delete rootQuest;
-   }
+   return &rootQuest;
 }
