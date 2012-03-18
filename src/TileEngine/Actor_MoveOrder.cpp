@@ -16,8 +16,8 @@ const int debugFlag = DEBUG_NPC;
 //#define DRAW_PATH
 
 Actor::MoveOrder::MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid)
-: Order(actor), pathInitialized(false), movementBegun(false), dst(destination), entityGrid(entityGrid)
-{
+: Order(actor), pathInitialized(false), movementBegun(false), dst(destination), entityGrid(entityGrid), cumulativeDistanceCovered(0)
+{	
 }
 
 Actor::MoveOrder::~MoveOrder()
@@ -71,8 +71,13 @@ bool Actor::MoveOrder::perform(long timePassed)
    shapes::Point2D location = actor.getLocation();
    MovementDirection newDirection = actor.getDirection();
    const float vel = actor.getMovementSpeed();
-   long distanceCovered = timePassed * vel;
-   
+   cumulativeDistanceCovered +=timePassed * vel;   
+   long distanceCovered = 0;
+   if(cumulativeDistanceCovered > 1.0)
+   {
+	   distanceCovered = floor(cumulativeDistanceCovered);
+	   cumulativeDistanceCovered -= distanceCovered;
+   }
    // If first run, get the best computed path (RFW), end frame
    // loop infinitely
    //      if there is no next vertex

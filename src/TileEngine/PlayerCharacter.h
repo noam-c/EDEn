@@ -27,7 +27,10 @@ class PlayerCharacter : public Actor
    
    /** True iff the player entity is active on the map. */
    bool active;
-   
+  
+   /** Total distance for the character to move. */
+   float cumulativeDistanceCovered;
+
    public:   
       /**
        * Constructor.
