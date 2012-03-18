@@ -40,6 +40,9 @@ class Actor::MoveOrder : public Actor::Order
    EntityGrid& entityGrid;
    EntityGrid::Path path;
 
+   /** Total distance for the character to move. */
+   float cumulativeDistanceCovered;
+
    void updateDirection(MovementDirection newDirection, bool moving);
    void updateNextWaypoint(shapes::Point2D location, MovementDirection& direction);
 

@@ -19,7 +19,7 @@ const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(EntityGrid& map, const std::string& sheetName)
-                                              : Actor("player", sheetName, map, 0, 0, 1.0f, DOWN), active(false)
+                                              : Actor("player", sheetName, map, 0, 0, 1.0f, DOWN), active(false), cumulativeDistanceCovered(0)
 {
 }
 
@@ -81,7 +81,14 @@ void PlayerCharacter::step(long timePassed)
    if(moving)
    {
       flushOrders();
-      int distanceTraversed = getMovementSpeed() * (timePassed / 5);
+	  /** \todo This algorithm is different from Actor_MoveOrder.cpp, synchronize. */
+	  cumulativeDistanceCovered += getMovementSpeed() * (timePassed / 5.0);
+      int distanceTraversed = 0;
+	  if(cumulativeDistanceCovered > 1.0)
+	  {
+		  distanceTraversed = floor(cumulativeDistanceCovered);
+		  cumulativeDistanceCovered -= distanceTraversed;
+	  }
       sprite->setAnimation(WALKING_PREFIX, direction);
       setDirection(direction);
       entityGrid.moveToClosestPoint(this, xDirection, yDirection, distanceTraversed);
