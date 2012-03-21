@@ -22,6 +22,7 @@
 #include "LuaTileEngine.h"
 
 #include "LuaQuest.h"
+#include "LuaInventory.h"
 
 #include "LuaWrapper.hpp"
 
@@ -73,6 +74,10 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
    luaopen_Quest(luaVM);
    luaW_push<Quest>(luaVM, playerData.getRootQuest());
    lua_setglobal(luaVM, "quests");
+   
+   luaopen_Inventory(luaVM);
+   luaW_push<Inventory>(luaVM, playerData.getInventory());
+   lua_setglobal(luaVM, "inventory");
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)

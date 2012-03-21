@@ -16,8 +16,8 @@ const int debugFlag = DEBUG_MENU;
 
 ItemsMenu::ItemsMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData) : MenuState(executionStack, menuShell), playerData(playerData)
 {
-   ItemList inventory = playerData.getInventory();
-   inventoryList.setItems(inventory);
+   Inventory* inventory = playerData.getInventory();
+   inventoryList.setItems(inventory->getItemList());
    ItemsPane* pane = new ItemsPane(inventoryList, menuShell.getDimension());
    pane->setModuleSelectListener(this);
 

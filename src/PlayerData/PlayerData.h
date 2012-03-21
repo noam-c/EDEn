@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "ItemList.h"
+#include "Inventory.h"
 #include "Quest.h"
 
 class Character;
@@ -67,7 +67,7 @@ class PlayerData
    Character* partyLeader;
 
    /** All the items that are in the player's item bag. Includes usables, keys, and unused equipment. */
-   ItemList inventory;
+   Inventory inventory;
 
    /** The top-level quest for the game. Contains all the quests that the player can complete. */
    Quest rootQuest;
@@ -122,11 +122,8 @@ class PlayerData
       Character* getPartyCharacter(const std::string& characterName) const;
 
 	   CharacterList getParty() const;
-	   const ItemList& getInventory() const;
-      ItemList getItemsByTypes(std::vector<int> acceptedTypes) const;
-   
-      bool addToInventory(const Item* item, int quantity = 1);
-      bool removeFromInventory(const Item* item, int quantity = 1);
+      const Inventory* getInventory() const;
+      Inventory* getInventory();
    
       bool changeEquipment(Character* character, EquipSlot* slot, const Item* newEquipment);
 

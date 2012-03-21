@@ -58,7 +58,7 @@ void EquipMenu::moduleSelected(int index, const std::string& eventId)
       // An equipment slot was selected to change.
       DEBUG("Equipment slot %d selected.", index);
       selectedSlot = equipSlots[index];
-      ItemList acceptedItems = playerData.getItemsByTypes(selectedSlot->acceptedTypes);
+      ItemList acceptedItems = playerData.getInventory()->getItemsByTypes(selectedSlot->acceptedTypes);
       equippableItems.setItems(acceptedItems);
       
       ((EquipPane*)menuPane)->invalidate();

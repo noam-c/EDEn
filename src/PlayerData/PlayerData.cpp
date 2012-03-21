@@ -140,34 +140,12 @@ void PlayerData::parseInventory(Json::Value& rootElement)
 {
    DEBUG("Loading inventory data...");
    Json::Value& itemsHeld = rootElement[INVENTORY_ELEMENT];
-   for(Json::Value::iterator iter = itemsHeld.begin(); iter != itemsHeld.end(); ++iter)
-   {
-      int itemNum, itemQuantity;
-      itemNum = (*iter)[ITEM_NUM_ATTRIBUTE].asInt();
-      itemQuantity = (*iter)[ITEM_QUANTITY_ATTRIBUTE].asInt();
-      inventory.push_back(std::pair<int,int>(itemNum, itemQuantity));
-   }
+   inventory.load(itemsHeld);
 }
 
 void PlayerData::serializeInventory(Json::Value& outputJson) const
 {
-   Json::Value inventoryNode(Json::arrayValue);
-   for(ItemList::const_iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
-   {
-      int itemNumber = iter->first;
-      int itemQuantity = iter->second;
-      
-      if(itemQuantity > 0)
-      {
-         Json::Value itemEntry(Json::objectValue);
-         itemEntry[ITEM_NUM_ATTRIBUTE] = itemNumber;
-         itemEntry[ITEM_QUANTITY_ATTRIBUTE] = itemQuantity;
-         
-         inventoryNode.append(itemEntry);
-      }
-   }
-   
-   outputJson[INVENTORY_ELEMENT] = inventoryNode;
+   outputJson[INVENTORY_ELEMENT] = inventory.serialize();
 }
 
 void PlayerData::parseLocation(Json::Value& rootElement)
@@ -255,79 +233,20 @@ CharacterList PlayerData::getParty() const
    return party;
 }
 
-const ItemList& PlayerData::getInventory() const
+const Inventory* PlayerData::getInventory() const
 {
-   return inventory;
+   return &inventory;
 }
 
-ItemList PlayerData::getItemsByTypes(std::vector<int> acceptedTypes) const
+Inventory* PlayerData::getInventory()
 {
-   /**
-    * \todo This method needs to properly filter through the inventory by type,
-    * This must be done once item type is loaded into the Item structure.
-    */
-   return inventory;
-}
-
-bool PlayerData::addToInventory(const Item* item, int quantity)
-{
-   if(quantity < 1)
-   {
-      return false;
-   }
-   
-   int itemId = item->getId();
-   for(ItemList::iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
-   {
-      if(iter->first == itemId)
-      {
-         iter->second += quantity;
-         return true;
-      }
-   }
-   
-   inventory.push_back(std::pair<int, int>(item->getId(), quantity));
-   return true;
-}
-
-bool PlayerData::removeFromInventory(const Item* item, int quantity)
-{
-   if(quantity < 1)
-   {
-      return false;
-   }
-
-   int itemId = item->getId();
-   for(ItemList::iterator iter = inventory.begin(); iter != inventory.end(); ++iter)
-   {
-      int& existingQuantity = iter->second;
-      if(iter->first == itemId)
-      {
-         if(existingQuantity >= quantity)
-         {
-            // If the item is in the inventory in sufficient quantity, remove 'quantity' items
-            // and return true.
-            existingQuantity -= quantity;
-            if(existingQuantity == 0)
-            {
-               inventory.erase(iter);
-            }
-
-            return true;
-         }
-
-         break;
-      }
-   }
-   
-   // If the item is not in inventory, return false.
-   return false;
+   return &inventory;
 }
 
 bool PlayerData::changeEquipment(Character* character, EquipSlot* slot, const Item* newEquipment)
 {
-   addToInventory(slot->equipped);
-   removeFromInventory(newEquipment);
+   inventory.addItem(slot->equipped->getId());
+   inventory.removeItem(newEquipment->getId());
    slot->equipped = newEquipment;
    return true;
 }
