@@ -164,8 +164,6 @@ set(HEADERS
   src/TileEngine/LuaTileEngine.h
   src/TileEngine/Tileset.h
   src/TileEngine/TileState.h
-  src/TileEngine/XMap.h
-  src/TileEngine/XRegion.h
   src/tinyxml/tinystr.h
   src/tinyxml/tinyxml.h
   src/TODOLIST.h
@@ -303,8 +301,6 @@ set(SOURCES
   src/TileEngine/LuaTileEngine.cpp
   src/TileEngine/Tileset.cpp
   src/TileEngine/TileState.cpp
-  src/TileEngine/XMap.cpp
-  src/TileEngine/XRegion.cpp
   src/main.cpp
   src/DebugUtils.cpp
   src/Exception.cpp

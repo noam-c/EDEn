@@ -10,6 +10,7 @@
 #include "Pathfinder.h"
 #include "EntityGrid.h"
 
+#include <math.h>
 #include <SDL.h>
 
 #include "DebugUtils.h"

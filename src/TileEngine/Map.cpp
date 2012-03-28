@@ -11,6 +11,7 @@
 #include "ResourceLoader.h"
 #include "TileEngine.h"
 #include "DebugUtils.h"
+#include "tinyxml.h"
 
 #include <sstream>
 
@@ -22,66 +23,82 @@ Map::Map()
 {
 }
 
-Map::Map(std::ifstream& in)
+Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
 {
-   /**
-    * \todo Regions shouldn't assume that files are well-formed.
-    *       Find and report errors if the file isn't formed ideally.
-    */
-
-   std::getline(in, mapName, MAP_DELIM);
-   DEBUG("Loading map: %s", mapName.c_str());
-   std::getline(in, tilesetName, MAP_DELIM);
-
-   in >> width;
-   in.get();
-   in >> height;
-
-   tileset = ResourceLoader::getTileset(tilesetName);
-
-   tileMap = new int*[height];
-
-   for(int i = 0; i < height; ++i)
-   {
-      tileMap[i] = new int[width];
-      for(int j = 0; j < width; ++j)
-      {
-         if(in)
-         {
-            in >> tileMap[i][j];
-         }
-         else
-         {
-            T_T("Tile map incomplete.");
-         }
-      }
-
-      in.ignore(width<<1, '\n');
-   }
-
-   std::string obstacleLine;
-   std::string obstacleSheetName;
-   std::string obstacleSpriteType;
-   std::string obstacleSpriteName;
+   DEBUG("Loading map file %s", filePath.c_str());
    
-   int obstacleWidth;
-   int obstacleHeight;
-   int tileX;
-   int tileY;
-
-   for(;;)
+   std::ifstream input(filePath.c_str());
+   if(!input)
    {
-      if(!std::getline(in, obstacleLine) || obstacleLine == "\n") break;
-
-      std::istringstream lineStream(obstacleLine);
-      lineStream >> obstacleSheetName >> obstacleSpriteType >> obstacleSpriteName >> obstacleWidth >> obstacleHeight >> tileX >> tileY;
-
-      Spritesheet* obstacleSheet = ResourceLoader::getSpritesheet(obstacleSheetName);
-      obstacles.push_back(new Obstacle(tileX, tileY, obstacleWidth, obstacleHeight, obstacleSheet, obstacleSpriteType, obstacleSpriteName));
+      T_T("Failed to open map file for reading.");
    }
-
+   
+   TiXmlDocument xmlDoc;
+   input >> xmlDoc;
+   
+   if(xmlDoc.Error())
+   {
+      DEBUG("Error occurred in map XML parsing: %s", xmlDoc.ErrorDesc());
+      T_T("Failed to parse map data.");
+   }
+   
+   TiXmlElement* root = xmlDoc.RootElement();
+   if(strcmp(root->Value(), "map") != 0)
+   {
+      DEBUG("Unexpected root element name.");
+      T_T("Failed to parse map data.");
+   }
+   
+   root->Attribute("width", &width);
+   root->Attribute("height", &height);
+   
+   TiXmlElement* propertiesElement = root->FirstChildElement("properties");
+   
+   TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
+   while(propertyElement != NULL)
+   {
+      if(std::string(propertyElement->Attribute("name")) == "tilesetName")
+      {
+         std::string tilesetName = propertyElement->Attribute("value");
+         tileset = ResourceLoader::getTileset(tilesetName);
+         break;
+      }
+      
+      propertyElement = propertyElement->NextSiblingElement("property");
+   }
+   
+   if(tileset == NULL)
+   {
+      T_T("Map doesn't contain a tileset.");
+   }
+   
+   TiXmlElement* floorElement = root->FirstChildElement("layer");
+   if(floorElement == NULL)
+   {
+      DEBUG("Expected layer data in map.");
+      T_T("Failed to parse map data.");
+   }
+   
+   TiXmlText* floorDataElement = floorElement->FirstChildElement("data")->FirstChild()->ToText();
+   std::stringstream layerStream(floorDataElement->Value());
+   
+   tileMap = new int*[height];
+   for(int y = 0; y < height; ++y)
+   {
+      tileMap[y] = new int[width];
+      
+      for(int x = 0; x < width; ++x)
+      {
+         std::string entry;
+         std::getline(layerStream, entry, ',');
+         tileMap[y][x] = atoi(entry.c_str()) - 1;
+      }
+   }
+   
    initializePassibilityMatrix();
-
+   
+   std::vector<Obstacle*> obstacles;
+   
    DEBUG("Map loaded.");
 }
 

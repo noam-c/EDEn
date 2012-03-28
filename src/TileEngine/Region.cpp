@@ -7,6 +7,7 @@
 #include "Region.h"
 #include "Map.h"
 #include <fstream>
+#include <dirent.h>
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_RES_LOAD;
@@ -17,44 +18,38 @@ Region::Region(const ResourceKey& name) : Resource(name), regionName(name)
 
 void Region::load(const char* path)
 {
-   /**
-    * \todo Regions shouldn't assume that files are well-formed.
-    *       Find and report errors if the file isn't formed ideally.
-    */
-
-   std::ifstream in;
-   in.open(path);
-   if(!in.is_open())
+   struct dirent *entry;
+   DIR *dp;
+   std::vector<std::string> files;
+   
+   dp = opendir(path);
+   if (dp == NULL)
    {
-      T_T(std::string("Error opening file: ") + path);
+      T_T("opendir");
    }
-
-   in >> regionName;
-
-   // Get rid of remaining crap on the line (like DOS newline characters...)
-   std::string remainder;
-   std::getline(in, remainder);
-
-   if(!in)
+   
+   while((entry = readdir(dp)))
    {
-      T_T(std::string("Error reading from file: ") + path);
+      std::string filename(entry->d_name);
+      if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".tmx")
+      {
+         files.push_back(filename);
+      }
    }
-   else if(in.eof())
+   
+   closedir(dp);
+   
+   for(std::vector<std::string>::iterator iter = files.begin(); iter != files.end(); ++iter)
    {
-      T_T(std::string("Region file contains no maps: ") + path);
-   }
-
-   Map* nextMap;
-   while(!in.eof())
-   {
+      std::string mapFile(std::string(path) + *iter);
       try
       {
-         nextMap = new Map(in);
+         Map* nextMap = new Map(iter->substr(0, iter->length() - 4), mapFile);
          areas[nextMap->getName()] = nextMap;
       }
       catch(Exception e)
       {
-         T_T(std::string("Malformed map in region file: ") + path + '\n' + e.getMessage());
+         T_T(std::string("Malformed map in map file: ") + mapFile + '\n' + e.getMessage());
       }
    }
 }

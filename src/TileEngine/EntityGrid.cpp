@@ -6,7 +6,6 @@
 
 #include "EntityGrid.h"
 #include "Map.h"
-#include "XMap.h"
 #include "Obstacle.h"
 #include "TileEngine.h"
 #include "TileState.h"

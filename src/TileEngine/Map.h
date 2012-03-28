@@ -76,10 +76,10 @@ class Map
        * At the end of construction, the input stream 'in' will be at the end of
        * this Map's data.
        *
-       * @param in The region file stream, currently pointing at the
-       *           beginning of this Map's data.
+       * @param name The name of the map area.
+       * @param filePath The path to the map file to load.
        */
-      Map(std::ifstream& in);
+      Map(const std::string& name, const std::string& filePath);
 
       /**
        * @return The name of this map.

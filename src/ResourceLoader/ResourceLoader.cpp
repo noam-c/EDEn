@@ -9,7 +9,7 @@
 #include "Music.h"
 #include "Sound.h"
 #include "Tileset.h"
-#include "XRegion.h"
+#include "Region.h"
 #include "Spritesheet.h"
 
 #include <fstream>
@@ -55,7 +55,7 @@ Resource* ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
       case REGION:
       {
          // Create a resource to hold a region
-         newResource = new XRegion(name);
+         newResource = new Region(name);
          break;
       }
       case SPRITESHEET:

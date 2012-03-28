@@ -9,6 +9,7 @@
 #include "SDL_opengl.h"
 #include "TileEngine.h"
 #include "Map.h"
+#include <math.h>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_NPC;
