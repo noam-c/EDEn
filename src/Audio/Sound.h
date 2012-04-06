@@ -57,7 +57,7 @@ class Sound : public Resource
     *
     * @param path The path to the music file.
     */
-   void load(const char* path);
+   void load(const std::string& path);
 
    /**
     * A callback used to signal to the sound that it has finished playing.

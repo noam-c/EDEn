@@ -10,10 +10,11 @@
 #include "Pathfinder.h"
 #include "ResourceLoader.h"
 #include "TileEngine.h"
-#include "DebugUtils.h"
-#include "tinyxml.h"
-
+#include "Rectangle.h"
+#include "Point2D.h"
 #include <sstream>
+
+#include "DebugUtils.h"
 
 const int debugFlag = DEBUG_RES_LOAD;
 
@@ -42,7 +43,7 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
       T_T("Failed to parse map data.");
    }
    
-   TiXmlElement* root = xmlDoc.RootElement();
+   const TiXmlElement* root = xmlDoc.RootElement();
    if(strcmp(root->Value(), "map") != 0)
    {
       DEBUG("Unexpected root element name.");
@@ -52,9 +53,9 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
    root->Attribute("width", &width);
    root->Attribute("height", &height);
    
-   TiXmlElement* propertiesElement = root->FirstChildElement("properties");
+   const TiXmlElement* propertiesElement = root->FirstChildElement("properties");
    
-   TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
+   const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
    while(propertyElement != NULL)
    {
       if(std::string(propertyElement->Attribute("name")) == "tilesetName")
@@ -72,14 +73,46 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
       T_T("Map doesn't contain a tileset.");
    }
    
-   TiXmlElement* floorElement = root->FirstChildElement("layer");
+   const TiXmlElement* floorElement = root->FirstChildElement("layer");
+   while(floorElement != NULL)
+   {
+      if(std::string(floorElement->Attribute("name")) == "floor")
+      {
+         break;
+      }
+      
+      floorElement = floorElement->NextSiblingElement("layer");
+   }
+   
    if(floorElement == NULL)
    {
       DEBUG("Expected layer data in map.");
       T_T("Failed to parse map data.");
    }
+
+   parseFloorLayer(floorElement);
+
+   const TiXmlElement* collisionElement = root->FirstChildElement("objectgroup");
+   while(floorElement != NULL)
+   {
+      if(std::string(collisionElement->Attribute("name")) == "collision")
+      {
+         break;
+      }
+      
+      collisionElement = collisionElement->NextSiblingElement("objectgroup");
+   }
+
+   parseCollisionGroup(collisionElement);
    
-   TiXmlText* floorDataElement = floorElement->FirstChildElement("data")->FirstChild()->ToText();
+   std::vector<Obstacle*> obstacles;
+   
+   DEBUG("Map loaded.");
+}
+
+void Map::parseFloorLayer(const TiXmlElement* floorLayerElement)
+{
+   const TiXmlText* floorDataElement = floorLayerElement->FirstChildElement("data")->FirstChild()->ToText();
    std::stringstream layerStream(floorDataElement->Value());
    
    tileMap = new int*[height];
@@ -94,17 +127,46 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
          tileMap[y][x] = atoi(entry.c_str()) - 1;
       }
    }
-   
+}
+
+void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
+{
    initializePassibilityMatrix();
-   
-   std::vector<Obstacle*> obstacles;
-   
-   DEBUG("Map loaded.");
+
+   if(collisionGroupElement != NULL)
+   {
+      shapes::Point2D topLeft;
+      int width;
+      int height;
+
+      const TiXmlElement* objectElement = collisionGroupElement->FirstChildElement("object");
+      while(objectElement != NULL)
+      {
+         objectElement->Attribute("x", &topLeft.x);
+         objectElement->Attribute("y", &topLeft.y);
+         objectElement->Attribute("width", &width);
+         objectElement->Attribute("height", &height);
+         
+         shapes::Rectangle rect(topLeft / TileEngine::TILE_SIZE, width / TileEngine::TILE_SIZE, height / TileEngine::TILE_SIZE);
+         if(rect.getWidth() > 0 && rect.getHeight() > 0)
+         {
+            for(int y = rect.top; y < rect.bottom; ++y)
+            {
+               for(int x = rect.left; x < rect.right; ++x)
+               {
+                  passibilityMap[y][x] = false;
+               }  
+            }
+         }
+
+         objectElement = objectElement->NextSiblingElement("object");
+      }
+   }
 }
 
 bool Map::isPassible(int x, int y) const
 {
-   return tileset->isPassible(tileMap[y][x]);
+    return passibilityMap[y][x];
 }
 
 void Map::initializePassibilityMatrix()
@@ -115,7 +177,7 @@ void Map::initializePassibilityMatrix()
       passibilityMap[y] = new bool[width];
       for(int x = 0; x < width; ++x)
       {
-         passibilityMap[y][x] = isPassible(x, y);
+         passibilityMap[y][x] = tileset->isPassible(tileMap[y][x]);
       }
    }
 }
@@ -161,7 +223,7 @@ void Map::draw() const
       for(int j = 0; j < height; ++j)
       {
 #ifdef DRAW_PASSIBILITY
-         if(passibilityMap[j][i])
+         if(isPassible(i,j))
          {
             Tileset::drawColorToTile(i, j, 0.0f, 1.0f, 0.0f);
          }

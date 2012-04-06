@@ -7,64 +7,90 @@
 #include "Tileset.h"
 #include "SDL_opengl.h"
 #include <fstream>
+#include "tinyxml.h"
 #include "GraphicsUtil.h"
 #include "TileEngine.h"
+#include <algorithm>
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_RES_LOAD | DEBUG_TILE_ENG;
-
-const std::string Tileset::IMG_EXTENSION = ".png";
-const std::string Tileset::DATA_EXTENSION = ".edt";
 
 Tileset::Tileset(ResourceKey name) : Resource(name)
 {
 }
 
-void Tileset::load(const char* path)
+void Tileset::load(const std::string& path)
 {
-   std::string imagePath(path);
-   imagePath += IMG_EXTENSION;
-
+   DEBUG("Loading tileset file %s", path.c_str());
+   
+   std::ifstream input(path.c_str());
+   if(!input)
+   {
+      T_T("Failed to open tileset file for reading.");
+   }
+   
+   TiXmlDocument xmlDoc;
+   input >> xmlDoc;
+   
+   if(xmlDoc.Error())
+   {
+      DEBUG("Error occurred in tileset XML parsing: %s", xmlDoc.ErrorDesc());
+      T_T("Failed to parse tileset data.");
+   }
+   
+   TiXmlElement* root = xmlDoc.RootElement();
+   if(strcmp(root->Value(), "tileset") != 0)
+   {
+      DEBUG("Unexpected root element name.");
+      T_T("Failed to parse tileset data.");
+   }
+   
+   TiXmlElement* imageElement = root->FirstChildElement("image");
+   if(imageElement == NULL)
+   {
+      DEBUG("Expected image data in tileset.");
+      T_T("Failed to parse tileset data.");
+   }
+   
+   std::string imagePath = imageElement->Attribute("source");
    DEBUG("Loading tileset image \"%s\"...", imagePath.c_str());
 
    int imgWidth, imgHeight;
-   GraphicsUtil::getInstance()->loadGLTexture(imagePath.c_str(), texture, imgWidth, imgHeight);
+   GraphicsUtil::getInstance()->loadGLTexture((std::string("data/tilesets/") + imagePath).c_str(), texture, imgWidth, imgHeight);
 
    width = imgWidth / TileEngine::TILE_SIZE;
    height = imgHeight / TileEngine::TILE_SIZE;
 
-   // A data file is needed to hold the default passibility matrix for a Tileset
+   // \todo When Tiled makes it easier, the tileset data needs to hold the default
+   // passibility matrix for a Tileset
    // Since maps will rarely change the passibility of tiles, it doesn't make
    // sense to hold passibility within each map's data; a map's Lua script
    // should be able to cheat default passibility if necessary.
-   std::string dataPath(path);
-   dataPath += DATA_EXTENSION;
-   DEBUG("Loading tileset data \"%s\"...", dataPath.c_str());
-
-   std::ifstream in(dataPath.c_str());
-
-   if(!in.is_open())
-   {  
-      T_T(std::string("Error opening file: ") + path);
-   }
-
-   passibility = new bool*[width];
-   for(int i = 0; i < width; ++i)
+   passibility.resize(width * height);
+   std::fill(passibility.begin(), passibility.end(), true);
+   
+   TiXmlElement* tileElement = root->FirstChildElement("tile");
+   while(tileElement != NULL)
    {
-      passibility[i] = new bool[height];
-      for(int j = 0; j < height; ++j)
+      int tileNum = -1;
+      tileElement->Attribute("id", &tileNum);
+
+      TiXmlElement* propertiesElement = tileElement->FirstChildElement("properties");
+
+      TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
+      while(propertyElement != NULL)
       {
-         if(in)
+         if(std::string(propertyElement->Attribute("name")) == "collision")
          {
-            int c;
-            in >> c;
-            passibility[i][j] = (c != 0);
+            const std::string collision = propertyElement->Attribute("value");
+            passibility[tileNum] = collision != "true";
+            break;
          }
-         else
-         {
-            T_T("Tileset has incomplete passibility matrix.");
-         }
+         
+         propertyElement = propertyElement->NextSiblingElement("property");
       }
+      
+      tileElement = tileElement->NextSiblingElement("tile");
    }
 }
    
@@ -122,20 +148,10 @@ size_t Tileset::getSize()
 
 bool Tileset::isPassible(int tileNum) const
 {
-   int tilesetX = tileNum % width;
-   int tilesetY = tileNum / width;
-
-   return passibility[tilesetX][tilesetY];
+   return passibility[tileNum];
 }
 
 Tileset::~Tileset()
 {
-   for(int i = 0; i < width; ++i)
-   {
-      delete [] passibility[i];
-   }
-
-   delete [] passibility;
-
    glDeleteTextures(1, &texture);
 }

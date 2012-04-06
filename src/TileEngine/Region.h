@@ -27,19 +27,18 @@ class Map;
  */
 class Region : public Resource
 {
-   protected:
-      /** The name of the region. */
-      std::string regionName;
+   /** The name of the region. */
+   std::string regionName;
 
-      /** The list of maps in this region, keyed by map names. */
-      std::map<std::string, Map*> areas;
+   /** The list of maps in this region, keyed by map names. */
+   std::map<std::string, Map*> areas;
 
-      /**
-       * Loads this region from the specified EDR file.
-       *
-       * @param path The path to the file containing the region and its maps.
-       */
-      virtual void load(const char* path);
+   /**
+    * Loads this region from the specified EDR file.
+    *
+    * @param path The path to the file containing the region and its maps.
+    */
+   virtual void load(const std::string& path);
 
    public:
       /**

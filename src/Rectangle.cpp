@@ -21,4 +21,14 @@ namespace shapes
                 || other.bottom < top
                 );
    }
+   
+   int Rectangle::getWidth() const
+   {
+      return right - left;
+   }
+
+   int Rectangle::getHeight() const
+   {
+      return bottom - top;
+   }
 };

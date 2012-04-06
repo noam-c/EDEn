@@ -77,7 +77,7 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
       music = ResourceLoader::getMusic("title.mp3");
       #endif
    }
-   catch (gcn::Exception e)
+   catch (gcn::Exception& e)
    {
       DEBUG(e.getMessage());
       DEBUG(IMG_GetError());
@@ -92,7 +92,7 @@ void MainMenu::activate()
    {
       actionsListBox->requestFocus();
    }
-   catch (gcn::Exception e)
+   catch (gcn::Exception& e)
    {
       DEBUG(e.getMessage());
       DEBUG(IMG_GetError());

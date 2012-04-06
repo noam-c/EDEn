@@ -32,22 +32,22 @@ Sound::Sound(ResourceKey name) : Resource(name), playingChannel(-1)
 {
 }
 
-void Sound::load(const char* path)
+void Sound::load(const std::string& path)
 {
    /**
     * \todo This should only be called once. Move it into initialization code.
     */
    Mix_ChannelFinished(&Sound::channelFinished);
 
-   DEBUG("Loading WAV %s", path);
-   sound = Mix_LoadWAV(path);
+   DEBUG("Loading WAV %s", path.c_str());
+   sound = Mix_LoadWAV(path.c_str());
 
    if(sound == NULL)
    {
       T_T(Mix_GetError());
    }
 
-   DEBUG("Successfully loaded WAV %s.", path);
+   DEBUG("Successfully loaded WAV %s.", path.c_str());
 }
 
 size_t Sound::getSize()

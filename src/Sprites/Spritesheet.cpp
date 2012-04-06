@@ -32,7 +32,7 @@ Spritesheet::Spritesheet(ResourceKey name) : Resource(name), frameList(NULL), nu
 {
 }
 
-void Spritesheet::load(const char* path)
+void Spritesheet::load(const std::string& path)
 {
    // Load the image itself into a texture using GraphicsUtil
    std::string imgPath(path);

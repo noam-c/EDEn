@@ -15,9 +15,9 @@ Music::Music(ResourceKey name) : Resource(name)
 {
 }
 
-void Music::load(const char* path)
+void Music::load(const std::string& path)
 {
-   music = Mix_LoadMUS(path);
+   music = Mix_LoadMUS(path.c_str());
 
    if(music == NULL)
    {

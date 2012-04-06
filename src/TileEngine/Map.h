@@ -7,6 +7,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "tinyxml.h"
+
 #include <fstream>
 #include <string>
 #include <vector>
@@ -24,50 +26,59 @@ class Obstacle;
  */
 class Map
 {
-   protected:
-      /**
-       * The delimiter for map data read from file.
-       */
-      static const char MAP_DELIM = ':';
+   /**
+    * The delimiter for map data read from file.
+    */
+   static const char MAP_DELIM = ':';
 
-      /** The name of this map */
-      std::string mapName;
-    
-      /** The name of the tileset in use by this map */
-      std::string tilesetName;
+   /** The name of this map */
+   std::string mapName;
+ 
+   /** The name of the tileset in use by this map */
+   std::string tilesetName;
 
-      /** Tileset in use by this map */
-      Tileset* tileset;
+   /** Tileset in use by this map */
+   Tileset* tileset;
 
-      /** The tiles of the map (as numbers referring to points in the Tileset) */
-      int** tileMap;
+   /** The tiles of the map (as numbers referring to points in the Tileset) */
+   int** tileMap;
 
-      /** The passibility of the map */
-      bool** passibilityMap;
+   /** The passibility of the map */
+   bool** passibilityMap;
 
-      /** The list of the map's obstacles */
-      std::vector<Obstacle*> obstacles;
+   /** The list of the map's obstacles */
+   std::vector<Obstacle*> obstacles;
 
-      /** Width (in tiles) of this map */
-      int width;
+   /** Width (in tiles) of this map */
+   int width;
 
-      /** Height (in tiles) of this map */
-      int height;
+   /** Height (in tiles) of this map */
+   int height;
 
-      /**
-       * @return true iff the tile at this location of the map is passible
-       */
-      bool isPassible(int x, int y) const;
+   /**
+    * @return true iff the tile at this location of the map is passible
+    */
+   bool isPassible(int x, int y) const;
 
-      /**
-       * Creates a 2-dimensional map that corresponds to the passibility of this Map
-       */
-      void initializePassibilityMatrix();
+   /**
+    * Parse the map layer that holds floor tile data.
+    */
+   void parseFloorLayer(const TiXmlElement* floorLayerElement);
 
-      /**
-       * Default constructor.
-       */
-      Map();
+   /**
+    * Parse the map layer that holds collision data.
+    */
+   void parseCollisionGroup(const TiXmlElement* collisionGroupElement);
+
+   /**
+    * Creates a 2-dimensional map that corresponds to the passibility of this Map
+    */
+   void initializePassibilityMatrix();
+
+   /**
+    * Default constructor.
+    */
+   Map();
 
    public:
 
@@ -102,7 +113,7 @@ class Map
       const std::vector<Obstacle*> getObstacles() const;
 
       /**
-       * @return The passibility map of the 
+       * @return The passibility of the map 
        */
       bool** getPassibilityMatrix() const;
 

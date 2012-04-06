@@ -70,7 +70,7 @@ MenuShell::MenuShell(PlayerData& playerData) : activeState(NULL)
       add(menuTabs, getWidth() * 0.2, 5);
       add(actionsListBox, 5, menuTabs->getTabHeight() + 5);
    }
-   catch (gcn::Exception e)
+   catch (gcn::Exception& e)
    {
       DEBUG(e.getMessage());
    }

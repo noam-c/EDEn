@@ -46,7 +46,7 @@ class Resource
    /**
     * Loading function for initialization of the resource from file.
     */
-   virtual void load(const char* path) = 0;
+   virtual void load(const std::string& path) = 0;
 
    public:
       /**

@@ -8,6 +8,7 @@
 #define TILESET_H
 
 #include "Resource.h"
+#include <vector>
 
 typedef unsigned int GLuint;
 
@@ -19,12 +20,6 @@ typedef unsigned int GLuint;
  */
 class Tileset : public Resource
 {
-   /** The file extension used for Spritesheet image files */
-   static const std::string IMG_EXTENSION;
-
-   /** The file extension used for Spritesheet data files */
-   static const std::string DATA_EXTENSION;
-
    /** Width (in tiles) */
    int width;
 
@@ -32,12 +27,12 @@ class Tileset : public Resource
    int height;
 
    /** Passibility matrix */
-   bool** passibility;
+   std::vector<bool> passibility;
 
    /** The tile texture */
    GLuint texture;
 
-   void load(const char* path);
+   void load(const std::string& path);
 
    public:
 

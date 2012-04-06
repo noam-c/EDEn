@@ -431,7 +431,7 @@ void EntityGrid::draw()
                glColor3f(0.0f, 0.5f, 0.0f);
                break;
             }
-            case NPC_CHARACTER:
+            case TileState::ACTOR:
             {
                if(collisionMap[y][x].entity == NULL)
                {
@@ -441,11 +441,6 @@ void EntityGrid::draw()
                {
                   glColor3f(0.0f, 0.0f, 0.5f);
                }
-               break;
-            }
-            case PLAYER_CHARACTER:
-            {
-               glColor3f(0.6f, 0.6f, 0.85f);
                break;
             }
             case TileState::OBSTACLE:

@@ -16,13 +16,13 @@ Region::Region(const ResourceKey& name) : Resource(name), regionName(name)
 {
 }
 
-void Region::load(const char* path)
+void Region::load(const std::string& path)
 {
    struct dirent *entry;
    DIR *dp;
    std::vector<std::string> files;
    
-   dp = opendir(path);
+   dp = opendir(path.c_str());
    if (dp == NULL)
    {
       T_T("opendir");
@@ -47,7 +47,7 @@ void Region::load(const char* path)
          Map* nextMap = new Map(iter->substr(0, iter->length() - 4), mapFile);
          areas[nextMap->getName()] = nextMap;
       }
-      catch(Exception e)
+      catch(Exception& e)
       {
          T_T(std::string("Malformed map in map file: ") + mapFile + '\n' + e.getMessage());
       }

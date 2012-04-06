@@ -108,6 +108,13 @@ bool Actor::MoveOrder::perform(long timePassed)
    {
       DEBUG("Finding an ideal path from %d,%d to %d,%d", location.x, location.y, dst.x, dst.y);  
       path = entityGrid.findBestPath(location, dst);
+      if(path.empty())
+      {
+         // If this path is blocked, then there must be a permanent obstruction.
+         return true;
+      }
+
+      // If a path was found, note that we have a path and end the frame
       pathInitialized = true;
       return false;
    }
