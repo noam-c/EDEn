@@ -12,9 +12,9 @@
 
 const int DEBUG_FLAG = DEBUG_SPRITE;
 
-Obstacle::Obstacle(const int tileX, const int tileY, const int width, const int height, Spritesheet* spritesheet, const std::string& spriteType, const std::string& spriteName) 
-   : tileCoords(shapes::Point2D(tileX, tileY)), width(width), height(height)
-                                                                                                                                                                                                               {
+Obstacle::Obstacle(const shapes::Point2D& tileCoords, const shapes::Size& size, Spritesheet* spritesheet, const std::string& spriteType, const std::string& spriteName) 
+   : tileCoords(tileCoords), size(size)
+{
    sprite = new Sprite(spritesheet);
 
    if(spriteType == "anim")
@@ -38,25 +38,15 @@ void Obstacle::step(long timePassed) const
 
 void Obstacle::draw() const
 {
-   sprite->draw(tileCoords.x * TileEngine::TILE_SIZE, (tileCoords.y + height) * TileEngine::TILE_SIZE);
+   sprite->draw(tileCoords.x * TileEngine::TILE_SIZE, (tileCoords.y + size.height) * TileEngine::TILE_SIZE);
 }
 
-int Obstacle::getTileX() const
+const shapes::Point2D& Obstacle::getTileCoords() const
 {
-   return tileCoords.x;
+   return tileCoords;
 }
 
-int Obstacle::getTileY() const
+const shapes::Size& Obstacle::getSize() const
 {
-   return tileCoords.y;
-}
-
-int Obstacle::getWidth() const
-{
-   return width;
-}
-
-int Obstacle::getHeight() const
-{
-   return height;
+   return size;
 }

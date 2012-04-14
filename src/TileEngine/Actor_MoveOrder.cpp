@@ -127,7 +127,7 @@ bool Actor::MoveOrder::perform(long timePassed)
          actor.setLocation(location);
          if(location != dst)
          {
-            path = entityGrid.findReroutedPath(location, dst, actor.getWidth(), actor.getHeight());
+            path = entityGrid.findReroutedPath(location, dst, actor.getSize());
             return false;
          }
 
@@ -139,7 +139,7 @@ bool Actor::MoveOrder::perform(long timePassed)
          movementBegun = entityGrid.beginMovement(&actor, path.front());
          if(!movementBegun)
          {
-            path = entityGrid.findReroutedPath(location, dst, actor.getWidth(), actor.getHeight());
+            path = entityGrid.findReroutedPath(location, dst, actor.getSize());
             updateDirection(actor.getDirection(), false);
             actor.setLocation(location);
             return false;

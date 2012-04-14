@@ -1,3 +1,9 @@
+/*
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
+ */
+
 #ifndef ACTOR_H
 #define ACTOR_H
 
@@ -5,6 +11,7 @@
 #include <string>
 
 #include "MovementDirection.h"
+#include "Size.h"
 #include "Point2D.h"
 
 class EntityGrid;
@@ -26,14 +33,11 @@ class Actor
    /** A queue of orders for the actor to perform */
    std::queue<Order*> orders;
 
-   /** The width of the actor (in pixels) */
-   int width;
-   
-   /** The height of the actor (in pixels) */
-   int height;
-   
    /** The current location of the actor (in pixels) */
    shapes::Point2D pixelLoc;
+   
+   /** The size of the actor (in pixels) */
+   shapes::Size size;
    
    /** The movement speed of the actor */
    float movementSpeed;
@@ -57,12 +61,12 @@ class Actor
        * @param sheetName The name of the spritesheet to use for rendering the actor.
        * @param entityGrid The map that this actor will be interacting in.
        * @param regionName The name of the region that this Actor is interacting in.
-       * @param x The x-location (in pixels) where the actor will start off.
-       * @param y The y-location (in pixels) where the actor will start off.
+       * @param location The location (in pixels) where the actor will start off.
+       * @param size The size (in pixels) of the actor.
        * @param movementSpeed The speed of the actor's movement.
        * @param direction The starting direction of the actor.
        */
-      Actor(const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, int x, int y, double movementSpeed, MovementDirection direction);
+      Actor(const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction);
 
       /**
        * Destructor.
@@ -78,17 +82,12 @@ public:
       /**
        * @return The name of this Actor.
        */
-      std::string getName() const;
+      const std::string& getName() const;
 
       /**
-       * @return The height of this Actor (in pixels).
+       * @return The size of this Actor (in pixels).
        */
-      int getWidth() const;
-
-      /**
-       * @return The height of this Actor (in pixels).
-       */
-      int getHeight() const;
+      const shapes::Size& getSize() const;
 
       /**
        * Performs a logic step of this NPC. During the step, the NPC works on
@@ -127,10 +126,9 @@ public:
       /**
        * This function enqueues a movement instruction.
        *
-       * @param x The x coordinate (in pixels) for the actor to move to
-       * @param y The y coordinate (in pixels) for the actor to move to
+       * @param dst The coordinates (in pixels) for the actor to move to
        */
-      void move(int x, int y);
+      void move(const shapes::Point2D& dst);
       
       /**
        * This function changes the actor's spritesheet.
@@ -162,12 +160,12 @@ public:
        *
        * @param location The new location of the actor.
        */
-      void setLocation(shapes::Point2D location);
+      void setLocation(const shapes::Point2D& location);
       
       /**
        * @return The location of the actor.
        */
-      shapes::Point2D getLocation() const;
+      const shapes::Point2D& getLocation() const;
       
       /**
        * This function changes the direction that the actor is facing.

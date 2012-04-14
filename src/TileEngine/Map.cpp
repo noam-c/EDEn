@@ -50,8 +50,12 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
       T_T("Failed to parse map data.");
    }
    
+   int width;
+   int height;
    root->Attribute("width", &width);
    root->Attribute("height", &height);
+   
+   bounds = shapes::Rectangle(shapes::Point2D::ORIGIN, shapes::Size(width, height));
    
    const TiXmlElement* propertiesElement = root->FirstChildElement("properties");
    
@@ -115,12 +119,15 @@ void Map::parseFloorLayer(const TiXmlElement* floorLayerElement)
    const TiXmlText* floorDataElement = floorLayerElement->FirstChildElement("data")->FirstChild()->ToText();
    std::stringstream layerStream(floorDataElement->Value());
    
+   const unsigned int width = bounds.getWidth();
+   const unsigned int height = bounds.getHeight();
+
    tileMap = new int*[height];
-   for(int y = 0; y < height; ++y)
+   for(unsigned int y = 0; y < height; ++y)
    {
       tileMap[y] = new int[width];
       
-      for(int x = 0; x < width; ++x)
+      for(unsigned int x = 0; x < width; ++x)
       {
          std::string entry;
          std::getline(layerStream, entry, ',');
@@ -147,7 +154,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
          objectElement->Attribute("width", &width);
          objectElement->Attribute("height", &height);
          
-         shapes::Rectangle rect(topLeft / TileEngine::TILE_SIZE, width / TileEngine::TILE_SIZE, height / TileEngine::TILE_SIZE);
+         shapes::Rectangle rect(topLeft / TileEngine::TILE_SIZE, shapes::Size(width, height) / TileEngine::TILE_SIZE);
          if(rect.getWidth() > 0 && rect.getHeight() > 0)
          {
             for(int y = rect.top; y < rect.bottom; ++y)
@@ -171,11 +178,14 @@ bool Map::isPassible(int x, int y) const
 
 void Map::initializePassibilityMatrix()
 {
+   const unsigned int width = bounds.getWidth();
+   const unsigned int height = bounds.getHeight();
+
    passibilityMap = new bool*[height];
-   for(int y = 0; y < height; ++y)
+   for(unsigned int y = 0; y < height; ++y)
    {
       passibilityMap[y] = new bool[width];
-      for(int x = 0; x < width; ++x)
+      for(unsigned int x = 0; x < width; ++x)
       {
          passibilityMap[y][x] = tileset->isPassible(tileMap[y][x]);
       }
@@ -187,14 +197,9 @@ std::string Map::getName() const
    return mapName;
 }
 
-int Map::getWidth() const
+const shapes::Rectangle& Map::getBounds() const
 {
-   return width;
-}
-
-int Map::getHeight() const
-{
-   return height;
+   return bounds;
 }
 
 const std::vector<Obstacle*> Map::getObstacles() const
@@ -218,9 +223,12 @@ void Map::step(long timePassed) const
 
 void Map::draw() const
 {
-   for(int i = 0; i < width; ++i)
+   const unsigned int width = bounds.getWidth();
+   const unsigned int height = bounds.getHeight();
+   
+   for(unsigned int i = 0; i < width; ++i)
    {
-      for(int j = 0; j < height; ++j)
+      for(unsigned int j = 0; j < height; ++j)
       {
 #ifdef DRAW_PASSIBILITY
          if(isPassible(i,j))
@@ -246,7 +254,8 @@ void Map::draw() const
 
 Map::~Map()
 {
-   for(int i = 0; i < width; ++i)
+   const unsigned int width = bounds.getWidth();
+   for(unsigned int i = 0; i < width; ++i)
    {
       delete [] tileMap[i];
       delete [] passibilityMap[i];

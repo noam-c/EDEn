@@ -99,7 +99,7 @@ void Sprite::setAnimation(const std::string& animationName, MovementDirection di
 
    Animation* newAnimation;
 
-   if(direction == NULL || (newAnimation = sheet->getAnimation(animationName + toDirectionString(direction))) == NULL)
+   if(direction == NONE || (newAnimation = sheet->getAnimation(animationName + toDirectionString(direction))) == NULL)
    {
       newAnimation = sheet->getAnimation(animationName);
    }

@@ -1,5 +1,13 @@
+/*
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
+ */
+
 #include "LuaActor.h"
 #include "Actor.h"
+#include "Point2D.h"
+
 #include "LuaWrapper.hpp"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
@@ -22,9 +30,8 @@ static int ActorL_Move(lua_State* luaVM)
          Actor* actor = luaW_check<Actor>(luaVM, 1);
          if (actor)
          {
-            int x = lua_tointeger(luaVM, 2);
-            int y = lua_tointeger(luaVM, 3);
-            actor->move(x, y);
+            const shapes::Point2D destination(lua_tointeger(luaVM, 2), lua_tointeger(luaVM, 3));
+            actor->move(destination);
          }
          break;
       }

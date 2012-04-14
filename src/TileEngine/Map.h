@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 
+#include "Rectangle.h"
+
 class Tileset;
 class Obstacle;
 
@@ -49,11 +51,8 @@ class Map
    /** The list of the map's obstacles */
    std::vector<Obstacle*> obstacles;
 
-   /** Width (in tiles) of this map */
-   int width;
-
-   /** Height (in tiles) of this map */
-   int height;
+   /** The bounds (in tiles) of this map */
+   shapes::Rectangle bounds;
 
    /**
     * @return true iff the tile at this location of the map is passible
@@ -98,14 +97,9 @@ class Map
       std::string getName() const;
 
       /**
-       * @return The width of the map (in tiles).
+       * @return The bounds of the map (in tiles).
        */
-      int getWidth() const;
-
-      /**
-       * @return The height of the map (in tiles).
-       */
-      int getHeight() const;
+      const shapes::Rectangle& getBounds() const;
 
       /**
        * @return The list of obstacles for this map

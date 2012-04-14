@@ -1,3 +1,9 @@
+/*
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
+ */
+
 #include "Actor.h"
 #include "ResourceLoader.h"
 #include "EntityGrid.h"
@@ -8,8 +14,8 @@
 
 const int debugFlag = DEBUG_NPC;
 
-Actor::Actor(const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, int x, int y, double movementSpeed, MovementDirection direction)
-   : name(name), width(32), height(32), pixelLoc(x, y), movementSpeed(movementSpeed), currDirection(direction), entityGrid(entityGrid)
+Actor::Actor(const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction)
+   : name(name), pixelLoc(location), size(size), movementSpeed(movementSpeed), currDirection(direction), entityGrid(entityGrid)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
    sprite = new Sprite(sheet);
@@ -31,19 +37,14 @@ void Actor::flushOrders()
    }
 }
 
-std::string Actor::getName() const
+const std::string& Actor::getName() const
 {
    return name;
 }
 
-int Actor::getWidth() const
+const shapes::Size& Actor::getSize() const
 {
-   return width;
-}
-
-int Actor::getHeight() const
-{
-   return height;
+   return size;
 }
 
 void Actor::step(long timePassed)
@@ -79,17 +80,16 @@ bool Actor::isIdle() const
    return orders.empty();
 }
 
-void Actor::move(int x, int y)
+void Actor::move(const shapes::Point2D& dst)
 {
-   if(entityGrid.withinMap(x,y))
+   if(entityGrid.withinMap(dst))
    {
-      DEBUG("Sending move order to %s: %d,%d", name.c_str(), x, y);
-      shapes::Point2D dst(x, y);
+      DEBUG("Sending move order to %s: %d,%d", name.c_str(), dst.x, dst.y);
       orders.push(new MoveOrder(*this, dst, entityGrid));
    }
    else
    {
-      DEBUG("%d,%d is not a place!!!", x, y);
+      DEBUG("%d,%d is not a place!!!", dst.x, dst.y);
    }
 }
 
@@ -149,12 +149,12 @@ void Actor::setAnimation(const std::string& animationName)
    sprite->setAnimation(animationName, currDirection);
 }
 
-void Actor::setLocation(shapes::Point2D location)
+void Actor::setLocation(const shapes::Point2D& location)
 {
    pixelLoc = location;
 }
 
-shapes::Point2D Actor::getLocation() const
+const shapes::Point2D& Actor::getLocation() const
 {
    return pixelLoc;
 }

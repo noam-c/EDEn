@@ -1,3 +1,9 @@
+/*
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
+ */
+
 #include "LuaPlayerCharacter.h"
 #include "PlayerCharacter.h"
 #include "Point2D.h"

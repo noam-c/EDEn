@@ -16,6 +16,7 @@
 #include "Region.h"
 #include "Map.h"
 #include "Pathfinder.h"
+#include "Rectangle.h"
 #include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
@@ -111,14 +112,13 @@ void TileEngine::setMap(std::string mapName)
 
 void TileEngine::recalculateMapOffsets()
 {
-   const int mapPixelWidth = entityGrid.getWidth() * TILE_SIZE;
-   const int mapPixelHeight = entityGrid.getHeight() * TILE_SIZE;
+   const shapes::Size& mapPixelBounds = entityGrid.getBounds().getSize() * TILE_SIZE;
 
-   xMapOffset = mapPixelWidth < GraphicsUtil::width ? 
-              (GraphicsUtil::width - mapPixelWidth) >> 1 : 0;
+   xMapOffset = mapPixelBounds.width < GraphicsUtil::width ? 
+              (GraphicsUtil::width - mapPixelBounds.width) >> 1 : 0;
 
-   yMapOffset = mapPixelHeight < GraphicsUtil::height ?
-              (GraphicsUtil::height - mapPixelHeight) >> 1 : 0;
+   yMapOffset = mapPixelBounds.height < GraphicsUtil::height ?
+              (GraphicsUtil::height - mapPixelBounds.height) >> 1 : 0;
 }
 
 void TileEngine::toggleDebugConsole()
@@ -138,15 +138,15 @@ void TileEngine::toggleDebugConsole()
    }
 }
 
-NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, shapes::Point2D npcLocation)
+NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size)
 {
    NPC* npcToAdd = NULL;
    
-   if(entityGrid.isAreaFree(npcLocation, 32, 32))
+   if(entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
       npcToAdd = new NPC(*scriptEngine, scheduler, npcName, spritesheetName,
                                  entityGrid, currRegion->getName(),
-                                 npcLocation.x, npcLocation.y);
+                                 npcLocation, size);
       npcList[npcName] = npcToAdd;
       entityGrid.addActor(npcToAdd, npcLocation);
    }

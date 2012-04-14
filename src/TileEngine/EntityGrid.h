@@ -11,12 +11,18 @@
 #include <vector>
 #include "MovementDirection.h"
 #include "Pathfinder.h"
+#include "Rectangle.h"
 
 class Obstacle;
 class Map;
 class Actor;
-struct shapes::Point2D;
-struct shapes::Rectangle;
+
+namespace shapes
+{
+   struct Size;
+   struct Point2D;
+};
+
 struct TileState;
 
 /**
@@ -45,15 +51,12 @@ class EntityGrid
    /** The pathfinding component used to navigate in this map. */
    Pathfinder pathfinder;
    
-   /** The width of the pathfinder map. */
-   int collisionMapWidth;
-
-   /** The height of the pathfinder map. */
-   int collisionMapHeight;
-
    /** The map of entities and states for each of the tiles. */
    TileState** collisionMap;
 
+   /** The bounds of the pathfinder map. */
+   shapes::Rectangle collisionMapBounds;
+   
    /**
     * Clean up the map of tile states.
     */
@@ -69,47 +72,40 @@ class EntityGrid
    /**
     * Checks if an area is available.
     *
-    * @param area The coordinates of the top-left corner of the area to occupy (in pixels)
-    * @param width The width of the area to occupy (in pixels)
-    * @param height The height of the area to occupy (in pixels)
+    * @param area The rectangular region to occupy (in pixels)
     * @param state The new state of the area (entity and type)
     *
     * @return true if the area can be successfully occupied, false if there was something else in the area.
     */
-   bool canOccupyArea(const shapes::Point2D& area, int width, int height, TileState state) const;
+   bool canOccupyArea(const shapes::Rectangle& area, TileState state) const;
    
    /**
     * If an area is available, occupy it and set the tiles within it to the new state. 
     * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
     *
-    * @param area The coordinates of the top-left corner of the area to occupy (in pixels)
-    * @param width The width of the area to occupy (in pixels)
-    * @param height The height of the area to occupy (in pixels)
+    * @param area The rectangular region to occupy (in pixels)
     * @param state The new state of the area (entity and type)
     *
     * @return true if the area has been successfully occupied, false if there was something else in the area.
     */
-   bool occupyArea(const shapes::Point2D& area, int width, int height, TileState state);
+   bool occupyArea(const shapes::Rectangle& area, TileState state);
 
    /**
     * Free the tiles belonging to a given entity within a specified area. 
     *
-    * @param locationToFree The coordinates of the top-left corner of the area to free (in pixels)
-    * @param width The width of the area to free (in pixels)
-    * @param height The height of the area to free (in pixels)
+    * @param areaToFree The rectangular region to free (in pixels)
     */
-   void freeArea(const shapes::Point2D& locationToFree, int width, int height);
+   void freeArea(const shapes::Rectangle& areaToFree);
    
    /**
     * Free the tiles belonging to a given entity within a specified area. 
     *
     * @param previousLocation The coordinates of the top-left corner of the area to free (in pixels)
     * @param currentLocation The coordinates of the top-left corner of the area to keep in the current state (in pixels)
-    * @param width The width of the area to free (in pixels)
-    * @param height The height of the area to free (in pixels)
+    * @param size The size of the area to free (in pixels)
     * @param state The state to remove from the tiles
     */
-   void freeArea(const shapes::Point2D& previousLocation, const shapes::Point2D& currentLocation, int width, int height, TileState state);
+   void freeArea(const shapes::Point2D& previousLocation, const shapes::Point2D& currentLocation, const shapes::Size& size, TileState state);
 
    /**
     * Helper function to unconditionally set the tiles in an area to a given state. 
@@ -147,14 +143,9 @@ class EntityGrid
       std::string getName() const;
       
       /**
-       * @return The width of the map.
+       * @return The bounds of the map.
        */
-      int getWidth() const;
-      
-      /**
-       * @return The height of the map.
-       */
-      int getHeight() const;
+      const shapes::Rectangle& getBounds() const;
 
       /**
        * @param point The coordinates to check (in pixels)
@@ -162,14 +153,6 @@ class EntityGrid
        * @return true iff the point is within the map
        */
       bool withinMap(const shapes::Point2D& point) const;
-      
-      /**
-       * @param x The x-coordinate to check (in pixels)
-       * @param y The y-coordinate to check (in pixels)
-       *
-       * @return true iff the x-y coordinate is within the map
-       */
-      bool withinMap(const int x, const int y) const;
 
       /**
        * Process logic for the map and its obstacles.
@@ -192,35 +175,31 @@ class EntityGrid
        *
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
-       * @param width The width of the moving entity.
-       * @param height The width of the moving entity.
+       * @param size The size of the moving entity.
        *
        * @return The shortest unobstructed path from the source point to the destination point.
        */
-      Path findReroutedPath(const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height);
+      Path findReroutedPath(const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size);
       
       /**
        * Checks an area for obstacles or entities.
        *
-       * @param area The coordinates of the top-left corner of the area (in pixels)
-       * @param width The width of the area (in pixels)
-       * @param height The height of the area (in pixels)
+       * @param area The area to check (in pixels)
        *
        * @return true iff a given area is entirely free of obstacles and entities.
        */
-      bool isAreaFree(const shapes::Point2D& area, int width, int height) const;
+      bool isAreaFree(const shapes::Rectangle& area) const;
    
       /**
        * Add an obstacle and occupy the tiles under it.
        * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
        *
        * @param area The coordinates of the top-left corner of the obstacle (in pixels)
-       * @param width The width of the obstacle (in pixels)
-       * @param height The height of the obstacle (in pixels)
+       * @param size The size of the obstacle (in pixels)
        *
        * @return true if the obstacle has been successfully placed in the area, false if there was something else in the area.
        */
-      bool addObstacle(const shapes::Point2D& area, int width, int height);
+      bool addObstacle(const shapes::Point2D& area, const shapes::Size& size);
 
       /**
        * Add an Actor and occupy the tiles under it.

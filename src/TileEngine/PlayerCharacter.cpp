@@ -20,7 +20,7 @@ const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(EntityGrid& map, const std::string& sheetName)
-                                              : Actor("player", sheetName, map, 0, 0, 1.0f, DOWN), active(false), cumulativeDistanceCovered(0)
+   : Actor("player", sheetName, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 1.0f, DOWN), active(false), cumulativeDistanceCovered(0)
 {
 }
 

@@ -10,6 +10,8 @@
 #include <list>
 #include <vector>
 
+#include "Rectangle.h"
+
 class Actor;
 class EntityGrid;
 class Map;
@@ -17,8 +19,8 @@ class Obstacle;
 
 namespace shapes
 {
+   struct Size;
    struct Point2D;
-   struct Rectangle;
 };
 
 struct TileState;
@@ -50,11 +52,8 @@ class Pathfinder
    /** The grid to compute paths on. */
    TileState** collisionGrid;
    
-   /** The width (in tiles) of the grid. */
-   int collisionGridWidth;
-   
-   /** The height (in tiles) of the grid. */
-   int collisionGridHeight;
+   /** The bounds (in tiles) of the grid. */
+   shapes::Rectangle collisionGridBounds;
    
    /**
     * Convert a tile number into pixel coordinates.
@@ -109,10 +108,9 @@ class Pathfinder
        *
        * @param grid The entity grid to perform pathfinding computations on.
        * @param tileSize The size (in pixels) of each tile.
-       * @param gridWidth The width of the grid.
-       * @param gridHeight The height of the grid.
+       * @param gridBounds The bounds of the grid.
        */
-      void initialize(TileState** grid, int tileSize, int gridWidth, int gridHeight);
+      void initialize(TileState** grid, int tileSize, const shapes::Rectangle& gridBounds);
       
       /**
        * Finds an ideal path from the source coordinates to the destination.
@@ -131,12 +129,11 @@ class Pathfinder
        * @param entityGrid The entity grid container.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
-       * @param width The width of the moving entity.
-       * @param height The width of the moving entity.
+       * @param size The size of the moving entity.
        *
        * @return The shortest unobstructed path from the source point to the destination point.
        */
-      Path findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height);
+      Path findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size);
       
       /**
        * Destructor.
@@ -170,12 +167,11 @@ class Pathfinder
        * @param entityGrid The entity grid container.
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
-       * @param width The width of the moving entity.
-       * @param height The height of the moving entity.
+       * @param size The size of the moving entity.
        *
        * @return The best path computed by the A* algorithm.
        */
-      Path findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height);
+      Path findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size);
 
       /**
        * A node used in A* search.
@@ -195,11 +191,10 @@ class Pathfinder
        * @param destinationTileNum The tile number of the goal point.
        * @param openSet The open set used to accumulate undiscovered points.
        * @param discovered A mapping from tile numbers to whether or not they have been discovered.
-       * @param width The entity width.
-       * @param height The entity height.
+       * @param size The entity Size.
        * @param diagonalNodes Whether or not the nodes being evaluated are diagonal from the evaluated point.
        */
-      void evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int width, int height, bool diagonalNodes = false);
+      void evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalNodes = false);
 };
 
 #endif

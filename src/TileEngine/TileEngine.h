@@ -197,10 +197,11 @@ class TileEngine: public GameState
        * @param npcName The name of the npc to add
        * @param spritesheetName The name of the spritesheet to draw the NPC with
        * @param npcLocation The location where we spawn the NPC
+       * @param size The size of the new NPC
        *
        * @return The created NPC (or NULL if it could not be placed in the map).
        */
-      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName, shapes::Point2D npcLocation);
+      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size);
 
       /**
        * @param npcName The name of the NPC to find.

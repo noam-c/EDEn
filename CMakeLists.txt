@@ -130,8 +130,6 @@ set(HEADERS
   src/PlayerData/Quest.h
   src/PlayerData/LuaQuest.h
   src/PlayerData/SaveGameItemNames.h
-  src/Point2D.h
-  src/Rectangle.h
   src/ResourceLoader/Resource.h
   src/ResourceLoader/ResourceKey.h
   src/ResourceLoader/ResourceLoader.h
@@ -142,6 +140,9 @@ set(HEADERS
   src/ScriptEngine/ScriptException.h
   src/ScriptEngine/ScriptFactory.h
   src/ScriptEngine/StringScript.h
+  src/Shapes/Size.h
+  src/Shapes/Point2D.h
+  src/Shapes/Rectangle.h
   src/Singleton.h
   src/Sprites/Animation.h
   src/Sprites/FrameSequence.h
@@ -273,6 +274,9 @@ set(SOURCES
   src/PlayerData/LuaInventory.cpp
   src/ResourceLoader/Resource.cpp
   src/ResourceLoader/ResourceLoader.cpp
+  src/Shapes/Size.cpp
+  src/Shapes/Point2D.cpp
+  src/Shapes/Rectangle.cpp
   src/ScriptEngine/FileScript.cpp
   src/ScriptEngine/NPCScript.cpp
   src/ScriptEngine/Script.cpp
@@ -307,8 +311,6 @@ set(SOURCES
   src/ExecutionStack.cpp
   src/GameState.cpp
   src/GraphicsUtil.cpp
-  src/Point2D.cpp
-  src/Rectangle.cpp
 )
 
 SET(SOURCE_GROUP_DELIMITER "/")
@@ -324,6 +326,7 @@ source_group(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
 source_group(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
 source_group(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
 source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
+source_group(Shapes REGULAR_EXPRESSION src/Shapes/.*)
 source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
 source_group(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
 source_group(json REGULAR_EXPRESSION src/json/.*)
@@ -343,6 +346,7 @@ include_directories(
   src/PlayerData
   src/ResourceLoader
   src/ScriptEngine
+  src/Shapes
   src/Sprites
   src/TileEngine
   src/json

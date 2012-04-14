@@ -5,9 +5,12 @@
  */
 
 #include "Point2D.h"
+#include "Rectangle.h"
 
 namespace shapes
 {
+   const Point2D Point2D::ORIGIN(0, 0);
+
    Point2D::Point2D() : x(0), y(0) {}
 
    Point2D::Point2D(int x, int y) : x(x), y(y) {}
@@ -32,26 +35,26 @@ namespace shapes
       return Point2D(x / coeff, y / coeff);
    }
 
-   std::vector<Point2D> Point2D::getDiagonallyAdjacentPoints(const Point2D& point, int mapWidth, int mapHeight)
+   std::vector<Point2D> Point2D::getDiagonallyAdjacentPoints(const Point2D& point, const Rectangle& bounds)
    {
       std::vector<Point2D> diagonalPoints;
    
-      if(point.x > 0 && point.y > 0)
+      if(point.x > bounds.left && point.y > bounds.top)
       {
          diagonalPoints.push_back(Point2D(point.x - 1, point.y - 1));
       }
    
-      if(point.x > 0 && point.y < mapHeight - 1)
+      if(point.x > bounds.left && point.y < bounds.bottom - 1)
       {
          diagonalPoints.push_back(Point2D(point.x - 1, point.y + 1));
       }
    
-      if(point.x < mapWidth - 1 && point.y > 0)
+      if(point.x < bounds.right - 1 && point.y > bounds.top)
       {
          diagonalPoints.push_back(Point2D(point.x + 1, point.y - 1));
       }
    
-      if(point.x < mapWidth - 1 && point.y < mapHeight - 1)
+      if(point.x < bounds.right - 1 && point.y < bounds.bottom - 1)
       {
          diagonalPoints.push_back(Point2D(point.x + 1, point.y + 1));
       }
@@ -59,26 +62,26 @@ namespace shapes
       return diagonalPoints;
    }
 
-   std::vector<Point2D> Point2D::getLaterallyAdjacentPoints(const Point2D& point, int mapWidth, int mapHeight)
+   std::vector<Point2D> Point2D::getLaterallyAdjacentPoints(const Point2D& point, const Rectangle& bounds)
    {
       std::vector<Point2D> lateralPoints;
    
-      if(point.x > 0)
+      if(point.x > bounds.left)
       {
          lateralPoints.push_back(Point2D(point.x - 1, point.y));
       }
    
-      if(point.x < mapWidth - 1)
+      if(point.x < bounds.right - 1)
       {
          lateralPoints.push_back(Point2D(point.x + 1, point.y));
       }
    
-      if(point.y > 0)
+      if(point.y > bounds.top)
       {
          lateralPoints.push_back(Point2D(point.x, point.y - 1));
       }
    
-      if(point.y < mapHeight - 1)
+      if(point.y < bounds.bottom - 1)
       {
          lateralPoints.push_back(Point2D(point.x, point.y + 1));
       }

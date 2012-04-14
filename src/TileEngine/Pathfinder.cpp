@@ -19,7 +19,7 @@ const float Pathfinder::INFINITY = std::numeric_limits<float>::infinity();
 
 shapes::Point2D Pathfinder::tileNumToCoords(int tileNum)
 {
-   div_t result = div(tileNum, collisionGridWidth);
+   div_t result = div(tileNum, collisionGridBounds.getWidth());
    return shapes::Point2D(result.rem, result.quot);
 }
 
@@ -31,7 +31,7 @@ shapes::Point2D Pathfinder::tileNumToPixels(int tileNum)
 
 int Pathfinder::coordsToTileNum(const shapes::Point2D& tileLocation)
 {
-   return (tileLocation.y * collisionGridWidth + tileLocation.x);
+   return (tileLocation.y * collisionGridBounds.getWidth() + tileLocation.x);
 }
 
 int Pathfinder::pixelsToTileNum(const shapes::Point2D& pixelLocation)
@@ -39,28 +39,27 @@ int Pathfinder::pixelsToTileNum(const shapes::Point2D& pixelLocation)
    return coordsToTileNum(pixelLocation / movementTileSize);
 }
 
-Pathfinder::Pathfinder() : distanceMatrix(NULL), successorMatrix(NULL), collisionGrid(NULL), collisionGridWidth(0), collisionGridHeight(0)
+Pathfinder::Pathfinder() : distanceMatrix(NULL), successorMatrix(NULL), collisionGrid(NULL)
 {
 }
 
-void Pathfinder::initialize(TileState** grid, int tileSize, int gridWidth, int gridHeight)
+void Pathfinder::initialize(TileState** grid, int tileSize, const shapes::Rectangle& gridBounds)
 {
    deleteRoyFloydWarshallMatrices();
    movementTileSize = tileSize;
    collisionGrid = grid;
-   collisionGridWidth = gridWidth;
-   collisionGridHeight = gridHeight;
+   collisionGridBounds = gridBounds;
    initRoyFloydWarshallMatrices();
 }
 
 void Pathfinder::initRoyFloydWarshallMatrices()
 {
-   const int NUM_TILES = collisionGridWidth * collisionGridHeight;
+   const unsigned int NUM_TILES = collisionGridBounds.getArea();
    
    distanceMatrix = new float*[NUM_TILES];
    successorMatrix = new int*[NUM_TILES];
 
-   for(int i = 0; i < NUM_TILES; ++i)
+   for(unsigned int i = 0; i < NUM_TILES; ++i)
    {
       distanceMatrix[i] = new float[NUM_TILES];
       successorMatrix[i] = new int[NUM_TILES];
@@ -69,10 +68,10 @@ void Pathfinder::initRoyFloydWarshallMatrices()
    shapes::Point2D aTile;
    shapes::Point2D bTile;
 
-   for(int a = 0; a < NUM_TILES; ++a)
+   for(unsigned int a = 0; a < NUM_TILES; ++a)
    {
       aTile = tileNumToCoords(a);
-      for(int b = 0; b < NUM_TILES; ++b)
+      for(unsigned int b = 0; b < NUM_TILES; ++b)
       {
          if(a == b)
          {
@@ -111,11 +110,11 @@ void Pathfinder::initRoyFloydWarshallMatrices()
       }
    }
 
-   for(int i = 0; i < NUM_TILES; ++i)
+   for(unsigned int i = 0; i < NUM_TILES; ++i)
    {
-      for(int a = 0; a < NUM_TILES; ++a)
+      for(unsigned int a = 0; a < NUM_TILES; ++a)
       {
-         for(int b = 0; b < NUM_TILES; ++b)
+         for(unsigned int b = 0; b < NUM_TILES; ++b)
          {
             float distance = distanceMatrix[a][i] + distanceMatrix[i][b];
             if(distance < distanceMatrix[a][b])
@@ -133,9 +132,9 @@ Pathfinder::Path Pathfinder::findBestPath(const shapes::Point2D& src, const shap
    return findRFWPath(src, dst);
 }
 
-Pathfinder::Path Pathfinder::findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height)
+Pathfinder::Path Pathfinder::findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size)
 {
-   return findAStarPath(entityGrid, src, dst, width, height);
+   return findAStarPath(entityGrid, src, dst, size);
 }
 
 class Pathfinder::AStarPoint : public shapes::Point2D
@@ -210,20 +209,20 @@ class Pathfinder::AStarPoint : public shapes::Point2D
       };
 };
 
-Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, int width, int height)
+Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size)
 {
    if(collisionGrid == NULL) return Path();
 
    const TileState& entityState = collisionGrid[src.y / movementTileSize][src.x / movementTileSize];
 
-   if(!entityGrid.canOccupyArea(dst, width, height, entityState)) return Path();
+   if(!entityGrid.canOccupyArea(shapes::Rectangle(dst, size), entityState)) return Path();
 
    shapes::Point2D destinationPoint(dst.x / movementTileSize, dst.y / movementTileSize);
 
    std::vector<AStarPoint*> openSet;
    std::vector<const AStarPoint*> closedSet;
    
-   const int NUM_TILES = collisionGridWidth*collisionGridHeight;
+   const int NUM_TILES = collisionGridBounds.getArea();
    std::vector<bool> discovered(NUM_TILES, false);
    const shapes::Point2D srcTile(src.x / movementTileSize, src.y / movementTileSize);
    
@@ -261,13 +260,13 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
 
       // Evaluate all the existing laterally adjacent points,
       // adding 1 as the cost of reaching the point from our current cheapest point.
-      const std::vector<shapes::Point2D> lateralPoints = shapes::Point2D::getLaterallyAdjacentPoints(*cheapestPoint, collisionGridWidth, collisionGridHeight);
-      evaluateAdjacentNodes(entityGrid, entityState, lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered, width, height);
+      const std::vector<shapes::Point2D> lateralPoints = shapes::Point2D::getLaterallyAdjacentPoints(*cheapestPoint, collisionGridBounds);
+      evaluateAdjacentNodes(entityGrid, entityState, lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered, size);
 
       // Evaluate all the existing diagonally adjacent points,
       // adding the square root of 2 as the cost of reaching the point from our current cheapest point.
-      const std::vector<shapes::Point2D> diagonalPoints = shapes::Point2D::getDiagonallyAdjacentPoints(*cheapestPoint, collisionGridWidth, collisionGridHeight);
-      evaluateAdjacentNodes(entityGrid, entityState, diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered, width, height, true);
+      const std::vector<shapes::Point2D> diagonalPoints = shapes::Point2D::getDiagonallyAdjacentPoints(*cheapestPoint, collisionGridBounds);
+      evaluateAdjacentNodes(entityGrid, entityState, diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered, size, true);
    }
    
    for(std::vector<AStarPoint*>::const_iterator iter = openSet.begin(); iter != openSet.end(); ++iter)
@@ -283,7 +282,7 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
    return path;
 }
 
-void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, int width, int height, bool diagonalMovement)
+void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalMovement)
 {
    for(std::vector<shapes::Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
    {
@@ -296,12 +295,12 @@ void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileS
          const int x = iter->x;
          const int y = iter->y;
          
-         bool freeTile = entityGrid.canOccupyArea(shapes::Point2D(x, y) * movementTileSize, width, height, entityState);
+         bool freeTile = entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(x, y) * movementTileSize, size), entityState);
 
          if(diagonalMovement)
          {
-            freeTile = freeTile && entityGrid.canOccupyArea(shapes::Point2D(evaluatedPoint->x, y), width, height, entityState)
-                                && entityGrid.canOccupyArea(shapes::Point2D(x, evaluatedPoint->y), width, height, entityState);
+            freeTile = freeTile && entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(evaluatedPoint->x, y), size), entityState)
+            && entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(x, evaluatedPoint->y), size), entityState);
          }
 
          if(freeTile)
@@ -341,7 +340,7 @@ Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shape
          break;
       }
       
-      path.push_back(shapes::Point2D(tileNumToPixels(nextTile)));
+      path.push_back(tileNumToPixels(nextTile));
       srcTileNum = nextTile;
    }
 
@@ -350,10 +349,10 @@ Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shape
 
 void Pathfinder::deleteRoyFloydWarshallMatrices()
 {
-   const int numTiles = collisionGridWidth * collisionGridHeight;
+   const unsigned int NUM_TILES = collisionGridBounds.getArea();
    if(distanceMatrix)
    {
-      for(int i = 0; i < numTiles; ++i)
+      for(unsigned int i = 0; i < NUM_TILES; ++i)
       {
          delete [] distanceMatrix[i];
       }
@@ -364,7 +363,7 @@ void Pathfinder::deleteRoyFloydWarshallMatrices()
 
    if(successorMatrix)
    {
-      for(int i = 0; i < numTiles; ++i)
+      for(unsigned int i = 0; i < NUM_TILES; ++i)
       {
          delete [] successorMatrix[i];
       }

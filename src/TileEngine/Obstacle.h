@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include "ResourceKey.h"
+#include "Size.h"
 #include "Point2D.h"
 
 class Sprite;
@@ -18,21 +19,17 @@ class Spritesheet;
 class Obstacle
 {
    const shapes::Point2D tileCoords;
-
-   const int width;
-   const int height;
+   const shapes::Size size;
 
    Sprite* sprite;
 
    public:
-     Obstacle(const int tileX, const int tileY, const int width, const int height, Spritesheet* spritesheet, const std::string& spriteType, const std::string& spriteName);
+      Obstacle(const shapes::Point2D& tileCoords, const shapes::Size& size, Spritesheet* spritesheet, const std::string& spriteType, const std::string& spriteName);
 
-     void step(long timePassed) const;
-     void draw() const;
-     int getTileX() const;
-     int getTileY() const;
-	  int getWidth() const;
-	  int getHeight() const;
+      void step(long timePassed) const;
+      void draw() const;
+      const shapes::Point2D& getTileCoords() const;
+      const shapes::Size& getSize() const;
 };
 
 #endif

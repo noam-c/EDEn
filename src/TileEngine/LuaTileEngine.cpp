@@ -1,6 +1,13 @@
+/*
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
+ */
+
 #include "LuaTileEngine.h"
 #include "TileEngine.h"
 #include "NPC.h"
+#include "Size.h"
 #include "Point2D.h"
 #include "LuaWrapper.hpp"
 
@@ -20,10 +27,17 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
 static int TileEngineL_AddNPC(lua_State* luaVM)
 {
    NPC* npc = NULL;
+   
+   shapes::Size npcSize(32, 32);
    int nargs = lua_gettop(luaVM);
    
    switch(nargs)
    {
+      case 7:
+      {
+         npcSize.width = lua_tointeger(luaVM, 6);
+         npcSize.height = lua_tointeger(luaVM, 7);
+      }
       case 5:
       {
          TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
@@ -31,12 +45,11 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
          {
             std::string npcName(lua_tostring(luaVM, 2));
             std::string spritesheetName(lua_tostring(luaVM, 3));
-            int x = lua_tointeger(luaVM, 4);
-            int y = lua_tointeger(luaVM, 5);
+            shapes::Point2D npcLocation(lua_tointeger(luaVM, 4), lua_tointeger(luaVM, 5));
 
             DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
-            DEBUG("NPC Location will be (%d, %d)", x, y);
-            npc = tileEngine->addNPC(npcName, spritesheetName, shapes::Point2D(x, y));
+            DEBUG("NPC Location will be (%d, %d)", npcLocation.x, npcLocation.y);
+            npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize);
          }
       }
    }

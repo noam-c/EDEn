@@ -101,10 +101,10 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
 
    public:
       /** The screen width (currently HARDCODED) */
-      static const int width = 800;
+      static const unsigned int width = 800;
    
       /** The screen height (currently HARDCODED) */
-      static const int height = 600;
+      static const unsigned int height = 600;
    
       /**
        * @return The width of the screen
