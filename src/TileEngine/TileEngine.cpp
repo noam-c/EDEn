@@ -28,7 +28,7 @@ const int debugFlag = DEBUG_TILE_ENG;
 const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath)
-: GameState(executionStack), xMapOffset(0), yMapOffset(0)
+: GameState(executionStack), entityGrid(messagePipe), xMapOffset(0), yMapOffset(0)
 {
    playerActor = new PlayerCharacter(entityGrid, "npc1");
    scriptEngine = new ScriptEngine(*this, playerData, scheduler);
@@ -63,7 +63,7 @@ void TileEngine::startChapter(const std::string& chapterName)
 
 std::string TileEngine::getMapName()
 {
-   return entityGrid.getName();
+   return entityGrid.getMapName();
 }
 
 void TileEngine::dialogueNarrate(const char* narration, Task* task)
@@ -84,7 +84,7 @@ bool TileEngine::setRegion(const std::string& regionName, const std::string& map
 
    setMap(mapName);
 
-   DEBUG("Running map script: %s/%s", regionName.c_str(), entityGrid.getName().c_str());
+   DEBUG("Running map script: %s/%s", regionName.c_str(), entityGrid.getMapName().c_str());
    return true;
 }
 
@@ -102,7 +102,7 @@ void TileEngine::setMap(std::string mapName)
    {
       // Otherwise, we use the region's default starting map
       entityGrid.setMapData(currRegion->getStartingMap());
-      mapName = entityGrid.getName();
+      mapName = entityGrid.getMapName();
    }
 
    DEBUG("Map set to: %s", mapName.c_str());
@@ -112,7 +112,7 @@ void TileEngine::setMap(std::string mapName)
 
 void TileEngine::recalculateMapOffsets()
 {
-   const shapes::Size& mapPixelBounds = entityGrid.getBounds().getSize() * TILE_SIZE;
+   const shapes::Size& mapPixelBounds = entityGrid.getMapBounds().getSize() * TILE_SIZE;
 
    xMapOffset = mapPixelBounds.width < GraphicsUtil::width ? 
               (GraphicsUtil::width - mapPixelBounds.width) >> 1 : 0;

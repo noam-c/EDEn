@@ -12,6 +12,7 @@
 #include "Point2D.h"
 #include "Rectangle.h"
 #include "Actor.h"
+#include "MessagePipe.h"
 #include "SDL_opengl.h"
 
 #include "DebugUtils.h"
@@ -26,7 +27,7 @@ const int EntityGrid::MOVEMENT_TILE_SIZE = 16;
 const float EntityGrid::ROOT_2 = 1.41421356f;
 const float EntityGrid::INFINITY = std::numeric_limits<float>::infinity();
 
-EntityGrid::EntityGrid() : map(NULL), collisionMap(NULL)
+EntityGrid::EntityGrid(messaging::MessagePipe& messagePipe) : messagePipe(messagePipe), map(NULL), collisionMap(NULL)
 {
 }
 
@@ -45,7 +46,8 @@ const Map* EntityGrid::getMapData() const
 
 void EntityGrid::setMapData(const Map* newMapData)
 {
-   map = newMapData;   
+   clearMap();
+   map = newMapData;
    if(map == NULL) return;
 
    const int collisionTileRatio = TileEngine::TILE_SIZE / MOVEMENT_TILE_SIZE;
@@ -68,33 +70,49 @@ void EntityGrid::setMapData(const Map* newMapData)
    }
 
    std::vector<Obstacle*> obstacles = map->getObstacles();
-   std::vector<Obstacle*>::const_iterator iter;
-   for(iter = obstacles.begin(); iter != obstacles.end(); ++iter)
+   for(std::vector<Obstacle*>::const_iterator iter = obstacles.begin(); iter != obstacles.end(); ++iter)
    {
       Obstacle* o = *iter;
       addObstacle(o->getTileCoords() * MOVEMENT_TILE_SIZE, o->getSize());   
    }
 
+   const std::vector<TriggerZone*>& triggerZones = map->getTriggerZones();
+   for(std::vector<TriggerZone*>::const_iterator iter = triggerZones.begin(); iter != triggerZones.end(); ++iter)
+   {
+      registerTriggerZone(*iter);
+   }
+   
    pathfinder.initialize(collisionMap, MOVEMENT_TILE_SIZE, collisionMapBounds);
 }
 
-std::string EntityGrid::getName() const
+void EntityGrid::registerTriggerZone(const TriggerZone* triggerZone)
 {
-   if(map) return map->getName();
-   
-   T_T("Requested map name when map does not exist.");
+	triggerDetectors.push_back(TriggerDetector(messagePipe, *triggerZone));
 }
 
-const shapes::Rectangle& EntityGrid::getBounds() const
+const std::string& EntityGrid::getMapName() const
 {
-   if(map) return map->getBounds();
+   if(!map)
+   {
+      T_T("Requested map name when map does not exist.");
+   }
    
-   T_T("Requested map bounds when map does not exist.");
+   return map->getName();
+}
+
+const shapes::Rectangle& EntityGrid::getMapBounds() const
+{
+   if(!map)
+   {
+      T_T("Requested map bounds when map does not exist.");
+   }
+
+   return map->getBounds();
 }
 
 bool EntityGrid::withinMap(const shapes::Point2D& point) const
 {
-   shapes::Rectangle pixelBounds(shapes::Point2D::ORIGIN, getBounds().getSize() * TileEngine::TILE_SIZE);
+   shapes::Rectangle pixelBounds(shapes::Point2D::ORIGIN, getMapBounds().getSize() * TileEngine::TILE_SIZE);
    return pixelBounds.contains(point);
 }
 
@@ -451,6 +469,17 @@ void EntityGrid::draw()
 #endif
 }
 
+void EntityGrid::clearMap()
+{
+   unregisterTriggers();
+   deleteCollisionMap();
+}
+
+void EntityGrid::unregisterTriggers()
+{
+   triggerDetectors.clear();
+}
+
 void EntityGrid::deleteCollisionMap()
 {
    if(collisionMap)
@@ -467,5 +496,5 @@ void EntityGrid::deleteCollisionMap()
 
 EntityGrid::~EntityGrid()
 {
-   deleteCollisionMap();
+   clearMap();
 }

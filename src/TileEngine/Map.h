@@ -17,6 +17,7 @@
 
 class Tileset;
 class Obstacle;
+class TriggerZone;
 
 /**
  * A map is a subset of a Region consisting of a single rectangular set of tiles
@@ -48,6 +49,9 @@ class Map
    /** The passibility of the map */
    bool** passibilityMap;
 
+   /** The list of the map's trigger zones */
+   std::vector<TriggerZone*> triggerZones;
+   
    /** The list of the map's obstacles */
    std::vector<Obstacle*> obstacles;
 
@@ -94,12 +98,17 @@ class Map
       /**
        * @return The name of this map.
        */
-      std::string getName() const;
+      const std::string& getName() const;
 
       /**
        * @return The bounds of the map (in tiles).
        */
       const shapes::Rectangle& getBounds() const;
+      
+      /**
+       * @return The list of trigger zones for this map
+       */
+      const std::vector<TriggerZone*> getTriggerZones() const;
 
       /**
        * @return The list of obstacles for this map

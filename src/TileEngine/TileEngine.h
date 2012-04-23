@@ -9,6 +9,7 @@
 
 #include "GameState.h"
 
+#include "MessagePipe.h"
 #include "Scheduler.h"
 #include "EntityGrid.h"
 #include "PlayerData.h"
@@ -44,6 +45,8 @@ class TileEngine: public GameState
 
    /** The current region that the player is in. */
    Region* currRegion;
+   
+   messaging::MessagePipe messagePipe;
 
    /** The current map that the player is in. */
    EntityGrid entityGrid;

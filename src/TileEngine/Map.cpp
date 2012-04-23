@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "Tileset.h"
 #include "Obstacle.h"
+#include "TriggerZone.h"
 #include "Pathfinder.h"
 #include "ResourceLoader.h"
 #include "TileEngine.h"
@@ -192,7 +193,7 @@ void Map::initializePassibilityMatrix()
    }
 }
 
-std::string Map::getName() const
+const std::string& Map::getName() const
 {
    return mapName;
 }
@@ -200,6 +201,11 @@ std::string Map::getName() const
 const shapes::Rectangle& Map::getBounds() const
 {
    return bounds;
+}
+
+const std::vector<TriggerZone*> Map::getTriggerZones() const
+{
+   return triggerZones;
 }
 
 const std::vector<Obstacle*> Map::getObstacles() const

@@ -16,6 +16,12 @@
 class Obstacle;
 class Map;
 class Actor;
+class TriggerZone;
+
+namespace messaging
+{
+   class MessagePipe;
+};
 
 namespace shapes
 {
@@ -44,6 +50,12 @@ class EntityGrid
 
    /** Floating-point notation for infinity. */
    static const float INFINITY;
+   
+   /** The message pipe used for trigger events. */
+   messaging::MessagePipe& messagePipe;
+
+   /** The list of trigger detectors associated with the map. */
+   std::list<TriggerDetector> triggerDetectors;
 
    /** The map on which the grid is overlaid. */
    const Map* map;
@@ -58,10 +70,27 @@ class EntityGrid
    shapes::Rectangle collisionMapBounds;
    
    /**
+    * Clean up the grid data and listeners.
+    */
+   void clearMap();
+   
+   /**
+    * Unregister message listeners associated with this map.
+    */
+   void unregisterTriggers();
+
+   /**
     * Clean up the map of tile states.
     */
    void deleteCollisionMap();
 
+   /**
+    * Registers a trigger zone in the map.
+    *
+    * @param triggerZone The trigger zone to register.
+    */
+   void registerTriggerZone(const TriggerZone* triggerZone);
+   
    /**
     * @param area The pixel-coordinate rectangle to determine boundaries for.
     *
@@ -121,8 +150,10 @@ class EntityGrid
 
       /**
        * Constructor.
+       *
+       * @param messagePipe The message pipe to use for trigger messages.
        */
-      EntityGrid();
+      EntityGrid(messaging::MessagePipe& messagePipe);
       
       /**
        * @return The map data that the EntityGrid is operating on.
@@ -140,12 +171,12 @@ class EntityGrid
       /**
        * @return The name of the map.
        */
-      std::string getName() const;
+      const std::string& getMapName() const;
       
       /**
        * @return The bounds of the map.
        */
-      const shapes::Rectangle& getBounds() const;
+      const shapes::Rectangle& getMapBounds() const;
 
       /**
        * @param point The coordinates to check (in pixels)

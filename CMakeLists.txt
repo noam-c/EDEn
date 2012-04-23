@@ -120,6 +120,8 @@ set(HEADERS
   src/MenuControls/MenuAction.h
   src/MenuControls/MenuShell.h
   src/MenuControls/ItemListModel.h
+  src/Messaging/MessagePipe.h
+  src/Messaging/Listener.h
   src/MovementDirection.h
   src/PlayerData/Character.h
   src/PlayerData/PlayerData.h
@@ -165,6 +167,10 @@ set(HEADERS
   src/TileEngine/LuaTileEngine.h
   src/TileEngine/Tileset.h
   src/TileEngine/TileState.h
+  src/TileEngine/TriggerZone.h
+  src/TileEngine/TriggerDetector.h
+  src/TileEngine/Messages/ActorMoveMessage.h
+  src/TileEngine/Messages/MapTriggerMessage.h
   src/tinyxml/tinystr.h
   src/tinyxml/tinyxml.h
   src/TODOLIST.h
@@ -264,6 +270,7 @@ set(SOURCES
   src/MenuControls/SaveGameModule.cpp
   src/MenuControls/MenuShell.cpp
   src/MenuControls/ItemListModel.cpp
+  src/Messaging/MessagePipe.cpp
   src/PlayerData/Character.cpp
   src/PlayerData/PlayerData.cpp
   src/PlayerData/Quest.cpp
@@ -305,6 +312,10 @@ set(SOURCES
   src/TileEngine/LuaTileEngine.cpp
   src/TileEngine/Tileset.cpp
   src/TileEngine/TileState.cpp
+  src/TileEngine/TriggerZone.cpp
+  src/TileEngine/TriggerDetector.cpp
+  src/TileEngine/Messages/ActorMoveMessage.cpp
+  src/TileEngine/Messages/MapTriggerMessage.cpp
   src/main.cpp
   src/DebugUtils.cpp
   src/Exception.cpp
@@ -323,12 +334,14 @@ source_group(guichan REGULAR_EXPRESSION src/guichan/.*)
 source_group(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
 source_group(Menu REGULAR_EXPRESSION src/Menu/.*)
 source_group(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
+source_group(Messaging REGULAR_EXPRESSION src/Messaging/.*)
 source_group(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
 source_group(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
 source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
 source_group(Shapes REGULAR_EXPRESSION src/Shapes/.*)
 source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
 source_group(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
+source_group("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.*)
 source_group(json REGULAR_EXPRESSION src/json/.*)
 source_group(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
 source_group(edwt REGULAR_EXPRESSION src/edwt/.*)
@@ -343,12 +356,14 @@ include_directories(
   src/MainMenu
   src/Menu
   src/MenuControls
+  src/Messaging
   src/PlayerData
   src/ResourceLoader
   src/ScriptEngine
   src/Shapes
   src/Sprites
   src/TileEngine
+  src/TileEngine/Messages
   src/json
   src/LuaWrapper
   src/edwt
