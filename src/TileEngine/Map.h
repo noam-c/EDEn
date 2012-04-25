@@ -11,10 +11,13 @@
 
 #include <fstream>
 #include <string>
+#include <map>
 #include <vector>
 
 #include "Rectangle.h"
 
+class Point2D;
+class MapExit;
 class Tileset;
 class Obstacle;
 class TriggerZone;
@@ -50,10 +53,16 @@ class Map
    bool** passibilityMap;
 
    /** The list of the map's trigger zones */
-   std::vector<TriggerZone*> triggerZones;
+   std::vector<TriggerZone> triggerZones;
    
    /** The list of the map's obstacles */
    std::vector<Obstacle*> obstacles;
+
+   /** The list of the map's entrances */
+   std::map<std::string, shapes::Point2D> mapEntrances;
+
+   /** The list of the map's exits */
+   std::vector<MapExit> mapExits;
 
    /** The bounds (in tiles) of this map */
    shapes::Rectangle bounds;
@@ -72,6 +81,16 @@ class Map
     * Parse the map layer that holds collision data.
     */
    void parseCollisionGroup(const TiXmlElement* collisionGroupElement);
+
+   /**
+    * Parse the map layer that holds map entrance data.
+    */
+   void parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement);
+
+   /**
+    * Parse the map layer that holds map exit data.
+    */
+   void parseMapExitsGroup(const TiXmlElement* exitsGroupElement);
 
    /**
     * Creates a 2-dimensional map that corresponds to the passibility of this Map
@@ -108,12 +127,24 @@ class Map
       /**
        * @return The list of trigger zones for this map
        */
-      const std::vector<TriggerZone*> getTriggerZones() const;
+      const std::vector<TriggerZone>& getTriggerZones() const;
 
       /**
        * @return The list of obstacles for this map
        */
-      const std::vector<Obstacle*> getObstacles() const;
+      const std::vector<Obstacle*>& getObstacles() const;
+
+      /**
+       * @param previousMap The name of the map that the player is entering this map from.
+       *
+       * @return The point of entry for the given origin map name.
+       */
+      const shapes::Point2D& getMapEntrance(const std::string& previousMap) const;
+
+      /**
+       * @return The list of exits for this map
+       */
+      const std::vector<MapExit>& getMapExits() const;
 
       /**
        * @return The passibility of the map 
@@ -134,7 +165,7 @@ class Map
       /**
        * Destructor.
        */
-      virtual ~Map();
+      ~Map();
 };
 
 #endif

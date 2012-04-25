@@ -157,6 +157,7 @@ set(HEADERS
   src/TileEngine/DialogueController.h
   src/TileEngine/EntityGrid.h
   src/TileEngine/Map.h
+  src/TileEngine/MapExit.h
   src/TileEngine/NPC.h
   src/TileEngine/Obstacle.h
   src/TileEngine/Pathfinder.h
@@ -168,8 +169,8 @@ set(HEADERS
   src/TileEngine/Tileset.h
   src/TileEngine/TileState.h
   src/TileEngine/TriggerZone.h
-  src/TileEngine/TriggerDetector.h
   src/TileEngine/Messages/ActorMoveMessage.h
+  src/TileEngine/Messages/MapExitMessage.h
   src/TileEngine/Messages/MapTriggerMessage.h
   src/tinyxml/tinystr.h
   src/tinyxml/tinyxml.h
@@ -302,6 +303,7 @@ set(SOURCES
   src/TileEngine/DialogueController.cpp
   src/TileEngine/EntityGrid.cpp
   src/TileEngine/Map.cpp
+  src/TileEngine/MapExit.cpp
   src/TileEngine/NPC.cpp
   src/TileEngine/Obstacle.cpp
   src/TileEngine/PlayerCharacter.cpp
@@ -313,8 +315,8 @@ set(SOURCES
   src/TileEngine/Tileset.cpp
   src/TileEngine/TileState.cpp
   src/TileEngine/TriggerZone.cpp
-  src/TileEngine/TriggerDetector.cpp
   src/TileEngine/Messages/ActorMoveMessage.cpp
+  src/TileEngine/Messages/MapExitMessage.cpp
   src/TileEngine/Messages/MapTriggerMessage.cpp
   src/main.cpp
   src/DebugUtils.cpp

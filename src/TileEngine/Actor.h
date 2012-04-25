@@ -18,6 +18,11 @@ class EntityGrid;
 class Sprite;
 class Spritesheet;
 
+namespace messaging
+{
+   class MessagePipe;
+}
+
 class Actor
 {
    /**
@@ -49,9 +54,12 @@ class Actor
       /** The Actor's associated sprite, which is drawn on screen. */
       Sprite* sprite;
       
-      /** The grid of actors which this Actor interacts with */
+      /** The grid of actors which this Actor interacts with. */
       EntityGrid& entityGrid;
       
+      /** The message pipe used to send and receive events. */
+      messaging::MessagePipe& messagePipe;
+
       /**
        * Constructor for the actor.
        * Initializes the actor's coroutine and loads the associated script.
@@ -59,6 +67,7 @@ class Actor
        * 
        * @param name The name of the actor (must also be the name of its script).
        * @param sheetName The name of the spritesheet to use for rendering the actor.
+       * @param messagePipe The message pipe used to send and receive events.
        * @param entityGrid The map that this actor will be interacting in.
        * @param regionName The name of the region that this Actor is interacting in.
        * @param location The location (in pixels) where the actor will start off.
@@ -66,7 +75,7 @@ class Actor
        * @param movementSpeed The speed of the actor's movement.
        * @param direction The starting direction of the actor.
        */
-      Actor(const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction);
+      Actor(const std::string& name, const std::string& sheetName, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction);
 
       /**
        * Destructor.
@@ -78,7 +87,7 @@ class Actor
        */
       void flushOrders();
 
-public:
+   public:
       /**
        * @return The name of this Actor.
        */

@@ -49,6 +49,7 @@
 #define DEBUG_SPRITE      1<<17    // Sprite/spritesheet functionality
 #define DEBUG_PLAYER      1<<18    // Player data/Character functionality
 #define DEBUG_ENTITY_GRID 1<<19    // Entity Map functionality
+#define DEBUG_MESSAGING   1<<20    // Message passing functionality
 
 #define DEBUG_ALL           ~0    // Turn on all debug output (verbose, but handy)
 

@@ -16,8 +16,9 @@
 
 const int debugFlag = DEBUG_NPC;
 
-NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, const std::string& regionName, const shapes::Point2D& location, const shapes::Size& size)
-   : Actor(name, sheetName, entityGrid, location, size, 0.1f, DOWN)
+NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName,
+		messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const std::string& regionName, const shapes::Point2D& location, const shapes::Size& size)
+   : Actor(name, sheetName, messagePipe, entityGrid, location, size, 0.1f, DOWN)
 {
    npcThread = engine.getNPCScript(this, regionName, entityGrid.getMapData()->getName(), name);
    scheduler.start(npcThread);

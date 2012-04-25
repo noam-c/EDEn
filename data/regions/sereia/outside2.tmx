@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="10" height="10" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="tilesetName" value="town"/>
+ </properties>
+ <tileset firstgid="1" source="../../tilesets/town.tsx"/>
+ <layer name="floor" width="10" height="10">
+  <data encoding="csv">
+315,114,114,317,281,283,114,114,114,317,
+315,114,114,317,281,283,114,114,316,317,
+315,231,344,345,281,283,316,316,114,232,
+260,317,253,254,197,198,254,254,254,254,
+114,317,281,5,6,7,226,310,310,310,
+259,317,281,33,34,35,283,287,288,289,
+315,317,281,61,62,63,283,315,316,317,
+315,317,309,310,310,310,311,315,316,317,
+315,232,288,288,288,288,288,260,316,317,
+343,344,344,344,344,344,344,344,344,345
+</data>
+ </layer>
+ <objectgroup name="collision" width="10" height="10">
+  <object x="64" y="96" width="160" height="160"/>
+  <object x="224" y="96" width="96" height="64"/>
+  <object x="128" y="0" width="64" height="96"/>
+ </objectgroup>
+ <objectgroup name="exits" width="10" height="10">
+  <object x="0" y="128" width="48" height="32">
+   <properties>
+    <property name="exit" value="outside"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="entrances" width="10" height="10">
+  <object x="0" y="128" width="32" height="32">
+   <properties>
+    <property name="entrance" value="outside"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

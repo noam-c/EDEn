@@ -7,17 +7,17 @@
 #ifndef MESSAGE_PIPE_H
 #define MESSAGE_PIPE_H
 
-#include <functional>
-#include <algorithm>
-#include <map>
 #include <set>
+
+#include "Listener.h"
+#include "DebugUtils.h"
+
+class ActorMoveMessage;
+class MapTriggerMessage;
+class MapExitMessage;
 
 namespace messaging
 {
-   template<typename T> class Listener;
-
-   struct PlayerMoveMessage;
-
    class MessagePipe
    {
       template<typename T> class ListenerList
@@ -45,11 +45,38 @@ namespace messaging
             }
       };
 
-      ListenerList<PlayerMoveMessage> playerMoveMessages;
+      ListenerList<ActorMoveMessage> actorMoveMessages;
+      ListenerList<MapTriggerMessage> mapTriggerMessages;
+      ListenerList<MapExitMessage> mapExitMessages;
       
-      template<typename T> void registerListener(Listener<T>* listener);
-      template<typename T> void unregisterListener(Listener<T>* listener);
-      template<typename T> void sendMessage(const T& message);
+      public:
+         template<typename T> void registerListener(Listener<T>* listener)
+         {
+            T_T("This listener type is unsupported.");
+         }
+
+         template<typename T> void unregisterListener(Listener<T>* listener)
+         {
+            T_T("This listener type is unsupported.");
+         }
+
+         template<typename T> void sendMessage(const T& message)
+         {
+            T_T("This message type is unsupported.");
+         }
    };
+
+   template<> void MessagePipe::registerListener(Listener<ActorMoveMessage>* listener);
+   template<> void MessagePipe::unregisterListener(Listener<ActorMoveMessage>* listener);
+   template<> void MessagePipe::sendMessage(const ActorMoveMessage& message);
+
+   template<> void MessagePipe::registerListener(Listener<MapTriggerMessage>* listener);
+   template<> void MessagePipe::unregisterListener(Listener<MapTriggerMessage>* listener);
+   template<> void MessagePipe::sendMessage(const MapTriggerMessage& message);
+
+   template<> void MessagePipe::registerListener(Listener<MapExitMessage>* listener);
+   template<> void MessagePipe::unregisterListener(Listener<MapExitMessage>* listener);
+   template<> void MessagePipe::sendMessage(const MapExitMessage& message);
 };
+
 #endif

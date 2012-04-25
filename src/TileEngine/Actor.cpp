@@ -10,12 +10,14 @@
 #include "Sprite.h"
 #include "TileEngine.h"
 #include "Actor_Orders.h"
+#include "MessagePipe.h"
+#include "ActorMoveMessage.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_NPC;
 
-Actor::Actor(const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction)
-   : name(name), pixelLoc(location), size(size), movementSpeed(movementSpeed), currDirection(direction), entityGrid(entityGrid)
+Actor::Actor(const std::string& name, const std::string& sheetName, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction)
+   : name(name), pixelLoc(location), messagePipe(messagePipe), size(size), movementSpeed(movementSpeed), currDirection(direction), entityGrid(entityGrid)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
    sprite = new Sprite(sheet);
@@ -151,7 +153,9 @@ void Actor::setAnimation(const std::string& animationName)
 
 void Actor::setLocation(const shapes::Point2D& location)
 {
+   const shapes::Point2D oldLocation = pixelLoc;
    pixelLoc = location;
+   messagePipe.sendMessage(ActorMoveMessage(oldLocation, location, this));
 }
 
 const shapes::Point2D& Actor::getLocation() const

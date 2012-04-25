@@ -12,11 +12,15 @@
 #include "MovementDirection.h"
 #include "Pathfinder.h"
 #include "Rectangle.h"
+#include "Listener.h"
 
 class Obstacle;
 class Map;
 class Actor;
+class TileEngine;
 class TriggerZone;
+
+struct ActorMoveMessage;
 
 namespace messaging
 {
@@ -38,7 +42,7 @@ struct TileState;
  *
  * @author Noam Chitayat
  */
-class EntityGrid
+class EntityGrid : messaging::Listener<ActorMoveMessage>
 {
    friend class Pathfinder;
    
@@ -51,11 +55,11 @@ class EntityGrid
    /** Floating-point notation for infinity. */
    static const float INFINITY;
    
+   /** The tile engine that moderates this grid. */
+   const TileEngine& tileEngine;
+
    /** The message pipe used for trigger events. */
    messaging::MessagePipe& messagePipe;
-
-   /** The list of trigger detectors associated with the map. */
-   std::list<TriggerDetector> triggerDetectors;
 
    /** The map on which the grid is overlaid. */
    const Map* map;
@@ -73,23 +77,11 @@ class EntityGrid
     * Clean up the grid data and listeners.
     */
    void clearMap();
-   
-   /**
-    * Unregister message listeners associated with this map.
-    */
-   void unregisterTriggers();
 
    /**
     * Clean up the map of tile states.
     */
    void deleteCollisionMap();
-
-   /**
-    * Registers a trigger zone in the map.
-    *
-    * @param triggerZone The trigger zone to register.
-    */
-   void registerTriggerZone(const TriggerZone* triggerZone);
    
    /**
     * @param area The pixel-coordinate rectangle to determine boundaries for.
@@ -151,9 +143,10 @@ class EntityGrid
       /**
        * Constructor.
        *
+       * @param tileEngine The tile engine that owns this entity grid.
        * @param messagePipe The message pipe to use for trigger messages.
        */
-      EntityGrid(messaging::MessagePipe& messagePipe);
+      EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe);
       
       /**
        * @return The map data that the EntityGrid is operating on.
@@ -314,6 +307,13 @@ class EntityGrid
        * Draw the collision map for diagnostic purposes.
        */
       void draw();
+
+      /**
+       * Receive location change messages.
+       *
+       * @param message The location change message that was fired.
+       */
+      void receive(const ActorMoveMessage& message);
 
       /**
        * Destructor.

@@ -12,7 +12,13 @@
 #include "Point2D.h"
 #include "Rectangle.h"
 #include "Actor.h"
+#include "PlayerCharacter.h"
 #include "MessagePipe.h"
+#include "TriggerZone.h"
+#include "MapExit.h"
+#include "ActorMoveMessage.h"
+#include "MapExitMessage.h"
+#include "MapTriggerMessage.h"
 #include "SDL_opengl.h"
 
 #include "DebugUtils.h"
@@ -27,8 +33,10 @@ const int EntityGrid::MOVEMENT_TILE_SIZE = 16;
 const float EntityGrid::ROOT_2 = 1.41421356f;
 const float EntityGrid::INFINITY = std::numeric_limits<float>::infinity();
 
-EntityGrid::EntityGrid(messaging::MessagePipe& messagePipe) : messagePipe(messagePipe), map(NULL), collisionMap(NULL)
+EntityGrid::EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe)
+   : tileEngine(tileEngine), messagePipe(messagePipe), map(NULL), collisionMap(NULL)
 {
+   messagePipe.registerListener(this);
 }
 
 shapes::Rectangle EntityGrid::getCollisionMapEdges(const shapes::Rectangle& area) const
@@ -76,18 +84,7 @@ void EntityGrid::setMapData(const Map* newMapData)
       addObstacle(o->getTileCoords() * MOVEMENT_TILE_SIZE, o->getSize());   
    }
 
-   const std::vector<TriggerZone*>& triggerZones = map->getTriggerZones();
-   for(std::vector<TriggerZone*>::const_iterator iter = triggerZones.begin(); iter != triggerZones.end(); ++iter)
-   {
-      registerTriggerZone(*iter);
-   }
-   
    pathfinder.initialize(collisionMap, MOVEMENT_TILE_SIZE, collisionMapBounds);
-}
-
-void EntityGrid::registerTriggerZone(const TriggerZone* triggerZone)
-{
-	triggerDetectors.push_back(TriggerDetector(messagePipe, *triggerZone));
 }
 
 const std::string& EntityGrid::getMapName() const
@@ -469,15 +466,34 @@ void EntityGrid::draw()
 #endif
 }
 
-void EntityGrid::clearMap()
+void EntityGrid::receive(const ActorMoveMessage& message)
 {
-   unregisterTriggers();
-   deleteCollisionMap();
+   const std::vector<MapExit>& mapExits = map->getMapExits();
+   for(std::vector<MapExit>::const_iterator iter = mapExits.begin(); iter != mapExits.end(); ++iter)
+   {
+      if(message.movingActor == tileEngine.getPlayerCharacter()
+            && !iter->getBounds().contains(message.oldLocation)
+            && iter->getBounds().contains(message.newLocation))
+      {
+         messagePipe.sendMessage(MapExitMessage(*iter));
+         return;
+      }
+   }
+
+   const std::vector<TriggerZone>& triggerZones = map->getTriggerZones();
+   for(std::vector<TriggerZone>::const_iterator iter = triggerZones.begin(); iter != triggerZones.end(); ++iter)
+   {
+      if(!iter->getBounds().contains(message.oldLocation)
+            && iter->getBounds().contains(message.newLocation))
+      {
+         messagePipe.sendMessage(MapTriggerMessage(*iter, message.movingActor));
+      }
+   }
 }
 
-void EntityGrid::unregisterTriggers()
+void EntityGrid::clearMap()
 {
-   triggerDetectors.clear();
+   deleteCollisionMap();
 }
 
 void EntityGrid::deleteCollisionMap()
@@ -497,4 +513,5 @@ void EntityGrid::deleteCollisionMap()
 EntityGrid::~EntityGrid()
 {
    clearMap();
+   messagePipe.unregisterListener(this);
 }

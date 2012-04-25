@@ -37,7 +37,6 @@ class ScriptEngine;
  */
 class NPC : public Actor
 {
-
    /** The NPC's thread of execution */
    NPCScript* npcThread;
 
@@ -51,12 +50,13 @@ class NPC : public Actor
        * @param scheduler The scheduler that owns the NPC's coroutine
        * @param name The name of the NPC (must also be the name of its script).
        * @param sheetName The name of the spritesheet to use for rendering the NPC.
+       * @param messagePipe The message pipe used to send event messages.
        * @param entityGrid The map that this NPC will be interacting in.
        * @param regionName The name of the region that this NPC is interacting in.
        * @param location The location (in pixels) where the NPC will start off.
        * @param size The size (in pixels) of the NPC.
        */
-   NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName, EntityGrid& entityGrid, const std::string& regionName, const shapes::Point2D& location, const shapes::Size& size);
+      NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const std::string& sheetName, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const std::string& regionName, const shapes::Point2D& location, const shapes::Size& size);
 
       /**
        * The NPC is currently not doing anything, nor has it been asked to do

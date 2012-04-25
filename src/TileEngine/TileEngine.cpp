@@ -15,6 +15,8 @@
 #include "ResourceLoader.h"
 #include "Region.h"
 #include "Map.h"
+#include "MapExit.h"
+#include "MapExitMessage.h"
 #include "Pathfinder.h"
 #include "Rectangle.h"
 #include "DebugConsoleWindow.h"
@@ -28,9 +30,10 @@ const int debugFlag = DEBUG_TILE_ENG;
 const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath)
-: GameState(executionStack), entityGrid(messagePipe), xMapOffset(0), yMapOffset(0)
+: GameState(executionStack), entityGrid(*this, messagePipe), xMapOffset(0), yMapOffset(0)
 {
-   playerActor = new PlayerCharacter(entityGrid, "npc1");
+   messagePipe.registerListener(this);
+   playerActor = new PlayerCharacter(messagePipe, entityGrid, "npc1");
    scriptEngine = new ScriptEngine(*this, playerData, scheduler);
    dialogue = new DialogueController(*top, scheduler, *scriptEngine);
    consoleWindow = new edwt::DebugConsoleWindow(top, top->getWidth(), top->getHeight() * 0.2);
@@ -42,6 +45,7 @@ TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapte
 
 TileEngine::~TileEngine()
 {
+   messagePipe.unregisterListener(this);
    delete consoleWindow;
    delete dialogue;
    delete scriptEngine;
@@ -64,6 +68,19 @@ void TileEngine::startChapter(const std::string& chapterName)
 std::string TileEngine::getMapName()
 {
    return entityGrid.getMapName();
+}
+
+void TileEngine::receive(const MapExitMessage& message)
+{
+   if(playerActor->isActive())
+   {
+      std::string exitedMap = entityGrid.getMapName();
+      std::string enteredMap = message.mapExit.getNextMap();
+      DEBUG("Exit signal received: Exiting %s and entering %s", exitedMap.c_str(), enteredMap.c_str());
+      setMap(enteredMap);
+      const shapes::Point2D& entryPoint = entityGrid.getMapData()->getMapEntrance(exitedMap);
+      playerActor->addToMap(entryPoint);
+   }
 }
 
 void TileEngine::dialogueNarrate(const char* narration, Task* task)
@@ -145,7 +162,7 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
    if(entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
       npcToAdd = new NPC(*scriptEngine, scheduler, npcName, spritesheetName,
-                                 entityGrid, currRegion->getName(),
+                                 messagePipe, entityGrid, currRegion->getName(),
                                  npcLocation, size);
       npcList[npcName] = npcToAdd;
       entityGrid.addActor(npcToAdd, npcLocation);
@@ -258,8 +275,10 @@ void TileEngine::handleInputEvents(bool& finishState)
 
                   // This assumes that, once the debug event is consumed here, it is not used anymore
                   delete script;
+                  break;
                }
             }
+            break;
          }
          case SDL_KEYDOWN:
          {

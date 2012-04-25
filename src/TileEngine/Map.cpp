@@ -8,6 +8,7 @@
 #include "Tileset.h"
 #include "Obstacle.h"
 #include "TriggerZone.h"
+#include "MapExit.h"
 #include "Pathfinder.h"
 #include "ResourceLoader.h"
 #include "TileEngine.h"
@@ -97,26 +98,41 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
 
    parseFloorLayer(floorElement);
 
-   const TiXmlElement* collisionElement = root->FirstChildElement("objectgroup");
-   while(floorElement != NULL)
+   bool hasCollisionLayer = false;
+   bool hasEntrancesLayer = false;
+   bool hasExitsLayer = false;
+
+   const TiXmlElement* objectGroupElement = root->FirstChildElement("objectgroup");
+   while(objectGroupElement != NULL)
    {
-      if(std::string(collisionElement->Attribute("name")) == "collision")
+      std::string objectGroupName = objectGroupElement->Attribute("name");
+      if(objectGroupName == "collision" && !hasCollisionLayer)
       {
-         break;
+         parseCollisionGroup(objectGroupElement);
+         hasCollisionLayer = true;
+      }
+      else if(objectGroupName == "entrances" && !hasEntrancesLayer)
+      {
+         parseMapEntrancesGroup(objectGroupElement);
+         hasEntrancesLayer = true;
+      }
+      else if(objectGroupName == "exits" && !hasExitsLayer)
+      {
+         parseMapExitsGroup(objectGroupElement);
+         hasExitsLayer = true;
       }
       
-      collisionElement = collisionElement->NextSiblingElement("objectgroup");
+      objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
    }
-
-   parseCollisionGroup(collisionElement);
    
-   std::vector<Obstacle*> obstacles;
+   //std::vector<Obstacle*> obstacles;
    
    DEBUG("Map loaded.");
 }
 
 void Map::parseFloorLayer(const TiXmlElement* floorLayerElement)
 {
+   DEBUG("Loading floor layer.");
    const TiXmlText* floorDataElement = floorLayerElement->FirstChildElement("data")->FirstChild()->ToText();
    std::stringstream layerStream(floorDataElement->Value());
    
@@ -141,6 +157,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
 {
    initializePassibilityMatrix();
 
+   DEBUG("Loading collision layer.");
    if(collisionGroupElement != NULL)
    {
       shapes::Point2D topLeft;
@@ -165,6 +182,91 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
                   passibilityMap[y][x] = false;
                }  
             }
+         }
+
+         objectElement = objectElement->NextSiblingElement("object");
+      }
+   }
+}
+
+void Map::parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement)
+{
+   DEBUG("Loading entrance layer.");
+   if(entrancesGroupElement != NULL)
+   {
+      shapes::Point2D entrance;
+
+      const TiXmlElement* objectElement = entrancesGroupElement->FirstChildElement("object");
+      while(objectElement != NULL)
+      {
+         objectElement->Attribute("x", &entrance.x);
+         objectElement->Attribute("y", &entrance.y);
+         std::string previousMap;
+
+         const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
+         const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
+         while(propertyElement != NULL)
+         {
+            if(std::string(propertyElement->Attribute("name")) == "entrance")
+            {
+               previousMap = propertyElement->Attribute("value");
+               break;
+            }
+
+            propertyElement = propertyElement->NextSiblingElement("property");
+         }
+
+         DEBUG("Found entrance from %s at %d,%d.",
+               previousMap.c_str(), entrance.x, entrance.y);
+
+         if(!previousMap.empty())
+         {
+            mapEntrances[previousMap] = entrance;
+         }
+
+         objectElement = objectElement->NextSiblingElement("object");
+      }
+   }
+}
+
+void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
+{
+   DEBUG("Loading exit layer.");
+   if(exitsGroupElement != NULL)
+   {
+      shapes::Point2D topLeft;
+      int width;
+      int height;
+
+      const TiXmlElement* objectElement = exitsGroupElement->FirstChildElement("object");
+      while(objectElement != NULL)
+      {
+         objectElement->Attribute("x", &topLeft.x);
+         objectElement->Attribute("y", &topLeft.y);
+         objectElement->Attribute("width", &width);
+         objectElement->Attribute("height", &height);
+         std::string nextMap;
+
+         const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
+         const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
+         while(propertyElement != NULL)
+         {
+            if(std::string(propertyElement->Attribute("name")) == "exit")
+            {
+               nextMap = propertyElement->Attribute("value");
+               break;
+            }
+
+            propertyElement = propertyElement->NextSiblingElement("property");
+         }
+
+         shapes::Rectangle rect(topLeft, shapes::Size(width, height));
+         DEBUG("Found exit %s at %d,%d with width %d and height %d.",
+               nextMap.c_str(), topLeft.x, topLeft.y, rect.getWidth(), rect.getHeight());
+
+         if(rect.getWidth() > 0 && rect.getHeight() > 0 && !nextMap.empty())
+         {
+            mapExits.push_back(MapExit(nextMap, rect));
          }
 
          objectElement = objectElement->NextSiblingElement("object");
@@ -203,14 +305,31 @@ const shapes::Rectangle& Map::getBounds() const
    return bounds;
 }
 
-const std::vector<TriggerZone*> Map::getTriggerZones() const
+const std::vector<TriggerZone>& Map::getTriggerZones() const
 {
    return triggerZones;
 }
 
-const std::vector<Obstacle*> Map::getObstacles() const
+const std::vector<Obstacle*>& Map::getObstacles() const
 {
    return obstacles;
+}
+
+const std::vector<MapExit>& Map::getMapExits() const
+{
+   return mapExits;
+}
+
+const shapes::Point2D& Map::getMapEntrance(const std::string& previousMap) const
+{
+   std::map<std::string, shapes::Point2D>::const_iterator result = mapEntrances.find(previousMap);
+
+   if(result == mapEntrances.end())
+   {
+      return shapes::Point2D::ORIGIN;
+   }
+
+   return result->second;
 }
 
 bool** Map::getPassibilityMatrix() const

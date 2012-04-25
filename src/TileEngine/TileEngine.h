@@ -12,6 +12,7 @@
 #include "MessagePipe.h"
 #include "Scheduler.h"
 #include "EntityGrid.h"
+#include "Listener.h"
 #include "PlayerData.h"
 
 #include <map>
@@ -38,7 +39,7 @@ namespace edwt
  *
  * @author Noam Chitayat
  */
-class TileEngine: public GameState
+class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
 {
    /** Time since the first logic step of the TileEngine instance. */
    unsigned long time;
@@ -146,6 +147,13 @@ class TileEngine: public GameState
        * @return The name of the currently loaded map.
        */
       std::string getMapName();
+
+      /**
+       * Handler for map location changes.
+       *
+       * @param message The map exit message.
+       */
+      void receive(const MapExitMessage& message);
 
       /**
        * Updates all NPCs on the map.

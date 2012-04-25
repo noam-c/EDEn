@@ -35,15 +35,26 @@ class PlayerCharacter : public Actor
       /**
        * Constructor.
        *
+       * @param messagePipe The message pipe used to send event messages.
        * @param map The map that the player character will be interacting in.
        * @param sheetName The name of the spritesheet to use for drawing the player character.
        */
-      PlayerCharacter(EntityGrid& map, const std::string& sheetName);
+      PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const std::string& sheetName);
+
+      /**
+       * Destructor.
+       */
+      ~PlayerCharacter();
+
+      /**
+       * @return true iff the player character is an active entity on the map.
+       */
+      bool isActive() const;
 
       /**
        * Adds the player entity to the map at the specified location.
        */
-      void addToMap(shapes::Point2D location);
+      void addToMap(const shapes::Point2D& location);
 
       /**
        * Deactivates the player entity.
