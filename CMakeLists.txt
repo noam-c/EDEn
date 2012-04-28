@@ -29,7 +29,7 @@ set(HEADERS
   src/Exception.h
   src/ExecutionStack.h
   src/GameState.h
-  src/GraphicsUtil.h
+  src/Graphics/GraphicsUtil.h
   src/guichan/actionevent.hpp
   src/guichan/actionlistener.hpp
   src/guichan/basiccontainer.hpp
@@ -323,7 +323,7 @@ set(SOURCES
   src/Exception.cpp
   src/ExecutionStack.cpp
   src/GameState.cpp
-  src/GraphicsUtil.cpp
+  src/Graphics/GraphicsUtil.cpp
 )
 
 SET(SOURCE_GROUP_DELIMITER "/")
@@ -332,6 +332,7 @@ source_group("//" REGULAR_EXPRESSION src/[^/]*)
 source_group(Audio REGULAR_EXPRESSION src/Audio/.*)
 source_group(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 source_group(GameData REGULAR_EXPRESSION src/GameData/.*)
+source_group(Graphics REGULAR_EXPRESSION src/Graphics/.*)
 source_group(guichan REGULAR_EXPRESSION src/guichan/.*)
 source_group(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
 source_group(Menu REGULAR_EXPRESSION src/Menu/.*)
@@ -354,6 +355,7 @@ include_directories(
   src/Audio
   src/Coroutines
   src/GameData
+  src/Graphics
   src/guichan
   src/MainMenu
   src/Menu
