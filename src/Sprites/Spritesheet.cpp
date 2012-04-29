@@ -7,6 +7,7 @@
 #include "Spritesheet.h"
 #include "SDL_opengl.h"
 #include "GraphicsUtil.h"
+#include "Texture.h"
 #include "SpriteFrame.h"
 #include "Animation.h"
 #include <queue>
@@ -28,7 +29,7 @@ const std::string Spritesheet::DATA_EXTENSION = ".eds";
  */
 const std::string Spritesheet::UNTITLED_LINE = "untitled";
 
-Spritesheet::Spritesheet(ResourceKey name) : Resource(name), frameList(NULL), numFrames(0)
+Spritesheet::Spritesheet(ResourceKey name) : Resource(name), frameList(NULL), numFrames(0), texture(NULL)
 {
 }
 
@@ -39,7 +40,8 @@ void Spritesheet::load(const std::string& path)
    imgPath += IMG_EXTENSION;
 
    DEBUG("Loading spritesheet image \"%s\"...", imgPath.c_str());
-   GraphicsUtil::getInstance()->loadGLTexture(imgPath.c_str(), texture, width, height);
+   texture = new Texture(imgPath);
+   size = texture->getSize();
 
    // Load in the spritesheet data file, which tells the engine where
    // each frame is in the image
@@ -239,10 +241,10 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    int frameHeight = f.bottom - f.top;
    int frameWidth = f.right - f.left;
 
-   float frameTop = f.top / float(height);
-   float frameBottom = f.bottom / float(height);
-   float frameLeft = f.left / float(width);
-   float frameRight = f.right / float(width);
+   float frameTop = f.top / float(size.height);
+   float frameBottom = f.bottom / float(size.height);
+   float frameLeft = f.left / float(size.width);
+   float frameRight = f.right / float(size.width);
    
    float destLeft = float(x);
    float destBottom = float(y);
@@ -250,25 +252,23 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    float destTop = destBottom - frameHeight;
 
    // NOTE: Alpha testing doesn't do transparency; it either draws a pixel or it doesn't
-   // If we want fades or something like that, we would need to use alpha blending
-
-   /** \todo Alpha testing is currently bugged. Investigate and fix. */
+   // If we want partial transparency, we would need to use alpha blending
 
    // Retain old alpha test state, function and threshold
-   //int oldAlphaFunction;
-   //float oldAlphaThreshold;
-   //glGetIntegerv(GL_ALPHA_TEST_FUNC, &oldAlphaFunction);
-   //glGetFloatv(GL_ALPHA_TEST_REF, &oldAlphaThreshold);
+   int oldAlphaFunction;
+   float oldAlphaThreshold;
+   glGetIntegerv(GL_ALPHA_TEST_FUNC, &oldAlphaFunction);
+   glGetFloatv(GL_ALPHA_TEST_REF, &oldAlphaThreshold);
 
-   //bool alphaTestEnabled = glIsEnabled(GL_ALPHA_TEST);
+   bool alphaTestEnabled = glIsEnabled(GL_ALPHA_TEST);
 
    // Enable alpha testing
-   //glEnable(GL_ALPHA_TEST);
+   glEnable(GL_ALPHA_TEST);
 
    // Set the alpha blending evaluation function
-   //glAlphaFunc(GL_GREATER, 0.1);
+   glAlphaFunc(GL_GREATER, 0.1f);
 
-   glBindTexture(GL_TEXTURE_2D, texture);
+   texture->bind();
 
    glBegin(GL_QUADS);
       glTexCoord2f(frameLeft, frameTop); glVertex3f(destLeft, destTop, 0.0f);
@@ -278,8 +278,8 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    glEnd();
 
    // We're done with alpha testing, return to default state
-   //glAlphaFunc(oldAlphaFunction, oldAlphaThreshold);
-   //if(!alphaTestEnabled) glDisable(GL_ALPHA_TEST);
+   glAlphaFunc(oldAlphaFunction, oldAlphaThreshold);
+   if(!alphaTestEnabled) glDisable(GL_ALPHA_TEST);
 }
 
 size_t Spritesheet::getSize()
@@ -298,4 +298,9 @@ Spritesheet::~Spritesheet()
 
    // Delete all the static frames
    delete [] frameList;
+
+   if(texture != NULL)
+   {
+      delete texture;
+   }
 }

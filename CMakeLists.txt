@@ -30,6 +30,7 @@ set(HEADERS
   src/ExecutionStack.h
   src/GameState.h
   src/Graphics/GraphicsUtil.h
+  src/Graphics/Texture.h
   src/guichan/actionevent.hpp
   src/guichan/actionlistener.hpp
   src/guichan/basiccontainer.hpp
@@ -324,6 +325,7 @@ set(SOURCES
   src/ExecutionStack.cpp
   src/GameState.cpp
   src/Graphics/GraphicsUtil.cpp
+  src/Graphics/Texture.cpp
 )
 
 SET(SOURCE_GROUP_DELIMITER "/")

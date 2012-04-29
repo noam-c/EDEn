@@ -9,6 +9,7 @@
 
 #include "Resource.h"
 #include "FrameSequence.h"
+#include "Size.h"
 #include <map>
 #include <string>
 
@@ -19,8 +20,7 @@ namespace Json
 
 struct SpriteFrame;
 class Animation;
-
-typedef unsigned int GLuint;
+class Texture;
 
 /**
  * The Spritesheet class represents an entire spritesheet image. It holds a
@@ -47,13 +47,10 @@ class Spritesheet : public Resource
    static const std::string UNTITLED_LINE;
 
    /** The spritesheet texture */
-   GLuint texture;
+   Texture* texture;
 
-   /** Width (in pixels) */
-   int width;
-
-   /** Height (in pixels) */
-   int height;
+   /** Spritesheet size (in pixels) */
+   shapes::Size size;
 
    /** The array of frames, which hold locations of different sprites in the sheet. */
    SpriteFrame* frameList;

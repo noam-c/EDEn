@@ -8,9 +8,10 @@
 #define TILESET_H
 
 #include "Resource.h"
+#include "Size.h"
 #include <vector>
 
-typedef unsigned int GLuint;
+class Texture;
 
 /**
  * This resource holds a tileset image texture and associated data
@@ -20,17 +21,14 @@ typedef unsigned int GLuint;
  */
 class Tileset : public Resource
 {
-   /** Width (in tiles) */
-   int width;
-
-   /** Height (in tiles) */
-   int height;
+   /** Tileset size (in tiles) */
+   shapes::Size size;
 
    /** Passibility matrix */
    std::vector<bool> passibility;
 
    /** The tile texture */
-   GLuint texture;
+   Texture* texture;
 
    void load(const std::string& path);
 

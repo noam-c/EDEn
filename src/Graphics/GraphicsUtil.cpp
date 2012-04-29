@@ -15,6 +15,7 @@
 #include "guichan/opengl.hpp"
 #include "guichan/opengl/openglsdlimageloader.hpp"
 #include "Container.h"
+#include "Size.h"
 #include "OpenGLTTF.h"
 
 #include "DebugUtils.h"
@@ -142,82 +143,6 @@ void GraphicsUtil::flipScreen()
 {
    glFlush();
    SDL_GL_SwapBuffers();
-}
-
-void GraphicsUtil::loadGLTexture(const char* path, GLuint& texture, int& w, int& h)
-{
-   // Create storage space for the texture and load the image
-   DEBUG("Loading image %s...", path);
-   SDL_Surface *image = IMG_Load(path);
-
-   if(!image)
-   {
-      // Problem loading the image; throw an exception
-      T_T(std::string("Unable to load image: ") + IMG_GetError());
-   }
-
-   DEBUG("Image load successful!");
-
-   Uint32 rmask, gmask, bmask, amask;
-
-/* SDL interprets each pixel as a 32-bit number, 
-   so our masks must depend on the endianness 
-   (byte order) of the machine */
-
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-   rmask = 0xff000000;
-   gmask = 0x00ff0000;
-   bmask = 0x0000ff00;
-   amask = 0x000000ff;
-#else
-   rmask = 0x000000ff;
-   gmask = 0x0000ff00;
-   bmask = 0x00ff0000;
-   amask = 0xff000000;
-#endif
-
-   SDL_Surface* rgbSurface = SDL_CreateRGBSurface(SDL_SWSURFACE, image->w, 
-                                 image->h, 32,
-                                 rmask, gmask, bmask, amask);
-
-   if(!rgbSurface)
-   {
-      // Problem converting the image; throw an exception
-      T_T(std::string("Unable to convert image: ") + SDL_GetError());
-   }
-
-   SDL_BlitSurface(image, 0, rgbSurface, 0);
-
-   w = image->w;
-   h = image->h;
-
-   // Create the texture
-   DEBUG("Generating texture...");
-   glGenTextures(1, &texture);
-
-   // Load image into the texture
-
-   // Bind this texture as the current texture OpenGL should work with
-   // Any texture ops on GL_TEXTURE_2D will become associated with this texture
-   DEBUG("Binding GL texture");
-   glBindTexture(GL_TEXTURE_2D, texture);
-
-   // Add Linear filtering for the texture
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-   // Transfer the image data into the texture
-   DEBUG("Transferring image data to GL texture");
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, 
-           (void*)rgbSurface->pixels);
-
-   DEBUG("Freeing image surface");
-   SDL_FreeSurface(image);
-
-   DEBUG("Freeing RGBA surface");
-   SDL_FreeSurface(rgbSurface);
-
-   DEBUG("Texture creation complete.");
 }
 
 int GraphicsUtil::getWidth()

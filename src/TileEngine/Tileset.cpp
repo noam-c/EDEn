@@ -10,12 +10,13 @@
 #include "tinyxml.h"
 #include "GraphicsUtil.h"
 #include "TileEngine.h"
+#include "Texture.h"
 #include <algorithm>
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_RES_LOAD | DEBUG_TILE_ENG;
 
-Tileset::Tileset(ResourceKey name) : Resource(name)
+Tileset::Tileset(ResourceKey name) : Resource(name), texture(NULL)
 {
 }
 
@@ -55,18 +56,15 @@ void Tileset::load(const std::string& path)
    std::string imagePath = imageElement->Attribute("source");
    DEBUG("Loading tileset image \"%s\"...", imagePath.c_str());
 
-   int imgWidth, imgHeight;
-   GraphicsUtil::getInstance()->loadGLTexture((std::string("data/tilesets/") + imagePath).c_str(), texture, imgWidth, imgHeight);
-
-   width = imgWidth / TileEngine::TILE_SIZE;
-   height = imgHeight / TileEngine::TILE_SIZE;
+   texture = new Texture(std::string("data/tilesets/") + imagePath);
+   size = texture->getSize() / TileEngine::TILE_SIZE;
 
    // \todo When Tiled makes it easier, the tileset data needs to hold the default
    // passibility matrix for a Tileset
    // Since maps will rarely change the passibility of tiles, it doesn't make
    // sense to hold passibility within each map's data; a map's Lua script
    // should be able to cheat default passibility if necessary.
-   passibility.resize(width * height);
+   passibility.resize(size.width * size.height);
    std::fill(passibility.begin(), passibility.end(), true);
    
    TiXmlElement* tileElement = root->FirstChildElement("tile");
@@ -96,8 +94,8 @@ void Tileset::load(const std::string& path)
    
 void Tileset::draw(int destX, int destY, int tileNum)
 {
-   int tilesetX = tileNum % width;
-   int tilesetY = tileNum / width;
+   int tilesetX = tileNum % size.width;
+   int tilesetY = tileNum / size.width;
 
    float destLeft = float(destX * TileEngine::TILE_SIZE);
    float destRight = float((destX + 1) * TileEngine::TILE_SIZE);
@@ -107,12 +105,12 @@ void Tileset::draw(int destX, int destY, int tileNum)
    float tileRight = float((tilesetX + 1) * TileEngine::TILE_SIZE - 1);
    float tileBottom = float((tilesetY + 1) * TileEngine::TILE_SIZE - 1);
 
-   float top = float(tilesetY) / height;
-   float bottom = float(tileBottom) / (height * TileEngine::TILE_SIZE - 1);
-   float left = float(tilesetX) / width;
-   float right = float(tileRight) / (width * TileEngine::TILE_SIZE - 1);
+   float top = float(tilesetY) / size.height;
+   float bottom = float(tileBottom) / (size.height * TileEngine::TILE_SIZE - 1);
+   float left = float(tilesetX) / size.width;
+   float right = float(tileRight) / (size.width * TileEngine::TILE_SIZE - 1);
 
-   glBindTexture(GL_TEXTURE_2D, texture);
+   texture->bind();
 
    glBegin(GL_QUADS);
       glTexCoord2f(left, top); glVertex3f(destLeft, destTop, 0.0f);
@@ -153,5 +151,8 @@ bool Tileset::isPassible(int tileNum) const
 
 Tileset::~Tileset()
 {
-   glDeleteTextures(1, &texture);
+   if(texture != NULL)
+   {
+      delete texture;
+   }
 }

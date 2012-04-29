@@ -27,6 +27,11 @@ namespace edwt
    class OpenGLTrueTypeFont;
 };
 
+namespace shapes
+{
+   struct Size;
+};
+
 typedef unsigned int GLuint;
 
 /**
@@ -122,18 +127,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * @param top The widget container to be used as the top-level container
        */
       void setInterface(gcn::Container* top);
-   
-      /**
-       * Load the texture given in the path, set the tileset's height
-       * and width based on the bitmap
-       *
-       * @param path The file path to the tileset
-       * @param texture The parameter used to return the OpenGL texture index
-       * @param w The parameter used to return image width
-       * @param h The parameter used to return image height
-       */
-      void loadGLTexture(const char* path, GLuint& texture, int& w, int& h);
-   
+
       /**
        * Flush any enqueued GL commands and then flip the screen buffer
        */
