@@ -12,9 +12,9 @@
 #include "Listener.h"
 #include "DebugUtils.h"
 
-class ActorMoveMessage;
-class MapTriggerMessage;
-class MapExitMessage;
+struct ActorMoveMessage;
+struct MapTriggerMessage;
+struct MapExitMessage;
 
 namespace messaging
 {
