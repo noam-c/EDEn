@@ -45,6 +45,7 @@ TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapte
 
 TileEngine::~TileEngine()
 {
+   clearNPCs();
    messagePipe.unregisterListener(this);
    delete consoleWindow;
    delete dialogue;
@@ -63,6 +64,18 @@ void TileEngine::loadPlayerData(const std::string& path)
 void TileEngine::startChapter(const std::string& chapterName)
 {
    scriptEngine->runChapterScript(chapterName);
+}
+
+void TileEngine::clearNPCs()
+{
+   std::map<std::string, NPC*>::iterator iter;
+
+   for(iter = npcList.begin(); iter != npcList.end(); ++iter)
+   {
+      delete iter->second;
+   }
+
+   npcList.clear();
 }
 
 std::string TileEngine::getMapName()
@@ -93,20 +106,18 @@ void TileEngine::dialogueSay(const char* speech, Task* task)
    dialogue->say(speech, task);
 }
 
-bool TileEngine::setRegion(const std::string& regionName, const std::string& mapName)
+int TileEngine::setRegion(const std::string& regionName, const std::string& mapName)
 {
    DEBUG("Loading region: %s", regionName.c_str());
    currRegion = ResourceLoader::getRegion(regionName);
    DEBUG("Loaded region: %s", currRegion->getName().c_str());
 
-   setMap(mapName);
-
-   DEBUG("Running map script: %s/%s", regionName.c_str(), entityGrid.getMapName().c_str());
-   return true;
+   return setMap(mapName);
 }
 
-void TileEngine::setMap(std::string mapName)
+int TileEngine::setMap(std::string mapName)
 {
+   clearNPCs();
    playerActor->removeFromMap();
 
    DEBUG("Setting map...");
@@ -125,6 +136,8 @@ void TileEngine::setMap(std::string mapName)
    DEBUG("Map set to: %s", mapName.c_str());
 
    recalculateMapOffsets();
+
+   return scriptEngine->runMapScript(currRegion->getName(), mapName);
 }
 
 void TileEngine::recalculateMapOffsets()

@@ -116,6 +116,11 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
     */
    void action();
    
+   /**
+    * Clears all the NPCs on the map.
+    */
+   void clearNPCs();
+
    protected:
       /**
        * Logic step.
@@ -190,17 +195,19 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @param mapName The name of the map to use within the region.
        *                By default, uses the first map declared in the region.
        *
-       * @return true iff the region was successfully set, and a map successfully loaded
+       * @return 0 or the yield code for a new map script.
        */
-      bool setRegion(const std::string& regionName, const std::string& mapName = "");
+      int setRegion(const std::string& regionName, const std::string& mapName = "");
 
       /**
        * Set a new map within the current region.
        *
        * @param mapName The name of the map to use within the region.
        *                By default, uses the first map declared in the region.
+       *
+       * @return 0 or the yield code for a new map script.
        */
-      void setMap(std::string mapName = "");
+      int setMap(std::string mapName = "");
 
       /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.

@@ -248,13 +248,7 @@ int ScriptEngine::setRegion(lua_State* luaStack)
       std::string regionName(lua_tostring(luaStack, 1));
       DEBUG("Setting region: %s", regionName.c_str());
 
-      if(!tileEngine.setRegion(regionName))
-      {
-         /** \todo Report an error to Lua, perhaps throw a ScriptException? */
-      }
-
-      std::string mapName = tileEngine.getMapName();
-      return runMapScript(regionName, mapName);
+      return tileEngine.setRegion(regionName);
    }
 
    return 0;
