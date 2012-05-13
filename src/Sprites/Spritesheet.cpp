@@ -255,12 +255,7 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    // If we want partial transparency, we would need to use alpha blending
 
    // Retain old alpha test state, function and threshold
-   int oldAlphaFunction;
-   float oldAlphaThreshold;
-   glGetIntegerv(GL_ALPHA_TEST_FUNC, &oldAlphaFunction);
-   glGetFloatv(GL_ALPHA_TEST_REF, &oldAlphaThreshold);
-
-   bool alphaTestEnabled = glIsEnabled(GL_ALPHA_TEST);
+   glPushAttrib(GL_COLOR_BUFFER_BIT);
 
    // Enable alpha testing
    glEnable(GL_ALPHA_TEST);
@@ -278,8 +273,7 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    glEnd();
 
    // We're done with alpha testing, return to default state
-   glAlphaFunc(oldAlphaFunction, oldAlphaThreshold);
-   if(!alphaTestEnabled) glDisable(GL_ALPHA_TEST);
+   glPopAttrib();
 }
 
 size_t Spritesheet::getSize()

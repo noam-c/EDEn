@@ -64,8 +64,9 @@ class Tileset : public Resource
        * @param destX The destination x-location (in tiles)
        * @param destY The destination y-location (in tiles)
        * @param tileNum The index of the tile to draw
+       * @param useAlphaTesting true iff transparent parts of the tile shouldn't be drawn
        */
-      void draw(int destX, int destY, int tileNum);
+      void draw(int destX, int destY, int tileNum, bool useAlphaTesting = false);
 
       /**
        * Draws the specified color to the coordinates specified

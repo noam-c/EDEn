@@ -45,11 +45,13 @@ Pathfinder::Pathfinder() : distanceMatrix(NULL), successorMatrix(NULL), collisio
 
 void Pathfinder::initialize(TileState** grid, int tileSize, const shapes::Rectangle& gridBounds)
 {
+   DEBUG("Resetting pathfinder...");
    deleteRoyFloydWarshallMatrices();
    movementTileSize = tileSize;
    collisionGrid = grid;
    collisionGridBounds = gridBounds;
    initRoyFloydWarshallMatrices();
+   DEBUG("Pathfinder reinitialized.");
 }
 
 void Pathfinder::initRoyFloydWarshallMatrices()

@@ -18,8 +18,7 @@
 
 class Point2D;
 class MapExit;
-class Tileset;
-class Obstacle;
+class Layer;
 class TriggerZone;
 
 /**
@@ -39,24 +38,18 @@ class Map
 
    /** The name of this map */
    std::string mapName;
- 
-   /** The name of the tileset in use by this map */
-   std::string tilesetName;
 
-   /** Tileset in use by this map */
-   Tileset* tileset;
+   /** Background layers, which are drawn behind the sprite layer (behind NPCs, player, etc.) */
+   std::vector<Layer*> backgroundLayers;
 
-   /** The tiles of the map (as numbers referring to points in the Tileset) */
-   int** tileMap;
+   /** Foreground layers, which are drawn in front of the sprite layer (in front of NPCs, player, etc.) */
+   std::vector<Layer*> foregroundLayers;
 
    /** The passibility of the map */
    bool** passibilityMap;
 
    /** The list of the map's trigger zones */
    std::vector<TriggerZone> triggerZones;
-   
-   /** The list of the map's obstacles */
-   std::vector<Obstacle*> obstacles;
 
    /** The list of the map's entrances */
    std::map<std::string, shapes::Point2D> mapEntrances;
@@ -71,11 +64,6 @@ class Map
     * @return true iff the tile at this location of the map is passible
     */
    bool isPassible(int x, int y) const;
-
-   /**
-    * Parse the map layer that holds floor tile data.
-    */
-   void parseFloorLayer(const TiXmlElement* floorLayerElement);
 
    /**
     * Parse the map layer that holds collision data.
@@ -130,11 +118,6 @@ class Map
       const std::vector<TriggerZone>& getTriggerZones() const;
 
       /**
-       * @return The list of obstacles for this map
-       */
-      const std::vector<Obstacle*>& getObstacles() const;
-
-      /**
        * @param previousMap The name of the map that the player is entering this map from.
        *
        * @return The point of entry for the given origin map name.
@@ -158,9 +141,14 @@ class Map
       void step(long timePassed) const;
 
       /**
-       * Draw an entire map's tiles.
+       * Draw an entire map's background.
        */
-      void draw() const;
+      void drawBackground() const;
+
+      /**
+       * Draw an entire map's foreground.
+       */
+      void drawForeground() const;
 
       /**
        * Destructor.

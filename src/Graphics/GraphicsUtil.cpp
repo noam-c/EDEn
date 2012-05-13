@@ -222,17 +222,12 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
    long time = SDL_GetTicks();
    float alpha = 0.0f;
 
-   GLint oldSrcFactor, oldDstFactor;
-   glGetIntegerv(GL_BLEND_SRC, &oldSrcFactor);
-   glGetIntegerv(GL_BLEND_DST, &oldDstFactor);
-   bool blendEnabled = glIsEnabled(GL_BLEND);
-   bool dTestEnabled = glIsEnabled(GL_DEPTH_TEST);
-   bool tex2dEnabled = glIsEnabled(GL_TEXTURE_2D);
+   glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-   if(!blendEnabled) glEnable(GL_BLEND);
-   if(dTestEnabled)  glDisable(GL_DEPTH_TEST);
-   if(tex2dEnabled)  glDisable(GL_TEXTURE_2D);
+   glEnable(GL_BLEND);
+   glDisable(GL_DEPTH_TEST);
+   glDisable(GL_TEXTURE_2D);
 
    for (;;)
    {
@@ -257,10 +252,7 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
       }
    }
 
-   if(tex2dEnabled)  glEnable(GL_TEXTURE_2D);
-   if(dTestEnabled)  glEnable(GL_DEPTH_TEST);
-   if(!blendEnabled) glDisable(GL_BLEND);
-   glBlendFunc(oldSrcFactor,oldDstFactor);
+   glPopAttrib();
 }
 
 void GraphicsUtil::finish()

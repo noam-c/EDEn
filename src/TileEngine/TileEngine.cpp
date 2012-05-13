@@ -230,17 +230,27 @@ void TileEngine::draw()
 {
    GraphicsUtil::getInstance()->setOffset(xMapOffset, yMapOffset);
       // Draw the map and NPCs against an offset (to center all the map elements)
+
+      // Start by drawing the background layers, if the map exists
       if(entityGrid.getMapData() != NULL)
       {
-         entityGrid.draw();
+         entityGrid.drawBackground();
       }
       else
       {
          GraphicsUtil::getInstance()->clearBuffer();
       }
 
+      // Draw all the sprites
       drawNPCs();
       playerActor->draw();
+
+      // Draw the foreground layers, if the map exists
+      if(entityGrid.getMapData() != NULL)
+      {
+         entityGrid.drawForeground();
+      }
+
    GraphicsUtil::getInstance()->resetOffset();
 }
 

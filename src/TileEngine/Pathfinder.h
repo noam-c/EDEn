@@ -15,7 +15,6 @@
 class Actor;
 class EntityGrid;
 class Map;
-class Obstacle;
 
 namespace shapes
 {

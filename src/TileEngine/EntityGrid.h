@@ -304,9 +304,14 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
       void endMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst);
    
       /**
-       * Draw the collision map for diagnostic purposes.
+       * Draw the background layers of the map.
        */
-      void draw();
+      void drawBackground() const;
+
+      /**
+       * Draw the foreground layers of the map.
+       */
+      void drawForeground() const;
 
       /**
        * Receive location change messages.

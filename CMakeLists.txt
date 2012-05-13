@@ -157,10 +157,10 @@ set(HEADERS
   src/TileEngine/LuaActor.h
   src/TileEngine/DialogueController.h
   src/TileEngine/EntityGrid.h
+  src/TileEngine/Layer.h
   src/TileEngine/Map.h
   src/TileEngine/MapExit.h
   src/TileEngine/NPC.h
-  src/TileEngine/Obstacle.h
   src/TileEngine/Pathfinder.h
   src/TileEngine/PlayerCharacter.h
   src/TileEngine/LuaPlayerCharacter.h
@@ -303,10 +303,10 @@ set(SOURCES
   src/TileEngine/LuaActor.cpp
   src/TileEngine/DialogueController.cpp
   src/TileEngine/EntityGrid.cpp
+  src/TileEngine/Layer.cpp
   src/TileEngine/Map.cpp
   src/TileEngine/MapExit.cpp
   src/TileEngine/NPC.cpp
-  src/TileEngine/Obstacle.cpp
   src/TileEngine/PlayerCharacter.cpp
   src/TileEngine/LuaPlayerCharacter.cpp
   src/TileEngine/Pathfinder.cpp

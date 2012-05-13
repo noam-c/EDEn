@@ -23,36 +23,36 @@ Tileset::Tileset(ResourceKey name) : Resource(name), texture(NULL)
 void Tileset::load(const std::string& path)
 {
    DEBUG("Loading tileset file %s", path.c_str());
-   
+
    std::ifstream input(path.c_str());
    if(!input)
    {
       T_T("Failed to open tileset file for reading.");
    }
-   
+
    TiXmlDocument xmlDoc;
    input >> xmlDoc;
-   
+
    if(xmlDoc.Error())
    {
       DEBUG("Error occurred in tileset XML parsing: %s", xmlDoc.ErrorDesc());
       T_T("Failed to parse tileset data.");
    }
-   
+
    TiXmlElement* root = xmlDoc.RootElement();
    if(strcmp(root->Value(), "tileset") != 0)
    {
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse tileset data.");
    }
-   
+
    TiXmlElement* imageElement = root->FirstChildElement("image");
    if(imageElement == NULL)
    {
       DEBUG("Expected image data in tileset.");
       T_T("Failed to parse tileset data.");
    }
-   
+
    std::string imagePath = imageElement->Attribute("source");
    DEBUG("Loading tileset image \"%s\"...", imagePath.c_str());
 
@@ -66,7 +66,7 @@ void Tileset::load(const std::string& path)
    // should be able to cheat default passibility if necessary.
    passibility.resize(size.width * size.height);
    std::fill(passibility.begin(), passibility.end(), true);
-   
+
    TiXmlElement* tileElement = root->FirstChildElement("tile");
    while(tileElement != NULL)
    {
@@ -84,15 +84,15 @@ void Tileset::load(const std::string& path)
             passibility[tileNum] = collision != "true";
             break;
          }
-         
+
          propertyElement = propertyElement->NextSiblingElement("property");
       }
-      
+
       tileElement = tileElement->NextSiblingElement("tile");
    }
 }
-   
-void Tileset::draw(int destX, int destY, int tileNum)
+
+void Tileset::draw(int destX, int destY, int tileNum, bool useAlphaTesting)
 {
    int tilesetX = tileNum % size.width;
    int tilesetY = tileNum / size.width;
@@ -110,6 +110,20 @@ void Tileset::draw(int destX, int destY, int tileNum)
    float left = float(tilesetX) / size.width;
    float right = float(tileRight) / (size.width * TileEngine::TILE_SIZE - 1);
 
+   glPushAttrib(GL_COLOR_BUFFER_BIT);
+
+   if(useAlphaTesting)
+   {
+      // NOTE: Alpha testing doesn't do transparency; it either draws a pixel or it doesn't
+      // If we want partial transparency, we would need to use alpha blending
+
+       // Enable alpha testing
+      glEnable(GL_ALPHA_TEST);
+
+      // Set the alpha blending evaluation function
+      glAlphaFunc(GL_GREATER, 0.1f);
+   }
+
    texture->bind();
 
    glBegin(GL_QUADS);
@@ -118,6 +132,8 @@ void Tileset::draw(int destX, int destY, int tileNum)
       glTexCoord2f(right, bottom); glVertex3f(destRight, destBottom, 0.0f);
       glTexCoord2f(left, bottom); glVertex3f(destLeft, destBottom, 0.0f);
    glEnd();
+
+   glPopAttrib();
 }
 
 void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)

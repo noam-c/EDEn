@@ -6,7 +6,6 @@
 
 #include "EntityGrid.h"
 #include "Map.h"
-#include "Obstacle.h"
 #include "TileEngine.h"
 #include "TileState.h"
 #include "Point2D.h"
@@ -54,6 +53,7 @@ const Map* EntityGrid::getMapData() const
 
 void EntityGrid::setMapData(const Map* newMapData)
 {
+   DEBUG("Resetting entity grid...");
    clearMap();
    map = newMapData;
    if(map == NULL) return;
@@ -77,14 +77,8 @@ void EntityGrid::setMapData(const Map* newMapData)
       }
    }
 
-   std::vector<Obstacle*> obstacles = map->getObstacles();
-   for(std::vector<Obstacle*>::const_iterator iter = obstacles.begin(); iter != obstacles.end(); ++iter)
-   {
-      Obstacle* o = *iter;
-      addObstacle(o->getTileCoords() * MOVEMENT_TILE_SIZE, o->getSize());   
-   }
-
    pathfinder.initialize(collisionMap, MOVEMENT_TILE_SIZE, collisionMapBounds);
+   DEBUG("Entity grid reinitialized.");
 }
 
 const std::string& EntityGrid::getMapName() const
@@ -408,13 +402,11 @@ void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
    }
 }
 
-void EntityGrid::draw()
+void EntityGrid::drawBackground() const
 {
    if(map == NULL) return;
 
-#ifndef DRAW_ENTITY_GRID
-   map->draw();
-#else
+#ifdef DRAW_ENTITY_GRID
    for(unsigned int y = 0; y < collisionMapBounds.getHeight(); ++y)
    {
       for(unsigned int x = 0; x < collisionMapBounds.getWidth(); ++x)
@@ -463,7 +455,14 @@ void EntityGrid::draw()
          glEnable(GL_TEXTURE_2D);
       }
    }
+#else
+   map->drawBackground();
 #endif
+}
+
+void EntityGrid::drawForeground() const
+{
+   map->drawForeground();
 }
 
 void EntityGrid::receive(const ActorMoveMessage& message)
