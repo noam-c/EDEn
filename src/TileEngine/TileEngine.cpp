@@ -23,6 +23,7 @@
 #include "DialogueController.h"
 #include "OpenGLTTF.h"
 #include "stdlib.h"
+#include <algorithm>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
@@ -215,42 +216,81 @@ void TileEngine::stepNPCs(long timePassed)
    }
 }
 
-void TileEngine::drawNPCs()
+std::vector<Actor*> TileEngine::collectActors() const
 {
-   std::map<std::string, NPC*>::iterator iter;
+   std::vector<Actor*> actors;
+   std::map<std::string, NPC*>::const_iterator iter;
 
    for(iter = npcList.begin(); iter != npcList.end(); ++iter)
    {
       NPC* currNPC = iter->second;
-      currNPC->draw();
+      actors.push_back(currNPC);
    }
+
+   if(playerActor->isActive())
+   {
+      actors.push_back(playerActor);
+   }
+
+   return actors;
+}
+
+static bool higherOnMap(const Actor* lhs, const Actor* rhs)
+{
+   return lhs->getLocation().y + lhs->getSize().height < rhs->getLocation().y + rhs->getSize().height;
 }
 
 void TileEngine::draw()
 {
-   GraphicsUtil::getInstance()->setOffset(xMapOffset, yMapOffset);
-      // Draw the map and NPCs against an offset (to center all the map elements)
+   // Collect the drawable actors and sort them by their y-location (in tiles)
+   std::vector<Actor*> actors = collectActors();
 
-      // Start by drawing the background layers, if the map exists
-      if(entityGrid.getMapData() != NULL)
+   GraphicsUtil::getInstance()->clearBuffer();
+   GraphicsUtil::getInstance()->setOffset(xMapOffset, yMapOffset);
+      // Draw the map layers and actors against an offset (to center all the map elements)
+
+      if(entityGrid.getMapData() == NULL)
       {
-         entityGrid.drawBackground();
+         // Draw all the sprites
+         std::vector<Actor*>::iterator nextActorToDraw;
+         for(nextActorToDraw = actors.begin(); nextActorToDraw != actors.end(); ++nextActorToDraw)
+         {
+            (*nextActorToDraw)->draw();
+         }
       }
       else
       {
-         GraphicsUtil::getInstance()->clearBuffer();
+         std::sort(actors.begin(), actors.end(), higherOnMap);
+
+         std::vector<Actor*>::iterator nextActorToDraw = actors.begin();
+
+         const unsigned int mapHeight = entityGrid.getMapBounds().getHeight();
+         for(int row = 0; row < mapHeight; ++row)
+         {
+            // Start by drawing a row of the background layers, if the map exists
+            if(entityGrid.getMapData() != NULL)
+            {
+               entityGrid.drawBackground(row);
+            }
+         }
+
+         for(int row = 0; row < mapHeight; ++row)
+         {
+            // Draw all the sprites on the row
+            for(; nextActorToDraw != actors.end(); ++nextActorToDraw)
+            {
+               int nextActorTile = (*nextActorToDraw)->getLocation().y / TILE_SIZE;
+               if(nextActorTile > row) break;
+               (*nextActorToDraw)->draw();
+            }
+
+            // Draw a row of the foreground layers, if the map exists
+            if(entityGrid.getMapData() != NULL)
+            {
+               entityGrid.drawForeground(row);
+            }
+         }
       }
-
-      // Draw all the sprites
-      drawNPCs();
-      playerActor->draw();
-
-      // Draw the foreground layers, if the map exists
-      if(entityGrid.getMapData() != NULL)
-      {
-         entityGrid.drawForeground();
-      }
-
    GraphicsUtil::getInstance()->resetOffset();
 }
 

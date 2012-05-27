@@ -27,7 +27,7 @@ const int debugFlag = DEBUG_ENTITY_GRID;
 
 // Movement tile size can be set to a divisor of drawn tile size to increase the pathfinding graph size
 // For now, no need for the additional granularity
-const int EntityGrid::MOVEMENT_TILE_SIZE = 16;
+const int EntityGrid::MOVEMENT_TILE_SIZE = 32;
 
 const float EntityGrid::ROOT_2 = 1.41421356f;
 const float EntityGrid::INFINITY = std::numeric_limits<float>::infinity();
@@ -78,7 +78,7 @@ void EntityGrid::setMapData(const Map* newMapData)
    }
 
    pathfinder.initialize(collisionMap, MOVEMENT_TILE_SIZE, collisionMapBounds);
-   DEBUG("Entity grid reinitialized.");
+   DEBUG("Entity grid initialized.");
 }
 
 const std::string& EntityGrid::getMapName() const
@@ -264,8 +264,6 @@ bool EntityGrid::occupyArea(const shapes::Rectangle& area, TileState state)
 
    if(canOccupyArea(area, state))
    {
-      DEBUG("Occupying tiles from %d,%d to %d,%d", areaRect.left, areaRect.top, areaRect.right, areaRect.bottom);
-      
       setArea(areaRect, state);
       return true;
    }
@@ -277,8 +275,6 @@ bool EntityGrid::occupyArea(const shapes::Rectangle& area, TileState state)
 void EntityGrid::freeArea(const shapes::Rectangle& areaToFree)
 {
    shapes::Rectangle rectToFree = getCollisionMapEdges(areaToFree);
-   
-   DEBUG("Freeing tiles from %d,%d to %d,%d", rectToFree.left, rectToFree.top, rectToFree.right, rectToFree.bottom);
    
    setArea(rectToFree, TileState(TileState::FREE));
 }
@@ -323,7 +319,7 @@ void EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
    const shapes::Point2D& source = actor->getLocation();
    const shapes::Size& actorSize = actor->getSize();
    
-   const shapes::Size mapPixelSize = shapes::Size(collisionMapBounds.getWidth() - 1, collisionMapBounds.getHeight() - 1) * MOVEMENT_TILE_SIZE;
+   const shapes::Size mapPixelSize = shapes::Size(collisionMapBounds.getWidth(), collisionMapBounds.getHeight()) * MOVEMENT_TILE_SIZE;
    
    shapes::Point2D lastAvailablePoint = source;
    
@@ -402,67 +398,64 @@ void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
    }
 }
 
-void EntityGrid::drawBackground() const
+void EntityGrid::drawBackground(int y) const
 {
    if(map == NULL) return;
 
 #ifdef DRAW_ENTITY_GRID
-   for(unsigned int y = 0; y < collisionMapBounds.getHeight(); ++y)
+   for(unsigned int x = 0; x < collisionMapBounds.getWidth(); ++x)
    {
-      for(unsigned int x = 0; x < collisionMapBounds.getWidth(); ++x)
+      float destLeft = float(x * MOVEMENT_TILE_SIZE);
+      float destRight = float((x + 1) * MOVEMENT_TILE_SIZE);
+      float destTop = float(y * MOVEMENT_TILE_SIZE);
+      float destBottom = float((y + 1) * MOVEMENT_TILE_SIZE);
+
+      glDisable(GL_TEXTURE_2D);
+      glBegin(GL_QUADS);
+
+      switch(collisionMap[y][x].entityType)
       {
-         float destLeft = float(x * MOVEMENT_TILE_SIZE);
-         float destRight = float((x + 1) * MOVEMENT_TILE_SIZE);
-         float destTop = float(y * MOVEMENT_TILE_SIZE);
-         float destBottom = float((y + 1) * MOVEMENT_TILE_SIZE);
-         
-         glDisable(GL_TEXTURE_2D);
-         glBegin(GL_QUADS);
-         
-         switch(collisionMap[y][x].entityType)
+         case TileState::FREE:
          {
-            case TileState::FREE:
-            {
-               glColor3f(0.0f, 0.5f, 0.0f);
-               break;
-            }
-            case TileState::ACTOR:
-            {
-               if(collisionMap[y][x].entity == NULL)
-               {
-                  glColor3f(0.5f, 0.0f, 0.0f);
-               }
-               else
-               {
-                  glColor3f(0.0f, 0.0f, 0.5f);
-               }
-               break;
-            }
-            case TileState::OBSTACLE:
-            default:
-            {
-               glColor3f(0.5f, 0.5f, 0.0f);
-               break;
-            }
+            glColor3f(0.0f, 0.5f, 0.0f);
+            break;
          }
-         
-         glVertex3f(destLeft, destTop, 0.0f);
-         glVertex3f(destRight, destTop, 0.0f);
-         glVertex3f(destRight, destBottom, 0.0f);
-         glVertex3f(destLeft, destBottom, 0.0f);
-         glColor3f(1.0f, 1.0f, 1.0f);
-         glEnd();
-         glEnable(GL_TEXTURE_2D);
+         case TileState::ACTOR:
+         {
+            if(collisionMap[y][x].entity == NULL)
+            {
+               glColor3f(0.5f, 0.0f, 0.0f);
+            }
+            else
+            {
+               glColor3f(0.0f, 0.0f, 0.5f);
+            }
+            break;
+         }
+         case TileState::OBSTACLE:
+         default:
+         {
+            glColor3f(0.5f, 0.5f, 0.0f);
+            break;
+         }
       }
+
+      glVertex3f(destLeft, destTop, 0.0f);
+      glVertex3f(destRight, destTop, 0.0f);
+      glVertex3f(destRight, destBottom, 0.0f);
+      glVertex3f(destLeft, destBottom, 0.0f);
+      glColor3f(1.0f, 1.0f, 1.0f);
+      glEnd();
+      glEnable(GL_TEXTURE_2D);
    }
 #else
-   map->drawBackground();
+   map->drawBackground(y);
 #endif
 }
 
-void EntityGrid::drawForeground() const
+void EntityGrid::drawForeground(int y) const
 {
-   map->drawForeground();
+   map->drawForeground(y);
 }
 
 void EntityGrid::receive(const ActorMoveMessage& message)

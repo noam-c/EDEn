@@ -28,12 +28,15 @@ class Layer
    /** The tiles of the map (as numbers referring to points in the Tileset) */
    int** tileMap;
 
-   /** The bounds (in tiles) of this map */
+   /** The bounds (in tiles) of the map containing this layer. */
    const shapes::Rectangle& bounds;
+
+   /** The height offset (in tiles) of this layer. */
+   int heightOffset;
 
    public:
       Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds);
-      void draw(bool isForeground = false) const;
+      void draw(int row, bool isForeground = false) const;
       ~Layer();
 };
 

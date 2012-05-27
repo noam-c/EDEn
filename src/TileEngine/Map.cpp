@@ -18,7 +18,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_RES_LOAD;
+const int debugFlag = DEBUG_RES_LOAD | DEBUG_ENTITY_GRID;
 
 //#define DRAW_PASSIBILITY
 
@@ -66,10 +66,12 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
       if(layerName == "background")
       {
          backgroundLayers.push_back(new Layer(layerElement, bounds));
+         DEBUG("Background layer added.");
       }
       else if(layerName == "foreground")
       {
          foregroundLayers.push_back(new Layer(layerElement, bounds));
+         DEBUG("Foreground layer added.");
       }
       
       layerElement = layerElement->NextSiblingElement("layer");
@@ -125,6 +127,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
          objectElement->Attribute("height", &height);
          
          shapes::Rectangle rect(topLeft / TileEngine::TILE_SIZE, shapes::Size(width, height) / TileEngine::TILE_SIZE);
+         DEBUG("Found collision object at %d,%d with width %d and height %d.", rect.left, rect.top, rect.getWidth(), rect.getHeight());
          if(rect.getWidth() > 0 && rect.getHeight() > 0)
          {
             for(int y = rect.top; y < rect.bottom; ++y)
@@ -288,42 +291,41 @@ void Map::step(long timePassed) const
 {
 }
 
-void Map::drawBackground() const
+void Map::drawBackground(int row) const
 {
+#ifdef DRAW_PASSIBILITY
    const unsigned int width = bounds.getWidth();
    const unsigned int height = bounds.getHeight();
    
-#ifdef DRAW_PASSIBILITY
-   for(unsigned int i = 0; i < width; ++i)
+   for(unsigned int column = 0; column < width; ++column)
    {
-      for(unsigned int j = 0; j < height; ++j)
+      if(isPassible(column, row))
       {
-         if(isPassible(i,j))
-         {
-            Tileset::drawColorToTile(i, j, 0.0f, 1.0f, 0.0f);
-         }
-         else
-         {
-            Tileset::drawColorToTile(i, j, 1.0f, 0.0f, 0.0f);
-         }
+         Tileset::drawColorToTile(column, row, 0.0f, 1.0f, 0.0f);
+      }
+      else
+      {
+         Tileset::drawColorToTile(column, row, 1.0f, 0.0f, 0.0f);
       }
    }
 #else
+   bool firstLayer = true;
    std::vector<Layer*>::const_iterator iter;
    for(iter = backgroundLayers.begin(); iter != backgroundLayers.end(); ++iter)
    {
-      (*iter)->draw();
+      (*iter)->draw(row, !firstLayer);
+      firstLayer = false;
    }
 #endif
 }
 
-void Map::drawForeground() const
+void Map::drawForeground(int row) const
 {
 #ifndef DRAW_PASSIBILITY
    std::vector<Layer*>::const_iterator iter;
    for(iter = foregroundLayers.begin(); iter != foregroundLayers.end(); ++iter)
    {
-      (*iter)->draw(true);
+      (*iter)->draw(row, true);
    }
 #endif
 }
@@ -341,8 +343,8 @@ Map::~Map()
       delete *iter;
    }
 
-   const unsigned int width = bounds.getWidth();
-   for(unsigned int i = 0; i < width; ++i)
+   const unsigned int height = bounds.getHeight();
+   for(unsigned int i = 0; i < height; ++i)
    {
       delete [] passibilityMap[i];
    }

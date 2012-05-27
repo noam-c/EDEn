@@ -168,9 +168,11 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
       void stepNPCs(long timePassed);
 
       /**
-       * Draws all NPCs on the map.
+       * Collects all active actors on the map.
+       *
+       * @return a vector of all the active actors.
        */
-      void drawNPCs();
+      std::vector<Actor*> collectActors() const;
 
       /**
        * Send a line of dialogue to the DialogueController as a narration.

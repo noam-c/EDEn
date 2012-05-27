@@ -141,14 +141,18 @@ class Map
       void step(long timePassed) const;
 
       /**
-       * Draw an entire map's background.
+       * Draw a row of the map's background.
+       *
+       * @param row The row of the background to draw.
        */
-      void drawBackground() const;
+      void drawBackground(int row) const;
 
       /**
-       * Draw an entire map's foreground.
+       * Draw a row of the map's foreground.
+       *
+       * @param row The row of the foreground to draw.
        */
-      void drawForeground() const;
+      void drawForeground(int row) const;
 
       /**
        * Destructor.

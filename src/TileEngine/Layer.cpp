@@ -14,7 +14,7 @@
 
 const int debugFlag = DEBUG_TILE_ENG;
 
-Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) : bounds(bounds)
+Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) : bounds(bounds), heightOffset(0)
 {
    const TiXmlElement* propertiesElement = layerData->FirstChildElement("properties");
 
@@ -25,7 +25,12 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) : b
       {
          std::string tilesetName = propertyElement->Attribute("value");
          tileset = ResourceLoader::getTileset(tilesetName);
-         break;
+      }
+      else if(std::string(propertyElement->Attribute("name")) == "heightOffset")
+      {
+         propertyElement->Attribute("value", &heightOffset);
+         DEBUG("Height offset found: %d", heightOffset);
+         if(heightOffset < 0) heightOffset = 0;
       }
 
       propertyElement = propertyElement->NextSiblingElement("property");
@@ -47,37 +52,43 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) : b
    for(unsigned int y = 0; y < height; ++y)
    {
       tileMap[y] = new int[width];
+      if (y < heightOffset || y >= height - heightOffset)
+      {
+         for(unsigned int x = 0; x < width; ++x)
+         {
+            tileMap[y][x] = -1;
+         }
+      }
+   }
 
+   for(unsigned int y = 0; y < height - heightOffset; ++y)
+   {
       for(unsigned int x = 0; x < width; ++x)
       {
          std::string entry;
          std::getline(layerStream, entry, ',');
-         tileMap[y][x] = atoi(entry.c_str()) - 1;
+         tileMap[y + heightOffset][x] = atoi(entry.c_str()) - 1;
       }
    }
 }
 
-void Layer::draw(bool isForeground) const
+void Layer::draw(int row, bool isForeground) const
 {
    const unsigned int width = bounds.getWidth();
-   const unsigned int height = bounds.getHeight();
-   for(unsigned int i = 0; i < width; ++i)
+   for(unsigned int column = 0; column < width; ++column)
    {
-      for(unsigned int j = 0; j < height; ++j)
+      const int tileNum = tileMap[row][column];
+      if(tileNum != -1)
       {
-         const int tileNum = tileMap[j][i];
-         if(tileNum != -1)
-         {
-            tileset->draw(i, j, tileNum, isForeground);
-         }
+         tileset->draw(column, row - heightOffset, tileNum, isForeground);
       }
    }
 }
 
 Layer::~Layer()
 {
-   const unsigned int width = bounds.getWidth();
-   for(unsigned int i = 0; i < width; ++i)
+   const unsigned int height = bounds.getHeight();
+   for(unsigned int i = 0; i < height; ++i)
    {
       delete [] tileMap[i];
    }

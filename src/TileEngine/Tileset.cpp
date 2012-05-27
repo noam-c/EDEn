@@ -143,6 +143,7 @@ void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
    float destTop = float(destY * TileEngine::TILE_SIZE);
    float destBottom = float((destY + 1) * TileEngine::TILE_SIZE);
 
+   glPushAttrib(GL_ENABLE_BIT);
    glDisable(GL_TEXTURE_2D);
    glBegin(GL_QUADS);
       glColor3f(r, g, b);
@@ -152,7 +153,7 @@ void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
       glVertex3f(destLeft, destBottom, 0.0f);
       glColor3f(1.0f, 1.0f, 1.0f);
    glEnd();
-   glEnable(GL_TEXTURE_2D);
+   glPopAttrib();
 }
 
 size_t Tileset::getSize()

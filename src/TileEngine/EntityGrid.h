@@ -304,14 +304,18 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
       void endMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst);
    
       /**
-       * Draw the background layers of the map.
+       * Draw a row of the background layers of the map.
+       *
+       * @param y The row to draw.
        */
-      void drawBackground() const;
+      void drawBackground(int y) const;
 
       /**
-       * Draw the foreground layers of the map.
+       * Draw a row of the foreground layers of the map.
+       *
+       * @param y The row to draw.
        */
-      void drawForeground() const;
+      void drawForeground(int y) const;
 
       /**
        * Receive location change messages.
