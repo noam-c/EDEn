@@ -7,6 +7,8 @@
 #ifndef ENTITY_GRID_H
 #define ENTITY_GRID_H
 
+#include <limits>
+#include <string>
 #include <list>
 #include <vector>
 #include "MovementDirection.h"

@@ -7,6 +7,8 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
+#include <string>
+
 #include "FrameSequence.h"
 
 /**
