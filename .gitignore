@@ -1,5 +1,15 @@
+.DS_store
+.cproject
+.project
 CMakeCache.txt
 CMakeFiles
+CMakeScripts
+Debug
 Makefile
 cmake_install.cmake
 eden
+eden.build
+eden.xcodeproj
+eden.xcode
+.settings/org.eclipse.cdt.codan.core.prefs
+doc/html
