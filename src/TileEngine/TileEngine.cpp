@@ -21,6 +21,10 @@
 #include "Rectangle.h"
 #include "DebugConsoleWindow.h"
 #include "DialogueController.h"
+#include "ExecutionStack.h"
+#include "FadeState.h"
+#include "MenuShell.h"
+#include "HomeMenu.h"
 #include "OpenGLTTF.h"
 #include "stdlib.h"
 #include <algorithm>
@@ -361,6 +365,15 @@ void TileEngine::handleInputEvents(bool& finishState)
                case SDLK_BACKQUOTE:
                {
                   toggleDebugConsole();
+                  return;
+               }
+               case SDLK_TAB:
+               {
+                  /** \todo This is never deleted, causing a memory leak. */
+                  MenuShell* menuShell = new MenuShell(playerData);
+
+                  HomeMenu* menu = new HomeMenu(executionStack, *menuShell, playerData);
+                  executionStack.pushState(new FadeState(executionStack, this, menu));
                   return;
                }
                default:

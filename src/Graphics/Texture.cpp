@@ -8,8 +8,17 @@
 
 const int debugFlag = DEBUG_GRAPHICS;
 
+Texture::Texture()
+{
+   glGenTextures(1, &textureHandle);
+}
+
 Texture::Texture(const std::string& imagePath)
 {
+   // Create the texture
+   DEBUG("Generating texture...");
+   glGenTextures(1, &textureHandle);
+
    // Create storage space for the texture and load the image
    DEBUG("Loading image %s...", imagePath.c_str());
    SDL_Surface *image = IMG_Load(imagePath.c_str());
@@ -24,10 +33,6 @@ Texture::Texture(const std::string& imagePath)
 
    size.width = image->w;
    size.height = image->h;
-
-   // Create the texture
-   DEBUG("Generating texture...");
-   glGenTextures(1, &textureHandle);
 
    // Load image into the texture
 

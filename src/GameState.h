@@ -97,7 +97,6 @@ class GameState
        */
       virtual bool advanceFrame();
 
-   
       /**
        * Called every frame in order to trigger drawing the game state
        * that is at the top of the execution stack.

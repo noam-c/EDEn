@@ -11,6 +11,7 @@
 #include "Sound.h"
 
 #include "TileEngine.h"
+#include "FadeState.h"
 #include "MenuShell.h"
 #include "HomeMenu.h"
 #include "PlayerData.h"
@@ -27,10 +28,9 @@
 void MainMenu::NewGameAction()
 {
    TileEngine* tileEngine = new TileEngine(executionStack, CHAP1);
-   executionStack.pushState(tileEngine);
+   executionStack.pushState(new FadeState(executionStack, this, tileEngine));
    chooseSound->play();
    Music::fadeOutMusic(1000);
-   GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 }
 
 /**

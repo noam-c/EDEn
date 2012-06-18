@@ -30,6 +30,7 @@ set(HEADERS
   src/ExecutionStack.h
   src/GameState.h
   src/Graphics/GraphicsUtil.h
+  src/Graphics/ScreenTexture.h
   src/Graphics/Texture.h
   src/guichan/actionevent.hpp
   src/guichan/actionlistener.hpp
@@ -175,6 +176,7 @@ set(HEADERS
   src/TileEngine/Messages/MapTriggerMessage.h
   src/tinyxml/tinystr.h
   src/tinyxml/tinyxml.h
+  src/Transitions/FadeState.h
   src/TODOLIST.h
 )
 
@@ -319,12 +321,14 @@ set(SOURCES
   src/TileEngine/Messages/ActorMoveMessage.cpp
   src/TileEngine/Messages/MapExitMessage.cpp
   src/TileEngine/Messages/MapTriggerMessage.cpp
+  src/Transitions/FadeState.cpp
   src/main.cpp
   src/DebugUtils.cpp
   src/Exception.cpp
   src/ExecutionStack.cpp
   src/GameState.cpp
   src/Graphics/GraphicsUtil.cpp
+  src/Graphics/ScreenTexture.cpp
   src/Graphics/Texture.cpp
 )
 
@@ -347,6 +351,7 @@ source_group(Shapes REGULAR_EXPRESSION src/Shapes/.*)
 source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
 source_group(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
 source_group("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.*)
+source_group(Transitions REGULAR_EXPRESSION src/Transitions/.*)
 source_group(json REGULAR_EXPRESSION src/json/.*)
 source_group(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
 source_group(edwt REGULAR_EXPRESSION src/edwt/.*)
@@ -370,6 +375,7 @@ include_directories(
   src/Sprites
   src/TileEngine
   src/TileEngine/Messages
+  src/Transitions
   src/json
   src/LuaWrapper
   src/edwt

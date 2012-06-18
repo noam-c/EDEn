@@ -14,17 +14,21 @@ typedef unsigned int GLuint;
 
 class Texture
 {
-   /** The texture handle */
-   GLuint textureHandle;
+   protected:
+      /** The texture handle */
+      GLuint textureHandle;
 
-   /** Texture size (in pixels) */
-   shapes::Size size;
+      /** Texture size (in pixels) */
+      shapes::Size size;
+
+      /** Default constructor (used when subclass initializes the texture. */
+      Texture();
 
    public:
       Texture(const std::string& imagePath);
       void bind();
       const shapes::Size& getSize();
-      ~Texture();
+      virtual ~Texture();
 };
 
 #endif
