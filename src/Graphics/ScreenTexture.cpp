@@ -23,11 +23,12 @@ ScreenTexture::ScreenTexture()
    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.width, size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
    glPopAttrib();
+
+   glGenFramebuffersEXT(1, &frameBuffer);
 }
 
 void ScreenTexture::startCapture()
 {
-   glGenFramebuffersEXT(1, &frameBuffer);
    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBuffer);
    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, textureHandle, 0);
 }

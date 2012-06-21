@@ -57,10 +57,10 @@ void FadeState::draw()
    screenTexture.bind();
 
    glBegin(GL_QUADS);
-      glTexCoord2f(0.0f, height); glVertex3f(0.5f, 0.5f, 0.0f);
-      glTexCoord2f(width, height); glVertex3f(width - 0.5f, 0.5f, 0.0f);
-      glTexCoord2f(width, 0.0f); glVertex3f(width - 0.5f, height - 0.5f, 0.0f);
-      glTexCoord2f(0.0f, 0.0f); glVertex3f(0.5f, height - 0.5f, 0.0f);
+      glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
+      glTexCoord2f(1.0f, 1.0f); glVertex3f(width, 0.0f, 0.0f);
+      glTexCoord2f(1.0f, 0.0f); glVertex3f(width, height, 0.0f);
+      glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, height, 0.0f);
    glEnd();
 
    glDisable(GL_TEXTURE_2D);
