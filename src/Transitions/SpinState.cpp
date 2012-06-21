@@ -1,17 +1,21 @@
-#include "FadeState.h"
+#include "SpinState.h"
 #include "ExecutionStack.h"
 #include "GraphicsUtil.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
 
+#include <cmath>
+
 #include "DebugUtils.h"
+
+const float PI = 3.14159265f;
 
 const int debugFlag = DEBUG_GRAPHICS;
 
-FadeState::FadeState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength)
+SpinState::SpinState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength)
    : GameState(executionStack), oldState(oldState), newState(newState), startTime(SDL_GetTicks()), transitionLength(transitionLength), alpha(1.0f), transitionComplete(false)
 {
-   DEBUG("Creating fade state.");
+   DEBUG("Creating spin state.");
    screenTexture.startCapture();
    oldState->drawFrame();
    screenTexture.endCapture();
@@ -22,28 +26,28 @@ FadeState::FadeState(ExecutionStack& executionStack, GameState* oldState, GameSt
    }
 }
 
-bool FadeState::step()
+bool SpinState::step()
 {
    if(transitionComplete)
    {
       return false;
    }
 
-   long timePassed = SDL_GetTicks() - startTime;
+   timePassed = SDL_GetTicks() - startTime;
 
    if(timePassed > transitionLength)
    {
-      DEBUG("Finishing fade.");
+      DEBUG("Finishing spin.");
       executionStack.pushState(newState);
       transitionComplete = true;
    }
 
    alpha = static_cast<double>(timePassed) / static_cast<double>(transitionLength);
-   DEBUG("Continuing fade (%dms passed).", timePassed);
+   DEBUG("Continuing spin (%dms passed).", timePassed);
    return true;
 }
 
-void FadeState::draw()
+void SpinState::draw()
 {
    const float width = static_cast<float>(GraphicsUtil::getInstance()->getWidth());
    const float height = static_cast<float>(GraphicsUtil::getInstance()->getHeight());
@@ -56,6 +60,16 @@ void FadeState::draw()
    glDisable(GL_DEPTH_TEST);
    screenTexture.bind();
 
+   float scaleFactor = cos(alpha*PI) * alpha + 1.0f;
+   DEBUG("Scale: %f", scaleFactor);
+
+   glPushMatrix();
+   glTranslatef(width/2.0f, height/2.0f, 0.0f);
+   glScalef(scaleFactor, scaleFactor, 1.0f);
+   glRotatef(alpha * timePassed * 0.25f, 0.0f, 0.0f, 1.0f);
+
+   glPushMatrix();
+   glTranslatef(-width/2.0f, -height/2.0f, 0.0f);
    glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
       glTexCoord2f(1.0f, 1.0f); glVertex3f(width, 0.0f, 0.0f);
@@ -64,20 +78,12 @@ void FadeState::draw()
    glEnd();
 
    glDisable(GL_TEXTURE_2D);
-   glEnable(GL_BLEND);
-   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+   glPopMatrix();
 
-   glBegin(GL_QUADS);
-      glColor4f(0.0f, 0.0f, 0.0f, alpha);
-      glVertex3f(0.0f, 0.0f, 0.0f);
-      glVertex3f(width, 0.0f, 0.0f);
-      glVertex3f(width, height, 0.0f);
-      glVertex3f(0.0f, height, 0.0f);
-   glEnd();
-
+   glPopMatrix();
    glPopAttrib();
 }
 
-FadeState::~FadeState()
+SpinState::~SpinState()
 {
 }
