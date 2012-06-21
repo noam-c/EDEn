@@ -60,16 +60,28 @@ void SpinState::draw()
    glDisable(GL_DEPTH_TEST);
    screenTexture.bind();
 
+   // Warp the standard cosine curve by the alpha value, which will produce
+   // a gradual increase in amplitude
    float scaleFactor = cos(alpha*PI) * alpha + 1.0f;
-   DEBUG("Scale: %f", scaleFactor);
 
+   // Keep the setup matrix in tact (if changes are applied elsewhere)
    glPushMatrix();
+
+   // Move to the center of the screen
    glTranslatef(width/2.0f, height/2.0f, 0.0f);
+
+   // Apply scaling
    glScalef(scaleFactor, scaleFactor, 1.0f);
+
+   // Rotate according to timePassed
    glRotatef(alpha * timePassed * 0.25f, 0.0f, 0.0f, 1.0f);
 
    glPushMatrix();
+
+   // Translate back to top,left to draw texture as expected
    glTranslatef(-width/2.0f, -height/2.0f, 0.0f);
+
+   // Draw
    glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
       glTexCoord2f(1.0f, 1.0f); glVertex3f(width, 0.0f, 0.0f);
@@ -77,10 +89,11 @@ void SpinState::draw()
       glTexCoord2f(0.0f, 0.0f); glVertex3f(0.0f, height, 0.0f);
    glEnd();
 
-   glDisable(GL_TEXTURE_2D);
+   // Pop twice, once for rotation/offset, and once more to get original matrix back
+   glPopMatrix();
    glPopMatrix();
 
-   glPopMatrix();
+   glDisable(GL_TEXTURE_2D);
    glPopAttrib();
 }
 

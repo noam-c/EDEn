@@ -6,7 +6,6 @@ class GameState;
 
 class RandomTransition
 {
-
   public:
     static GameState* create(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength = 1000);
 };
