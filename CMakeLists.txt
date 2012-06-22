@@ -179,6 +179,7 @@ set(HEADERS
   src/Transitions/FadeState.h
   src/Transitions/SpinState.h
   src/Transitions/RandomTransition.h
+  src/Transitions/BlendState.h
   src/TODOLIST.h
 )
 
@@ -326,6 +327,7 @@ set(SOURCES
   src/Transitions/FadeState.cpp
   src/Transitions/SpinState.cpp
   src/Transitions/RandomTransition.cpp
+  src/Transitions/BlendState.cpp
   src/main.cpp
   src/DebugUtils.cpp
   src/Exception.cpp

@@ -9,11 +9,12 @@
 #include "GameState.h"
 #include "FadeState.h"
 #include "SpinState.h"
+#include "BlendState.h"
 
 // For rand()
 #include <cstdlib>
 
-const int NUM_TRANSITIONS = 2;
+const int NUM_TRANSITIONS = 3;
 
 GameState* RandomTransition::create(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength)
 {
@@ -23,6 +24,7 @@ GameState* RandomTransition::create(ExecutionStack& executionStack, GameState* o
   {
     case 0: transition = new FadeState(executionStack, oldState, transitionLength); break;
     case 1: transition = new SpinState(executionStack, oldState, transitionLength); break;
+    case 2: transition = new BlendState(executionStack, oldState, newState, transitionLength); break;
   }
   return transition;
 }
