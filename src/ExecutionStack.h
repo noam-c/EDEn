@@ -29,11 +29,20 @@ class ExecutionStack
    std::stack<GameState*> stateStack;
 
    /**
+    * The next state to push after the current transition completes.
+    */
+   GameState* nextState;
+
+   /**
     * Remove and delete the most recent state pushed on the stack.
     */
    void popState();
 
    public:
+      /**
+       * Constructor.
+       */
+      ExecutionStack();
 
       /**
        * Destructor.
@@ -47,8 +56,9 @@ class ExecutionStack
        * or another state is pushed
        *
        * @param newState the new state of the game
+       * @param transitionState an optional transition state used to introduce the new state visually
        */
-      void pushState(GameState* newState);
+      void pushState(GameState* newState, GameState* transitionState = NULL);
 
       /**
        * Execute the game loop.

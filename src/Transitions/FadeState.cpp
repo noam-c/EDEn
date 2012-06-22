@@ -14,34 +14,32 @@
 
 const int debugFlag = DEBUG_GRAPHICS;
 
-FadeState::FadeState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength)
-   : GameState(executionStack), oldState(oldState), newState(newState), startTime(SDL_GetTicks()), transitionLength(transitionLength), alpha(1.0f), transitionComplete(false)
+FadeState::FadeState(ExecutionStack& executionStack, GameState* oldState, long transitionLength)
+   : GameState(executionStack), oldState(oldState), startTime(SDL_GetTicks()), transitionLength(transitionLength), alpha(1.0f)
 {
    DEBUG("Creating fade state.");
-   screenTexture.startCapture();
+
+   oldState->activate();
+   oldStateTexture.startCapture();
    oldState->drawFrame();
-   screenTexture.endCapture();
+   oldStateTexture.endCapture();
 
    if(glGetError())
    {
-      DEBUG("Failed to create screen capture.");
+      DEBUG("Failed to create screen capture for old state.");
    }
+
+   activate();
 }
 
 bool FadeState::step()
 {
-   if(transitionComplete)
-   {
-      return false;
-   }
-
    long timePassed = SDL_GetTicks() - startTime;
 
    if(timePassed > transitionLength)
    {
       DEBUG("Finishing fade.");
-      executionStack.pushState(newState);
-      transitionComplete = true;
+      return false;
    }
 
    alpha = static_cast<double>(timePassed) / static_cast<double>(transitionLength);
@@ -60,7 +58,7 @@ void FadeState::draw()
    glEnable(GL_TEXTURE_2D);
    glDisable(GL_BLEND);
    glDisable(GL_DEPTH_TEST);
-   screenTexture.bind();
+   oldStateTexture.bind();
 
    glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);

@@ -21,8 +21,8 @@ GameState* RandomTransition::create(ExecutionStack& executionStack, GameState* o
   GameState* transition;
   switch(randomNumber)
   {
-    case 0: transition = new FadeState(executionStack, oldState, newState, transitionLength); break;
-    case 1: transition = new SpinState(executionStack, oldState, newState, transitionLength); break;
+    case 0: transition = new FadeState(executionStack, oldState, transitionLength); break;
+    case 1: transition = new SpinState(executionStack, oldState, transitionLength); break;
   }
   return transition;
 }

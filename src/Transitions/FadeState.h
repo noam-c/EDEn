@@ -13,22 +13,19 @@
 class FadeState : public GameState
 {
    GameState* oldState;
-   GameState* newState;
 
    long startTime;
    long transitionLength;
    double alpha;
 
-   bool transitionComplete;
-
-   ScreenTexture screenTexture;
+   ScreenTexture oldStateTexture;
 
    protected:
       bool step();
       void draw();
 
    public:
-      FadeState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength = 1000);
+      FadeState(ExecutionStack& executionStack, GameState* oldState, long transitionLength = 1000);
       ~FadeState();
 };
 

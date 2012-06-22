@@ -11,6 +11,10 @@
 
 const int debugFlag = DEBUG_EXEC_STACK;
 
+ExecutionStack::ExecutionStack() : nextState(NULL)
+{
+}
+
 ExecutionStack::~ExecutionStack()
 {
    // Delete all states on the stack
@@ -25,12 +29,32 @@ void ExecutionStack::popState()
    GameState* topState = stateStack.top();
    stateStack.pop();
    delete topState;
+
+   if(nextState)
+   {
+      pushState(nextState);
+      nextState = NULL;
+   }
 }
 
-void ExecutionStack::pushState(GameState* newState)
+void ExecutionStack::pushState(GameState* newState, GameState* transitionState)
 {
-   stateStack.push(newState);
-   newState->activate();
+   if(transitionState)
+   {
+      stateStack.push(transitionState);
+      if(nextState)
+      {
+         T_T("Attempted to push a transition in the middle of a transition.");
+      }
+
+      nextState = newState;
+   }
+   else
+   {
+      stateStack.push(newState);
+   }
+
+   stateStack.top()->activate();
 }
 
 void ExecutionStack::execute()
@@ -47,7 +71,7 @@ void ExecutionStack::execute()
       else
       {
          // Delete the current state if it is finished, then
-         // reactivate the state below it.
+         // reactivate the next state atop the stack.
          popState();
          if(!stateStack.empty())
          {

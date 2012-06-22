@@ -12,7 +12,6 @@
 class SpinState : public GameState
 {
    GameState* oldState;
-   GameState* newState;
 
    long startTime;
    long transitionLength;
@@ -20,16 +19,14 @@ class SpinState : public GameState
 
    long timePassed;
 
-   bool transitionComplete;
-
-   ScreenTexture screenTexture;
+   ScreenTexture oldStateTexture;
 
    protected:
       bool step();
       void draw();
 
    public:
-      SpinState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength = 1000);
+      SpinState(ExecutionStack& executionStack, GameState* oldState, long transitionLength = 1000);
       ~SpinState();
 };
 

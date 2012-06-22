@@ -373,7 +373,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                   MenuShell* menuShell = new MenuShell(playerData);
 
                   HomeMenu* menu = new HomeMenu(executionStack, *menuShell, playerData);
-                  executionStack.pushState(RandomTransition::create(executionStack, this, menu));
+                  executionStack.pushState(menu, RandomTransition::create(executionStack, this, menu));
                   return;
                }
                default:
