@@ -4,6 +4,11 @@
 #include "GameState.h"
 #include "ScreenTexture.h"
 
+/**
+ * A transition that creates a spin and shrink effect for the previous transition.
+ *
+ * @author Bobby Richter
+ */
 class SpinState : public GameState
 {
    GameState* oldState;

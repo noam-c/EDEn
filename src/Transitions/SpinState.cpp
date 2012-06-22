@@ -1,3 +1,9 @@
+/*
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
+ */
+
 #include "SpinState.h"
 #include "ExecutionStack.h"
 #include "GraphicsUtil.h"
