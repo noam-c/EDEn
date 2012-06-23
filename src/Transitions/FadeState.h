@@ -7,21 +7,11 @@
 #ifndef FADE_STATE_H
 #define FADE_STATE_H
 
-#include "GameState.h"
-#include "ScreenTexture.h"
+#include "TransitionState.h"
 
-class FadeState : public GameState
+class FadeState : public TransitionState
 {
-   GameState* oldState;
-
-   long startTime;
-   long transitionLength;
-   double alpha;
-
-   ScreenTexture oldStateTexture;
-
    protected:
-      bool step();
       void draw();
 
    public:

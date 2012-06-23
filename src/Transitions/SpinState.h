@@ -1,28 +1,16 @@
 #ifndef SPIN_STATE_H
 #define SPIN_STATE_H
 
-#include "GameState.h"
-#include "ScreenTexture.h"
+#include "TransitionState.h"
 
 /**
  * A transition that creates a spin and shrink effect for the previous transition.
  *
  * @author Bobby Richter
  */
-class SpinState : public GameState
+class SpinState : public TransitionState
 {
-   GameState* oldState;
-
-   long startTime;
-   long transitionLength;
-   double alpha;
-
-   long timePassed;
-
-   ScreenTexture oldStateTexture;
-
    protected:
-      bool step();
       void draw();
 
    public:

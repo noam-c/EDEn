@@ -5,46 +5,21 @@
  */
 
 #include "FadeState.h"
-#include "ExecutionStack.h"
 #include "GraphicsUtil.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_GRAPHICS;
+const int debugFlag = DEBUG_TRANSITIONS;
 
 FadeState::FadeState(ExecutionStack& executionStack, GameState* oldState, long transitionLength)
-   : GameState(executionStack), oldState(oldState), startTime(SDL_GetTicks()), transitionLength(transitionLength), alpha(1.0f)
+   : TransitionState(executionStack, oldState, NULL, transitionLength)
 {
-   DEBUG("Creating fade state.");
-
-   oldState->activate();
-   oldStateTexture.startCapture();
-   oldState->drawFrame();
-   oldStateTexture.endCapture();
-
-   if(glGetError())
-   {
-      DEBUG("Failed to create screen capture for old state.");
-   }
-
-   activate();
 }
 
-bool FadeState::step()
+FadeState::~FadeState()
 {
-   long timePassed = SDL_GetTicks() - startTime;
-
-   if(timePassed > transitionLength)
-   {
-      DEBUG("Finishing fade.");
-      return false;
-   }
-
-   alpha = static_cast<double>(timePassed) / static_cast<double>(transitionLength);
-   DEBUG("Continuing fade (%dms passed).", timePassed);
-   return true;
 }
 
 void FadeState::draw()
@@ -71,7 +46,7 @@ void FadeState::draw()
    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
    glBegin(GL_QUADS);
-      glColor4f(0.0f, 0.0f, 0.0f, alpha);
+      glColor4f(0.0f, 0.0f, 0.0f, progress);
       glVertex3f(0.0f, 0.0f, 0.0f);
       glVertex3f(width, 0.0f, 0.0f);
       glVertex3f(width, height, 0.0f);
@@ -79,8 +54,4 @@ void FadeState::draw()
    glEnd();
 
    glPopAttrib();
-}
-
-FadeState::~FadeState()
-{
 }

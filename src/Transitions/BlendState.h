@@ -7,23 +7,11 @@
 #ifndef BLEND_STATE_H
 #define BLEND_STATE_H
 
-#include "GameState.h"
-#include "ScreenTexture.h"
+#include "TransitionState.h"
 
-class BlendState : public GameState
+class BlendState : public TransitionState
 {
-   GameState* oldState;
-   GameState* newState;
-
-   long startTime;
-   long transitionLength;
-   double alpha;
-
-   ScreenTexture oldStateTexture;
-   ScreenTexture newStateTexture;
-
    protected:
-      bool step();
       void draw();
 
    public:

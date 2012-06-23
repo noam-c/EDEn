@@ -5,7 +5,6 @@
  */
 
 #include "BlendState.h"
-#include "ExecutionStack.h"
 #include "GraphicsUtil.h"
 #include "SDL.h"
 #include "SDL_opengl.h"
@@ -15,46 +14,12 @@
 const int debugFlag = DEBUG_GRAPHICS;
 
 BlendState::BlendState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength)
-   : GameState(executionStack), oldState(oldState), newState(newState), startTime(SDL_GetTicks()), transitionLength(transitionLength), alpha(1.0f)
+   : TransitionState(executionStack, oldState, newState, transitionLength)
 {
-   DEBUG("Creating blend state.");
-
-   oldState->activate();
-   oldStateTexture.startCapture();
-   oldState->drawFrame();
-   oldStateTexture.endCapture();
-
-   if(glGetError())
-   {
-      DEBUG("Failed to create screen capture for old state.");
-   }
-
-   newState->activate();
-   newStateTexture.startCapture();
-   newState->drawFrame();
-   newStateTexture.endCapture();
-
-   if(glGetError())
-   {
-      DEBUG("Failed to create screen capture for new state.");
-   }
-
-   activate();
 }
 
-bool BlendState::step()
+BlendState::~BlendState()
 {
-   long timePassed = SDL_GetTicks() - startTime;
-
-   if(timePassed > transitionLength)
-   {
-      DEBUG("Finishing blend.");
-      return false;
-   }
-
-   alpha = static_cast<double>(timePassed) / static_cast<double>(transitionLength);
-   DEBUG("Continuing blend (%dms passed).", timePassed);
-   return true;
 }
 
 void BlendState::draw()
@@ -79,7 +44,7 @@ void BlendState::draw()
    newStateTexture.bind();
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   glColor4f(1.0f, 1.0f, 1.0f, alpha);
+   glColor4f(1.0f, 1.0f, 1.0f, progress);
 
    glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
@@ -89,8 +54,4 @@ void BlendState::draw()
    glEnd();
 
    glPopAttrib();
-}
-
-BlendState::~BlendState()
-{
 }
