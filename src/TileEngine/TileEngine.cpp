@@ -22,7 +22,7 @@
 #include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "ExecutionStack.h"
-#include "RandomTransition.h"
+#include "RandomTransitionGenerator.h"
 #include "MenuShell.h"
 #include "HomeMenu.h"
 #include "OpenGLTTF.h"
@@ -373,7 +373,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                   MenuShell* menuShell = new MenuShell(playerData);
 
                   HomeMenu* menu = new HomeMenu(executionStack, *menuShell, playerData);
-                  executionStack.pushState(menu, RandomTransition::create(executionStack, this, menu));
+                  executionStack.pushState(menu, RandomTransitionGenerator::create(executionStack, this, menu));
                   return;
                }
                default:

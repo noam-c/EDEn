@@ -178,7 +178,7 @@ set(HEADERS
   src/tinyxml/tinyxml.h
   src/Transitions/FadeState.h
   src/Transitions/SpinState.h
-  src/Transitions/RandomTransition.h
+  src/Transitions/RandomTransitionGenerator.h
   src/Transitions/BlendState.h
   src/TODOLIST.h
 )
@@ -326,7 +326,7 @@ set(SOURCES
   src/TileEngine/Messages/MapTriggerMessage.cpp
   src/Transitions/FadeState.cpp
   src/Transitions/SpinState.cpp
-  src/Transitions/RandomTransition.cpp
+  src/Transitions/RandomTransitionGenerator.cpp
   src/Transitions/BlendState.cpp
   src/main.cpp
   src/DebugUtils.cpp

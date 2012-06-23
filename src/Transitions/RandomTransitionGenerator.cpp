@@ -4,7 +4,7 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#include "RandomTransition.h"
+#include "RandomTransitionGenerator.h"
 #include "ExecutionStack.h"
 #include "GameState.h"
 #include "FadeState.h"
@@ -16,7 +16,7 @@
 
 const int NUM_TRANSITIONS = 3;
 
-GameState* RandomTransition::create(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength)
+GameState* RandomTransitionGenerator::create(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength)
 {
   int randomNumber = rand() % NUM_TRANSITIONS;
   GameState* transition;

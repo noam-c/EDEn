@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef RANDOM_TRANSITION_H
-#define RANDOM_TRANSITION_H
+#ifndef RANDOM_TRANSITION_GENERATOR_H
+#define RANDOM_TRANSITION_GENERATOR_H
 
 class ExecutionStack;
 class GameState;
@@ -15,7 +15,7 @@ class GameState;
  *
  * @author Bobby Richter
  */
-class RandomTransition
+class RandomTransitionGenerator
 {
   public:
      /**
