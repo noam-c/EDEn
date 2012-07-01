@@ -18,8 +18,8 @@ SaveGameModule::SaveGameModule(PlayerData& playerData) : playerData(playerData)
    setHorizontalSpacing(10);
    setPadding(5, 5, 5, 5);
 
-   CharacterList party = playerData.getParty();
-   for(CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter)
+   const std::vector<Character*>& party = playerData.getRoster()->getParty();
+   for(std::vector<Character*>::const_iterator iter = party.begin(); iter != party.end(); ++iter)
    {
       edwt::Icon* characterPicture = new edwt::Icon((*iter)->getPortraitPath());
 

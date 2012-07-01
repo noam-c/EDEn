@@ -21,6 +21,8 @@
 #include "LuaActor.h"
 #include "LuaTileEngine.h"
 
+#include "LuaCharacter.h"
+#include "LuaCharacterRoster.h"
 #include "LuaQuest.h"
 #include "LuaInventory.h"
 
@@ -78,6 +80,11 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
    luaopen_Inventory(luaVM);
    luaW_push<Inventory>(luaVM, playerData.getInventory());
    lua_setglobal(luaVM, "inventory");
+
+   luaopen_Character(luaVM);
+   luaopen_CharacterRoster(luaVM);
+   luaW_push<CharacterRoster>(luaVM, playerData.getRoster());
+   lua_setglobal(luaVM, "party");
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)

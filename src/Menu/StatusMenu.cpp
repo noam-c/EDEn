@@ -7,11 +7,12 @@
 #include "StatusMenu.h"
 #include "StatusPane.h"
 #include "PlayerData.h"
+#include "CharacterRoster.h"
 #include "MenuShell.h"
 
-StatusMenu::StatusMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, const std::string& characterName) : MenuState(executionStack, menuShell), playerData(playerData), characterName(characterName)
+StatusMenu::StatusMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, Character* character) : MenuState(executionStack, menuShell), playerData(playerData), character(character)
 {
-   setMenuPane(new StatusPane(playerData.getPartyCharacter(characterName), menuShell.getDimension()));
+   setMenuPane(new StatusPane(character, menuShell.getDimension()));
 }
 
 void StatusMenu::tabChanged(const std::string& tabName)
@@ -22,14 +23,14 @@ void StatusMenu::tabChanged(const std::string& tabName)
    }
    else
    {
-      setCharacter(tabName);
+      setCharacter(playerData.getRoster()->getCharacter(tabName));
    }
 }
 
-void StatusMenu::setCharacter(const std::string& charName)
+void StatusMenu::setCharacter(Character* newCharacter)
 {
-   characterName = charName;
-   ((StatusPane*)menuPane)->setCharacter(playerData.getPartyCharacter(charName));
+   character = newCharacter;
+   ((StatusPane*)menuPane)->setCharacter(character);
 }
 
 StatusMenu::~StatusMenu()

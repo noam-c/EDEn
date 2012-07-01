@@ -9,8 +9,8 @@
 
 #include <map>
 #include <string>
-#include <vector>
 
+#include "CharacterRoster.h"
 #include "Inventory.h"
 #include "Quest.h"
 
@@ -22,8 +22,6 @@ namespace Json
 {
    class Value;
 };
-
-typedef std::vector<Character*> CharacterList;
 
 /**
  * The exact location where the game was last saved, for reloading game state.
@@ -48,26 +46,12 @@ class PlayerData
 {
    /** The file from which this player data was last saved/loaded. */
    std::string filePath;
-   
-   /**
-    * A list of all playable characters encountered.
-    * This includes characters in the party and the reserve,
-    * but also includes characters encountered by the player,
-    * but currently inaccessible for play.
-    */
-   CharacterList charactersEncountered;
-
-   /** The characters in the main party, who interact with the world and participate in combat. */
-   CharacterList party;
-   
-   /** The characters who are available to switch into the party. */
-   CharacterList reserve;
-
-   /** The lead character in the party, who the player sees when they are playing the game. */
-   Character* partyLeader;
 
    /** All the items that are in the player's item bag. Includes usables, keys, and unused equipment. */
    Inventory inventory;
+
+   /** The roster of characters in the player's party or encountered by the player. */
+   CharacterRoster roster;
 
    /** The top-level quest for the game. Contains all the quests that the player can complete. */
    Quest rootQuest;
@@ -116,13 +100,10 @@ class PlayerData
        * @param filePath The path to save the player data to.
        */
       void save(const std::string& path);
-   
-      void addNewCharacter(Character* newCharacter);
-      Character* getPartyLeader() const;
-      Character* getPartyCharacter(const std::string& characterName) const;
 
-	   CharacterList getParty() const;
+      const CharacterRoster* getRoster() const;
       const Inventory* getInventory() const;
+      CharacterRoster* getRoster();
       Inventory* getInventory();
    
       bool changeEquipment(Character* character, EquipSlot* slot, const Item* newEquipment);

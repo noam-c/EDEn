@@ -137,21 +137,21 @@ void HomeMenu::showPanel(MenuAction panelToShow)
 
 void HomeMenu::moduleSelected(int index, const std::string& eventId)
 {
-   const std::string& characterName = playerData.getParty()[index]->getName();
+   Character* character = playerData.getRoster()->getParty()[index];
    
-   DEBUG("Character selected: %s", characterName.c_str());
+   DEBUG("Character selected: %s", character->getName().c_str());
    
    MenuState* nextState;
    switch(characterAction)
    {
       case STATUS_PANEL:
          DEBUG("Creating Status menu panel...");
-         nextState = new StatusMenu(executionStack, menuShell, playerData, characterName);
+         nextState = new StatusMenu(executionStack, menuShell, playerData, character);
          break;
       case EQUIP_PANEL:
       default:
          DEBUG("Creating Equip menu panel...");
-         nextState = new EquipMenu(executionStack, menuShell, playerData, characterName);
+         nextState = new EquipMenu(executionStack, menuShell, playerData, character);
          break;
    }
    
@@ -161,7 +161,8 @@ void HomeMenu::moduleSelected(int index, const std::string& eventId)
 
 void HomeMenu::tabChanged(const std::string& tabName)
 {
-   executionStack.pushState(new StatusMenu(executionStack, menuShell, playerData, tabName));
+   Character* tabbedCharacter = playerData.getRoster()->getCharacter(tabName);
+   executionStack.pushState(new StatusMenu(executionStack, menuShell, playerData, tabbedCharacter));
    menuPane->setVisible(false);
 }
 

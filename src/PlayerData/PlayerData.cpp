@@ -18,16 +18,12 @@ const int debugFlag = DEBUG_PLAYER;
 // Uncomment this line to turn off encryption of savegames
 // #define DISABLE_ENCRYPTION
 
-PlayerData::PlayerData() : partyLeader(NULL), rootQuest("root")
+PlayerData::PlayerData() : rootQuest("root")
 {
 }
 
 PlayerData::~PlayerData()
 {
-   for(CharacterList::iterator iter = charactersEncountered.begin(); iter != charactersEncountered.end(); ++iter)
-   {
-      delete *iter;
-   }
 }
 
 const std::string& PlayerData::getFilePath()
@@ -64,64 +60,14 @@ void PlayerData::load(const std::string& path)
 
 void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
 {
+   DEBUG("Loading character roster...");
    Json::Value& charactersElement = rootElement[CHARACTER_LIST_ELEMENT];
-   Json::Value& partyElement = charactersElement[PARTY_ELEMENT];
-   Json::Value& reserveElement = charactersElement[RESERVE_ELEMENT];
-   
-   int partySize = partyElement.size();
-   int reserveSize = reserveElement.size();
-   
-   if(partyElement.isArray() && partySize > 0)
-   {
-      DEBUG("Loading party...");
-      for(int i = 0; i < partySize; ++i)
-      {
-         DEBUG("Adding character %d...", i+1);
-         Character* currCharacter = new Character(partyElement[i]);
-         std::string name = currCharacter->getName();
-         charactersEncountered.push_back(currCharacter);
-         party.push_back(currCharacter);
-      }
-      DEBUG("Party loaded.");
-   }
-
-   if(reserveElement.isArray() && reserveSize > 0)
-   {
-      DEBUG("Loading reserve...");
-      for(int i = 0; i < reserveSize; ++i)
-      {
-         DEBUG("Adding character %d...", i+1);
-         Character* currCharacter = new Character(reserveElement[i]);
-         std::string name = currCharacter->getName();
-         charactersEncountered.push_back(currCharacter);
-         reserve.push_back(currCharacter);
-      }
-      DEBUG("Reserve loaded.");
-   }
+   roster.load(charactersElement);
 }
 
 void PlayerData::serializeCharactersAndParty(Json::Value& outputJson) const
 {
-   Json::Value charactersNode(Json::objectValue);
-   
-   Json::Value partyNode(Json::arrayValue);
-   for(CharacterList::const_iterator iter = party.begin(); iter != party.end(); ++iter)
-   {
-      Character* character = *iter;
-      character->serialize(partyNode);
-   }
-   
-   Json::Value reserveNode(Json::arrayValue);
-   for(CharacterList::const_iterator iter = reserve.begin(); iter != reserve.end(); ++iter)
-   {
-      Character* character = *iter;
-      character->serialize(reserveNode);
-   }
-   
-   charactersNode[PARTY_ELEMENT] = partyNode;
-   charactersNode[RESERVE_ELEMENT] = reserveNode;
-   
-   outputJson[CHARACTER_LIST_ELEMENT] = charactersNode;
+   outputJson[CHARACTER_LIST_ELEMENT] = roster.serialize();
 }
 
 void PlayerData::parseQuestLog(Json::Value& rootElement)
@@ -197,45 +143,19 @@ void PlayerData::save(const std::string& path)
    filePath = path;
 }
 
-void PlayerData::addNewCharacter(Character* newCharacter)
+const CharacterRoster* PlayerData::getRoster() const
 {
-   std::string characterName = newCharacter->getName();
-   charactersEncountered.push_back(newCharacter);
-   
-   if(party.empty())
-   {
-      partyLeader = newCharacter;
-   }
-
-   party.push_back(newCharacter);
-}
-
-Character* PlayerData::getPartyLeader() const
-{
-   return partyLeader;
-}
-
-Character* PlayerData::getPartyCharacter(const std::string& characterName) const
-{
-   for(CharacterList::const_iterator iter = party.begin(); iter != party.end(); ++iter)
-   {
-      if((*iter)->getName() == characterName)
-      {
-         return *iter;
-      }
-   }
-
-   return NULL;
-}
-
-CharacterList PlayerData::getParty() const
-{
-   return party;
+   return &roster;
 }
 
 const Inventory* PlayerData::getInventory() const
 {
    return &inventory;
+}
+
+CharacterRoster* PlayerData::getRoster()
+{
+   return &roster;
 }
 
 Inventory* PlayerData::getInventory()

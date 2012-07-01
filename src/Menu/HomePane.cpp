@@ -33,10 +33,10 @@ void HomePane::setModuleSelectListener(edwt::ModuleSelectListener* listener)
 
 void HomePane::refresh()
 {
-   CharacterList party = playerData.getParty();
+   const std::vector<Character*>& party = playerData.getRoster()->getParty();
    
    int i = 0;
-   for(CharacterList::iterator iter = party.begin(); iter != party.end(); ++iter, ++i)
+   for(std::vector<Character*>::const_iterator iter = party.begin(); iter != party.end() && i < PlayerData::PARTY_SIZE; ++iter, ++i)
    {
       characterModules[i].setCharacter(*iter);
    }

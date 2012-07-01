@@ -18,7 +18,6 @@ static const char* ITEM_QUANTITY_ATTRIBUTE = "quantity";
 
 static const char* CHARACTER_LIST_ELEMENT = "Characters";
 static const char* PARTY_ELEMENT = "Party";
-static const char* RESERVE_ELEMENT = "Reserve";
 static const char* CHARACTER_ELEMENT = "Character";
 
 static const char* MAX_HP_ATTRIBUTE = "maxHP";

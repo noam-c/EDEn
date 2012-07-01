@@ -25,8 +25,8 @@ class StatusMenu : public MenuState
    /** The player data operated on by this menu state. */
    PlayerData& playerData;
 
-   /** The name of the character displayed. */
-   std::string characterName;
+   /** The character displayed. */
+   Character* character;
 
    public:
       /**
@@ -35,9 +35,9 @@ class StatusMenu : public MenuState
        * @param executionStack The execution stack that the state belongs to.
        * @param menuShell The shell to display the status GUI in.
        * @param playerData The player data to operate on.
-       * @param characterName The name of the initial character to display in the status menu.
+       * @param character The initial character to display in the status menu.
        */
-      StatusMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, const std::string& characterName);
+      StatusMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, Character* character);
 
       /**
        * Fired when the player picks a new character tab.
@@ -50,9 +50,9 @@ class StatusMenu : public MenuState
       /**
        * Sets the character to be displayed in the menu.
        *
-       * @param charName The name of the character to display.
+       * @param character The new character to display.
        */
-      void setCharacter(const std::string& charName);
+      void setCharacter(Character* newCharacter);
 
       /**
        * Destructor.

@@ -7,6 +7,7 @@
 #include "EquipMenu.h"
 #include "EquipPane.h"
 #include "PlayerData.h"
+#include "CharacterRoster.h"
 #include "Character.h"
 #include "MenuShell.h"
 
@@ -14,10 +15,10 @@
 
 const int debugFlag = DEBUG_MENU;
 
-EquipMenu::EquipMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, const std::string& characterName) : MenuState(executionStack, menuShell), playerData(playerData), characterName(characterName)
+EquipMenu::EquipMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, Character* character) : MenuState(executionStack, menuShell), playerData(playerData), character(character)
 {
    // Initialize the equipment pane using the character slots.
-   std::vector<EquipSlot*> characterSlots = playerData.getPartyCharacter(characterName)->getEquipment().getSlots();
+   std::vector<EquipSlot*> characterSlots = character->getEquipment().getSlots();
    equipSlots.assign(characterSlots.begin(), characterSlots.end());
    EquipPane* equipPane = new EquipPane(equipSlots, equippableItems, menuShell.getDimension());
 
@@ -34,7 +35,7 @@ void EquipMenu::tabChanged(const std::string& tabName)
    }
    else
    {
-      setCharacter(tabName);
+      setCharacter(playerData.getRoster()->getCharacter(tabName));
    }
 }
 
@@ -45,7 +46,7 @@ void EquipMenu::moduleSelected(int index, const std::string& eventId)
       // An item was selected from the list of available equipment.
       DEBUG("Item %d selected.", index);
       
-      if(playerData.changeEquipment(playerData.getPartyCharacter(characterName), selectedSlot, equippableItems.getItemAt(index)))
+      if(playerData.changeEquipment(character, selectedSlot, equippableItems.getItemAt(index)))
       {
          selectedSlot = NULL;
          equippableItems.clear();
@@ -65,10 +66,10 @@ void EquipMenu::moduleSelected(int index, const std::string& eventId)
    }
 }
 
-void EquipMenu::setCharacter(const std::string& charName)
+void EquipMenu::setCharacter(Character* newCharacter)
 {
-   characterName = charName;
-   std::vector<EquipSlot*> characterSlots = playerData.getPartyCharacter(characterName)->getEquipment().getSlots();
+   character = newCharacter;
+   std::vector<EquipSlot*> characterSlots = character->getEquipment().getSlots();
    equipSlots.assign(characterSlots.begin(), characterSlots.end());
 
    ((EquipPane*)menuPane)->invalidate();

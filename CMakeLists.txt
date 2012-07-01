@@ -126,6 +126,9 @@ set(HEADERS
   src/Messaging/Listener.h
   src/MovementDirection.h
   src/PlayerData/Character.h
+  src/PlayerData/LuaCharacter.h
+  src/PlayerData/CharacterRoster.h
+  src/PlayerData/LuaCharacterRoster.h
   src/PlayerData/PlayerData.h
   src/PlayerData/EquipData.h
   src/PlayerData/EquipSlot.h
@@ -280,6 +283,9 @@ set(SOURCES
   src/MenuControls/ItemListModel.cpp
   src/Messaging/MessagePipe.cpp
   src/PlayerData/Character.cpp
+  src/PlayerData/CharacterRoster.cpp
+  src/PlayerData/LuaCharacter.cpp
+  src/PlayerData/LuaCharacterRoster.cpp
   src/PlayerData/PlayerData.cpp
   src/PlayerData/Quest.cpp
   src/PlayerData/LuaQuest.cpp
