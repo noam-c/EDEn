@@ -159,9 +159,9 @@ void HomeMenu::moduleSelected(int index, const std::string& eventId)
    menuPane->setVisible(false);
 }
 
-void HomeMenu::tabChanged(const std::string& tabName)
+void HomeMenu::tabChanged(int index)
 {
-   Character* tabbedCharacter = playerData.getRoster()->getCharacter(tabName);
+   Character* tabbedCharacter = playerData.getRoster()->getParty()[index - 1];
    executionStack.pushState(new StatusMenu(executionStack, menuShell, playerData, tabbedCharacter));
    menuPane->setVisible(false);
 }

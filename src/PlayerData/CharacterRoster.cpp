@@ -72,10 +72,12 @@ void CharacterRoster::load(Json::Value& charactersElement)
       DEBUG("Loading party...");
       for(int i = 0; i < partySize; ++i)
       {
-         DEBUG("Adding character %d...", i+1);
-         Character* currCharacter = new Character(partyElement[i]);
-         std::string name = currCharacter->getName();
-         allCharacters[name] = currCharacter;
+         Json::Value characterNode = partyElement[i];
+         DEBUG("Adding character %d...", i);
+         Character* currCharacter = new Character(characterNode);
+
+         std::string characterId = currCharacter->getId();
+         allCharacters[characterId] = currCharacter;
          party.push_back(currCharacter);
       }
       DEBUG("Party loaded.");
@@ -85,16 +87,14 @@ void CharacterRoster::load(Json::Value& charactersElement)
 Json::Value CharacterRoster::serialize() const
 {
    Json::Value charactersNode(Json::objectValue);
-
    Json::Value partyNode(Json::arrayValue);
    for(std::vector<Character*>::const_iterator iter = party.begin(); iter != party.end(); ++iter)
    {
       Character* character = *iter;
-      character->serialize(partyNode);
+      partyNode.append(character->serialize());
    }
 
    charactersNode[PARTY_ELEMENT] = partyNode;
-
    return charactersNode;
 }
 

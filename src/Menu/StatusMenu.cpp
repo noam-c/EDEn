@@ -9,21 +9,22 @@
 #include "PlayerData.h"
 #include "CharacterRoster.h"
 #include "MenuShell.h"
+#include "Tab.h"
 
 StatusMenu::StatusMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData, Character* character) : MenuState(executionStack, menuShell), playerData(playerData), character(character)
 {
    setMenuPane(new StatusPane(character, menuShell.getDimension()));
 }
 
-void StatusMenu::tabChanged(const std::string& tabName)
+void StatusMenu::tabChanged(int index)
 {
-   if(tabName == "Party")
+   if(index <= 0)
    {
       finished = true;
    }
    else
    {
-      setCharacter(playerData.getRoster()->getCharacter(tabName));
+      setCharacter(playerData.getRoster()->getParty()[index - 1]);
    }
 }
 

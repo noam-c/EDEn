@@ -10,6 +10,7 @@
 #include "CharacterRoster.h"
 #include "Character.h"
 #include "MenuShell.h"
+#include "Tab.h"
 
 #include "DebugUtils.h"
 
@@ -27,15 +28,15 @@ EquipMenu::EquipMenu(ExecutionStack& executionStack, MenuShell& menuShell, Playe
    setMenuPane(equipPane);
 }
 
-void EquipMenu::tabChanged(const std::string& tabName)
+void EquipMenu::tabChanged(int index)
 {
-   if(tabName == "Party")
+   if(index <= 0)
    {
       finished = true;
    }
    else
    {
-      setCharacter(playerData.getRoster()->getCharacter(tabName));
+      setCharacter(playerData.getRoster()->getParty()[index - 1]);
    }
 }
 

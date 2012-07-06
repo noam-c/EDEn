@@ -7,6 +7,8 @@
 #ifndef MODULE_SELECT_LISTENER_H
 #define MODULE_SELECT_LISTENER_H
 
+#include <string>
+
 namespace edwt
 {
    /**

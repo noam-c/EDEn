@@ -98,9 +98,9 @@ class MenuState : public GameState, public edwt::TabChangeListener
       /**
        * Override this method to respond to menu tab events.
        *
-       * @param tabName The name of the tab that was selected by the user.
+       * @param index The index of the tab that was selected by the user.
        */
-      virtual void tabChanged(const std::string& tabName);
+      virtual void tabChanged(int index);
       
       /**
        * Respond to a new action being chosen from the menu list.

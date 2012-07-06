@@ -7,56 +7,104 @@
 #include "Character.h"
 #include "SaveGameItemNames.h"
 #include "json.h"
+#include <fstream>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-Character::Character(const std::string& name) : name(name)
+Json::Value Character::getArchetype(const std::string& archetypeId)
 {
+   const std::string path = std::string("data/characters/") + archetypeId + ".edc";
+   DEBUG("Loading archetype %s in file %s", archetypeId.c_str(), path.c_str());
+
+   std::ifstream input(path.c_str());
+   if(!input)
+   {
+      T_T("Failed to open save game file for reading.");
+   }
+
+   Json::Value jsonRoot;
+   input >> jsonRoot;
+
+   if(jsonRoot.isNull())
+   {
+      DEBUG("Unexpected root element name.");
+      T_T("Failed to parse save data.");
+   }
+
+   return jsonRoot;
+}
+
+Character::Character(const std::string& id) : id(id)
+{
+   Json::Value archetypeData = Character::getArchetype(id);
+   name = archetypeData[NAME_ATTRIBUTE].asString();
+   parsePortraitData(archetypeData);
+
+   parseStats(archetypeData);
+   equipment.load(archetypeData["Equipment"]);
 }
 
 Character::Character(Json::Value& charToLoad)
 {
-   name = charToLoad[NAME_ATTRIBUTE].asString();
-   hp = charToLoad[HP_ATTRIBUTE].asInt();
-   sp = charToLoad[SP_ATTRIBUTE].asInt();
-   maxHP = charToLoad[MAX_HP_ATTRIBUTE].asInt();
-   maxSP = charToLoad[MAX_SP_ATTRIBUTE].asInt();
-   strength = charToLoad[STR_ATTRIBUTE].asInt();
-   intelligence = charToLoad[INT_ATTRIBUTE].asInt();
-   equipment.load(charToLoad["Equipment"]);
+   id = charToLoad[ID_ATTRIBUTE].asString();
 
-   parsePortraitData(charToLoad);
+   std::string archetypeId = archetype = charToLoad[ARCHETYPE_ATTRIBUTE].asString();
+   if(archetypeId.empty())
+   {
+      archetypeId = id;
+   }
+
+   Json::Value archetypeData = Character::getArchetype(archetypeId);
+   name = archetypeData[NAME_ATTRIBUTE].asString();
+   parsePortraitData(archetypeData);
+
+   parseStats(charToLoad);
+   equipment.load(charToLoad["Equipment"]);
 }
 
-void Character::parsePortraitData(Json::Value& charToLoad)
+void Character::parsePortraitData(Json::Value& portraitDataContainer)
 {
-   Json::Value& portraitData = charToLoad[PORTRAIT_ELEMENT];
+   Json::Value& portraitData = portraitDataContainer[PORTRAIT_ELEMENT];
    portraitPath = portraitData[PATH_ATTRIBUTE].asString();
 }
 
-void Character::serialize(Json::Value& characterSet) const
+void Character::parseStats(Json::Value& statsDataContainer)
+{
+   Json::Value& statsData = statsDataContainer[STATS_ELEMENT];
+
+   hp = statsData[HP_ATTRIBUTE].asInt();
+   sp = statsData[SP_ATTRIBUTE].asInt();
+   maxHP = statsData[MAX_HP_ATTRIBUTE].asInt();
+   maxSP = statsData[MAX_SP_ATTRIBUTE].asInt();
+   strength = statsData[STR_ATTRIBUTE].asInt();
+   intelligence = statsData[INT_ATTRIBUTE].asInt();
+}
+
+Json::Value Character::serialize() const
 {
    Json::Value characterNode(Json::objectValue);
    
-   characterNode[NAME_ATTRIBUTE] = name;
-   characterNode[HP_ATTRIBUTE] = hp;
-   characterNode[SP_ATTRIBUTE] = sp;
-   characterNode[MAX_HP_ATTRIBUTE] = maxHP;
-   characterNode[MAX_SP_ATTRIBUTE] = maxSP;
-   characterNode[STR_ATTRIBUTE] = strength;
-   characterNode[INT_ATTRIBUTE] = intelligence;
+   if(!archetype.empty())
+   {
+      characterNode[ARCHETYPE_ATTRIBUTE] = archetype;
+   }
+
+   characterNode[ID_ATTRIBUTE] = id;
+
+   Json::Value statsNode(Json::objectValue);
+   statsNode[HP_ATTRIBUTE] = hp;
+   statsNode[SP_ATTRIBUTE] = sp;
+   statsNode[MAX_HP_ATTRIBUTE] = maxHP;
+   statsNode[MAX_SP_ATTRIBUTE] = maxSP;
+   statsNode[STR_ATTRIBUTE] = strength;
+   statsNode[INT_ATTRIBUTE] = intelligence;
+
+   characterNode[STATS_ELEMENT] = statsNode;
+
    equipment.serialize(characterNode["Equipment"]);
    
-   serializePortraitData(characterNode);
-   characterSet.append(characterNode);
-}
-
-void Character::serializePortraitData(Json::Value& characterNode) const
-{
-   Json::Value portraitNode(Json::objectValue);
-   portraitNode[PATH_ATTRIBUTE] = portraitPath;
-   characterNode[PORTRAIT_ELEMENT] = portraitNode;
+   return characterNode;
 }
 
 int Character::getMaxHP() const
@@ -113,6 +161,11 @@ int Character::getEndurance() const
 int Character::getAgility() const
 {
    return agility;
+}
+
+std::string Character::getId() const
+{
+   return id;
 }
 
 std::string Character::getName() const

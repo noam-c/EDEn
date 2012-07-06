@@ -1,22 +1,19 @@
-
 {
 	"Characters" : 
 	{
 		"Party" : 
 		[
-			
 			{
-				"Portrait" : 
+		      "id" : "akrom",
+				"Stats" : 
 				{
-					"path" : "data/images/akrom.jpg"
+	            "hp" : 150,
+	            "int" : 6,
+	            "maxHP" : 200,
+	            "maxSP" : 30,
+	            "sp" : 0,
+	            "str" : 7
 				},
-				"hp" : 150,
-				"int" : 6,
-				"maxHP" : 200,
-				"maxSP" : 30,
-				"name" : "Akrom",
-				"sp" : 0,
-				"str" : 7,
 				"Equipment" :
 				{
 					"Head":{"types":[0],"equipped":300},
@@ -33,34 +30,33 @@
 					"Feet":{"types":[2]}
 				}
 			},
-			
+
 			{
-				"Portrait" : 
+			   "id" : "kain",
+				"Stats" : 
 				{
-					"path" : "data/images/kain.jpg"
+	            "hp" : 100,
+	            "int" : 8,
+	            "maxHP" : 150,
+	            "maxSP" : 60,
+	            "sp" : 50,
+	            "str" : 5
 				},
-				"hp" : 100,
-				"int" : 8,
-				"maxHP" : 150,
-				"maxSP" : 60,
-				"name" : "Kain",
-				"sp" : 50,
-				"str" : 5,
 				"Equipment" :
-                                {
-                                        "Head":{"types":[0],"equipped":300},
-                                        "Body":{"types":[1],"equipped":401},
+            {
+               "Head":{"types":[0],"equipped":300},
+               "Body":{"types":[1],"equipped":401},
  					"Wpn1":{"types":[8,11],"equipped":503},
 					"Off1":{"types":[],"enabled":false},
 					"Wpn2":{"types":[8,11],"equipped":503},
 					"Off2":{"types":[],"enabled":false},
-                                        "Accessories":
-                                        [
-                                                {"types":[4],"equipped":902},
-                                                {"types":[4],"equipped":902}
-                                        ],
+               "Accessories":
+               [
+                  {"types":[4],"equipped":902},
+                  {"types":[4],"equipped":902}
+               ],
 					"Feet":{"types":[2]}
-                                }
+            }
 			}
 		]
 	},

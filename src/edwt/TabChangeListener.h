@@ -7,10 +7,10 @@
 #ifndef TAB_CHANGE_LISTENER_H
 #define TAB_CHANGE_LISTENER_H
 
-#include <string>
-
 namespace edwt
 {
+   class Tab;
+
    /**
     * An interface for classes that wish to catch tab change events from a TabbedArea.
     *
@@ -19,13 +19,12 @@ namespace edwt
    class TabChangeListener
    {
       public:
-         
          /**
           * Called when a new tab in a tabbed area is selected.
           *
-          * @param tabName the name of the tab that was selected.
+          * @param index The index of the tab that was selected.
           */
-         virtual void tabChanged(const std::string& tabName) = 0;
+         virtual void tabChanged(int index) = 0;
    };
 };
 

@@ -1,0 +1,29 @@
+{
+	"name" : "Akrom",
+	"Portrait" : 
+	{
+		"path" : "data/characters/akrom.jpg"
+	},
+	"Stats" : 
+	{
+		"int" : 6,
+		"maxHP" : 200,
+		"maxSP" : 30,
+		"str" : 7
+	},
+	"Equipment" :
+	{
+		"Head":{"types":[0],"equipped":300},
+		"Body":{"types":[1],"equipped":401},
+		"Wpn1":{"types":[8,11],"equipped":503},
+		"Off1":{"types":[],"enabled":false},
+		"Wpn2":{"types":[8,11],"equipped":503},
+		"Off2":{"types":[],"enabled":false},
+		"Accessories":
+		[
+			{"types":[4],"equipped":902},
+			{"types":[4],"equipped":902}
+		],
+		"Feet":{"types":[2]}
+	}
+}

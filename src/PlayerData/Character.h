@@ -23,8 +23,14 @@ namespace Json
  */
 class Character
 {
+   /** The character's ID for data lookups. */
+   std::string id;
+
    /** The name of the character. */
    std::string name;
+
+   /** The archetype that was loaded for this character (empty if the default archetype was used). */
+   std::string archetype;
 
    /** The path to the character portrait (used in dialogue and menus). */
    std::string portraitPath;
@@ -48,31 +54,42 @@ class Character
    EquipData equipment;
  
    /**
+    * Loads the archetype for the character, which provides character
+    * information and base stats/equipment.
+    *
+    * @param archetypeId The ID of the archetype to load.
+    *
+    * @return A JSON node containing the loaded character archetype.
+    */
+   static Json::Value getArchetype(const std::string& archetypeId);
+
+   /**
     * Parse the portrait path from the character node.
     *
-    * @param charToLoad The JSON node containing the character data to load.
+    * @param portraitDataContainer The JSON node containing the portrait data to load.
     */
-   void parsePortraitData(Json::Value& charToLoad);
+   void parsePortraitData(Json::Value& portraitDataContainer);
    
    /**
-    * Serialize the portrait data into a JSON output.
+    * Parse the stats from the given node.
     *
-    * @param characterNode The JSON node representing the character to add the portrait data to.
+    * @param statsDataContainer The JSON node containing the stats to load.
     */
-   void serializePortraitData(Json::Value& characterNode) const;
-   
+   void parseStats(Json::Value& statsDataContainer);
+
    public:
       /**
        * Constructor used to create a new character.
+       * Initializes the entire character using the base archetype data.
        *
-       * @param The name of this character.
+       * @param The id of the new character.
        */
-      Character(const std::string& name);
+      Character(const std::string& id);
 
       /**
        * Constructor used to load an existing character.
        *
-       * @param charToLoad The JSON node containing the character data to load.
+       * @param charToLoad The JSON node containing the character's data.
        */
       Character(Json::Value& charToLoad);
    
@@ -81,13 +98,18 @@ class Character
        *
        * @param characterSet The character array to serialize the character into.
        */
-      void serialize(Json::Value& characterSet) const;
+      Json::Value serialize() const;
    
+      /**
+       * @return The ID of the character.
+       */
+      std::string getId() const;
+
+
       /**
        * @return The name of the character.
        */
       std::string getName() const;
-   
       /**
        * @return The relative file path containing the picture of this character.
        * \todo The character portrait data should just contain an ID for the picture instead of a filepath.

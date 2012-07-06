@@ -9,6 +9,8 @@
 
 static const char* PLAYER_DATA_ELEMENT = "PlayerData";
 
+static const char* ID_ATTRIBUTE = "id";
+static const char* ARCHETYPE_ATTRIBUTE = "archetype";
 static const char* NAME_ATTRIBUTE = "name";
 
 static const char* INVENTORY_ELEMENT = "Inventory";
@@ -19,6 +21,7 @@ static const char* ITEM_QUANTITY_ATTRIBUTE = "quantity";
 static const char* CHARACTER_LIST_ELEMENT = "Characters";
 static const char* PARTY_ELEMENT = "Party";
 static const char* CHARACTER_ELEMENT = "Character";
+static const char* STATS_ELEMENT = "Stats";
 
 static const char* MAX_HP_ATTRIBUTE = "maxHP";
 static const char* HP_ATTRIBUTE = "hp";

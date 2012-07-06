@@ -93,7 +93,7 @@ void MenuState::draw()
 {
 }
 
-void MenuState::tabChanged(const std::string& tabName)
+void MenuState::tabChanged(int index)
 {
 }
 

@@ -87,9 +87,9 @@ class HomeMenu: public MenuState, public edwt::ModuleSelectListener, public gcn:
       /**
        * Called when a new tab in a tabbed area is selected.
        *
-       * @param tabName the name of the tab that was selected.
+       * @param index The index of the tab that was selected.
        */
-      void tabChanged(const std::string& tabName);
+      void tabChanged(int index);
       
       /**
        * Called when the main menu receives a GUI action event.

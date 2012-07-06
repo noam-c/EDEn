@@ -1,95 +1,90 @@
-
 {
 	"Characters" : 
 	{
 		"Party" : 
-		[
-			
+		[ 
 			{
-				"Portrait" : 
-				{
-					"path" : "data/images/akrom.jpg"
-				},
-				"hp" : 150,
-				"int" : 6,
-				"maxHP" : 200,
-				"maxSP" : 30,
-				"name" : "Akrom",
-				"sp" : 0,
-				"str" : 7,
+            "id" : "kain",
+			   "Stats" :
+		      {
+   				"hp" : 100,
+   				"int" : 8,
+   				"maxHP" : 150,
+   				"maxSP" : 60,
+   				"sp" : 50,
+   				"str" : 5
+		      },
 				"Equipment" :
-				{
-					"Head":{"types":[0],"equipped":300},
-					"Body":{"types":[1],"equipped":401},
-					"Wpn1":{"types":[8,11],"equipped":503},
-					"Off1":{"types":[],"enabled":false},
-					"Wpn2":{"types":[8,11],"equipped":503},
-					"Off2":{"types":[],"enabled":false},
-					"Accessories":
-					[
-						{"types":[4],"equipped":902},
-						{"types":[4],"equipped":902}
-					],
-					"Feet":{"types":[2]}
-				}
-			},
-			
-			{
-				"Portrait" : 
-				{
-					"path" : "data/images/kain.jpg"
-				},
-				"hp" : 100,
-				"int" : 8,
-				"maxHP" : 150,
-				"maxSP" : 60,
-				"name" : "Kain",
-				"sp" : 50,
-				"str" : 5,
-				"Equipment" :
-                                {
-                                        "Head":{"types":[0],"equipped":300},
-                                        "Body":{"types":[1],"equipped":401},
+             {
+               "Head":{"types":[0],"equipped":300},
+               "Body":{"types":[1],"equipped":401},
  					"Wpn1":{"types":[8,11],"equipped":503},
 					"Off1":{"types":[],"enabled":false},
 					"Wpn2":{"types":[8,11],"equipped":503},
 					"Off2":{"types":[],"enabled":false},
-                                        "Accessories":
-                                        [
-                                                {"types":[4],"equipped":902},
-                                                {"types":[4],"equipped":902}
-                                        ],
-					"Feet":{"types":[2]}
-                                }
+               "Accessories":
+               [
+                  {"types":[4],"equipped":902},
+                  {"types":[4],"equipped":902}
+               ],
+               "Feet":{"types":[2]}
+            }
 			},
 			
+         {
+            "id" : "akrom",
+            "Stats" :
+            {
+               "hp" : 150,
+               "int" : 6,
+               "maxHP" : 200,
+               "maxSP" : 30,
+               "sp" : 0,
+               "str" : 7
+            },
+            "Equipment" :
+            {
+               "Head":{"types":[0],"equipped":300},
+               "Body":{"types":[1],"equipped":401},
+               "Wpn1":{"types":[8,11],"equipped":503},
+               "Off1":{"types":[],"enabled":false},
+               "Wpn2":{"types":[8,11],"equipped":503},
+               "Off2":{"types":[],"enabled":false},
+               "Accessories":
+               [
+                  {"types":[4],"equipped":902},
+                  {"types":[4],"equipped":902}
+               ],
+               "Feet":{"types":[2]}
+            }
+         },
+
 			{
-				"Portrait" : 
+            "id" : "shiara",
+				"Stats" :
 				{
-					"path" : "data/images/shiara.png"
+				   "hp" : 100,
+   				"int" : 12,
+   				"maxHP" : 100,
+   				"maxSP" : 100,
+   				"sp" : 100,
+   				"str" : 2
 				},
-				"hp" : 100,
-				"int" : 12,
-				"maxHP" : 100,
-				"maxSP" : 100,
-				"name" : "Shiara",
-				"sp" : 100,
-				"str" : 2,
 				"Equipment" :
 		 		{
-                                        "Head":{"types":[0],"equipped":300},
-                                        "Body":{"types":[1],"equipped":401},
- 					"Wpn1":{"types":[8,11],"equipped":503},
-					"Off1":{"types":[],"enabled":false},
-					"Wpn2":{"types":[8,11],"equipped":503},
-					"Off2":{"types":[],"enabled":false},
-                                        "Accessories":
-                                        [
-                                                {"types":[4],"equipped":902},
-                                                {"types":[4],"equipped":902}
-                                        ],
-                                        "Feet":{"types":[2]}
-                                }
+               "Head":{"types":[0],"equipped":300},
+               "Body":{"types":[1],"equipped":401},
+               "Wpn1":{"types":[8,11],"equipped":503},
+               "Off1":{"types":[],"enabled":false},
+               "Wpn2":{"types":[8,11],"equipped":503},
+               "Off2":{"types":[],"enabled":false},
+                "Accessories":
+               [
+                  {"types":[4],"equipped":902},
+                  {"types":[4],"equipped":902}
+               ],
+               "Feet":{"types":[2]}
+            }
 			}
 		]
 	},
@@ -100,7 +95,6 @@
 			"itemNum" : 0,
 			"quantity" : 5
 		},
-		
 		{
 			"itemNum" : 1,
 			"quantity" : 10

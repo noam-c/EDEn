@@ -43,9 +43,9 @@ class StatusMenu : public MenuState
        * Fired when the player picks a new character tab.
        * Displays the character in the tab or cancels the status menu if the "Party" tab is selected.
        *
-       * @param tabName The name of the newly-selected tab.
+       * @param index The index of the newly-selected tab.
        */
-      void tabChanged(const std::string& tabName);
+      void tabChanged(int index);
 
       /**
        * Sets the character to be displayed in the menu.

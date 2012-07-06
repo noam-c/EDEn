@@ -52,7 +52,8 @@ namespace edwt
       gcn::TabbedArea::setSelectedTab(tab);
       if (tab != oldTab && tabChangeListener != NULL)
       {
-         tabChangeListener->tabChanged(tab->getCaption());
+         int index = getSelectedTabIndex();
+         tabChangeListener->tabChanged(index);
       }
    }
 
