@@ -39,10 +39,15 @@ Character::Character(const std::string& id) : id(id)
 {
    Json::Value archetypeData = Character::getArchetype(id);
    name = archetypeData[NAME_ATTRIBUTE].asString();
+   spritesheetId = archetypeData[SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
 
    parseStats(archetypeData);
    equipment.load(archetypeData["Equipment"]);
+
+   // Start off the character with full HP/SP
+   hp = maxHP;
+   sp = maxSP;
 }
 
 Character::Character(Json::Value& charToLoad)
@@ -57,10 +62,15 @@ Character::Character(Json::Value& charToLoad)
 
    Json::Value archetypeData = Character::getArchetype(archetypeId);
    name = archetypeData[NAME_ATTRIBUTE].asString();
+   spritesheetId = archetypeData[SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
 
    parseStats(charToLoad);
    equipment.load(charToLoad["Equipment"]);
+}
+
+Character::~Character()
+{
 }
 
 void Character::parsePortraitData(Json::Value& portraitDataContainer)
@@ -171,6 +181,11 @@ std::string Character::getId() const
 std::string Character::getName() const
 {
    return name;
+}
+
+std::string Character::getSpritesheetId() const
+{
+   return spritesheetId;
 }
 
 std::string Character::getPortraitPath() const

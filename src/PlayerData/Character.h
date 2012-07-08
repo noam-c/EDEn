@@ -35,6 +35,9 @@ class Character
    /** The path to the character portrait (used in dialogue and menus). */
    std::string portraitPath;
 
+   /** The ID of the spritesheet resource used for this character. */
+   std::string spritesheetId;
+
    // Character status attributes
    int strength;
    int intelligence;
@@ -94,6 +97,11 @@ class Character
       Character(Json::Value& charToLoad);
    
       /**
+       * Destructor.
+       */
+      ~Character();
+
+      /**
        * Serialize the character data into a JSON output.
        *
        * @param characterSet The character array to serialize the character into.
@@ -110,6 +118,12 @@ class Character
        * @return The name of the character.
        */
       std::string getName() const;
+
+      /**
+       * @return The ID of the spritesheet used to represent the character.
+       */
+      std::string getSpritesheetId() const;
+
       /**
        * @return The relative file path containing the picture of this character.
        * \todo The character portrait data should just contain an ID for the picture instead of a filepath.

@@ -20,11 +20,24 @@ CharacterRoster::CharacterRoster() : partyLeader(NULL)
 
 CharacterRoster::~CharacterRoster()
 {
-
+   DEBUG("Destroying character roster...");
    for(std::map<std::string, Character*>::iterator iter = allCharacters.begin(); iter != allCharacters.end(); ++iter)
    {
+      DEBUG("Destroying character %s", (iter->first).c_str());
       delete iter->second;
+      DEBUG("Character %s destroyed", (iter->first).c_str());
    }
+   DEBUG("Character roster destroyed.");
+}
+
+Character* CharacterRoster::loadNewCharacter(const std::string& id)
+{
+   if(getCharacter(id) == NULL)
+   {
+      allCharacters[id] = new Character(id);
+   }
+
+   return allCharacters[id];
 }
 
 Character* CharacterRoster::getPartyLeader() const
@@ -32,9 +45,9 @@ Character* CharacterRoster::getPartyLeader() const
    return partyLeader;
 }
 
-Character* CharacterRoster::getCharacter(const std::string& characterName) const
+Character* CharacterRoster::getCharacter(const std::string& id) const
 {
-   std::map<std::string, Character*>::const_iterator iter = allCharacters.find(characterName);
+   std::map<std::string, Character*>::const_iterator iter = allCharacters.find(id);
    return iter != allCharacters.end() ? iter->second : NULL;
 }
 
@@ -45,19 +58,24 @@ const std::vector<Character*>& CharacterRoster::getParty() const
 
 void CharacterRoster::addToParty(Character* character)
 {
-   if (partyLeader == NULL)
+   if(character == NULL)
+   {
+      return;
+   }
+
+   if(partyLeader == NULL)
    {
       partyLeader = character;
    }
 
-   if (find(party.begin(), party.end(), character) == party.end())
+   if(std::find(party.begin(), party.end(), character) == party.end())
    {
       party.push_back(character);
    }
 
-   if (allCharacters.find(character->getName()) == allCharacters.end())
+   if(allCharacters.find(character->getId()) == allCharacters.end())
    {
-      allCharacters[character->getName()] = character;
+      allCharacters[character->getId()] = character;
    }
 }
 
@@ -90,7 +108,7 @@ Json::Value CharacterRoster::serialize() const
    Json::Value partyNode(Json::arrayValue);
    for(std::vector<Character*>::const_iterator iter = party.begin(); iter != party.end(); ++iter)
    {
-      Character* character = *iter;
+      const Character* character = *iter;
       partyNode.append(character->serialize());
    }
 
@@ -98,12 +116,17 @@ Json::Value CharacterRoster::serialize() const
    return charactersNode;
 }
 
-void CharacterRoster::removeFromParty(Character *character)
+void CharacterRoster::removeFromParty(Character* character)
 {
-   remove(party.begin(), party.end(), character) == party.end();
-
-   if(party.empty())
+   if(party.size() == 1)
    {
+      std::remove(party.begin(), party.end(), character);
       partyLeader = NULL;
+   }
+   else if(party.size() > 1 && partyLeader == character)
+   {
+      std::vector<Character*>::iterator iter = std::find(party.begin(), party.end(), character);
+      partyLeader = *(iter + 1 != party.end() ? iter + 1 : party.begin());
+      party.erase(iter);
    }
 }

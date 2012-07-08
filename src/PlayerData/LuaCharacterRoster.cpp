@@ -7,6 +7,7 @@
 #include "LuaCharacterRoster.h"
 #include "CharacterRoster.h"
 
+#include <string>
 #include "LuaWrapper.hpp"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
@@ -16,6 +17,29 @@ extern "C"
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
+}
+
+static int CharacterListL_CreateCharacter(lua_State* luaVM)
+{
+   const int nargs = lua_gettop(luaVM);
+   CharacterRoster* characterRoster;
+   Character* createdCharacter = NULL;
+
+   if(nargs > 1)
+   {
+      characterRoster = luaW_to<CharacterRoster>(luaVM, 1);
+      switch(nargs)
+      {
+         case 2:
+         {
+            createdCharacter = characterRoster->loadNewCharacter(std::string(lua_tostring(luaVM, 2)));
+            break;
+         }
+      }
+   }
+
+   luaW_push<Character>(luaVM, createdCharacter);
+   return 1;
 }
 
 static int CharacterListL_AddToParty(lua_State* luaVM)
@@ -44,7 +68,8 @@ static int CharacterListL_AddToParty(lua_State* luaVM)
 
 static luaL_reg characterRosterMetatable[] =
 {
-   { "add", CharacterListL_AddToParty },
+   { "createCharacter", CharacterListL_CreateCharacter },
+   { "addToParty", CharacterListL_AddToParty },
    { NULL, NULL }
 };
 

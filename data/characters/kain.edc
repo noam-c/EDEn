@@ -4,6 +4,7 @@
 	{
 		"path" : "data/characters/kain.jpg"
 	},
+   "Spritesheet" : "npc1",
    "Stats" :
    {
       "int" : 6,

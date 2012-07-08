@@ -84,7 +84,7 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
    luaopen_Character(luaVM);
    luaopen_CharacterRoster(luaVM);
    luaW_push<CharacterRoster>(luaVM, playerData.getRoster());
-   lua_setglobal(luaVM, "party");
+   lua_setglobal(luaVM, "roster");
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
@@ -323,5 +323,6 @@ ScriptEngine::~ScriptEngine()
    {
       DEBUG("Destroying Lua state machine...");
       lua_close(luaVM);
+      DEBUG("Lua state machine destroyed.");
    }
 }

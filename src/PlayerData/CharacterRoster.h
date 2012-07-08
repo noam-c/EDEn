@@ -44,8 +44,9 @@ class CharacterRoster
        */
       Json::Value serialize() const;
 
+      Character* loadNewCharacter(const std::string& id);
       Character* getPartyLeader() const;
-      Character* getCharacter(const std::string& characterName) const;
+      Character* getCharacter(const std::string& id) const;
       const std::vector<Character*>& getParty() const;
       void addToParty(Character* character);
       void removeFromParty(Character* character);

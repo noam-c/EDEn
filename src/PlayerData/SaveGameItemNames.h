@@ -33,6 +33,8 @@ static const char* INT_ATTRIBUTE = "int";
 static const char* PORTRAIT_ELEMENT = "Portrait";
 static const char* PATH_ATTRIBUTE = "path";
 
+static const char* SPRITESHEET_ATTRIBUTE = "Spritesheet";
+
 static const char* QUEST_ELEMENT = "Quest";
 static const char* DESCRIPTION_ELEMENT = "Description";
 static const char* COMPLETED_ATTRIBUTE = "completed";
