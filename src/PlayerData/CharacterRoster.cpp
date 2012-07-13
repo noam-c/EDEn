@@ -8,14 +8,30 @@
 #include <algorithm>
 #include "json.h"
 
+#include "MessagePipe.h"
+#include "RosterUpdateMessage.h"
+
 #include "Character.h"
 #include "SaveGameItemNames.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-CharacterRoster::CharacterRoster() : partyLeader(NULL)
+CharacterRoster::CharacterRoster() : messagePipe(NULL), partyLeader(NULL)
 {
+}
+
+void CharacterRoster::signalRosterUpdate()
+{
+   if(messagePipe != NULL)
+   {
+      messagePipe->sendMessage(RosterUpdateMessage());
+   }
+}
+
+void CharacterRoster::bindMessagePipe(const messaging::MessagePipe* pipe)
+{
+   messagePipe = pipe;
 }
 
 CharacterRoster::~CharacterRoster()
@@ -35,6 +51,7 @@ Character* CharacterRoster::loadNewCharacter(const std::string& id)
    if(getCharacter(id) == NULL)
    {
       allCharacters[id] = new Character(id);
+      signalRosterUpdate();
    }
 
    return allCharacters[id];
@@ -77,6 +94,8 @@ void CharacterRoster::addToParty(Character* character)
    {
       allCharacters[character->getId()] = character;
    }
+
+   signalRosterUpdate();
 }
 
 void CharacterRoster::load(Json::Value& charactersElement)
@@ -100,6 +119,8 @@ void CharacterRoster::load(Json::Value& charactersElement)
       }
       DEBUG("Party loaded.");
    }
+
+   signalRosterUpdate();
 }
 
 Json::Value CharacterRoster::serialize() const
@@ -129,4 +150,6 @@ void CharacterRoster::removeFromParty(Character* character)
       partyLeader = *(iter + 1 != party.end() ? iter + 1 : party.begin());
       party.erase(iter);
    }
+
+   signalRosterUpdate();
 }

@@ -23,7 +23,7 @@ namespace messaging
       actorMoveMessages.unregisterListener(listener);
    }
 
-   template<> void MessagePipe::sendMessage(const ActorMoveMessage& message)
+   template<> void MessagePipe::sendMessage(const ActorMoveMessage& message) const
    {
       actorMoveMessages.send(message);
    }
@@ -38,7 +38,7 @@ namespace messaging
       mapTriggerMessages.unregisterListener(listener);
    }
 
-   template<> void MessagePipe::sendMessage(const MapTriggerMessage& message)
+   template<> void MessagePipe::sendMessage(const MapTriggerMessage& message) const
    {
       DEBUG("Pipe received map trigger message.");
       mapTriggerMessages.send(message);
@@ -54,9 +54,25 @@ namespace messaging
       mapExitMessages.unregisterListener(listener);
    }
 
-   template<> void MessagePipe::sendMessage(const MapExitMessage& message)
+   template<> void MessagePipe::sendMessage(const MapExitMessage& message) const
    {
       DEBUG("Pipe received map exit message.");
       mapExitMessages.send(message);
+   }
+
+   template<> void MessagePipe::registerListener(Listener<RosterUpdateMessage>* listener)
+   {
+      rosterUpdateMessages.registerListener(listener);
+   }
+
+   template<> void MessagePipe::unregisterListener(Listener<RosterUpdateMessage>* listener)
+   {
+      rosterUpdateMessages.unregisterListener(listener);
+   }
+
+   template<> void MessagePipe::sendMessage(const RosterUpdateMessage& message) const
+   {
+      DEBUG("Pipe received character roster update message.");
+      rosterUpdateMessages.send(message);
    }
 };

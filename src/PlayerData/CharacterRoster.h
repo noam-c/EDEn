@@ -15,10 +15,18 @@ namespace Json
    class Value;
 };
 
+namespace messaging
+{
+   class MessagePipe;
+};
+
 class Character;
 
 class CharacterRoster
 {
+   /** The message pipe used to send messages about updates to the roster. */
+   const messaging::MessagePipe* messagePipe;
+
    /** The lead character in the party, who the player sees when they are playing the game. */
    Character* partyLeader;
 
@@ -32,9 +40,20 @@ class CharacterRoster
     */
    std::map<std::string, Character*> allCharacters;
 
+   void signalRosterUpdate();
+
    public:
       CharacterRoster();
       ~CharacterRoster();
+
+      /**
+       * Binds a new message pipe to send player data updates to. This overwrites the previously set
+       * message pipe, if it exists.
+       *
+       * @param pipe The message pipe used to send messages about updates to the player data.
+       */
+      void bindMessagePipe(const messaging::MessagePipe* pipe);
+
       void load(Json::Value& charactersElement);
 
       /**

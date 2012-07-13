@@ -26,6 +26,16 @@ PlayerData::~PlayerData()
 {
 }
 
+void PlayerData::bindMessagePipe(const messaging::MessagePipe* messagePipe)
+{
+   roster.bindMessagePipe(messagePipe);
+}
+
+void PlayerData::clearMessagePipe()
+{
+   bindMessagePipe(NULL);
+}
+
 const std::string& PlayerData::getFilePath()
 {
    return filePath;

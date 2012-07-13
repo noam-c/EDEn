@@ -123,6 +123,12 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
 
    protected:
       /**
+       * Activation of state.
+       * Rebinds the TileEngine's message pipe to the player data.
+       */
+      void activate();
+
+      /**
        * Logic step.
        * Sends time passed to all controllers so that they can update accordingly.
        * Takes user input if there is any. 

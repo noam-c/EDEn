@@ -137,6 +137,7 @@ set(HEADERS
   src/PlayerData/Quest.h
   src/PlayerData/LuaQuest.h
   src/PlayerData/SaveGameItemNames.h
+  src/PlayerData/Messages/RosterUpdateMessage.h
   src/ResourceLoader/Resource.h
   src/ResourceLoader/ResourceKey.h
   src/ResourceLoader/ResourceLoader.h
@@ -293,6 +294,7 @@ set(SOURCES
   src/PlayerData/EquipSlot.cpp
   src/PlayerData/Inventory.cpp
   src/PlayerData/LuaInventory.cpp
+  src/PlayerData/Messages/RosterUpdateMessage.cpp
   src/ResourceLoader/Resource.cpp
   src/ResourceLoader/ResourceLoader.cpp
   src/Shapes/Size.cpp
@@ -359,6 +361,7 @@ source_group(Menu REGULAR_EXPRESSION src/Menu/.*)
 source_group(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
 source_group(Messaging REGULAR_EXPRESSION src/Messaging/.*)
 source_group(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
+source_group("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
 source_group(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
 source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
 source_group(Shapes REGULAR_EXPRESSION src/Shapes/.*)
@@ -383,6 +386,7 @@ include_directories(
   src/MenuControls
   src/Messaging
   src/PlayerData
+  src/PlayerData/Messages
   src/ResourceLoader
   src/ScriptEngine
   src/Shapes

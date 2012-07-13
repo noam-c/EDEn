@@ -38,7 +38,7 @@ TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapte
 : GameState(executionStack), entityGrid(*this, messagePipe), xMapOffset(0), yMapOffset(0)
 {
    messagePipe.registerListener(this);
-   playerActor = new PlayerCharacter(messagePipe, entityGrid, "npc1");
+   playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData, "npc1");
    scriptEngine = new ScriptEngine(*this, playerData, scheduler);
    dialogue = new DialogueController(*top, scheduler, *scriptEngine);
    consoleWindow = new edwt::DebugConsoleWindow(top, top->getWidth(), top->getHeight() * 0.2);
@@ -209,6 +209,12 @@ PlayerCharacter* TileEngine::getPlayerCharacter() const
    return playerActor;
 }
 
+void TileEngine::activate()
+{
+   GameState::activate();
+   playerData.bindMessagePipe(&messagePipe);
+}
+
 void TileEngine::stepNPCs(long timePassed)
 {
    std::map<std::string, NPC*>::iterator iter;
@@ -369,6 +375,11 @@ void TileEngine::handleInputEvents(bool& finishState)
                }
                case SDLK_TAB:
                {
+                  // Clear the message pipe in preparation for the new state.
+                  // The Tile Engine message pipe will be rebound when the Tile Engine state
+                  // is activated again.
+                  playerData.clearMessagePipe();
+
                   /** \todo This is never deleted, causing a memory leak. */
                   MenuShell* menuShell = new MenuShell(playerData);
 

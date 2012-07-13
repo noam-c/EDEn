@@ -23,6 +23,11 @@ namespace Json
    class Value;
 };
 
+namespace messaging
+{
+   class MessagePipe;
+};
+
 /**
  * The exact location where the game was last saved, for reloading game state.
  *
@@ -81,7 +86,20 @@ class PlayerData
        * Constructor.
        */
       PlayerData();
+
+      /**
+       * Binds a new message pipe to send player data updates to. This overwrites the previously set
+       * message pipe, if it exists.
+       *
+       * @param messagePipe The message pipe used to send messages about updates to the player data.
+       */
+      void bindMessagePipe(const messaging::MessagePipe* messagePipe);
    
+      /**
+       * Clears the current message pipe.
+       */
+      void clearMessagePipe();
+
       /**
        * @return The file path that this player data was last associated with (saved to or loaded from).
        */
