@@ -30,6 +30,7 @@ set(HEADERS
   src/ExecutionStack.h
   src/GameState.h
   src/Graphics/GraphicsUtil.h
+  src/Graphics/OpenGLExtensions.h
   src/Graphics/ScreenTexture.h
   src/Graphics/Texture.h
   src/guichan/actionevent.hpp
@@ -344,6 +345,7 @@ set(SOURCES
   src/ExecutionStack.cpp
   src/GameState.cpp
   src/Graphics/GraphicsUtil.cpp
+  src/Graphics/OpenGLExtensions.cpp
   src/Graphics/ScreenTexture.cpp
   src/Graphics/Texture.cpp
 )

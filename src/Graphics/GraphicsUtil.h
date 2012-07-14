@@ -9,6 +9,8 @@
 
 #include "Singleton.h"
 
+#include "OpenGLExtensions.h"
+
 struct SDL_Surface;
 union SDL_Event;
 
@@ -44,8 +46,11 @@ typedef unsigned int GLuint;
  */
 class GraphicsUtil : public Singleton<GraphicsUtil>
 {
-   /** The screen surface */    
+   /** The screen surface */
    static SDL_Surface* screen;
+
+   /** The OpenGL Extensions */
+   OpenGLExtensions openGLExtensions;
 
    /** The Guichan SDL input driver */
    gcn::SDLInput* input;
@@ -111,6 +116,11 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       /** The screen height (currently HARDCODED) */
       static const unsigned int height = 600;
    
+      /**
+       * @return The extension manager for this graphical context.
+       */
+      const OpenGLExtensions& getExtensions() const;
+
       /**
        * @return The width of the screen
        */

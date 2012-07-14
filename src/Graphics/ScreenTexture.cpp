@@ -1,10 +1,7 @@
 #include "ScreenTexture.h"
 #include "GraphicsUtil.h"
+#include "OpenGLExtensions.h"
 #include "Size.h"
-
-#define GL_GLEXT_PROTOTYPES 1
-#include "SDL_opengl.h"
-#undef GL_GLEXT_PROTOTYPES
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_GRAPHICS;
@@ -24,22 +21,38 @@ ScreenTexture::ScreenTexture()
 
    glPopAttrib();
 
-   glGenFramebuffersEXT(1, &frameBuffer);
+   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
+   if(extensions.isFrameBuffersEnabled())
+   {
+      (*extensions.getGenFramebuffersFunction())(1, &frameBuffer);
+   }
 }
 
 void ScreenTexture::startCapture()
 {
-   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBuffer);
-   glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, textureHandle, 0);
+   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
+   if(extensions.isFrameBuffersEnabled())
+   {
+      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, frameBuffer);
+      (*extensions.getFramebufferTexture2DFunction())(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, textureHandle, 0);
+   }
 }
 
 void ScreenTexture::endCapture()
 {
-   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
+   if(extensions.isFrameBuffersEnabled())
+   {
+      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, 0);
+   }
 }
 
 ScreenTexture::~ScreenTexture()
 {
-   glDeleteFramebuffersEXT(1, &frameBuffer);
+   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
+   if(extensions.isFrameBuffersEnabled())
+   {
+      (*extensions.getDeleteFramebuffersFunction())(1, &frameBuffer);
+   }
 }
 

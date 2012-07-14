@@ -30,6 +30,7 @@ void GraphicsUtil::initialize()
    currentYOffset = 0;
 
    initSDL();
+   openGLExtensions.initialize();
    initGuichan();
 }
 
@@ -143,6 +144,11 @@ void GraphicsUtil::flipScreen()
 {
    glFlush();
    SDL_GL_SwapBuffers();
+}
+
+const OpenGLExtensions& GraphicsUtil::getExtensions() const
+{
+   return openGLExtensions;
 }
 
 int GraphicsUtil::getWidth()
