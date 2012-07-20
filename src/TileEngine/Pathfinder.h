@@ -59,28 +59,28 @@ class Pathfinder
     *
     * @param The tile number when counting the tiles from left to right, then top to bottom.
     */
-   inline shapes::Point2D tileNumToPixels(int tileNum);
+   inline shapes::Point2D tileNumToPixels(int tileNum) const;
    
    /**
     * Convert pixel coordinates into a tile number.
     *
     * @param pixelLocation The coordinates of the location (in pixels)
     */
-   inline int pixelsToTileNum(const shapes::Point2D& pixelLocation);
+   inline int pixelsToTileNum(const shapes::Point2D& pixelLocation) const;
    
    /**
     * Convert a tile number into tile coordinates.
     *
     * @param The tile number when counting the tiles from left to right, then top to bottom.
     */
-   inline shapes::Point2D tileNumToCoords(int tileNum);
+   inline shapes::Point2D tileNumToCoords(int tileNum) const;
    
    /**
     * Convert tile coordinates into a tile number.
     *
     * @param tileLocation The coordinates of the location (in tiles)
     */
-   inline int coordsToTileNum(const shapes::Point2D& tileLocation);
+   inline int coordsToTileNum(const shapes::Point2D& tileLocation) const;
    
    /** 
     * Runs the Roy-Floyd-Warshall algorithm on the initialized entity grid
@@ -119,7 +119,7 @@ class Pathfinder
        *
        * @return The ideal best path from the source point to the destination point.
        */
-      Path findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst);
+      Path findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst) const;
       
       /**
        * Finds the shortest path from the source coordinates to the destination
@@ -132,7 +132,7 @@ class Pathfinder
        *
        * @return The shortest unobstructed path from the source point to the destination point.
        */
-      Path findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size);
+      Path findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const;
       
       /**
        * Destructor.
@@ -146,7 +146,7 @@ class Pathfinder
 
        * @return A straight path from origin to goal, regardless of anything being in the way.
        */
-      Path getStraightPath(const shapes::Point2D& src, const shapes::Point2D& dst);
+      Path getStraightPath(const shapes::Point2D& src, const shapes::Point2D& dst) const;
 
       /**
        * Uses the successor matrix computed on Pathfinder construction to determine the best path.
@@ -157,7 +157,7 @@ class Pathfinder
        *
        * @return The best path computed by the Roy-Floyd-Warshall algorithm. 
        */
-      Path findRFWPath(const shapes::Point2D& src, const shapes::Point2D& dst);
+      Path findRFWPath(const shapes::Point2D& src, const shapes::Point2D& dst) const;
 
       /**
        * Uses the A* algorithm to dynamically find the best possible path. Uses the Roy-Floyd-Warshall distance matrix as a heuristic when determining the best path.
@@ -170,7 +170,7 @@ class Pathfinder
        *
        * @return The best path computed by the A* algorithm.
        */
-      Path findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size);
+      Path findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const;
 
       /**
        * A node used in A* search.
@@ -193,7 +193,7 @@ class Pathfinder
        * @param size The entity Size.
        * @param diagonalNodes Whether or not the nodes being evaluated are diagonal from the evaluated point.
        */
-      void evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalNodes = false);
+      void evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalNodes = false) const;
 };
 
 #endif

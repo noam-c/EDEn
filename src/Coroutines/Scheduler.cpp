@@ -43,9 +43,9 @@ void Scheduler::start(Thread* thread)
    }
 }
 
-bool Scheduler::hasRunningThread()
+bool Scheduler::hasRunningThread() const
 {
-   return runningThread;
+   return runningThread != NULL;
 }
 
 int Scheduler::block(Task* pendingTask)

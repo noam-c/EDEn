@@ -54,7 +54,7 @@ void Region::load(const std::string& path)
    }
 }
 
-std::string Region::getName()
+std::string Region::getName() const
 {
    return regionName;
 }
@@ -69,7 +69,7 @@ Map* Region::getMap(const std::string& name)
    return areas[name];
 }
 
-size_t Region::getSize()
+size_t Region::getResourceSize() const
 {
    return sizeof(this);
 }

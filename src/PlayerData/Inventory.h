@@ -49,7 +49,7 @@ class Inventory
        * @return The item list that represents the inventory.
        * \todo Remove this function when possible to promote encapsulation.
        */
-      ItemList& getItemList();
+      const ItemList& getItemList() const;
 
       /**
        * Gets a list of items and their quantities in the inventory, filtered by a list of types.

@@ -156,7 +156,7 @@ void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
    glPopAttrib();
 }
 
-size_t Tileset::getSize()
+size_t Tileset::getResourceSize() const
 {
    return sizeof(this);
 }

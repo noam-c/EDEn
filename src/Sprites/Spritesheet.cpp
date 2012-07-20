@@ -8,7 +8,8 @@
 #include "SDL_opengl.h"
 #include "GraphicsUtil.h"
 #include "Texture.h"
-#include "SpriteFrame.h"
+#include "Rectangle.h"
+#include "Point2D.h"
 #include "Animation.h"
 #include <queue>
 #include <fstream>
@@ -86,7 +87,7 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
    }
 
    DEBUG("Loading frames...");
-   frameList = new SpriteFrame[numFrames];
+   frameList.reserve(numFrames);
    for(int i = 0; i < numFrames; ++i)
    {
       Json::Value& currFrame = framesElement[i];
@@ -111,14 +112,15 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
       }
 
       // Get the frame rectangle coordinates
-      int left = currFrame["left"].asInt();
-      int top = currFrame["top"].asInt();
-      int right = currFrame["right"].asInt();
-      int bottom = currFrame["bottom"].asInt();
+      const shapes::Rectangle rect(
+            currFrame["top"].asInt(),
+            currFrame["left"].asInt(),
+            currFrame["bottom"].asInt(),
+            currFrame["right"].asInt());
 
-      frameList[i] = SpriteFrame(left, top, right, bottom);
+      frameList.push_back(rect);
       DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
-            frameName.c_str(), left, top, right, bottom);
+            frameName.c_str(), rect.left, rect.top, rect.right, rect.bottom);
 
       frameIndices[frameName] = i;
    }
@@ -217,9 +219,9 @@ Animation* Spritesheet::getAnimation(const std::string& animationName) const
 }
 
 
-void Spritesheet::draw(const int x, const int y, const int frameIndex) const
+void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
 {
-   if(frameList == NULL)
+   if(!isInitialized())
    {
       // Don't draw if the spritesheet was not initialized
       // (i.e. there was a failure constructing this spritesheet)
@@ -232,22 +234,22 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
       return;
    }
 
-   SpriteFrame f = frameList[frameIndex];
+   const shapes::Rectangle& frame = frameList[frameIndex];
 
    /**
     * \todo We can do all these calculations when the frames are initialized
     *       in order to optimize the drawing code a bit more!
     */
-   int frameHeight = f.bottom - f.top;
-   int frameWidth = f.right - f.left;
+   const int frameHeight = frame.getHeight();
+   const int frameWidth = frame.getWidth();
 
-   float frameTop = f.top / float(size.height);
-   float frameBottom = f.bottom / float(size.height);
-   float frameLeft = f.left / float(size.width);
-   float frameRight = f.right / float(size.width);
+   float frameTop = frame.top / float(size.height);
+   float frameBottom = frame.bottom / float(size.height);
+   float frameLeft = frame.left / float(size.width);
+   float frameRight = frame.right / float(size.width);
    
-   float destLeft = float(x);
-   float destBottom = float(y);
+   float destLeft = float(point.x);
+   float destBottom = float(point.y);
    float destRight = destLeft + frameWidth;
    float destTop = destBottom - frameHeight;
 
@@ -276,7 +278,7 @@ void Spritesheet::draw(const int x, const int y, const int frameIndex) const
    glPopAttrib();
 }
 
-size_t Spritesheet::getSize()
+size_t Spritesheet::getResourceSize() const
 {
    return sizeof(Spritesheet);
 }
@@ -289,9 +291,6 @@ Spritesheet::~Spritesheet()
    {
       delete iter->second;
    }
-
-   // Delete all the static frames
-   delete [] frameList;
 
    if(texture != NULL)
    {

@@ -9,7 +9,7 @@
 #include "json.h"
 #include "SaveGameItemNames.h"
 
-ItemList& Inventory::getItemList()
+const ItemList& Inventory::getItemList() const
 {
    return items;
 }

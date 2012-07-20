@@ -80,6 +80,7 @@ class EquipData
 
       /**
        * @return The list of equipment slots on the character.
+       * \todo Refactor the code so that this method can either be const or removed
        */
       std::vector<EquipSlot*> getSlots();
 };

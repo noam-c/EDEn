@@ -65,17 +65,17 @@ class Resource
       /**
        * @return true iff this resource has already been successfully loaded.
        */
-      bool isInitialized();
+      bool isInitialized() const;
 
       /**
        * @return the name of this Resource in string format.
        */
-      std::string getResourceName();
+      std::string getResourceName() const;
 
       /**
        * @return the size that the resource takes up in memory.
        */
-      virtual size_t getSize() = 0;
+      virtual size_t getResourceSize() const = 0;
 
       /**
        * Abstract destructor (forces all Resources to have destructors).

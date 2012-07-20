@@ -88,7 +88,7 @@ void HomeMenu::pollInputEvent(bool& finishState)
    }
 }
 
-bool HomeMenu::isCharacterDependent(MenuAction action)
+bool HomeMenu::isCharacterDependent(MenuAction action) const
 {
    switch(action)
    {

@@ -89,7 +89,7 @@ class Sound : public Resource
        *
        * @return The size of the sound resource in memory.
        */
-      size_t getSize();
+      size_t getResourceSize() const;
 
       /**
        * Destructor.

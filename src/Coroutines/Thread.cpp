@@ -13,7 +13,7 @@ Thread::Thread()
    threadId = nextThreadId++;
 }
 
-int Thread::getId()
+int Thread::getId() const
 {
    return threadId;
 }

@@ -47,7 +47,7 @@ class Region : public Resource
       Region(const ResourceKey& name);
 
       /** @return the name of the region. */
-      std::string getName();
+      std::string getName() const;
 
       /** @return the starting map (first map loaded) for this Region. */
       Map* getStartingMap();
@@ -64,7 +64,7 @@ class Region : public Resource
        *
        * @return The size of the region resource in memory.
        */
-      size_t getSize();
+      size_t getResourceSize() const;
 
       /**
        * Destructor.

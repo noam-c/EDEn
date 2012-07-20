@@ -18,11 +18,11 @@ class ItemListModel : public gcn::ListModel
    ItemList itemList;
    
    public:
-      void setItems(ItemList& newList);
+      void setItems(const ItemList& newList);
       void clear();
       int getNumberOfElements();
       std::string getElementAt(int i);
-      const Item* getItemAt(int i);
+      const Item* getItemAt(int i) const;
 };
 
 #endif

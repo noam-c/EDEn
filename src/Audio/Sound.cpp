@@ -50,7 +50,7 @@ void Sound::load(const std::string& path)
    DEBUG("Successfully loaded WAV %s.", path.c_str());
 }
 
-size_t Sound::getSize()
+size_t Sound::getResourceSize() const
 {
    return sizeof(Sound);
 }

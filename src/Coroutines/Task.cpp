@@ -22,7 +22,7 @@ Task::Task(TaskId taskId, Scheduler& scheduler)
                       : id(taskId), scheduler(scheduler)
 {}
 
-TaskId Task::getTaskId()
+TaskId Task::getTaskId() const
 {
    return id;
 }

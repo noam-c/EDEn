@@ -53,7 +53,7 @@ class HomeMenu: public MenuState, public edwt::ModuleSelectListener, public gcn:
    /**
     * @return true iff the action requires a character to be selected
     */
-   bool isCharacterDependent(MenuAction action);
+   bool isCharacterDependent(MenuAction action) const;
 
    protected:
       /**

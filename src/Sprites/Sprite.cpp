@@ -123,10 +123,10 @@ void Sprite::step(long timePassed)
    }
 }
 
-void Sprite::draw(int x, int y) const
+void Sprite::draw(const shapes::Point2D& point) const
 {
    int indexToDraw = animation != NULL ? animation->getIndex() : frameIndex;
-   sheet->draw(x, y, indexToDraw);
+   sheet->draw(point, indexToDraw);
 }
 
 Sprite::~Sprite()

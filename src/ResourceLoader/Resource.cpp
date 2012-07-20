@@ -10,7 +10,7 @@ Resource::Resource(const ResourceKey& name) : initialized(false), name(name)
 {
 }
 
-bool Resource::isInitialized()
+bool Resource::isInitialized() const
 {
    return initialized;
 }
@@ -21,7 +21,7 @@ void Resource::initialize(const char* path)
    initialized = true;
 }
 
-std::string Resource::getResourceName()
+std::string Resource::getResourceName() const
 {
    return std::string(name);
 }

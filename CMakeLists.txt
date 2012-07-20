@@ -156,7 +156,6 @@ set(HEADERS
   src/Sprites/Animation.h
   src/Sprites/FrameSequence.h
   src/Sprites/Sprite.h
-  src/Sprites/SpriteFrame.h
   src/Sprites/Spritesheet.h
   src/TileEngine/Actor.h
   src/TileEngine/Actor_Orders.h 
@@ -310,7 +309,6 @@ set(SOURCES
   src/ScriptEngine/StringScript.cpp
   src/Sprites/Animation.cpp
   src/Sprites/Sprite.cpp
-  src/Sprites/SpriteFrame.cpp
   src/Sprites/Spritesheet.cpp
   src/TileEngine/Actor.cpp
   src/TileEngine/Actor_MoveOrder.cpp

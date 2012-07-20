@@ -11,11 +11,18 @@
 #include "FrameSequence.h"
 #include "Size.h"
 #include <map>
+#include <vector>
 #include <string>
 
 namespace Json
 {
    class Value;
+};
+
+namespace shapes
+{
+   struct Point2D;
+   struct Rectangle;
 };
 
 struct SpriteFrame;
@@ -52,8 +59,8 @@ class Spritesheet : public Resource
    /** Spritesheet size (in pixels) */
    shapes::Size size;
 
-   /** The array of frames, which hold locations of different sprites in the sheet. */
-   SpriteFrame* frameList;
+   /** The list of frames, which hold locations of different sprites in the sheet. */
+   std::vector<shapes::Rectangle> frameList;
 
    /** The number of frames available in the spritesheet. */
    int numFrames;
@@ -100,11 +107,10 @@ class Spritesheet : public Resource
       /**
        * Draws a given frame at a specified location.
        *
-       * @param x The x-location to draw at.
-       * @param y The y-location to draw at.
+       * @param point The location to draw at.
        * @param frameIndex The frame to draw.
        */
-      void draw(const int x, const int y, const int frameIndex) const;
+      void draw(const shapes::Point2D& point, const int frameIndex) const;
 
       /**
        * Get the index of a frame specified by the frame name.
@@ -130,7 +136,7 @@ class Spritesheet : public Resource
        *
        * @return The size of the spritesheet resource in memory.
        */
-      size_t getSize();
+      size_t getResourceSize() const;
 
       /**
        * Destructor.

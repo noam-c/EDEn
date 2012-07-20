@@ -46,17 +46,7 @@ class Tileset : public Resource
        *
        * @return The size of the tileset resource in memory.
        */
-      size_t getSize();
-
-      /**  
-       * @return the width (in tiles) of the tileset
-       */
-      int getWidth();
-
-      /**  
-       * @return the height (in tiles) of the tileset
-       */
-      int getHeight();
+      size_t getResourceSize() const;
 
       /**
        * Draws the specified tile to the coordinates specified

@@ -22,6 +22,7 @@ namespace shapes
       Rectangle();
       Rectangle(const Point2D& topLeft, const Size& size);
       Rectangle(const Point2D& topLeft, const Point2D& bottomRight);
+      Rectangle(int top, int left, int bottom, int right);
 
       /**
        * @return The area of the rectangle (width * height).

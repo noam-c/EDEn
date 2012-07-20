@@ -32,7 +32,7 @@ void EquipPane::EquipSlotModule::mouseClicked(gcn::MouseEvent& event)
    distributeActionEvent();
 }
 
-EquipPane::EquipPane(std::vector<EquipSlot*>& slotList, ItemListModel& equippableItemList, const gcn::Rectangle& rect) : MenuPane(rect), invalidated(false), equipSlots(slotList), equippableItems(equippableItemList), itemListBox(&equippableItemList)
+EquipPane::EquipPane(const std::vector<EquipSlot*>& slotList, ItemListModel& equippableItemList, const gcn::Rectangle& rect) : MenuPane(rect), invalidated(false), equipSlots(slotList), equippableItems(equippableItemList), itemListBox(&equippableItemList)
 {
    slotContainer.setNumberOfColumns(1);
    slotContainer.setHeight(rect.height / 2);

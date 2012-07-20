@@ -53,7 +53,7 @@ class Task
       /**
        *  @return the unique identifier of this Task.
        */
-      TaskId getTaskId();
+      TaskId getTaskId() const;
 
       /**
        *  Signals the scheduler that the Task has finished, and destroys

@@ -134,12 +134,12 @@ void DialogueController::advanceDialogue()
    mainDialogue->setText(dialogue);
 }
 
-bool DialogueController::dialogueComplete()
+bool DialogueController::dialogueComplete() const
 {
    return charsToShow == currLine->dialogue.size();
 }
 
-bool DialogueController::hasDialogue()
+bool DialogueController::hasDialogue() const
 {
    return currLine != NULL;
 }
@@ -159,7 +159,7 @@ void DialogueController::clearDialogue()
    mainDialogue->setText("");
 }
 
-int DialogueController::getMillisecondsPerCharacter()
+int DialogueController::getMillisecondsPerCharacter() const
 {
    int time = MILLISECONDS_PER_LETTER;
    if(fastMode)
@@ -257,7 +257,7 @@ DialogueController::Line::Line(LineType type, const std::string& dialogue, Task*
    }
 }
 
-bool DialogueController::Line::getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex)
+bool DialogueController::Line::getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex) const
 {
    if(openScriptBrackets.empty())
    {

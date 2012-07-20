@@ -17,24 +17,24 @@ const int debugFlag = DEBUG_PATHFINDER;
 const float Pathfinder::ROOT_2 = 1.41421356f;
 const float Pathfinder::INFINITY = std::numeric_limits<float>::infinity();
 
-shapes::Point2D Pathfinder::tileNumToCoords(int tileNum)
+shapes::Point2D Pathfinder::tileNumToCoords(int tileNum) const
 {
    div_t result = div(tileNum, collisionGridBounds.getWidth());
    return shapes::Point2D(result.rem, result.quot);
 }
 
-shapes::Point2D Pathfinder::tileNumToPixels(int tileNum)
+shapes::Point2D Pathfinder::tileNumToPixels(int tileNum) const
 {
    shapes::Point2D p = tileNumToCoords(tileNum);
    return p * movementTileSize;
 }
 
-int Pathfinder::coordsToTileNum(const shapes::Point2D& tileLocation)
+int Pathfinder::coordsToTileNum(const shapes::Point2D& tileLocation) const
 {
    return (tileLocation.y * collisionGridBounds.getWidth() + tileLocation.x);
 }
 
-int Pathfinder::pixelsToTileNum(const shapes::Point2D& pixelLocation)
+int Pathfinder::pixelsToTileNum(const shapes::Point2D& pixelLocation) const
 {
    return coordsToTileNum(pixelLocation / movementTileSize);
 }
@@ -129,12 +129,12 @@ void Pathfinder::initRoyFloydWarshallMatrices()
    }
 }
 
-Pathfinder::Path Pathfinder::findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst)
+Pathfinder::Path Pathfinder::findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst) const
 {
    return findRFWPath(src, dst);
 }
 
-Pathfinder::Path Pathfinder::findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size)
+Pathfinder::Path Pathfinder::findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const
 {
    return findAStarPath(entityGrid, src, dst, size);
 }
@@ -211,7 +211,7 @@ class Pathfinder::AStarPoint : public shapes::Point2D
       };
 };
 
-Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size)
+Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const
 {
    if(collisionGrid == NULL) return Path();
 
@@ -284,7 +284,7 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
    return path;
 }
 
-void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalMovement)
+void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalMovement) const
 {
    for(std::vector<shapes::Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
    {
@@ -327,7 +327,7 @@ void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileS
    }
 }
 
-Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shapes::Point2D& dst)
+Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shapes::Point2D& dst) const
 {
    Path path;
 

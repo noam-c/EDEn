@@ -11,6 +11,6 @@
 
 class ScriptException : public Exception
 {  
-}
+};
 
 #endif

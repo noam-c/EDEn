@@ -64,7 +64,7 @@ class Music : public Resource
        *
        * @return The size of the music resource in memory.
        */
-      size_t getSize();
+      size_t getResourceSize() const;
 
       /**
        * Play this song.

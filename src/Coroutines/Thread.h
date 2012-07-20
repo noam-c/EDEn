@@ -39,7 +39,7 @@ class Thread
       /**
        * @return the numeric identifier for this Thread.
        */
-      int getId();
+      int getId() const;
 
       /**
        * Resume this Thread, or run through its logic.

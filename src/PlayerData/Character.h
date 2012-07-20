@@ -64,7 +64,7 @@ class Character
     *
     * @return A JSON node containing the loaded character archetype.
     */
-   static Json::Value getArchetype(const std::string& archetypeId);
+   static Json::Value loadArchetype(const std::string& archetypeId);
 
    /**
     * Parse the portrait path from the character node.

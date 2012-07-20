@@ -79,7 +79,7 @@ class Scheduler
       /**
        * @return true iff there is a Thread currently running in the Scheduler
        */
-      bool hasRunningThread();
+      bool hasRunningThread() const;
 
       /**
        * Block a Thread on a specified instruction TicketId. Thread will be

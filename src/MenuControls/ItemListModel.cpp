@@ -9,7 +9,7 @@
 #include "Item.h"
 #include <sstream>
 
-void ItemListModel::setItems(ItemList& newList)
+void ItemListModel::setItems(const ItemList& newList)
 {
    itemList.assign(newList.begin(), newList.end());
 }
@@ -34,7 +34,7 @@ std::string ItemListModel::getElementAt(int i)
    return stream.str();
 }
 
-const Item* ItemListModel::getItemAt(int i)
+const Item* ItemListModel::getItemAt(int i) const
 {
    return ItemData::getInstance()->getItem(itemList[i].first);
 }

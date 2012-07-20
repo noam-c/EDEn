@@ -83,7 +83,7 @@ void TileEngine::clearNPCs()
    npcList.clear();
 }
 
-std::string TileEngine::getMapName()
+std::string TileEngine::getMapName() const
 {
    return entityGrid.getMapName();
 }

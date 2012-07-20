@@ -11,6 +11,11 @@
 
 #include "MovementDirection.h"
 
+namespace shapes
+{
+   struct Point2D;
+};
+
 class Spritesheet;
 class Animation;
 
@@ -91,10 +96,9 @@ class Sprite
       /**
        * Draws the sprite at the specified location.
        *
-       * @param x The x-location to draw at.
-       * @param y The y-location to draw at.
+       * @param point The location to draw at.
        */
-      void draw(int x, int y) const;
+      void draw(const shapes::Point2D& point) const;
 
       /**
        * Destructor.

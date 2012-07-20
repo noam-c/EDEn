@@ -111,7 +111,7 @@ class DialogueController
           *
           *  @return true iff there are embedded script brackets left in the string
           */
-         bool getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex);
+         bool getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex) const;
 
          /**
           *  Gets the next embedded script and removes it from the dialogue line.
@@ -160,7 +160,7 @@ class DialogueController
    /**
     * @return true iff the current line of dialogue is finished writing to screen
     */
-   bool dialogueComplete();
+   bool dialogueComplete() const;
 
    /**
     * Refresh the dialogue box to show enough letters on the screen for the amount of time passed.
@@ -194,7 +194,7 @@ class DialogueController
     * @return The amount of time (in milliseconds) to wait before
     *         adding another letter.
     */
-   int getMillisecondsPerCharacter();
+   int getMillisecondsPerCharacter() const;
 
    public:
 
@@ -219,7 +219,7 @@ class DialogueController
       /**
        * @return true iff there is currently a line of dialogue being shown.
        */
-      bool hasDialogue();
+      bool hasDialogue() const;
 
       /**
        * Enqueue a line of speech said by a character.

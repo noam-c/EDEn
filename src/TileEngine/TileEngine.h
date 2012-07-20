@@ -157,7 +157,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
       /**
        * @return The name of the currently loaded map.
        */
-      std::string getMapName();
+      std::string getMapName() const;
 
       /**
        * Handler for map location changes.

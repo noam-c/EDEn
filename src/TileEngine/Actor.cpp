@@ -68,7 +68,7 @@ void Actor::draw()
 {
    if(sprite)
    {
-      sprite->draw(pixelLoc.x, pixelLoc.y + TileEngine::TILE_SIZE);
+      sprite->draw(shapes::Point2D(pixelLoc.x, pixelLoc.y + TileEngine::TILE_SIZE));
    }
    
    if(!orders.empty())

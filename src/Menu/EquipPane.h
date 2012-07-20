@@ -39,7 +39,7 @@ class EquipPane : public MenuPane, public gcn::ActionListener
  
    bool invalidated;
    
-   std::vector<EquipSlot*>& equipSlots;
+   const std::vector<EquipSlot*>& equipSlots;
    ItemListModel& equippableItems;
 
    edwt::ListBox itemListBox;
@@ -69,7 +69,7 @@ class EquipPane : public MenuPane, public gcn::ActionListener
        * @param slotList The list of character slots to display in the equipment pane.
        * @param rect The preferred dimensions for this menu pane.
        */
-      EquipPane(std::vector<EquipSlot*>& slotList, ItemListModel& equippableItemList, const gcn::Rectangle& rect);
+      EquipPane(const std::vector<EquipSlot*>& slotList, ItemListModel& equippableItemList, const gcn::Rectangle& rect);
 
       void setModuleSelectListener(edwt::ModuleSelectListener* listener);
    

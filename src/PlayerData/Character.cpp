@@ -12,7 +12,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-Json::Value Character::getArchetype(const std::string& archetypeId)
+Json::Value Character::loadArchetype(const std::string& archetypeId)
 {
    const std::string path = std::string("data/characters/") + archetypeId + ".edc";
    DEBUG("Loading archetype %s in file %s", archetypeId.c_str(), path.c_str());
@@ -37,7 +37,7 @@ Json::Value Character::getArchetype(const std::string& archetypeId)
 
 Character::Character(const std::string& id) : id(id)
 {
-   Json::Value archetypeData = Character::getArchetype(id);
+   Json::Value archetypeData = Character::loadArchetype(id);
    name = archetypeData[NAME_ATTRIBUTE].asString();
    spritesheetId = archetypeData[SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
@@ -60,7 +60,7 @@ Character::Character(Json::Value& charToLoad)
       archetypeId = id;
    }
 
-   Json::Value archetypeData = Character::getArchetype(archetypeId);
+   Json::Value archetypeData = Character::loadArchetype(archetypeId);
    name = archetypeData[NAME_ATTRIBUTE].asString();
    spritesheetId = archetypeData[SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
