@@ -282,7 +282,7 @@ int ScriptEngine::runScript(Script* script)
 {
    scheduler.start(script);
 
-   if(scheduler.hasRunningThread())
+   if(scheduler.hasRunningCoroutine())
    {
       return scheduler.join(script);
    }
@@ -296,7 +296,7 @@ int ScriptEngine::runScriptString(const std::string& scriptString)
    StringScript* newScript = new StringScript(luaVM, scriptString);
    scheduler.start(newScript);
 
-   if(scheduler.hasRunningThread())
+   if(scheduler.hasRunningCoroutine())
    {
       return scheduler.join(newScript);
    }
@@ -304,12 +304,12 @@ int ScriptEngine::runScriptString(const std::string& scriptString)
    return 0;
 }
 
-void ScriptEngine::callFunction(lua_State* thread, const char* funcName)
+void ScriptEngine::callFunction(lua_State* coroutine, const char* funcName)
 {
-   // push the function onto the stack and then resume the thread from the
+   // push the function onto the stack and then resume the coroutine from the
    // start of the function 
-   lua_getfield(thread, LUA_GLOBALSINDEX, funcName);
-   lua_resume(thread, 0);
+   lua_getfield(coroutine, LUA_GLOBALSINDEX, funcName);
+   lua_resume(coroutine, 0);
 }
 
 std::string ScriptEngine::getScriptPath(const std::string& scriptName)

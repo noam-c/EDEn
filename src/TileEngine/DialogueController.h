@@ -10,7 +10,7 @@
 #include <queue>
 #include <string>
 
-#include "Thread.h"
+#include "Coroutine.h"
 #include "Task.h"
 
 namespace edwt
@@ -44,7 +44,7 @@ class DialogueController
    typedef edwt::TextBox DialogueBox;
 
    
-   class DialogueThread : public Thread
+   class DialogueCoroutine : public Coroutine
    {
       DialogueController& dialogueController;
       
@@ -52,9 +52,9 @@ class DialogueController
          /**
           * Constructor.
           *
-          * @param dialogueController The dialogue controller that this thread should control.
+          * @param dialogueController The dialogue controller that this coroutine should control.
           */
-         DialogueThread(DialogueController& dialogueController);
+         DialogueCoroutine(DialogueController& dialogueController);
          
          /**
           * Resumes the associated dialogue controller.
@@ -250,7 +250,7 @@ class DialogueController
        * of dialogue to reveal (it is shown letter by letter over time)
        *
        * @param timePassed The number of milliseconds that has passed since the last frame.
-       * @return false only, since this Thread does not end until end-of-life
+       * @return false only, since this Coroutine does not end until end-of-life
        */
       bool resume(long time);
 

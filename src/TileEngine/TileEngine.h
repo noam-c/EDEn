@@ -61,7 +61,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    /** The Scripting Engine used for the engine's scripting. */
    ScriptEngine* scriptEngine;
 
-   /** The Thread scheduler used by the tile engine. */
+   /** The Coroutine scheduler used by the tile engine. */
    Scheduler scheduler;
    
    /** The player data */

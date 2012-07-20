@@ -13,11 +13,11 @@
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueThread::DialogueThread(DialogueController& controller) : dialogueController(controller)
+DialogueController::DialogueCoroutine::DialogueCoroutine(DialogueController& controller) : dialogueController(controller)
 {
 }
 
-bool DialogueController::DialogueThread::resume(long timePassed)
+bool DialogueController::DialogueCoroutine::resume(long timePassed)
 {
    return dialogueController.resume(timePassed);
 }
@@ -28,7 +28,7 @@ DialogueController::DialogueController(edwt::Container& top, Scheduler& schedule
    initMainDialogue();
    clearDialogue();
 
-   scheduler.start(new DialogueThread(*this));
+   scheduler.start(new DialogueCoroutine(*this));
 }
 
 void DialogueController::initMainDialogue()

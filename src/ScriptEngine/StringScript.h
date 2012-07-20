@@ -20,11 +20,11 @@ class StringScript : public Script
    public:
       /**
        * Constructor.
-       * Creates a new Lua thread by forking the main VM, and then
-       * loads the specified script string into the new thread's stack.
+       * Creates a new Lua coroutine by forking the main VM, and then
+       * loads the specified script string into the new coroutine's stack.
        *
-       * @param luaVM The main Lua stack to fork a thread from.
-       * @param scriptString The Lua code that should be run on this thread.
+       * @param luaVM The main Lua stack to fork a coroutine from.
+       * @param scriptString The Lua code that should be run on this coroutine.
        */
       StringScript(lua_State* luaVM, const std::string& scriptString);
 

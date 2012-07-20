@@ -5,10 +5,10 @@ project( eden )
 set(HEADERS
   src/Audio/Music.h
   src/Audio/Sound.h
+  src/Coroutines/Coroutine.h
   src/Coroutines/Scheduler.h
   src/Coroutines/Task.h
   src/Coroutines/TaskId.h
-  src/Coroutines/Thread.h
   src/Coroutines/Timer.h
   src/DebugUtils.h
   src/edwt/Container.h
@@ -245,9 +245,9 @@ set(SOURCES
   src/json/jsoncpp.cpp
   src/Audio/Music.cpp
   src/Audio/Sound.cpp
+  src/Coroutines/Coroutine.cpp
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
-  src/Coroutines/Thread.cpp
   src/Coroutines/Timer.cpp
   src/edwt/Container.cpp
   src/edwt/DebugConsoleWindow.cpp

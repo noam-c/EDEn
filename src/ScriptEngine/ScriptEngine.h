@@ -45,12 +45,12 @@ class ScriptEngine
    PlayerData& playerData;
 
    /**
-    * The scheduler for the script threads
+    * The scheduler for the script coroutines
     */
    Scheduler& scheduler;
 
    /**
-    * The main Lua execution thread and stack
+    * The main Lua execution coroutine and stack
     */
    lua_State* luaVM;
 
@@ -77,7 +77,7 @@ class ScriptEngine
        *
        * @param tileEngine The tile engine to make calls to from scripts
        * @param playerData The player data that the scripts will reference
-       * @param scheduler The scheduler responsible for managing this engine's Script threads
+       * @param scheduler The scheduler responsible for managing this engine's Script coroutines
        */
       ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Scheduler& scheduler);
 
@@ -121,18 +121,18 @@ class ScriptEngine
       void setTileEngine(TileEngine* engine);
 
       /**
-       * Calls a specified function on a specified Lua thread.
+       * Calls a specified function on a specified Lua coroutine.
        * Because of the nature of Lua's argument pushing, passing an array of
        * arguments here will be complicated and may not be worth adding in.
        *
        * \todo We should add error handling in case the function doesn't exist
-       * in this thread.
+       * in this coroutine.
        *
-       * @param thread The thread to run the function on. This can be the main
-       * thread.
+       * @param coroutine The coroutine to run the function on. This can be the main
+       * coroutine.
        * @param funcName The name of the function to call.
        */
-      void callFunction(lua_State* thread, const char* funcName);
+      void callFunction(lua_State* coroutine, const char* funcName);
 
       /** 
        * Destructor. Cleans up used memory and closes the Lua VM,

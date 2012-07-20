@@ -70,13 +70,13 @@ class NPCScript : public Script
    public:
       /**
        * Constructor.
-       * Creates a new Lua thread by forking the main VM, and then
+       * Creates a new Lua coroutine by forking the main VM, and then
        * loads the specified script file's NPC functions into the Lua environment.
        * The functions are then moved from the environment globals table into
        * a unique table specifically reserved for this NPC.
        *
-       * @param luaVM The main Lua stack to fork a thread from.
-       * @param scriptPath The path to a script that should be run on this thread.
+       * @param luaVM The main Lua stack to fork a coroutine from.
+       * @param scriptPath The path to a script that should be run on this coroutine.
        */
       NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc);
 
@@ -96,7 +96,7 @@ class NPCScript : public Script
        *
        * @param timePassed the amount of time that has passed since the last frame.
        *
-       * @return true iff the NPC is finished and the thread should end.
+       * @return true iff the NPC is finished and the coroutine should end.
        */
       bool resume(long timePassed);
 
@@ -108,7 +108,7 @@ class NPCScript : public Script
       void activate();
 
       /**
-       * Signal that the NPC is finished, and its thread should no longer
+       * Signal that the NPC is finished, and its coroutine should no longer
        * execute.
        */
       void finish();

@@ -316,7 +316,7 @@ bool TileEngine::step()
    }
 
    bool done = false;
-   scheduler.runThreads(timePassed);
+   scheduler.runCoroutines(timePassed);
 
    handleInputEvents(done);
 

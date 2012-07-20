@@ -27,9 +27,9 @@ class ScriptEngine;
  * script state of an NPC's AI behaviour. An NPCScript runs based on whether 
  * or not the script is currently in the middle of a run or if the NPC itself
  * currently has instructions to work on.
- * If the script is not running and the NPC is idle, the NPCThread runs the
+ * If the script is not running and the NPC is idle, the NPCCoroutine runs the
  * NPC's idle function (if it exists).
- * The NPC itself is updated by Lua bindings, and the NPCThread is given time
+ * The NPC itself is updated by Lua bindings, and the NPCCoroutine is given time
  * to run by the Scheduler as necessary, and updates the NPC's instruction queue
  * via the script instructions.
  *
@@ -37,8 +37,8 @@ class ScriptEngine;
  */
 class NPC : public Actor
 {
-   /** The NPC's thread of execution */
-   NPCScript* npcThread;
+   /** The NPC's coroutine of execution */
+   NPCScript* npcCoroutine;
 
    public:
       /**

@@ -20,11 +20,11 @@ class FileScript : public Script
    public:
       /**
        * Constructor.
-       * Creates a new Lua thread by forking the main VM, and then
-       * loads the specified script file onto the new thread's stack.
+       * Creates a new Lua coroutine by forking the main VM, and then
+       * loads the specified script file onto the new coroutine's stack.
        *
-       * @param luaVM The main Lua stack to fork a thread from.
-       * @param scriptPath The path to a script that should be run on this thread.
+       * @param luaVM The main Lua stack to fork a coroutine from.
+       * @param scriptPath The path to a script that should be run on this coroutine.
        */
       FileScript(lua_State* luaVM, const std::string& scriptPath);
 

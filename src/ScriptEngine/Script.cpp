@@ -31,21 +31,21 @@ bool Script::runScript(int numArgs)
 
    running = true;
 
-   DEBUG("Resuming script with name %s, thread ID %d...", scriptName.c_str(), threadId);
-   DEBUG("Lua Thread Address: 0x%x", luaStack);
+   DEBUG("Resuming script with name %s, coroutine ID %d...", scriptName.c_str(), coroutineId);
+   DEBUG("Lua Coroutine Address: 0x%x", luaStack);
 
    int returnCode = lua_resume(luaStack, numArgs);
    switch(returnCode)
    {
       case 0:
       {
-         DEBUG("Script %d finished.", threadId);
+         DEBUG("Script %d finished.", coroutineId);
          running = false;
          return true;
       }
       case LUA_YIELD:
       {
-         DEBUG("Script %d yielded.", threadId);
+         DEBUG("Script %d yielded.", coroutineId);
          return false;
       }
       default:

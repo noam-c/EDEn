@@ -135,7 +135,7 @@ bool NPCScript::resume(long timePassed)
 
    if(running)
    {
-      DEBUG("NPC Thread %d resuming running script.", getId());
+      DEBUG("NPC Coroutine %d resuming running script.", getId());
       runScript();
    }
    else

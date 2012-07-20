@@ -6,258 +6,258 @@
 
 #include "Scheduler.h"
 #include "Task.h"
-#include "Thread.h"
+#include "Coroutine.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_SCHEDULER;
 
-Scheduler::Scheduler() : runningThread(NULL)
+Scheduler::Scheduler() : runningCoroutine(NULL)
 {
 }
 
 void Scheduler::printFinishedQueue()
 {
-   DEBUG("Finished Thread List:");
+   DEBUG("Finished Coroutine List:");
    DEBUG("---");
-   const int queueSize = finishedThreads.size();
+   const int queueSize = finishedCoroutines.size();
    for(int i = 0; i < queueSize; ++i)
    {
-      Thread* t = finishedThreads.front();
+      Coroutine* t = finishedCoroutines.front();
       DEBUG("\t%d at address 0x%x", t->getId(), t);
-      finishedThreads.pop();
-      finishedThreads.push(t);
+      finishedCoroutines.pop();
+      finishedCoroutines.push(t);
    }
    DEBUG("---");
 }
 
-void Scheduler::start(Thread* thread)
+void Scheduler::start(Coroutine* coroutine)
 {
-   DEBUG("Starting thread %d...", thread->getId());
+   DEBUG("Starting coroutine %d...", coroutine->getId());
 
-   // Ensure that this thread is not already scheduled
-   if(readyThreads.find(thread) == readyThreads.end()
-      && unstartedThreads.find(thread) == unstartedThreads.end())
+   // Ensure that this coroutine is not already scheduled
+   if(readyCoroutines.find(coroutine) == readyCoroutines.end()
+      && unstartedCoroutines.find(coroutine) == unstartedCoroutines.end())
    {
-      // Insert the thread into the unstarted thread list
-      unstartedThreads.insert(thread);
+      // Insert the coroutine into the unstarted coroutine list
+      unstartedCoroutines.insert(coroutine);
    }
 }
 
-bool Scheduler::hasRunningThread() const
+bool Scheduler::hasRunningCoroutine() const
 {
-   return runningThread != NULL;
+   return runningCoroutine != NULL;
 }
 
 int Scheduler::block(Task* pendingTask)
 {
-   DEBUG("Blocking thread %d on task %d...", runningThread->getId(), pendingTask->getTaskId());
+   DEBUG("Blocking coroutine %d on task %d...", runningCoroutine->getId(), pendingTask->getTaskId());
 
-   // Find the thread in the ready list
-   if(readyThreads.find(runningThread) != readyThreads.end())
+   // Find the coroutine in the ready list
+   if(readyCoroutines.find(runningCoroutine) != readyCoroutines.end())
    {
-      // If the thread is in the ready list, push it into the finished thread list
-      DEBUG("Putting thread %d in the finish list", runningThread->getId());
-      finishedThreads.push(runningThread);
+      // If the coroutine is in the ready list, push it into the finished coroutine list
+      DEBUG("Putting coroutine %d in the finish list", runningCoroutine->getId());
+      finishedCoroutines.push(runningCoroutine);
       printFinishedQueue();
 
-      // Add the thread to the blocked list
-      blockedThreads[pendingTask->getTaskId()] = runningThread;
+      // Add the coroutine to the blocked list
+      blockedCoroutines[pendingTask->getTaskId()] = runningCoroutine;
    }
    else
    {
-      T_T("Attempting to block a thread that isn't ready/running!");
+      T_T("Attempting to block a coroutine that isn't ready/running!");
    }
 
-   DEBUG("Yielding: %d", runningThread->getId());
-   return runningThread->yield();
+   DEBUG("Yielding: %d", runningCoroutine->getId());
+   return runningCoroutine->yield();
 }
 
 void Scheduler::taskDone(TaskId finishedTask)
 {
    DEBUG("Task %d finished.", finishedTask);
 
-   Thread* resumingThread = blockedThreads[finishedTask];
-   if(resumingThread)
+   Coroutine* resumingCoroutine = blockedCoroutines[finishedTask];
+   if(resumingCoroutine)
    {
-      DEBUG("Putting thread %d on resume list...", resumingThread->getId());
+      DEBUG("Putting coroutine %d on resume list...", resumingCoroutine->getId());
 
-      // Put the resumed thread onto the unstarted stack
-      unstartedThreads.insert(resumingThread);
+      // Put the resumed coroutine onto the unstarted stack
+      unstartedCoroutines.insert(resumingCoroutine);
 
-      // Remove the thread from the block list
-      blockedThreads[finishedTask] = NULL;
+      // Remove the coroutine from the block list
+      blockedCoroutines[finishedTask] = NULL;
    }
 }
 
-int Scheduler::join(Thread* thread)
+int Scheduler::join(Coroutine* coroutine)
 {
-   DEBUG("Joining thread %d on thread %d...", runningThread->getId(), thread->getId());
+   DEBUG("Joining coroutine %d on coroutine %d...", runningCoroutine->getId(), coroutine->getId());
 
-   // Find the thread in the ready list
-   if(readyThreads.find(runningThread) != readyThreads.end())
+   // Find the coroutine in the ready list
+   if(readyCoroutines.find(runningCoroutine) != readyCoroutines.end())
    {
-      // If the thread is in the ready list, push it into the finished thread list
-      DEBUG("Putting thread %d in the finish list", runningThread->getId());
-      finishedThreads.push(runningThread);
+      // If the coroutine is in the ready list, push it into the finished coroutine list
+      DEBUG("Putting coroutine %d in the finish list", runningCoroutine->getId());
+      finishedCoroutines.push(runningCoroutine);
       printFinishedQueue();
 
-      // Add the thread to the joining list
-      joiningThreads[thread] = runningThread;
+      // Add the coroutine to the joining list
+      joiningCoroutines[coroutine] = runningCoroutine;
    }
    else
    {
-      T_T("Attempting to suspend a thread that isn't ready/running!");
+      T_T("Attempting to suspend a coroutine that isn't ready/running!");
    }
 
-   DEBUG("Yielding: %d", runningThread->getId());
-   return runningThread->yield();
+   DEBUG("Yielding: %d", runningCoroutine->getId());
+   return runningCoroutine->yield();
 }
 
-void Scheduler::threadDone(Thread* thread)
+void Scheduler::coroutineDone(Coroutine* coroutine)
 {
-   // A thread has completed execution,
+   // A coroutine has completed execution,
    // so check if anyone is waiting for it to finish
-   Thread* resumingThread = joiningThreads[thread];
+   Coroutine* resumingCoroutine = joiningCoroutines[coroutine];
 
-   if(resumingThread)
+   if(resumingCoroutine)
    {
-      // If there is such a thread, put it on the unstarted thread list again
-      DEBUG("Putting thread %d on resume list...", resumingThread->getId());
-      unstartedThreads.insert(resumingThread);
+      // If there is such a coroutine, put it on the unstarted coroutine list again
+      DEBUG("Putting coroutine %d on resume list...", resumingCoroutine->getId());
+      unstartedCoroutines.insert(resumingCoroutine);
 
-      // Clear the joining thread out of the joining list
-      joiningThreads[thread] = NULL;
+      // Clear the joining coroutine out of the joining list
+      joiningCoroutines[coroutine] = NULL;
    }
 }
 
-void Scheduler::finished(Thread* thread)
+void Scheduler::finished(Coroutine* coroutine)
 {
-   // Check for any joins on this thread, then push it onto the finished
-   // thread list
-   threadDone(thread);
-   DEBUG("Putting thread %d in the finish list", thread->getId());
+   // Check for any joins on this coroutine, then push it onto the finished
+   // coroutine list
+   coroutineDone(coroutine);
+   DEBUG("Putting coroutine %d in the finish list", coroutine->getId());
    printFinishedQueue();
-   finishedThreads.push(thread);
-   deletedThreads.push(thread);
+   finishedCoroutines.push(coroutine);
+   deletedCoroutines.push(coroutine);
 }
 
-void Scheduler::runThreads(long timePassed)
+void Scheduler::runCoroutines(long timePassed)
 {
-   // If there are any threads on the unstarted list, then put them all into
+   // If there are any coroutines on the unstarted list, then put them all into
    // the ready list and clear the unstarted list
-   if(!unstartedThreads.empty())
+   if(!unstartedCoroutines.empty())
    {
-      readyThreads.insert(unstartedThreads.begin(), unstartedThreads.end());
-      unstartedThreads.clear();
+      readyCoroutines.insert(unstartedCoroutines.begin(), unstartedCoroutines.end());
+      unstartedCoroutines.clear();
    }
 
-   // Run each thread until either it yields or finishes execution
-   for(ThreadList::iterator iter = readyThreads.begin(); iter != readyThreads.end(); ++iter)
+   // Run each coroutine until either it yields or finishes execution
+   for(CoroutineList::iterator iter = readyCoroutines.begin(); iter != readyCoroutines.end(); ++iter)
    {
-      // Set the running thread to the next thread
-      runningThread = *iter;
+      // Set the running coroutine to the next coroutine
+      runningCoroutine = *iter;
 
       try
       {
-         // Run/resume the thread
-         bool scriptIsFinished = runningThread->resume(timePassed);
+         // Run/resume the coroutine
+         bool scriptIsFinished = runningCoroutine->resume(timePassed);
    
          if(scriptIsFinished)
          {
-            finished(runningThread);
+            finished(runningCoroutine);
          }
       }
       catch(Exception& e)
       {
          // This coroutine malfunctioned in some terminal way. We should not run it again.
          /** \todo These debug messages cause a segmentation fault when a map script throws an exception. */
-         DEBUG("Thread failure encountered! Removing thread %d", runningThread->getId());
+         DEBUG("Coroutine failure encountered! Removing coroutine %d", runningCoroutine->getId());
          DEBUG("Reason: %s", e.getMessage().c_str());
          finished(*iter);
       }
    }
 
-   // Clear the running thread since none are running now
-   runningThread = NULL;
+   // Clear the running coroutine since none are running now
+   runningCoroutine = NULL;
 
-   // If there are any finished/blocked threads,
-   // remove them from the ready thread list
-   while(!finishedThreads.empty())
+   // If there are any finished/blocked coroutines,
+   // remove them from the ready coroutine list
+   while(!finishedCoroutines.empty())
    {
-      Thread* thread = finishedThreads.front();
-      DEBUG("Removing thread %d from ready list...", thread->getId());
+      Coroutine* coroutine = finishedCoroutines.front();
+      DEBUG("Removing coroutine %d from ready list...", coroutine->getId());
 
-      readyThreads.erase(thread);
-      finishedThreads.pop();
+      readyCoroutines.erase(coroutine);
+      finishedCoroutines.pop();
    }
 
-   // If there are any threads that are done and need deleting, delete them
-   while(!deletedThreads.empty())
+   // If there are any coroutines that are done and need deleting, delete them
+   while(!deletedCoroutines.empty())
    {
-      Thread* thread = deletedThreads.front();
-      DEBUG("Deleting thread %d", thread->getId());
-      delete thread;
-      deletedThreads.pop();
+      Coroutine* coroutine = deletedCoroutines.front();
+      DEBUG("Deleting coroutine %d", coroutine->getId());
+      delete coroutine;
+      deletedCoroutines.pop();
    }
 }
 
 Scheduler::~Scheduler()
 {
-   // Delete all the blocked threads.
+   // Delete all the blocked coroutines.
    BlockList::iterator blockListIter;
-   for(blockListIter = blockedThreads.begin(); blockListIter != blockedThreads.end(); ++blockListIter)
+   for(blockListIter = blockedCoroutines.begin(); blockListIter != blockedCoroutines.end(); ++blockListIter)
    {
-      Thread* threadToDelete = blockListIter->second;
-      if(threadToDelete != NULL)
+      Coroutine* coroutineToDelete = blockListIter->second;
+      if(coroutineToDelete != NULL)
       {
-         delete threadToDelete;
+         delete coroutineToDelete;
       }
    }
 
-   // Delete all the threads waiting on a join.
+   // Delete all the coroutines waiting on a join.
    JoinList::iterator joinListIter;
-   for(joinListIter = joiningThreads.begin(); joinListIter != joiningThreads.end(); ++joinListIter)
+   for(joinListIter = joiningCoroutines.begin(); joinListIter != joiningCoroutines.end(); ++joinListIter)
    {
-      Thread* threadToDelete = joinListIter->second;
-      if(threadToDelete != NULL)
+      Coroutine* coroutineToDelete = joinListIter->second;
+      if(coroutineToDelete != NULL)
       {
-         delete threadToDelete;
+         delete coroutineToDelete;
       }
    }
 
-   // Delete all the unstarted threads.
-   ThreadList::iterator unstartedListIter;
-   for(unstartedListIter = unstartedThreads.begin(); unstartedListIter != unstartedThreads.end(); ++unstartedListIter)
+   // Delete all the unstarted coroutines.
+   CoroutineList::iterator unstartedListIter;
+   for(unstartedListIter = unstartedCoroutines.begin(); unstartedListIter != unstartedCoroutines.end(); ++unstartedListIter)
    {
-      Thread* threadToDelete = *unstartedListIter;
-      if(threadToDelete != NULL)
+      Coroutine* coroutineToDelete = *unstartedListIter;
+      if(coroutineToDelete != NULL)
       {
-         delete threadToDelete;
+         delete coroutineToDelete;
       }
    }
 
-   // Delete all the ready threads.
-   ThreadList::iterator readyListIter;
-   for(readyListIter = readyThreads.begin(); readyListIter != readyThreads.end(); ++readyListIter)
+   // Delete all the ready coroutines.
+   CoroutineList::iterator readyListIter;
+   for(readyListIter = readyCoroutines.begin(); readyListIter != readyCoroutines.end(); ++readyListIter)
    {
-      Thread* threadToDelete = *readyListIter;
-      if(threadToDelete != NULL)
+      Coroutine* coroutineToDelete = *readyListIter;
+      if(coroutineToDelete != NULL)
       {
-         delete threadToDelete;
+         delete coroutineToDelete;
       }
    }
 
-   // Delete all the finished threads.
-   while(!finishedThreads.empty())
+   // Delete all the finished coroutines.
+   while(!finishedCoroutines.empty())
    {
-      delete finishedThreads.front();
-      finishedThreads.pop();
+      delete finishedCoroutines.front();
+      finishedCoroutines.pop();
    }
 
-   // Delete all the threads waiting to be destroyed.
-   while(!deletedThreads.empty())
+   // Delete all the coroutines waiting to be destroyed.
+   while(!deletedCoroutines.empty())
    {
-      delete deletedThreads.front();
-      deletedThreads.pop();
+      delete deletedCoroutines.front();
+      deletedCoroutines.pop();
    }
 }
