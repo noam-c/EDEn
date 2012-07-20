@@ -23,7 +23,8 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_ENTITY_GRID;
 
-//#define DRAW_ENTITY_GRID
+// Define as 1 to draw the entity grid's state instead of the map
+#define DRAW_ENTITY_GRID 0
 
 // Movement tile size can be set to a divisor of drawn tile size to increase the pathfinding graph size
 // For now, no need for the additional granularity
@@ -402,55 +403,58 @@ void EntityGrid::drawBackground(int y) const
 {
    if(map == NULL) return;
 
-#ifdef DRAW_ENTITY_GRID
-   for(unsigned int x = 0; x < collisionMapBounds.getWidth(); ++x)
+   if(DRAW_ENTITY_GRID)
    {
-      float destLeft = float(x * MOVEMENT_TILE_SIZE);
-      float destRight = float((x + 1) * MOVEMENT_TILE_SIZE);
-      float destTop = float(y * MOVEMENT_TILE_SIZE);
-      float destBottom = float((y + 1) * MOVEMENT_TILE_SIZE);
-
-      glDisable(GL_TEXTURE_2D);
-      glBegin(GL_QUADS);
-
-      switch(collisionMap[y][x].entityType)
+      for(unsigned int x = 0; x < collisionMapBounds.getWidth(); ++x)
       {
-         case TileState::FREE:
-         {
-            glColor3f(0.0f, 0.5f, 0.0f);
-            break;
-         }
-         case TileState::ACTOR:
-         {
-            if(collisionMap[y][x].entity == NULL)
-            {
-               glColor3f(0.5f, 0.0f, 0.0f);
-            }
-            else
-            {
-               glColor3f(0.0f, 0.0f, 0.5f);
-            }
-            break;
-         }
-         case TileState::OBSTACLE:
-         default:
-         {
-            glColor3f(0.5f, 0.5f, 0.0f);
-            break;
-         }
-      }
+         float destLeft = float(x * MOVEMENT_TILE_SIZE);
+         float destRight = float((x + 1) * MOVEMENT_TILE_SIZE);
+         float destTop = float(y * MOVEMENT_TILE_SIZE);
+         float destBottom = float((y + 1) * MOVEMENT_TILE_SIZE);
 
-      glVertex3f(destLeft, destTop, 0.0f);
-      glVertex3f(destRight, destTop, 0.0f);
-      glVertex3f(destRight, destBottom, 0.0f);
-      glVertex3f(destLeft, destBottom, 0.0f);
-      glColor3f(1.0f, 1.0f, 1.0f);
-      glEnd();
-      glEnable(GL_TEXTURE_2D);
+         glDisable(GL_TEXTURE_2D);
+         glBegin(GL_QUADS);
+
+         switch(collisionMap[y][x].entityType)
+         {
+            case TileState::FREE:
+            {
+               glColor3f(0.0f, 0.5f, 0.0f);
+               break;
+            }
+            case TileState::ACTOR:
+            {
+               if(collisionMap[y][x].entity == NULL)
+               {
+                  glColor3f(0.5f, 0.0f, 0.0f);
+               }
+               else
+               {
+                  glColor3f(0.0f, 0.0f, 0.5f);
+               }
+               break;
+            }
+            case TileState::OBSTACLE:
+            default:
+            {
+               glColor3f(0.5f, 0.5f, 0.0f);
+               break;
+            }
+         }
+
+         glVertex3f(destLeft, destTop, 0.0f);
+         glVertex3f(destRight, destTop, 0.0f);
+         glVertex3f(destRight, destBottom, 0.0f);
+         glVertex3f(destLeft, destBottom, 0.0f);
+         glColor3f(1.0f, 1.0f, 1.0f);
+         glEnd();
+         glEnable(GL_TEXTURE_2D);
+      }
    }
-#else
-   map->drawBackground(y);
-#endif
+   else
+   {
+      map->drawBackground(y);
+   }
 }
 
 void EntityGrid::drawForeground(int y) const

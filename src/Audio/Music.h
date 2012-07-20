@@ -13,8 +13,8 @@
 /** \todo Get rid of the MUSIC_OFF macro usage once an options menu with
  * persistence is successfully implemented.
  */
-// Uncomment this macro to turn off music
-#define MUSIC_OFF
+// Define this macro as 1 to turn off music
+#define MUSIC_OFF 1
 
 /**
  * This Resource represents a song, and provides an interface for playing,

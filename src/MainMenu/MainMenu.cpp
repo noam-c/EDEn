@@ -73,9 +73,7 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
       top->add(titleLabel, 400 - titleLabel->getWidth() / 2, 50);
       top->add(actionsListBox, 400 - actionsListBox->getWidth() / 2, 600 - (actionsListBox->getHeight() + 50));
 
-      #ifndef MUSIC_OFF
       music = ResourceLoader::getMusic("title.mp3");
-      #endif
    }
    catch (gcn::Exception& e)
    {

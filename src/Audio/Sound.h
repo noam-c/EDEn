@@ -16,8 +16,8 @@ class Task;
 /** \todo Get rid of the SOUND_OFF macro usage once an options menu with
  * persistence is successfully implemented.
  */
-// Uncomment this macro to turn off sound
-//#define SOUND_OFF
+// Define this macro as 1 to turn off sound
+#define SOUND_OFF 0
 
 /**
  * This Resource represents a sound, and provides an interface for playing

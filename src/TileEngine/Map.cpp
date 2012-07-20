@@ -20,7 +20,8 @@
 
 const int debugFlag = DEBUG_RES_LOAD | DEBUG_ENTITY_GRID;
 
-//#define DRAW_PASSIBILITY
+// Define as 1 to have the game draw the map's passibility matrix
+#define DRAW_PASSIBILITY 0
 
 Map::Map()
 {
@@ -293,30 +294,33 @@ void Map::step(long timePassed) const
 
 void Map::drawBackground(int row) const
 {
-#ifdef DRAW_PASSIBILITY
-   const unsigned int width = bounds.getWidth();
-   const unsigned int height = bounds.getHeight();
-   
-   for(unsigned int column = 0; column < width; ++column)
+   if(DRAW_PASSIBILITY)
    {
-      if(isPassible(column, row))
+      const unsigned int width = bounds.getWidth();
+      const unsigned int height = bounds.getHeight();
+
+      for(unsigned int column = 0; column < width; ++column)
       {
-         Tileset::drawColorToTile(column, row, 0.0f, 1.0f, 0.0f);
-      }
-      else
-      {
-         Tileset::drawColorToTile(column, row, 1.0f, 0.0f, 0.0f);
+         if(isPassible(column, row))
+         {
+            Tileset::drawColorToTile(column, row, 0.0f, 1.0f, 0.0f);
+         }
+         else
+         {
+            Tileset::drawColorToTile(column, row, 1.0f, 0.0f, 0.0f);
+         }
       }
    }
-#else
-   bool firstLayer = true;
-   std::vector<Layer*>::const_iterator iter;
-   for(iter = backgroundLayers.begin(); iter != backgroundLayers.end(); ++iter)
+   else
    {
-      (*iter)->draw(row, !firstLayer);
-      firstLayer = false;
+      bool firstLayer = true;
+      std::vector<Layer*>::const_iterator iter;
+      for(iter = backgroundLayers.begin(); iter != backgroundLayers.end(); ++iter)
+      {
+         (*iter)->draw(row, !firstLayer);
+         firstLayer = false;
+      }
    }
-#endif
 }
 
 void Map::drawForeground(int row) const

@@ -14,7 +14,8 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_NPC;
 
-//#define DRAW_PATH
+// Define as 1 to draw the NPC's projected path to the screen
+#define DRAW_PATH 0
 
 Actor::MoveOrder::MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid)
 : Order(actor), pathInitialized(false), movementBegun(false), dst(destination), entityGrid(entityGrid), cumulativeDistanceCovered(0)
@@ -200,19 +201,20 @@ bool Actor::MoveOrder::perform(long timePassed)
 
 void Actor::MoveOrder::draw()
 {
-#if DRAW_PATH
-   if(path.empty()) return;
-
-   glDisable(GL_TEXTURE_2D);
-   glColor3f(1.0f, 0.0f, 0.0f);
-   glBegin(GL_LINE_STRIP);
-   for(EntityGrid::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
+   if(DRAW_PATH)
    {
-      shapes::Point2D point(iter->x + TileEngine::TILE_SIZE / 2, iter->y + TileEngine::TILE_SIZE / 2);
-      glVertex3d(point.x, point.y, 0);
+      if(path.empty()) return;
+
+      glDisable(GL_TEXTURE_2D);
+      glColor3f(1.0f, 0.0f, 0.0f);
+      glBegin(GL_LINE_STRIP);
+      for(EntityGrid::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
+      {
+         shapes::Point2D point(iter->x + TileEngine::TILE_SIZE / 2, iter->y + TileEngine::TILE_SIZE / 2);
+         glVertex3d(point.x, point.y, 0);
+      }
+      glEnd();
+
+      glEnable(GL_TEXTURE_2D);
    }
-   glEnd();
-   
-   glEnable(GL_TEXTURE_2D);
-#endif
 }

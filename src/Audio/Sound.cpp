@@ -57,8 +57,7 @@ size_t Sound::getResourceSize() const
 
 void Sound::play(Task* task)
 {
-#ifndef SOUND_OFF
-   if(sound == NULL)
+   if(SOUND_OFF || sound == NULL)
    {
       if(task)
       {
@@ -76,7 +75,6 @@ void Sound::play(Task* task)
 
    playingList[playingChannel] = this;
    playTask = task;
-#endif
 }
 
 void Sound::stop()

@@ -60,8 +60,7 @@ void Music::stopMusic()
 
 void Music::play()
 {
-#ifndef MUSIC_OFF
-   if(music == NULL) return;
+   if(MUSIC_OFF || music == NULL) return;
 
    if(!isPlaying(this))
    {
@@ -71,7 +70,6 @@ void Music::play()
          DEBUG("There was a problem playing the music: %s", Mix_GetError());
       }
    }
-#endif
 }
 
 Music::~Music()
