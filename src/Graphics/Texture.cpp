@@ -71,7 +71,7 @@ void Texture::bind()
    glBindTexture(GL_TEXTURE_2D, textureHandle);
 }
 
-const shapes::Size& Texture::getSize()
+const shapes::Size& Texture::getSize() const
 {
    return size;
 }

@@ -325,13 +325,14 @@ void Map::drawBackground(int row) const
 
 void Map::drawForeground(int row) const
 {
-#ifndef DRAW_PASSIBILITY
-   std::vector<Layer*>::const_iterator iter;
-   for(iter = foregroundLayers.begin(); iter != foregroundLayers.end(); ++iter)
+   if(!DRAW_PASSIBILITY)
    {
-      (*iter)->draw(row, true);
+      std::vector<Layer*>::const_iterator iter;
+      for(iter = foregroundLayers.begin(); iter != foregroundLayers.end(); ++iter)
+      {
+         (*iter)->draw(row, true);
+      }
    }
-#endif
 }
 
 Map::~Map()
