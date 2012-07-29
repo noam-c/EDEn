@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.5)
 
 project( eden )
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
+
 set(HEADERS
   src/Audio/Music.h
   src/Audio/Sound.h
@@ -142,6 +144,8 @@ set(HEADERS
   src/ResourceLoader/Resource.h
   src/ResourceLoader/ResourceKey.h
   src/ResourceLoader/ResourceLoader.h
+  src/rocket/ShellRenderInterfaceOpenGL.h
+  src/rocket/EdenRocketSystem.h
   src/ScriptEngine/FileScript.h
   src/ScriptEngine/NPCScript.h
   src/ScriptEngine/Script.h
@@ -297,6 +301,8 @@ set(SOURCES
   src/PlayerData/Messages/RosterUpdateMessage.cpp
   src/ResourceLoader/Resource.cpp
   src/ResourceLoader/ResourceLoader.cpp
+  src/rocket/ShellRenderInterfaceOpenGL.cpp
+  src/rocket/EdenRocketSystem.cpp
   src/Shapes/Size.cpp
   src/Shapes/Point2D.cpp
   src/Shapes/Rectangle.cpp
@@ -348,7 +354,7 @@ set(SOURCES
   src/Graphics/Texture.cpp
 )
 
-SET(SOURCE_GROUP_DELIMITER "/")
+set(SOURCE_GROUP_DELIMITER "/")
 
 source_group("//" REGULAR_EXPRESSION src/[^/]*)
 source_group(Audio REGULAR_EXPRESSION src/Audio/.*)
@@ -363,6 +369,7 @@ source_group(Messaging REGULAR_EXPRESSION src/Messaging/.*)
 source_group(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
 source_group("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
 source_group(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
+source_group(rocket REGULAR_EXPRESSION src/rocket/.*)
 source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
 source_group(Shapes REGULAR_EXPRESSION src/Shapes/.*)
 source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
@@ -388,6 +395,7 @@ include_directories(
   src/PlayerData
   src/PlayerData/Messages
   src/ResourceLoader
+  src/rocket
   src/ScriptEngine
   src/Shapes
   src/Sprites
@@ -408,7 +416,7 @@ add_definitions(
 add_executable( eden ${SOURCES} ${HEADERS} )
 
 IF(WIN32)
-	target_link_libraries( eden SDLmain lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
+	target_link_libraries( eden SDLmain rocket lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
 ELSE(WIN32)
 	INCLUDE(FindOpenGL)
 	INCLUDE(FindSDL)
@@ -416,9 +424,11 @@ ELSE(WIN32)
 	INCLUDE(FindSDL_ttf)
 	INCLUDE(FindSDL_mixer)
 	INCLUDE(FindLua51)
+	INCLUDE(FindLibRocket)
 
 	set(INCL_HEADERS
 	  ${LUA_INCLUDE_DIR}
+	  ${ROCKET_INCLUDE_DIR}
 	  ${SDL_INCLUDE_DIR}
 	  ${SDLIMAGE_INCLUDE_DIR}
 	  ${SDLTTF_INCLUDE_DIR}
@@ -428,6 +438,6 @@ ELSE(WIN32)
 
 	include_directories(BEFORE SYSTEM ${INCL_HEADERS})
 
-	target_link_libraries( eden ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )
+	target_link_libraries( eden ${LIBROCKET_LIBRARY} ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )
 ENDIF(WIN32)
 

@@ -19,6 +19,8 @@
 #include "StringListModel.h"
 #include "ListBox.h"
 
+#include <Rocket/Core.h>
+
 #include "ExecutionStack.h"
 #include "SDL_image.h"
 #include "DebugUtils.h"
@@ -27,22 +29,18 @@ const int debugFlag = DEBUG_TITLE;
 
 enum MainMenuActions
 {
-	NEW_GAME_ACTION,
-	LOAD_GAME_ACTION,
-	OPTIONS_ACTION,
-	ABOUT_ACTION,
-	QUIT_GAME_ACTION,
-	MENU_PROTOTYPE_ACTION,
+   NEW_GAME_ACTION,
+   LOAD_GAME_ACTION,
+   OPTIONS_ACTION,
+   ABOUT_ACTION,
+   QUIT_GAME_ACTION,
+   MENU_PROTOTYPE_ACTION,
 };
 
 MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
 {
    try
    {
-      bg = new gcn::Icon("data/images/splash.jpg");
-      bg->setDimension(top->getDimension());
-      top->add(bg,0,0);
-
       populateOpsList();
 
       titleLabel = new edwt::Label("Exodus Draconis Engine");
@@ -74,6 +72,14 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
       top->add(actionsListBox, 400 - actionsListBox->getWidth() / 2, 600 - (actionsListBox->getHeight() + 50));
 
       music = ResourceLoader::getMusic("title.mp3");
+
+      rocketContext = Rocket::Core::CreateContext("title", Rocket::Core::Vector2i(GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight()));
+      titleDocument = rocketContext->LoadDocument("data/gui/title.rml");
+
+      if(titleDocument != NULL)
+      {
+         titleDocument->Show();
+      }
    }
    catch (gcn::Exception& e)
    {
@@ -115,11 +121,14 @@ bool MainMenu::step()
 
    bool done = false;
 
-#ifndef MUSIC_OFF
-   music->play();
-#endif
+   if (!MUSIC_OFF)
+   {
+      music->play();
+   }
 
    waitForInputEvent(done);
+
+   rocketContext->Update();
 
    return !done;
 }
@@ -208,21 +217,28 @@ void MainMenu::waitForInputEvent(bool& finishState)
    }
 
    // If the main menu didn't consume this event, then propagate to the generic input handling
-   handleEvent(event);
+   //handleEvent(event);
 }
 
 void MainMenu::draw()
 {
    /* Don't run too fast */
    SDL_Delay (1);
+
+   rocketContext->Render();
 }
 
 MainMenu::~MainMenu()
 {
-   Music::fadeOutMusic(1000);
+   if (!MUSIC_OFF)
+   {
+      Music::fadeOutMusic(1000);
+   }
+
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 
-   delete bg;
+   rocketContext->RemoveReference();
+
    delete actionsListBox;
    delete titleLabel;
    delete actionsFont;

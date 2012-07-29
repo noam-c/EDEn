@@ -14,6 +14,7 @@
 #include "guichan/sdl.hpp"
 #include "guichan/opengl.hpp"
 #include "guichan/opengl/openglsdlimageloader.hpp"
+#include <Rocket/Core.h>
 #include "Container.h"
 #include "Size.h"
 #include "OpenGLTTF.h"
@@ -31,6 +32,9 @@ void GraphicsUtil::initialize()
 
    initSDL();
    openGLExtensions.initialize();
+   Rocket::Core::SetSystemInterface(&rocketSystemInterface);
+   Rocket::Core::SetRenderInterface(&rocketRenderInterface);
+   Rocket::Core::Initialise();
    initGuichan();
 }
 

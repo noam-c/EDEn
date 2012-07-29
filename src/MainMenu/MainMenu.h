@@ -10,6 +10,15 @@
 #include "GameState.h"
 #include "guichan.hpp"
 
+namespace Rocket
+{
+   namespace Core
+   {
+      class Context;
+      class ElementDocument;
+   };
+};
+
 namespace edwt
 {
    class StringListModel;
@@ -38,6 +47,12 @@ class MainMenu: public GameState, public gcn::ActionListener, public gcn::Select
 
    /** Sound for picking an option */
    Sound* chooseSound;
+
+   /** The Rocket context used to render the title screen */
+   Rocket::Core::Context* rocketContext;
+
+   /** The title screen RML document */
+   Rocket::Core::ElementDocument* titleDocument;
 
    /** The main title on top of the title screen */
    edwt::Label* titleLabel;
