@@ -10,8 +10,8 @@
 #include "Singleton.h"
 
 #include "OpenGLExtensions.h"
-#include "EdenRocketSystem.h"
-#include "ShellRenderInterfaceOpenGL.h"
+#include "EdenRocketRenderInterface.h"
+#include "EdenRocketSystemInterface.h"
 
 struct SDL_Surface;
 union SDL_Event;
@@ -75,11 +75,11 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
    /** The global default font */
    edwt::OpenGLTrueTypeFont* font;
 
-   /** The system interface that Rocket will use. */
-   EdenRocketSystem rocketSystemInterface;
-
    /** The render interface that Rocket will use. */
-   ShellRenderInterfaceOpenGL rocketRenderInterface;
+   EdenRocketRenderInterface rocketRenderInterface;
+
+   /** The system interface that Rocket will use. */
+   EdenRocketSystemInterface rocketSystemInterface;
 
    /** The x-offset to draw at (in pixels). */
    int currentXOffset;

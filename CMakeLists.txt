@@ -144,8 +144,8 @@ set(HEADERS
   src/ResourceLoader/Resource.h
   src/ResourceLoader/ResourceKey.h
   src/ResourceLoader/ResourceLoader.h
-  src/rocket/ShellRenderInterfaceOpenGL.h
-  src/rocket/EdenRocketSystem.h
+  src/rocket/EdenRocketRenderInterface.h
+  src/rocket/EdenRocketSystemInterface.h
   src/ScriptEngine/FileScript.h
   src/ScriptEngine/NPCScript.h
   src/ScriptEngine/Script.h
@@ -301,8 +301,8 @@ set(SOURCES
   src/PlayerData/Messages/RosterUpdateMessage.cpp
   src/ResourceLoader/Resource.cpp
   src/ResourceLoader/ResourceLoader.cpp
-  src/rocket/ShellRenderInterfaceOpenGL.cpp
-  src/rocket/EdenRocketSystem.cpp
+  src/rocket/EdenRocketRenderInterface.cpp
+  src/rocket/EdenRocketSystemInterface.cpp
   src/Shapes/Size.cpp
   src/Shapes/Point2D.cpp
   src/Shapes/Rectangle.cpp
