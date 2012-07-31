@@ -18,6 +18,7 @@
 #include "Container.h"
 #include "Size.h"
 #include "OpenGLTTF.h"
+#include <dirent.h>
 
 #include "DebugUtils.h"
 
@@ -32,9 +33,7 @@ void GraphicsUtil::initialize()
 
    initSDL();
    openGLExtensions.initialize();
-   Rocket::Core::SetSystemInterface(&rocketSystemInterface);
-   Rocket::Core::SetRenderInterface(&rocketRenderInterface);
-   Rocket::Core::Initialise();
+   initRocket();
    initGuichan();
 }
 
@@ -104,6 +103,42 @@ void GraphicsUtil::initSDL()
    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
    SDL_WM_SetCaption ("Buhr Prototype", NULL);
+}
+
+void GraphicsUtil::initRocket()
+{
+    Rocket::Core::SetSystemInterface(&rocketSystemInterface);
+    Rocket::Core::SetRenderInterface(&rocketRenderInterface);
+    Rocket::Core::Initialise();
+
+    const std::string fontLocation = "data/fonts";
+    struct dirent *entry;
+    DIR *dp;
+    dp = opendir(fontLocation.c_str());
+    if (dp == NULL)
+    {
+       T_T("Failed to open data/fonts for font loading.");
+    }
+
+    while((entry = readdir(dp)))
+    {
+       const std::string filename = entry->d_name;
+       if(filename.length() > 4)
+       {
+          const std::string extension = filename.substr(filename.length() - 4, 4);
+
+          if(extension == ".ttf" || extension == ".otf")
+          {
+             const std::string path = fontLocation + '/' + entry->d_name;
+             if(!Rocket::Core::FontDatabase::LoadFontFace(path.c_str()))
+             {
+                DEBUG("Failed to load font: %s", path.c_str());
+             }
+          }
+       }
+    }
+
+    closedir(dp);
 }
 
 void GraphicsUtil::initGuichan()

@@ -19,14 +19,6 @@ namespace Rocket
    };
 };
 
-namespace edwt
-{
-   class StringListModel;
-   class ListBox;
-   class Label;
-   class OpenGLTrueTypeFont;
-};
-
 class Music;
 class Sound;
 
@@ -37,7 +29,7 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class MainMenu: public GameState, public gcn::ActionListener, public gcn::SelectionListener
+class MainMenu: public GameState
 {
    /** Main menu music */
    Music* music;
@@ -53,29 +45,6 @@ class MainMenu: public GameState, public gcn::ActionListener, public gcn::Select
 
    /** The title screen RML document */
    Rocket::Core::ElementDocument* titleDocument;
-
-   /** The main title on top of the title screen */
-   edwt::Label* titleLabel;
-
-   /** The list box for all options in the title screen */
-   edwt::ListBox* actionsListBox;
-
-   /** The container for the background image */
-   gcn::Icon* bg;
-
-   /** The list model holding the options for the title screen */
-   edwt::StringListModel* titleOps;
-
-   /** The font for the title screen heading */
-   edwt::OpenGLTrueTypeFont* titleFont;
-
-   /** The font for the title screen menu options */
-   edwt::OpenGLTrueTypeFont* actionsFont;
-
-   /**
-    * Populate the title screen list with required options
-    */
-   void populateOpsList();
 
    /**
     * Wait for and handle the input event.

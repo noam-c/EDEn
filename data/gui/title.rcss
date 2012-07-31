@@ -1,0 +1,21 @@
+body
+{
+   font-family: FairydustB;
+   font-size: 16pt;
+   background-decorator: image;
+   background-image-src: ../images/splash.jpg;
+   height: 100%;
+   width: 100%;
+   
+   text-align: center;
+}
+
+.option
+{
+	font-color: #ffffff;
+}
+
+.option:hover
+{
+   font-color: #999999;
+}

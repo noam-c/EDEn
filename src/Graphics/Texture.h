@@ -10,7 +10,9 @@
 #include <string>
 #include "Size.h"
 
+struct SDL_Surface;
 typedef unsigned int GLuint;
+typedef unsigned int GLenum;
 
 /**
  * Manages the creation, binding and deletion of an OpenGL texture.
@@ -29,6 +31,13 @@ class Texture
       /** Default constructor (used when subclass initializes the texture. */
       Texture();
 
+      /**
+       * Generates an OpenGL texture from an SDL Surface.
+       *
+       * @param image The surface containing the image for the texture.
+       */
+      void initTextureFromImage(SDL_Surface* image);
+
    public:
       /**
        * Constructor.
@@ -37,6 +46,17 @@ class Texture
        * @param imagePath the path to the image to load into the texture.
        */
       Texture(const std::string& imagePath);
+
+      /**
+       * Constructor.
+       * Creates an OpenGL texture from image data in memory.
+       *
+       * @param imageData the pointer to the image data to load into the texture.
+       * @param imageFormat the image data format (expressed as an OpenGL format GLenum)
+       * @param imageSize the size of the image (in pixels)
+       * @param bytesPerPixel the number of bytes representing each pixel in the image
+       */
+      Texture(const void* imageData, GLenum imageFormat, const shapes::Size& imageSize, int bytesPerPixel);
 
       /**
        * Binds the texture to the drawing context for

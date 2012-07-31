@@ -95,6 +95,11 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
    void initSDL();
 
    /**
+    * Initializes the Rocket library to render RML pages as GUI elements.
+    */
+   void initRocket();
+
+   /**
     * Initializes the Guichan library for use with OpenGL via SDL.
     */
    void initGuichan();
