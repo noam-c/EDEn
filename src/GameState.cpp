@@ -37,7 +37,7 @@ bool GameState::advanceFrame()
    return step();
 }
 
-void GameState::handleEvent(SDL_Event& event)
+void GameState::handleEvent(const SDL_Event& event)
 {
    GraphicsUtil::getInstance()->pushInput(event);
 }

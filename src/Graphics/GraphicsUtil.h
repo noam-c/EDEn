@@ -171,7 +171,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        *
        * @param event the input event to send to the widgets
        */
-      void pushInput(SDL_Event event);
+      void pushInput(const SDL_Event& event);
 
       /**
        * Sets a camera offset to begin drawing at. Note that this offset is

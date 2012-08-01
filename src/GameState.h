@@ -74,7 +74,7 @@ class GameState
        *
        * @param event The event to handle.
        */
-      void handleEvent(SDL_Event& event);
+      void handleEvent(const SDL_Event& event);
 
       /**
        * Runs the state's graphic and interface processing.

@@ -20,6 +20,7 @@
 #include "ListBox.h"
 
 #include <Rocket/Core.h>
+#include "RocketSDLInputMapping.h"
 
 #include "ExecutionStack.h"
 #include "SDL_image.h"
@@ -119,8 +120,7 @@ void MainMenu::waitForInputEvent(bool& finishState)
       }
    }
 
-   // If the main menu didn't consume this event, then propagate to the generic input handling
-   handleEvent(event);
+   RocketSDLInputMapping::handleSDLEvent(rocketContext, event);
 }
 
 void MainMenu::draw()

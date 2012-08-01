@@ -236,7 +236,7 @@ void GraphicsUtil::drawGUI()
    SDL_GL_SwapBuffers();
 }
 
-void GraphicsUtil::pushInput(SDL_Event event)
+void GraphicsUtil::pushInput(const SDL_Event& event)
 {
    input->pushInput(event);
 }

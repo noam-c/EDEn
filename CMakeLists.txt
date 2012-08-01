@@ -146,6 +146,7 @@ set(HEADERS
   src/ResourceLoader/ResourceLoader.h
   src/rocket/EdenRocketRenderInterface.h
   src/rocket/EdenRocketSystemInterface.h
+  src/rocket/RocketSDLInputMapping.h
   src/ScriptEngine/FileScript.h
   src/ScriptEngine/NPCScript.h
   src/ScriptEngine/Script.h
@@ -303,6 +304,7 @@ set(SOURCES
   src/ResourceLoader/ResourceLoader.cpp
   src/rocket/EdenRocketRenderInterface.cpp
   src/rocket/EdenRocketSystemInterface.cpp
+  src/rocket/RocketSDLInputMapping.cpp
   src/Shapes/Size.cpp
   src/Shapes/Point2D.cpp
   src/Shapes/Rectangle.cpp
