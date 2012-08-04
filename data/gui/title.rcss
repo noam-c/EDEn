@@ -1,7 +1,7 @@
 body
 {
    font-family: FairydustB;
-   font-size: 16pt;
+   font-size: 24pt;
    background-decorator: image;
    background-image-src: ../images/splash.jpg;
    height: 100%;
@@ -10,12 +10,25 @@ body
    text-align: center;
 }
 
+.title
+{
+	margin-top: 20px;
+	font-size: 48pt;
+}
+
+.menu
+{
+	position: absolute;
+   bottom: 50px;
+   line-height: 1em;
+}
+
 .option
 {
-	font-color: #ffffff;
+   color: #ffffff;
 }
 
 .option:hover
 {
-   font-color: #999999;
+   color: #999999;
 }

@@ -40,13 +40,15 @@ void EdenRocketRenderInterface::RenderGeometry(
       const Rocket::Core::Vector2f& translation)
 {
    glPushMatrix();
-   glPushAttrib(GL_COLOR_BUFFER_BIT);
+   glPushAttrib(GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_TEXTURE_BIT);
    glPushClientAttrib(GL_CLIENT_VERTEX_ARRAY_BIT);
 
    glTranslatef(translation.x, translation.y, 0);
 
    glEnableClientState(GL_VERTEX_ARRAY);
    glEnableClientState(GL_COLOR_ARRAY);
+
+   glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

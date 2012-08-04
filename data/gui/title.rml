@@ -1,9 +1,16 @@
 <rml>
-	<head>
+   <head>
       <link type="text/rcss" href="base.rcss" />
       <link type="text/rcss" href="title.rcss" />
-	</head>
-	<body>
-		<div>Hello world!</div>
-	</body>
+   </head>
+   <body>
+      <div class="title">Exodus Draconis Engine</div>
+      <div class="menu">
+         <div class="option">New Game</div>
+         <div class="option">Load Game</div>
+         <div class="option">Menu Prototype</div>
+         <div class="option">About</div>
+         <div class="option">Exit Game</div>
+      </div>
+   </body>
 </rml>
