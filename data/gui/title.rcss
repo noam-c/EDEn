@@ -16,7 +16,7 @@ body
 	font-size: 48pt;
 }
 
-.menu
+.menuOptions
 {
 	position: absolute;
    bottom: 50px;

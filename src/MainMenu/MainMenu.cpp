@@ -22,6 +22,8 @@
 #include <Rocket/Core.h>
 #include "RocketSDLInputMapping.h"
 
+#include "RocketListener.h"
+
 #include "ExecutionStack.h"
 #include "SDL_image.h"
 #include "DebugUtils.h"
@@ -51,7 +53,27 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
    if(titleDocument != NULL)
    {
       titleDocument->Show();
-      DEBUG("height: %g. y: %g.", titleDocument->GetClientHeight(), titleDocument->GetAbsoluteTop());
+      bindAction("newGameAction", "click", &MainMenu::NewGameAction);
+      bindAction("menuPrototypeAction", "click", &MainMenu::MenuPrototypeAction);
+      bindAction("loadGameAction", "click", &MainMenu::LoadGameAction);
+      bindAction("optionsAction", "click", &MainMenu::OptionsAction);
+      bindAction("aboutAction", "click", &MainMenu::AboutAction);
+      bindAction("quitGameAction", "click", &MainMenu::QuitAction);
+   }
+}
+
+void MainMenu::bindAction(const char* id, const char* eventType, void (MainMenu::*function)(Rocket::Core::Event*), bool capture)
+{
+   Rocket::Core::Element* element = titleDocument->GetElementById(id);
+   if(element != NULL)
+   {
+      RocketListener<MainMenu>* listener = new RocketListener<MainMenu>(std::bind1st(std::mem_fun(function), this));
+      clickListeners.push_back(listener);
+      element->AddEventListener(eventType, listener, capture);
+   }
+   else
+   {
+      DEBUG("Unable to bind %s event listener to element with id: %s", eventType, id);
    }
 }
 
@@ -76,11 +98,6 @@ bool MainMenu::step()
    rocketContext->Update();
 
    return !done;
-}
-
-void MainMenu::valueChanged(const gcn::SelectionEvent& event)
-{
-   reselectSound->play();
 }
 
 void MainMenu::waitForInputEvent(bool& finishState)
@@ -136,6 +153,12 @@ MainMenu::~MainMenu()
    if (!MUSIC_OFF)
    {
       Music::fadeOutMusic(1000);
+   }
+
+   delete titleDocument;
+   for(std::vector<RocketListener<MainMenu>* >::iterator iter = clickListeners.begin(); iter != clickListeners.end(); ++iter)
+   {
+      delete *iter;
    }
 
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);

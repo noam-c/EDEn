@@ -10,6 +10,7 @@
 #include "Music.h"
 #include "Sound.h"
 
+#include <Rocket/Core.h>
 #include "TileEngine.h"
 #include "FadeState.h"
 #include "MenuShell.h"
@@ -25,7 +26,7 @@
  * [this will eventually change to a chapter selection list, with the fade
  * and pushed state (field or battle) changing based on the chapter].
  */
-void MainMenu::NewGameAction()
+void MainMenu::NewGameAction(Rocket::Core::Event* event)
 {
    TileEngine* tileEngine = new TileEngine(executionStack, CHAP1);
    executionStack.pushState(tileEngine, new FadeState(executionStack, this));
@@ -37,7 +38,7 @@ void MainMenu::NewGameAction()
  * 'Menu Prototype' was selected. Push a Menu state.
  * \todo This will eventually be removed entirely, as it is only a programmer convenience right now.
  */
-void MainMenu::MenuPrototypeAction()
+void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
 {
    PlayerData* playerData = new PlayerData();
    playerData->load(SAVE_GAME);
@@ -52,7 +53,7 @@ void MainMenu::MenuPrototypeAction()
 /**
  * 'Load Game' was selected. (TODO)
  */
-void MainMenu::LoadGameAction()
+void MainMenu::LoadGameAction(Rocket::Core::Event* event)
 {
 }
 
@@ -60,21 +61,21 @@ void MainMenu::LoadGameAction()
  * 'Options' was selected.
  * Perform any transitions necessary and load up the options menu interface. (TODO)
  */
-void MainMenu::OptionsAction()
+void MainMenu::OptionsAction(Rocket::Core::Event* event)
 {
 }
 
 /**
  * 'About' was selected. (TODO)
  */
-void MainMenu::AboutAction()
+void MainMenu::AboutAction(Rocket::Core::Event* event)
 {
 }
 
 /**
  * 'Quit Game' was selected. Signal state logic termination, fade to black.
  */
-void MainMenu::QuitAction()
+void MainMenu::QuitAction(Rocket::Core::Event* event)
 {
    finished = true;
    chooseSound->play();

@@ -5,12 +5,13 @@
    </head>
    <body>
       <div class="title">Exodus Draconis Engine</div>
-      <div class="menu">
-         <div class="option">New Game</div>
-         <div class="option">Load Game</div>
-         <div class="option">Menu Prototype</div>
-         <div class="option">About</div>
-         <div class="option">Exit Game</div>
+      <div class="menuOptions">
+         <div id="newGameAction" class="option">New Game</div>
+         <div id="loadGameAction" class="option">Load Game</div>
+         <div id="menuPrototypeAction" class="option">Menu Prototype</div>
+         <div id="optionsAction" class="option">Options</div>
+         <div id="aboutAction" class="option">About</div>
+         <div id="quitGameAction" class="option">Exit Game</div>
       </div>
    </body>
 </rml>
