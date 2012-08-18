@@ -306,7 +306,6 @@ set(SOURCES
   src/rocket/EdenRocketRenderInterface.cpp
   src/rocket/EdenRocketSystemInterface.cpp
   src/rocket/RocketSDLInputMapping.cpp
-  src/rocket/RocketListener.cpp
   src/Shapes/Size.cpp
   src/Shapes/Point2D.cpp
   src/Shapes/Rectangle.cpp
@@ -420,7 +419,7 @@ add_definitions(
 add_executable( eden ${SOURCES} ${HEADERS} )
 
 IF(WIN32)
-	target_link_libraries( eden SDLmain rocket lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
+	target_link_libraries( eden SDLmain rocket rocketControls lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
 ELSE(WIN32)
 	INCLUDE(FindOpenGL)
 	INCLUDE(FindSDL)
@@ -429,10 +428,12 @@ ELSE(WIN32)
 	INCLUDE(FindSDL_mixer)
 	INCLUDE(FindLua51)
 	INCLUDE(FindLibRocket)
+	INCLUDE(FindLibRocketControls)
 
 	set(INCL_HEADERS
 	  ${LUA_INCLUDE_DIR}
 	  ${ROCKET_INCLUDE_DIR}
+	  ${ROCKET_CONTROLS_INCLUDE_DIR}
 	  ${SDL_INCLUDE_DIR}
 	  ${SDLIMAGE_INCLUDE_DIR}
 	  ${SDLTTF_INCLUDE_DIR}
@@ -442,6 +443,6 @@ ELSE(WIN32)
 
 	include_directories(BEFORE SYSTEM ${INCL_HEADERS})
 
-	target_link_libraries( eden ${LIBROCKET_LIBRARY} ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )
+	target_link_libraries( eden ${LIBROCKET_LIBRARY} ${LIBROCKET_CONTROLS_LIBRARY} ${LUA_LIBRARIES} ${SDLTTF_LIBRARY} ${SDLIMAGE_LIBRARY} ${SDLMIXER_LIBRARY} ${SDL_LIBRARY} ${OPENGL_LIBRARIES} )
 ENDIF(WIN32)
 

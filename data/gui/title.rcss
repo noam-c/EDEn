@@ -16,7 +16,7 @@ body
 	font-size: 48pt;
 }
 
-.menuOptions
+#menu
 {
 	position: absolute;
    bottom: 50px;
@@ -28,7 +28,7 @@ body
    color: #ffffff;
 }
 
-.option:hover
+.option.selected
 {
    color: #999999;
 }

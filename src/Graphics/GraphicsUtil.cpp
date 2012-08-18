@@ -15,6 +15,8 @@
 #include "guichan/opengl.hpp"
 #include "guichan/opengl/openglsdlimageloader.hpp"
 #include <Rocket/Core.h>
+#include <Rocket/Controls.h>
+#include "RocketSDLInputMapping.h"
 #include "Container.h"
 #include "Size.h"
 #include "OpenGLTTF.h"
@@ -110,6 +112,7 @@ void GraphicsUtil::initRocket()
     Rocket::Core::SetSystemInterface(&rocketSystemInterface);
     Rocket::Core::SetRenderInterface(&rocketRenderInterface);
     Rocket::Core::Initialise();
+    Rocket::Controls::Initialise();
 
     const std::string fontLocation = "data/fonts";
     struct dirent *entry;
@@ -139,6 +142,8 @@ void GraphicsUtil::initRocket()
     }
 
     closedir(dp);
+
+    RocketSDLInputMapping::initialize();
 }
 
 void GraphicsUtil::initGuichan()

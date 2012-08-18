@@ -17,6 +17,7 @@ namespace Rocket
    {
       class Context;
       class ElementDocument;
+      class Element;
       class Event;
    };
 };
@@ -57,8 +58,11 @@ class MainMenu: public GameState
     */
    void waitForInputEvent(bool& finishState);
 
+   void listKeyDown(Rocket::Core::Event* event);
+
    std::vector<RocketListener<MainMenu>*> clickListeners;
    void bindAction(const char* id, const char* eventType, void (MainMenu::*function)(Rocket::Core::Event*), bool capture = false);
+   void bindAction(Rocket::Core::Element* element, const char* eventType, void (MainMenu::*function)(Rocket::Core::Event*), bool capture = false);
 
    //Actions for the list ops - see documentation in MainMenuActions.cpp
    void NewGameAction(Rocket::Core::Event* event);
