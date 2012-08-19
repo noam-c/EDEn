@@ -46,6 +46,7 @@ EDEn depends on the following development libraries to build the source:
 * SDL_ttf 2.0
 * SDL_mixer 1.2
 * Lua 5.1
+* libRocket
 
 Windows developers will also need the Windows implementation of dirent.h.
 
@@ -56,6 +57,7 @@ Links
 
 * SDL Cross-platform Library - http://www.libsdl.org
 * Guichan GUI library - http://guichan.sourceforge.net
+* libRocket - http://www.librocket.com
 * Lua Programming Language - http://www.lua.org
 * JsonCpp library - http://jsoncpp.sourceforge.net/
 * TinyXml library - http://www.grinninglizard.com/tinyxml/
