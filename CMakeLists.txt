@@ -419,7 +419,7 @@ add_definitions(
 add_executable( eden ${SOURCES} ${HEADERS} )
 
 IF(WIN32)
-	target_link_libraries( eden SDLmain rocket rocketControls lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
+	target_link_libraries( eden SDLmain rocketCore rocketControls lua5.1 SDL_ttf SDL_image SDL_mixer SDL opengl32 glu32 )
 ELSE(WIN32)
 	INCLUDE(FindOpenGL)
 	INCLUDE(FindSDL)

@@ -315,6 +315,9 @@ void GraphicsUtil::finish()
    delete graphics;
    delete input;
 
+   // Shut down Rocket
+   Rocket::Core::Shutdown();
+
    //Destroy the SDL_ttf stuff
    if(!TTF_WasInit())
    {

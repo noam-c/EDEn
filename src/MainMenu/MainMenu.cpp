@@ -122,7 +122,7 @@ void MainMenu::waitForInputEvent(bool& finishState)
          {
             case SDLK_ESCAPE:
             {
-               finishState = true;
+               QuitAction(NULL);
                return;
             }
             default:
@@ -135,7 +135,7 @@ void MainMenu::waitForInputEvent(bool& finishState)
       }
       case SDL_QUIT:
       {
-          finishState = true;
+          QuitAction(NULL);
           return;
       }
       default:
@@ -212,18 +212,11 @@ void MainMenu::draw()
 
 MainMenu::~MainMenu()
 {
-   if (!MUSIC_OFF)
-   {
-      Music::fadeOutMusic(1000);
-   }
-
-   delete titleDocument;
+   titleDocument->RemoveReference();
    for(std::vector<RocketListener<MainMenu>* >::iterator iter = clickListeners.begin(); iter != clickListeners.end(); ++iter)
    {
       delete *iter;
    }
-
-   GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
 
    rocketContext->RemoveReference();
 }

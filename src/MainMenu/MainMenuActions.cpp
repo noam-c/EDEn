@@ -79,6 +79,12 @@ void MainMenu::QuitAction(Rocket::Core::Event* event)
 {
    finished = true;
    chooseSound->play();
-   Music::fadeOutMusic(1000);
+
+   if (!MUSIC_OFF)
+   {
+      Music::fadeOutMusic(1000);
+   }
+
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
+   titleDocument->Close();
 }
