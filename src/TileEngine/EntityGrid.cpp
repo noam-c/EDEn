@@ -347,10 +347,22 @@ void EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
 
       if(!canOccupyArea(shapes::Rectangle(nextPoint, actorSize), actorState))
       {
+         shapes::Point2D nextHorizontalPoint(nextPoint.x, lastAvailablePoint.y);
+         shapes::Point2D nextVerticalPoint(lastAvailablePoint.x, nextPoint.y);
+
+         if(canOccupyArea(shapes::Rectangle(nextHorizontalPoint, actorSize), actorState))
+         {
+            lastAvailablePoint = nextHorizontalPoint;
+         }
+         else if(canOccupyArea(shapes::Rectangle(nextVerticalPoint, actorSize), actorState))
+         {
+            lastAvailablePoint = nextVerticalPoint;
+         }
+
          break;
       }
 
-      lastAvailablePoint = nextPoint;      
+      lastAvailablePoint = nextPoint;
    }
 
    if(lastAvailablePoint != source)
