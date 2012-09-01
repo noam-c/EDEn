@@ -88,23 +88,30 @@ void Pathfinder::initRoyFloydWarshallMatrices()
             bool yAdjacent = aTile.y - 1 <= bTile.y && bTile.y <= aTile.y + 1;
             
             bool adjacent = xAdjacent && yAdjacent;
-            
-            if(!adjacent 
-               || collisionGrid[aTile.y][aTile.x].entityType == TileState::OBSTACLE 
-               || collisionGrid[bTile.y][bTile.x].entityType == TileState::OBSTACLE)
+            bool diagonallyAdjacent = aTile.x != bTile.x && aTile.y != bTile.y;
+            bool aTileIsObstacle = collisionGrid[aTile.y][aTile.x].entityType == TileState::OBSTACLE;
+            bool bTileIsObstacle = collisionGrid[bTile.y][bTile.x].entityType == TileState::OBSTACLE;
+
+            distanceMatrix[a][b] = INFINITY;
+            successorMatrix[a][b] = -1;
+
+            if(adjacent && !aTileIsObstacle && !bTileIsObstacle)
             {
-               distanceMatrix[a][b] = INFINITY;
-               successorMatrix[a][b] = -1;
-            }
-            else
-            {
-               successorMatrix[a][b] = b;
-               if(aTile.x != bTile.x && aTile.y != bTile.y)
+               if(diagonallyAdjacent)
                {
-                  distanceMatrix[a][b] = ROOT_2;
+                  bool diagonalTraversalBlocked =
+                        collisionGrid[bTile.y][aTile.x].entityType == TileState::OBSTACLE ||
+                        collisionGrid[aTile.y][bTile.x].entityType == TileState::OBSTACLE;
+
+                  if(!diagonalTraversalBlocked)
+                  {
+                     successorMatrix[a][b] = b;
+                     distanceMatrix[a][b] = ROOT_2;
+                  }
                }
                else
                {
+                  successorMatrix[a][b] = b;
                   distanceMatrix[a][b] = 1;
                }
             }
