@@ -106,25 +106,10 @@ set(HEADERS
   src/GameData/ItemList.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
-  src/Menu/CharacterModule.h
-  src/Menu/ConfirmStateListener.h
-  src/Menu/ConfirmState.h
-  src/Menu/DataMenu.h
-  src/Menu/DataPane.h
-  src/Menu/EquipMenu.h
-  src/Menu/EquipPane.h
   src/Menu/HomeMenu.h
-  src/Menu/HomePane.h
-  src/Menu/ItemsMenu.h
-  src/Menu/ItemsPane.h
-  src/Menu/MenuPane.h
-  src/Menu/MenuState.h
-  src/Menu/StatusMenu.h
-  src/Menu/StatusPane.h
-  src/MenuControls/SaveGameModule.h
-  src/MenuControls/MenuAction.h
-  src/MenuControls/MenuShell.h
-  src/MenuControls/ItemListModel.h
+  src/Menu/HomeViewModel.h
+  src/Menu/ImageFormatter.h
+  src/Menu/MenuShell.h
   src/Messaging/MessagePipe.h
   src/Messaging/Listener.h
   src/MovementDirection.h
@@ -144,6 +129,7 @@ set(HEADERS
   src/ResourceLoader/Resource.h
   src/ResourceLoader/ResourceKey.h
   src/ResourceLoader/ResourceLoader.h
+  src/rocket/EdenRocketBindings.h
   src/rocket/EdenRocketRenderInterface.h
   src/rocket/EdenRocketSystemInterface.h
   src/rocket/RocketSDLInputMapping.h
@@ -271,23 +257,10 @@ set(SOURCES
   src/GameData/Item.cpp
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
-  src/Menu/CharacterModule.cpp
-  src/Menu/ConfirmState.cpp
-  src/Menu/DataMenu.cpp
-  src/Menu/DataPane.cpp
-  src/Menu/EquipMenu.cpp
-  src/Menu/EquipPane.cpp
   src/Menu/HomeMenu.cpp
-  src/Menu/HomePane.cpp
-  src/Menu/ItemsMenu.cpp
-  src/Menu/ItemsPane.cpp
-  src/Menu/MenuPane.cpp
-  src/Menu/MenuState.cpp
-  src/Menu/StatusMenu.cpp
-  src/Menu/StatusPane.cpp
-  src/MenuControls/SaveGameModule.cpp
-  src/MenuControls/MenuShell.cpp
-  src/MenuControls/ItemListModel.cpp
+  src/Menu/HomeViewModel.cpp
+  src/Menu/ImageFormatter.cpp
+  src/Menu/MenuShell.cpp
   src/Messaging/MessagePipe.cpp
   src/PlayerData/Character.cpp
   src/PlayerData/CharacterRoster.cpp

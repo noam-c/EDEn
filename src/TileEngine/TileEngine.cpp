@@ -23,10 +23,10 @@
 #include "DialogueController.h"
 #include "ExecutionStack.h"
 #include "RandomTransitionGenerator.h"
-#include "MenuShell.h"
 #include "HomeMenu.h"
 #include "OpenGLTTF.h"
 #include "stdlib.h"
+#include <Rocket/Core.h>
 #include <algorithm>
 
 #include "DebugUtils.h"
@@ -149,11 +149,11 @@ void TileEngine::recalculateMapOffsets()
 {
    const shapes::Size& mapPixelBounds = entityGrid.getMapBounds().getSize() * TILE_SIZE;
 
-   xMapOffset = mapPixelBounds.width < GraphicsUtil::width ? 
-              (GraphicsUtil::width - mapPixelBounds.width) >> 1 : 0;
+   xMapOffset = mapPixelBounds.width < GraphicsUtil::getInstance()->getWidth() ?
+              (GraphicsUtil::getInstance()->getWidth() - mapPixelBounds.width) >> 1 : 0;
 
-   yMapOffset = mapPixelBounds.height < GraphicsUtil::height ?
-              (GraphicsUtil::height - mapPixelBounds.height) >> 1 : 0;
+   yMapOffset = mapPixelBounds.height < GraphicsUtil::getInstance()->getHeight() ?
+              (GraphicsUtil::getInstance()->getHeight() - mapPixelBounds.height) >> 1 : 0;
 }
 
 void TileEngine::toggleDebugConsole()
@@ -380,10 +380,8 @@ void TileEngine::handleInputEvents(bool& finishState)
                   // is activated again.
                   playerData.clearMessagePipe();
 
-                  /** \todo This is never deleted, causing a memory leak. */
-                  MenuShell* menuShell = new MenuShell(playerData);
+                  HomeMenu* menu = new HomeMenu(executionStack, playerData);
 
-                  HomeMenu* menu = new HomeMenu(executionStack, *menuShell, playerData);
                   executionStack.pushState(menu, RandomTransitionGenerator::create(executionStack, this, menu));
                   return;
                }

@@ -13,15 +13,8 @@
 #include "Music.h"
 #include "Sound.h"
 
-#include "Container.h"
-#include "Label.h"
-#include "OpenGLTTF.h"
-#include "StringListModel.h"
-#include "ListBox.h"
-
 #include <Rocket/Core.h>
 #include "RocketSDLInputMapping.h"
-
 #include "RocketListener.h"
 
 #include "ExecutionStack.h"
@@ -40,53 +33,28 @@ enum MainMenuActions
    MENU_PROTOTYPE_ACTION,
 };
 
-MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack)
+MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack), bindings(this)
 {
    chooseSound = ResourceLoader::getSound("choose");
    reselectSound = ResourceLoader::getSound("reselect");
 
    music = ResourceLoader::getMusic("title.mp3");
 
-   rocketContext = Rocket::Core::CreateContext("title", Rocket::Core::Vector2i(GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight()));
+   rocketContext = GraphicsUtil::getInstance()->createRocketContext("title");
    titleDocument = rocketContext->LoadDocument("data/gui/title.rml");
 
    if(titleDocument != NULL)
    {
       titleDocument->Show();
-      bindAction("newGameAction", "click", &MainMenu::NewGameAction);
-      bindAction("menuPrototypeAction", "click", &MainMenu::MenuPrototypeAction);
-      bindAction("loadGameAction", "click", &MainMenu::LoadGameAction);
-      bindAction("optionsAction", "click", &MainMenu::OptionsAction);
-      bindAction("aboutAction", "click", &MainMenu::AboutAction);
-      bindAction("quitGameAction", "click", &MainMenu::QuitAction);
+      bindings.bindAction(titleDocument, "newGameAction", "click", &MainMenu::NewGameAction);
+      bindings.bindAction(titleDocument, "menuPrototypeAction", "click", &MainMenu::MenuPrototypeAction);
+      bindings.bindAction(titleDocument, "loadGameAction", "click", &MainMenu::LoadGameAction);
+      bindings.bindAction(titleDocument, "optionsAction", "click", &MainMenu::OptionsAction);
+      bindings.bindAction(titleDocument, "aboutAction", "click", &MainMenu::AboutAction);
+      bindings.bindAction(titleDocument, "quitGameAction", "click", &MainMenu::QuitAction);
 
-      bindAction(titleDocument, "keydown", &MainMenu::listKeyDown);
+      bindings.bindAction(titleDocument, "keydown", &MainMenu::listKeyDown);
    }
-}
-
-void MainMenu::bindAction(const char* id, const char* eventType, void (MainMenu::*function)(Rocket::Core::Event*), bool capture)
-{
-   Rocket::Core::Element* element = titleDocument->GetElementById(id);
-   if(element != NULL)
-   {
-      bindAction(element, eventType, function);
-   }
-   else
-   {
-      DEBUG("Unable to bind %s event listener to element with id: %s", eventType, id);
-   }
-}
-
-void MainMenu::bindAction(Rocket::Core::Element* element, const char* eventType, void (MainMenu::*function)(Rocket::Core::Event*), bool capture)
-{
-   RocketListener<MainMenu>* listener = new RocketListener<MainMenu>(std::bind1st(std::mem_fun(function), this));
-   clickListeners.push_back(listener);
-   element->AddEventListener(eventType, listener, capture);
-}
-
-void MainMenu::activate()
-{
-   GameState::activate();
 }
 
 bool MainMenu::step()
@@ -100,19 +68,21 @@ bool MainMenu::step()
       music->play();
    }
 
-   waitForInputEvent(done);
+   pollInputEvent(done);
 
    rocketContext->Update();
 
    return !done;
 }
 
-void MainMenu::waitForInputEvent(bool& finishState)
+void MainMenu::pollInputEvent(bool& finishState)
 {
+   SDL_Delay (1);
+
    SDL_Event event;
 
    /* Check for events */
-   SDL_WaitEvent(&event);
+   SDL_PollEvent(&event);
 
    switch (event.type)
    {
@@ -204,19 +174,11 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
 
 void MainMenu::draw()
 {
-   /* Don't run too fast */
-   SDL_Delay (1);
-
    rocketContext->Render();
 }
 
 MainMenu::~MainMenu()
 {
    titleDocument->RemoveReference();
-   for(std::vector<RocketListener<MainMenu>* >::iterator iter = clickListeners.begin(); iter != clickListeners.end(); ++iter)
-   {
-      delete *iter;
-   }
-
    rocketContext->RemoveReference();
 }

@@ -30,7 +30,7 @@ void Inventory::load(Json::Value& inventoryJson)
       int itemNum, itemQuantity;
       itemNum = (*iter)[ITEM_NUM_ATTRIBUTE].asInt();
       itemQuantity = (*iter)[ITEM_QUANTITY_ATTRIBUTE].asInt();
-      items.push_back(std::pair<int,int>(itemNum, itemQuantity));
+      items.push_back(std::make_pair(itemNum, itemQuantity));
    }
 }
 
@@ -104,7 +104,7 @@ bool Inventory::addItem(int itemId, int quantity)
    ItemList::iterator itemIter = findItem(itemId);
    if(itemIter == items.end())
    {
-      items.push_back(std::pair<int, int>(itemId, quantity));
+      items.push_back(std::make_pair(itemId, quantity));
    }
    else
    {

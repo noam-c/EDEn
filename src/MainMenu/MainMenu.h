@@ -8,8 +8,7 @@
 #define MAIN_MENU_H
 
 #include "GameState.h"
-#include <functional>
-#include <vector>
+#include "EdenRocketBindings.h"
 
 namespace Rocket
 {
@@ -21,8 +20,6 @@ namespace Rocket
       class Event;
    };
 };
-
-template<typename T> class RocketListener;
 
 class Music;
 class Sound;
@@ -36,6 +33,9 @@ class Sound;
  */
 class MainMenu: public GameState
 {
+   /** The event binding collection for this GUI */
+   EdenRocketBindings<MainMenu> bindings;
+
    /** Main menu music */
    Music* music;
 
@@ -52,17 +52,13 @@ class MainMenu: public GameState
    Rocket::Core::ElementDocument* titleDocument;
 
    /**
-    * Wait for and handle the input event.
+    * Poll and handle the next input event.
     *
     * @param finishState Returned as true if the input event quit out of the main menu.
     */
-   void waitForInputEvent(bool& finishState);
+   void pollInputEvent(bool& finishState);
 
    void listKeyDown(Rocket::Core::Event* event);
-
-   std::vector<RocketListener<MainMenu>*> clickListeners;
-   void bindAction(const char* id, const char* eventType, void (MainMenu::*function)(Rocket::Core::Event*), bool capture = false);
-   void bindAction(Rocket::Core::Element* element, const char* eventType, void (MainMenu::*function)(Rocket::Core::Event*), bool capture = false);
 
    //Actions for the list ops - see documentation in MainMenuActions.cpp
    void NewGameAction(Rocket::Core::Event* event);
@@ -95,11 +91,6 @@ class MainMenu: public GameState
        * @param executionStack The execution stack that the state belongs to.
        */
       MainMenu(ExecutionStack& executionStack);
-   
-      /**
-       * When the state is activated, set modal focus to the listbox
-       */
-      void activate();
    
       /**
        * Destructor.

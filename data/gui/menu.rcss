@@ -1,0 +1,50 @@
+body
+{
+   font-family: Lunchtime Doubly So;
+   font-size: 16pt;
+   height: 100%;
+   width: 100%;
+}
+
+.shell
+{
+   background-decorator: image;
+   background-image-src: ../images/menubg.jpg;
+}
+
+.panel
+{
+   background-color: #00000050;
+   border-color: #ffffff50;
+   border-width: 2px;
+
+   margin-top: 10px;
+   margin-bottom: 10px;
+
+   padding: 10px;
+}
+
+.menuPane
+{
+   margin-left: 20%;
+   width: 75%;
+   height: 90%;
+}
+
+#sidebar
+{
+   width: 15%;
+   margin-left: 10px;
+   text-align: right;
+   line-height: 1em;
+}
+
+.sidebarOption
+{
+   color: #ffffff;
+}
+
+.sidebarOption:hover
+{
+   color: #ffffff99;
+}

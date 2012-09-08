@@ -48,6 +48,12 @@ typedef unsigned int GLuint;
  */
 class GraphicsUtil : public Singleton<GraphicsUtil>
 {
+   /** The screen width (currently HARDCODED) */
+   static const unsigned int width = 800;
+
+   /** The screen height (currently HARDCODED) */
+   static const unsigned int height = 600;
+
    /** The screen surface */
    static SDL_Surface* screen;
 
@@ -123,12 +129,6 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       virtual void finish();
 
    public:
-      /** The screen width (currently HARDCODED) */
-      static const unsigned int width = 800;
-   
-      /** The screen height (currently HARDCODED) */
-      static const unsigned int height = 600;
-   
       /**
        * @return The extension manager for this graphical context.
        */
@@ -143,6 +143,11 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * @return The height of the screen
        */
       int getHeight();
+
+      /**
+       * Set up a new Rocket context that spans the entire screen.
+       */
+      Rocket::Core::Context* createRocketContext(const std::string& name);
 
       /**
        * Set the widget container to draw to screen.

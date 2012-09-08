@@ -11,9 +11,9 @@
 #include "Sound.h"
 
 #include <Rocket/Core.h>
+#include "MenuShell.h"
 #include "TileEngine.h"
 #include "FadeState.h"
-#include "MenuShell.h"
 #include "HomeMenu.h"
 #include "PlayerData.h"
 
@@ -43,11 +43,7 @@ void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
    PlayerData* playerData = new PlayerData();
    playerData->load(SAVE_GAME);
 
-   /** \todo This is never deleted, causing a memory leak. */
-   MenuShell* menuShell = new MenuShell(*playerData);
-
-   HomeMenu* menu = new HomeMenu(executionStack, *menuShell, *playerData);
-   executionStack.pushState(menu);
+   executionStack.pushState(new HomeMenu(executionStack, *playerData));
 }
 
 /**

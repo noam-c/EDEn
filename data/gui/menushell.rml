@@ -1,0 +1,18 @@
+<rml id="shell">
+   <head>
+      <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="menu.rcss" />
+   </head>
+   <body class="shell">
+      <div id="sidebar" class="panel">
+         <div class="sidebarOption">Items</div>
+         <div class="sidebarOption">Equip</div>
+         <div class="sidebarOption">Status</div>
+         <div class="sidebarOption">Skills</div>
+         <div class="sidebarOption">Formation</div>
+         <div class="sidebarOption">Party Change</div>
+         <div class="sidebarOption">Options</div>
+         <div class="sidebarOption">Data</div>
+      </div>
+   </body>
+</rml>

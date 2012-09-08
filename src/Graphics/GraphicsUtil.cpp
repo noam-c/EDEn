@@ -146,6 +146,11 @@ void GraphicsUtil::initRocket()
     RocketSDLInputMapping::initialize();
 }
 
+Rocket::Core::Context* GraphicsUtil::createRocketContext(const std::string& name)
+{
+   return Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(width, height));
+}
+
 void GraphicsUtil::initGuichan()
 {
    imageLoader = new gcn::OpenGLSDLImageLoader();

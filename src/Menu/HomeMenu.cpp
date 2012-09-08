@@ -11,22 +11,13 @@
 #include "Music.h"
 #include "Sound.h"
 
-#include "Container.h"
-#include "Label.h"
-#include "TabbedArea.h"
-#include "Tab.h"
-#include "OpenGLTTF.h"
-#include "StringListModel.h"
-#include "ListBox.h"
+#include <Rocket/Core.h>
+#include "RocketSDLInputMapping.h"
+#include "EdenRocketBindings.h"
+#include "MenuShell.h"
+
 #include "PlayerData.h"
 #include "Character.h"
-
-#include "MenuShell.h"
-#include "ItemsMenu.h"
-#include "StatusMenu.h"
-#include "EquipMenu.h"
-#include "DataMenu.h"
-#include "HomePane.h"
 
 #include "ExecutionStack.h"
 #include "SDL_image.h"
@@ -34,11 +25,32 @@
 
 const int debugFlag = DEBUG_MENU;
 
-HomeMenu::HomeMenu(ExecutionStack& executionStack, MenuShell& menuShell, PlayerData& playerData) : MenuState(executionStack, menuShell), playerData(playerData), characterAction(NO_ACTION)
+HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData) :
+   GameState(executionStack),
+   bindings(this),
+   playerData(playerData),
+   homeViewModel(*playerData.getRoster())
 {
-   HomePane* pane = new HomePane(playerData, menuShell.getDimension());
-   setMenuPane(pane);
-   pane->setModuleSelectListener(this);
+   initialize();
+}
+
+HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell& menuShell) :
+   GameState(executionStack),
+   bindings(this),
+   playerData(playerData),
+   homeViewModel(*playerData.getRoster()),
+   menuShell(menuShell)
+{
+   initialize();
+}
+
+void HomeMenu::initialize()
+{
+   homePaneDocument = menuShell.getContext()->LoadDocument("data/gui/homepane.rml");
+   if(homePaneDocument != NULL)
+   {
+      homePaneDocument->Show();
+   }
 }
 
 bool HomeMenu::step()
@@ -47,128 +59,59 @@ bool HomeMenu::step()
 
    bool done = false;
 
-   pollInputEvent(done);
+   waitForInputEvent(done);
+
+   menuShell.getContext()->Update();
 
    return !done;
 }
 
-void HomeMenu::pollInputEvent(bool& finishState)
+void HomeMenu::waitForInputEvent(bool& finishState)
 {
+   /* The menu shouldn't run too fast */
+   SDL_Delay (1);
+
    SDL_Event event;
 
    /* Check for events */
-   if(SDL_PollEvent(&event))
+   SDL_PollEvent(&event);
+
+   switch (event.type)
    {
-      switch (event.type)
+      case SDL_KEYDOWN:
       {
-         case SDL_KEYDOWN:
+         switch(event.key.keysym.sym)
          {
-            switch(event.key.keysym.sym)
+            case SDLK_ESCAPE:
             {
-               case SDLK_ESCAPE:
-               {
-                  finishState = true;
-                  return;
-               }
-               default:
-               {
-                  break;
-               }
+               finishState = true;
+               return;
             }
-            break;
+            default:
+            {
+               break;
+            }
          }
-         default:
-         {
-             break;
-         }
+
+         break;
       }
-
-      // If the main HomeMenu didn't consume this event, then propagate to the generic input handling
-      handleEvent(event);
-   }
-}
-
-bool HomeMenu::isCharacterDependent(MenuAction action) const
-{
-   switch(action)
-   {
-      case EQUIP_PANEL:
-      case STATUS_PANEL:
-      case SKILLS_PANEL:
-         return true;
-
-      case FORMATION_PANEL:
-      case PARTY_CHANGE_PANEL:
-      case OPTIONS_PANEL:
-      case DATA_PANEL:
-      case ITEM_PANEL:
-      default:
-         return false;
-   }
-}
-
-void HomeMenu::showPanel(MenuAction panelToShow)
-{
-   if(isCharacterDependent(panelToShow))
-   {
-      DEBUG("Character-dependent action selected");
-      characterAction = panelToShow;
-   }
-   else
-   {
-      DEBUG("Character-independent action selected");
-      
-      MenuState* nextState;
-      switch(panelToShow)
+      case SDL_QUIT:
       {
-         case ITEM_PANEL:
-            nextState = new ItemsMenu(executionStack, menuShell, playerData);
-            break;
-         case DATA_PANEL:
-         default:
-            nextState = new DataMenu(executionStack, menuShell, playerData);
-            break;
+         finishState = true;
+         return;
       }
-
-      executionStack.pushState(nextState);
-      menuPane->setVisible(false);
-   }
-}
-
-void HomeMenu::moduleSelected(int index, const std::string& eventId)
-{
-   Character* character = playerData.getRoster()->getParty()[index];
-   
-   DEBUG("Character selected: %s", character->getName().c_str());
-   
-   MenuState* nextState;
-   switch(characterAction)
-   {
-      case STATUS_PANEL:
-         DEBUG("Creating Status menu panel...");
-         nextState = new StatusMenu(executionStack, menuShell, playerData, character);
-         break;
-      case EQUIP_PANEL:
       default:
-         DEBUG("Creating Equip menu panel...");
-         nextState = new EquipMenu(executionStack, menuShell, playerData, character);
+      {
          break;
+      }
    }
-   
-   executionStack.pushState(nextState);
-   menuPane->setVisible(false);
+
+   RocketSDLInputMapping::handleSDLEvent(menuShell.getContext(), event);
 }
 
-void HomeMenu::tabChanged(int index)
+void HomeMenu::draw()
 {
-   Character* tabbedCharacter = playerData.getRoster()->getParty()[index - 1];
-   executionStack.pushState(new StatusMenu(executionStack, menuShell, playerData, tabbedCharacter));
-   menuPane->setVisible(false);
-}
-
-void HomeMenu::action(const gcn::ActionEvent& event)
-{
-   
+   menuShell.getContext()->Render();
 }
 
 HomeMenu::~HomeMenu()

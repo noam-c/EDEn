@@ -1,0 +1,10 @@
+.characterGrid datagridheader
+{
+	height: 0px;
+	visibility: hidden;
+}
+
+.characterGrid datagridrow
+{
+   margin-bottom: 10px;
+}
