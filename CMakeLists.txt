@@ -110,6 +110,8 @@ set(HEADERS
   src/Menu/HomeViewModel.h
   src/Menu/ImageFormatter.h
   src/Menu/MenuShell.h
+  src/Menu/MenuShellOption.h
+  src/Menu/MenuState.h
   src/Messaging/MessagePipe.h
   src/Messaging/Listener.h
   src/MovementDirection.h
@@ -261,6 +263,7 @@ set(SOURCES
   src/Menu/HomeViewModel.cpp
   src/Menu/ImageFormatter.cpp
   src/Menu/MenuShell.cpp
+  src/Menu/MenuState.cpp
   src/Messaging/MessagePipe.cpp
   src/PlayerData/Character.cpp
   src/PlayerData/CharacterRoster.cpp

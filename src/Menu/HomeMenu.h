@@ -10,9 +10,8 @@
 #include <stack>
 #include <map>
 
-#include "GameState.h"
+#include "MenuState.h"
 #include "EdenRocketBindings.h"
-#include "MenuShell.h"
 #include "HomeViewModel.h"
 
 namespace Rocket
@@ -36,13 +35,10 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class HomeMenu: public GameState
+class HomeMenu: public MenuState
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings<HomeMenu> bindings;
-
-   /** The shell that holds the common menu controls */
-   MenuShell menuShell;
 
    /** The player data */
    PlayerData& playerData;
@@ -52,26 +48,6 @@ class HomeMenu: public GameState
 
    /** The home menu RML document */
    Rocket::Core::ElementDocument* homePaneDocument;
-
-   /**
-    * Wait for and handle the input event.
-    *
-    * @param finishState Returned as true if the input event quit out of the main menu.
-    */
-   void waitForInputEvent(bool& finishState);
-
-   protected:
-      /**
-       * Draws the menu.
-       */
-      void draw();
-
-      /**
-       * Perform logic for the menu screen.
-       *
-       * @return true iff the user is not finished with the menu.
-       */
-      bool step();
 
    public:
       /**
@@ -92,6 +68,10 @@ class HomeMenu: public GameState
       HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell& menuShell);
 
       void initialize();
+
+      std::vector<MenuShellOption> getSidebarOptions();
+
+      void sidebarClicked(int optionIndex);
 
       /**
        * Destructor.

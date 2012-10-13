@@ -11,11 +11,6 @@
 #include "Music.h"
 #include "Sound.h"
 
-#include <Rocket/Core.h>
-#include "RocketSDLInputMapping.h"
-#include "EdenRocketBindings.h"
-#include "MenuShell.h"
-
 #include "PlayerData.h"
 #include "Character.h"
 
@@ -26,7 +21,7 @@
 const int debugFlag = DEBUG_MENU;
 
 HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData) :
-   GameState(executionStack),
+   MenuState(executionStack),
    bindings(this),
    playerData(playerData),
    homeViewModel(*playerData.getRoster())
@@ -35,11 +30,10 @@ HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData) :
 }
 
 HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell& menuShell) :
-   GameState(executionStack),
+   MenuState(executionStack, menuShell),
    bindings(this),
    playerData(playerData),
-   homeViewModel(*playerData.getRoster()),
-   menuShell(menuShell)
+   homeViewModel(*playerData.getRoster())
 {
    initialize();
 }
@@ -51,69 +45,26 @@ void HomeMenu::initialize()
    {
       homePaneDocument->Show();
    }
-}
 
-bool HomeMenu::step()
-{
-   if(finished) return false;
-
-   bool done = false;
-
-   waitForInputEvent(done);
-
-   menuShell.getContext()->Update();
-
-   return !done;
-}
-
-void HomeMenu::waitForInputEvent(bool& finishState)
-{
-   /* The menu shouldn't run too fast */
-   SDL_Delay (1);
-
-   SDL_Event event;
-
-   /* Check for events */
-   SDL_PollEvent(&event);
-
-   switch (event.type)
-   {
-      case SDL_KEYDOWN:
-      {
-         switch(event.key.keysym.sym)
-         {
-            case SDLK_ESCAPE:
-            {
-               finishState = true;
-               return;
-            }
-            default:
-            {
-               break;
-            }
-         }
-
-         break;
-      }
-      case SDL_QUIT:
-      {
-         finishState = true;
-         return;
-      }
-      default:
-      {
-         break;
-      }
-   }
-
-   RocketSDLInputMapping::handleSDLEvent(menuShell.getContext(), event);
-}
-
-void HomeMenu::draw()
-{
-   menuShell.getContext()->Render();
+   sidebarOptions.push_back("Items");
+   sidebarOptions.push_back("Equip");
+   sidebarOptions.push_back("Status");
+   sidebarOptions.push_back("Skills");
+   sidebarOptions.push_back("Formation");
+   sidebarOptions.push_back("Party Change");
+   sidebarOptions.push_back("Options");
+   sidebarOptions.push_back("Data");
 }
 
 HomeMenu::~HomeMenu()
 {
+}
+
+void HomeMenu::sidebarClicked(int optionIndex)
+{
+   switch(optionIndex)
+   {
+      default:
+         break;
+   }
 }

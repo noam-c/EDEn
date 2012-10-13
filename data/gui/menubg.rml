@@ -3,8 +3,6 @@
       <link type="text/rcss" href="base.rcss" />
       <link type="text/rcss" href="menu.rcss" />
    </head>
-   <body>
-      <div id="sidebar" class="panel">
-      </div>
+   <body class="shell">
    </body>
 </rml>
