@@ -9,6 +9,16 @@
 #include "json.h"
 #include "SaveGameItemNames.h"
 
+Inventory& Inventory::operator=(const Inventory& inventory)
+{
+   if(&inventory != this)
+   {
+      items = inventory.items;
+   }
+
+   return *this;
+}
+
 const ItemList& Inventory::getItemList() const
 {
    return items;
@@ -23,8 +33,10 @@ ItemList Inventory::getItemsByTypes(std::vector<int> acceptedTypes) const
    return items;
 }
 
-void Inventory::load(Json::Value& inventoryJson)
+void Inventory::load(const Json::Value& inventoryJson)
 {
+   items.clear();
+
    for(Json::Value::iterator iter = inventoryJson.begin(); iter != inventoryJson.end(); ++iter)
    {
       int itemNum, itemQuantity;

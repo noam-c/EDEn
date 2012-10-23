@@ -31,6 +31,10 @@ void GameState::activate()
    finished = false;
 }
 
+void GameState::deactivate()
+{
+}
+
 bool GameState::advanceFrame()
 {
    GraphicsUtil::getInstance()->stepGUI();

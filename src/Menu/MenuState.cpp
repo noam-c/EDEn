@@ -5,6 +5,7 @@
  */
 
 #include "MenuState.h"
+#include "MenuShell.h"
 #include <Rocket/Core.h>
 #include "RocketSDLInputMapping.h"
 #include "EdenRocketBindings.h"
@@ -13,23 +14,28 @@
 const int debugFlag = DEBUG_MENU;
 
 MenuState::MenuState(ExecutionStack& executionStack) :
-   GameState(executionStack)
+   GameState(executionStack), internalMenuShell(true)
 {
+   menuShell = new MenuShell();
 }
 
-MenuState::MenuState(ExecutionStack& executionStack, MenuShell& menuShell) :
-   GameState(executionStack), menuShell(menuShell)
+MenuState::MenuState(ExecutionStack& executionStack, MenuShell* menuShell) :
+   GameState(executionStack), menuShell(menuShell), internalMenuShell(false)
 {
 }
 
 MenuState::~MenuState()
 {
+   if(internalMenuShell)
+   {
+      delete menuShell;
+   }
 }
 
 void MenuState::activate()
 {
    GameState::activate();
-   menuShell.changeMenuState(this);
+   menuShell->changeMenuState(this);
 }
 
 
@@ -37,20 +43,20 @@ bool MenuState::step()
 {
    if(finished) return false;
 
+   /* The menu shouldn't run too fast */
+   SDL_Delay (1);
+
    bool done = false;
 
    waitForInputEvent(done);
 
-   menuShell.getContext()->Update();
+   menuShell->getContext()->Update();
 
    return !done;
 }
 
 void MenuState::waitForInputEvent(bool& finishState)
 {
-   /* The menu shouldn't run too fast */
-   SDL_Delay (1);
-
    SDL_Event event;
 
    /* Check for events */
@@ -86,12 +92,12 @@ void MenuState::waitForInputEvent(bool& finishState)
       }
    }
 
-   RocketSDLInputMapping::handleSDLEvent(menuShell.getContext(), event);
+   RocketSDLInputMapping::handleSDLEvent(menuShell->getContext(), event);
 }
 
 void MenuState::draw()
 {
-   menuShell.getContext()->Render();
+   menuShell->getContext()->Render();
 }
 
 std::vector<MenuShellOption> MenuState::getSidebarOptions()

@@ -46,6 +46,11 @@ class Inventory
 
    public:
       /**
+       * Assignment operator.
+       */
+      Inventory& operator=(const Inventory& inventory);
+
+      /**
        * @return The item list that represents the inventory.
        * \todo Remove this function when possible to promote encapsulation.
        */
@@ -65,7 +70,7 @@ class Inventory
        *
        * @param inventoryJson The JSON data to load from.
        */
-      void load(Json::Value& inventoryJson);
+      void load(const Json::Value& inventoryJson);
 
       /**
        * Serializes the inventory into JSON.

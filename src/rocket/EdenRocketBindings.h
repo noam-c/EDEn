@@ -17,7 +17,7 @@ namespace Rocket
 template<typename T> class EdenRocketBindings
 {
    T* instance;
-   std::vector<RocketListener<T>*> listeners;
+   std::vector<RocketListener<T>* > listeners;
 
    EdenRocketBindings() {};
 
@@ -44,9 +44,8 @@ template<typename T> class EdenRocketBindings
 
       void bindAction(Rocket::Core::Element* element, const char* eventType, void (T::*function)(Rocket::Core::Event*), bool capture = false)
       {
-         RocketListener<T>* listener = new RocketListener<T>(std::bind1st(std::mem_fun(function), instance));
+         RocketListener<T>* listener = new RocketListener<T>(element, eventType, capture, std::bind1st(std::mem_fun(function), instance));
          listeners.push_back(listener);
-         element->AddEventListener(eventType, listener, capture);
       }
 };
 

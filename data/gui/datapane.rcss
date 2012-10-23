@@ -1,0 +1,66 @@
+#saveGameGrid datagridheader
+{
+	height: 0px;
+	visibility: hidden;
+}
+
+#saveGameGrid datagridrow
+{
+   margin-bottom: 10px;
+   border-width: 2px;
+   border-color: #ffffffff;
+}
+
+#saveGameGrid datagridcell
+{
+   margin: 10px;
+}
+
+.dialogWindow
+{
+   margin: auto;
+   width: 300px;
+   height: 120px;
+}
+
+.dialogTitle,
+.dialogBody
+{
+   border-width: 2px;
+   border-style: solid;
+   border-color: black;
+   text-align: center;
+}
+
+.dialogTitle
+{
+   background-color: #110044;
+}
+
+.dialogBody
+{
+   height: 100px;
+   background-color: #220055;
+   border-top-width: 0px;
+   padding-top: 10px;
+}
+
+.dialogBody button
+{
+   padding: 5px;
+   margin-right: 10px;
+   border-width: 2px;
+   border-style: solid;
+   border-color: #555555;
+   background-color: #999999;
+}
+
+.dialogBody button:last-child
+{
+   margin-right: 0px;
+}
+
+.dialogBody button:active
+{
+   background-color: #777777;
+}

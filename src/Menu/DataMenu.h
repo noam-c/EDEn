@@ -4,15 +4,15 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef HOME_MENU_H
-#define HOME_MENU_H
+#ifndef DATA_MENU_H
+#define DATA_MENU_H
 
 #include <stack>
 #include <map>
 
 #include "MenuState.h"
 #include "EdenRocketBindings.h"
-#include "HomeViewModel.h"
+#include "DataViewModel.h"
 
 namespace Rocket
 {
@@ -35,19 +35,30 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class HomeMenu: public MenuState
+class DataMenu: public MenuState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<HomeMenu> bindings;
+   EdenRocketBindings<DataMenu> bindings;
 
    /** The player data */
    PlayerData& playerData;
 
    /** The view model */
-   HomeViewModel homeViewModel;
+   DataViewModel dataViewModel;
 
-   /** The home menu RML document */
+   /** The data menu RML document */
    Rocket::Core::ElementDocument* paneDocument;
+
+   /** The RML document for the Confirm Save window in the data menu */
+   Rocket::Core::ElementDocument* confirmSaveDocument;
+
+   int slotToSave;
+
+   void showConfirmDialog(int index);
+   void hideConfirmDialog();
+   void confirmClicked(Rocket::Core::Event* event);
+   void cancelClicked(Rocket::Core::Event* event);
+   void saveGameClicked(Rocket::Core::Event* event);
 
    public:
       /**
@@ -56,7 +67,7 @@ class HomeMenu: public MenuState
        * @param executionStack The execution stack that the state belongs to.
        * @param playerData The player data that the menu will display.
        */
-      HomeMenu(ExecutionStack& executionStack, PlayerData& playerData);
+      DataMenu(ExecutionStack& executionStack, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
@@ -65,7 +76,7 @@ class HomeMenu: public MenuState
        * @param playerData The player data that the menu will display.
        * @param menuShell The shell for the menu
        */
-      HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
+      DataMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
 
       void initialize();
       void activate();
@@ -78,7 +89,7 @@ class HomeMenu: public MenuState
       /**
        * Destructor.
        */
-      ~HomeMenu();
+      ~DataMenu();
 };
 
 #endif

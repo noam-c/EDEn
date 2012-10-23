@@ -21,6 +21,11 @@ CharacterRoster::CharacterRoster() : messagePipe(NULL), partyLeader(NULL)
 {
 }
 
+CharacterRoster::~CharacterRoster()
+{
+   deleteCharacterList();
+}
+
 void CharacterRoster::signalRosterUpdate()
 {
    if(messagePipe != NULL)
@@ -34,16 +39,27 @@ void CharacterRoster::bindMessagePipe(const messaging::MessagePipe* pipe)
    messagePipe = pipe;
 }
 
-CharacterRoster::~CharacterRoster()
+void CharacterRoster::deleteCharacterList()
 {
    DEBUG("Destroying character roster...");
+
    for(std::map<std::string, Character*>::iterator iter = allCharacters.begin(); iter != allCharacters.end(); ++iter)
    {
       DEBUG("Destroying character %s", (iter->first).c_str());
       delete iter->second;
       DEBUG("Character %s destroyed", (iter->first).c_str());
    }
+
    DEBUG("Character roster destroyed.");
+}
+
+void CharacterRoster::clear()
+{
+   partyLeader = NULL;
+   party.clear();
+
+   deleteCharacterList();
+   allCharacters.clear();
 }
 
 Character* CharacterRoster::loadNewCharacter(const std::string& id)
@@ -98,9 +114,11 @@ void CharacterRoster::addToParty(Character* character)
    signalRosterUpdate();
 }
 
-void CharacterRoster::load(Json::Value& charactersElement)
+void CharacterRoster::load(const Json::Value& charactersElement)
 {
-   Json::Value& partyElement = charactersElement[PARTY_ELEMENT];
+   clear();
+
+   const Json::Value& partyElement = charactersElement[PARTY_ELEMENT];
 
    int partySize = partyElement.size();
 

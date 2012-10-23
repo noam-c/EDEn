@@ -27,6 +27,7 @@ ExecutionStack::~ExecutionStack()
 void ExecutionStack::popState()
 {
    GameState* topState = stateStack.top();
+   topState->deactivate();
    stateStack.pop();
    delete topState;
 
@@ -39,6 +40,11 @@ void ExecutionStack::popState()
 
 void ExecutionStack::pushState(GameState* newState, GameState* transitionState)
 {
+   if(!stateStack.empty())
+   {
+      stateStack.top()->deactivate();
+   }
+
    if(transitionState)
    {
       stateStack.push(transitionState);

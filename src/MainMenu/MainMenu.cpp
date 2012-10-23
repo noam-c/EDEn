@@ -179,6 +179,7 @@ void MainMenu::draw()
 
 MainMenu::~MainMenu()
 {
+   titleDocument->Close();
    titleDocument->RemoveReference();
    rocketContext->RemoveReference();
 }

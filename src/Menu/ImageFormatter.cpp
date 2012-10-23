@@ -17,5 +17,8 @@ ImageFormatter::~ImageFormatter()
 
 void ImageFormatter::FormatData(Rocket::Core::String& formatted_data, const Rocket::Core::StringList& raw_data)
 {
-   formatted_data = "<img style=\"height: 100px; width: 100px;\" src=\"../../" + raw_data[0] + "\" />";
+   if(!raw_data.empty() && !raw_data[0].Empty())
+   {
+      formatted_data = "<img class=\"datagridimage\" src=\"../../" + raw_data[0] + "\" />";
+   }
 }

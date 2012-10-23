@@ -106,6 +106,8 @@ set(HEADERS
   src/GameData/ItemList.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
+  src/Menu/DataMenu.h
+  src/Menu/DataViewModel.h
   src/Menu/HomeMenu.h
   src/Menu/HomeViewModel.h
   src/Menu/ImageFormatter.h
@@ -259,6 +261,8 @@ set(SOURCES
   src/GameData/Item.cpp
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
+  src/Menu/DataMenu.cpp
+  src/Menu/DataViewModel.cpp
   src/Menu/HomeMenu.cpp
   src/Menu/HomeViewModel.cpp
   src/Menu/ImageFormatter.cpp

@@ -91,6 +91,12 @@ class GameState
       virtual void activate();
 
       /**
+       * State deactivation called every time this state stops being at the top of the execution stack.
+       * In other words, deactivate is always called when this state relinquishes control of the game loop.
+       */
+      virtual void deactivate();
+
+      /**
        * Called every frame in order to trigger logic processing in the game state
        * that is at the top of the execution stack.
        * Generic logic that happens in every game state (such as GUI logic) should go in here.

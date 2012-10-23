@@ -41,9 +41,18 @@ class CharacterRoster
    std::map<std::string, Character*> allCharacters;
 
    void signalRosterUpdate();
+   void deleteCharacterList();
+   void clear();
 
    public:
+      /**
+       * Constructor.
+       */
       CharacterRoster();
+
+      /**
+       * Destructor.
+       */
       ~CharacterRoster();
 
       /**
@@ -54,7 +63,7 @@ class CharacterRoster
        */
       void bindMessagePipe(const messaging::MessagePipe* pipe);
 
-      void load(Json::Value& charactersElement);
+      void load(const Json::Value& charactersElement);
 
       /**
        * Serializes the character data and party layout into JSON.

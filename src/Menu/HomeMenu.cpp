@@ -5,6 +5,8 @@
  */
 
 #include "HomeMenu.h"
+#include "DataMenu.h"
+#include "MenuShell.h"
 #include "GraphicsUtil.h"
 
 #include "ResourceLoader.h"
@@ -29,7 +31,7 @@ HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData) :
    initialize();
 }
 
-HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell& menuShell) :
+HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell) :
    MenuState(executionStack, menuShell),
    bindings(this),
    playerData(playerData),
@@ -40,11 +42,7 @@ HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuS
 
 void HomeMenu::initialize()
 {
-   homePaneDocument = menuShell.getContext()->LoadDocument("data/gui/homepane.rml");
-   if(homePaneDocument != NULL)
-   {
-      homePaneDocument->Show();
-   }
+   paneDocument = menuShell->getContext()->LoadDocument("data/gui/homepane.rml");
 
    sidebarOptions.push_back("Items");
    sidebarOptions.push_back("Equip");
@@ -56,14 +54,39 @@ void HomeMenu::initialize()
    sidebarOptions.push_back("Data");
 }
 
+void HomeMenu::activate()
+{
+   MenuState::activate();
+   if(paneDocument != NULL)
+   {
+      paneDocument->Show();
+   }
+}
+
+void HomeMenu::deactivate()
+{
+   if(paneDocument != NULL)
+   {
+      paneDocument->Hide();
+   }
+}
+
 HomeMenu::~HomeMenu()
 {
+   if(paneDocument != NULL)
+   {
+      paneDocument->Close();
+      paneDocument->RemoveReference();
+   }
 }
 
 void HomeMenu::sidebarClicked(int optionIndex)
 {
    switch(optionIndex)
    {
+      case 7:
+         executionStack.pushState(new DataMenu(executionStack, playerData, menuShell));
+         break;
       default:
          break;
    }

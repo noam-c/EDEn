@@ -7,6 +7,8 @@
 #ifndef MENU_SHELL_OPTION_H
 #define MENU_SHELL_OPTION_H
 
+#include <string>
+
 typedef std::string MenuShellOption;
 
 #endif

@@ -8,13 +8,16 @@
 #define MENU_STATE_H
 
 #include "GameState.h"
-#include "MenuShell.h"
 #include "MenuShellOption.h"
 
 #include <vector>
 
+class MenuShell;
+
 class MenuState : public GameState
 {
+   bool internalMenuShell;
+
    /**
     * Wait for and handle the input event.
     *
@@ -24,7 +27,7 @@ class MenuState : public GameState
 
    protected:
       /** The shell that holds the common menu controls */
-      MenuShell menuShell;
+      MenuShell* menuShell;
 
       std::vector<MenuShellOption> sidebarOptions;
 
@@ -47,7 +50,7 @@ class MenuState : public GameState
 
    public:
       MenuState(ExecutionStack& executionStack);
-      MenuState(ExecutionStack& executionStack, MenuShell& menuShell);
+      MenuState(ExecutionStack& executionStack, MenuShell* menuShell);
       virtual ~MenuState() = 0;
 
       std::vector<MenuShellOption> getSidebarOptions();

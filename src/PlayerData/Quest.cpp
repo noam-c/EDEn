@@ -16,7 +16,7 @@ Quest::Quest(const std::string& name, const std::string& description, bool optio
 {
 }
 
-Quest::Quest(Json::Value& questJson)
+Quest::Quest(const Json::Value& questJson)
 {
    load(questJson);
 }
@@ -29,16 +29,18 @@ Quest::~Quest()
    }
 }
 
-void Quest::load(Json::Value& questTree)
+void Quest::load(const Json::Value& questTree)
 {
+   subquests.clear();
+
    name = questTree[NAME_ATTRIBUTE].asString();
-   Json::Value& descriptionElement = questTree[DESCRIPTION_ELEMENT];
+   const Json::Value& descriptionElement = questTree[DESCRIPTION_ELEMENT];
    description = descriptionElement.isString() ? descriptionElement.asString() : "";
    
    completed = questTree[COMPLETED_ATTRIBUTE].asBool();
    optional = questTree[OPTIONAL_ATTRIBUTE].asBool();
 
-   Json::Value& subquestNode = questTree[QUEST_ELEMENT];
+   const Json::Value& subquestNode = questTree[QUEST_ELEMENT];
    for(Json::Value::iterator iter = subquestNode.begin(); iter != subquestNode.end(); ++iter)
    {
       Quest* subquest = new Quest(*iter);

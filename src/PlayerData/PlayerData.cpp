@@ -18,12 +18,33 @@ const int debugFlag = DEBUG_PLAYER;
 // Uncomment this line to turn off encryption of savegames
 // #define DISABLE_ENCRYPTION
 
-PlayerData::PlayerData() : rootQuest("root")
+PlayerData::PlayerData() : rootQuest(std::string("root"))
 {
 }
 
 PlayerData::~PlayerData()
 {
+}
+
+PlayerData& PlayerData::operator=(const PlayerData& playerData)
+{
+   if(&playerData != this)
+   {
+      /**
+       * \todo Once the project moves to C++11, we can use STL smart pointers
+       * to manage the members of these objects. After that, these serializations and reloads
+       * can be replaced with proper assignment operators without bloating the code to
+       * copy objects on the heap.
+       */
+      roster.load(playerData.roster.serialize());
+      rootQuest.load(playerData.rootQuest.serialize());
+
+      inventory = playerData.inventory;
+      currChapter = playerData.currChapter;
+      saveLocation = playerData.saveLocation;
+   }
+
+   return *this;
 }
 
 void PlayerData::bindMessagePipe(const messaging::MessagePipe* messagePipe)

@@ -1,0 +1,17 @@
+<rml>
+   <head>
+      <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="menu.rcss" />
+      <link type="text/rcss" href="datapane.rcss" />
+   </head>
+   <body class="dialogWindow">
+	   <handle move_target="#document">
+	      <div class="dialogTitle">Overwrite game?</div>
+      </handle>
+	   <div class="dialogBody">
+	      <div>Are you sure you want to overwrite this save game?</div><br />
+	      <button id="confirm">Yes</button>
+	      <button id="cancel">No</button>
+      </div>
+   </body>
+</rml>

@@ -88,6 +88,16 @@ class PlayerData
       PlayerData();
 
       /**
+       * Destructor.
+       */
+      ~PlayerData();
+
+      /**
+       * Assignment operator.
+       */
+      PlayerData& operator=(const PlayerData& playerData);
+
+      /**
        * Binds a new message pipe to send player data updates to. This overwrites the previously set
        * message pipe, if it exists.
        *
@@ -127,8 +137,6 @@ class PlayerData
       bool changeEquipment(Character* character, EquipSlot* slot, const Item* newEquipment);
 
       Quest* getRootQuest();
-
-      ~PlayerData();
 };
 
 #endif

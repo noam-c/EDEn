@@ -48,3 +48,9 @@ body
 {
    color: #ffffff99;
 }
+
+.datagridimage
+{
+   width: 100px;
+   height: 100px;
+}

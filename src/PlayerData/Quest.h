@@ -88,7 +88,7 @@ class Quest
        *
        * @param questJson The JSON data to load from.
        */
-      Quest(Json::Value& questJson);
+      Quest(const Json::Value& questJson);
    
       /**
        * Destructor.
@@ -101,7 +101,7 @@ class Quest
        *
        * @param questJson The JSON data to load from.
        */
-      void load(Json::Value& questJson);
+      void load(const Json::Value& questJson);
    
       /**
        * Serializes the quest and its subquests into JSON.

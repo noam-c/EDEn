@@ -1,0 +1,15 @@
+<rml>
+   <head>
+      <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="menu.rcss" />
+      <link type="text/rcss" href="datapane.rcss" />
+   </head>
+   <body class="menuPane panel">
+      <datagrid id="saveGameGrid" source="dataViewModel.saveGames">
+         <col fields="character1" width="20%" formatter="image"></col>
+         <col fields="character2" width="20%" formatter="image"></col>
+         <col fields="character3" width="20%" formatter="image"></col>
+         <col fields="character4" width="20%" formatter="image"></col>
+      </datagrid>
+   </body>
+</rml>

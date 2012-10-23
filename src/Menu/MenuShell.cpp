@@ -12,7 +12,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuShell::MenuShell() : bindings(this)
+MenuShell::MenuShell() : bindings(this), currentState(NULL)
 {
    rocketContext = GraphicsUtil::getInstance()->createRocketContext("menu");
    shellDocument = rocketContext->LoadDocument("data/gui/menushell.rml");
@@ -31,16 +31,6 @@ MenuShell::MenuShell() : bindings(this)
       sidebarElement = shellDocument->GetElementById("sidebar");
       bindings.bindAction(sidebarElement, "click", &MenuShell::sidebarClicked);
    }
-}
-
-MenuShell::MenuShell(const MenuShell& menuShell) :
-   rocketContext(menuShell.rocketContext),
-   shellDocument(menuShell.shellDocument),
-   sidebarElement(menuShell.sidebarElement),
-   bindings(this)
-{
-   rocketContext->AddReference();
-   shellDocument->AddReference();
 }
 
 MenuShell::~MenuShell()
@@ -62,7 +52,6 @@ Rocket::Core::ElementDocument* MenuShell::getShellDocument() const
 void MenuShell::refresh()
 {
    sidebarElement->SetInnerRML("");
-
 
    std::vector<MenuShellOption> sidebarOptions = currentState->getSidebarOptions();
    std::vector<MenuShellOption>::iterator iter;

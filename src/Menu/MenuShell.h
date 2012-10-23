@@ -39,7 +39,6 @@ class MenuShell
 
       public:
          MenuShell();
-         MenuShell(const MenuShell& menuShell);
          ~MenuShell();
 
          Rocket::Core::Context* getContext() const;

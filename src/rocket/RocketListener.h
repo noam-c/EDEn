@@ -6,13 +6,23 @@
 
 template<typename Handler> class RocketListener : public Rocket::Core::EventListener
 {
+   Rocket::Core::Element* element;
+   Rocket::Core::String eventType;
+   bool capture;
    typedef std::binder1st<std::mem_fun1_t<void, Handler, Rocket::Core::Event*> > ProcessFunctionType;
    ProcessFunctionType processFunction;
 
    public:
-      RocketListener(ProcessFunctionType processFunction)
-         : processFunction(processFunction)
-      {}
+      RocketListener(Rocket::Core::Element* element, Rocket::Core::String eventType, bool capture, ProcessFunctionType processFunction)
+         : element(element), eventType(eventType), capture(capture), processFunction(processFunction)
+      {
+         element->AddEventListener(eventType, this, capture);
+      }
+
+      ~RocketListener()
+      {
+         element->RemoveEventListener(eventType, this, capture);
+      }
 
       void ProcessEvent(Rocket::Core::Event& event)
       {
