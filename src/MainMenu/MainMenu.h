@@ -14,9 +14,7 @@ namespace Rocket
 {
    namespace Core
    {
-      class Context;
       class ElementDocument;
-      class Element;
       class Event;
    };
 };
@@ -44,9 +42,6 @@ class MainMenu: public GameState
 
    /** Sound for picking an option */
    Sound* chooseSound;
-
-   /** The Rocket context used to render the title screen */
-   Rocket::Core::Context* rocketContext;
 
    /** The title screen RML document */
    Rocket::Core::ElementDocument* titleDocument;

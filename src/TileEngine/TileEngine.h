@@ -27,7 +27,7 @@ class Task;
 
 namespace edwt
 {
-   class DebugConsoleWindow;
+//   class DebugConsoleWindow;
 };
 
 /**
@@ -53,7 +53,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    EntityGrid entityGrid;
 
    /** The debug console window to be used for diagnostics. */
-   edwt::DebugConsoleWindow* consoleWindow;
+   //edwt::DebugConsoleWindow* consoleWindow;
 
    /** Controller for dialogue and narrations. */
    DialogueController* dialogue;

@@ -5,8 +5,9 @@
  */
 
 #include "DialogueController.h"
-#include "TextBox.h"
-#include "Container.h"
+
+#include <Rocket/Core.h>
+
 #include "Scheduler.h"
 #include "ScriptEngine.h"
 #include "DebugUtils.h"
@@ -22,8 +23,8 @@ bool DialogueController::DialogueCoroutine::resume(long timePassed)
    return dialogueController.resume(timePassed);
 }
 
-DialogueController::DialogueController(edwt::Container& top, Scheduler& scheduler, ScriptEngine& engine)
-                     : scriptEngine(engine), top(top), fastMode(false), currLine(NULL)
+DialogueController::DialogueController(Rocket::Core::Context& context, Scheduler& scheduler, ScriptEngine& engine)
+                     : scriptEngine(engine), context(context), mainDialogue(NULL), fastMode(false), currLine(NULL)
 {
    initMainDialogue();
    clearDialogue();
@@ -31,16 +32,21 @@ DialogueController::DialogueController(edwt::Container& top, Scheduler& schedule
    scheduler.start(new DialogueCoroutine(*this));
 }
 
+DialogueController::~DialogueController()
+{
+   if(mainDialogue != NULL)
+   {
+      mainDialogue->GetOwnerDocument()->Close();
+   }
+}
+
 void DialogueController::initMainDialogue()
 {
-   mainDialogue = new DialogueBox();
-   mainDialogue->setEditable(false);
-
-   mainDialogue->setVisible(false);
-   mainDialogue->setWidth(800);
-   mainDialogue->setX(0);
-
-   top.add(mainDialogue);
+   Rocket::Core::ElementDocument* dialogueBoxDocument = context.LoadDocument("data/gui/dialogueBox.rml");
+   if(dialogueBoxDocument != NULL)
+   {
+      mainDialogue = dialogueBoxDocument->GetElementById("textArea");
+   }
 }
 
 void DialogueController::addLine(LineType type, const char* speech, Task* task)
@@ -69,29 +75,11 @@ void DialogueController::say(const char* speech, Task* task)
 
 void DialogueController::setDialogue(LineType type)
 {
-   switch(type)
-   {
-      case NARRATE:
-      {
-         mainDialogue->setOpaque(false);
-         mainDialogue->setAlignment(edwt::CENTER);
-      
-         mainDialogue->setY(600/2 - mainDialogue->getHeight()/2);
-         mainDialogue->setForegroundColor(gcn::Color(255,255,255));   
-         mainDialogue->setVisible(true);
-         break;
-      }
-      case SAY:
-      {
-         mainDialogue->setOpaque(true);
-         mainDialogue->setAlignment(edwt::LEFT);
-      
-         mainDialogue->setHeight(100);
-         mainDialogue->setY(600 - mainDialogue->getHeight());
-         mainDialogue->setForegroundColor(gcn::Color(0,0,0));
-         mainDialogue->setVisible(true);
-      }   
-   }
+   mainDialogue->GetOwnerDocument()->Show();
+
+   bool isSpeech = type == SAY;
+   mainDialogue->SetClass("speech", isSpeech);
+   mainDialogue->SetClass("narration", !isSpeech);
 }
 
 void DialogueController::setFastModeEnabled(bool enabled)
@@ -131,7 +119,7 @@ void DialogueController::advanceDialogue()
 
    // Display the necessary piece of text in the text box
    dialogue = dialogue.substr(0, charsToShow);
-   mainDialogue->setText(dialogue);
+   mainDialogue->SetInnerRML(dialogue.c_str());
 }
 
 bool DialogueController::dialogueComplete() const
@@ -156,7 +144,7 @@ void DialogueController::clearDialogue()
       currLine = NULL;
    }
 
-   mainDialogue->setText("");
+   mainDialogue->SetInnerRML("");
 }
 
 int DialogueController::getMillisecondsPerCharacter() const
@@ -183,6 +171,7 @@ bool DialogueController::nextLine()
    if(lineQueue.empty())
    {
       currLine = NULL;
+      mainDialogue->GetOwnerDocument()->Hide();
    }
    else
    {

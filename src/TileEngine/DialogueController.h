@@ -13,13 +13,16 @@
 #include "Coroutine.h"
 #include "Task.h"
 
-namespace edwt
-{
-   class Container;
-   class TextBox;
-};
-
 class ScriptEngine;
+
+namespace Rocket
+{
+   namespace Core
+   {
+      class Context;
+      class Element;
+   };
+};
 
 /**
  * The dialogue controller controls all of the dialogue boxes that hold
@@ -41,9 +44,8 @@ class DialogueController
    static const int MILLISECONDS_PER_LETTER = 100;
    
    /** Abstract the implementation of the dialogue boxes */
-   typedef edwt::TextBox DialogueBox;
+   typedef Rocket::Core::Element DialogueBox;
 
-   
    class DialogueCoroutine : public Coroutine
    {
       DialogueController& dialogueController;
@@ -127,8 +129,8 @@ class DialogueController
    /** The script engine to call when embedded instructions are found */
    ScriptEngine& scriptEngine;
 
-   /** The topmost container that will contain the dialogue boxes */
-   edwt::Container& top;
+   /** The Rocket context that will manage the dialogue boxes */
+   Rocket::Core::Context& context;
 
    /** Main dialogue box for speech or narration */
    DialogueBox* mainDialogue;
@@ -201,11 +203,16 @@ class DialogueController
       /**
        * Constructor.
        *
-       * @param top The top-level widget container of the current state.
+       * @param context The Rocket context of the current state.
        * @param scheduler The scheduler that will manage the dialogue controller's execution.
        * @param engine The scripting engine to call with embedded scripts.
        */
-      DialogueController(edwt::Container& top, Scheduler& scheduler, ScriptEngine& engine);
+      DialogueController(Rocket::Core::Context& context, Scheduler& scheduler, ScriptEngine& engine);
+
+      /**
+       * Destructor.
+       */
+      ~DialogueController();
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next

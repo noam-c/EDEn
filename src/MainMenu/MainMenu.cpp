@@ -5,20 +5,14 @@
  */
 
 #include "MainMenu.h"
-#include "GraphicsUtil.h"
 
-#include "TileEngine.h"
+#include <SDL.h>
+#include <Rocket/Core.h>
 
 #include "ResourceLoader.h"
 #include "Music.h"
 #include "Sound.h"
 
-#include <Rocket/Core.h>
-#include "RocketSDLInputMapping.h"
-#include "RocketListener.h"
-
-#include "ExecutionStack.h"
-#include "SDL_image.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_TITLE;
@@ -33,15 +27,14 @@ enum MainMenuActions
    MENU_PROTOTYPE_ACTION,
 };
 
-MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack), bindings(this)
+MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack, "MainMenu"), bindings(this)
 {
    chooseSound = ResourceLoader::getSound("choose");
    reselectSound = ResourceLoader::getSound("reselect");
 
    music = ResourceLoader::getMusic("title.mp3");
 
-   rocketContext = GraphicsUtil::getInstance()->createRocketContext("title");
-   titleDocument = rocketContext->LoadDocument("data/gui/title.rml");
+   titleDocument = context->LoadDocument("data/gui/title.rml");
 
    if(titleDocument != NULL)
    {
@@ -57,6 +50,12 @@ MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack), 
    }
 }
 
+MainMenu::~MainMenu()
+{
+   titleDocument->Close();
+   titleDocument->RemoveReference();
+}
+
 bool MainMenu::step()
 {
    if(finished) return false;
@@ -69,8 +68,6 @@ bool MainMenu::step()
    }
 
    pollInputEvent(done);
-
-   rocketContext->Update();
 
    return !done;
 }
@@ -114,7 +111,7 @@ void MainMenu::pollInputEvent(bool& finishState)
       }
    }
 
-   RocketSDLInputMapping::handleSDLEvent(rocketContext, event);
+   handleEvent(event);
 }
 
 void MainMenu::listKeyDown(Rocket::Core::Event* event)
@@ -174,12 +171,4 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
 
 void MainMenu::draw()
 {
-   rocketContext->Render();
-}
-
-MainMenu::~MainMenu()
-{
-   titleDocument->Close();
-   titleDocument->RemoveReference();
-   rocketContext->RemoveReference();
 }

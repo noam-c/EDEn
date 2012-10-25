@@ -6,28 +6,29 @@
 
 #include "GameState.h"
 #include "GraphicsUtil.h"
-#include <SDL.h>
-#include "Container.h"
-#include "DebugConsoleWindow.h"
+#include <Rocket/Core.h>
+#include "RocketSDLInputMapping.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_GAME_STATE;
 
-GameState::GameState(ExecutionStack& executionStack) : executionStack(executionStack), internalContainer(true)
+GameState::GameState(ExecutionStack& executionStack, const std::string& stateName) : executionStack(executionStack)
 {
-   top = new edwt::Container();
-   top->setDimension(gcn::Rectangle(0, 0, GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight()));
-   top->setOpaque(false);
-   top->setEnabled(true);
+   context = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
 }
 
-GameState::GameState(ExecutionStack& executionStack, edwt::Container* container) : executionStack(executionStack), top(container), internalContainer(false)
+GameState::GameState(ExecutionStack& executionStack, const std::string& stateName, Rocket::Core::Context* context) : executionStack(executionStack), context(context)
 {
+   context->AddReference();
+}
+
+GameState::~GameState()
+{
+   context->RemoveReference();
 }
 
 void GameState::activate()
 {
-   GraphicsUtil::getInstance()->setInterface(top);
    finished = false;
 }
 
@@ -37,30 +38,21 @@ void GameState::deactivate()
 
 bool GameState::advanceFrame()
 {
-   GraphicsUtil::getInstance()->stepGUI();
+   context->Update();
    return step();
 }
 
 void GameState::handleEvent(const SDL_Event& event)
 {
-   GraphicsUtil::getInstance()->pushInput(event);
+   RocketSDLInputMapping::handleSDLEvent(context, event);
 }
 
 void GameState::drawFrame()
 {
    draw();
 
-   GraphicsUtil::getInstance()->drawGUI();
+   context->Render();
 
    // Make sure everything is displayed on screen
    GraphicsUtil::getInstance()->flipScreen();
-}
-
-GameState::~GameState()
-{
-   if(internalContainer)
-   {
-      GraphicsUtil::getInstance()->setInterface(NULL);
-      delete top;
-   }
 }

@@ -7,9 +7,6 @@
 #ifndef DATA_MENU_H
 #define DATA_MENU_H
 
-#include <stack>
-#include <map>
-
 #include "MenuState.h"
 #include "EdenRocketBindings.h"
 #include "DataViewModel.h"

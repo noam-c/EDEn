@@ -24,7 +24,7 @@ class TransitionState : public GameState
       virtual void draw() = 0;
 
    public:
-      TransitionState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength = 1000);
+      TransitionState(ExecutionStack& executionStack, const std::string& stateName, GameState* oldState, GameState* newState, long transitionLength = 1000);
       virtual ~TransitionState() = 0;
 };
 

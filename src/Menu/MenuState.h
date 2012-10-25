@@ -49,8 +49,8 @@ class MenuState : public GameState
       bool step();
 
    public:
-      MenuState(ExecutionStack& executionStack);
-      MenuState(ExecutionStack& executionStack, MenuShell* menuShell);
+      MenuState(ExecutionStack& executionStack, const std::string& stateName);
+      MenuState(ExecutionStack& executionStack, const std::string& stateName, MenuShell* menuShell);
       virtual ~MenuState() = 0;
 
       std::vector<MenuShellOption> getSidebarOptions();

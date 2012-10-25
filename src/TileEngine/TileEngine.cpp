@@ -5,12 +5,17 @@
  */
 
 #include "TileEngine.h"
+
+#include "stdlib.h"
+#include <Rocket/Core.h>
+#include <algorithm>
+#include <SDL.h>
+
 #include "ScriptEngine.h"
 #include "NPC.h"
 #include "PlayerCharacter.h"
 #include "PlayerData.h"
 #include "Scheduler.h"
-#include "Container.h"
 #include "GraphicsUtil.h"
 #include "ResourceLoader.h"
 #include "Region.h"
@@ -19,15 +24,11 @@
 #include "MapExitMessage.h"
 #include "Pathfinder.h"
 #include "Rectangle.h"
-#include "DebugConsoleWindow.h"
+//#include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "ExecutionStack.h"
 #include "RandomTransitionGenerator.h"
 #include "HomeMenu.h"
-#include "OpenGLTTF.h"
-#include "stdlib.h"
-#include <Rocket/Core.h>
-#include <algorithm>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
@@ -35,13 +36,13 @@ const int debugFlag = DEBUG_TILE_ENG;
 const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath)
-: GameState(executionStack), entityGrid(*this, messagePipe), xMapOffset(0), yMapOffset(0)
+   : GameState(executionStack, "TileEngine"), entityGrid(*this, messagePipe), xMapOffset(0), yMapOffset(0)
 {
    messagePipe.registerListener(this);
    playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData, "npc1");
    scriptEngine = new ScriptEngine(*this, playerData, scheduler);
-   dialogue = new DialogueController(*top, scheduler, *scriptEngine);
-   consoleWindow = new edwt::DebugConsoleWindow(top, top->getWidth(), top->getHeight() * 0.2);
+   dialogue = new DialogueController(*context, scheduler, *scriptEngine);
+   //consoleWindow = new edwt::DebugConsoleWindow(context, context->getWidth(), context->getHeight() * 0.2);
    
    time = SDL_GetTicks();
    loadPlayerData(playerDataPath);
@@ -52,7 +53,7 @@ TileEngine::~TileEngine()
 {
    clearNPCs();
    messagePipe.unregisterListener(this);
-   delete consoleWindow;
+   //delete consoleWindow;
    delete dialogue;
    delete scriptEngine;
    delete playerActor;
@@ -157,7 +158,7 @@ void TileEngine::recalculateMapOffsets()
 }
 
 void TileEngine::toggleDebugConsole()
-{
+{/*
    bool consoleWindowVisible = consoleWindow->isVisible();
    if(consoleWindowVisible)
    {
@@ -170,7 +171,7 @@ void TileEngine::toggleDebugConsole()
       top->moveToTop(consoleWindow);
       consoleWindow->setVisible(true);
       consoleWindow->requestFocus();
-   }
+   }*/
 }
 
 NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size)
@@ -339,6 +340,7 @@ void TileEngine::handleInputEvents(bool& finishState)
       {
          case SDL_USEREVENT:
          {
+            /*
             switch(event.user.code)
             {
                case DEBUG_CONSOLE_EVENT:
@@ -351,6 +353,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                   break;
                }
             }
+            */
             break;
          }
          case SDL_KEYDOWN:

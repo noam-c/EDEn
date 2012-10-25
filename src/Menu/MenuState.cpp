@@ -13,14 +13,14 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuState::MenuState(ExecutionStack& executionStack) :
-   GameState(executionStack), internalMenuShell(true)
+MenuState::MenuState(ExecutionStack& executionStack, const std::string& stateName) :
+   GameState(executionStack, stateName), internalMenuShell(true)
 {
-   menuShell = new MenuShell();
+   menuShell = new MenuShell(context);
 }
 
-MenuState::MenuState(ExecutionStack& executionStack, MenuShell* menuShell) :
-   GameState(executionStack), menuShell(menuShell), internalMenuShell(false)
+MenuState::MenuState(ExecutionStack& executionStack, const std::string& stateName, MenuShell* menuShell) :
+   GameState(executionStack, stateName, menuShell->getContext()), menuShell(menuShell), internalMenuShell(false)
 {
 }
 
@@ -49,8 +49,6 @@ bool MenuState::step()
    bool done = false;
 
    waitForInputEvent(done);
-
-   menuShell->getContext()->Update();
 
    return !done;
 }
@@ -92,12 +90,11 @@ void MenuState::waitForInputEvent(bool& finishState)
       }
    }
 
-   RocketSDLInputMapping::handleSDLEvent(menuShell->getContext(), event);
+   handleEvent(event);
 }
 
 void MenuState::draw()
 {
-   menuShell->getContext()->Render();
 }
 
 std::vector<MenuShellOption> MenuState::getSidebarOptions()

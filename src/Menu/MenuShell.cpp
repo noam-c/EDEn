@@ -12,9 +12,9 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuShell::MenuShell() : bindings(this), currentState(NULL)
+MenuShell::MenuShell(Rocket::Core::Context* context) : bindings(this), currentState(NULL), rocketContext(context)
 {
-   rocketContext = GraphicsUtil::getInstance()->createRocketContext("menu");
+   rocketContext->AddReference();
    shellDocument = rocketContext->LoadDocument("data/gui/menushell.rml");
 
    Rocket::Core::ElementDocument* background = rocketContext->LoadDocument("data/gui/menubg.rml");

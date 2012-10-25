@@ -11,7 +11,6 @@
 #include <Rocket/Controls.h>
 
 #include "PlayerData.h"
-#include "Character.h"
 
 #include "ExecutionStack.h"
 #include "DebugUtils.h"
@@ -19,7 +18,7 @@
 const int debugFlag = DEBUG_MENU;
 
 DataMenu::DataMenu(ExecutionStack& executionStack, PlayerData& playerData) :
-   MenuState(executionStack),
+   MenuState(executionStack, "DataMenu"),
    bindings(this),
    playerData(playerData),
    dataViewModel(playerData)
@@ -28,7 +27,7 @@ DataMenu::DataMenu(ExecutionStack& executionStack, PlayerData& playerData) :
 }
 
 DataMenu::DataMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell) :
-   MenuState(executionStack, menuShell),
+   MenuState(executionStack, "DataMenu", menuShell),
    bindings(this),
    playerData(playerData),
    dataViewModel(playerData)

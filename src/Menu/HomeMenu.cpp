@@ -7,23 +7,20 @@
 #include "HomeMenu.h"
 #include "DataMenu.h"
 #include "MenuShell.h"
-#include "GraphicsUtil.h"
 
 #include "ResourceLoader.h"
 #include "Music.h"
 #include "Sound.h"
 
 #include "PlayerData.h"
-#include "Character.h"
 
 #include "ExecutionStack.h"
-#include "SDL_image.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_MENU;
 
 HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData) :
-   MenuState(executionStack),
+   MenuState(executionStack, "HomeMenu"),
    bindings(this),
    playerData(playerData),
    homeViewModel(*playerData.getRoster())
@@ -32,12 +29,21 @@ HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData) :
 }
 
 HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell) :
-   MenuState(executionStack, menuShell),
+   MenuState(executionStack, "HomeMenu", menuShell),
    bindings(this),
    playerData(playerData),
    homeViewModel(*playerData.getRoster())
 {
    initialize();
+}
+
+HomeMenu::~HomeMenu()
+{
+   if(paneDocument != NULL)
+   {
+      paneDocument->Close();
+      paneDocument->RemoveReference();
+   }
 }
 
 void HomeMenu::initialize()
@@ -68,15 +74,6 @@ void HomeMenu::deactivate()
    if(paneDocument != NULL)
    {
       paneDocument->Hide();
-   }
-}
-
-HomeMenu::~HomeMenu()
-{
-   if(paneDocument != NULL)
-   {
-      paneDocument->Close();
-      paneDocument->RemoveReference();
    }
 }
 

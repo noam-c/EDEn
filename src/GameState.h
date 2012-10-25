@@ -7,11 +7,16 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
+#include <string>
+
 class ExecutionStack;
 
-namespace edwt
+namespace Rocket
 {
-   class Container;
+   namespace Core
+   {
+      class Context;
+   }
 };
 
 union SDL_Event;
@@ -36,11 +41,11 @@ class GameState
       /** The execution stack that the state belongs to. */
       ExecutionStack& executionStack;
    
-      /** The container for any GUI widgets used by the state. */
-      edwt::Container* top;
+      /** The Rocket context for any GUI created by the state. */
+      Rocket::Core::Context* context;
 
-      /** True iff the container was created internally (and thus should also be destroyed internally) */
-      bool internalContainer;
+      /** True iff the Rocket context was created internally (and thus should also be destroyed internally) */
+      bool internalContext;
 
       /** Set true to signal the state logic to terminate so that the state is destroyed. */
       bool finished;
@@ -50,17 +55,19 @@ class GameState
        * Initializes the top-level GUI widget container.
        *
        * @param executionStack The execution stack that the state belongs to.
+       * @param stateName The unique name of the state.
        */
-      GameState(ExecutionStack& executionStack);
+      GameState(ExecutionStack& executionStack, const std::string& stateName);
 
       /**
        * Constructor.
        * Initializes the state with an existing top-level container.
        *
        * @param executionStack The execution stack that the state belongs to.
-       * @param container The top-level container to use for this state.
+       * @param stateName The unique name of the state.
+       * @param context The Rocket context to use for this state's GUI.
        */
-      GameState(ExecutionStack& executionStack, edwt::Container* container);
+      GameState(ExecutionStack& executionStack, const std::string& stateName, Rocket::Core::Context* context);
 
       /**
        * Runs the state's logic processing

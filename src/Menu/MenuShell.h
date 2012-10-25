@@ -38,7 +38,7 @@ class MenuShell
       void refresh();
 
       public:
-         MenuShell();
+         MenuShell(Rocket::Core::Context* context);
          ~MenuShell();
 
          Rocket::Core::Context* getContext() const;

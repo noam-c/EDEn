@@ -1,0 +1,33 @@
+body
+{
+   font-family: Lunchtime Doubly So;
+   font-size: 16pt;
+   position: relative;
+   height: 100%;
+   width: 100%;
+}
+
+.dialogueText
+{
+   position: absolute;
+   color: #FFFFFF;
+}
+
+.dialogueText.narration
+{
+   text-align: center;
+   top: 50%;
+   margin-top: -16pt;
+   height: 16pt;
+}
+
+.dialogueText.speech
+{
+   background-color: #0033AB;
+   border-color: #000000AA;
+   border-width: 3px;
+   padding: 5px;
+   margin: 5px;
+   height: 64pt;
+   bottom: 0;
+}

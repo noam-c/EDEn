@@ -4,16 +4,6 @@
 #include "RocketListener.h"
 #include <vector>
 
-namespace Rocket
-{
-   namespace Core
-   {
-      class Element;
-      class ElementDocument;
-      class Event;
-   };
-};
-
 template<typename T> class EdenRocketBindings
 {
    T* instance;
