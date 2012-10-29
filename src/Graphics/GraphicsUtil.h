@@ -16,21 +16,6 @@
 struct SDL_Surface;
 union SDL_Event;
 
-namespace gcn
-{
-   class SDLInput;
-   class OpenGLGraphics;
-   class OpenGLSDLImageLoader;
-   class Gui;
-   class Container;
-};
-    
-namespace edwt
-{
-   class Container;
-   class OpenGLTrueTypeFont;
-};
-
 namespace shapes
 {
    struct Size;
@@ -59,27 +44,6 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
 
    /** The OpenGL Extensions */
    OpenGLExtensions openGLExtensions;
-
-   /** The Guichan SDL input driver */
-   gcn::SDLInput* input;
-
-   /** The Guichan OpenGL Graphics driver */
-   gcn::OpenGLGraphics* graphics;
-
-   /** The Guichan OpenGL image loader (for loading images via SDL) */
-   gcn::OpenGLSDLImageLoader* imageLoader;
-
-   /** A Gui object - binds all the drivers together */
-   gcn::Gui* gui;
-   
-   /** A top-level container bound to the GUI. */
-   edwt::Container* guiContainer;
-   
-   /** The current container shown inside the top-level container. */
-   gcn::Container* top;
-
-   /** The global default font */
-   edwt::OpenGLTrueTypeFont* font;
 
    /** The render interface that Rocket will use. */
    EdenRocketRenderInterface rocketRenderInterface;
@@ -150,34 +114,10 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       Rocket::Core::Context* createRocketContext(const std::string& name);
 
       /**
-       * Set the widget container to draw to screen.
-       *
-       * @param top The widget container to be used as the top-level container
-       */
-      void setInterface(gcn::Container* top);
-
-      /**
        * Flush any enqueued GL commands and then flip the screen buffer
        */
       void flipScreen();
    
-      /**
-       * Run GUI widget logic
-       */
-      void stepGUI();
-   
-      /**
-       * Draw GUI widgets to the screen
-       */
-      void drawGUI();
-
-      /**
-       * Push an SDL input event to the widgets
-       *
-       * @param event the input event to send to the widgets
-       */
-      void pushInput(const SDL_Event& event);
-
       /**
        * Sets a camera offset to begin drawing at. Note that this offset is
        * absolute; the offset is from the origin, rather than from the current

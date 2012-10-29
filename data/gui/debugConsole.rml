@@ -1,0 +1,10 @@
+<rml>
+   <head>
+      <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="debugConsole.rcss" />
+   </head>
+   <body>
+      <div id="commandLog" class="commandLog"></div>
+      <input id="commandPrompt" class="commandPrompt" type="text"></input>
+   </body>
+</rml>

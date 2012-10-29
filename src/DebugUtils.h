@@ -33,7 +33,7 @@
 #define DEBUG_EXEC_STACK  1<<1     // Execution stack
 #define DEBUG_GAME_STATE  1<<2     // General game state
 #define DEBUG_GRAPHICS    1<<3     // Graphics Utilities
-#define DEBUG_EDWT        1<<4     // ED Widget Toolkit
+#define DEBUG_ROCKET      1<<4     // Rocket GUI functionality
 #define DEBUG_TITLE       1<<5     // Title Screen
 #define DEBUG_TILE_ENG    1<<6     // Tile Engine
 #define DEBUG_MENU        1<<7     // In-game Menu
@@ -51,7 +51,6 @@
 #define DEBUG_ENTITY_GRID 1<<19    // Entity Map functionality
 #define DEBUG_MESSAGING   1<<20    // Message passing functionality
 #define DEBUG_TRANSITIONS 1<<21    // Game state transition functionality
-#define DEBUG_ROCKET      1<<22    // Rocket GUI functionality
 
 #define DEBUG_ALL           ~0    // Turn on all debug output (verbose, but handy)
 

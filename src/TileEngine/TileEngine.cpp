@@ -24,7 +24,6 @@
 #include "MapExitMessage.h"
 #include "Pathfinder.h"
 #include "Rectangle.h"
-//#include "DebugConsoleWindow.h"
 #include "DialogueController.h"
 #include "ExecutionStack.h"
 #include "RandomTransitionGenerator.h"
@@ -36,16 +35,17 @@ const int debugFlag = DEBUG_TILE_ENG;
 const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath)
-   : GameState(executionStack, "TileEngine"), entityGrid(*this, messagePipe), xMapOffset(0), yMapOffset(0)
+   : GameState(executionStack, "TileEngine"), consoleWindow(*context), entityGrid(*this, messagePipe), xMapOffset(0), yMapOffset(0)
 {
    messagePipe.registerListener(this);
+
+   loadPlayerData(playerDataPath);
+
    playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData, "npc1");
    scriptEngine = new ScriptEngine(*this, playerData, scheduler);
    dialogue = new DialogueController(*context, scheduler, *scriptEngine);
-   //consoleWindow = new edwt::DebugConsoleWindow(context, context->getWidth(), context->getHeight() * 0.2);
-   
+
    time = SDL_GetTicks();
-   loadPlayerData(playerDataPath);
    startChapter(chapterName);
 }
 
@@ -53,7 +53,6 @@ TileEngine::~TileEngine()
 {
    clearNPCs();
    messagePipe.unregisterListener(this);
-   //delete consoleWindow;
    delete dialogue;
    delete scriptEngine;
    delete playerActor;
@@ -158,20 +157,16 @@ void TileEngine::recalculateMapOffsets()
 }
 
 void TileEngine::toggleDebugConsole()
-{/*
-   bool consoleWindowVisible = consoleWindow->isVisible();
+{
+   bool consoleWindowVisible = consoleWindow.isVisible();
    if(consoleWindowVisible)
    {
-      // Hide the console window
-      consoleWindow->setVisible(false);
+      consoleWindow.hide();
    }
    else
    {
-      // Show the console window
-      top->moveToTop(consoleWindow);
-      consoleWindow->setVisible(true);
-      consoleWindow->requestFocus();
-   }*/
+      consoleWindow.show();
+   }
 }
 
 NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size)
@@ -322,7 +317,6 @@ bool TileEngine::step()
    handleInputEvents(done);
 
    playerActor->step(timePassed);
-
    entityGrid.step(timePassed);
 
    stepNPCs(timePassed);
@@ -340,7 +334,6 @@ void TileEngine::handleInputEvents(bool& finishState)
       {
          case SDL_USEREVENT:
          {
-            /*
             switch(event.user.code)
             {
                case DEBUG_CONSOLE_EVENT:
@@ -353,7 +346,6 @@ void TileEngine::handleInputEvents(bool& finishState)
                   break;
                }
             }
-            */
             break;
          }
          case SDL_KEYDOWN:
@@ -362,8 +354,11 @@ void TileEngine::handleInputEvents(bool& finishState)
             {
                case SDLK_SPACE:
                {
-                  dialogue->setFastModeEnabled(true);
-                  dialogue->nextLine();
+                  if(!consoleWindow.isVisible())
+                  {
+                     dialogue->setFastModeEnabled(true);
+                     dialogue->nextLine();
+                  }
                   return;
                }
                case SDLK_ESCAPE:
@@ -378,15 +373,18 @@ void TileEngine::handleInputEvents(bool& finishState)
                }
                case SDLK_TAB:
                {
-                  // Clear the message pipe in preparation for the new state.
-                  // The Tile Engine message pipe will be rebound when the Tile Engine state
-                  // is activated again.
-                  playerData.clearMessagePipe();
+                  if(!consoleWindow.isVisible())
+                  {
+                     // Clear the message pipe in preparation for the new state.
+                     // The Tile Engine message pipe will be rebound when the Tile Engine state
+                     // is activated again.
+                     playerData.clearMessagePipe();
 
-                  HomeMenu* menu = new HomeMenu(executionStack, playerData);
+                     HomeMenu* menu = new HomeMenu(executionStack, playerData);
 
-                  executionStack.pushState(menu, RandomTransitionGenerator::create(executionStack, this, menu));
-                  return;
+                     executionStack.pushState(menu, RandomTransitionGenerator::create(executionStack, this, menu));
+                     return;
+                  }
                }
                default:
                {
@@ -397,23 +395,26 @@ void TileEngine::handleInputEvents(bool& finishState)
          }
          case SDL_KEYUP:
          {
-            switch(event.key.keysym.sym)
+            if(!consoleWindow.isVisible())
             {
-               case SDLK_SPACE:
+               switch(event.key.keysym.sym)
                {
-                  if(dialogue->hasDialogue())
+                  case SDLK_SPACE:
                   {
-                     dialogue->setFastModeEnabled(false);
+                     if(dialogue->hasDialogue())
+                     {
+                        dialogue->setFastModeEnabled(false);
+                     }
+                     else
+                     {
+                        action();
+                     }
+                     return;
                   }
-                  else
+                  default:
                   {
-                     action();
+                     break;
                   }
-                  return;
-               }
-               default:
-               {
-                  break;
                }
             }
             break;
@@ -428,10 +429,10 @@ void TileEngine::handleInputEvents(bool& finishState)
             break;
          }
       }
-   }
 
-   // If the tile engine didn't consume this event, then propagate to the generic input handling
-   handleEvent(event);
+      // If the tile engine didn't consume this event, then propagate to the generic input handling
+      handleEvent(event);
+   }
 }
 
 void TileEngine::action()

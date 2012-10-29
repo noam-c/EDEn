@@ -253,6 +253,11 @@ void RocketSDLInputMapping::handleSDLEvent(Rocket::Core::Context* context, const
          else
          {
             context->ProcessKeyDown(keyMapping, RocketSDLInputMapping::getKeyModifierState(event.key.keysym.mod));
+
+            if(event.key.keysym.unicode >= ' ' && (event.key.keysym.unicode <= '~'))
+            {
+                context->ProcessTextInput(event.key.keysym.unicode);
+            }
          }
          break;
       }

@@ -10,6 +10,7 @@
 #include "GameState.h"
 
 #include "MessagePipe.h"
+#include "DebugConsoleWindow.h"
 #include "Scheduler.h"
 #include "EntityGrid.h"
 #include "Listener.h"
@@ -24,11 +25,6 @@ class PlayerCharacter;
 class Region;
 class DialogueController;
 class Task;
-
-namespace edwt
-{
-//   class DebugConsoleWindow;
-};
 
 /**
  * GameState that coordinates all the gameplay involving walking around fields
@@ -49,11 +45,11 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    
    messaging::MessagePipe messagePipe;
 
+   /** The debug console window to be used for diagnostics. */
+   DebugConsoleWindow consoleWindow;
+
    /** The current map that the player is in. */
    EntityGrid entityGrid;
-
-   /** The debug console window to be used for diagnostics. */
-   //edwt::DebugConsoleWindow* consoleWindow;
 
    /** Controller for dialogue and narrations. */
    DialogueController* dialogue;
@@ -82,7 +78,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    /**
     * Loads new player data.
     *
-    * @param path The path to the chapter script.
+    * @param path The path to the player data file.
     */
    void loadPlayerData(const std::string& path);
    

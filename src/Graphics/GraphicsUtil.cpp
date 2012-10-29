@@ -10,16 +10,10 @@
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 #include "SDL_ttf.h"
-#include "guichan.hpp"
-#include "guichan/sdl.hpp"
-#include "guichan/opengl.hpp"
-#include "guichan/opengl/openglsdlimageloader.hpp"
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include "RocketSDLInputMapping.h"
-#include "Container.h"
 #include "Size.h"
-#include "OpenGLTTF.h"
 #include <dirent.h>
 
 #include "DebugUtils.h"
@@ -36,7 +30,6 @@ void GraphicsUtil::initialize()
    initSDL();
    openGLExtensions.initialize();
    initRocket();
-   initGuichan();
 }
 
 void GraphicsUtil::initSDL()
@@ -151,44 +144,6 @@ Rocket::Core::Context* GraphicsUtil::createRocketContext(const std::string& name
    return Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(width, height));
 }
 
-void GraphicsUtil::initGuichan()
-{
-   imageLoader = new gcn::OpenGLSDLImageLoader();
-
-   // The ImageLoader in use is static and must be set to be
-   // able to load images
-   gcn::Image::setImageLoader(imageLoader);
-   graphics = new gcn::OpenGLGraphics();
-   graphics->setTargetPlane(800, 600);
-
-   input = new gcn::SDLInput();
-
-   gui = new gcn::Gui();
-
-   // Set gui to use the SDLGraphics object.
-   gui->setGraphics(graphics);
-
-   // Set gui to use the SDLInput object
-   gui->setInput(input);
-
-   // Set top-level container for the gui
-   guiContainer = new edwt::Container();
-   gui->setTop(guiContainer);
-   guiContainer->setWidth(width);
-   guiContainer->setHeight(height);
-   guiContainer->setVisible(true);
-   guiContainer->setOpaque(false);
-   
-   // Set the top-level container to be null for now
-   top = NULL;
-
-   // Load the image font.
-   font = new edwt::OpenGLTrueTypeFont("data/fonts/LDSRegular.ttf", 16);
-
-   // The global font is static and must be set.
-   gcn::Widget::setGlobalFont(font);
-}
-
 void GraphicsUtil::flipScreen()
 {
    glFlush();
@@ -208,47 +163,6 @@ int GraphicsUtil::getWidth()
 int GraphicsUtil::getHeight()
 {
    return height;
-}
-
-void GraphicsUtil::setInterface(gcn::Container* newTop)
-{
-   if(top != NULL)
-   {
-      top->setVisible(false);
-   }
-   
-   if(newTop != NULL)
-   {
-      if(guiContainer->containsWidget(newTop))
-      {
-         newTop->setVisible(true);
-      }
-      else
-      {
-         guiContainer->add(newTop);
-      }
-   }
-
-   top = newTop;
-}
-
-void GraphicsUtil::stepGUI()
-{
-   gui->logic();
-}
-
-void GraphicsUtil::drawGUI()
-{
-   // Draw the GUI to buffer
-   gui->draw();
-
-   // Update the screen
-   SDL_GL_SwapBuffers();
-}
-
-void GraphicsUtil::pushInput(const SDL_Event& event)
-{
-   input->pushInput(event);
 }
 
 void GraphicsUtil::clearBuffer()
@@ -312,14 +226,6 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
 
 void GraphicsUtil::finish()
 {
-   //Destroys some Guichan stuff
-   delete font;
-   delete guiContainer;
-   delete gui;
-   delete imageLoader;
-   delete graphics;
-   delete input;
-
    // Shut down Rocket
    Rocket::Core::Shutdown();
 

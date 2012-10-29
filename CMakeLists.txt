@@ -13,21 +13,7 @@ set(HEADERS
   src/Coroutines/TaskId.h
   src/Coroutines/Timer.h
   src/DebugUtils.h
-  src/edwt/Container.h
-  src/edwt/DebugConsoleWindow.h
-  src/edwt/Icon.h
-  src/edwt/Label.h
-  src/edwt/ListBox.h
-  src/edwt/ModuleSelectListener.h
-  src/edwt/OpenGLTTF.h
-  src/edwt/StringListModel.h
-  src/edwt/Tab.h
-  src/edwt/TabbedArea.h
-  src/edwt/TabChangeListener.h
-  src/edwt/TextAlignment.h
-  src/edwt/TextBox.h
-  src/edwt/TextField.h
-  src/edwt/Window.h
+  src/DebugConsoleWindow.h
   src/Exception.h
   src/ExecutionStack.h
   src/GameState.h
@@ -245,18 +231,6 @@ set(SOURCES
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
   src/Coroutines/Timer.cpp
-  src/edwt/Container.cpp
-  src/edwt/DebugConsoleWindow.cpp
-  src/edwt/Icon.cpp
-  src/edwt/Label.cpp
-  src/edwt/ListBox.cpp
-  src/edwt/OpenGLTTF.cpp
-  src/edwt/StringListModel.cpp
-  src/edwt/Tab.cpp
-  src/edwt/TabbedArea.cpp
-  src/edwt/TextBox.cpp
-  src/edwt/TextField.cpp
-  src/edwt/Window.cpp
   src/GameData/ItemData.cpp
   src/GameData/Item.cpp
   src/MainMenu/MainMenu.cpp
@@ -328,6 +302,7 @@ set(SOURCES
   src/Transitions/BlendState.cpp
   src/main.cpp
   src/DebugUtils.cpp
+  src/DebugConsoleWindow.cpp
   src/Exception.cpp
   src/ExecutionStack.cpp
   src/GameState.cpp
@@ -361,7 +336,6 @@ source_group("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.
 source_group(Transitions REGULAR_EXPRESSION src/Transitions/.*)
 source_group(json REGULAR_EXPRESSION src/json/.*)
 source_group(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
-source_group(edwt REGULAR_EXPRESSION src/edwt/.*)
 source_group(tinyxml REGULAR_EXPRESSION src/tinyxml/.*)
 
 include_directories( 
@@ -387,7 +361,6 @@ include_directories(
   src/Transitions
   src/json
   src/LuaWrapper
-  src/edwt
   src/tinyxml
 )
 

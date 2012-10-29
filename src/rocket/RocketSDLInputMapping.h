@@ -21,6 +21,7 @@ class RocketSDLInputMapping
    public:
       static void initialize();
       static void handleSDLEvent(Rocket::Core::Context* context, const SDL_Event& event);
+      static char getCharacterCode(const SDL_KeyboardEvent& keyEvent);
 };
 
 #endif
