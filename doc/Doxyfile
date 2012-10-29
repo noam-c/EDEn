@@ -96,10 +96,8 @@ FILE_PATTERNS          = *.cpp \
                          *.h \
                          *.hpp
 RECURSIVE              = YES
-EXCLUDE                = ../src/guichan \
-                         ../src/json \
-                         ../src/tinyxml \
-                         ../src/guichan.hpp
+EXCLUDE                = ../src/json \
+                         ../src/tinyxml
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = 
 EXCLUDE_SYMBOLS        = 

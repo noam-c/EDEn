@@ -9,7 +9,6 @@
 #include "ExecutionStack.h"
 #include "MainMenu.h"
 #include "ResourceLoader.h"
-#include "guichan.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -38,11 +37,6 @@ int main (int argc, char *argv[])
       DEBUG("Game is finished. Freeing resources and destroying singletons.");
       ResourceLoader::freeAll();
       GraphicsUtil::destroy();
-   }
-   catch (gcn::Exception& e)
-   {
-      DEBUG("Uncaught Guichan exception: \n%s", e.getMessage().c_str());
-      return 1;
    }
    catch(Exception& e)
    {

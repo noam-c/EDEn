@@ -69,16 +69,11 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
     */
    void initRocket();
 
-   /**
-    * Initializes the Guichan library for use with OpenGL via SDL.
-    */
-   void initGuichan();
-
    protected:
       /** 
        * Constructor.
        * Initializes SDL and OpenGL.
-       * Initialize Guichan GUI drivers for OpenGL.
+       * Initialize Rocket GUI library.
        */
       virtual void initialize();
    

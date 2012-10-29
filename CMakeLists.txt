@@ -21,70 +21,6 @@ set(HEADERS
   src/Graphics/OpenGLExtensions.h
   src/Graphics/ScreenTexture.h
   src/Graphics/Texture.h
-  src/guichan/actionevent.hpp
-  src/guichan/actionlistener.hpp
-  src/guichan/basiccontainer.hpp
-  src/guichan/cliprectangle.hpp
-  src/guichan/color.hpp
-  src/guichan/deathlistener.hpp
-  src/guichan/defaultfont.hpp
-  src/guichan/event.hpp
-  src/guichan/exception.hpp
-  src/guichan/focushandler.hpp
-  src/guichan/focuslistener.hpp
-  src/guichan/font.hpp
-  src/guichan/genericinput.hpp
-  src/guichan/glut.hpp
-  src/guichan/graphics.hpp
-  src/guichan/gui.hpp
-  src/guichan/image.hpp
-  src/guichan/imagefont.hpp
-  src/guichan/imageloader.hpp
-  src/guichan/input.hpp
-  src/guichan/inputevent.hpp
-  src/guichan/key.hpp
-  src/guichan/keyevent.hpp
-  src/guichan/keyinput.hpp
-  src/guichan/keylistener.hpp
-  src/guichan/listmodel.hpp
-  src/guichan/mouseevent.hpp
-  src/guichan/mouseinput.hpp
-  src/guichan/mouselistener.hpp
-  src/guichan/opengl/openglallegroimageloader.hpp
-  src/guichan/opengl/openglgraphics.hpp
-  src/guichan/opengl/openglimage.hpp
-  src/guichan/opengl/openglsdlimageloader.hpp
-  src/guichan/opengl.hpp
-  src/guichan/platform.hpp
-  src/guichan/rectangle.hpp
-  src/guichan/sdl/sdlgraphics.hpp
-  src/guichan/sdl/sdlimage.hpp
-  src/guichan/sdl/sdlimageloader.hpp
-  src/guichan/sdl/sdlinput.hpp
-  src/guichan/sdl/sdlpixel.hpp
-  src/guichan/sdl.hpp
-  src/guichan/selectionevent.hpp
-  src/guichan/selectionlistener.hpp
-  src/guichan/widget.hpp
-  src/guichan/widgetlistener.hpp
-  src/guichan/widgets/adjustingcontainer.hpp
-  src/guichan/widgets/button.hpp
-  src/guichan/widgets/checkbox.hpp
-  src/guichan/widgets/container.hpp
-  src/guichan/widgets/dropdown.hpp
-  src/guichan/widgets/icon.hpp
-  src/guichan/widgets/imagebutton.hpp
-  src/guichan/widgets/label.hpp
-  src/guichan/widgets/listbox.hpp
-  src/guichan/widgets/radiobutton.hpp
-  src/guichan/widgets/scrollarea.hpp
-  src/guichan/widgets/slider.hpp
-  src/guichan/widgets/tab.hpp
-  src/guichan/widgets/tabbedarea.hpp
-  src/guichan/widgets/textbox.hpp
-  src/guichan/widgets/textfield.hpp
-  src/guichan/widgets/window.hpp
-  src/guichan.hpp
   src/json/json.h
   src/json/json-forwards.h
   src/GameData/ItemData.h
@@ -171,55 +107,6 @@ set(HEADERS
 )
 
 set(SOURCES 
-  src/guichan/actionevent.cpp
-  src/guichan/basiccontainer.cpp
-  src/guichan/cliprectangle.cpp
-  src/guichan/color.cpp
-  src/guichan/defaultfont.cpp
-  src/guichan/event.cpp
-  src/guichan/exception.cpp
-  src/guichan/focushandler.cpp
-  src/guichan/font.cpp
-  src/guichan/genericinput.cpp
-  src/guichan/graphics.cpp
-  src/guichan/gui.cpp
-  src/guichan/guichan.cpp
-  src/guichan/image.cpp
-  src/guichan/imagefont.cpp
-  src/guichan/inputevent.cpp
-  src/guichan/key.cpp
-  src/guichan/keyevent.cpp
-  src/guichan/keyinput.cpp
-  src/guichan/mouseevent.cpp
-  src/guichan/mouseinput.cpp
-  src/guichan/opengl/opengl.cpp
-  src/guichan/opengl/openglgraphics.cpp
-  src/guichan/opengl/openglimage.cpp
-  src/guichan/rectangle.cpp
-  src/guichan/sdl/sdl.cpp
-  src/guichan/sdl/sdlgraphics.cpp
-  src/guichan/sdl/sdlimage.cpp
-  src/guichan/sdl/sdlimageloader.cpp
-  src/guichan/sdl/sdlinput.cpp
-  src/guichan/selectionevent.cpp
-  src/guichan/widget.cpp
-  src/guichan/widgets/adjustingcontainer.cpp
-  src/guichan/widgets/button.cpp
-  src/guichan/widgets/checkbox.cpp
-  src/guichan/widgets/container.cpp
-  src/guichan/widgets/dropdown.cpp
-  src/guichan/widgets/icon.cpp
-  src/guichan/widgets/imagebutton.cpp
-  src/guichan/widgets/label.cpp
-  src/guichan/widgets/listbox.cpp
-  src/guichan/widgets/radiobutton.cpp
-  src/guichan/widgets/scrollarea.cpp
-  src/guichan/widgets/slider.cpp
-  src/guichan/widgets/tab.cpp
-  src/guichan/widgets/tabbedarea.cpp
-  src/guichan/widgets/textbox.cpp
-  src/guichan/widgets/textfield.cpp
-  src/guichan/widgets/window.cpp
   src/tinyxml/tinystr.cpp
   src/tinyxml/tinyxml.cpp
   src/tinyxml/tinyxmlerror.cpp
@@ -319,7 +206,6 @@ source_group(Audio REGULAR_EXPRESSION src/Audio/.*)
 source_group(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 source_group(GameData REGULAR_EXPRESSION src/GameData/.*)
 source_group(Graphics REGULAR_EXPRESSION src/Graphics/.*)
-source_group(guichan REGULAR_EXPRESSION src/guichan/.*)
 source_group(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
 source_group(Menu REGULAR_EXPRESSION src/Menu/.*)
 source_group(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
@@ -344,7 +230,6 @@ include_directories(
   src/Coroutines
   src/GameData
   src/Graphics
-  src/guichan
   src/MainMenu
   src/Menu
   src/MenuControls

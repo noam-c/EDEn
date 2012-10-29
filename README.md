@@ -16,10 +16,6 @@ Most of the code is Copyright 2012 Noam Chitayat. Contributors retain copyright 
 
 The EDEn source is released under the terms of the Ruby License, with the following exceptions:
 
-* Code in the guichan folder or under the gcn namespace is part of the Guichan GUI library version 0.8.2.
-
-	Guichan is copyright 2004-2012 Olof Naessén and Per Larsson. All rights reserved. 
-
 * Code in the json folder or under the Json namespace is part of the JsonCpp JSON parsing library.
 
 	JsonCpp is copryright 2007-2012 Baptiste Lepilleur. Distributed under MIT license, or public domain if desired and recognized in your jurisdiction.
@@ -56,7 +52,6 @@ Links
 -----
 
 * SDL Cross-platform Library - http://www.libsdl.org
-* Guichan GUI library - http://guichan.sourceforge.net
 * libRocket - http://www.librocket.com
 * Lua Programming Language - http://www.lua.org
 * JsonCpp library - http://jsoncpp.sourceforge.net/
