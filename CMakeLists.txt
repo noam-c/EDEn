@@ -250,6 +250,7 @@ include_directories(
 )
 
 add_definitions( 
+  -Wall
   -DDEBUG_MODE
   -D_CONSOLE
 )
