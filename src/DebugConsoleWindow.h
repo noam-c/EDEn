@@ -65,10 +65,21 @@ class DebugConsoleWindow
        */
       void onKeyPress(Rocket::Core::Event* event);
 
+      /**
+       * @return true iff the debug window is currently visible.
+       */
       bool isVisible() const;
 
+      /**
+       * Reveals the debug console window.
+       * (does nothing if the window is already visible)
+       */
       void show();
 
+      /**
+       * Hides the debug console window from view.
+       * (does nothing if the window is already hidden)
+       */
       void hide();
 
       /**

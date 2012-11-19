@@ -9,13 +9,35 @@
 
 #include "TransitionState.h"
 
+/**
+ * A transition that slowly blends in the new state while
+ * simultaneously fading out the old state, creating a smooth
+ * and simple transition between the two states' screens.
+ *
+ * @author Noam Chitayat
+ */
 class BlendState : public TransitionState
 {
    protected:
+      /**
+       * Draws a blend between the old and new state.
+       */
       void draw();
 
    public:
+      /**
+       * Constructor.
+       *
+       * @param executionStack The execution stack managing this transition.
+       * @param oldState The state that is being transitioned away from.
+       * @param newState The state that is being transitioned to.
+       * @param transitionLength The length (in milliseconds) of the transition.
+       */
       BlendState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength = 1000);
+
+      /**
+       * Destructor.
+       */
       ~BlendState();
 };
 

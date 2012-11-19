@@ -18,12 +18,7 @@ TransitionState::TransitionState(ExecutionStack& executionStack, const std::stri
 {
    if(oldState != NULL)
    {
-      oldState->activate();
-      oldStateTexture.startCapture();
-      oldState->drawFrame();
-      oldStateTexture.endCapture();
-
-      if (glGetError())
+      if(!captureStateToTexture(oldState, oldStateTexture))
       {
          DEBUG("Failed to create screen capture for old state.");
       }
@@ -31,12 +26,7 @@ TransitionState::TransitionState(ExecutionStack& executionStack, const std::stri
 
    if(newState != NULL)
    {
-      newState->activate();
-      newStateTexture.startCapture();
-      newState->drawFrame();
-      newStateTexture.endCapture();
-
-      if (glGetError())
+      if(!captureStateToTexture(newState, newStateTexture))
       {
          DEBUG("Failed to create screen capture for new state.");
       }
@@ -47,6 +37,17 @@ TransitionState::TransitionState(ExecutionStack& executionStack, const std::stri
 
 TransitionState::~TransitionState()
 {
+}
+
+bool TransitionState::captureStateToTexture(GameState* state, ScreenTexture& screenTexture)
+{
+   state->activate();
+   screenTexture.startCapture();
+   state->drawFrame();
+   screenTexture.endCapture();
+   state->deactivate();
+
+   return !glGetError();
 }
 
 bool TransitionState::step()
@@ -61,6 +62,7 @@ bool TransitionState::step()
 
    progress = static_cast<double>(timePassed)
          / static_cast<double>(transitionLength);
+
    DEBUG("Continuing transition (%dms passed).", timePassed);
    return true;
 }

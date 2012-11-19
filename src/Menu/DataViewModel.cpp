@@ -32,7 +32,7 @@ void DataViewModel::saveToSlot(int slotIndex)
    NotifyRowChange("saveGames", slotIndex, 1);
 }
 
-void DataViewModel::clearSaveGames()
+void DataViewModel::clearSaveGameList()
 {
    std::vector<std::pair<std::string, PlayerData*> >::iterator iter;
    for(iter = saveGames.begin(); iter != saveGames.end(); ++iter)
@@ -45,7 +45,7 @@ void DataViewModel::clearSaveGames()
 
 void DataViewModel::refreshSaveGames()
 {
-   clearSaveGames();
+   clearSaveGameList();
 
    struct dirent *entry;
    DIR *dp;

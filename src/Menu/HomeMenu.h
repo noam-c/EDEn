@@ -49,6 +49,22 @@ class HomeMenu: public MenuState
    /** The home menu RML document */
    Rocket::Core::ElementDocument* paneDocument;
 
+   /**
+    * Initializes the home menu pane and populates the sidebar.
+    */
+   void initialize();
+
+   protected:
+      /**
+       * Activates the home menu and reveals the home pane.
+       */
+      void activate();
+
+      /**
+       * Deactivates the home menu and hides the home pane.
+       */
+      void deactivate();
+
    public:
       /**
        * Constructor. Initializes the menu GUI.
@@ -67,12 +83,12 @@ class HomeMenu: public MenuState
        */
       HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
 
-      void initialize();
-      void activate();
-      void deactivate();
-
-      std::vector<MenuShellOption> getSidebarOptions();
-
+      /**
+       * Handles sidebar option click events by navigating to the
+       * appropriate menu.
+       *
+       * @param optionIndex The index of the sidebar option that was clicked.
+       */
       void sidebarClicked(int optionIndex);
 
       /**

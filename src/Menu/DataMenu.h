@@ -40,7 +40,7 @@ class DataMenu: public MenuState
    /** The player data */
    PlayerData& playerData;
 
-   /** The view model */
+   /** The view model that exposes the savegames to the GUI */
    DataViewModel dataViewModel;
 
    /** The data menu RML document */
@@ -49,13 +49,60 @@ class DataMenu: public MenuState
    /** The RML document for the Confirm Save window in the data menu */
    Rocket::Core::ElementDocument* confirmSaveDocument;
 
+   /** The slot to save to after the user confirms the save. */
    int slotToSave;
 
+   /**
+    * Displays the confirmation dialog to ensure that the user wants
+    * to save at this location.
+    *
+    * @param index The index of the data to save.
+    */
    void showConfirmDialog(int index);
+
+   /**
+    * Hides the confirmation dialog if it is visible, and
+    * resets the save slot.
+    */
    void hideConfirmDialog();
+
+   /**
+    * Event handler for the "Yes"/"Confirm" button being clicked.
+    *
+    * @param event The Rocket GUI event being sent by the user input.
+    */
    void confirmClicked(Rocket::Core::Event* event);
+
+   /**
+    * Event handler for the "No"/"Cancel" button being clicked.
+    *
+    * @param event The Rocket GUI event being sent by the user input.
+    */
    void cancelClicked(Rocket::Core::Event* event);
+
+   /**
+    * Event handler for a savegame being clicked.
+    * Begins the saving process using the clicked slot.
+    *
+    * @param event The Rocket GUI event that indicates which slot was clicked.
+    */
    void saveGameClicked(Rocket::Core::Event* event);
+
+   /**
+    * Initializes the data menu pane and populates the sidebar.
+    */
+   void initialize();
+
+   protected:
+      /**
+       * Activates the data menu and reveals the data pane.
+       */
+      void activate();
+
+      /**
+       * Deactivates the data menu and hides the data pane.
+       */
+      void deactivate();
 
    public:
       /**
@@ -75,12 +122,12 @@ class DataMenu: public MenuState
        */
       DataMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
 
-      void initialize();
-      void activate();
-      void deactivate();
-
-      std::vector<MenuShellOption> getSidebarOptions();
-
+      /**
+       * Handles a sidebar click for the data menu.
+       * \todo Finish implementation of this method.
+       *
+       * @param optionIndex The index of the sidebar option that was clicked.
+       */
       void sidebarClicked(int optionIndex);
 
       /**

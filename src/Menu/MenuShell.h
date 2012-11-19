@@ -24,27 +24,73 @@ namespace Rocket
 
 class MenuState;
 
+/**
+ * The menu shell contains the foundations of the in-game menu.
+ * All the standard GUI elements, such as the Rocket context, the action sidebar, and the background
+ * are created in the shell, which is passed up through any menu-based GameState (MenuState types) to allow for
+ * sharing of a single shell among states.
+ *
+ * @author Noam Chitayat
+ */
 class MenuShell
 {
-      Rocket::Core::Context* rocketContext;
-      Rocket::Core::ElementDocument* shellDocument;
-      Rocket::Core::Element* sidebarElement;
+   /** The Rocket context which holds the shell's GUI components. */
+   Rocket::Core::Context* rocketContext;
 
-      /** The event binding collection for the sidebar */
-      EdenRocketBindings<MenuShell> bindings;
+   /** The RML document holding the shell GUI components. */
+   Rocket::Core::ElementDocument* shellDocument;
 
-      MenuState* currentState;
+   /**
+    * The element containing the sidebar list for
+    * the active menu's related actions.
+    */
+   Rocket::Core::Element* sidebarElement;
 
-      void refresh();
+   /** The event binding collection for the sidebar */
+   EdenRocketBindings<MenuShell> bindings;
 
-      public:
-         MenuShell(Rocket::Core::Context* context);
-         ~MenuShell();
+   /** The currently active menu state */
+   MenuState* currentState;
 
-         Rocket::Core::Context* getContext() const;
-         Rocket::Core::ElementDocument* getShellDocument() const;
-         void changeMenuState(MenuState* newState);
-         void sidebarClicked(Rocket::Core::Event* event);
+   /**
+    * Refreshes the menu shell GUI components.
+    */
+   void refresh();
+
+   /**
+    * Event handler for sidebar element clicks.
+    * Determines the clicked option index and sends an
+    * event to the currently active menu.
+    */
+   void sidebarClicked(Rocket::Core::Event* event);
+
+   public:
+      /**
+       * Constructor.
+       *
+       * @param context The menu context that will contain the menu shell GUI.
+       */
+      MenuShell(Rocket::Core::Context* context);
+
+      /**
+       * Destructor.
+       */
+      ~MenuShell();
+
+      /**
+       * @return The Rocket context managing the shell GUI.
+       */
+      Rocket::Core::Context* getContext() const;
+
+      /**
+       * @return The RML document managing the shell GUI.
+       */
+      Rocket::Core::ElementDocument* getShellDocument() const;
+
+      /**
+       * Sets a new active menu state.
+       */
+      void changeMenuState(MenuState* newState);
 };
 
 #endif

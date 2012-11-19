@@ -9,13 +9,32 @@
 
 #include "TransitionState.h"
 
+/**
+ * A transition that slowly fades out the old state,
+ * allowing it to completely fade to black before displaying
+ * the new state.
+ */
 class FadeState : public TransitionState
 {
    protected:
+      /**
+       * Draws a faded version of the old state.
+       */
       void draw();
 
    public:
+      /**
+       * Constructor.
+       *
+       * @param executionStack The execution stack managing this transition.
+       * @param oldState The state that is being faded out.
+       * @param transitionLength The length (in milliseconds) of the transition.
+       */
       FadeState(ExecutionStack& executionStack, GameState* oldState, long transitionLength = 1000);
+
+      /**
+       * Destructor.
+       */
       ~FadeState();
 };
 
