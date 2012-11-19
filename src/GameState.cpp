@@ -30,6 +30,7 @@ GameState::~GameState()
 void GameState::activate()
 {
    finished = false;
+   context->Update();
 }
 
 void GameState::deactivate()

@@ -147,37 +147,37 @@ int RocketSDLInputMapping::getKeyModifierState(const SDLMod& modifiers)
 {
    int rocketModifierState = 0;
 
-   if (modifiers & KMOD_SHIFT != 0)
+   if ((modifiers & KMOD_SHIFT) != 0)
    {
       rocketModifierState |= Rocket::Core::Input::KM_SHIFT;
    }
 
-   if (modifiers & KMOD_CTRL != 0)
+   if ((modifiers & KMOD_CTRL) != 0)
    {
       rocketModifierState |= Rocket::Core::Input::KM_CTRL;
    }
 
-   if (modifiers & KMOD_ALT != 0)
+   if ((modifiers & KMOD_ALT) != 0)
    {
       rocketModifierState |= Rocket::Core::Input::KM_ALT;
    }
 
-   if (modifiers & KMOD_META != 0)
+   if ((modifiers & KMOD_META) != 0)
    {
       rocketModifierState |= Rocket::Core::Input::KM_META;
    }
 
-   if (modifiers & KMOD_CAPS != 0)
+   if ((modifiers & KMOD_CAPS) != 0)
    {
       rocketModifierState |= Rocket::Core::Input::KM_CAPSLOCK;
    }
 
-   if (modifiers & KMOD_NUM != 0)
+   if ((modifiers & KMOD_NUM) != 0)
    {
       rocketModifierState |= Rocket::Core::Input::KM_NUMLOCK;
    }
 
-   if (modifiers & KMOD_MODE != 0)
+   if ((modifiers & KMOD_MODE) != 0)
    {
       rocketModifierState |= Rocket::Core::Input::KM_CAPSLOCK;
    }
