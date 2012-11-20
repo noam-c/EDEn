@@ -39,7 +39,10 @@ int Pathfinder::pixelsToTileNum(const shapes::Point2D& pixelLocation) const
    return coordsToTileNum(pixelLocation / movementTileSize);
 }
 
-Pathfinder::Pathfinder() : distanceMatrix(NULL), successorMatrix(NULL), collisionGrid(NULL)
+Pathfinder::Pathfinder() :
+   distanceMatrix(NULL),
+   successorMatrix(NULL),
+   collisionGrid(NULL)
 {
 }
 
@@ -52,6 +55,11 @@ void Pathfinder::initialize(TileState** grid, int tileSize, const shapes::Rectan
    collisionGridBounds = gridBounds;
    initRoyFloydWarshallMatrices();
    DEBUG("Pathfinder reinitialized.");
+}
+
+Pathfinder::~Pathfinder()
+{
+   deleteRoyFloydWarshallMatrices();
 }
 
 void Pathfinder::initRoyFloydWarshallMatrices()
@@ -380,9 +388,4 @@ void Pathfinder::deleteRoyFloydWarshallMatrices()
       delete [] successorMatrix;
       successorMatrix = NULL;
    }
-}
-
-Pathfinder::~Pathfinder()
-{
-   deleteRoyFloydWarshallMatrices();
 }

@@ -12,12 +12,15 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_GAME_STATE;
 
-GameState::GameState(ExecutionStack& executionStack, const std::string& stateName) : executionStack(executionStack)
+GameState::GameState(ExecutionStack& executionStack, const std::string& stateName) :
+   executionStack(executionStack)
 {
    context = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
 }
 
-GameState::GameState(ExecutionStack& executionStack, const std::string& stateName, Rocket::Core::Context* context) : executionStack(executionStack), context(context)
+GameState::GameState(ExecutionStack& executionStack, const std::string& stateName, Rocket::Core::Context* context) :
+   executionStack(executionStack),
+   context(context)
 {
    context->AddReference();
 }

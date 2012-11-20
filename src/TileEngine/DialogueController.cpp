@@ -14,7 +14,8 @@
 
 const int debugFlag = DEBUG_DIA_CONTR;
 
-DialogueController::DialogueCoroutine::DialogueCoroutine(DialogueController& controller) : dialogueController(controller)
+DialogueController::DialogueCoroutine::DialogueCoroutine(DialogueController& controller) :
+   dialogueController(controller)
 {
 }
 

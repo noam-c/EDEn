@@ -11,7 +11,8 @@
 
 const int debugFlag = DEBUG_EXEC_STACK;
 
-ExecutionStack::ExecutionStack() : nextState(NULL)
+ExecutionStack::ExecutionStack() :
+   nextState(NULL)
 {
 }
 

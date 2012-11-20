@@ -17,7 +17,9 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-CharacterRoster::CharacterRoster() : messagePipe(NULL), partyLeader(NULL)
+CharacterRoster::CharacterRoster() :
+   messagePipe(NULL),
+   partyLeader(NULL)
 {
 }
 

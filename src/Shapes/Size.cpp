@@ -8,10 +8,14 @@
 
 namespace shapes
 {
-   Size::Size() : width(0), height(0)
+   Size::Size() :
+      width(0),
+      height(0)
    {}
    
-   Size::Size(unsigned int width, unsigned int height) : width(width), height(height)
+   Size::Size(unsigned int width, unsigned int height) :
+      width(width),
+      height(height)
    {}
    
    bool Size::operator==(const Size& rhs) const

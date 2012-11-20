@@ -15,7 +15,8 @@ extern "C"
    #include <lauxlib.h>
 }
 
-StringScript::StringScript(lua_State* luaVM, const std::string& scriptString) : Script(scriptString)
+StringScript::StringScript(lua_State* luaVM, const std::string& scriptString) :
+   Script(scriptString)
 {
    luaStack = lua_newthread(luaVM);
    luaL_loadstring(luaStack, scriptString.c_str());

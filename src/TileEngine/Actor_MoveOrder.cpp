@@ -17,8 +17,13 @@ const int debugFlag = DEBUG_NPC;
 // Define as 1 to draw the NPC's projected path to the screen
 #define DRAW_PATH 0
 
-Actor::MoveOrder::MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid)
-: Order(actor), pathInitialized(false), movementBegun(false), dst(destination), entityGrid(entityGrid), cumulativeDistanceCovered(0)
+Actor::MoveOrder::MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid) :
+   Order(actor),
+   pathInitialized(false),
+   movementBegun(false),
+   dst(destination),
+   entityGrid(entityGrid),
+   cumulativeDistanceCovered(0)
 {	
 }
 

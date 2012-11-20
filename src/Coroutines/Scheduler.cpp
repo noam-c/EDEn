@@ -11,8 +11,70 @@
 
 const int debugFlag = DEBUG_SCHEDULER;
 
-Scheduler::Scheduler() : runningCoroutine(NULL)
+Scheduler::Scheduler() :
+   runningCoroutine(NULL)
 {
+}
+
+Scheduler::~Scheduler()
+{
+   // Delete all the blocked coroutines.
+   BlockList::iterator blockListIter;
+   for(blockListIter = blockedCoroutines.begin(); blockListIter != blockedCoroutines.end(); ++blockListIter)
+   {
+      Coroutine* coroutineToDelete = blockListIter->second;
+      if(coroutineToDelete != NULL)
+      {
+         delete coroutineToDelete;
+      }
+   }
+
+   // Delete all the coroutines waiting on a join.
+   JoinList::iterator joinListIter;
+   for(joinListIter = joiningCoroutines.begin(); joinListIter != joiningCoroutines.end(); ++joinListIter)
+   {
+      Coroutine* coroutineToDelete = joinListIter->second;
+      if(coroutineToDelete != NULL)
+      {
+         delete coroutineToDelete;
+      }
+   }
+
+   // Delete all the unstarted coroutines.
+   CoroutineList::iterator unstartedListIter;
+   for(unstartedListIter = unstartedCoroutines.begin(); unstartedListIter != unstartedCoroutines.end(); ++unstartedListIter)
+   {
+      Coroutine* coroutineToDelete = *unstartedListIter;
+      if(coroutineToDelete != NULL)
+      {
+         delete coroutineToDelete;
+      }
+   }
+
+   // Delete all the ready coroutines.
+   CoroutineList::iterator readyListIter;
+   for(readyListIter = readyCoroutines.begin(); readyListIter != readyCoroutines.end(); ++readyListIter)
+   {
+      Coroutine* coroutineToDelete = *readyListIter;
+      if(coroutineToDelete != NULL)
+      {
+         delete coroutineToDelete;
+      }
+   }
+
+   // Delete all the finished coroutines.
+   while(!finishedCoroutines.empty())
+   {
+      delete finishedCoroutines.front();
+      finishedCoroutines.pop();
+   }
+
+   // Delete all the coroutines waiting to be destroyed.
+   while(!deletedCoroutines.empty())
+   {
+      delete deletedCoroutines.front();
+      deletedCoroutines.pop();
+   }
 }
 
 void Scheduler::printFinishedQueue()
@@ -197,67 +259,6 @@ void Scheduler::runCoroutines(long timePassed)
       Coroutine* coroutine = deletedCoroutines.front();
       DEBUG("Deleting coroutine %d", coroutine->getId());
       delete coroutine;
-      deletedCoroutines.pop();
-   }
-}
-
-Scheduler::~Scheduler()
-{
-   // Delete all the blocked coroutines.
-   BlockList::iterator blockListIter;
-   for(blockListIter = blockedCoroutines.begin(); blockListIter != blockedCoroutines.end(); ++blockListIter)
-   {
-      Coroutine* coroutineToDelete = blockListIter->second;
-      if(coroutineToDelete != NULL)
-      {
-         delete coroutineToDelete;
-      }
-   }
-
-   // Delete all the coroutines waiting on a join.
-   JoinList::iterator joinListIter;
-   for(joinListIter = joiningCoroutines.begin(); joinListIter != joiningCoroutines.end(); ++joinListIter)
-   {
-      Coroutine* coroutineToDelete = joinListIter->second;
-      if(coroutineToDelete != NULL)
-      {
-         delete coroutineToDelete;
-      }
-   }
-
-   // Delete all the unstarted coroutines.
-   CoroutineList::iterator unstartedListIter;
-   for(unstartedListIter = unstartedCoroutines.begin(); unstartedListIter != unstartedCoroutines.end(); ++unstartedListIter)
-   {
-      Coroutine* coroutineToDelete = *unstartedListIter;
-      if(coroutineToDelete != NULL)
-      {
-         delete coroutineToDelete;
-      }
-   }
-
-   // Delete all the ready coroutines.
-   CoroutineList::iterator readyListIter;
-   for(readyListIter = readyCoroutines.begin(); readyListIter != readyCoroutines.end(); ++readyListIter)
-   {
-      Coroutine* coroutineToDelete = *readyListIter;
-      if(coroutineToDelete != NULL)
-      {
-         delete coroutineToDelete;
-      }
-   }
-
-   // Delete all the finished coroutines.
-   while(!finishedCoroutines.empty())
-   {
-      delete finishedCoroutines.front();
-      finishedCoroutines.pop();
-   }
-
-   // Delete all the coroutines waiting to be destroyed.
-   while(!deletedCoroutines.empty())
-   {
-      delete deletedCoroutines.front();
       deletedCoroutines.pop();
    }
 }

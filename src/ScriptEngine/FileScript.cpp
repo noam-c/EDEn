@@ -18,8 +18,10 @@ extern "C"
    #include <lauxlib.h>
 }
 
-FileScript::FileScript(lua_State* luaVM, const std::string& scriptPath) : Script(scriptPath)
-{  luaStack = lua_newthread(luaVM);
+FileScript::FileScript(lua_State* luaVM, const std::string& scriptPath) :
+   Script(scriptPath)
+{
+   luaStack = lua_newthread(luaVM);
    DEBUG("Script ID %d loading file %s", getId(), scriptPath.c_str());
    luaL_loadfile(luaStack, scriptPath.c_str());
 }

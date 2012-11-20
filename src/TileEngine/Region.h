@@ -43,8 +43,15 @@ class Region : public Resource
    public:
       /**
        * Constructor.
+       *
+       * @param name The name of the region resource.
        */
       Region(const ResourceKey& name);
+
+      /**
+       * Destructor.
+       */
+      ~Region();
 
       /** @return the name of the region. */
       std::string getName() const;
@@ -65,11 +72,6 @@ class Region : public Resource
        * @return The size of the region resource in memory.
        */
       size_t getResourceSize() const;
-
-      /**
-       * Destructor.
-       */
-      ~Region();
 };
 
 #endif

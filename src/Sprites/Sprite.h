@@ -58,6 +58,11 @@ class Sprite
       Sprite(Spritesheet* sheet);
 
       /**
+       * Destructor.
+       */
+      ~Sprite();
+
+      /**
        * Clears any existing frame or animation information.
        */
       void clearCurrentFrame();
@@ -99,11 +104,6 @@ class Sprite
        * @param point The location to draw at.
        */
       void draw(const shapes::Point2D& point) const;
-
-      /**
-       * Destructor.
-       */
-      ~Sprite();
 };
 
 #endif

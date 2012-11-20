@@ -14,7 +14,9 @@
 
 const int debugFlag = DEBUG_TILE_ENG;
 
-Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) : bounds(bounds), heightOffset(0)
+Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
+   bounds(bounds),
+   heightOffset(0)
 {
    const TiXmlElement* propertiesElement = layerData->FirstChildElement("properties");
 
@@ -72,6 +74,17 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) : b
    }
 }
 
+Layer::~Layer()
+{
+   const unsigned int height = bounds.getHeight();
+   for(unsigned int i = 0; i < height; ++i)
+   {
+      delete [] tileMap[i];
+   }
+
+   delete [] tileMap;
+}
+
 void Layer::draw(int row, bool isForeground) const
 {
    const unsigned int width = bounds.getWidth();
@@ -84,15 +97,3 @@ void Layer::draw(int row, bool isForeground) const
       }
    }
 }
-
-Layer::~Layer()
-{
-   const unsigned int height = bounds.getHeight();
-   for(unsigned int i = 0; i < height; ++i)
-   {
-      delete [] tileMap[i];
-   }
-
-   delete [] tileMap;
-}
-

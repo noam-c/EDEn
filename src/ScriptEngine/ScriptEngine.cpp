@@ -40,8 +40,10 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Scheduler& scheduler)
-                                  : tileEngine(tileEngine), playerData(playerData), scheduler(scheduler)
+ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Scheduler& scheduler) :
+   tileEngine(tileEngine),
+   playerData(playerData),
+   scheduler(scheduler)
 {
    luaVM = luaL_newstate();
 
@@ -85,6 +87,16 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
    luaopen_CharacterRoster(luaVM);
    luaW_push<CharacterRoster>(luaVM, playerData.getRoster());
    lua_setglobal(luaVM, "roster");
+}
+
+ScriptEngine::~ScriptEngine()
+{
+   if(luaVM)
+   {
+      DEBUG("Destroying Lua state machine...");
+      lua_close(luaVM);
+      DEBUG("Lua state machine destroyed.");
+   }
 }
 
 int ScriptEngine::narrate(lua_State* luaStack)
@@ -315,14 +327,4 @@ void ScriptEngine::callFunction(lua_State* coroutine, const char* funcName)
 std::string ScriptEngine::getScriptPath(const std::string& scriptName)
 {
    return scriptName + ".lua";
-}
-
-ScriptEngine::~ScriptEngine()
-{
-   if(luaVM)
-   {
-      DEBUG("Destroying Lua state machine...");
-      lua_close(luaVM);
-      DEBUG("Lua state machine destroyed.");
-   }
 }

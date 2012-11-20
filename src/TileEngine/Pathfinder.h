@@ -110,7 +110,12 @@ class Pathfinder
        * @param gridBounds The bounds of the grid.
        */
       void initialize(TileState** grid, int tileSize, const shapes::Rectangle& gridBounds);
-      
+
+      /**
+       * Destructor.
+       */
+      ~Pathfinder();
+
       /**
        * Finds an ideal path from the source coordinates to the destination.
        *
@@ -133,11 +138,6 @@ class Pathfinder
        * @return The shortest unobstructed path from the source point to the destination point.
        */
       Path findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const;
-      
-      /**
-       * Destructor.
-       */
-      ~Pathfinder();
 
    private:
       /**

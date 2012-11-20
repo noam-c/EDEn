@@ -42,6 +42,11 @@ class Tileset : public Resource
       Tileset(ResourceKey name);
 
       /**
+       * Destructor.
+       */
+      ~Tileset();
+
+      /**
        * Implementation of method in Resource class.
        *
        * @return The size of the tileset resource in memory.
@@ -75,11 +80,6 @@ class Tileset : public Resource
        * @return true iff the tile at tileNum is passible by default
        */
       bool isPassible(int tileNum) const;
-
-      /**
-       * Destructor.
-       */
-      ~Tileset();
 };
 
 #endif

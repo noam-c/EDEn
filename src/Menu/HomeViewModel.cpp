@@ -11,8 +11,8 @@
 #include <sstream>
 
 HomeViewModel::HomeViewModel(const CharacterRoster& characterRoster)
-      : Rocket::Controls::DataSource("homeViewModel"), characterRoster(
-            characterRoster)
+      : Rocket::Controls::DataSource("homeViewModel"),
+        characterRoster(characterRoster)
 {
 }
 

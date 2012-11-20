@@ -12,8 +12,9 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_ROCKET;
 
-DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context)
-   : bindings(this), context(context)
+DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
+   bindings(this),
+   context(context)
 {
    context.AddReference();
 
@@ -21,11 +22,7 @@ DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context)
    if(consoleDocument != NULL)
    {
       logElement = consoleDocument->GetElementById("commandLog");
-      if(logElement != NULL)
-      {
-//         bindings.bindAction(logElement, "focus", &DebugConsoleWindow::onFocus);
-      }
-      else
+      if(logElement == NULL)
       {
          DEBUG("Warning: missing \"commandLog\" element in debug console window.");
       }

@@ -11,8 +11,17 @@ const int debugFlag = DEBUG_AUDIO;
 
 Music* Music::currentMusic = NULL;
 
-Music::Music(ResourceKey name) : Resource(name)
+Music::Music(ResourceKey name) :
+   Resource(name)
 {
+}
+
+Music::~Music()
+{
+   if(music != NULL)
+   {
+      Mix_FreeMusic(music);
+   }
 }
 
 void Music::load(const std::string& path)
@@ -69,13 +78,5 @@ void Music::play()
       {
          DEBUG("There was a problem playing the music: %s", Mix_GetError());
       }
-   }
-}
-
-Music::~Music()
-{
-   if(music != NULL)
-   {
-      Mix_FreeMusic(music);
    }
 }

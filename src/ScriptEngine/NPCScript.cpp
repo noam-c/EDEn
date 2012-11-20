@@ -23,7 +23,11 @@ extern "C"
 
 const char* NPCScript::FUNCTION_NAMES[] = { "idle", "activate" };
 
-NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) : Script(scriptPath), npc(npc), activated(false), finished(false)
+NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) :
+   Script(scriptPath),
+   npc(npc),
+   activated(false),
+   finished(false)
 {
    luaStack = lua_newthread(luaVM);
 

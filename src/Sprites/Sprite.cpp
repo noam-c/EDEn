@@ -12,8 +12,17 @@
 
 const int debugFlag = DEBUG_SPRITE;
 
-Sprite::Sprite(Spritesheet* sheet) : sheet(sheet), frameIndex(0), animation(NULL), currDirection(NONE)
+Sprite::Sprite(Spritesheet* sheet) :
+   sheet(sheet),
+   frameIndex(0),
+   animation(NULL),
+   currDirection(NONE)
 {
+}
+
+Sprite::~Sprite()
+{
+   clearCurrentFrame();
 }
 
 void Sprite::clearCurrentFrame()
@@ -127,9 +136,4 @@ void Sprite::draw(const shapes::Point2D& point) const
 {
    int indexToDraw = animation != NULL ? animation->getIndex() : frameIndex;
    sheet->draw(point, indexToDraw);
-}
-
-Sprite::~Sprite()
-{
-   clearCurrentFrame();
 }

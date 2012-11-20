@@ -35,7 +35,8 @@ Json::Value Character::loadArchetype(const std::string& archetypeId)
    return jsonRoot;
 }
 
-Character::Character(const std::string& id) : id(id)
+Character::Character(const std::string& id) :
+   id(id)
 {
    Json::Value archetypeData = Character::loadArchetype(id);
    name = archetypeData[NAME_ATTRIBUTE].asString();

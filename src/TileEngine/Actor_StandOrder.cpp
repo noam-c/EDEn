@@ -7,7 +7,9 @@
 #include "Actor.h"
 #include "Actor_Orders.h"
 
-Actor::StandOrder::StandOrder(Actor& actor, MovementDirection direction) : Order(actor), direction(direction)
+Actor::StandOrder::StandOrder(Actor& actor, MovementDirection direction) :
+   Order(actor),
+   direction(direction)
 {
 }
 

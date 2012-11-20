@@ -8,9 +8,13 @@
 
 int Coroutine::nextCoroutineId = 0;
 
-Coroutine::Coroutine()
+Coroutine::Coroutine() :
+      coroutineId(nextCoroutineId++)
 {
-   coroutineId = nextCoroutineId++;
+}
+
+Coroutine::~Coroutine()
+{
 }
 
 int Coroutine::getId() const
@@ -21,8 +25,4 @@ int Coroutine::getId() const
 int Coroutine::yield()
 {
    return 0;
-}
-
-Coroutine::~Coroutine()
-{
 }

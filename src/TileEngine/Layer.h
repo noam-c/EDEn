@@ -35,9 +35,26 @@ class Layer
    int heightOffset;
 
    public:
+      /**
+       * Constructor.
+       *
+       * @param layerData The map data for this layer.
+       * @param bounds The bounds of the map.
+       */
       Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds);
-      void draw(int row, bool isForeground = false) const;
+
+      /**
+       * Destructor.
+       */
       ~Layer();
+
+      /**
+       * Draws a row of the layer to screen.
+       *
+       * @param row The row to draw from the layer.
+       * @param isForeground Set true iff this layer is being drawn in the foreground.
+       */
+      void draw(int row, bool isForeground = false) const;
 };
 
 #endif

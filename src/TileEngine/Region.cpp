@@ -12,8 +12,18 @@
 
 const int debugFlag = DEBUG_RES_LOAD;
 
-Region::Region(const ResourceKey& name) : Resource(name), regionName(name)
+Region::Region(const ResourceKey& name) :
+   Resource(name),
+   regionName(name)
 {
+}
+
+Region::~Region()
+{
+   for(std::map<std::string, Map*>::iterator i = areas.begin(); i != areas.end(); ++i)
+   {
+      delete (i->second);
+   }
 }
 
 void Region::load(const std::string& path)
@@ -72,12 +82,4 @@ Map* Region::getMap(const std::string& name)
 size_t Region::getResourceSize() const
 {
    return sizeof(this);
-}
-
-Region::~Region()
-{
-   for(std::map<std::string, Map*>::iterator i = areas.begin(); i != areas.end(); ++i)
-   {
-      delete (i->second);
-   }
 }

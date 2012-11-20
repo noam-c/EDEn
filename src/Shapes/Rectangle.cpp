@@ -10,10 +10,29 @@
 
 namespace shapes
 {
-   Rectangle::Rectangle() : top(0), left(0), bottom(0), right(0) {}
-   Rectangle::Rectangle(const Point2D& topLeft, const Size& size) : top(topLeft.y), left(topLeft.x), bottom(top + size.height), right(left + size.width) {}
-   Rectangle::Rectangle(const Point2D& topLeft, const Point2D& bottomRight) : top(topLeft.y), left(topLeft.x), bottom(bottomRight.y), right(bottomRight.x) {}
-   Rectangle::Rectangle(int top, int left, int bottom, int right) : top(top), left(left), bottom(bottom), right(right) {}
+   Rectangle::Rectangle() :
+      top(0),
+      left(0),
+      bottom(0),
+      right(0)
+   {}
+
+   Rectangle::Rectangle(const Point2D& topLeft, const Size& size) :
+      top(topLeft.y),
+      left(topLeft.x),
+      bottom(top + size.height),
+      right(left + size.width)
+   {}
+
+   Rectangle::Rectangle(const Point2D& topLeft, const Point2D& bottomRight) :
+      top(topLeft.y),
+      left(topLeft.x),
+      bottom(bottomRight.y),
+      right(bottomRight.x)
+   {}
+
+   Rectangle::Rectangle(int top, int left, int bottom, int right) : top(top), left(left), bottom(bottom), right(right)
+   {}
 
    unsigned int Rectangle::getArea() const
    {
@@ -34,8 +53,7 @@ namespace shapes
       return !(other.left < left
                || other.right >= right
                || other.top < top
-               || other.bottom >= bottom
-               );
+               || other.bottom >= bottom);
    }
    
    bool Rectangle::contains(const Point2D& point) const
@@ -43,8 +61,7 @@ namespace shapes
       return !(point.x < left
                || point.x >= right
                || point.y < top
-               || point.y >= bottom
-               );
+               || point.y >= bottom);
    }
    
    Size Rectangle::getSize() const

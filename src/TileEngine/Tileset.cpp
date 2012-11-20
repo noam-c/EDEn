@@ -16,8 +16,18 @@
 
 const int debugFlag = DEBUG_RES_LOAD | DEBUG_TILE_ENG;
 
-Tileset::Tileset(ResourceKey name) : Resource(name), texture(NULL)
+Tileset::Tileset(ResourceKey name) :
+   Resource(name),
+   texture(NULL)
 {
+}
+
+Tileset::~Tileset()
+{
+   if(texture != NULL)
+   {
+      delete texture;
+   }
 }
 
 void Tileset::load(const std::string& path)
@@ -164,12 +174,4 @@ size_t Tileset::getResourceSize() const
 bool Tileset::isPassible(int tileNum) const
 {
    return passibility[tileNum];
-}
-
-Tileset::~Tileset()
-{
-   if(texture != NULL)
-   {
-      delete texture;
-   }
 }

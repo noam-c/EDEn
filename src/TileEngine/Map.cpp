@@ -108,6 +108,28 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
    DEBUG("Map loaded.");
 }
 
+Map::~Map()
+{
+   std::vector<Layer*>::const_iterator iter;
+   for(iter = backgroundLayers.begin(); iter != backgroundLayers.end(); ++iter)
+   {
+      delete *iter;
+   }
+
+   for(iter = foregroundLayers.begin(); iter != foregroundLayers.end(); ++iter)
+   {
+      delete *iter;
+   }
+
+   const unsigned int height = bounds.getHeight();
+   for(unsigned int i = 0; i < height; ++i)
+   {
+      delete [] passibilityMap[i];
+   }
+
+   delete [] passibilityMap;
+}
+
 void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
 {
    initializePassibilityMatrix();
@@ -297,7 +319,6 @@ void Map::drawBackground(int row) const
    if(DRAW_PASSIBILITY)
    {
       const unsigned int width = bounds.getWidth();
-      const unsigned int height = bounds.getHeight();
 
       for(unsigned int column = 0; column < width; ++column)
       {
@@ -333,26 +354,4 @@ void Map::drawForeground(int row) const
          (*iter)->draw(row, true);
       }
    }
-}
-
-Map::~Map()
-{
-   std::vector<Layer*>::const_iterator iter;
-   for(iter = backgroundLayers.begin(); iter != backgroundLayers.end(); ++iter)
-   {
-      delete *iter;
-   }
-
-   for(iter = foregroundLayers.begin(); iter != foregroundLayers.end(); ++iter)
-   {
-      delete *iter;
-   }
-
-   const unsigned int height = bounds.getHeight();
-   for(unsigned int i = 0; i < height; ++i)
-   {
-      delete [] passibilityMap[i];
-   }
-
-   delete [] passibilityMap;
 }

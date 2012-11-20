@@ -103,6 +103,11 @@ class Map
       Map(const std::string& name, const std::string& filePath);
 
       /**
+       * Destructor.
+       */
+      ~Map();
+
+      /**
        * @return The name of this map.
        */
       const std::string& getName() const;
@@ -153,11 +158,6 @@ class Map
        * @param row The row of the foreground to draw.
        */
       void drawForeground(int row) const;
-
-      /**
-       * Destructor.
-       */
-      ~Map();
 };
 
 #endif

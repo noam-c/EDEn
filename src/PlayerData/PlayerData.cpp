@@ -18,7 +18,8 @@ const int debugFlag = DEBUG_PLAYER;
 // Uncomment this line to turn off encryption of savegames
 // #define DISABLE_ENCRYPTION
 
-PlayerData::PlayerData() : rootQuest(std::string("root"))
+PlayerData::PlayerData() :
+   rootQuest(std::string("root"))
 {
 }
 

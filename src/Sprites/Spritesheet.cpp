@@ -30,8 +30,27 @@ const std::string Spritesheet::DATA_EXTENSION = ".eds";
  */
 const std::string Spritesheet::UNTITLED_LINE = "untitled";
 
-Spritesheet::Spritesheet(ResourceKey name) : Resource(name), frameList(NULL), numFrames(0), texture(NULL)
+Spritesheet::Spritesheet(ResourceKey name) :
+   Resource(name),
+   frameList(NULL),
+   texture(NULL),
+   numFrames(0)
 {
+}
+
+Spritesheet::~Spritesheet()
+{
+   // Delete the frame lists for the animations
+   std::map<std::string, const FrameSequence*>::iterator iter;
+   for(iter = animationList.begin(); iter != animationList.end(); ++iter)
+   {
+      delete iter->second;
+   }
+
+   if(texture != NULL)
+   {
+      delete texture;
+   }
 }
 
 void Spritesheet::load(const std::string& path)
@@ -281,19 +300,4 @@ void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
 size_t Spritesheet::getResourceSize() const
 {
    return sizeof(Spritesheet);
-}
-
-Spritesheet::~Spritesheet()
-{
-   // Delete the frame lists for the animations
-   std::map<std::string, const FrameSequence*>::iterator iter;
-   for(iter = animationList.begin(); iter != animationList.end(); ++iter)
-   {
-      delete iter->second;
-   }
-
-   if(texture != NULL)
-   {
-      delete texture;
-   }
 }

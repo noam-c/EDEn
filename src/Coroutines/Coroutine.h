@@ -31,6 +31,11 @@ class Coroutine
        * Constructor. Initializes the coroutine ID.
        */
       Coroutine();
+
+      /**
+       * Destructor.
+       */
+      virtual ~Coroutine();
    
       /**
        * @return the numeric identifier for this Coroutine.
@@ -56,11 +61,6 @@ class Coroutine
        *         this coroutine is not a coroutine.
        */
       virtual int yield();
-
-      /**
-       * Destructor.
-       */
-      virtual ~Coroutine();
 };
 
 #endif

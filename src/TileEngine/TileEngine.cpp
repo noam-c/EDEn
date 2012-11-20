@@ -34,8 +34,12 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 const int TileEngine::TILE_SIZE = 32;
 
-TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath)
-   : GameState(executionStack, "TileEngine"), consoleWindow(*context), entityGrid(*this, messagePipe), xMapOffset(0), yMapOffset(0)
+TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath) :
+   GameState(executionStack, "TileEngine"),
+   consoleWindow(*context),
+   entityGrid(*this, messagePipe),
+   xMapOffset(0),
+   yMapOffset(0)
 {
    messagePipe.registerListener(this);
 

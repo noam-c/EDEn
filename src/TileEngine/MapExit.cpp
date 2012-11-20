@@ -6,8 +6,9 @@
 
 #include "MapExit.h"
 
-MapExit::MapExit(const std::string& nextMap, const shapes::Rectangle& bounds)
-   : nextMap(nextMap), bounds(bounds)
+MapExit::MapExit(const std::string& nextMap, const shapes::Rectangle& bounds) :
+   nextMap(nextMap),
+   bounds(bounds)
 {}
 
 const shapes::Rectangle& MapExit::getBounds() const

@@ -28,7 +28,7 @@ class ItemData : public Singleton<ItemData>
       /**
        * Load up all the item metadata from items.edb.
        */
-      void initialize();   
+      void initialize();
 
       /**
        * Get an item by its ID.

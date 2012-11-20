@@ -36,6 +36,11 @@ class Item
       Item(Json::Value& itemNode);
    
       /**
+       * Destructor.
+       */
+      ~Item();
+
+      /**
        * @return The unique identifier of this item.
        */
       const int getId() const;
@@ -44,11 +49,6 @@ class Item
        * @return The name of this item.
        */
       const std::string& getName() const;
-   
-      /**
-       * Destructor.
-       */
-      ~Item();
 };
 
 #endif

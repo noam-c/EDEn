@@ -18,9 +18,14 @@ Task* Task::getNextTask(Scheduler& scheduler)
    return new Task(nextId++, scheduler);
 }
 
-Task::Task(TaskId taskId, Scheduler& scheduler)
-                      : id(taskId), scheduler(scheduler)
+Task::Task(TaskId taskId, Scheduler& scheduler) :
+   id(taskId),
+   scheduler(scheduler)
 {}
+
+Task::~Task()
+{
+}
 
 TaskId Task::getTaskId() const
 {
@@ -31,8 +36,4 @@ void Task::signal()
 {
    scheduler.taskDone(id);
    delete this;
-}
-
-Task::~Task()
-{
 }

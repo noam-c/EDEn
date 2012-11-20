@@ -11,8 +11,10 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-Quest::Quest(const std::string& name, const std::string& description, bool optional, bool completed)
-   : name(name), optional(optional), completed(completed)
+Quest::Quest(const std::string& name, const std::string& description, bool optional, bool completed) :
+  name(name),
+  optional(optional),
+  completed(completed)
 {
 }
 

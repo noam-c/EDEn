@@ -13,8 +13,8 @@
 
 const int debugFlag = DEBUG_TRANSITIONS;
 
-FadeState::FadeState(ExecutionStack& executionStack, GameState* oldState, long transitionLength)
-   : TransitionState(executionStack, "FadeState", oldState, NULL, transitionLength)
+FadeState::FadeState(ExecutionStack& executionStack, GameState* oldState, long transitionLength) :
+   TransitionState(executionStack, "FadeState", oldState, NULL, transitionLength)
 {
 }
 

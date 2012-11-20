@@ -7,7 +7,13 @@
 #include "Item.h"
 #include "json.h"
 
-Item::Item(Json::Value& node) : id(node["id"].asInt()), name(node["name"].asString())
+Item::Item(Json::Value& node) :
+   id(node["id"].asInt()),
+   name(node["name"].asString())
+{
+}
+
+Item::~Item()
 {
 }
 
@@ -19,8 +25,4 @@ const int Item::getId() const
 const std::string& Item::getName() const
 {
    return name;
-}
-
-Item::~Item()
-{
 }

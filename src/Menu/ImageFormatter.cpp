@@ -7,7 +7,8 @@
 #include "ImageFormatter.h"
 #include <Rocket/Core/TypeConverter.h>
 
-ImageFormatter::ImageFormatter() : Rocket::Controls::DataFormatter("image")
+ImageFormatter::ImageFormatter() :
+   Rocket::Controls::DataFormatter("image")
 {
 }
 

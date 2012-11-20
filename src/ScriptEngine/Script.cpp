@@ -18,7 +18,13 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-Script::Script(const std::string& name) : scriptName(name), running(false)
+Script::Script(const std::string& name) :
+   scriptName(name),
+   running(false)
+{
+}
+
+Script::~Script()
 {
 }
 
@@ -67,8 +73,4 @@ bool Script::resume(long /*timePassed*/)
 int Script::yield()
 {
    return lua_yield(luaStack, 0);
-}
-
-Script::~Script()
-{
 }

@@ -105,6 +105,11 @@ class Spritesheet : public Resource
       Spritesheet(ResourceKey name);
 
       /**
+       * Destructor.
+       */
+      ~Spritesheet();
+
+      /**
        * Draws a given frame at a specified location.
        *
        * @param point The location to draw at.
@@ -137,11 +142,6 @@ class Spritesheet : public Resource
        * @return The size of the spritesheet resource in memory.
        */
       size_t getResourceSize() const;
-
-      /**
-       * Destructor.
-       */
-      ~Spritesheet();
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "MapExitMessage.h"
 
-MapExitMessage::MapExitMessage(const MapExit& mapExit)
-	: mapExit(mapExit) {}
+MapExitMessage::MapExitMessage(const MapExit& mapExit) :
+   mapExit(mapExit)
+{}

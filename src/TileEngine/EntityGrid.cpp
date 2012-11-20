@@ -33,10 +33,19 @@ const int EntityGrid::MOVEMENT_TILE_SIZE = 32;
 const float EntityGrid::ROOT_2 = 1.41421356f;
 const float EntityGrid::INFINITY = std::numeric_limits<float>::infinity();
 
-EntityGrid::EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe)
-   : tileEngine(tileEngine), messagePipe(messagePipe), map(NULL), collisionMap(NULL)
+EntityGrid::EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe) :
+   tileEngine(tileEngine),
+   messagePipe(messagePipe),
+   map(NULL),
+   collisionMap(NULL)
 {
    messagePipe.registerListener(this);
+}
+
+EntityGrid::~EntityGrid()
+{
+   clearMap();
+   messagePipe.unregisterListener(this);
 }
 
 shapes::Rectangle EntityGrid::getCollisionMapEdges(const shapes::Rectangle& area) const
@@ -516,10 +525,4 @@ void EntityGrid::deleteCollisionMap()
       delete [] collisionMap;
       collisionMap = NULL;
    }
-}
-
-EntityGrid::~EntityGrid()
-{
-   clearMap();
-   messagePipe.unregisterListener(this);
 }

@@ -8,10 +8,14 @@
 #include <sstream>
 
 Exception::Exception(const std::string& function,
-       int line, const std::string& message)
-       : function(function),
-         line(line),
-         message(message)
+       int line, const std::string& message) :
+   function(function),
+   line(line),
+   message(message)
+{
+}
+
+Exception::~Exception() throw()
 {
 }
 
@@ -36,8 +40,4 @@ const std::string& Exception::getFunction() const
 int Exception::getLine() const
 {
    return line;
-}
-
-Exception::~Exception() throw()
-{
 }

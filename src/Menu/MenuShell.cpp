@@ -12,7 +12,10 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuShell::MenuShell(Rocket::Core::Context* context) : bindings(this), currentState(NULL), rocketContext(context)
+MenuShell::MenuShell(Rocket::Core::Context* context) :
+   rocketContext(context),
+   bindings(this),
+   currentState(NULL)
 {
    rocketContext->AddReference();
    shellDocument = rocketContext->LoadDocument("data/gui/menushell.rml");

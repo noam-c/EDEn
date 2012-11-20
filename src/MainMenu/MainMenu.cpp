@@ -27,7 +27,9 @@ enum MainMenuActions
    MENU_PROTOTYPE_ACTION,
 };
 
-MainMenu::MainMenu(ExecutionStack& executionStack) : GameState(executionStack, "MainMenu"), bindings(this)
+MainMenu::MainMenu(ExecutionStack& executionStack) :
+   GameState(executionStack, "MainMenu"),
+   bindings(this)
 {
    chooseSound = ResourceLoader::getSound("choose");
    reselectSound = ResourceLoader::getSound("reselect");

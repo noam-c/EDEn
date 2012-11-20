@@ -28,7 +28,9 @@ void Sound::channelFinished(int channel)
    }
 }
 
-Sound::Sound(ResourceKey name) : Resource(name), playingChannel(-1)
+Sound::Sound(ResourceKey name) :
+   Resource(name),
+   playingChannel(-1)
 {
 }
 

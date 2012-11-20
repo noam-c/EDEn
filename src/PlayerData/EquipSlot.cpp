@@ -9,7 +9,10 @@
 #include "Item.h"
 #include "json.h"
 
-EquipSlot::EquipSlot() : equipped(NULL), acceptedTypes(NULL), enabled(true)
+EquipSlot::EquipSlot() :
+   equipped(NULL),
+   acceptedTypes(NULL),
+   enabled(true)
 {
 }
 

@@ -23,8 +23,11 @@ const int debugFlag = DEBUG_TILE_ENG;
 const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
-PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData, const std::string& sheetName)
-   : Actor("player", sheetName, messagePipe, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 1.0f, DOWN), roster(*playerData.getRoster()), active(false), cumulativeDistanceCovered(0)
+PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData, const std::string& sheetName) :
+   Actor("player", sheetName, messagePipe, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 1.0f, DOWN),
+   roster(*playerData.getRoster()),
+   active(false),
+   cumulativeDistanceCovered(0)
 {
    messagePipe.registerListener(this);
 }

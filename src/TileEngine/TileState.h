@@ -7,6 +7,10 @@
 #ifndef TILE_STATE_H
 #define TILE_STATE_H
 
+#ifndef NULL
+   #define NULL 0
+#endif
+
 /**
  * The state of a tile, specifically the kind of entity occupying it and
  * a pointer to that entity.
@@ -35,24 +39,12 @@ struct TileState
    void* entity;
    
    /**
-    * Default constructor.
-    */
-   TileState();
-   
-   /**
-    * Constructor.
-    *
-    * @param type The type of entity occupying the tile.
-    */
-   TileState(EntityType type);
-   
-   /**
     * Constructor.
     *
     * @param type The type of entity occupying the tile.
     * @param entity The entity in the tile.
     */
-   TileState(EntityType type, void* entity);
+   TileState(EntityType type = FREE, void* entity = NULL);
 };
 
 #endif

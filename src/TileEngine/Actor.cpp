@@ -16,8 +16,14 @@
 
 const int debugFlag = DEBUG_NPC;
 
-Actor::Actor(const std::string& name, const std::string& sheetName, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction)
-   : name(name), pixelLoc(location), messagePipe(messagePipe), size(size), movementSpeed(movementSpeed), currDirection(direction), entityGrid(entityGrid)
+Actor::Actor(const std::string& name, const std::string& sheetName, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction) :
+   name(name),
+   pixelLoc(location),
+   size(size),
+   messagePipe(messagePipe),
+   movementSpeed(movementSpeed),
+   currDirection(direction),
+   entityGrid(entityGrid)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
    sprite = new Sprite(sheet);

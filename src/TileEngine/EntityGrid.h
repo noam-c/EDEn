@@ -149,6 +149,11 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @param messagePipe The message pipe to use for trigger messages.
        */
       EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe);
+
+      /**
+       * Destructor.
+       */
+      ~EntityGrid();
       
       /**
        * @return The map data that the EntityGrid is operating on.
@@ -325,11 +330,6 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @param message The location change message that was fired.
        */
       void receive(const ActorMoveMessage& message);
-
-      /**
-       * Destructor.
-       */
-      ~EntityGrid();
 };
 
 #endif
