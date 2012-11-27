@@ -107,6 +107,8 @@ class GameState
        * Called every frame in order to trigger logic processing in the game state
        * that is at the top of the execution stack.
        * Generic logic that happens in every game state (such as GUI logic) should go in here.
+       *
+       * @return true iff the state is not yet finished.
        */
       virtual bool advanceFrame();
 

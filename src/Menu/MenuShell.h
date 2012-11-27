@@ -61,6 +61,8 @@ class MenuShell
     * Event handler for sidebar element clicks.
     * Determines the clicked option index and sends an
     * event to the currently active menu.
+    *
+    * @param event The click event that occurred in the sidebar.
     */
    void sidebarClicked(Rocket::Core::Event* event);
 
@@ -89,6 +91,8 @@ class MenuShell
 
       /**
        * Sets a new active menu state.
+       *
+       * @param newState The menu state to change to.
        */
       void changeMenuState(MenuState* newState);
 };

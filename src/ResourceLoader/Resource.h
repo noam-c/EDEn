@@ -45,6 +45,8 @@ class Resource
 
    /**
     * Loading function for initialization of the resource from file.
+    *
+    * @param path The file path where the resource is located.
     */
    virtual void load(const std::string& path) = 0;
 
@@ -59,6 +61,8 @@ class Resource
       /**
        * Loads a resource from file and sets the resource to 'loaded' state
        * on success.
+       *
+       * @param path The file path where the resource is located.
        */
       void initialize(const char* path);
 

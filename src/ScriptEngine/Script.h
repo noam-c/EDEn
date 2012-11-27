@@ -34,7 +34,7 @@ class Script : public Coroutine
        * Runs the script until completion or yielding. Prints out any errors encountered
        * while resuming the script.
        *
-       * @param The number of arguments passed to the script.
+       * @param numArgs The number of arguments passed to the script.
        *
        * @return true iff the script runs to completion, false if the coroutine
        *         yielded, or there was an error in execution.

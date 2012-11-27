@@ -12,7 +12,16 @@ namespace messaging
    template<typename T> class Listener
    {
       public:
+         /**
+          * Handle a message from the message pipe.
+          *
+          * @param message The message sent to the listener.
+          */
          virtual void receive(const T& message) = 0;
+
+         /**
+          * Destructor.
+          */
          virtual ~Listener() {}
    };
 };

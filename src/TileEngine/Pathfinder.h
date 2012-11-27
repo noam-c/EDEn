@@ -57,7 +57,7 @@ class Pathfinder
    /**
     * Convert a tile number into pixel coordinates.
     *
-    * @param The tile number when counting the tiles from left to right, then top to bottom.
+    * @param tileNum The tile number when counting the tiles from left to right, then top to bottom.
     */
    inline shapes::Point2D tileNumToPixels(int tileNum) const;
    
@@ -71,7 +71,7 @@ class Pathfinder
    /**
     * Convert a tile number into tile coordinates.
     *
-    * @param The tile number when counting the tiles from left to right, then top to bottom.
+    * @param tileNum The tile number when counting the tiles from left to right, then top to bottom.
     */
    inline shapes::Point2D tileNumToCoords(int tileNum) const;
    

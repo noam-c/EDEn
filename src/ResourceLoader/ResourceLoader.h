@@ -111,26 +111,36 @@ class ResourceLoader
        * The extension must also be specified since music
        * can appear in multiple file types.
        *
+       * @param name The name of the music resource.
+       *
        * @return The piece of music given by the specified name.
        */
       static Music* getMusic(ResourceKey name);
 
       /**
+       * @param name The name of the sound resource.
+       *
        * @return The sound effect given by the specified name.
        */
       static Sound* getSound(ResourceKey name);
 
       /**
+       * @param name The name of the tileset resource.
+       *
        * @return The tileset given by the specified name.
        */
       static Tileset* getTileset(ResourceKey name);
 
       /**
+       * @param name The name of the spritesheet resource.
+       *
        * @return The spritesheet given by the specified name.
        */
       static Spritesheet* getSpritesheet(ResourceKey name);
 
       /**
+       * @param name The name of the region resource.
+       *
        * @return The region data given by the specified name.
        */
       static Region* getRegion(ResourceKey name);

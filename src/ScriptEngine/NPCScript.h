@@ -12,17 +12,22 @@
 class NPC;
 
 /**
- * An NPCScript is a type of Script that holds functions that determine
- * NPC behaviour.
+ * An <code>NPCScript</code> holds functions that determine <code>NPC</code> behaviour,
+ * while also controlling when an <code>NPC</code> executes these functions.
  *
- * When resumed, instead of strictly running the script, the NPC Script only
+ * When resumed, instead of strictly running the script, the <code>NPCScript</code> only
  * runs the script if it is in the middle of execution. Otherwise, it checks if
- * the NPC is busy and runs the NPC's idle script function if it is not doing
- * anything.
+ * the <code>NPC</code> is busy and runs the <code>NPC</code>'s idle script function
+ * if it is not doing anything.
  *
- * The NPCScript and NPC need to be separate entities, because otherwise the
- * Scheduler could block the NPC in its entirety if the script executes a
- * blocking instruction.
+ * The <code>NPCScript</code> and <code>NPC</code> actor need to be separate entities,
+ * because otherwise the <code>Scheduler</code> could block the <code>NPC</code> in its
+ * entirety if the script executes a blocking instruction.
+ *
+ * For example, if the <code>NPCScript</code> requests that the <code>NPC</code>
+ * move to a location before continuing execution, the <code>NPC</code> actor coroutine
+ * needs to run in order to complete movement while the <code>NPCScript</code>
+ * is blocked.
  *
  * @author Noam Chitayat
  */
@@ -77,6 +82,7 @@ class NPCScript : public Script
        *
        * @param luaVM The main Lua stack to fork a coroutine from.
        * @param scriptPath The path to a script that should be run on this coroutine.
+       * @param npc The NPC controlled by this coroutine.
        */
       NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc);
 

@@ -85,7 +85,7 @@ class Character
        * Constructor used to create a new character.
        * Initializes the entire character using the base archetype data.
        *
-       * @param The id of the new character.
+       * @param id The id of the new character.
        */
       Character(const std::string& id);
 
@@ -102,9 +102,9 @@ class Character
       ~Character();
 
       /**
-       * Serialize the character data into a JSON output.
+       * Serialize the character data into JSON output.
        *
-       * @param characterSet The character array to serialize the character into.
+       * @return A JSON object containing this character's serialized data.
        */
       Json::Value serialize() const;
    

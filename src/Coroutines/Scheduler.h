@@ -110,7 +110,6 @@ class Scheduler
        * Block a Coroutine and make it wait until another Coroutine has finished
        * executing.
        *
-       * @param joiningCoroutine The Coroutine that will be waiting for the runningState to finish
        * @param runningCoroutine The Coroutine on which the joining Coroutine is waiting.
        *
        * @return a yield code from the Coroutine being blocked

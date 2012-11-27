@@ -62,9 +62,10 @@ class DialogueController
           * Resumes the associated dialogue controller.
           *
           * @param timePassed The number of milliseconds that has passed since the last frame.
+          *
           * @return the result of the parent dialogue controller's resumption
           */
-         bool resume(long time);
+         bool resume(long timePassed);
    };
 
    /**
@@ -257,9 +258,10 @@ class DialogueController
        * of dialogue to reveal (it is shown letter by letter over time)
        *
        * @param timePassed The number of milliseconds that has passed since the last frame.
+       *
        * @return false only, since this Coroutine does not end until end-of-life
        */
-      bool resume(long time);
+      bool resume(long timePassed);
 
 };
 

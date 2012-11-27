@@ -27,3 +27,5 @@ eden.vcxproj.filters
 eden.vcxproj.user
 eden.opensdf
 ipch
+
+doc/warn.txt

@@ -258,9 +258,6 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * Remove the player and free the tiles under it.
        *
        * @param actor The actor that is being removed.
-       * @param area The prior coordinates of the top-left corner of the player character (in pixels)
-       * @param width The width of the actor (in pixels)
-       * @param height The height of the actor (in pixels)
        */
       void removeActor(Actor* actor);
 

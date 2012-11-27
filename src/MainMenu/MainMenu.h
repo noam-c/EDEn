@@ -53,6 +53,12 @@ class MainMenu: public GameState
     */
    void pollInputEvent(bool& finishState);
 
+   /**
+    * Callback for Rocket event when a key is pressed
+    * while the list of menu options has focus.
+    *
+    * @param event The user input event.
+    */
    void listKeyDown(Rocket::Core::Event* event);
 
    //Actions for the list ops - see documentation in MainMenuActions.cpp

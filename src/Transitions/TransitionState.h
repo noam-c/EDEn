@@ -44,7 +44,7 @@ class TransitionState : public GameState
        * the given state.
        *
        * @param state The game state to capture
-       * @param texture The texture to capture the drawn state to.
+       * @param screenTexture The texture to capture the drawn state to.
        */
       bool captureStateToTexture(GameState* state, ScreenTexture& screenTexture);
 

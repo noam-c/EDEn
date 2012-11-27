@@ -36,10 +36,16 @@ public:
     * Constructor.
     * Creates an animation with a given linked list of frame indices.
     *
+    * @param name The uniquely identifying name of the animation.
     * @param frameSequence The sequence of frames in a given animation.
     */
-   Animation(const std::string& animation, const FrameSequence& frameSequence);
+   Animation(const std::string& name, const FrameSequence& frameSequence);
    
+   /**
+    * Destructor.
+    */
+   ~Animation();
+
    /**
     * Updates the animation based on the time that has passed since the
     * last call.
@@ -55,14 +61,9 @@ public:
    int getIndex() const;
    
    /**
-    * @return name The name of the animation.
+    * @return The name of the animation.
     */
    const std::string& getName() const;
-   
-   /**
-    * Destructor.
-    */
-   ~Animation();
 };
 
 #endif

@@ -39,6 +39,8 @@ class Timer : public Coroutine
        * Resume this timer's countdown.
        *
        * @param timePassed The time that has passed since the last frame.
+       *
+       * @return true iff the timer has completed.
        */
       bool resume(long timePassed);
 };

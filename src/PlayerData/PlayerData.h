@@ -118,14 +118,14 @@ class PlayerData
       /**
        * Load the player data from a file.
        *
-       * @param filePath The path to load the player data from.
+       * @param path The path to load the player data from.
        */
       void load(const std::string& path);
 
       /**
        * Save the player data to a file and set a new default file path.
        *
-       * @param filePath The path to save the player data to.
+       * @param path The path to save the player data to.
        */
       void save(const std::string& path);
 

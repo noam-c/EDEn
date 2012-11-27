@@ -40,7 +40,11 @@ class Sound : public Resource
     */
    static bool ownsChannel(Sound* sound, int channel);
 
-   /** A callback used when a channel is released and its sound is done playing. */
+   /**
+    * A callback used when a channel is released and its sound is done playing.
+    *
+    * @param channel The channel that has finished playing a sound.
+    */
    static void channelFinished(int channel);
 
    /** A Task object used to signal waiting coroutines when this sound object is done playing. */

@@ -20,7 +20,7 @@ NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, co
             messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const std::string& regionName, const shapes::Point2D& location, const shapes::Size& size) :
    Actor(name, sheetName, messagePipe, entityGrid, location, size, 0.1f, DOWN)
 {
-   npcCoroutine = engine.getNPCScript(this, regionName, entityGrid.getMapData()->getName(), name);
+   npcCoroutine = engine.createNPCCoroutine(this, regionName, entityGrid.getMapData()->getName());
    scheduler.start(npcCoroutine);
    DEBUG("NPC %s has a Coroutine with ID %d", name.c_str(), npcCoroutine->getId());
 }

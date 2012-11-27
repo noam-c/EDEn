@@ -72,7 +72,7 @@ class Exception : public std::exception
       const std::string& getMessage() const;
 
       /**
-       * The line number from which this Exception was thrown.
+       * @return the line number from which this Exception was thrown.
        */
       int getLine() const;
 

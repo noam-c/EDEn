@@ -104,7 +104,10 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       int getHeight();
 
       /**
-       * Set up a new Rocket context that spans the entire screen.
+       * @param The name of the new Rocket context.
+       *
+       * @return a new Rocket context that spans the entire screen
+       *         and has the specified name.
        */
       Rocket::Core::Context* createRocketContext(const std::string& name);
 

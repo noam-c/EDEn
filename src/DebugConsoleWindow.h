@@ -41,8 +41,6 @@ class DebugConsoleWindow
    /** The Rocket element that holds the text box. */
    Rocket::Controls::ElementFormControlInput* commandElement;
 
-   bool isWindowVisible;
-
    public:
       /**
        * Constructor.

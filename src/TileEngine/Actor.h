@@ -69,7 +69,6 @@ class Actor
        * @param sheetName The name of the spritesheet to use for rendering the actor.
        * @param messagePipe The message pipe used to send and receive events.
        * @param entityGrid The map that this actor will be interacting in.
-       * @param regionName The name of the region that this Actor is interacting in.
        * @param location The location (in pixels) where the actor will start off.
        * @param size The size (in pixels) of the actor.
        * @param movementSpeed The speed of the actor's movement.
@@ -121,14 +120,14 @@ class Actor
       /**
        * This function enqueues an instruction to stand facing a specified direction.
        *
-       * @param The direction for the actor to face when standing.
+       * @param direction The direction for the actor to face when standing.
        */
       void stand(MovementDirection direction);
 
       /**
        * Change the actor's direction so that it is facing the specified actor.
        *
-       * @param actor The actor to turn and face.
+       * @param other The actor to turn and face.
        */
       void faceActor(Actor* other);
    

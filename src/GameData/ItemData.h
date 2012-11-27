@@ -31,9 +31,9 @@ class ItemData : public Singleton<ItemData>
       void initialize();
 
       /**
-       * Get an item by its ID.
-       *
        * @param key The ID of the item metadata to be retrieved.
+       *
+       * @return The metadata for the item with the specified ID.
        */
       Item const* getItem(int key);
 

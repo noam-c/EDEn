@@ -273,9 +273,9 @@ int ScriptEngine::setRegion(lua_State* luaStack)
    return 0;
 }
 
-NPCScript* ScriptEngine::getNPCScript(NPC* npc, const std::string& regionName, const std::string& mapName, const std::string& npcName)
+NPCScript* ScriptEngine::createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName)
 {
-   return ScriptFactory::getNPCScript(luaVM, npc, regionName, mapName, npcName);
+   return ScriptFactory::createNPCCoroutine(luaVM, npc, regionName, mapName);
 }
 
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName)

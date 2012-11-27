@@ -7,7 +7,7 @@
 #include "ScriptFactory.h"
 #include "FileScript.h"
 #include "NPCScript.h"
-#include <cstdarg>
+#include "NPC.h"
 
 const std::string ScriptFactory::EXTENSION = ".lua";
 const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scripts/maps/", "data/scripts/npcs/" };
@@ -17,31 +17,24 @@ std::string ScriptFactory::getPath(const std::string& name, ScriptType type)
    return PATHS[type] + name + EXTENSION;
 }
 
-Script* ScriptFactory::createScript(lua_State* luaVM, const std::string& name, ScriptType type, NPC* npc)
+Script* ScriptFactory::createScript(lua_State* luaVM, const std::string& name, ScriptType type)
 {
-   std::string path = getPath(name, type);
-
-   if(type == NPC_SCRIPT && npc != NULL)
-   {
-      return new NPCScript(luaVM, path, npc);
-   }
-
-   return new FileScript(luaVM, path);
+   return new FileScript(luaVM, ScriptFactory::getPath(name, type));
 }
 
-NPCScript* ScriptFactory::getNPCScript(lua_State* luaVM, NPC* npc, const std::string& regionName, const std::string& mapName, const std::string& npcName)
+NPCScript* ScriptFactory::createNPCCoroutine(lua_State* luaVM, NPC* npc, const std::string& regionName, const std::string& mapName)
 {
-   std::string scriptName = regionName + '/' + mapName + '/' + npcName;
-   return static_cast<NPCScript*>(createScript(luaVM, scriptName, NPC_SCRIPT, npc));
+   std::string scriptName = regionName + '/' + mapName + '/' + npc->getName();
+   return new NPCScript(luaVM, ScriptFactory::getPath(scriptName, NPC_SCRIPT), npc);
 }
 
 Script* ScriptFactory::getMapScript(lua_State* luaVM, const std::string& regionName, const std::string& mapName)
 {
    std::string scriptName = regionName + '/' + mapName;
-   return createScript(luaVM, scriptName, MAP_SCRIPT);
+   return ScriptFactory::createScript(luaVM, scriptName, MAP_SCRIPT);
 }
 
 Script* ScriptFactory::getChapterScript(lua_State* luaVM, const std::string& name)
 {
-    return createScript(luaVM, name, CHAPTER_SCRIPT);
+    return ScriptFactory::createScript(luaVM, name, CHAPTER_SCRIPT);
 }
