@@ -16,7 +16,6 @@ namespace Rocket
    namespace Core
    {
       class Context;
-      class ElementDocument;
       class Element;
       class Event;
    };
@@ -42,9 +41,6 @@ class DataMenu: public MenuState
 
    /** The view model that exposes the savegames to the GUI */
    DataViewModel dataViewModel;
-
-   /** The data menu RML document */
-   Rocket::Core::ElementDocument* paneDocument;
 
    /** The RML document for the Confirm Save window in the data menu */
    Rocket::Core::ElementDocument* confirmSaveDocument;

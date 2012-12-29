@@ -31,12 +31,23 @@ body
    height: 90%;
 }
 
+.noSidebar .menuPane
+{
+   margin-left: 0;
+   width: 90%;
+}
+
 #sidebar
 {
    width: 15%;
    margin-left: 10px;
    text-align: right;
    line-height: 1em;
+}
+
+#sidebar.noSidebar
+{
+   display: none;
 }
 
 .sidebarOption

@@ -57,14 +57,23 @@ void MenuShell::refresh()
    sidebarElement->SetInnerRML("");
 
    std::vector<MenuShellOption> sidebarOptions = currentState->getSidebarOptions();
-   std::vector<MenuShellOption>::iterator iter;
-   for(iter = sidebarOptions.begin(); iter != sidebarOptions.end(); ++iter)
+
+   bool sidebarEnabled = !sidebarOptions.empty();
+   if(sidebarEnabled)
    {
-      Rocket::Core::Element* element = shellDocument->CreateElement("div");
-      element->SetClass("sidebarOption", true);
-      element->AppendChild(shellDocument->CreateTextNode(iter->c_str()));
-      sidebarElement->AppendChild(element);
+      sidebarElement->SetClass("noSidebar", false);
+      std::vector<MenuShellOption>::iterator iter;
+      for(iter = sidebarOptions.begin(); iter != sidebarOptions.end(); ++iter)
+      {
+         Rocket::Core::Element* element = shellDocument->CreateElement("div");
+         element->SetClass("sidebarOption", true);
+         element->AppendChild(shellDocument->CreateTextNode(iter->c_str()));
+         sidebarElement->AppendChild(element);
+      }
    }
+
+   sidebarElement->SetClass("noSidebar", !sidebarEnabled);
+   currentState->setSidebarEnabled(sidebarEnabled);
 }
 
 void MenuShell::changeMenuState(MenuState* newState)

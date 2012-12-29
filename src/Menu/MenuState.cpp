@@ -104,3 +104,15 @@ std::vector<MenuShellOption> MenuState::getSidebarOptions()
 {
    return sidebarOptions;
 }
+
+void MenuState::sidebarClicked(int optionIndex)
+{
+}
+
+void MenuState::setSidebarEnabled(bool enabled)
+{
+   if(paneDocument != NULL)
+   {
+      paneDocument->SetClass("noSidebar", !enabled);
+   }
+}

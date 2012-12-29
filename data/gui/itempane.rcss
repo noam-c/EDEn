@@ -1,0 +1,17 @@
+#itemGrid datagridheader
+{
+	height: 0px;
+	visibility: hidden;
+}
+
+#itemGrid datagridrow
+{
+   margin-bottom: 10px;
+   border-width: 2px;
+   border-color: #ffffffff;
+}
+
+#itemGrid datagridcell
+{
+   margin: 10px;
+}

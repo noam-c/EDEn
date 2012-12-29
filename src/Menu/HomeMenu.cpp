@@ -6,6 +6,7 @@
 
 #include "HomeMenu.h"
 #include "DataMenu.h"
+#include "ItemMenu.h"
 #include "MenuShell.h"
 
 #include "ResourceLoader.h"
@@ -81,6 +82,9 @@ void HomeMenu::sidebarClicked(int optionIndex)
 {
    switch(optionIndex)
    {
+      case 0:
+         executionStack.pushState(new ItemMenu(executionStack, playerData, menuShell));
+         break;
       case 7:
          executionStack.pushState(new DataMenu(executionStack, playerData, menuShell));
          break;

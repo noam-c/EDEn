@@ -1,0 +1,13 @@
+<rml>
+   <head>
+      <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="menu.rcss" />
+      <link type="text/rcss" href="datapane.rcss" />
+   </head>
+   <body class="menuPane panel">
+      <datagrid id="itemGrid" source="itemViewModel.items">
+         <col fields="name" width="80%"></col>
+         <col fields="quantity" width="20%"></col>
+      </datagrid>
+   </body>
+</rml>

@@ -16,6 +16,8 @@ class PlayerData;
  * A view model that allows a Rocket GUI to bind to the player's saved games.
  * Specifically, this view model exposes summary data about each saved game
  * in the player's savegames directory.
+ *
+ * @author Noam Chitayat
  */
 class DataViewModel : public Rocket::Controls::DataSource
 {

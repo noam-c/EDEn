@@ -4,25 +4,23 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef HOME_VIEW_MODEL_H
-#define HOME_VIEW_MODEL_H
+#ifndef ITEM_VIEW_MODEL_H
+#define ITEM_VIEW_MODEL_H
 
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
-class CharacterRoster;
+class PlayerData;
 
 /**
- * A view model that allows a Rocket GUI to bind to player data.
- * Specifically, this view model exposes summary data about the player's
- * current party.
+ * A view model that allows a Rocket GUI to bind to the player's inventory.
  *
  * @author Noam Chitayat
  */
-class HomeViewModel : public Rocket::Controls::DataSource
+class ItemViewModel : public Rocket::Controls::DataSource
 {
-   /** The character roster to expose to the GUI */
-   const CharacterRoster& characterRoster;
+   /** The currently loaded player data. */
+   PlayerData& playerData;
 
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter imageFormatter;
@@ -31,14 +29,14 @@ class HomeViewModel : public Rocket::Controls::DataSource
       /**
        * Constructor.
        *
-       * @param characterRoster The list of the player's characters.
+       * @param playerData The currently loaded player data.
        */
-      HomeViewModel(const CharacterRoster& characterRoster);
+      ItemViewModel(PlayerData& playerData);
 
       /**
        * Destructor.
        */
-      ~HomeViewModel();
+      ~ItemViewModel();
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

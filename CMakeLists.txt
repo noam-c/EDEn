@@ -33,6 +33,8 @@ set(HEADERS
   src/Menu/HomeMenu.h
   src/Menu/HomeViewModel.h
   src/Menu/ImageFormatter.h
+  src/Menu/ItemMenu.h
+  src/Menu/ItemViewModel.h
   src/Menu/MenuShell.h
   src/Menu/MenuShellOption.h
   src/Menu/MenuState.h
@@ -127,6 +129,8 @@ set(SOURCES
   src/Menu/HomeMenu.cpp
   src/Menu/HomeViewModel.cpp
   src/Menu/ImageFormatter.cpp
+  src/Menu/ItemMenu.cpp
+  src/Menu/ItemViewModel.cpp
   src/Menu/MenuShell.cpp
   src/Menu/MenuState.cpp
   src/Messaging/MessagePipe.cpp

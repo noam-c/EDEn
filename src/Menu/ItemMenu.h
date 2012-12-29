@@ -4,15 +4,12 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef HOME_MENU_H
-#define HOME_MENU_H
-
-#include <stack>
-#include <map>
+#ifndef ITEM_MENU_H
+#define ITEM_MENU_H
 
 #include "MenuState.h"
 #include "EdenRocketBindings.h"
-#include "HomeViewModel.h"
+#include "ItemViewModel.h"
 
 namespace Rocket
 {
@@ -34,30 +31,30 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class HomeMenu: public MenuState
+class ItemMenu: public MenuState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<HomeMenu> bindings;
+   EdenRocketBindings<ItemMenu> bindings;
 
    /** The player data */
    PlayerData& playerData;
 
-   /** The view model */
-   HomeViewModel homeViewModel;
+   /** The view model that exposes the inventory to the GUI */
+   ItemViewModel itemViewModel;
 
    /**
-    * Initializes the home menu pane and populates the sidebar.
+    * Initializes the item menu pane and populates the sidebar.
     */
    void initialize();
 
    protected:
       /**
-       * Activates the home menu and reveals the home pane.
+       * Activates the data menu and reveals the data pane.
        */
       void activate();
 
       /**
-       * Deactivates the home menu and hides the home pane.
+       * Deactivates the data menu and hides the data pane.
        */
       void deactivate();
 
@@ -68,29 +65,21 @@ class HomeMenu: public MenuState
        * @param executionStack The execution stack that the state belongs to.
        * @param playerData The player data that the menu will display.
        */
-      HomeMenu(ExecutionStack& executionStack, PlayerData& playerData);
+      ItemMenu(ExecutionStack& executionStack, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
        *
        * @param executionStack The execution stack that the state belongs to.
        * @param playerData The player data that the menu will display.
-       * @param menuShell The shell for the menu
+       * @param menuShell The shell for the menu.
        */
-      HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
-
-      /**
-       * Handles sidebar option click events by navigating to the
-       * appropriate menu.
-       *
-       * @param optionIndex The index of the sidebar option that was clicked.
-       */
-      void sidebarClicked(int optionIndex);
+      ItemMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
 
       /**
        * Destructor.
        */
-      ~HomeMenu();
+      ~ItemMenu();
 };
 
 #endif
