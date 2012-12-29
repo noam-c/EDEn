@@ -89,9 +89,9 @@ class MainMenu: public GameState
        * Constructor.
        * Initializes the title screen widgets, font, image and sounds.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        */
-      MainMenu(ExecutionStack& executionStack);
+      MainMenu(GameContext& gameContext);
    
       /**
        * Destructor.

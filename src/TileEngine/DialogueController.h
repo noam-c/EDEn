@@ -130,6 +130,9 @@ class DialogueController
    /** The script engine to call when embedded instructions are found */
    ScriptEngine& scriptEngine;
 
+   /** The scheduler that will be used to manage script coroutines that arise during the dialogue. */
+   Scheduler& scheduler;
+
    /** The Rocket context that will manage the dialogue boxes */
    Rocket::Core::Context& context;
 

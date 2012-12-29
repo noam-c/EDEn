@@ -16,15 +16,15 @@
 
 const int NUM_TRANSITIONS = 3;
 
-GameState* RandomTransitionGenerator::create(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength)
+GameState* RandomTransitionGenerator::create(GameContext& gameContext, GameState* oldState, GameState* newState, long transitionLength)
 {
   int randomNumber = rand() % NUM_TRANSITIONS;
   GameState* transition;
   switch(randomNumber)
   {
-    case 0: transition = new FadeState(executionStack, oldState, transitionLength); break;
-    case 1: transition = new SpinState(executionStack, oldState, transitionLength); break;
-    case 2: transition = new BlendState(executionStack, oldState, newState, transitionLength); break;
+    case 0: transition = new FadeState(gameContext, oldState, transitionLength); break;
+    case 1: transition = new SpinState(gameContext, oldState, transitionLength); break;
+    case 2: transition = new BlendState(gameContext, oldState, newState, transitionLength); break;
   }
   return transition;
 }

@@ -25,6 +25,7 @@
 #include "Pathfinder.h"
 #include "Rectangle.h"
 #include "DialogueController.h"
+#include "GameContext.h"
 #include "ExecutionStack.h"
 #include "RandomTransitionGenerator.h"
 #include "HomeMenu.h"
@@ -34,20 +35,23 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 const int TileEngine::TILE_SIZE = 32;
 
-TileEngine::TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath) :
-   GameState(executionStack, "TileEngine"),
-   consoleWindow(*context),
+TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName, const std::string& playerDataPath) :
+   GameState(gameContext, "TileEngine"),
+   consoleWindow(*rocketContext),
    entityGrid(*this, messagePipe),
    xMapOffset(0),
    yMapOffset(0)
 {
+   scheduler = new Scheduler();
+
    messagePipe.registerListener(this);
 
    loadPlayerData(playerDataPath);
 
    playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData, "npc1");
-   scriptEngine = new ScriptEngine(*this, playerData, scheduler);
-   dialogue = new DialogueController(*context, scheduler, *scriptEngine);
+   gameContext.getScriptEngine().setTileEngine(this);
+   gameContext.getScriptEngine().setPlayerData(&playerData);
+   dialogue = new DialogueController(*rocketContext, *scheduler, gameContext.getScriptEngine());
 
    time = SDL_GetTicks();
    startChapter(chapterName);
@@ -58,8 +62,8 @@ TileEngine::~TileEngine()
    clearNPCs();
    messagePipe.unregisterListener(this);
    delete dialogue;
-   delete scriptEngine;
    delete playerActor;
+   delete scheduler;
 }
 
 void TileEngine::loadPlayerData(const std::string& path)
@@ -72,7 +76,7 @@ void TileEngine::loadPlayerData(const std::string& path)
 
 void TileEngine::startChapter(const std::string& chapterName)
 {
-   scriptEngine->runChapterScript(chapterName);
+   gameContext.getScriptEngine().runChapterScript(chapterName, *scheduler);
 }
 
 void TileEngine::clearNPCs()
@@ -85,6 +89,11 @@ void TileEngine::clearNPCs()
    }
 
    npcList.clear();
+}
+
+Scheduler* TileEngine::getScheduler() const
+{
+   return scheduler;
 }
 
 std::string TileEngine::getMapName() const
@@ -146,7 +155,7 @@ int TileEngine::setMap(std::string mapName)
 
    recalculateMapOffsets();
 
-   return scriptEngine->runMapScript(currRegion->getName(), mapName);
+   return gameContext.getScriptEngine().runMapScript(currRegion->getName(), mapName, *scheduler);
 }
 
 void TileEngine::recalculateMapOffsets()
@@ -179,7 +188,7 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
    
    if(entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
-      npcToAdd = new NPC(*scriptEngine, scheduler, npcName, spritesheetName,
+      npcToAdd = new NPC(gameContext.getScriptEngine(), *scheduler, npcName, spritesheetName,
                                  messagePipe, entityGrid, currRegion->getName(),
                                  npcLocation, size);
       npcList[npcName] = npcToAdd;
@@ -316,7 +325,7 @@ bool TileEngine::step()
    }
 
    bool done = false;
-   scheduler.runCoroutines(timePassed);
+   scheduler->runCoroutines(timePassed);
 
    handleInputEvents(done);
 
@@ -343,7 +352,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                case DEBUG_CONSOLE_EVENT:
                {
                   std::string* script = (std::string*)event.user.data1;
-                  scriptEngine->runScriptString(*script);
+                  gameContext.getScriptEngine().runScriptString(*script, *scheduler);
 
                   // This assumes that, once the debug event is consumed here, it is not used anymore
                   delete script;
@@ -384,9 +393,8 @@ void TileEngine::handleInputEvents(bool& finishState)
                      // is activated again.
                      playerData.clearMessagePipe();
 
-                     HomeMenu* menu = new HomeMenu(executionStack, playerData);
-
-                     executionStack.pushState(menu, RandomTransitionGenerator::create(executionStack, this, menu));
+                     HomeMenu* menu = new HomeMenu(gameContext, playerData);
+                     gameContext.getExecutionStack().pushState(menu, RandomTransitionGenerator::create(gameContext, this, menu));
                      return;
                   }
                }

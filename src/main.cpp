@@ -5,7 +5,7 @@
  */
 
 #include "GraphicsUtil.h"
-#include "ScriptEngine.h"
+#include "GameContext.h"
 #include "ExecutionStack.h"
 #include "MainMenu.h"
 #include "ResourceLoader.h"
@@ -28,11 +28,11 @@ int main (int argc, char *argv[])
    {
       GraphicsUtil::getInstance();
       DEBUG("Initializing execution stack.");
-      ExecutionStack stack;
+      GameContext gameContext;
       DEBUG("Pushing Main Menu state.");
-      stack.pushState(new MainMenu(stack));
+      gameContext.getExecutionStack().pushState(new MainMenu(gameContext));
       DEBUG("Beginning game execution.");
-      stack.execute();
+      gameContext.getExecutionStack().execute();
 
       DEBUG("Game is finished. Freeing resources and destroying singletons.");
       ResourceLoader::freeAll();

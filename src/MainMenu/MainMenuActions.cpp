@@ -5,6 +5,7 @@
  */
 
 #include "MainMenu.h"
+#include "GameContext.h"
 #include "ExecutionStack.h"
 #include "GraphicsUtil.h"
 #include "Music.h"
@@ -28,8 +29,8 @@
  */
 void MainMenu::NewGameAction(Rocket::Core::Event* event)
 {
-   TileEngine* tileEngine = new TileEngine(executionStack, CHAP1);
-   executionStack.pushState(tileEngine, new FadeState(executionStack, this));
+   TileEngine* tileEngine = new TileEngine(gameContext, CHAP1);
+   gameContext.getExecutionStack().pushState(tileEngine, new FadeState(gameContext, this));
    chooseSound->play();
    Music::fadeOutMusic(1000);
 }
@@ -43,7 +44,7 @@ void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
    PlayerData* playerData = new PlayerData();
    playerData->load(SAVE_GAME);
 
-   executionStack.pushState(new HomeMenu(executionStack, *playerData));
+   gameContext.getExecutionStack().pushState(new HomeMenu(gameContext, *playerData));
 }
 
 /**

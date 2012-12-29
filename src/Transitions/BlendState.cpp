@@ -13,8 +13,8 @@
 
 const int debugFlag = DEBUG_GRAPHICS;
 
-BlendState::BlendState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength) :
-   TransitionState(executionStack, "BlendState", oldState, newState, transitionLength)
+BlendState::BlendState(GameContext& gameContext, GameState* oldState, GameState* newState, long transitionLength) :
+   TransitionState(gameContext, "BlendState", oldState, newState, transitionLength)
 {
 }
 

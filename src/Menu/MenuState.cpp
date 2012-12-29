@@ -13,15 +13,15 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuState::MenuState(ExecutionStack& executionStack, const std::string& stateName) :
-   GameState(executionStack, stateName),
+MenuState::MenuState(GameContext& gameContext, const std::string& stateName) :
+   GameState(gameContext, stateName),
    internalMenuShell(true)
 {
-   menuShell = new MenuShell(context);
+   menuShell = new MenuShell(rocketContext);
 }
 
-MenuState::MenuState(ExecutionStack& executionStack, const std::string& stateName, MenuShell* menuShell) :
-   GameState(executionStack, stateName, menuShell->getContext()),
+MenuState::MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* menuShell) :
+   GameState(gameContext, stateName, menuShell->getContext()),
    internalMenuShell(false),
    menuShell(menuShell)
 {

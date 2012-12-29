@@ -12,9 +12,9 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TRANSITIONS;
 
-TransitionState::TransitionState(ExecutionStack& executionStack, const std::string& stateName,
+TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName,
       GameState* oldState, GameState* newState, long transitionLength) :
-      GameState(executionStack, stateName),
+      GameState(gameContext, stateName),
       startTime(SDL_GetTicks()),
       transitionLength(transitionLength),
       progress(1.0f)

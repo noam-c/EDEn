@@ -27,8 +27,8 @@ enum MainMenuActions
    MENU_PROTOTYPE_ACTION,
 };
 
-MainMenu::MainMenu(ExecutionStack& executionStack) :
-   GameState(executionStack, "MainMenu"),
+MainMenu::MainMenu(GameContext& gameContext) :
+   GameState(gameContext, "MainMenu"),
    bindings(this)
 {
    chooseSound = ResourceLoader::getSound("choose");
@@ -36,7 +36,7 @@ MainMenu::MainMenu(ExecutionStack& executionStack) :
 
    music = ResourceLoader::getMusic("title.mp3");
 
-   titleDocument = context->LoadDocument("data/gui/title.rml");
+   titleDocument = rocketContext->LoadDocument("data/gui/title.rml");
 
    if(titleDocument != NULL)
    {

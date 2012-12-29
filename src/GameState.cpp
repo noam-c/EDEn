@@ -12,28 +12,28 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_GAME_STATE;
 
-GameState::GameState(ExecutionStack& executionStack, const std::string& stateName) :
-   executionStack(executionStack)
+GameState::GameState(GameContext& gameContext, const std::string& stateName) :
+   gameContext(gameContext)
 {
-   context = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
+   rocketContext = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
 }
 
-GameState::GameState(ExecutionStack& executionStack, const std::string& stateName, Rocket::Core::Context* context) :
-   executionStack(executionStack),
-   context(context)
+GameState::GameState(GameContext& gameContext, const std::string& stateName, Rocket::Core::Context* context) :
+   gameContext(gameContext),
+   rocketContext(context)
 {
    context->AddReference();
 }
 
 GameState::~GameState()
 {
-   context->RemoveReference();
+   rocketContext->RemoveReference();
 }
 
 void GameState::activate()
 {
    finished = false;
-   context->Update();
+   rocketContext->Update();
 }
 
 void GameState::deactivate()
@@ -42,21 +42,26 @@ void GameState::deactivate()
 
 bool GameState::advanceFrame()
 {
-   context->Update();
+   rocketContext->Update();
    return step();
 }
 
 void GameState::handleEvent(const SDL_Event& event)
 {
-   RocketSDLInputMapping::handleSDLEvent(context, event);
+   RocketSDLInputMapping::handleSDLEvent(rocketContext, event);
 }
 
 void GameState::drawFrame()
 {
    draw();
 
-   context->Render();
+   rocketContext->Render();
 
    // Make sure everything is displayed on screen
    GraphicsUtil::getInstance()->flipScreen();
+}
+
+Scheduler* GameState::getScheduler() const
+{
+   return NULL;
 }

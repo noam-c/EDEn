@@ -17,8 +17,8 @@
 
 const int debugFlag = DEBUG_MENU;
 
-ItemMenu::ItemMenu(ExecutionStack& executionStack, PlayerData& playerData) :
-   MenuState(executionStack, "ItemMenu"),
+ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData) :
+   MenuState(gameContext, "ItemMenu"),
    bindings(this),
    playerData(playerData),
    itemViewModel(playerData)
@@ -26,8 +26,8 @@ ItemMenu::ItemMenu(ExecutionStack& executionStack, PlayerData& playerData) :
    initialize();
 }
 
-ItemMenu::ItemMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell) :
-   MenuState(executionStack, "ItemMenu", menuShell),
+ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
+   MenuState(gameContext, "ItemMenu", menuShell),
    bindings(this),
    playerData(playerData),
    itemViewModel(playerData)

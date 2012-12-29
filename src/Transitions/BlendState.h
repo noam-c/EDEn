@@ -28,12 +28,12 @@ class BlendState : public TransitionState
       /**
        * Constructor.
        *
-       * @param executionStack The execution stack managing this transition.
+       * @param gameContext The context containing the execution stack managing this transition.
        * @param oldState The state that is being transitioned away from.
        * @param newState The state that is being transitioned to.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      BlendState(ExecutionStack& executionStack, GameState* oldState, GameState* newState, long transitionLength = 1000);
+      BlendState(GameContext& gameContext, GameState* oldState, GameState* newState, long transitionLength = 1000);
 
       /**
        * Destructor.

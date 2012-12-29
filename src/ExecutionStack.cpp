@@ -39,6 +39,12 @@ void ExecutionStack::popState()
    }
 }
 
+GameState* ExecutionStack::getCurrentState() const
+{
+   return stateStack.top();
+}
+
+
 void ExecutionStack::pushState(GameState* newState, GameState* transitionState)
 {
    if(!stateStack.empty())

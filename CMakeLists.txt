@@ -16,6 +16,7 @@ set(HEADERS
   src/DebugConsoleWindow.h
   src/Exception.h
   src/ExecutionStack.h
+  src/GameContext.h
   src/GameState.h
   src/Graphics/GraphicsUtil.h
   src/Graphics/OpenGLExtensions.h
@@ -196,6 +197,7 @@ set(SOURCES
   src/DebugConsoleWindow.cpp
   src/Exception.cpp
   src/ExecutionStack.cpp
+  src/GameContext.cpp
   src/GameState.cpp
   src/Graphics/GraphicsUtil.cpp
   src/Graphics/OpenGLExtensions.cpp

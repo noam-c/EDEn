@@ -52,13 +52,13 @@ class TransitionState : public GameState
       /**
        * Constructor.
        *
-       * @param executionStack The execution stack that will contain the transition state.
+       * @param gameContext The context containing the execution stack managing this transition.
        * @param stateName The identifier of the transition state.
        * @param oldState The old state that the transition will be moving from.
        * @param newState The new state that the transition will be moving to.
        * @param transitionLength An optional length (in milliseconds) for the transition.
        */
-      TransitionState(ExecutionStack& executionStack, const std::string& stateName, GameState* oldState, GameState* newState, long transitionLength = 1000);
+      TransitionState(GameContext& gameContext, const std::string& stateName, GameState* oldState, GameState* newState, long transitionLength = 1000);
 
       /**
        * Destructor.

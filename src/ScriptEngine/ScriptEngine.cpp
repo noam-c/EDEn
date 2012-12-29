@@ -7,6 +7,7 @@
 #include "ScriptEngine.h"
 #include "TileEngine.h"
 #include "PlayerData.h"
+#include "GameContext.h"
 #include "Scheduler.h"
 #include "ResourceLoader.h"
 #include "Music.h"
@@ -40,10 +41,8 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Scheduler& scheduler) :
-   tileEngine(tileEngine),
-   playerData(playerData),
-   scheduler(scheduler)
+ScriptEngine::ScriptEngine(GameContext& gameContext) :
+   gameContext(gameContext)
 {
    luaVM = luaL_newstate();
 
@@ -66,27 +65,12 @@ ScriptEngine::ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Sched
    lua_setglobal(luaVM, SCRIPT_ENG_LUA_NAME);
    
    luaopen_TileEngine(luaVM);
-   luaW_push<TileEngine>(luaVM, &tileEngine);
-   lua_setglobal(luaVM, "map");
-   
    luaopen_Actor(luaVM);
-
    luaopen_PlayerCharacter(luaVM);
-   luaW_push<PlayerCharacter>(luaVM, tileEngine.getPlayerCharacter());
-   lua_setglobal(luaVM, "playerSprite");
-
    luaopen_Quest(luaVM);
-   luaW_push<Quest>(luaVM, playerData.getRootQuest());
-   lua_setglobal(luaVM, "quests");
-   
    luaopen_Inventory(luaVM);
-   luaW_push<Inventory>(luaVM, playerData.getInventory());
-   lua_setglobal(luaVM, "inventory");
-
    luaopen_Character(luaVM);
    luaopen_CharacterRoster(luaVM);
-   luaW_push<CharacterRoster>(luaVM, playerData.getRoster());
-   lua_setglobal(luaVM, "roster");
 }
 
 ScriptEngine::~ScriptEngine()
@@ -99,8 +83,62 @@ ScriptEngine::~ScriptEngine()
    }
 }
 
+void ScriptEngine::setTileEngine(TileEngine* engine)
+{
+   tileEngine = engine;
+   if(tileEngine != NULL)
+   {
+      luaW_push(luaVM, tileEngine);
+      lua_setglobal(luaVM, "map");
+
+      luaW_push(luaVM, tileEngine->getPlayerCharacter());
+      lua_setglobal(luaVM, "playerSprite");
+   }
+   else
+   {
+      lua_pushnil(luaVM);
+      lua_setglobal(luaVM, "map");
+
+      lua_pushnil(luaVM);
+      lua_setglobal(luaVM, "playerSprite");
+   }
+}
+
+void ScriptEngine::setPlayerData(PlayerData* playerData)
+{
+   this->playerData = playerData;
+   if(this->playerData != NULL)
+   {
+      luaW_push(luaVM, this->playerData->getRootQuest());
+      lua_setglobal(luaVM, "quests");
+
+      luaW_push(luaVM, this->playerData->getInventory());
+      lua_setglobal(luaVM, "inventory");
+
+      luaW_push(luaVM, this->playerData->getRoster());
+      lua_setglobal(luaVM, "roster");
+   }
+   else
+   {
+      lua_pushnil(luaVM);
+      lua_setglobal(luaVM, "quests");
+
+      lua_pushnil(luaVM);
+      lua_setglobal(luaVM, "inventory");
+
+      lua_pushnil(luaVM);
+      lua_setglobal(luaVM, "roster");
+   }
+}
+
 int ScriptEngine::narrate(lua_State* luaStack)
 {
+   Scheduler* scheduler = gameContext.getCurrentScheduler();
+   if (scheduler == NULL)
+   {
+      return 0;
+   }
+
    int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
@@ -114,14 +152,14 @@ int ScriptEngine::narrate(lua_State* luaStack)
          waitForFinish = (lua_toboolean(luaStack, 2) == 1);
       }
 
-      Task* task = Task::getNextTask(scheduler);
+      Task* task = Task::getNextTask(*scheduler);
       if(waitForFinish)
       {
-         callResult = scheduler.block(task);
+         callResult = scheduler->block(task);
       }
 
       DEBUG("Narrating text: %s", speech);
-      tileEngine.dialogueNarrate(speech, task);
+      tileEngine->dialogueNarrate(speech, task);
    }
 
    return callResult;
@@ -129,6 +167,12 @@ int ScriptEngine::narrate(lua_State* luaStack)
 
 int ScriptEngine::say(lua_State* luaStack)
 {
+   Scheduler* scheduler = gameContext.getCurrentScheduler();
+   if (scheduler == NULL)
+   {
+      return 0;
+   }
+
    int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
@@ -142,14 +186,14 @@ int ScriptEngine::say(lua_State* luaStack)
          waitForFinish = (lua_toboolean(luaStack, 2) == 1);
       }
 
-      Task* task = Task::getNextTask(scheduler);
+      Task* task = Task::getNextTask(*scheduler);
       if(waitForFinish)
       {
-         callResult = scheduler.block(task);
+         callResult = scheduler->block(task);
       }
 
       DEBUG("Saying text: %s", speech);
-      tileEngine.dialogueSay(speech, task);
+      tileEngine->dialogueSay(speech, task);
    }
 
    return callResult;
@@ -157,6 +201,12 @@ int ScriptEngine::say(lua_State* luaStack)
 
 int ScriptEngine::playSound(lua_State* luaStack)
 {
+   Scheduler* scheduler = gameContext.getCurrentScheduler();
+   if (scheduler == NULL)
+   {
+      return 0;
+   }
+
    int nargs = lua_gettop(luaStack);
    bool waitForFinish = false;
 
@@ -170,7 +220,7 @@ int ScriptEngine::playSound(lua_State* luaStack)
          waitForFinish = (lua_toboolean(luaStack, 2) == 1);
       }
 
-      Task* task = Task::getNextTask(scheduler);
+      Task* task = Task::getNextTask(*scheduler);
 
       DEBUG("Playing sound: %s", soundName.c_str());
       Sound* sound = ResourceLoader::getSound(soundName);
@@ -178,7 +228,7 @@ int ScriptEngine::playSound(lua_State* luaStack)
 
       if(waitForFinish)
       {
-         return scheduler.block(task);
+         return scheduler->block(task);
       }
    }
 
@@ -216,13 +266,19 @@ int ScriptEngine::stopMusic(lua_State* luaStack)
 
 int ScriptEngine::delay(lua_State* luaStack)
 {
+   Scheduler* scheduler = gameContext.getCurrentScheduler();
+   if (scheduler == NULL)
+   {
+      return 0;
+   }
+
    long timeToWait = (long)lua_tonumber(luaStack, 1);
    DEBUG("Waiting %d milliseconds", timeToWait);
    
    Timer* waitTimer = new Timer(timeToWait);
-   scheduler.start(waitTimer);
+   scheduler->start(waitTimer);
    
-   return scheduler.join(waitTimer);
+   return scheduler->join(waitTimer);
 }
 
 int ScriptEngine::generateRandom(lua_State* luaStack)
@@ -267,7 +323,7 @@ int ScriptEngine::setRegion(lua_State* luaStack)
       std::string regionName(lua_tostring(luaStack, 1));
       DEBUG("Setting region: %s", regionName.c_str());
 
-      return tileEngine.setRegion(regionName);
+      return tileEngine->setRegion(regionName);
    }
 
    return 0;
@@ -278,19 +334,19 @@ NPCScript* ScriptEngine::createNPCCoroutine(NPC* npc, const std::string& regionN
    return ScriptFactory::createNPCCoroutine(luaVM, npc, regionName, mapName);
 }
 
-int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName)
+int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)
 {
    Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);
-   return runScript(mapScript);
+   return runScript(mapScript, scheduler);
 }
 
-int ScriptEngine::runChapterScript(const std::string& chapterName)
+int ScriptEngine::runChapterScript(const std::string& chapterName, Scheduler& scheduler)
 {
    Script* chapterScript = ScriptFactory::getChapterScript(luaVM, chapterName);
-   return runScript(chapterScript);
+   return runScript(chapterScript, scheduler);
 }
 
-int ScriptEngine::runScript(Script* script)
+int ScriptEngine::runScript(Script* script, Scheduler& scheduler)
 {
    scheduler.start(script);
 
@@ -302,7 +358,7 @@ int ScriptEngine::runScript(Script* script)
    return 0;
 }
 
-int ScriptEngine::runScriptString(const std::string& scriptString)
+int ScriptEngine::runScriptString(const std::string& scriptString, Scheduler& scheduler)
 {
    DEBUG("Running script string: %s", scriptString.c_str());
    StringScript* newScript = new StringScript(luaVM, scriptString);

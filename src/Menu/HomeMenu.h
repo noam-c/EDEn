@@ -65,19 +65,24 @@ class HomeMenu: public MenuState
       /**
        * Constructor. Initializes the menu GUI.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param playerData The player data that the menu will display.
        */
-      HomeMenu(ExecutionStack& executionStack, PlayerData& playerData);
+      HomeMenu(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param playerData The player data that the menu will display.
        * @param menuShell The shell for the menu
        */
-      HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
+      HomeMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell);
+
+      /**
+       * Destructor.
+       */
+      ~HomeMenu();
 
       /**
        * Handles sidebar option click events by navigating to the
@@ -86,11 +91,6 @@ class HomeMenu: public MenuState
        * @param optionIndex The index of the sidebar option that was clicked.
        */
       void sidebarClicked(int optionIndex);
-
-      /**
-       * Destructor.
-       */
-      ~HomeMenu();
 };
 
 #endif

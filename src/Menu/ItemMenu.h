@@ -62,19 +62,19 @@ class ItemMenu: public MenuState
       /**
        * Constructor. Initializes the menu GUI.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param playerData The player data that the menu will display.
        */
-      ItemMenu(ExecutionStack& executionStack, PlayerData& playerData);
+      ItemMenu(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param playerData The player data that the menu will display.
        * @param menuShell The shell for the menu.
        */
-      ItemMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
+      ItemMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell);
 
       /**
        * Destructor.

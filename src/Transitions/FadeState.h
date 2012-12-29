@@ -26,11 +26,11 @@ class FadeState : public TransitionState
       /**
        * Constructor.
        *
-       * @param executionStack The execution stack managing this transition.
+       * @param gameContext The context containing the execution stack managing this transition.
        * @param oldState The state that is being faded out.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      FadeState(ExecutionStack& executionStack, GameState* oldState, long transitionLength = 1000);
+      FadeState(GameContext& gameContext, GameState* oldState, long transitionLength = 1000);
 
       /**
        * Destructor.

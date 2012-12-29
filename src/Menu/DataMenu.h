@@ -104,19 +104,24 @@ class DataMenu: public MenuState
       /**
        * Constructor. Initializes the menu GUI.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param playerData The player data that the menu will display.
        */
-      DataMenu(ExecutionStack& executionStack, PlayerData& playerData);
+      DataMenu(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param playerData The player data that the menu will display.
        * @param menuShell The shell for the menu
        */
-      DataMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell);
+      DataMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell);
+
+      /**
+       * Destructor.
+       */
+      ~DataMenu();
 
       /**
        * Handles a sidebar click for the data menu.
@@ -125,11 +130,6 @@ class DataMenu: public MenuState
        * @param optionIndex The index of the sidebar option that was clicked.
        */
       void sidebarClicked(int optionIndex);
-
-      /**
-       * Destructor.
-       */
-      ~DataMenu();
 };
 
 #endif

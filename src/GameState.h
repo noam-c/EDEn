@@ -9,7 +9,8 @@
 
 #include <string>
 
-class ExecutionStack;
+class GameContext;
+class Scheduler;
 
 namespace Rocket
 {
@@ -38,11 +39,11 @@ union SDL_Event;
 class GameState
 {
    protected:
-      /** The execution stack that the state belongs to. */
-      ExecutionStack& executionStack;
+      /** The game context responsible for the state's data and execution. */
+      GameContext& gameContext;
    
       /** The Rocket context for any GUI created by the state. */
-      Rocket::Core::Context* context;
+      Rocket::Core::Context* rocketContext;
 
       /** True iff the Rocket context was created internally (and thus should also be destroyed internally) */
       bool internalContext;
@@ -54,20 +55,20 @@ class GameState
        * Constructor.
        * Initializes the top-level GUI widget container.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The game context responsible for the state's data and execution.
        * @param stateName The unique name of the state.
        */
-      GameState(ExecutionStack& executionStack, const std::string& stateName);
+      GameState(GameContext& gameContext, const std::string& stateName);
 
       /**
        * Constructor.
        * Initializes the state with an existing top-level container.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The game context responsible for the state's data and execution.
        * @param stateName The unique name of the state.
-       * @param context The Rocket context to use for this state's GUI.
+       * @param rocketContext The Rocket context to use for this state's GUI.
        */
-      GameState(ExecutionStack& executionStack, const std::string& stateName, Rocket::Core::Context* context);
+      GameState(GameContext& gameContext, const std::string& stateName, Rocket::Core::Context* rocketContext);
 
       /**
        * Runs the state's logic processing
@@ -118,6 +119,11 @@ class GameState
        * Generic drawing code that is performed in every game state (such as drawing GUI and flipping the buffer) should go in here.
        */
       virtual void drawFrame();
+
+      /**
+       * @return the state's coroutine scheduler, or NULL if none exists.
+       */
+      virtual Scheduler* getScheduler() const;
 
       /**
        * Destructor.

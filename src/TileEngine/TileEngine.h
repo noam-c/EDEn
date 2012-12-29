@@ -11,7 +11,6 @@
 
 #include "MessagePipe.h"
 #include "DebugConsoleWindow.h"
-#include "Scheduler.h"
 #include "EntityGrid.h"
 #include "Listener.h"
 #include "PlayerData.h"
@@ -54,11 +53,8 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    /** Controller for dialogue and narrations. */
    DialogueController* dialogue;
 
-   /** The Scripting Engine used for the engine's scripting. */
-   ScriptEngine* scriptEngine;
-
-   /** The Coroutine scheduler used by the tile engine. */
-   Scheduler scheduler;
+   /** The coroutine scheduler used by the tile engine. */
+   Scheduler* scheduler;
    
    /** The player data */
    PlayerData playerData;
@@ -144,11 +140,16 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
       /**
        * Constructor.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param chapterName The name of the chapter to load after construction
        * @param playerDataPath The path to the player's data.
        */
-      TileEngine(ExecutionStack& executionStack, const std::string& chapterName, const std::string& playerDataPath = "");
+      TileEngine(GameContext& gameContext, const std::string& chapterName, const std::string& playerDataPath = "");
+
+      /**
+       * @return The tile engine's coroutine scheduler.
+       */
+      Scheduler* getScheduler() const;
 
       /**
        * @return The name of the currently loaded map.

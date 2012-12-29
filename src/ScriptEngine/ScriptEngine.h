@@ -15,6 +15,7 @@
 // We will need to talk to the tile engine and player data from Lua
 class TileEngine;
 class PlayerData;
+class GameContext;
 
 class Scheduler;
 class NPC;
@@ -37,17 +38,18 @@ class ScriptEngine
    /**
     * The tile engine to execute commands on
     */
-   TileEngine& tileEngine;
+   TileEngine* tileEngine;
    
    /**
     * The player data to execute commands on
     */
-   PlayerData& playerData;
+   PlayerData* playerData;
 
    /**
-    * The scheduler for the script coroutines
+    * The game context that contains the current game state and
+    * player game data.
     */
-   Scheduler& scheduler;
+   GameContext& gameContext;
 
    /**
     * The main Lua execution coroutine and stack
@@ -68,18 +70,17 @@ class ScriptEngine
     * Run a specified script.
     *
     * @param script The script to run.
+    * @param scheduler The scheduler that will manage the new script coroutine.
     */
-   int runScript(Script* script);
+   int runScript(Script* script, Scheduler& scheduler);
 
    public:
       /** 
        * Constructor. Initializes a Lua VM and initializes members as needed.
        *
-       * @param tileEngine The tile engine to make calls to from scripts
-       * @param playerData The player data that the scripts will reference
-       * @param scheduler The scheduler responsible for managing this engine's Script coroutines
+       * @param gameContext The context containing the current game state and data.
        */
-      ScriptEngine(TileEngine& tileEngine, PlayerData& playerData, Scheduler& scheduler);
+      ScriptEngine(GameContext& gameContext);
 
       /**
        * Get a specified NPC script.
@@ -95,22 +96,25 @@ class ScriptEngine
        *
        * @param regionName The region containing the map script to run.
        * @param mapName The name of the map script to be run.
+       * @param scheduler The scheduler that will manage the new script coroutine.
        */
-      int runMapScript(const std::string& regionName, const std::string& mapName);
+      int runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler);
 
       /**
        * Run a specified chapter script.
        *
        * @param chapterName The name of the chapter script to run.
+       * @param scheduler The scheduler that will manage the new script coroutine.
        */
-      int runChapterScript(const std::string& chapterName);
+      int runChapterScript(const std::string& chapterName, Scheduler& scheduler);
 
       /**
        * Run a string of script with the specified name.
        *
        * @param scriptString The name of the script to run.
+       * @param scheduler The scheduler that will manage the new script coroutine.
        */
-      int runScriptString(const std::string& scriptString);
+      int runScriptString(const std::string& scriptString, Scheduler& scheduler);
 
       /**
        * Set the tile engine to send commands to.
@@ -118,6 +122,13 @@ class ScriptEngine
        * @param engine The tile engine to set.
        */
       void setTileEngine(TileEngine* engine);
+
+      /**
+       * Set the player data to send commands to.
+       *
+       * @param playerData The player data that the scripts will reference
+       */
+      void setPlayerData(PlayerData* playerData);
 
       /**
        * Calls a specified function on a specified Lua coroutine.

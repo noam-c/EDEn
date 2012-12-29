@@ -84,19 +84,19 @@ class MenuState : public GameState
       /**
        * Constructor.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param stateName The unique name of the state.
        */
-      MenuState(ExecutionStack& executionStack, const std::string& stateName);
+      MenuState(GameContext& gameContext, const std::string& stateName);
 
       /**
        * Constructor.
        *
-       * @param executionStack The execution stack that the state belongs to.
+       * @param gameContext The context containing the current player data and execution stack.
        * @param stateName The unique name of the state.
        * @param shell The shell for the menu.
        */
-      MenuState(ExecutionStack& executionStack, const std::string& stateName, MenuShell* shell);
+      MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* shell);
 
       /**
        * Destructor.

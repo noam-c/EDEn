@@ -15,13 +15,14 @@
 
 #include "PlayerData.h"
 
+#include "GameContext.h"
 #include "ExecutionStack.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_MENU;
 
-HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData) :
-   MenuState(executionStack, "HomeMenu"),
+HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData) :
+   MenuState(gameContext, "HomeMenu"),
    bindings(this),
    playerData(playerData),
    homeViewModel(*playerData.getRoster())
@@ -29,8 +30,8 @@ HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData) :
    initialize();
 }
 
-HomeMenu::HomeMenu(ExecutionStack& executionStack, PlayerData& playerData, MenuShell* menuShell) :
-   MenuState(executionStack, "HomeMenu", menuShell),
+HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
+   MenuState(gameContext, "HomeMenu", menuShell),
    bindings(this),
    playerData(playerData),
    homeViewModel(*playerData.getRoster())
@@ -83,10 +84,10 @@ void HomeMenu::sidebarClicked(int optionIndex)
    switch(optionIndex)
    {
       case 0:
-         executionStack.pushState(new ItemMenu(executionStack, playerData, menuShell));
+         gameContext.getExecutionStack().pushState(new ItemMenu(gameContext, playerData, menuShell));
          break;
       case 7:
-         executionStack.pushState(new DataMenu(executionStack, playerData, menuShell));
+         gameContext.getExecutionStack().pushState(new DataMenu(gameContext, playerData, menuShell));
          break;
       default:
          break;

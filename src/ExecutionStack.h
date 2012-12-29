@@ -61,6 +61,11 @@ class ExecutionStack
       void pushState(GameState* newState, GameState* transitionState = NULL);
 
       /**
+       * @return The currently executing game state.
+       */
+      GameState* getCurrentState() const;
+
+      /**
        * Execute the game loop.
        * Step through the state logic. If the logic returns true
        * then the state is not ready to terminate, so run its draw step.
