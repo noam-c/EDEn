@@ -15,7 +15,7 @@ const int debugFlag = DEBUG_TRANSITIONS;
 TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName,
       GameState* oldState, GameState* newState, long transitionLength) :
       GameState(gameContext, stateName),
-      startTime(SDL_GetTicks()),
+      totalTime(0),
       transitionLength(transitionLength),
       progress(1.0f)
 {
@@ -53,11 +53,10 @@ bool TransitionState::captureStateToTexture(GameState* state, ScreenTexture& scr
    return !glGetError();
 }
 
-bool TransitionState::step()
+bool TransitionState::step(long timePassed)
 {
-   long timePassed = SDL_GetTicks() - startTime;
-
-   if (timePassed > transitionLength)
+   totalTime += timePassed;
+   if (totalTime > transitionLength)
    {
       DEBUG("Finishing transition.");
       return false;

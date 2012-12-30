@@ -60,6 +60,7 @@ bool Script::runScript(int numArgs)
          DEBUG("Error running script: %s", lua_tostring(luaStack, -1));
          running = false;
          T_T("An error occured running this script.");
+         return true;
       }
    }
 }

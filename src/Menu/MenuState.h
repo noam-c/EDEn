@@ -69,6 +69,11 @@ class MenuState : public GameState
       virtual void activate();
 
       /**
+       * @return The scheduler used to manage the menu's coroutines
+       */
+      Scheduler* getScheduler() const;
+
+      /**
        * Draws the menu.
        */
       void draw();
@@ -78,7 +83,7 @@ class MenuState : public GameState
        *
        * @return true iff the user is not finished with the menu.
        */
-      bool step();
+      bool step(long timePassed);
 
    public:
       /**

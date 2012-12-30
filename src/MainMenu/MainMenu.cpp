@@ -10,6 +10,7 @@
 #include <Rocket/Core.h>
 
 #include "ResourceLoader.h"
+#include "Scheduler.h"
 #include "Music.h"
 #include "Sound.h"
 
@@ -31,6 +32,8 @@ MainMenu::MainMenu(GameContext& gameContext) :
    GameState(gameContext, "MainMenu"),
    bindings(this)
 {
+   scheduler = new Scheduler();
+
    chooseSound = ResourceLoader::getSound("choose");
    reselectSound = ResourceLoader::getSound("reselect");
 
@@ -56,12 +59,15 @@ MainMenu::~MainMenu()
 {
    titleDocument->Close();
    titleDocument->RemoveReference();
+
+   delete scheduler;
 }
 
-bool MainMenu::step()
+bool MainMenu::step(long timePassed)
 {
    if(finished) return false;
 
+   scheduler->runCoroutines(timePassed);
    bool done = false;
 
    if (!MUSIC_OFF)
@@ -69,12 +75,15 @@ bool MainMenu::step()
       music->play();
    }
 
-   pollInputEvent(done);
+   waitForInputEvent(done);
+
+   /* The menu shouldn't run too fast */
+   SDL_Delay (1);
 
    return !done;
 }
 
-void MainMenu::pollInputEvent(bool& finishState)
+void MainMenu::waitForInputEvent(bool& finishState)
 {
    SDL_Delay (1);
 
@@ -173,4 +182,9 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
 
 void MainMenu::draw()
 {
+}
+
+Scheduler* MainMenu::getScheduler() const
+{
+   return scheduler;
 }

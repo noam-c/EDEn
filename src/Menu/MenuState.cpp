@@ -21,7 +21,7 @@ MenuState::MenuState(GameContext& gameContext, const std::string& stateName) :
 }
 
 MenuState::MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* menuShell) :
-   GameState(gameContext, stateName, menuShell->getContext()),
+   GameState(gameContext, stateName, menuShell->getRocketContext()),
    internalMenuShell(false),
    menuShell(menuShell)
 {
@@ -42,16 +42,17 @@ void MenuState::activate()
 }
 
 
-bool MenuState::step()
+bool MenuState::step(long timePassed)
 {
    if(finished) return false;
 
-   /* The menu shouldn't run too fast */
-   SDL_Delay (1);
-
+   menuShell->getScheduler()->runCoroutines(timePassed);
    bool done = false;
 
    waitForInputEvent(done);
+
+   /* The menu shouldn't run too fast */
+   SDL_Delay (1);
 
    return !done;
 }
@@ -94,6 +95,11 @@ void MenuState::waitForInputEvent(bool& finishState)
    }
 
    handleEvent(event);
+}
+
+Scheduler* MenuState::getScheduler() const
+{
+   return menuShell->getScheduler();
 }
 
 void MenuState::draw()

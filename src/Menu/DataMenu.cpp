@@ -37,13 +37,13 @@ DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* 
 
 void DataMenu::initialize()
 {
-   paneDocument = menuShell->getContext()->LoadDocument("data/gui/datapane.rml");
+   paneDocument = menuShell->getRocketContext()->LoadDocument("data/gui/datapane.rml");
    if(paneDocument != NULL)
    {
       bindings.bindAction(paneDocument, "saveGameGrid", "click", &DataMenu::saveGameClicked);
    }
 
-   confirmSaveDocument = menuShell->getContext()->LoadDocument("data/gui/dataconfirmsave.rml");
+   confirmSaveDocument = menuShell->getRocketContext()->LoadDocument("data/gui/dataconfirmsave.rml");
    if(confirmSaveDocument != NULL)
    {
       bindings.bindAction(confirmSaveDocument, "confirm", "click", &DataMenu::confirmClicked);

@@ -17,6 +17,8 @@ MenuShell::MenuShell(Rocket::Core::Context* context) :
    bindings(this),
    currentState(NULL)
 {
+   scheduler = new Scheduler();
+
    rocketContext->AddReference();
    shellDocument = rocketContext->LoadDocument("data/gui/menushell.rml");
 
@@ -42,9 +44,14 @@ MenuShell::~MenuShell()
    rocketContext->RemoveReference();
 }
 
-Rocket::Core::Context* MenuShell::getContext() const
+Rocket::Core::Context* MenuShell::getRocketContext() const
 {
    return rocketContext;
+}
+
+Scheduler* MenuShell::getScheduler() const
+{
+   return scheduler;
 }
 
 Rocket::Core::ElementDocument* MenuShell::getShellDocument() const

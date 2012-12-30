@@ -38,6 +38,12 @@ union SDL_Event;
  */
 class GameState
 {
+   /** The maximum amount of milliseconds allowed to pass between frames. */
+   const static int MAX_FRAME_TIME;
+
+   /** Timestamp of the last logic step of the state. */
+   unsigned long time;
+
    protected:
       /** The game context responsible for the state's data and execution. */
       GameContext& gameContext;
@@ -75,7 +81,7 @@ class GameState
        *
        * @return true iff the state is not finished
        */
-      virtual bool step() = 0;
+      virtual bool step(long timePassed) = 0;
 
       /**
        * Does common event handling that is required across all game states.

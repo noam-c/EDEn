@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include "EdenRocketBindings.h"
+#include "Scheduler.h"
 
 namespace Rocket
 {
@@ -52,6 +53,9 @@ class MenuShell
    /** The currently active menu state */
    MenuState* currentState;
 
+   /** The menu's script scheduler */
+   Scheduler* scheduler;
+
    /**
     * Refreshes the menu shell GUI components.
     */
@@ -82,7 +86,12 @@ class MenuShell
       /**
        * @return The Rocket context managing the shell GUI.
        */
-      Rocket::Core::Context* getContext() const;
+      Rocket::Core::Context* getRocketContext() const;
+
+      /**
+       * @return The scheduler used to manage the menu coroutines.
+       */
+      Scheduler* getScheduler() const;
 
       /**
        * @return The RML document managing the shell GUI.

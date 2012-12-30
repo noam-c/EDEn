@@ -36,9 +36,6 @@ class Task;
  */
 class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
 {
-   /** Time since the first logic step of the TileEngine instance. */
-   unsigned long time;
-
    /** The current region that the player is in. */
    Region* currRegion;
    
@@ -125,7 +122,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * Sends time passed to all controllers so that they can update accordingly.
        * Takes user input if there is any. 
        */
-      bool step();
+      bool step(long timePassed);
 
       /**
        * Draw map tiles if a map is loaded in, and then coordinate the drawing

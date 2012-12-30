@@ -63,6 +63,8 @@ set(HEADERS
   src/rocket/EdenRocketSystemInterface.h
   src/rocket/RocketSDLInputMapping.h
   src/rocket/RocketListener.h
+  src/rocket/RocketScriptHandler.h
+  src/rocket/RocketScriptHandlerFactory.h
   src/ScriptEngine/FileScript.h
   src/ScriptEngine/NPCScript.h
   src/ScriptEngine/Script.h
@@ -151,6 +153,8 @@ set(SOURCES
   src/ResourceLoader/ResourceLoader.cpp
   src/rocket/EdenRocketRenderInterface.cpp
   src/rocket/EdenRocketSystemInterface.cpp
+  src/rocket/RocketScriptHandler.cpp
+  src/rocket/RocketScriptHandlerFactory.cpp
   src/rocket/RocketSDLInputMapping.cpp
   src/Shapes/Size.cpp
   src/Shapes/Point2D.cpp

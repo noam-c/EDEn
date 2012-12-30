@@ -1,8 +1,12 @@
 #include "GameContext.h"
 #include "GameState.h"
 
+#include <Rocket/Core/Factory.h>
+#include "RocketScriptHandlerFactory.h"
+
 GameContext::GameContext() : scriptEngine(*this)
 {
+   Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(*this));
 }
 
 GameContext::~GameContext()

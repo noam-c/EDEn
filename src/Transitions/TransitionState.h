@@ -13,8 +13,8 @@
 class TransitionState : public GameState
 {
    protected:
-      /** The time (in milliseconds) that the transition began. */
-      long startTime;
+      /** The total time elapsed since the transition began. */
+      long totalTime;
 
       /** The length of time that the transition will take to complete. */
       const long transitionLength;
@@ -31,7 +31,7 @@ class TransitionState : public GameState
       /**
        * Update the transition to the right timeframe.
        */
-      virtual bool step();
+      virtual bool step(long timePassed);
 
       /**
        * Draw the transition.

@@ -34,6 +34,9 @@ class MainMenu: public GameState
    /** The event binding collection for this GUI */
    EdenRocketBindings<MainMenu> bindings;
 
+   /** The coroutine scheduler for the main menu's GUI scripts */
+   Scheduler* scheduler;
+
    /** Main menu music */
    Music* music;
 
@@ -51,7 +54,7 @@ class MainMenu: public GameState
     *
     * @param finishState Returned as true if the input event quit out of the main menu.
     */
-   void pollInputEvent(bool& finishState);
+   void waitForInputEvent(bool& finishState);
 
    /**
     * Callback for Rocket event when a key is pressed
@@ -82,7 +85,12 @@ class MainMenu: public GameState
        *
        * @return true iff the title screen is not finished running (no quit event)
        */
-      bool step();
+      bool step(long timePassed);
+
+      /**
+       * @return the main menu's script scheduler
+       */
+      Scheduler* getScheduler() const;
 
    public:
       /**

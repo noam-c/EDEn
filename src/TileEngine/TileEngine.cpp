@@ -53,7 +53,6 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    gameContext.getScriptEngine().setPlayerData(&playerData);
    dialogue = new DialogueController(*rocketContext, *scheduler, gameContext.getScriptEngine());
 
-   time = SDL_GetTicks();
    startChapter(chapterName);
 }
 
@@ -313,17 +312,8 @@ void TileEngine::draw()
    GraphicsUtil::getInstance()->resetOffset();
 }
 
-bool TileEngine::step()
+bool TileEngine::step(long timePassed)
 {
-   long prevTime = time;
-   time = SDL_GetTicks();
-
-   long timePassed = time - prevTime;
-   if(timePassed > 32)
-   {
-      timePassed = 32;
-   }
-
    bool done = false;
    scheduler->runCoroutines(timePassed);
 

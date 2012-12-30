@@ -6,13 +6,19 @@
 
 #include "GameState.h"
 #include "GraphicsUtil.h"
+
+#include <SDL.h>
+
 #include <Rocket/Core.h>
 #include "RocketSDLInputMapping.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_GAME_STATE;
 
+const int GameState::MAX_FRAME_TIME = 32;
+
 GameState::GameState(GameContext& gameContext, const std::string& stateName) :
+   time(SDL_GetTicks()),
    gameContext(gameContext)
 {
    rocketContext = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
@@ -43,7 +49,13 @@ void GameState::deactivate()
 bool GameState::advanceFrame()
 {
    rocketContext->Update();
-   return step();
+
+   long prevTime = time;
+   time = SDL_GetTicks();
+
+   long timePassed = std::min<long>(time - prevTime, GameState::MAX_FRAME_TIME);
+
+   return step(timePassed);
 }
 
 void GameState::handleEvent(const SDL_Event& event)

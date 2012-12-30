@@ -37,7 +37,7 @@ ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* 
 
 void ItemMenu::initialize()
 {
-   paneDocument = menuShell->getContext()->LoadDocument("data/gui/itempane.rml");
+   paneDocument = menuShell->getRocketContext()->LoadDocument("data/gui/itempane.rml");
 }
 
 ItemMenu::~ItemMenu()

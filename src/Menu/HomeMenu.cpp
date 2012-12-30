@@ -50,7 +50,7 @@ HomeMenu::~HomeMenu()
 
 void HomeMenu::initialize()
 {
-   paneDocument = menuShell->getContext()->LoadDocument("data/gui/homepane.rml");
+   paneDocument = menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");
 
    sidebarOptions.push_back("Items");
    sidebarOptions.push_back("Equip");
