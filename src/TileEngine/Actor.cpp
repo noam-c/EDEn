@@ -20,10 +20,10 @@ Actor::Actor(const std::string& name, const std::string& sheetName, messaging::M
    name(name),
    pixelLoc(location),
    size(size),
-   messagePipe(messagePipe),
    movementSpeed(movementSpeed),
    currDirection(direction),
-   entityGrid(entityGrid)
+   entityGrid(entityGrid),
+   messagePipe(messagePipe)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
    sprite = new Sprite(sheet);

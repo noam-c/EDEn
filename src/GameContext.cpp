@@ -5,8 +5,8 @@
 #include "RocketScriptHandlerFactory.h"
 
 GameContext::GameContext() :
-   itemData(*this),
-   scriptEngine(*this)
+   scriptEngine(*this),
+   itemData(*this)
 {
    Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(*this));
 }

@@ -32,7 +32,6 @@ const std::string Spritesheet::UNTITLED_LINE = "untitled";
 
 Spritesheet::Spritesheet(ResourceKey name) :
    Resource(name),
-   frameList(NULL),
    texture(NULL),
    numFrames(0)
 {
