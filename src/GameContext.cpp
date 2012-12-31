@@ -4,7 +4,9 @@
 #include <Rocket/Core/Factory.h>
 #include "RocketScriptHandlerFactory.h"
 
-GameContext::GameContext() : scriptEngine(*this)
+GameContext::GameContext() :
+   itemData(*this),
+   scriptEngine(*this)
 {
    Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(*this));
 }
@@ -23,12 +25,12 @@ ScriptEngine& GameContext::getScriptEngine()
    return scriptEngine;
 }
 
-PlayerData* GameContext::getCurrentPlayerData()
+PlayerData* GameContext::getCurrentPlayerData() const
 {
    return playerData;
 }
 
-Scheduler* GameContext::getCurrentScheduler()
+Scheduler* GameContext::getCurrentScheduler() const
 {
    GameState* currentState = executionStack.getCurrentState();
    if (currentState != NULL)
@@ -37,6 +39,11 @@ Scheduler* GameContext::getCurrentScheduler()
    }
 
    return NULL;
+}
+
+Item* GameContext::getItem(int itemId) const
+{
+   return itemData.getItem(itemId);
 }
 
 void GameContext::setCurrentPlayerData(PlayerData* data)

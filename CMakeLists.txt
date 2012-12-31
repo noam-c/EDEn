@@ -24,8 +24,8 @@ set(HEADERS
   src/Graphics/Texture.h
   src/json/json.h
   src/json/json-forwards.h
-  src/GameData/ItemData.h
   src/GameData/Item.h
+  src/GameData/ItemData.h
   src/GameData/ItemList.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
@@ -66,6 +66,7 @@ set(HEADERS
   src/rocket/RocketScriptHandler.h
   src/rocket/RocketScriptHandlerFactory.h
   src/ScriptEngine/FileScript.h
+  src/ScriptEngine/ItemScript.h
   src/ScriptEngine/NPCScript.h
   src/ScriptEngine/Script.h
   src/ScriptEngine/ScriptEngine.h
@@ -123,8 +124,8 @@ set(SOURCES
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
   src/Coroutines/Timer.cpp
-  src/GameData/ItemData.cpp
   src/GameData/Item.cpp
+  src/GameData/ItemData.cpp
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
   src/Menu/DataMenu.cpp
@@ -160,6 +161,7 @@ set(SOURCES
   src/Shapes/Point2D.cpp
   src/Shapes/Rectangle.cpp
   src/ScriptEngine/FileScript.cpp
+  src/ScriptEngine/ItemScript.cpp
   src/ScriptEngine/NPCScript.cpp
   src/ScriptEngine/Script.cpp
   src/ScriptEngine/ScriptEngine.cpp

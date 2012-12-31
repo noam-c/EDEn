@@ -2,11 +2,11 @@
 	"data" : 
 	[
 		// 1-299 usable items
-		{"id" : 0,"name" : "Potion"},
-		{"id" : 1,"name" : "Ether"},
+		{"id" : 1,"name" : "Potion" },
+		{"id" : 2,"name" : "Ether"},
 
-                // 300-399 Head equipment (helms and hats)
-                {"id" : 300,"name" : "Bandanna","equip":1},
+      // 300-399 Head equipment (helms and hats)
+      {"id" : 300,"name" : "Bandanna","equip":1},
 
 		// 400-499 Body equipment (armor)
 		{"id" : 400,"name" : "Plain Clothes","equip":2},

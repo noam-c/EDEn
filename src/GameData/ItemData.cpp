@@ -14,7 +14,7 @@
 const int debugFlag = DEBUG_PLAYER;
 const char* ITEM_DATA_PATH = "data/metadata/items.edb";
 
-void ItemData::initialize()
+ItemData::ItemData(GameContext& gameContext)
 {
    Json::Reader reader;
    DEBUG("Loading item data file %s", ITEM_DATA_PATH);
@@ -43,23 +43,28 @@ void ItemData::initialize()
    for(int i = 0; i < numItems; ++i)
    {
       int id = itemList[i]["id"].asInt();
-      items[id] = new Item const(itemList[i]);
+      items[id] = new Item(itemList[i]);
       DEBUG("Loaded item ID %d", id);
    } 
 
    DEBUG("Item data loaded.");
 }
 
-Item const* ItemData::getItem(int key)
+ItemData::~ItemData()
 {
-   return items[key];
-}
-
-void ItemData::finish()
-{
-   for(std::map<int, Item const*>::iterator iter = items.begin(); iter != items.end(); ++iter)
+   for(std::map<int, Item*>::iterator iter = items.begin(); iter != items.end(); ++iter)
    {
       delete iter->second;
    }
 }
 
+Item* ItemData::getItem(int key) const
+{
+   std::map<int, Item*>::const_iterator itemIterator = items.find(key);
+   if(itemIterator != items.end())
+   {
+      return itemIterator->second;
+   }
+
+   return NULL;
+}

@@ -17,7 +17,8 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-CharacterRoster::CharacterRoster() :
+CharacterRoster::CharacterRoster(const GameContext& gameContext) :
+   gameContext(gameContext),
    messagePipe(NULL),
    partyLeader(NULL)
 {
@@ -68,7 +69,7 @@ Character* CharacterRoster::loadNewCharacter(const std::string& id)
 {
    if(getCharacter(id) == NULL)
    {
-      allCharacters[id] = new Character(id);
+      allCharacters[id] = new Character(gameContext, id);
       signalRosterUpdate();
    }
 
@@ -131,7 +132,7 @@ void CharacterRoster::load(const Json::Value& charactersElement)
       {
          Json::Value characterNode = partyElement[i];
          DEBUG("Adding character %d...", i);
-         Character* currCharacter = new Character(characterNode);
+         Character* currCharacter = new Character(gameContext, characterNode);
 
          std::string characterId = currCharacter->getId();
          allCharacters[characterId] = currCharacter;

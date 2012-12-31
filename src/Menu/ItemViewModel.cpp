@@ -6,7 +6,7 @@
 
 #include "ItemViewModel.h"
 #include "PlayerData.h"
-#include "ItemData.h"
+#include "GameContext.h"
 #include "Inventory.h"
 #include "Item.h"
 
@@ -17,14 +17,22 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-ItemViewModel::ItemViewModel(PlayerData& playerData) :
+ItemViewModel::ItemViewModel(GameContext& gameContext, PlayerData& playerData) :
       Rocket::Controls::DataSource("itemViewModel"),
+      gameContext(gameContext),
       playerData(playerData)
 {
 }
 
 ItemViewModel::~ItemViewModel()
 {
+}
+
+void ItemViewModel::useItem(int rowIndex)
+{
+   const ItemList& itemList = playerData.getInventory()->getItemList();
+   gameContext.getItem(itemList[rowIndex].first)->onMenuUse(gameContext);
+   NotifyRowChange("saveGames", rowIndex, 1);
 }
 
 void ItemViewModel::GetRow(Rocket::Core::StringList& row,
@@ -38,7 +46,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
       {
          if (columns[i] == "name")
          {
-            row.push_back(ItemData::getInstance()->getItem(itemList[row_index].first)->getName().c_str());
+            row.push_back(gameContext.getItem(itemList[row_index].first)->getName().c_str());
          }
          else if (columns[i] == "quantity")
          {

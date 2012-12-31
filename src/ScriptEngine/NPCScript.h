@@ -7,6 +7,8 @@
 #ifndef NPC_SCRIPT_H
 #define NPC_SCRIPT_H
 
+#include <vector>
+
 #include "Script.h"
 
 class NPC;
@@ -58,10 +60,10 @@ class NPCScript : public Script
     * A mapping to determine whether or not each function exists and
     * has been properly loaded for the NPC.
     * Indexing is done using the NPCFunction enum.
-    * (i.e. functionExists[IDLE] returns true iff the NPC script had an idle
+    * (e.g. functionExists[IDLE] returns true iff the NPC script had an idle
     * function declared)
     */
-   bool* functionExists;
+   std::vector<bool> functionExists;
 
    /** The NPC controlled by this script's execution. */
    NPC* npc;
@@ -85,6 +87,11 @@ class NPCScript : public Script
        * @param npc The NPC controlled by this coroutine.
        */
       NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc);
+
+      /**
+       * Destructor.
+       */
+      ~NPCScript();
 
       /**
        * Call a function on this NPC's script.
@@ -118,11 +125,6 @@ class NPCScript : public Script
        * execute.
        */
       void finish();
-
-      /**
-       * Destructor.
-       */
-      ~NPCScript();
 };
 
 #endif

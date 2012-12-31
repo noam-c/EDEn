@@ -47,14 +47,14 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    /** The current map that the player is in. */
    EntityGrid entityGrid;
 
+   /** The player data */
+   PlayerData playerData;
+
    /** Controller for dialogue and narrations. */
    DialogueController* dialogue;
 
    /** The coroutine scheduler used by the tile engine. */
    Scheduler* scheduler;
-   
-   /** The player data */
-   PlayerData playerData;
 
    /** The actor representing the player character on the map */
    PlayerCharacter* playerActor;

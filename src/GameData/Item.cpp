@@ -7,14 +7,34 @@
 #include "Item.h"
 #include "json.h"
 
+#include "GameContext.h"
+#include "ScriptEngine.h"
+#include "ItemScript.h"
+
+#include "LuaWrapper.hpp"
+
+// Include the Lua libraries. Since they are written in clean C, the functions
+// need to be included in this fashion to work with the C++ code.
+extern "C"
+{
+   #include <lua.h>
+   #include <lualib.h>
+   #include <lauxlib.h>
+}
+
 Item::Item(Json::Value& node) :
    id(node["id"].asInt()),
-   name(node["name"].asString())
+   name(node["name"].asString()),
+   itemScript(NULL)
 {
 }
 
 Item::~Item()
 {
+   if(itemScript != NULL)
+   {
+      delete itemScript;
+   }
 }
 
 const int Item::getId() const
@@ -25,4 +45,30 @@ const int Item::getId() const
 const std::string& Item::getName() const
 {
    return name;
+}
+
+void Item::loadScript(GameContext& gameContext)
+{
+   if(itemScript == NULL)
+   {
+      itemScript = gameContext.getScriptEngine().createItemScript(this);
+   }
+}
+
+bool Item::onMenuUse(GameContext& gameContext)
+{
+   loadScript(gameContext);
+   return itemScript->onMenuUse();
+}
+
+bool Item::onFieldUse(GameContext& gameContext)
+{
+   loadScript(gameContext);
+   return itemScript->onFieldUse();
+}
+
+bool Item::onBattleUse(GameContext& gameContext)
+{
+   loadScript(gameContext);
+   return itemScript->onBattleUse();
 }

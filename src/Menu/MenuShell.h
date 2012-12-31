@@ -74,9 +74,9 @@ class MenuShell
       /**
        * Constructor.
        *
-       * @param context The menu context that will contain the menu shell GUI.
+       * @param rocketContext The menu context that will contain the menu shell GUI.
        */
-      MenuShell(Rocket::Core::Context* context);
+      MenuShell(Rocket::Core::Context* rocketContext);
 
       /**
        * Destructor.

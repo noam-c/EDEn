@@ -334,6 +334,11 @@ NPCScript* ScriptEngine::createNPCCoroutine(NPC* npc, const std::string& regionN
    return ScriptFactory::createNPCCoroutine(luaVM, npc, regionName, mapName);
 }
 
+ItemScript* ScriptEngine::createItemScript(const Item* item)
+{
+   return ScriptFactory::getItemScript(luaVM, item);
+}
+
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)
 {
    Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);

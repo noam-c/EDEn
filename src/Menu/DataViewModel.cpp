@@ -14,8 +14,9 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-DataViewModel::DataViewModel(PlayerData& playerData) :
+DataViewModel::DataViewModel(const GameContext& gameContext, PlayerData& playerData) :
       Rocket::Controls::DataSource("dataViewModel"),
+      gameContext(gameContext),
       playerData(playerData)
 {
    refreshSaveGames();
@@ -62,7 +63,7 @@ void DataViewModel::refreshSaveGames()
       std::string filename(entry->d_name);
       if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".edd")
       {
-         PlayerData* data = new PlayerData();
+         PlayerData* data = new PlayerData(gameContext);
 
          /** \todo Extract HARDCODED path into a constant. */
          std::string path = "data/savegames/" + filename;

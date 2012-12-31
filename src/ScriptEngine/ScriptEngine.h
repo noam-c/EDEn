@@ -18,9 +18,11 @@ class PlayerData;
 class GameContext;
 
 class Scheduler;
-class NPC;
 class Script;
+class NPC;
 class NPCScript;
+class Item;
+class ItemScript;
 
 struct lua_State;
 
@@ -90,6 +92,13 @@ class ScriptEngine
        * @param mapName The name of the map this NPC is found in.
        */
       NPCScript* createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName);
+
+      /**
+       * Get a specified item script.
+       *
+       * @param item The item to load the script for.
+       */
+      ItemScript* createItemScript(const Item* item);
 
       /**
        * Run a specified map script.

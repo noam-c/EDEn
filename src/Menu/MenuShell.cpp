@@ -12,8 +12,8 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuShell::MenuShell(Rocket::Core::Context* context) :
-   rocketContext(context),
+MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
+   rocketContext(rocketContext),
    bindings(this),
    currentState(NULL)
 {

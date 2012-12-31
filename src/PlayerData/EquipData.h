@@ -64,7 +64,7 @@ class EquipData
        *
        * @param equipmentNode The JSON node containing the data for this equipment set.
        */
-      void load(Json::Value& equipmentNode);
+      void load(const GameContext& gameContext, Json::Value& equipmentNode);
 
       /**
        * Serialize the equipment set into the given node.

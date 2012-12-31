@@ -5,12 +5,17 @@
  */
 
 #include "ScriptFactory.h"
+
+#include <sstream>
+
 #include "FileScript.h"
+#include "ItemScript.h"
+#include "Item.h"
 #include "NPCScript.h"
 #include "NPC.h"
 
 const std::string ScriptFactory::EXTENSION = ".lua";
-const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scripts/maps/", "data/scripts/npcs/" };
+const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scripts/maps/", "data/scripts/npcs/", "data/scripts/items/" };
 
 std::string ScriptFactory::getPath(const std::string& name, ScriptType type)
 {
@@ -26,6 +31,14 @@ NPCScript* ScriptFactory::createNPCCoroutine(lua_State* luaVM, NPC* npc, const s
 {
    std::string scriptName = regionName + '/' + mapName + '/' + npc->getName();
    return new NPCScript(luaVM, ScriptFactory::getPath(scriptName, NPC_SCRIPT), npc);
+}
+
+ItemScript* ScriptFactory::getItemScript(lua_State* luaVM, const Item* item)
+{
+   std::ostringstream itemIdBuffer;
+   itemIdBuffer << item->getId();
+
+   return new ItemScript(luaVM, ScriptFactory::getPath(itemIdBuffer.str(), ITEM_SCRIPT), item);
 }
 
 Script* ScriptFactory::getMapScript(lua_State* luaVM, const std::string& regionName, const std::string& mapName)

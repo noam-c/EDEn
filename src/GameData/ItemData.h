@@ -10,8 +10,7 @@
 #include <map>
 #include <string>
 
-#include "Singleton.h"
-
+class GameContext;
 class Item;
 
 /**
@@ -19,28 +18,28 @@ class Item;
  *
  * @author Noam Chitayat
  */
-class ItemData : public Singleton<ItemData>
+class ItemData
 {
    /** A map of all the items, mapped by Item ID. */
-   std::map<int, Item const*> items;
+   std::map<int, Item*> items;
 
    public:
       /**
-       * Load up all the item metadata from items.edb.
+       * Constructor. Load up all the item metadata from items.edb.
        */
-      void initialize();
+      ItemData(GameContext& gameContext);
+
+      /**
+       * Destructor. Clean up the item metadata map.
+       */
+      ~ItemData();
 
       /**
        * @param key The ID of the item metadata to be retrieved.
        *
        * @return The metadata for the item with the specified ID.
        */
-      Item const* getItem(int key);
-
-      /**
-       * Clean up the item metadata map.
-       */
-      void finish();
+      Item* getItem(int key) const;
 };
 
 #endif

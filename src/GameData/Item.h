@@ -14,6 +14,9 @@ namespace Json
    class Value;
 };
 
+class GameContext;
+class ItemScript;
+
 /**
  * Metadata for an item. Since currently, all the games items are non-customizable (no 'unique' items),
  * a template is sufficient for describing all the properties that an item will have. As a result,
@@ -26,6 +29,9 @@ class Item
    
    /** The name of this item. */
    const std::string name;
+
+   /** The script that dictates what the item does when used. */
+   ItemScript* itemScript;
 
    public:
       /**
@@ -49,6 +55,14 @@ class Item
        * @return The name of this item.
        */
       const std::string& getName() const;
+
+      void loadScript(GameContext& gameContext);
+
+      bool onMenuUse(GameContext& gameContext);
+
+      bool onFieldUse(GameContext& gameContext);
+
+      bool onBattleUse(GameContext& gameContext);
 };
 
 #endif

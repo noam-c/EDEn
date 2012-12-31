@@ -17,29 +17,29 @@ EquipData::EquipData()
 {
 }
 
-void EquipData::load(Json::Value& equipment)
+void EquipData::load(const GameContext& gameContext, Json::Value& equipment)
 {
    if(equipment.isNull())
    {
       return;
    }
 
-   head.load(equipment["Head"]);
-   body.load(equipment["Body"]);
-   primaryWeapon.load(equipment["Wpn1"]);
-   primaryOffhand.load(equipment["Off1"]);
-   secondaryWeapon.load(equipment["Wpn2"]);
-   secondaryOffhand.load(equipment["Off2"]);
-   garment.load(equipment["Garment"]);
-   feet.load(equipment["Feet"]);
+   head.load(gameContext, equipment["Head"]);
+   body.load(gameContext, equipment["Body"]);
+   primaryWeapon.load(gameContext, equipment["Wpn1"]);
+   primaryOffhand.load(gameContext, equipment["Off1"]);
+   secondaryWeapon.load(gameContext, equipment["Wpn2"]);
+   secondaryOffhand.load(gameContext, equipment["Off2"]);
+   garment.load(gameContext, equipment["Garment"]);
+   feet.load(gameContext, equipment["Feet"]);
 
    Json::Value& accessoriesNode = equipment["Accessories"];
    int numAccessories = accessoriesNode.size();
-   accessories.resize(numAccessories);
 
+   accessories.resize(numAccessories);
    for(int i = 0; i < numAccessories; ++i)
    {
-      accessories[i].load(accessoriesNode[i]);
+      accessories[i].load(gameContext, accessoriesNode[i]);
    }
 }
 

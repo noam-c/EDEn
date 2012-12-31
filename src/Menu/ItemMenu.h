@@ -80,6 +80,8 @@ class ItemMenu: public MenuState
        * Destructor.
        */
       ~ItemMenu();
+
+      void itemClicked(Rocket::Core::Event* event);
 };
 
 #endif

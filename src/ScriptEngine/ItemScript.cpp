@@ -4,11 +4,12 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#include "NPCScript.h"
-#include "NPC.h"
+#include "ItemScript.h"
+#include "Item.h"
+
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_NPC;
+const int debugFlag = DEBUG_METADATA;
 
 #include "LuaWrapper.hpp"
 
@@ -21,29 +22,26 @@ extern "C"
    #include <lauxlib.h>
 }
 
-const char* NPCScript::FUNCTION_NAMES[] = { "idle", "activate" };
+const char* ItemScript::FUNCTION_NAMES[] = { "onMenuUse", "onFieldUse", "onBattleUse" };
 
-NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) :
+ItemScript::ItemScript(lua_State* luaVM, const std::string& scriptPath, const Item* item) :
    Script(scriptPath),
-   functionExists(NUM_FUNCTIONS),
-   npc(npc),
-   activated(false),
-   finished(false)
+   functionExists(NUM_FUNCTIONS)
 {
    luaStack = lua_newthread(luaVM);
 
-   // Run through the script to gather all the NPC functions
+   // Run through the script to gather all the item's functions
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
 
-   int result = luaL_dofile(luaStack, scriptPath.c_str());
+   int result = luaL_dofile(luaVM, scriptPath.c_str());
 
    if(result != 0)
    {
-      DEBUG("Error loading NPC functions for %s: %s", npc->getName().c_str(), lua_tostring(luaStack, -1));
+      DEBUG("Error loading item functions for item ID %d: %s", item->getId(), lua_tostring(luaStack, -1));
    }
 
    // All the below code simply takes all the global functions that the script
-   // created, and pushes them into a table that uses this NPC's unique
+   // created, and pushes them into a table that uses the item's unique
    // identifier. Then it removes those global functions for safety.
 
    // Sure, this would be much easier to do in the Lua script itself, but
@@ -88,7 +86,7 @@ NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) 
          lua_pushnil(luaStack);
          lua_setglobal(luaStack, FUNCTION_NAMES[i]);
 
-         // The function is valid for the NPC
+         // The function is valid for the item
          functionExists[i] = true;
 
          DEBUG("Function %s was found and loaded", FUNCTION_NAMES[i]);
@@ -99,7 +97,7 @@ NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) 
    lua_setglobal(luaStack, scriptName.c_str());
 }
 
-NPCScript::~NPCScript()
+ItemScript::~ItemScript()
 {
    /** \todo Check if this cleanup is appropriate. */
    // Set the function table to nil so that it gets garbage collected
@@ -107,7 +105,7 @@ NPCScript::~NPCScript()
    // lua_setglobal(luaStack, scriptPath.c_str());
 }
 
-bool NPCScript::callFunction(NPCFunction function)
+bool ItemScript::callFunction(ItemFunction function)
 {
    if(functionExists[function])
    {
@@ -117,54 +115,30 @@ bool NPCScript::callFunction(NPCFunction function)
       // Grab the function name
       const char* functionName = FUNCTION_NAMES[function];
 
-      DEBUG("NPC %s running function %s", npc->getName().c_str(), functionName);
+      DEBUG("Item ID %d running function %s", item->getId(), functionName);
 
       // Get the function from the NPC function table and push it on the stack
       lua_pushstring(luaStack, functionName);
       lua_gettable(luaStack, -2);
 
-      // Push NPC as argument
-      luaW_push<Actor>(luaStack, npc);
-
       // Run the script
-      return runScript(1);
+      return runScript();
    }
 
    return true;
 }
 
-bool NPCScript::resume(long timePassed)
+bool ItemScript::onMenuUse()
 {
-   if(finished) return true;
-   
-   if(activated)
-   {
-      activated = false;
-      callFunction(ACTIVATE);
-   }
-
-   if(running)
-   {
-      DEBUG("NPC Coroutine %d resuming running script.", getId());
-      runScript();
-   }
-   else
-   {
-      if(npc->isIdle())
-      {
-         callFunction(IDLE);
-      }
-   }
-
-   return false;
+   return callFunction(MENU_USE);
 }
 
-void NPCScript::activate()
+bool ItemScript::onFieldUse()
 {
-   activated = true;
+   return callFunction(FIELD_USE);
 }
 
-void NPCScript::finish()
+bool ItemScript::onBattleUse()
 {
-   finished = true;
+   return callFunction(BATTLE_USE);
 }

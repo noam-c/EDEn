@@ -21,7 +21,7 @@ DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData) :
    MenuState(gameContext, "DataMenu"),
    bindings(this),
    playerData(playerData),
-   dataViewModel(playerData)
+   dataViewModel(gameContext, playerData)
 {
    initialize();
 }
@@ -30,7 +30,7 @@ DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* 
    MenuState(gameContext, "DataMenu", menuShell),
    bindings(this),
    playerData(playerData),
-   dataViewModel(playerData)
+   dataViewModel(gameContext, playerData)
 {
    initialize();
 }

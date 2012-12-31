@@ -35,7 +35,7 @@ Json::Value Character::loadArchetype(const std::string& archetypeId)
    return jsonRoot;
 }
 
-Character::Character(const std::string& id) :
+Character::Character(const GameContext& gameContext, const std::string& id) :
    id(id)
 {
    Json::Value archetypeData = Character::loadArchetype(id);
@@ -44,14 +44,14 @@ Character::Character(const std::string& id) :
    parsePortraitData(archetypeData);
 
    parseStats(archetypeData);
-   equipment.load(archetypeData["Equipment"]);
+   equipment.load(gameContext, archetypeData["Equipment"]);
 
    // Start off the character with full HP/SP
    hp = maxHP;
    sp = maxSP;
 }
 
-Character::Character(Json::Value& charToLoad)
+Character::Character(const GameContext& gameContext, Json::Value& charToLoad)
 {
    id = charToLoad[ID_ATTRIBUTE].asString();
 
@@ -67,7 +67,7 @@ Character::Character(Json::Value& charToLoad)
    parsePortraitData(archetypeData);
 
    parseStats(charToLoad);
-   equipment.load(charToLoad["Equipment"]);
+   equipment.load(gameContext, charToLoad["Equipment"]);
 }
 
 Character::~Character()

@@ -19,7 +19,7 @@
 #include "PlayerData.h"
 
 #define CHAP1 "chapter1"
-#define SAVE_GAME "data/savegames/savegamejson.edd"
+#define SAVE_GAME "data/savegames/savegame1.edd"
 //Actions for each of the list ops in the title screen
 
 /**
@@ -41,7 +41,7 @@ void MainMenu::NewGameAction(Rocket::Core::Event* event)
  */
 void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
 {
-   PlayerData* playerData = new PlayerData();
+   PlayerData* playerData = new PlayerData(gameContext);
    playerData->load(SAVE_GAME);
 
    gameContext.getExecutionStack().pushState(new HomeMenu(gameContext, *playerData));

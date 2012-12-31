@@ -3,13 +3,16 @@
 
 #include "ExecutionStack.h"
 #include "ScriptEngine.h"
+#include "ItemData.h"
 
+class Item;
 class PlayerData;
 
 class GameContext
 {
    ExecutionStack executionStack;
    ScriptEngine scriptEngine;
+   ItemData itemData;
    PlayerData* playerData;
 
    public:
@@ -18,8 +21,9 @@ class GameContext
 
       ExecutionStack& getExecutionStack();
       ScriptEngine& getScriptEngine();
-      PlayerData* getCurrentPlayerData();
-      Scheduler* getCurrentScheduler();
+      PlayerData* getCurrentPlayerData() const;
+      Scheduler* getCurrentScheduler() const;
+      Item* getItem(int itemId) const;
 
       void setCurrentPlayerData(PlayerData* data);
 };

@@ -85,7 +85,7 @@ class PlayerData
       /**
        * Constructor.
        */
-      PlayerData();
+      PlayerData(const GameContext& gameContext);
 
       /**
        * Destructor.

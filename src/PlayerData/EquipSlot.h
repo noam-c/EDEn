@@ -15,6 +15,7 @@ namespace Json
    class Value;
 };
 
+class GameContext;
 class Item;
 
 /**
@@ -42,13 +43,18 @@ struct EquipSlot
     * Constructor.
     */
    EquipSlot();
+
+   /**
+    * Destructor.
+    */
+   ~EquipSlot();
    
    /**
     * Load in slot information from a savegame.
     *
     * @param inputJson The JSON node containing the slot information.
     */
-   void load(Json::Value& inputJson);
+   void load(const GameContext& gameContext, Json::Value& inputJson);
    
    /**
     * Serialize the slot information into a JSON node.
@@ -56,11 +62,6 @@ struct EquipSlot
     * @param slotNode The JSON node into which the slot information should be saved.
     */
    void serialize(Json::Value& slotNode) const;
-      
-   /**
-    * Destructor.
-    */
-   ~EquipSlot();
 };
 
 #endif

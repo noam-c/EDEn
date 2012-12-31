@@ -10,6 +10,7 @@
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
+class GameContext;
 class PlayerData;
 
 /**
@@ -21,6 +22,8 @@ class PlayerData;
  */
 class DataViewModel : public Rocket::Controls::DataSource
 {
+   const GameContext& gameContext;
+
    /** The currently loaded player data. */
    PlayerData& playerData;
 
@@ -42,7 +45,7 @@ class DataViewModel : public Rocket::Controls::DataSource
        *
        * @param playerData The currently loaded player data.
        */
-      DataViewModel(PlayerData& playerData);
+      DataViewModel(const GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Destructor.

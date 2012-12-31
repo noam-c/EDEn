@@ -9,8 +9,10 @@
 
 #include <string>
 
-class NPC;
 class Script;
+class Item;
+class ItemScript;
+class NPC;
 class NPCScript;
 struct lua_State;
 
@@ -39,6 +41,8 @@ class ScriptFactory
       MAP_SCRIPT,
       /** Scripts containing instructions for NPC behaviour */
       NPC_SCRIPT,
+      /** Scripts containing instructions for item behaviour */
+      ITEM_SCRIPT,
    };
 
    /** 
@@ -81,6 +85,14 @@ class ScriptFactory
        * @return The NPC script associated with the NPC requested
        */
       static NPCScript* createNPCCoroutine(lua_State* luaVM, NPC* npc, const std::string& regionName, const std::string& mapName);
+
+      /**
+       * @param luaVM The Lua VM to be used to load the script
+       * @param item The item to load the script for
+       *
+       * @return The item script given by the specified item ID
+       */
+      static ItemScript* getItemScript(lua_State* luaVM, const Item* item);
 
       /**
        * @param luaVM The Lua VM to be used to load the script

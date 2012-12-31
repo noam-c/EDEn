@@ -64,12 +64,12 @@
 	[
 		
 		{
-			"itemNum" : 0,
+			"itemNum" : 1,
 			"quantity" : 5
 		},
 		
 		{
-			"itemNum" : 1,
+			"itemNum" : 2,
 			"quantity" : 10
 		}
 	],

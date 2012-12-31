@@ -10,6 +10,7 @@
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
+class GameContext;
 class PlayerData;
 
 /**
@@ -19,6 +20,8 @@ class PlayerData;
  */
 class ItemViewModel : public Rocket::Controls::DataSource
 {
+   GameContext& gameContext;
+
    /** The currently loaded player data. */
    PlayerData& playerData;
 
@@ -31,12 +34,14 @@ class ItemViewModel : public Rocket::Controls::DataSource
        *
        * @param playerData The currently loaded player data.
        */
-      ItemViewModel(PlayerData& playerData);
+      ItemViewModel(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Destructor.
        */
       ~ItemViewModel();
+
+      void useItem(int rowIndex);
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

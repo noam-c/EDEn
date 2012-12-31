@@ -39,6 +39,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    GameState(gameContext, "TileEngine"),
    consoleWindow(*rocketContext),
    entityGrid(*this, messagePipe),
+   playerData(gameContext),
    xMapOffset(0),
    yMapOffset(0)
 {

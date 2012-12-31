@@ -21,9 +21,12 @@ namespace messaging
 };
 
 class Character;
+class GameContext;
 
 class CharacterRoster
 {
+   const GameContext& gameContext;
+
    /** The message pipe used to send messages about updates to the roster. */
    const messaging::MessagePipe* messagePipe;
 
@@ -48,7 +51,7 @@ class CharacterRoster
       /**
        * Constructor.
        */
-      CharacterRoster();
+      CharacterRoster(const GameContext& gameContext);
 
       /**
        * Destructor.

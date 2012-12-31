@@ -5,7 +5,7 @@
  */
 
 #include "EquipSlot.h"
-#include "ItemData.h"
+#include "GameContext.h"
 #include "Item.h"
 #include "json.h"
 
@@ -16,7 +16,7 @@ EquipSlot::EquipSlot() :
 {
 }
 
-void EquipSlot::load(Json::Value& inputJson)
+void EquipSlot::load(const GameContext& gameContext, Json::Value& inputJson)
 {
    if(inputJson.isNull())
    {
@@ -26,7 +26,7 @@ void EquipSlot::load(Json::Value& inputJson)
    Json::Value& equippedIdNode = inputJson["equipped"];
    if(equippedIdNode.isInt())
    {
-      equipped = ItemData::getInstance()->getItem(equippedIdNode.asInt());
+      equipped = gameContext.getItem(equippedIdNode.asInt());
    }
    
    Json::Value& acceptedTypesNode = inputJson["types"];
