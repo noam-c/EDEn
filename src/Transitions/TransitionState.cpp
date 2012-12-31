@@ -62,9 +62,9 @@ bool TransitionState::step(long timePassed)
       return false;
    }
 
-   progress = static_cast<double>(timePassed)
+   progress = static_cast<double>(totalTime)
          / static_cast<double>(transitionLength);
 
-   DEBUG("Continuing transition (%dms passed).", timePassed);
+   DEBUG("Continuing transition (%dms passed).", totalTime);
    return true;
 }
