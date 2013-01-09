@@ -44,7 +44,7 @@ class ItemScript : public Script
    static const char* FUNCTION_NAMES[];
 
    /** The item that runs this script. */
-   const Item* item;
+   const Item& item;
 
    /**
     * A mapping to determine whether or not each function exists and
@@ -77,7 +77,7 @@ class ItemScript : public Script
        * @param scriptPath The path to a script that should be run on this coroutine.
        * @param item The item that uses this script
        */
-      ItemScript(lua_State* luaVM, const std::string& scriptPath, const Item* item);
+      ItemScript(lua_State* luaVM, const std::string& scriptPath, const Item& item);
 
       /**
        * Destructor.

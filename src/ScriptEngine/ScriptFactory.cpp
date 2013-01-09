@@ -33,10 +33,10 @@ NPCScript* ScriptFactory::createNPCCoroutine(lua_State* luaVM, NPC* npc, const s
    return new NPCScript(luaVM, ScriptFactory::getPath(scriptName, NPC_SCRIPT), npc);
 }
 
-ItemScript* ScriptFactory::getItemScript(lua_State* luaVM, const Item* item)
+ItemScript* ScriptFactory::getItemScript(lua_State* luaVM, const Item& item)
 {
    std::ostringstream itemIdBuffer;
-   itemIdBuffer << item->getId();
+   itemIdBuffer << item.getId();
 
    return new ItemScript(luaVM, ScriptFactory::getPath(itemIdBuffer.str(), ITEM_SCRIPT), item);
 }

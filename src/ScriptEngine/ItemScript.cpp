@@ -24,9 +24,10 @@ extern "C"
 
 const char* ItemScript::FUNCTION_NAMES[] = { "onMenuUse", "onFieldUse", "onBattleUse" };
 
-ItemScript::ItemScript(lua_State* luaVM, const std::string& scriptPath, const Item* item) :
+ItemScript::ItemScript(lua_State* luaVM, const std::string& scriptPath, const Item& item) :
    Script(scriptPath),
-   functionExists(NUM_FUNCTIONS)
+   functionExists(NUM_FUNCTIONS),
+   item(item)
 {
    luaStack = lua_newthread(luaVM);
 
@@ -37,7 +38,7 @@ ItemScript::ItemScript(lua_State* luaVM, const std::string& scriptPath, const It
 
    if(result != 0)
    {
-      DEBUG("Error loading item functions for item ID %d: %s", item->getId(), lua_tostring(luaStack, -1));
+      DEBUG("Error loading item functions for item ID %d: %s", item.getId(), lua_tostring(luaStack, -1));
    }
 
    // All the below code simply takes all the global functions that the script
@@ -115,7 +116,7 @@ bool ItemScript::callFunction(ItemFunction function)
       // Grab the function name
       const char* functionName = FUNCTION_NAMES[function];
 
-      DEBUG("Item ID %d running function %s", item->getId(), functionName);
+      DEBUG("Item ID %d running function %s", item.getId(), functionName);
 
       // Get the function from the NPC function table and push it on the stack
       lua_pushstring(luaStack, functionName);

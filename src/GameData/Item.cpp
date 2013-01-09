@@ -51,7 +51,7 @@ void Item::loadScript(GameContext& gameContext)
 {
    if(itemScript == NULL)
    {
-      itemScript = gameContext.getScriptEngine().createItemScript(this);
+      itemScript = gameContext.getScriptEngine().createItemScript(*this);
    }
 }
 

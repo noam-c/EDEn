@@ -98,7 +98,7 @@ class ScriptEngine
        *
        * @param item The item to load the script for.
        */
-      ItemScript* createItemScript(const Item* item);
+      ItemScript* createItemScript(const Item& item) const;
 
       /**
        * Run a specified map script.
