@@ -25,10 +25,13 @@ class Texture
       /** The texture handle */
       GLuint textureHandle;
 
+      /** True iff the texture was successfully generated */
+      bool valid;
+
       /** Texture size (in pixels) */
       shapes::Size size;
 
-      /** Default constructor (used when subclass initializes the texture. */
+      /** Default constructor (used when subclass initializes the texture). */
       Texture();
 
       /**
@@ -63,6 +66,11 @@ class Texture
        * modification or drawing.
        */
       void bind();
+
+      /**
+       * @return true iff this texture object is valid.
+       */
+      bool isValid() const;
 
       /**
        * @return the dimensions of the texture in pixels.

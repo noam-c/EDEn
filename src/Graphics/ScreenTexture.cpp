@@ -51,6 +51,8 @@ void ScreenTexture::endCapture()
    {
       (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, 0);
    }
+
+   valid = true;
 }
 
 ScreenTexture::~ScreenTexture()

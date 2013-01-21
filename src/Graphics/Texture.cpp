@@ -9,12 +9,14 @@
 
 const int debugFlag = DEBUG_GRAPHICS;
 
-Texture::Texture()
+Texture::Texture() :
+   valid(false)
 {
    glGenTextures(1, &textureHandle);
 }
 
-Texture::Texture(const std::string& imagePath)
+Texture::Texture(const std::string& imagePath) :
+   valid(false)
 {
    // Create the texture
    DEBUG("Generating texture...");
@@ -27,7 +29,8 @@ Texture::Texture(const std::string& imagePath)
    if (!image)
    {
       // Problem loading the image; throw an exception
-      T_T(std::string("Unable to load image: ") + IMG_GetError());
+      DEBUG(std::string("Unable to load image: ") + IMG_GetError());
+      return;
    }
 
    DEBUG("Image load successful!");
@@ -57,6 +60,7 @@ Texture::Texture(const std::string& imagePath)
    // Transfer the image data into the texture
    DEBUG("Transferring image data to GL texture");
    glTexImage2D(GL_TEXTURE_2D, 0, image->format->BytesPerPixel, size.width, size.height, 0, textureFormat, GL_UNSIGNED_BYTE, image->pixels);
+   valid = true;
 
    DEBUG("Freeing image surface");
    SDL_FreeSurface(image);
@@ -64,7 +68,9 @@ Texture::Texture(const std::string& imagePath)
    DEBUG("Texture creation complete.");
 }
 
-Texture::Texture(const void* imageData, GLenum imageFormat, const shapes::Size& imageSize, int bytesPerPixel) : size(imageSize)
+Texture::Texture(const void* imageData, GLenum imageFormat, const shapes::Size& imageSize, int bytesPerPixel) :
+   valid(false),
+   size(imageSize)
 {
    // Create the texture
    DEBUG("Generating texture...");
@@ -80,6 +86,7 @@ Texture::Texture(const void* imageData, GLenum imageFormat, const shapes::Size& 
    // Transfer the image data into the texture
    DEBUG("Transferring image data to GL texture");
    glTexImage2D(GL_TEXTURE_2D, 0, bytesPerPixel, size.width, size.height, 0, imageFormat, GL_UNSIGNED_BYTE, imageData);
+   valid = true;
 
    DEBUG("Texture creation complete.");
 }
@@ -88,6 +95,11 @@ void Texture::bind()
 {
    // Any texture ops on GL_TEXTURE_2D will become associated with this texture
    glBindTexture(GL_TEXTURE_2D, textureHandle);
+}
+
+bool Texture::isValid() const
+{
+   return valid;
 }
 
 const shapes::Size& Texture::getSize() const

@@ -100,6 +100,12 @@ bool EdenRocketRenderInterface::LoadTexture(
       const Rocket::Core::String& source)
 {
    Texture* texture = new Texture(std::string(source.CString()));
+   if(!texture->isValid())
+   {
+      delete texture;
+      return false;
+   }
+
    textureHandle = reinterpret_cast<Rocket::Core::TextureHandle>(texture);
    return true;
 }
