@@ -13,7 +13,7 @@ function activate(me)
       say('Thank you again!', true)
    elseif quests:get('chapter1/carryAConvo/talkToNPC'):isComplete() then
       say('Thank you so much! Have a reward!', true)
-      inventory:addItem(0, 1)
+      inventory:addItem(1, 1)
       quests:get('chapter1/carryAConvo'):complete()
    else
       say('So did you talk to the other guy yet?', true)

@@ -82,6 +82,7 @@ class ItemMenu: public MenuState
       ~ItemMenu();
 
       void itemClicked(Rocket::Core::Event* event);
+      void dragStarted(Rocket::Core::Event* event);
 };
 
 #endif

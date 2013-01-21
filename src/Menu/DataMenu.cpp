@@ -18,7 +18,7 @@
 const int debugFlag = DEBUG_MENU;
 
 DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData) :
-   MenuState(gameContext, "DataMenu"),
+   MenuState(gameContext, playerData, "DataMenu"),
    bindings(this),
    playerData(playerData),
    dataViewModel(gameContext, playerData)

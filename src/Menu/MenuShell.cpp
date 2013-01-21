@@ -7,13 +7,15 @@
 #include "MenuShell.h"
 #include "GraphicsUtil.h"
 #include "MenuState.h"
+#include "Scheduler.h"
 #include <Rocket/Core.h>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
+MenuShell::MenuShell(GameContext& gameContext, PlayerData& playerData, Rocket::Core::Context* rocketContext) :
    rocketContext(rocketContext),
+   shortcutBar(gameContext, playerData, *rocketContext),
    bindings(this),
    currentState(NULL)
 {

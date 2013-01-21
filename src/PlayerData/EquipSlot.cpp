@@ -11,7 +11,6 @@
 
 EquipSlot::EquipSlot() :
    equipped(NULL),
-   acceptedTypes(NULL),
    enabled(true)
 {
 }

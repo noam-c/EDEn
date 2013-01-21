@@ -40,15 +40,14 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    consoleWindow(*rocketContext),
    entityGrid(*this, messagePipe),
    playerData(gameContext),
-   xMapOffset(0),
-   yMapOffset(0)
+   shortcutBar(gameContext, playerData, *rocketContext),
+   mapOffset(0, 0)
 {
    scheduler = new Scheduler();
 
    messagePipe.registerListener(this);
 
    loadPlayerData(playerDataPath);
-
    playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData, "npc1");
    gameContext.getScriptEngine().setTileEngine(this);
    gameContext.getScriptEngine().setPlayerData(&playerData);
@@ -71,6 +70,7 @@ void TileEngine::loadPlayerData(const std::string& path)
    if(!path.empty())
    {
       playerData.load(path);
+      shortcutBar.refresh();
    }
 }
 
@@ -162,11 +162,12 @@ void TileEngine::recalculateMapOffsets()
 {
    const shapes::Size& mapPixelBounds = entityGrid.getMapBounds().getSize() * TILE_SIZE;
 
-   xMapOffset = mapPixelBounds.width < GraphicsUtil::getInstance()->getWidth() ?
+   mapOffset.x = mapPixelBounds.width < GraphicsUtil::getInstance()->getWidth() ?
               (GraphicsUtil::getInstance()->getWidth() - mapPixelBounds.width) >> 1 : 0;
 
-   yMapOffset = mapPixelBounds.height < GraphicsUtil::getInstance()->getHeight() ?
-              (GraphicsUtil::getInstance()->getHeight() - mapPixelBounds.height) >> 1 : 0;
+   int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - shortcutBar.getHeight();
+   mapOffset.y = mapPixelBounds.height < totalUsableHeight ?
+              (totalUsableHeight - mapPixelBounds.height) >> 1 : 0;
 }
 
 void TileEngine::toggleDebugConsole()
@@ -221,6 +222,7 @@ PlayerCharacter* TileEngine::getPlayerCharacter() const
 void TileEngine::activate()
 {
    GameState::activate();
+   shortcutBar.refresh();
    playerData.bindMessagePipe(&messagePipe);
 }
 
@@ -265,7 +267,7 @@ void TileEngine::draw()
    std::vector<Actor*> actors = collectActors();
 
    GraphicsUtil::getInstance()->clearBuffer();
-   GraphicsUtil::getInstance()->setOffset(xMapOffset, yMapOffset);
+   GraphicsUtil::getInstance()->setOffset(mapOffset.x, mapOffset.y);
       // Draw the map layers and actors against an offset (to center all the map elements)
 
       if(entityGrid.getMapData() == NULL)
@@ -360,8 +362,15 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   if(!consoleWindow.isVisible())
                   {
-                     dialogue->setFastModeEnabled(true);
-                     dialogue->nextLine();
+                     if(dialogue->hasDialogue())
+                     {
+                        dialogue->setFastModeEnabled(true);
+                        dialogue->nextLine();
+                     }
+                     else
+                     {
+                        action();
+                     }
                   }
                   return;
                }
@@ -407,10 +416,6 @@ void TileEngine::handleInputEvents(bool& finishState)
                      if(dialogue->hasDialogue())
                      {
                         dialogue->setFastModeEnabled(false);
-                     }
-                     else
-                     {
-                        action();
                      }
                      return;
                   }

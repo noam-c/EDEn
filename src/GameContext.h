@@ -13,6 +13,11 @@ class GameContext
    ExecutionStack executionStack;
    ScriptEngine scriptEngine;
    ItemData itemData;
+  
+   /**
+    *  \todo Load or set PlayerData in GameContext and, where appropriate,
+    *  pass the context around instead of the PlayerData.
+    */
    PlayerData* playerData;
 
    public:

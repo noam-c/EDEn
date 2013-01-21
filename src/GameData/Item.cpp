@@ -25,6 +25,7 @@ extern "C"
 Item::Item(Json::Value& node) :
    id(node["id"].asInt()),
    name(node["name"].asString()),
+   iconPath(node["icon"].asString()),
    itemScript(NULL)
 {
 }
@@ -45,6 +46,11 @@ const int Item::getId() const
 const std::string& Item::getName() const
 {
    return name;
+}
+
+const std::string& Item::getIconPath() const
+{
+   return iconPath;
 }
 
 void Item::loadScript(GameContext& gameContext)

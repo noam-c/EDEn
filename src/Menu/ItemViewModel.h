@@ -20,6 +20,8 @@ class PlayerData;
  */
 class ItemViewModel : public Rocket::Controls::DataSource
 {
+   const static Rocket::Core::String UnknownItemIconPath;
+
    GameContext& gameContext;
 
    /** The currently loaded player data. */
@@ -42,6 +44,8 @@ class ItemViewModel : public Rocket::Controls::DataSource
       ~ItemViewModel();
 
       void useItem(int rowIndex);
+
+      int getItemId(int rowIndex) const;
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

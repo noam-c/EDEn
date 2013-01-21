@@ -22,7 +22,7 @@
 const int debugFlag = DEBUG_MENU;
 
 HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData) :
-   MenuState(gameContext, "HomeMenu"),
+   MenuState(gameContext, playerData, "HomeMenu"),
    bindings(this),
    playerData(playerData),
    homeViewModel(*playerData.getRoster())

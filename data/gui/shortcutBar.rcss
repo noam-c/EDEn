@@ -1,0 +1,40 @@
+body
+{
+   background-color: #0033AB;
+   border-color: #000000AA;
+   border-width: 3px;
+   font-family: Lunchtime Doubly So;
+   font-size: 12pt;
+   height: 50px;
+   width: 540px;
+   padding: 5px;
+   bottom: 0;
+   z-index: 1;
+   margin-left: auto;
+   margin-right: auto;
+   overflow: hidden;
+}
+
+.shortcut
+{
+	width: 48px;
+	height: 48px;
+	margin: 0 2px;
+	border-width: 1px;
+	border-color: #ffffff;
+	float: left;
+   text-align: right;
+   drag: drag-drop;
+}
+
+.shortcutIcon
+{
+	display: block;
+   width: 32px;
+   height: 32px;
+}
+
+.shortcutQuantity
+{
+	margin: 2px;
+}

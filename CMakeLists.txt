@@ -39,6 +39,7 @@ set(HEADERS
   src/Menu/MenuShell.h
   src/Menu/MenuShellOption.h
   src/Menu/MenuState.h
+  src/Menu/ShortcutBar.h
   src/Messaging/MessagePipe.h
   src/Messaging/Listener.h
   src/MovementDirection.h
@@ -137,6 +138,7 @@ set(SOURCES
   src/Menu/ItemViewModel.cpp
   src/Menu/MenuShell.cpp
   src/Menu/MenuState.cpp
+  src/Menu/ShortcutBar.cpp
   src/Messaging/MessagePipe.cpp
   src/PlayerData/Character.cpp
   src/PlayerData/CharacterRoster.cpp

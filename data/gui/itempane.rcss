@@ -1,17 +1,21 @@
-#itemGrid datagridheader
+.itemGrid datagridheader
 {
 	height: 0px;
 	visibility: hidden;
 }
 
-#itemGrid datagridrow
+.itemGrid datagridrow
 {
-   margin-bottom: 10px;
-   border-width: 2px;
-   border-color: #ffffffff;
+   drag: drag-drop;
 }
 
-#itemGrid datagridcell
+.itemGrid datagridcell
 {
-   margin: 10px;
+   margin: 0 10px;
+}
+
+.datagridimage
+{
+   width: 32px;
+   height: 32px;
 }

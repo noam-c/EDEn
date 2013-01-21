@@ -100,6 +100,10 @@
 			"quantity" : 10
 		}
 	],
+	"Shortcuts" :
+	[
+	   1,2
+	],
 	"Quest" : 
 	{
 		"Quest" : 

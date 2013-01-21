@@ -2,8 +2,8 @@
 	"data" : 
 	[
 		// 1-299 usable items
-		{"id" : 1,"name" : "Potion" },
-		{"id" : 2,"name" : "Ether"},
+		{"id" : 1, "name" : "Potion", "icon": "data/images/icons/P_Blue04.png"},
+		{"id" : 2, "name" : "Ether",  "icon": "data/images/icons/P_Orange04.png"},
 
       // 300-399 Head equipment (helms and hats)
       {"id" : 300,"name" : "Bandanna","equip":1},

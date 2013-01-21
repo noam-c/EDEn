@@ -14,6 +14,8 @@
 #include "EntityGrid.h"
 #include "Listener.h"
 #include "PlayerData.h"
+#include "ShortcutBar.h"
+#include "Point2D.h"
 
 #include <map>
 #include <string>
@@ -50,6 +52,9 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    /** The player data */
    PlayerData playerData;
 
+   /** The window containing the player's shortcuts. */
+   ShortcutBar shortcutBar;
+
    /** Controller for dialogue and narrations. */
    DialogueController* dialogue;
 
@@ -62,11 +67,8 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    /** A list of all NPCs in the map, identified by their names. */
    std::map<std::string, NPC*> npcList;
 
-   /** The x-offset to draw elements of the map at. */
-   int xMapOffset;
-
-   /** The y-offset to draw elements of the map at. */
-   int yMapOffset;
+   /** The offset at which elements of the map will be drawn. */
+   shapes::Point2D mapOffset;
    
    /**
     * Loads new player data.

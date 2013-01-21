@@ -6,6 +6,7 @@
 
 #include "MenuState.h"
 #include "MenuShell.h"
+#include "Scheduler.h"
 #include <Rocket/Core.h>
 #include "RocketSDLInputMapping.h"
 #include "EdenRocketBindings.h"
@@ -13,11 +14,11 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuState::MenuState(GameContext& gameContext, const std::string& stateName) :
+MenuState::MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName) :
    GameState(gameContext, stateName),
    internalMenuShell(true)
 {
-   menuShell = new MenuShell(rocketContext);
+   menuShell = new MenuShell(gameContext, playerData, rocketContext);
 }
 
 MenuState::MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* menuShell) :

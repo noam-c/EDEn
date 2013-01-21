@@ -20,7 +20,8 @@ const int debugFlag = DEBUG_PLAYER;
 
 PlayerData::PlayerData(const GameContext& gameContext) :
    roster(gameContext),
-   rootQuest(std::string("root"))
+   rootQuest(std::string("root")),
+   shortcutList(PlayerData::SHORTCUT_BAR_SIZE, 0)
 {
 }
 
@@ -43,6 +44,7 @@ PlayerData& PlayerData::operator=(const PlayerData& playerData)
 
       inventory = playerData.inventory;
       currChapter = playerData.currChapter;
+      shortcutList = playerData.shortcutList;
       saveLocation = playerData.saveLocation;
    }
 
@@ -86,6 +88,7 @@ void PlayerData::load(const std::string& path)
    parseCharactersAndParty(jsonRoot);
    parseQuestLog(jsonRoot);
    parseInventory(jsonRoot);
+   parseShortcuts(jsonRoot);
    parseLocation(jsonRoot);
    
    filePath = path;
@@ -127,6 +130,41 @@ void PlayerData::serializeInventory(Json::Value& outputJson) const
    outputJson[INVENTORY_ELEMENT] = inventory.serialize();
 }
 
+void PlayerData::parseShortcuts(Json::Value& rootElement)
+{
+   // Make sure that the shortcut bar vector is properly sized and initialized.
+   shortcutList.clear();
+   shortcutList.resize(PlayerData::SHORTCUT_BAR_SIZE, 0);
+
+   DEBUG("Loading shortcuts");
+   Json::Value& shortcutListJson = rootElement[SHORTCUTS_ELEMENT];
+
+   for(int i = 0; i < PlayerData::SHORTCUT_BAR_SIZE && i < shortcutListJson.size(); ++i)
+   {
+      int id = shortcutListJson[i].asInt();
+      DEBUG("Loading shortcut with item ID: %d", id);
+      shortcutList[i] = id;
+   }
+}
+
+void PlayerData::serializeShortcuts(Json::Value& outputJson) const
+{
+   Json::Value shortcutNode(Json::arrayValue);
+   for(ShortcutList::const_iterator iter = shortcutList.begin(); iter != shortcutList.end(); ++iter)
+   {
+      int itemNumber = *iter;
+      shortcutNode.append(itemNumber);
+   }
+
+   int remainingShortcutSlotCount = PlayerData::SHORTCUT_BAR_SIZE - shortcutNode.size();
+   for(int i = 0; i < remainingShortcutSlotCount; ++i)
+   {
+      shortcutNode.append(0);
+   }
+
+   outputJson[SHORTCUTS_ELEMENT] = shortcutNode;
+}
+
 void PlayerData::parseLocation(Json::Value& rootElement)
 {
    Json::Value& location = rootElement[SAVE_STATE_ELEMENT];
@@ -161,6 +199,7 @@ void PlayerData::save(const std::string& path)
    serializeCharactersAndParty(playerDataNode);
    serializeInventory(playerDataNode);
    serializeQuestLog(playerDataNode);
+   serializeShortcuts(playerDataNode);
    serializeLocation(playerDataNode);
 
    DEBUG("Saving to file %s", path.c_str());
@@ -184,6 +223,27 @@ const CharacterRoster* PlayerData::getRoster() const
 const Inventory* PlayerData::getInventory() const
 {
    return &inventory;
+}
+
+int PlayerData::getShortcut(int index) const
+{
+   return shortcutList[index];
+}
+
+void PlayerData::setShortcut(int index, int itemId)
+{
+   if (index < 0 || index >= PlayerData::SHORTCUT_BAR_SIZE)
+   {
+      DEBUG("Attempted to set shortcut %d, which is out of bounds.", index);
+      return;
+   }
+
+   shortcutList[index] = itemId;
+}
+
+void PlayerData::clearShortcut(int index)
+{
+   setShortcut(index, 0);
 }
 
 CharacterRoster* PlayerData::getRoster()

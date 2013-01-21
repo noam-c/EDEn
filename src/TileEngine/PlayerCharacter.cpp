@@ -76,7 +76,7 @@ void PlayerCharacter::step(long timePassed)
 {
    if(!active) return;
 
-   MovementDirection direction = NONE;
+   MovementDirection direction = getDirection();
    int xDirection = 0;
    int yDirection = 0;
 
@@ -107,26 +107,33 @@ void PlayerCharacter::step(long timePassed)
       xDirection = -1;
    }
 
-   bool moving = xDirection != 0 || yDirection != 0;
+   bool hasVelocity = xDirection != 0 || yDirection != 0;
+   bool moving = hasVelocity;
 
-   if(moving)
+   if(hasVelocity)
    {
       flushOrders();
-	  /** \todo This algorithm is different from Actor_MoveOrder.cpp, synchronize. */
-	  cumulativeDistanceCovered += getMovementSpeed() * (timePassed / 5.0);
+      /** \todo This algorithm is different from Actor_MoveOrder.cpp, synchronize. */
+      cumulativeDistanceCovered += getMovementSpeed() * (timePassed / 5.0);
       int distanceTraversed = 0;
-	  if(cumulativeDistanceCovered > 1.0)
-	  {
-		  distanceTraversed = floor(cumulativeDistanceCovered);
-		  cumulativeDistanceCovered -= distanceTraversed;
-	  }
+      if(cumulativeDistanceCovered > 1.0)
+      {
+         distanceTraversed = floor(cumulativeDistanceCovered);
+         cumulativeDistanceCovered -= distanceTraversed;
+      }
+
       sprite->setAnimation(WALKING_PREFIX, direction);
       setDirection(direction);
-      entityGrid.moveToClosestPoint(this, xDirection, yDirection, distanceTraversed);
+      moving = entityGrid.moveToClosestPoint(this, xDirection, yDirection, distanceTraversed);
    }
    else if(isIdle())
    {
-      sprite->setFrame(STANDING_PREFIX, getDirection());
+      moving = false;
+   }
+
+   if (!moving)
+   {
+      sprite->setFrame(STANDING_PREFIX, direction);
    }
 
    Actor::step(timePassed);

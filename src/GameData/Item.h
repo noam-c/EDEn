@@ -30,6 +30,9 @@ class Item
    /** The name of this item. */
    const std::string name;
 
+   /** The path to the icon use to represent this item visually. */
+   const std::string iconPath;
+
    /** The script that dictates what the item does when used. */
    ItemScript* itemScript;
 
@@ -55,6 +58,11 @@ class Item
        * @return The name of this item.
        */
       const std::string& getName() const;
+
+      /**
+       * @return The icon visually representing this item.
+       */
+      const std::string& getIconPath() const;
 
       void loadScript(GameContext& gameContext);
 

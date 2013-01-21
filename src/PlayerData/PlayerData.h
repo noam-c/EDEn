@@ -41,6 +41,8 @@ struct SaveLocation
    int y;
 };
 
+typedef std::vector<int> ShortcutList;
+
 /**
  * A model representing the player's game data, which includes
  * character data, inventory, quest log, and game state.
@@ -64,6 +66,9 @@ class PlayerData
    /** The current chapter being played (if the game was saved in the middle of a chapter. */
    std::string currChapter;
 
+   /** The player's shortcut list. */
+   ShortcutList shortcutList;
+
    /** The location of the last save point used. */
    SaveLocation saveLocation;
    
@@ -76,11 +81,15 @@ class PlayerData
    void parseInventory(Json::Value& rootElement);
    void serializeInventory(Json::Value& outputJson) const;
     
+   void parseShortcuts(Json::Value& rootElement);
+   void serializeShortcuts(Json::Value& outputJson) const;
+
    void parseLocation(Json::Value& rootElement);
    void serializeLocation(Json::Value& outputJson) const;
     
    public:
       static const int PARTY_SIZE = 4;
+      static const int SHORTCUT_BAR_SIZE = 10;
    
       /**
        * Constructor.
@@ -128,6 +137,10 @@ class PlayerData
        * @param path The path to save the player data to.
        */
       void save(const std::string& path);
+
+      int getShortcut(int index) const;
+      void setShortcut(int index, int itemId);
+      void clearShortcut(int index);
 
       const CharacterRoster* getRoster() const;
       const Inventory* getInventory() const;

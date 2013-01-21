@@ -18,6 +18,8 @@ static const char* ITEM_ELEMENT = "Item";
 static const char* ITEM_NUM_ATTRIBUTE = "itemNum";
 static const char* ITEM_QUANTITY_ATTRIBUTE = "quantity";
 
+static const char* SHORTCUTS_ELEMENT = "Shortcuts";
+
 static const char* CHARACTER_LIST_ELEMENT = "Characters";
 static const char* PARTY_ELEMENT = "Party";
 static const char* CHARACTER_ELEMENT = "Character";

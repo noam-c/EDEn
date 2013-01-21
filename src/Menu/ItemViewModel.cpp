@@ -17,6 +17,8 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
+const Rocket::Core::String ItemViewModel::UnknownItemIconPath("data/images/icons/I_Rock01.png");
+
 ItemViewModel::ItemViewModel(GameContext& gameContext, PlayerData& playerData) :
       Rocket::Controls::DataSource("itemViewModel"),
       gameContext(gameContext),
@@ -31,8 +33,23 @@ ItemViewModel::~ItemViewModel()
 void ItemViewModel::useItem(int rowIndex)
 {
    const ItemList& itemList = playerData.getInventory()->getItemList();
-   gameContext.getItem(itemList[rowIndex].first)->onMenuUse(gameContext);
-   NotifyRowChange("saveGames", rowIndex, 1);
+   const int itemId = itemList[rowIndex].first;
+   Item* item = gameContext.getItem(itemId);
+   if(item == NULL)
+   {
+      DEBUG("Tried to use bad item with ID: %d.", itemId);
+   }
+   else
+   {
+      item->onMenuUse(gameContext);
+      NotifyRowChange("items", rowIndex, 1);
+   }
+}
+
+int ItemViewModel::getItemId(int rowIndex) const
+{
+   const ItemList& itemList = playerData.getInventory()->getItemList();
+   return itemList[rowIndex].first;
 }
 
 void ItemViewModel::GetRow(Rocket::Core::StringList& row,
@@ -44,15 +61,34 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
       const ItemList& itemList = playerData.getInventory()->getItemList();
       for (int i = 0; i < columns.size(); ++i)
       {
+         const int itemId = itemList[row_index].first;
+         const int itemQuantity = itemList[row_index].second;
+         const Item* rowItem = gameContext.getItem(itemId);
          if (columns[i] == "name")
          {
-            row.push_back(gameContext.getItem(itemList[row_index].first)->getName().c_str());
+            if(rowItem == NULL)
+            {
+               row.push_back(Rocket::Core::String(13, "Unknown %d", itemId));
+            }
+            else
+            {
+               row.push_back(rowItem->getName().c_str());
+            }
          }
          else if (columns[i] == "quantity")
          {
-            std::ostringstream stream;
-            stream << itemList[row_index].second;
-            row.push_back(stream.str().c_str());
+            row.push_back(Rocket::Core::String(5, "%d", itemQuantity));
+         }
+         else if (columns[i] == "icon")
+         {
+            if(rowItem == NULL)
+            {
+               row.push_back(ItemViewModel::UnknownItemIconPath);
+            }
+            else
+            {
+               row.push_back(rowItem->getIconPath().c_str());
+            }
          }
       }
    }
