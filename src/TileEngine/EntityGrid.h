@@ -275,8 +275,10 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @param xDirection The direction moved on the x-axis.
        * @param yDirection The direction moved on the y-axis.
        * @param distance The total distance that the player character can be moved in this call.
+       *
+       * @return true iff the actor moved to a new location
        */
-      void moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance);
+      bool moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance);
    
       /**
        * Request permission from the EntityGrid to move an Actor from the source to the given destination.

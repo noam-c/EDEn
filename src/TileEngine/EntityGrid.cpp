@@ -319,10 +319,10 @@ bool EntityGrid::isAreaFree(const shapes::Rectangle& area) const
    return true;
 }
 
-void EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance)
+bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance)
 {
-   if(xDirection == 0 && yDirection == 0) return;
-   if(distance == 0) return;
+   if(xDirection == 0 && yDirection == 0) return false;
+   if(distance == 0) return false;
 
    TileState actorState(TileState::ACTOR, actor);
 
@@ -376,19 +376,22 @@ void EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
 
    if(lastAvailablePoint != source)
    {
-      if(!occupyArea(shapes::Rectangle(lastAvailablePoint, actor->getSize()), actorState))
-      {
-         // If updating failed, just stick with the start location
-         occupyArea(shapes::Rectangle(source, actorSize), actorState);
-      }
-      else
+      if(occupyArea(shapes::Rectangle(lastAvailablePoint, actor->getSize()), actorState))
       {
          // If we moved, update the map accordingly
          freeArea(source, lastAvailablePoint, actorSize, actorState);
 
          actor->setLocation(lastAvailablePoint);
+         return true;
+      }
+      else
+      {
+         // If updating failed, just stick with the start location
+         occupyArea(shapes::Rectangle(source, actorSize), actorState);
       }
    }
+
+   return false;
 }
 
 bool EntityGrid::beginMovement(Actor* actor, const shapes::Point2D& dst)
