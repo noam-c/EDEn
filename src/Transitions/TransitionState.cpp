@@ -14,7 +14,7 @@ const int debugFlag = DEBUG_TRANSITIONS;
 
 TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName,
       GameState* oldState, GameState* newState, long transitionLength) :
-      GameState(gameContext, stateName),
+      GameState(gameContext, GameState::TRANSITION, stateName),
       totalTime(0),
       transitionLength(transitionLength),
       progress(1.0f)

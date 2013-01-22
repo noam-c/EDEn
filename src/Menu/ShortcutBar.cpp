@@ -31,6 +31,7 @@ ShortcutBar::ShortcutBar(GameContext& gameContext, PlayerData& playerData, Rocke
       if (shortcutContainer != NULL)
       {
          bindings.bindAction(shortcutContainer, "dragdrop", &ShortcutBar::itemDropped);
+         bindings.bindAction(shortcutContainer, "click", &ShortcutBar::shortcutClicked);
       }
 
       refresh();
@@ -48,6 +49,40 @@ ShortcutBar::~ShortcutBar()
    }
 
    rocketContext.RemoveReference();
+}
+
+void ShortcutBar::shortcutClicked(Rocket::Core::Event* event)
+{
+   Rocket::Core::Element* shortcutElement = event->GetTargetElement();
+
+   while(shortcutElement != NULL && shortcutElement->GetParentNode() != shortcutContainer)
+   {
+      shortcutElement = shortcutElement->GetParentNode();
+   }
+
+   // Only handle the click if it went to a shortcut
+   // (direct child of the shortcut bar container)
+   if (shortcutElement != NULL)
+   {
+      // Find the index of the shortcut
+      int shortcutIndex = 0;
+
+      for(;;)
+      {
+         shortcutElement = shortcutElement->GetPreviousSibling();
+         if (shortcutElement == NULL) break;
+         ++shortcutIndex;
+      }
+
+      int itemId = playerData.getShortcut(shortcutIndex);
+      Item* item = gameContext.getItem(itemId);
+
+      if(item != NULL)
+      {
+         item->use(gameContext);
+         refresh();
+      }
+   }
 }
 
 void ShortcutBar::itemDropped(Rocket::Core::Event* event)

@@ -41,7 +41,7 @@ void ItemViewModel::useItem(int rowIndex)
    }
    else
    {
-      item->onMenuUse(gameContext);
+      item->use(gameContext);
       NotifyRowChange("items", rowIndex, 1);
    }
 }

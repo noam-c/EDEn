@@ -15,14 +15,14 @@
 const int debugFlag = DEBUG_MENU;
 
 MenuState::MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName) :
-   GameState(gameContext, stateName),
+   GameState(gameContext, GameState::MENU, stateName),
    internalMenuShell(true)
 {
    menuShell = new MenuShell(gameContext, playerData, rocketContext);
 }
 
 MenuState::MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* menuShell) :
-   GameState(gameContext, stateName, menuShell->getRocketContext()),
+   GameState(gameContext, GameState::MENU, stateName, menuShell->getRocketContext()),
    internalMenuShell(false),
    menuShell(menuShell)
 {

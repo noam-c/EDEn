@@ -41,6 +41,17 @@ Scheduler* GameContext::getCurrentScheduler() const
    return NULL;
 }
 
+GameState::GameStateType GameContext::getCurrentStateType() const
+{
+   GameState* currentState = executionStack.getCurrentState();
+   if (currentState != NULL)
+   {
+      return currentState->getStateType();
+   }
+
+   return GameState::UNKNOWN;
+}
+
 Item* GameContext::getItem(int itemId) const
 {
    return itemData.getItem(itemId);

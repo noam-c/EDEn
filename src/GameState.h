@@ -38,11 +38,26 @@ union SDL_Event;
  */
 class GameState
 {
-   /** The maximum amount of milliseconds allowed to pass between frames. */
-   const static int MAX_FRAME_TIME;
+   public:
+      enum GameStateType
+      {
+         UNKNOWN,
+         TITLE,
+         FIELD,
+         MENU,
+         BATTLE,
+         TRANSITION,
+      };
 
-   /** Timestamp of the last logic step of the state. */
-   unsigned long time;
+   private:
+      /** The maximum amount of milliseconds allowed to pass between frames. */
+      const static int MAX_FRAME_TIME;
+
+      /** Timestamp of the last logic step of the state. */
+      unsigned long time;
+
+      /** The type of the current game state. */
+      GameStateType stateType;
 
    protected:
       /** The game context responsible for the state's data and execution. */
@@ -62,19 +77,21 @@ class GameState
        * Initializes the top-level GUI widget container.
        *
        * @param gameContext The game context responsible for the state's data and execution.
+       * @param stateType The type of the state.
        * @param stateName The unique name of the state.
        */
-      GameState(GameContext& gameContext, const std::string& stateName);
+      GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName);
 
       /**
        * Constructor.
        * Initializes the state with an existing top-level container.
        *
        * @param gameContext The game context responsible for the state's data and execution.
+       * @param stateType The type of the state.
        * @param stateName The unique name of the state.
        * @param rocketContext The Rocket context to use for this state's GUI.
        */
-      GameState(GameContext& gameContext, const std::string& stateName, Rocket::Core::Context* rocketContext);
+      GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName, Rocket::Core::Context* rocketContext);
 
       /**
        * Runs the state's logic processing
@@ -130,6 +147,11 @@ class GameState
        * @return the state's coroutine scheduler, or NULL if none exists.
        */
       virtual Scheduler* getScheduler() const;
+
+      /**
+       * @return the type of this game state.
+       */
+      GameStateType getStateType() const;
 
       /**
        * Destructor.

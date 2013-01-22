@@ -7,7 +7,7 @@ function onMenuUse()
 end
 
 function onFieldUse()
-   print('Used a potion in the field.')
+   say('Used a potion in the field.')
 end
 
 function onBattleUse()

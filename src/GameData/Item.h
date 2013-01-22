@@ -66,11 +66,7 @@ class Item
 
       void loadScript(GameContext& gameContext);
 
-      bool onMenuUse(GameContext& gameContext);
-
-      bool onFieldUse(GameContext& gameContext);
-
-      bool onBattleUse(GameContext& gameContext);
+      bool use(GameContext& gameContext);
 };
 
 #endif

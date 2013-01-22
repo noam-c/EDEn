@@ -54,9 +54,7 @@ class ShortcutBar
        */
       ~ShortcutBar();
 
-      /**
-       *
-       */
+      void shortcutClicked(Rocket::Core::Event* event);
       void itemDropped(Rocket::Core::Event* event);
 
       /**

@@ -5,6 +5,12 @@
 #include "ScriptEngine.h"
 #include "ItemData.h"
 
+/**
+ * \todo Change this include to forward declarations when enums
+ * can be forward declared in the product.
+ */
+#include "GameState.h"
+
 class Item;
 class PlayerData;
 
@@ -28,6 +34,7 @@ class GameContext
       ScriptEngine& getScriptEngine();
       PlayerData* getCurrentPlayerData() const;
       Scheduler* getCurrentScheduler() const;
+      GameState::GameStateType getCurrentStateType() const;
       Item* getItem(int itemId) const;
 
       void setCurrentPlayerData(PlayerData* data);

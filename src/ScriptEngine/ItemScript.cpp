@@ -26,8 +26,8 @@ const char* ItemScript::FUNCTION_NAMES[] = { "onMenuUse", "onFieldUse", "onBattl
 
 ItemScript::ItemScript(lua_State* luaVM, const std::string& scriptPath, const Item& item) :
    Script(scriptPath),
-   functionExists(NUM_FUNCTIONS),
-   item(item)
+   item(item),
+   functionExists(NUM_FUNCTIONS)
 {
    luaStack = lua_newthread(luaVM);
 

@@ -22,6 +22,9 @@ extern "C"
    #include <lauxlib.h>
 }
 
+#include "DebugUtils.h"
+const int debugFlag = DEBUG_METADATA;
+
 Item::Item(Json::Value& node) :
    id(node["id"].asInt()),
    name(node["name"].asString()),
@@ -61,20 +64,20 @@ void Item::loadScript(GameContext& gameContext)
    }
 }
 
-bool Item::onMenuUse(GameContext& gameContext)
+bool Item::use(GameContext& gameContext)
 {
    loadScript(gameContext);
-   return itemScript->onMenuUse();
-}
 
-bool Item::onFieldUse(GameContext& gameContext)
-{
-   loadScript(gameContext);
-   return itemScript->onFieldUse();
-}
+   switch(gameContext.getCurrentStateType())
+   {
+      case GameState::MENU:
+         return itemScript->onMenuUse();
+      case GameState::FIELD:
+         return itemScript->onFieldUse();
+      case GameState::BATTLE:
+         return itemScript->onBattleUse();
+   }
 
-bool Item::onBattleUse(GameContext& gameContext)
-{
-   loadScript(gameContext);
-   return itemScript->onBattleUse();
+   DEBUG("Item used in an unrecognized game state type. Item script will not run.");
+   return false;
 }

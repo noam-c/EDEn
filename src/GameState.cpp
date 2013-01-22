@@ -17,14 +17,16 @@ const int debugFlag = DEBUG_GAME_STATE;
 
 const int GameState::MAX_FRAME_TIME = 32;
 
-GameState::GameState(GameContext& gameContext, const std::string& stateName) :
+GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName) :
    time(SDL_GetTicks()),
+   stateType(stateType),
    gameContext(gameContext)
 {
    rocketContext = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
 }
 
-GameState::GameState(GameContext& gameContext, const std::string& stateName, Rocket::Core::Context* context) :
+GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName, Rocket::Core::Context* context) :
+   stateType(stateType),
    gameContext(gameContext),
    rocketContext(context)
 {
@@ -76,4 +78,9 @@ void GameState::drawFrame()
 Scheduler* GameState::getScheduler() const
 {
    return NULL;
+}
+
+GameState::GameStateType GameState::getStateType() const
+{
+   return stateType;
 }
