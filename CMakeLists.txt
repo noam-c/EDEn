@@ -24,9 +24,9 @@ set(HEADERS
   src/Graphics/Texture.h
   src/json/json.h
   src/json/json-forwards.h
-  src/GameData/Item.h
-  src/GameData/ItemData.h
-  src/GameData/ItemList.h
+  src/Metadata/Item.h
+  src/Metadata/ItemData.h
+  src/Metadata/ItemList.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
   src/Menu/DataMenu.h
@@ -125,8 +125,8 @@ set(SOURCES
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
   src/Coroutines/Timer.cpp
-  src/GameData/Item.cpp
-  src/GameData/ItemData.cpp
+  src/Metadata/Item.cpp
+  src/Metadata/ItemData.cpp
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
   src/Menu/DataMenu.cpp
@@ -218,7 +218,7 @@ set(SOURCE_GROUP_DELIMITER "/")
 source_group("//" REGULAR_EXPRESSION src/[^/]*)
 source_group(Audio REGULAR_EXPRESSION src/Audio/.*)
 source_group(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
-source_group(GameData REGULAR_EXPRESSION src/GameData/.*)
+source_group(Metadata REGULAR_EXPRESSION src/Metadata/.*)
 source_group(Graphics REGULAR_EXPRESSION src/Graphics/.*)
 source_group(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
 source_group(Menu REGULAR_EXPRESSION src/Menu/.*)
@@ -242,7 +242,7 @@ include_directories(
   src
   src/Audio
   src/Coroutines
-  src/GameData
+  src/Metadata
   src/Graphics
   src/MainMenu
   src/Menu
