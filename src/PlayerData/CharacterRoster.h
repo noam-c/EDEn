@@ -25,6 +25,8 @@ class GameContext;
 
 class CharacterRoster
 {
+   static const char* PARTY_ELEMENT;
+
    const GameContext& gameContext;
 
    /** The message pipe used to send messages about updates to the roster. */

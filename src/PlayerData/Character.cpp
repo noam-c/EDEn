@@ -5,12 +5,29 @@
  */
 
 #include "Character.h"
-#include "SaveGameItemNames.h"
 #include "json.h"
 #include <fstream>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
+
+const char* Character::ID_ATTRIBUTE = "id";
+const char* Character::ARCHETYPE_ATTRIBUTE = "archetype";
+const char* Character::NAME_ATTRIBUTE = "name";
+
+const char* Character::STATS_ELEMENT = "Stats";
+
+const char* Character::MAX_HP_ATTRIBUTE = "maxHP";
+const char* Character::HP_ATTRIBUTE = "hp";
+const char* Character::MAX_SP_ATTRIBUTE = "maxSP";
+const char* Character::SP_ATTRIBUTE = "sp";
+const char* Character::STR_ATTRIBUTE = "str";
+const char* Character::INT_ATTRIBUTE = "int";
+
+const char* Character::PORTRAIT_ELEMENT = "Portrait";
+const char* Character::PORTRAIT_PATH_ATTRIBUTE = "path";
+
+const char* Character::SPRITESHEET_ATTRIBUTE = "Spritesheet";
 
 Json::Value Character::loadArchetype(const std::string& archetypeId)
 {
@@ -39,8 +56,8 @@ Character::Character(const GameContext& gameContext, const std::string& id) :
    id(id)
 {
    Json::Value archetypeData = Character::loadArchetype(id);
-   name = archetypeData[NAME_ATTRIBUTE].asString();
-   spritesheetId = archetypeData[SPRITESHEET_ATTRIBUTE].asString();
+   name = archetypeData[Character::NAME_ATTRIBUTE].asString();
+   spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
 
    parseStats(archetypeData);
@@ -53,17 +70,17 @@ Character::Character(const GameContext& gameContext, const std::string& id) :
 
 Character::Character(const GameContext& gameContext, Json::Value& charToLoad)
 {
-   id = charToLoad[ID_ATTRIBUTE].asString();
+   id = charToLoad[Character::ID_ATTRIBUTE].asString();
 
-   std::string archetypeId = archetype = charToLoad[ARCHETYPE_ATTRIBUTE].asString();
+   std::string archetypeId = archetype = charToLoad[Character::ARCHETYPE_ATTRIBUTE].asString();
    if(archetypeId.empty())
    {
       archetypeId = id;
    }
 
    Json::Value archetypeData = Character::loadArchetype(archetypeId);
-   name = archetypeData[NAME_ATTRIBUTE].asString();
-   spritesheetId = archetypeData[SPRITESHEET_ATTRIBUTE].asString();
+   name = archetypeData[Character::NAME_ATTRIBUTE].asString();
+   spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
 
    parseStats(charToLoad);
@@ -76,20 +93,20 @@ Character::~Character()
 
 void Character::parsePortraitData(Json::Value& portraitDataContainer)
 {
-   Json::Value& portraitData = portraitDataContainer[PORTRAIT_ELEMENT];
-   portraitPath = portraitData[PATH_ATTRIBUTE].asString();
+   Json::Value& portraitData = portraitDataContainer[Character::PORTRAIT_ELEMENT];
+   portraitPath = portraitData[Character::PORTRAIT_PATH_ATTRIBUTE].asString();
 }
 
 void Character::parseStats(Json::Value& statsDataContainer)
 {
-   Json::Value& statsData = statsDataContainer[STATS_ELEMENT];
+   Json::Value& statsData = statsDataContainer[Character::STATS_ELEMENT];
 
-   hp = statsData[HP_ATTRIBUTE].asInt();
-   sp = statsData[SP_ATTRIBUTE].asInt();
-   maxHP = statsData[MAX_HP_ATTRIBUTE].asInt();
-   maxSP = statsData[MAX_SP_ATTRIBUTE].asInt();
-   strength = statsData[STR_ATTRIBUTE].asInt();
-   intelligence = statsData[INT_ATTRIBUTE].asInt();
+   hp = statsData[Character::HP_ATTRIBUTE].asInt();
+   sp = statsData[Character::SP_ATTRIBUTE].asInt();
+   maxHP = statsData[Character::MAX_HP_ATTRIBUTE].asInt();
+   maxSP = statsData[Character::MAX_SP_ATTRIBUTE].asInt();
+   strength = statsData[Character::STR_ATTRIBUTE].asInt();
+   intelligence = statsData[Character::INT_ATTRIBUTE].asInt();
 }
 
 Json::Value Character::serialize() const
@@ -98,20 +115,20 @@ Json::Value Character::serialize() const
    
    if(!archetype.empty())
    {
-      characterNode[ARCHETYPE_ATTRIBUTE] = archetype;
+      characterNode[Character::ARCHETYPE_ATTRIBUTE] = archetype;
    }
 
-   characterNode[ID_ATTRIBUTE] = id;
+   characterNode[Character::ID_ATTRIBUTE] = id;
 
    Json::Value statsNode(Json::objectValue);
-   statsNode[HP_ATTRIBUTE] = hp;
-   statsNode[SP_ATTRIBUTE] = sp;
-   statsNode[MAX_HP_ATTRIBUTE] = maxHP;
-   statsNode[MAX_SP_ATTRIBUTE] = maxSP;
-   statsNode[STR_ATTRIBUTE] = strength;
-   statsNode[INT_ATTRIBUTE] = intelligence;
+   statsNode[Character::HP_ATTRIBUTE] = hp;
+   statsNode[Character::SP_ATTRIBUTE] = sp;
+   statsNode[Character::MAX_HP_ATTRIBUTE] = maxHP;
+   statsNode[Character::MAX_SP_ATTRIBUTE] = maxSP;
+   statsNode[Character::STR_ATTRIBUTE] = strength;
+   statsNode[Character::INT_ATTRIBUTE] = intelligence;
 
-   characterNode[STATS_ELEMENT] = statsNode;
+   characterNode[Character::STATS_ELEMENT] = statsNode;
 
    equipment.serialize(characterNode["Equipment"]);
    

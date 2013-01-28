@@ -40,6 +40,12 @@ namespace Json
  */
 class Quest
 {
+   static const char* NAME_ATTRIBUTE;
+
+   static const char* DESCRIPTION_ELEMENT;
+   static const char* COMPLETED_ATTRIBUTE;
+   static const char* OPTIONAL_ATTRIBUTE;
+
    /**
     * Represents a table of quests, indexed by their names.
     */
@@ -72,7 +78,9 @@ class Quest
    QuestLog subquests;
 
    
-   public:   
+   public:
+      static const char* QUEST_ELEMENT;
+
       /**
        * Constructor.
        *

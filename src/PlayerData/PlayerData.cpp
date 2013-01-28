@@ -5,7 +5,6 @@
  */
 
 #include "PlayerData.h"
-#include "SaveGameItemNames.h"
 #include "Character.h"
 #include "ItemData.h"
 #include "Item.h"
@@ -15,8 +14,17 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-// Uncomment this line to turn off encryption of savegames
-// #define DISABLE_ENCRYPTION
+const char* PlayerData::CHARACTER_LIST_ELEMENT = "Characters";
+const char* PlayerData::CHARACTER_ELEMENT = "Character";
+
+const char* PlayerData::SHORTCUTS_ELEMENT = "Shortcuts";
+
+const char* PlayerData::SAVE_STATE_ELEMENT = "CurrentLocation";
+const char* PlayerData::CHAPTER_ATTRIBUTE = "chapter";
+const char* PlayerData::REGION_ATTRIBUTE = "region";
+const char* PlayerData::MAP_ATTRIBUTE = "map";
+const char* PlayerData::X_ATTRIBUTE = "x";
+const char* PlayerData::Y_ATTRIBUTE = "y";
 
 PlayerData::PlayerData(const GameContext& gameContext) :
    roster(gameContext),
@@ -97,37 +105,37 @@ void PlayerData::load(const std::string& path)
 void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
 {
    DEBUG("Loading character roster...");
-   Json::Value& charactersElement = rootElement[CHARACTER_LIST_ELEMENT];
+   Json::Value& charactersElement = rootElement[PlayerData::CHARACTER_LIST_ELEMENT];
    roster.load(charactersElement);
 }
 
 void PlayerData::serializeCharactersAndParty(Json::Value& outputJson) const
 {
-   outputJson[CHARACTER_LIST_ELEMENT] = roster.serialize();
+   outputJson[PlayerData::CHARACTER_LIST_ELEMENT] = roster.serialize();
 }
 
 void PlayerData::parseQuestLog(Json::Value& rootElement)
 {
    DEBUG("Loading quest log...");
-   Json::Value& questLog = rootElement[QUEST_ELEMENT];
+   Json::Value& questLog = rootElement[Quest::QUEST_ELEMENT];
    rootQuest.load(questLog);
 }
 
 void PlayerData::serializeQuestLog(Json::Value& outputJson) const
 {
-   outputJson[QUEST_ELEMENT] = rootQuest.serialize();
+   outputJson[Quest::QUEST_ELEMENT] = rootQuest.serialize();
 }
 
 void PlayerData::parseInventory(Json::Value& rootElement)
 {
    DEBUG("Loading inventory data...");
-   Json::Value& itemsHeld = rootElement[INVENTORY_ELEMENT];
+   Json::Value& itemsHeld = rootElement[Inventory::INVENTORY_ELEMENT];
    inventory.load(itemsHeld);
 }
 
 void PlayerData::serializeInventory(Json::Value& outputJson) const
 {
-   outputJson[INVENTORY_ELEMENT] = inventory.serialize();
+   outputJson[Inventory::INVENTORY_ELEMENT] = inventory.serialize();
 }
 
 void PlayerData::parseShortcuts(Json::Value& rootElement)
@@ -137,7 +145,7 @@ void PlayerData::parseShortcuts(Json::Value& rootElement)
    shortcutList.resize(PlayerData::SHORTCUT_BAR_SIZE, 0);
 
    DEBUG("Loading shortcuts");
-   Json::Value& shortcutListJson = rootElement[SHORTCUTS_ELEMENT];
+   Json::Value& shortcutListJson = rootElement[PlayerData::SHORTCUTS_ELEMENT];
 
    for(int i = 0; i < PlayerData::SHORTCUT_BAR_SIZE && i < shortcutListJson.size(); ++i)
    {
@@ -162,23 +170,23 @@ void PlayerData::serializeShortcuts(Json::Value& outputJson) const
       shortcutNode.append(0);
    }
 
-   outputJson[SHORTCUTS_ELEMENT] = shortcutNode;
+   outputJson[PlayerData::SHORTCUTS_ELEMENT] = shortcutNode;
 }
 
 void PlayerData::parseLocation(Json::Value& rootElement)
 {
-   Json::Value& location = rootElement[SAVE_STATE_ELEMENT];
+   Json::Value& location = rootElement[PlayerData::SAVE_STATE_ELEMENT];
    if(!location.isNull())
    {
       DEBUG("Loading current location data...");
-      currChapter = location[CHAPTER_ATTRIBUTE].asString();
+      currChapter = location[PlayerData::CHAPTER_ATTRIBUTE].asString();
       
       // Set the current chapter and location
       SaveLocation savePoint;
-      savePoint.region = location[REGION_ATTRIBUTE].asString();
-      savePoint.map = location[MAP_ATTRIBUTE].asString();
-      savePoint.x = location[X_ATTRIBUTE].asInt();
-      savePoint.y = location[Y_ATTRIBUTE].asInt();
+      savePoint.region = location[PlayerData::REGION_ATTRIBUTE].asString();
+      savePoint.map = location[PlayerData::MAP_ATTRIBUTE].asString();
+      savePoint.x = location[PlayerData::X_ATTRIBUTE].asInt();
+      savePoint.y = location[PlayerData::Y_ATTRIBUTE].asInt();
    }
    else
    {

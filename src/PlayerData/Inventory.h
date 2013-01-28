@@ -25,6 +25,10 @@ class Item;
  */
 class Inventory
 {
+   static const char* ITEM_ELEMENT;
+   static const char* ITEM_NUM_ATTRIBUTE;
+   static const char* ITEM_QUANTITY_ATTRIBUTE;
+
    /** The items held in the inventory. */
    ItemList items;
 
@@ -45,6 +49,8 @@ class Inventory
    ItemList::iterator findItem(int itemId);
 
    public:
+      static const char* INVENTORY_ELEMENT;
+
       /**
        * Assignment operator.
        */

@@ -5,7 +5,6 @@
  */
 
 #include "EquipData.h"
-#include "SaveGameItemNames.h"
 #include "json.h"
 #include "ItemData.h"
 #include "Item.h"

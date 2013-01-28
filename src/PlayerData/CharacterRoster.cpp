@@ -12,10 +12,11 @@
 #include "RosterUpdateMessage.h"
 
 #include "Character.h"
-#include "SaveGameItemNames.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
+
+const char* CharacterRoster::PARTY_ELEMENT = "Party";
 
 CharacterRoster::CharacterRoster(const GameContext& gameContext) :
    gameContext(gameContext),
@@ -121,7 +122,7 @@ void CharacterRoster::load(const Json::Value& charactersElement)
 {
    clear();
 
-   const Json::Value& partyElement = charactersElement[PARTY_ELEMENT];
+   const Json::Value& partyElement = charactersElement[CharacterRoster::PARTY_ELEMENT];
 
    int partySize = partyElement.size();
 
@@ -154,7 +155,7 @@ Json::Value CharacterRoster::serialize() const
       partyNode.append(character->serialize());
    }
 
-   charactersNode[PARTY_ELEMENT] = partyNode;
+   charactersNode[CharacterRoster::PARTY_ELEMENT] = partyNode;
    return charactersNode;
 }
 

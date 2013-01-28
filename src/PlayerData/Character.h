@@ -23,6 +23,23 @@ namespace Json
  */
 class Character
 {
+   static const char* ID_ATTRIBUTE;
+   static const char* ARCHETYPE_ATTRIBUTE;
+   static const char* NAME_ATTRIBUTE;
+
+   static const char* STATS_ELEMENT;
+
+   static const char* SPRITESHEET_ATTRIBUTE;
+   static const char* PORTRAIT_ELEMENT;
+   static const char* PORTRAIT_PATH_ATTRIBUTE;
+
+   static const char* MAX_HP_ATTRIBUTE;
+   static const char* HP_ATTRIBUTE;
+   static const char* MAX_SP_ATTRIBUTE;
+   static const char* SP_ATTRIBUTE;
+   static const char* STR_ATTRIBUTE;
+   static const char* INT_ATTRIBUTE;
+
    /** The character's ID for data lookups. */
    std::string id;
 

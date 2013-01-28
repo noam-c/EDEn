@@ -7,7 +7,11 @@
 #include "Inventory.h"
 #include "Item.h"
 #include "json.h"
-#include "SaveGameItemNames.h"
+
+const char* Inventory::INVENTORY_ELEMENT = "Inventory";
+const char* Inventory::ITEM_ELEMENT = "Item";
+const char* Inventory::ITEM_NUM_ATTRIBUTE = "itemNum";
+const char* Inventory::ITEM_QUANTITY_ATTRIBUTE = "quantity";
 
 Inventory& Inventory::operator=(const Inventory& inventory)
 {
@@ -40,8 +44,8 @@ void Inventory::load(const Json::Value& inventoryJson)
    for(Json::Value::iterator iter = inventoryJson.begin(); iter != inventoryJson.end(); ++iter)
    {
       int itemNum, itemQuantity;
-      itemNum = (*iter)[ITEM_NUM_ATTRIBUTE].asInt();
-      itemQuantity = (*iter)[ITEM_QUANTITY_ATTRIBUTE].asInt();
+      itemNum = (*iter)[Inventory::ITEM_NUM_ATTRIBUTE].asInt();
+      itemQuantity = (*iter)[Inventory::ITEM_QUANTITY_ATTRIBUTE].asInt();
       items.push_back(std::make_pair(itemNum, itemQuantity));
    }
 }
@@ -57,8 +61,8 @@ Json::Value Inventory::serialize() const
       if(itemQuantity > 0)
       {
          Json::Value itemEntry(Json::objectValue);
-         itemEntry[ITEM_NUM_ATTRIBUTE] = itemNumber;
-         itemEntry[ITEM_QUANTITY_ATTRIBUTE] = itemQuantity;
+         itemEntry[Inventory::ITEM_NUM_ATTRIBUTE] = itemNumber;
+         itemEntry[Inventory::ITEM_QUANTITY_ATTRIBUTE] = itemQuantity;
          
          inventoryNode.append(itemEntry);
       }

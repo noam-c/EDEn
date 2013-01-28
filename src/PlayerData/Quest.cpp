@@ -5,11 +5,17 @@
  */
 
 #include "Quest.h"
-#include "SaveGameItemNames.h"
 #include "json.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
+
+const char* Quest::NAME_ATTRIBUTE = "name";
+
+const char* Quest::QUEST_ELEMENT = "Quest";
+const char* Quest::DESCRIPTION_ELEMENT = "Description";
+const char* Quest::COMPLETED_ATTRIBUTE = "completed";
+const char* Quest::OPTIONAL_ATTRIBUTE = "optional";
 
 Quest::Quest(const std::string& name, const std::string& description, bool optional, bool completed) :
   name(name),
@@ -35,14 +41,14 @@ void Quest::load(const Json::Value& questTree)
 {
    subquests.clear();
 
-   name = questTree[NAME_ATTRIBUTE].asString();
-   const Json::Value& descriptionElement = questTree[DESCRIPTION_ELEMENT];
+   name = questTree[Quest::NAME_ATTRIBUTE].asString();
+   const Json::Value& descriptionElement = questTree[Quest::DESCRIPTION_ELEMENT];
    description = descriptionElement.isString() ? descriptionElement.asString() : "";
    
-   completed = questTree[COMPLETED_ATTRIBUTE].asBool();
-   optional = questTree[OPTIONAL_ATTRIBUTE].asBool();
+   completed = questTree[Quest::COMPLETED_ATTRIBUTE].asBool();
+   optional = questTree[Quest::OPTIONAL_ATTRIBUTE].asBool();
 
-   const Json::Value& subquestNode = questTree[QUEST_ELEMENT];
+   const Json::Value& subquestNode = questTree[Quest::QUEST_ELEMENT];
    for(Json::Value::iterator iter = subquestNode.begin(); iter != subquestNode.end(); ++iter)
    {
       Quest* subquest = new Quest(*iter);
@@ -53,15 +59,15 @@ void Quest::load(const Json::Value& questTree)
 Json::Value Quest::serialize() const
 {
    Json::Value questNode(Json::objectValue);
-   questNode[NAME_ATTRIBUTE] = name;
+   questNode[Quest::NAME_ATTRIBUTE] = name;
    
    if(!description.empty())
    {
-      questNode[DESCRIPTION_ELEMENT] = description;
+      questNode[Quest::DESCRIPTION_ELEMENT] = description;
    }
    
-   questNode[COMPLETED_ATTRIBUTE] = completed;
-   questNode[OPTIONAL_ATTRIBUTE] = optional;
+   questNode[Quest::COMPLETED_ATTRIBUTE] = completed;
+   questNode[Quest::OPTIONAL_ATTRIBUTE] = optional;
    
    Json::Value subquestsNode(Json::arrayValue);
    for(QuestLog::const_iterator iter  = subquests.begin(); iter != subquests.end(); ++iter)
@@ -70,7 +76,7 @@ Json::Value Quest::serialize() const
       subquestsNode.append(subquestNode);
    }
    
-   questNode[QUEST_ELEMENT] = subquestsNode;
+   questNode[Quest::QUEST_ELEMENT] = subquestsNode;
    
    return questNode;
 }

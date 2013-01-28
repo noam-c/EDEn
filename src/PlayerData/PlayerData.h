@@ -51,6 +51,18 @@ typedef std::vector<int> ShortcutList;
  */
 class PlayerData
 {
+   static const char* CHARACTER_LIST_ELEMENT;
+   static const char* CHARACTER_ELEMENT;
+
+   static const char* SHORTCUTS_ELEMENT;
+
+   static const char* SAVE_STATE_ELEMENT;
+   static const char* CHAPTER_ATTRIBUTE;
+   static const char* REGION_ATTRIBUTE;
+   static const char* MAP_ATTRIBUTE;
+   static const char* X_ATTRIBUTE;
+   static const char* Y_ATTRIBUTE;
+
    /** The file from which this player data was last saved/loaded. */
    std::string filePath;
 

@@ -54,7 +54,6 @@ set(HEADERS
   src/PlayerData/LuaInventory.h
   src/PlayerData/Quest.h
   src/PlayerData/LuaQuest.h
-  src/PlayerData/SaveGameItemNames.h
   src/PlayerData/Messages/RosterUpdateMessage.h
   src/ResourceLoader/Resource.h
   src/ResourceLoader/ResourceKey.h
