@@ -14,7 +14,7 @@ namespace Json
    class Value;
 };
 
-class Item;
+typedef class Usable Item;
 
 /**
  * Keeps track of all the items held in the player's inventory,

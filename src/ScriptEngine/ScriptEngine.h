@@ -21,8 +21,8 @@ class Scheduler;
 class Script;
 class NPC;
 class NPCScript;
-class Item;
-class ItemScript;
+typedef class Usable Item;
+class UsableScript;
 
 struct lua_State;
 
@@ -94,11 +94,11 @@ class ScriptEngine
       NPCScript* createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName);
 
       /**
-       * Get a specified item script.
+       * Get a specified usable's script.
        *
-       * @param item The item to load the script for.
+       * @param usable The usable to load the script for.
        */
-      ItemScript* createItemScript(const Item& item) const;
+      UsableScript* createItemScript(const Item& item) const;
 
       /**
        * Run a specified map script.

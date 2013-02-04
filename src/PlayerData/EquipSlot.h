@@ -16,7 +16,7 @@ namespace Json
 };
 
 class GameContext;
-class Item;
+typedef class Usable Item;
 
 /**
  * An equipment slot. Can have an item equipped in it, and can have restrictions on the 

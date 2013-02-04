@@ -15,7 +15,7 @@
 #include "Quest.h"
 
 class Character;
-class Item;
+typedef class Usable Item;
 struct EquipSlot;
 
 namespace Json

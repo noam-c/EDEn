@@ -11,7 +11,8 @@
 #include <string>
 
 class GameContext;
-class Item;
+
+typedef class Usable Item;
 
 /**
  * A global map holding all the item metadata (item IDs and the associated names, descriptions, etc.) for the game.

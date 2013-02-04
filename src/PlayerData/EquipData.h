@@ -16,7 +16,7 @@ namespace Json
    class Value;
 };
 
-class Item;
+typedef class Usable Item;
 
 /**
  * A data structure used for representing the equipment of a character, in terms of the equipment slots

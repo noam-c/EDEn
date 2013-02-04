@@ -9,7 +9,7 @@
 #include <sstream>
 
 #include "FileScript.h"
-#include "ItemScript.h"
+#include "UsableScript.h"
 #include "Item.h"
 #include "NPCScript.h"
 #include "NPC.h"
@@ -33,12 +33,12 @@ NPCScript* ScriptFactory::createNPCCoroutine(lua_State* luaVM, NPC* npc, const s
    return new NPCScript(luaVM, ScriptFactory::getPath(scriptName, NPC_SCRIPT), npc);
 }
 
-ItemScript* ScriptFactory::getItemScript(lua_State* luaVM, const Item& item)
+UsableScript* ScriptFactory::getItemScript(lua_State* luaVM, const Item& item)
 {
    std::ostringstream itemIdBuffer;
    itemIdBuffer << item.getId();
 
-   return new ItemScript(luaVM, ScriptFactory::getPath(itemIdBuffer.str(), ITEM_SCRIPT), item);
+   return new UsableScript(luaVM, ScriptFactory::getPath(itemIdBuffer.str(), ITEM_SCRIPT), item);
 }
 
 Script* ScriptFactory::getMapScript(lua_State* luaVM, const std::string& regionName, const std::string& mapName)

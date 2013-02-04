@@ -11,7 +11,7 @@
  */
 #include "GameState.h"
 
-class Item;
+typedef class Usable Item;
 class PlayerData;
 
 class GameContext

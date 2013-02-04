@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef ITEM_H
-#define ITEM_H
+#ifndef USABLE_H
+#define USABLE_H
 
 #include <string>
 
@@ -15,52 +15,52 @@ namespace Json
 };
 
 class GameContext;
-class ItemScript;
+class UsableScript;
 
 /**
- * Metadata for an item. Since currently, all the games items are non-customizable (no 'unique' items),
- * a template is sufficient for describing all the properties that an item will have. As a result,
- * Item is not an object representative of a single item found in the world; it is the information describing a given item.
+ * Metadata for an usable. Since currently, all the games usables are non-customizable (no 'unique' usables),
+ * a template is sufficient for describing all the properties that an usable will have. As a result,
+ * Usable is not an object representative of a single usable found in the world; it is the information describing a given usable.
  */
-class Item
+class Usable
 {
-   /** The unique identifier of this item. */
+   /** The unique identifier of this usable. */
    const int id;
    
-   /** The name of this item. */
+   /** The name of this usable. */
    const std::string name;
 
-   /** The path to the icon use to represent this item visually. */
+   /** The path to the icon use to represent this usable visually. */
    const std::string iconPath;
 
-   /** The script that dictates what the item does when used. */
-   ItemScript* itemScript;
+   /** The script that dictates what the usable does when used. */
+   UsableScript* usableScript;
 
    public:
       /**
        * Constructor.
        *
-       * @param itemNode The JSON node containing the item metadata to load.
+       * @param usableNode The JSON node containing the usable metadata to load.
        */
-      Item(Json::Value& itemNode);
+      Usable(Json::Value& usableNode);
    
       /**
        * Destructor.
        */
-      ~Item();
+      ~Usable();
 
       /**
-       * @return The unique identifier of this item.
+       * @return The unique identifier of this usable.
        */
       const int getId() const;
       
       /**
-       * @return The name of this item.
+       * @return The name of this usable.
        */
       const std::string& getName() const;
 
       /**
-       * @return The icon visually representing this item.
+       * @return The icon visually representing this usable.
        */
       const std::string& getIconPath() const;
 

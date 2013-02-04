@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#include "ItemScript.h"
-#include "Item.h"
+#include "UsableScript.h"
+#include "Usable.h"
 
 #include "DebugUtils.h"
 
@@ -22,27 +22,27 @@ extern "C"
    #include <lauxlib.h>
 }
 
-const char* ItemScript::FUNCTION_NAMES[] = { "onMenuUse", "onFieldUse", "onBattleUse" };
+const char* UsableScript::FUNCTION_NAMES[] = { "onMenuUse", "onFieldUse", "onBattleUse" };
 
-ItemScript::ItemScript(lua_State* luaVM, const std::string& scriptPath, const Item& item) :
+UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, const Usable& usable) :
    Script(scriptPath),
-   item(item),
+   usable(usable),
    functionExists(NUM_FUNCTIONS)
 {
    luaStack = lua_newthread(luaVM);
 
-   // Run through the script to gather all the item's functions
+   // Run through the script to gather all the usable's functions
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
 
    int result = luaL_dofile(luaVM, scriptPath.c_str());
 
    if(result != 0)
    {
-      DEBUG("Error loading item functions for item ID %d: %s", item.getId(), lua_tostring(luaStack, -1));
+      DEBUG("Error loading usable functions for usable ID %d: %s", usable.getId(), lua_tostring(luaStack, -1));
    }
 
    // All the below code simply takes all the global functions that the script
-   // created, and pushes them into a table that uses the item's unique
+   // created, and pushes them into a table that uses the usable's unique
    // identifier. Then it removes those global functions for safety.
 
    // Sure, this would be much easier to do in the Lua script itself, but
@@ -87,7 +87,7 @@ ItemScript::ItemScript(lua_State* luaVM, const std::string& scriptPath, const It
          lua_pushnil(luaStack);
          lua_setglobal(luaStack, FUNCTION_NAMES[i]);
 
-         // The function is valid for the item
+         // The function is valid for the usable
          functionExists[i] = true;
 
          DEBUG("Function %s was found and loaded", FUNCTION_NAMES[i]);
@@ -98,7 +98,7 @@ ItemScript::ItemScript(lua_State* luaVM, const std::string& scriptPath, const It
    lua_setglobal(luaStack, scriptName.c_str());
 }
 
-ItemScript::~ItemScript()
+UsableScript::~UsableScript()
 {
    /** \todo Check if this cleanup is appropriate. */
    // Set the function table to nil so that it gets garbage collected
@@ -106,7 +106,7 @@ ItemScript::~ItemScript()
    // lua_setglobal(luaStack, scriptPath.c_str());
 }
 
-bool ItemScript::callFunction(ItemFunction function)
+bool UsableScript::callFunction(UsableFunction function)
 {
    if(functionExists[function])
    {
@@ -116,7 +116,7 @@ bool ItemScript::callFunction(ItemFunction function)
       // Grab the function name
       const char* functionName = FUNCTION_NAMES[function];
 
-      DEBUG("Item ID %d running function %s", item.getId(), functionName);
+      DEBUG("Usable ID %d running function %s", usable.getId(), functionName);
 
       // Get the function from the NPC function table and push it on the stack
       lua_pushstring(luaStack, functionName);
@@ -129,17 +129,17 @@ bool ItemScript::callFunction(ItemFunction function)
    return true;
 }
 
-bool ItemScript::onMenuUse()
+bool UsableScript::onMenuUse()
 {
    return callFunction(MENU_USE);
 }
 
-bool ItemScript::onFieldUse()
+bool UsableScript::onFieldUse()
 {
    return callFunction(FIELD_USE);
 }
 
-bool ItemScript::onBattleUse()
+bool UsableScript::onBattleUse()
 {
    return callFunction(BATTLE_USE);
 }

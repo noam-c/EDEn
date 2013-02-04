@@ -10,8 +10,8 @@
 #include <string>
 
 class Script;
-class Item;
-class ItemScript;
+typedef class Usable Item;
+class UsableScript;
 class NPC;
 class NPCScript;
 struct lua_State;
@@ -92,7 +92,7 @@ class ScriptFactory
        *
        * @return The item script given by the specified item ID
        */
-      static ItemScript* getItemScript(lua_State* luaVM, const Item& item);
+      static UsableScript* getItemScript(lua_State* luaVM, const Item& item);
 
       /**
        * @param luaVM The Lua VM to be used to load the script

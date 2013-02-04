@@ -4,37 +4,37 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef ITEM_SCRIPT_H
-#define ITEM_SCRIPT_H
+#ifndef USABLE_SCRIPT_H
+#define USABLE_SCRIPT_H
 
 #include <vector>
 
 #include "Script.h"
 
-class Item;
+class Usable;
 
 /**
- * An <code>ItemScript</code> holds functions that determine <code>Item</code> behaviour.
+ * An <code>UsableScript</code> holds functions that determine <code>Usable</code> behaviour.
  *
  * @author Noam Chitayat
  */
-class ItemScript : public Script
+class UsableScript : public Script
 {
    /**
-    * The functions that can be called on an Item.
+    * The functions that can be called on an Usable.
     * When new functions are added here, the name of the function must also be
     * added to FUNCTION_NAMES. The functions are optional and can be replaced
     * by an empty function if they do not exist.
     */
-   enum ItemFunction
+   enum UsableFunction
    {
-      /** The function for using an item in the menu. */
+      /** The function for using an usable in the menu. */
       MENU_USE,
-      /** The function for using an item in the field. */
+      /** The function for using an usable in the field. */
       FIELD_USE,
-      /** The function for using an item in the battle. */
+      /** The function for using an usable in the battle. */
       BATTLE_USE,
-      /** The number of ItemFunction values. */
+      /** The number of UsableFunction values. */
       NUM_FUNCTIONS
    };
 
@@ -43,27 +43,27 @@ class ItemScript : public Script
     */
    static const char* FUNCTION_NAMES[];
 
-   /** The item that runs this script. */
-   const Item& item;
+   /** The usable that runs this script. */
+   const Usable& usable;
 
    /**
     * A mapping to determine whether or not each function exists and
-    * has been properly loaded for the Item.
-    * Indexing is done using the ItemFunction enum.
-    * (e.g. functionExists[MENU_USE] returns true iff the Item script had a menu usage
+    * has been properly loaded for the Usable.
+    * Indexing is done using the UsableFunction enum.
+    * (e.g. functionExists[MENU_USE] returns true iff the Usable script had a menu usage
     * function declared)
     */
    std::vector<bool> functionExists;
 
    /**
-    * Call a function on this item's script.
+    * Call a function on this usable's script.
     *
     * @param function the function to call
     *
     * @return true iff the script runs to completion, false if the coroutine
     *         yielded, or there was an error in execution.
     */
-   bool callFunction(ItemFunction function);
+   bool callFunction(UsableFunction function);
 
    public:
       /**
@@ -75,14 +75,14 @@ class ItemScript : public Script
        *
        * @param luaVM The main Lua stack to fork a coroutine from.
        * @param scriptPath The path to a script that should be run on this coroutine.
-       * @param item The item that uses this script
+       * @param usable The usable that uses this script
        */
-      ItemScript(lua_State* luaVM, const std::string& scriptPath, const Item& item);
+      UsableScript(lua_State* luaVM, const std::string& scriptPath, const Usable& usable);
 
       /**
        * Destructor.
        */
-      ~ItemScript();
+      ~UsableScript();
 
       bool onMenuUse();
 

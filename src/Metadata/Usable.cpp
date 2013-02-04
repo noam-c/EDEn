@@ -4,12 +4,12 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#include "Item.h"
+#include "Usable.h"
 #include "json.h"
 
 #include "GameContext.h"
 #include "ScriptEngine.h"
-#include "ItemScript.h"
+#include "UsableScript.h"
 
 #include "LuaWrapper.hpp"
 
@@ -25,59 +25,59 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_METADATA;
 
-Item::Item(Json::Value& node) :
+Usable::Usable(Json::Value& node) :
    id(node["id"].asInt()),
    name(node["name"].asString()),
    iconPath(node["icon"].asString()),
-   itemScript(NULL)
+   usableScript(NULL)
 {
 }
 
-Item::~Item()
+Usable::~Usable()
 {
-   if(itemScript != NULL)
+   if(usableScript != NULL)
    {
-      delete itemScript;
+      delete usableScript;
    }
 }
 
-const int Item::getId() const
+const int Usable::getId() const
 {
    return id;
 }
 
-const std::string& Item::getName() const
+const std::string& Usable::getName() const
 {
    return name;
 }
 
-const std::string& Item::getIconPath() const
+const std::string& Usable::getIconPath() const
 {
    return iconPath;
 }
 
-void Item::loadScript(GameContext& gameContext)
+void Usable::loadScript(GameContext& gameContext)
 {
-   if(itemScript == NULL)
+   if(usableScript == NULL)
    {
-      itemScript = gameContext.getScriptEngine().createItemScript(*this);
+      usableScript = gameContext.getScriptEngine().createItemScript(*this);
    }
 }
 
-bool Item::use(GameContext& gameContext)
+bool Usable::use(GameContext& gameContext)
 {
    loadScript(gameContext);
 
    switch(gameContext.getCurrentStateType())
    {
       case GameState::MENU:
-         return itemScript->onMenuUse();
+         return usableScript->onMenuUse();
       case GameState::FIELD:
-         return itemScript->onFieldUse();
+         return usableScript->onFieldUse();
       case GameState::BATTLE:
-         return itemScript->onBattleUse();
+         return usableScript->onBattleUse();
    }
 
-   DEBUG("Item used in an unrecognized game state type. Item script will not run.");
+   DEBUG("Usable used in an unrecognized game state type. Usable script will not run.");
    return false;
 }

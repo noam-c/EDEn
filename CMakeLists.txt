@@ -27,6 +27,7 @@ set(HEADERS
   src/Metadata/Item.h
   src/Metadata/ItemData.h
   src/Metadata/ItemList.h
+  src/Metadata/Usable.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
   src/Menu/DataMenu.h
@@ -66,8 +67,8 @@ set(HEADERS
   src/rocket/RocketScriptHandler.h
   src/rocket/RocketScriptHandlerFactory.h
   src/ScriptEngine/FileScript.h
-  src/ScriptEngine/ItemScript.h
   src/ScriptEngine/NPCScript.h
+  src/ScriptEngine/UsableScript.h
   src/ScriptEngine/Script.h
   src/ScriptEngine/ScriptEngine.h
   src/ScriptEngine/ScriptException.h
@@ -124,8 +125,8 @@ set(SOURCES
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
   src/Coroutines/Timer.cpp
-  src/Metadata/Item.cpp
   src/Metadata/ItemData.cpp
+  src/Metadata/Usable.cpp
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
   src/Menu/DataMenu.cpp
@@ -162,8 +163,8 @@ set(SOURCES
   src/Shapes/Point2D.cpp
   src/Shapes/Rectangle.cpp
   src/ScriptEngine/FileScript.cpp
-  src/ScriptEngine/ItemScript.cpp
   src/ScriptEngine/NPCScript.cpp
+  src/ScriptEngine/UsableScript.cpp
   src/ScriptEngine/Script.cpp
   src/ScriptEngine/ScriptEngine.cpp
   src/ScriptEngine/ScriptFactory.cpp
