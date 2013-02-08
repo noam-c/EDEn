@@ -3,7 +3,7 @@
 
 #include "ExecutionStack.h"
 #include "ScriptEngine.h"
-#include "ItemData.h"
+#include "Metadata.h"
 
 /**
  * \todo Change this include to forward declarations when enums
@@ -12,13 +12,15 @@
 #include "GameState.h"
 
 typedef class Usable Item;
+typedef unsigned int ItemId;
+typedef unsigned int SkillId;
 class PlayerData;
 
 class GameContext
 {
    ExecutionStack executionStack;
    ScriptEngine scriptEngine;
-   ItemData itemData;
+   Metadata metadata;
   
    /**
     *  \todo Load or set PlayerData in GameContext and, where appropriate,
@@ -35,7 +37,8 @@ class GameContext
       PlayerData* getCurrentPlayerData() const;
       Scheduler* getCurrentScheduler() const;
       GameState::GameStateType getCurrentStateType() const;
-      Item* getItem(int itemId) const;
+      Item* getItem(ItemId itemId) const;
+      Skill* getSkill(SkillId skillId) const;
 
       void setCurrentPlayerData(PlayerData* data);
 };

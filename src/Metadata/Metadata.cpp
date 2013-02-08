@@ -4,8 +4,9 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#include "ItemData.h"
+#include "Metadata.h"
 #include "Item.h"
+#include "Skill.h"
 #include "json.h"
 #include <fstream>
 
@@ -13,32 +14,59 @@
 
 const int debugFlag = DEBUG_PLAYER;
 const char* ITEM_DATA_PATH = "data/metadata/items.edb";
+const char* SKILL_DATA_PATH = "data/metadata/skills.edb";
 
-ItemData::ItemData(GameContext& gameContext)
+Metadata::Metadata(GameContext& gameContext)
+{
+   loadItemMetadata();
+   loadSkillMetadata();
+}
+
+Metadata::~Metadata()
+{
+   for(std::map<ItemId, Item*>::iterator iter = items.begin(); iter != items.end(); ++iter)
+   {
+      delete iter->second;
+   }
+
+   for(std::map<SkillId, Skill*>::iterator iter = skills.begin(); iter != skills.end(); ++iter)
+   {
+      delete iter->second;
+   }
+}
+
+Json::Value Metadata::loadMetadataTable(const char* filePath)
 {
    Json::Reader reader;
-   DEBUG("Loading item data file %s", ITEM_DATA_PATH);
+   DEBUG("Loading metadata file %s", filePath);
 
-   std::ifstream input(ITEM_DATA_PATH);
+   std::ifstream input(filePath);
    if(!input)
    {
-      T_T("Failed to open data file for reading.");
+      T_T("Failed to open metadata file for reading.");
    }
 
    Json::Value jsonRoot;
    if(!reader.parse(input, jsonRoot))
    {
-      DEBUG("Failed to parse item data: %s", reader.getFormattedErrorMessages().c_str());
-      T_T("Item database is corrupt.");
+      DEBUG("Failed to parse metadata: %s", reader.getFormattedErrorMessages().c_str());
+      T_T("Requested metadata database is corrupt.");
    }
 
-   Json::Value& itemList = jsonRoot["data"];
+   Json::Value& dataList = jsonRoot["data"];
 
-   if(!itemList.isArray())
+   if(!dataList.isArray())
    {
-      T_T("Failed to parse item data.");
+      T_T("Failed to parse metadata: Expected \"data\" to be an array.");
    }
 
+   DEBUG("Loaded metadata file %s", filePath);
+   return dataList;
+}
+
+void Metadata::loadItemMetadata()
+{
+   Json::Value itemList = loadMetadataTable(ITEM_DATA_PATH);
    int numItems = itemList.size();
    for(int i = 0; i < numItems; ++i)
    {
@@ -50,20 +78,37 @@ ItemData::ItemData(GameContext& gameContext)
    DEBUG("Item data loaded.");
 }
 
-ItemData::~ItemData()
+void Metadata::loadSkillMetadata()
 {
-   for(std::map<int, Item*>::iterator iter = items.begin(); iter != items.end(); ++iter)
+   Json::Value skillList = loadMetadataTable(SKILL_DATA_PATH);
+   int numSkills = skillList.size();
+   for(int i = 0; i < numSkills; ++i)
    {
-      delete iter->second;
+      int id = skillList[i]["id"].asInt();
+      skills[id] = new Skill(skillList[i]);
+      DEBUG("Loaded skill ID %d", id);
    }
+
+   DEBUG("Skill data loaded.");
 }
 
-Item* ItemData::getItem(int key) const
+Item* Metadata::getItem(ItemId key) const
 {
-   std::map<int, Item*>::const_iterator itemIterator = items.find(key);
+   std::map<ItemId, Item*>::const_iterator itemIterator = items.find(key);
    if(itemIterator != items.end())
    {
       return itemIterator->second;
+   }
+
+   return NULL;
+}
+
+Skill* Metadata::getSkill(SkillId key) const
+{
+   std::map<SkillId, Skill*>::const_iterator skillIterator = skills.find(key);
+   if(skillIterator != skills.end())
+   {
+      return skillIterator->second;
    }
 
    return NULL;

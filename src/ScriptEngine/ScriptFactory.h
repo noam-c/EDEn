@@ -11,6 +11,7 @@
 
 class Script;
 typedef class Usable Item;
+class Skill;
 class UsableScript;
 class NPC;
 class NPCScript;
@@ -43,6 +44,8 @@ class ScriptFactory
       NPC_SCRIPT,
       /** Scripts containing instructions for item behaviour */
       ITEM_SCRIPT,
+      /** Scripts containing instructions for skill behaviour */
+      SKILL_SCRIPT,
    };
 
    /** 
@@ -93,6 +96,14 @@ class ScriptFactory
        * @return The item script given by the specified item ID
        */
       static UsableScript* getItemScript(lua_State* luaVM, const Item& item);
+
+      /**
+       * @param luaVM The Lua VM to be used to load the script
+       * @param skill The skill to load the script for
+       *
+       * @return The skill script given by the specified item ID
+       */
+      static UsableScript* getSkillScript(lua_State* luaVM, const Skill& skill);
 
       /**
        * @param luaVM The Lua VM to be used to load the script

@@ -74,7 +74,7 @@ void ShortcutBar::shortcutClicked(Rocket::Core::Event* event)
          ++shortcutIndex;
       }
 
-      int itemId = playerData.getShortcut(shortcutIndex);
+      const ItemId itemId = playerData.getShortcut(shortcutIndex);
       Item* item = gameContext.getItem(itemId);
 
       if(item != NULL)
@@ -140,7 +140,7 @@ void ShortcutBar::refresh()
 
    for (int i = 0; i < PlayerData::SHORTCUT_BAR_SIZE; ++i)
    {
-      int itemId = playerData.getShortcut(i);
+      const ItemId itemId = playerData.getShortcut(i);
       const Item* item = gameContext.getItem(itemId);
 
       Rocket::Core::Element* shortcutElement = shortcutBarDocument->CreateElement("div");
@@ -150,7 +150,7 @@ void ShortcutBar::refresh()
       {
          DEBUG("Adding shortcut for item %d", itemId);
 
-         shortcutElement->SetAttribute("itemId", itemId);
+         shortcutElement->SetAttribute("itemId", static_cast<int>(itemId));
          Rocket::Core::String shortcutIconPath("../../");
          shortcutIconPath += item->getIconPath().c_str();
          const Rocket::Core::String shortcutQuantity(8, "%d", playerData.getInventory()->getItemQuantity(itemId));

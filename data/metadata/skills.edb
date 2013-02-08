@@ -1,0 +1,7 @@
+{
+	"data" : 
+	[
+		{"id" : 1, "name" : "Heal", "icon": "data/images/icons/S_Holy01.png"},
+		{"id" : 2, "name" : "Fireball",  "icon": "data/images/icons/S_Fire03.png"}
+	]
+}

@@ -33,7 +33,7 @@ ItemViewModel::~ItemViewModel()
 void ItemViewModel::useItem(int rowIndex)
 {
    const ItemList& itemList = playerData.getInventory()->getItemList();
-   const int itemId = itemList[rowIndex].first;
+   const ItemId itemId = itemList[rowIndex].first;
    Item* item = gameContext.getItem(itemId);
    if(item == NULL)
    {
@@ -61,7 +61,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
       const ItemList& itemList = playerData.getInventory()->getItemList();
       for (int i = 0; i < columns.size(); ++i)
       {
-         const int itemId = itemList[row_index].first;
+         const ItemId itemId = itemList[row_index].first;
          const int itemQuantity = itemList[row_index].second;
          const Item* rowItem = gameContext.getItem(itemId);
          if (columns[i] == "name")

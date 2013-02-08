@@ -6,7 +6,7 @@
 
 GameContext::GameContext() :
    scriptEngine(*this),
-   itemData(*this)
+   metadata(*this)
 {
    Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(*this));
 }
@@ -52,9 +52,14 @@ GameState::GameStateType GameContext::getCurrentStateType() const
    return GameState::UNKNOWN;
 }
 
-Item* GameContext::getItem(int itemId) const
+Item* GameContext::getItem(ItemId itemId) const
 {
-   return itemData.getItem(itemId);
+   return metadata.getItem(itemId);
+}
+
+Skill* GameContext::getSkill(SkillId skillId) const
+{
+   return metadata.getSkill(skillId);
 }
 
 void GameContext::setCurrentPlayerData(PlayerData* data)

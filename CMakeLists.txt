@@ -25,8 +25,9 @@ set(HEADERS
   src/json/json.h
   src/json/json-forwards.h
   src/Metadata/Item.h
-  src/Metadata/ItemData.h
+  src/Metadata/Metadata.h
   src/Metadata/ItemList.h
+  src/Metadata/Skill.h
   src/Metadata/Usable.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
@@ -125,7 +126,8 @@ set(SOURCES
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
   src/Coroutines/Timer.cpp
-  src/Metadata/ItemData.cpp
+  src/Metadata/Metadata.cpp
+  src/Metadata/Skill.cpp
   src/Metadata/Usable.cpp
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp

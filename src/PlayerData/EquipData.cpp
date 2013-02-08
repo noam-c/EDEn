@@ -6,7 +6,7 @@
 
 #include "EquipData.h"
 #include "json.h"
-#include "ItemData.h"
+#include "Metadata.h"
 #include "Item.h"
 
 #include "DebugUtils.h"

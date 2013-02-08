@@ -11,11 +11,12 @@
 #include "FileScript.h"
 #include "UsableScript.h"
 #include "Item.h"
+#include "Skill.h"
 #include "NPCScript.h"
 #include "NPC.h"
 
 const std::string ScriptFactory::EXTENSION = ".lua";
-const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scripts/maps/", "data/scripts/npcs/", "data/scripts/items/" };
+const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scripts/maps/", "data/scripts/npcs/", "data/scripts/items/", "data/scripts/skills/" };
 
 std::string ScriptFactory::getPath(const std::string& name, ScriptType type)
 {
@@ -39,6 +40,14 @@ UsableScript* ScriptFactory::getItemScript(lua_State* luaVM, const Item& item)
    itemIdBuffer << item.getId();
 
    return new UsableScript(luaVM, ScriptFactory::getPath(itemIdBuffer.str(), ITEM_SCRIPT), item);
+}
+
+UsableScript* ScriptFactory::getSkillScript(lua_State* luaVM, const Skill& skill)
+{
+   std::ostringstream skillIdBuffer;
+   skillIdBuffer << skill.getId();
+
+   return new UsableScript(luaVM, ScriptFactory::getPath(skillIdBuffer.str(), SKILL_SCRIPT), skill);
 }
 
 Script* ScriptFactory::getMapScript(lua_State* luaVM, const std::string& regionName, const std::string& mapName)
