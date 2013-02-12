@@ -224,7 +224,10 @@ set(SOURCES
 
 set(SOURCE_GROUP_DELIMITER "/")
 
-source_group("//" REGULAR_EXPRESSION src/[^/]*)
+IF(NOT ${CMAKE_GENERATOR} STREQUAL "Xcode")
+   source_group("//" REGULAR_EXPRESSION src/[^/]*)
+ENDIF()
+
 source_group(Audio REGULAR_EXPRESSION src/Audio/.*)
 source_group(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 source_group(Metadata REGULAR_EXPRESSION src/Metadata/.*)
@@ -234,18 +237,21 @@ source_group(Menu REGULAR_EXPRESSION src/Menu/.*)
 source_group(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
 source_group(Messaging REGULAR_EXPRESSION src/Messaging/.*)
 source_group(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
-source_group("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
 source_group(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
 source_group(rocket REGULAR_EXPRESSION src/rocket/.*)
 source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
 source_group(Shapes REGULAR_EXPRESSION src/Shapes/.*)
 source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
 source_group(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
-source_group("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.*)
 source_group(Transitions REGULAR_EXPRESSION src/Transitions/.*)
 source_group(json REGULAR_EXPRESSION src/json/.*)
 source_group(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
 source_group(tinyxml REGULAR_EXPRESSION src/tinyxml/.*)
+
+IF(NOT ${CMAKE_GENERATOR} STREQUAL "Xcode")
+   source_group("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
+   source_group("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.*)
+ENDIF()
 
 include_directories( 
   src

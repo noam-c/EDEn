@@ -47,7 +47,7 @@ Texture::Texture(const std::string& imagePath) :
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-   GLenum textureFormat;
+   GLenum textureFormat = GL_RGB;
    if (image->format->BytesPerPixel == 4) // contains an alpha channel
    {
       textureFormat = image->format->Rmask == 0x000000ff ? GL_RGBA : GL_BGRA;

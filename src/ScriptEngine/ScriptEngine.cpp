@@ -304,7 +304,7 @@ int ScriptEngine::generateRandom(lua_State* luaStack)
       {
          /** \todo Error case. */
          min = 0;
-         max = 0;
+         max = 1;
          break;
       }
    }

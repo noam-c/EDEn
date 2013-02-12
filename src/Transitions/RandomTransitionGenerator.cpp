@@ -19,12 +19,13 @@ const int NUM_TRANSITIONS = 3;
 GameState* RandomTransitionGenerator::create(GameContext& gameContext, GameState* oldState, GameState* newState, long transitionLength)
 {
   int randomNumber = rand() % NUM_TRANSITIONS;
-  GameState* transition;
+  GameState* transition = NULL;
   switch(randomNumber)
   {
     case 0: transition = new FadeState(gameContext, oldState, transitionLength); break;
     case 1: transition = new SpinState(gameContext, oldState, transitionLength); break;
     case 2: transition = new BlendState(gameContext, oldState, newState, transitionLength); break;
   }
+
   return transition;
 }
