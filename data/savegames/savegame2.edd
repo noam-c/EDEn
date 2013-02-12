@@ -56,7 +56,11 @@
                   {"types":[4],"equipped":902}
                ],
 					"Feet":{"types":[2]}
-            }
+            },
+            "Skills" :
+            [
+               1,2
+            ]
 			}
 		]
 	},

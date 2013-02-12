@@ -31,18 +31,18 @@ body
    height: 90%;
 }
 
-.noSidebar .menuPane
-{
-   margin-left: 0;
-   width: 90%;
-}
-
-#sidebar
+body.sidebarPane
 {
    width: 15%;
+   height: auto;
    margin-left: 10px;
    text-align: right;
    line-height: 1em;
+}
+
+#sidebar.panel
+{
+   width: 100%;
 }
 
 #sidebar.noSidebar

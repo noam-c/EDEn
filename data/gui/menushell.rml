@@ -3,7 +3,7 @@
       <link type="text/rcss" href="base.rcss" />
       <link type="text/rcss" href="menu.rcss" />
    </head>
-   <body>
+   <body class="sidebarPane">
       <div id="sidebar" class="panel">
       </div>
    </body>

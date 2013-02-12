@@ -26,6 +26,8 @@ eden.vcxproj
 eden.vcxproj.filters
 eden.vcxproj.user
 eden.opensdf
+eden.cbp
+eden.layout
 ipch
 
 doc/warn.txt

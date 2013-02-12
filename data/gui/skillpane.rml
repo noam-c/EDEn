@@ -1,0 +1,13 @@
+<rml>
+   <head>
+      <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="menu.rcss" />
+      <link type="text/rcss" href="skillpane.rcss" />
+   </head>
+   <body class="menuPane panel">
+      <datagrid id="skillGrid" class="skillGrid" source="skillViewModel.skills">
+         <col fields="icon" width="5%" formatter="image"></col>
+         <col fields="name" width="90%"></col>
+      </datagrid>
+   </body>
+</rml>

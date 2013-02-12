@@ -36,6 +36,11 @@ class Usable
    /** The script that dictates what the usable does when used. */
    UsableScript* usableScript;
 
+   void loadScript(GameContext& gameContext);
+
+   protected:
+      virtual UsableScript* createScript(GameContext& gameContext);
+
    public:
       /**
        * Constructor.
@@ -63,8 +68,6 @@ class Usable
        * @return The icon visually representing this usable.
        */
       const std::string& getIconPath() const;
-
-      void loadScript(GameContext& gameContext);
 
       bool use(GameContext& gameContext);
 };

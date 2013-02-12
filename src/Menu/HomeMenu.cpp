@@ -5,9 +5,10 @@
  */
 
 #include "HomeMenu.h"
-#include "DataMenu.h"
-#include "ItemMenu.h"
 #include "MenuShell.h"
+
+#include <Rocket/Core.h>
+#include <Rocket/Controls.h>
 
 #include "ResourceLoader.h"
 #include "Music.h"
@@ -25,7 +26,7 @@ HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData) :
    MenuState(gameContext, playerData, "HomeMenu"),
    bindings(this),
    playerData(playerData),
-   homeViewModel(*playerData.getRoster())
+   homeViewModel(gameContext, playerData)
 {
    initialize();
 }
@@ -34,7 +35,7 @@ HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* 
    MenuState(gameContext, "HomeMenu", menuShell),
    bindings(this),
    playerData(playerData),
-   homeViewModel(*playerData.getRoster())
+   homeViewModel(gameContext, playerData)
 {
    initialize();
 }
@@ -51,6 +52,10 @@ HomeMenu::~HomeMenu()
 void HomeMenu::initialize()
 {
    paneDocument = menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");
+   if(paneDocument != NULL)
+   {
+      bindings.bindAction(paneDocument, "characterGrid", "click", &HomeMenu::characterClicked);
+   }
 
    sidebarOptions.push_back("Items");
    sidebarOptions.push_back("Equip");
@@ -79,17 +84,30 @@ void HomeMenu::deactivate()
    }
 }
 
+void HomeMenu::characterClicked(Rocket::Core::Event* event)
+{
+   Rocket::Core::Element* target = event->GetTargetElement();
+
+   // Move up the DOM to the datagridrow item holding this element
+   while(target->GetParentNode() != NULL && target->GetTagName() != "datagridrow")
+   {
+      target = target->GetParentNode();
+   }
+
+   if(target != NULL)
+   {
+      // If we found a row element, cast it and get its index
+      Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
+      if(rowElement != NULL)
+      {
+         DEBUG("Character click registered.");
+         int characterIndex = rowElement->GetParentRelativeIndex();
+         homeViewModel.selectCharacter(characterIndex, menuShell);
+      }
+   }
+}
+
 void HomeMenu::sidebarClicked(int optionIndex)
 {
-   switch(optionIndex)
-   {
-      case 0:
-         gameContext.getExecutionStack().pushState(new ItemMenu(gameContext, playerData, menuShell));
-         break;
-      case 7:
-         gameContext.getExecutionStack().pushState(new DataMenu(gameContext, playerData, menuShell));
-         break;
-      default:
-         break;
-   }
+   homeViewModel.sidebarClicked(optionIndex, menuShell);
 }

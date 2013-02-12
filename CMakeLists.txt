@@ -25,12 +25,14 @@ set(HEADERS
   src/json/json.h
   src/json/json-forwards.h
   src/Metadata/Item.h
-  src/Metadata/Metadata.h
   src/Metadata/ItemList.h
+  src/Metadata/Metadata.h
   src/Metadata/Skill.h
+  src/Metadata/SkillList.h
   src/Metadata/Usable.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
+  src/Menu/CharacterDependentMenu.h
   src/Menu/DataMenu.h
   src/Menu/DataViewModel.h
   src/Menu/HomeMenu.h
@@ -41,6 +43,8 @@ set(HEADERS
   src/Menu/MenuShell.h
   src/Menu/MenuShellOption.h
   src/Menu/MenuState.h
+  src/Menu/SkillMenu.h
+  src/Menu/SkillViewModel.h
   src/Menu/ShortcutBar.h
   src/Messaging/MessagePipe.h
   src/Messaging/Listener.h
@@ -131,6 +135,7 @@ set(SOURCES
   src/Metadata/Usable.cpp
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
+  src/Menu/CharacterDependentMenu.cpp
   src/Menu/DataMenu.cpp
   src/Menu/DataViewModel.cpp
   src/Menu/HomeMenu.cpp
@@ -140,6 +145,8 @@ set(SOURCES
   src/Menu/ItemViewModel.cpp
   src/Menu/MenuShell.cpp
   src/Menu/MenuState.cpp
+  src/Menu/SkillMenu.cpp
+  src/Menu/SkillViewModel.cpp
   src/Menu/ShortcutBar.cpp
   src/Messaging/MessagePipe.cpp
   src/PlayerData/Character.cpp

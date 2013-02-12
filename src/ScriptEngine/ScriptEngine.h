@@ -22,6 +22,7 @@ class Script;
 class NPC;
 class NPCScript;
 typedef class Usable Item;
+class Skill;
 class UsableScript;
 
 struct lua_State;
@@ -94,11 +95,18 @@ class ScriptEngine
       NPCScript* createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName);
 
       /**
-       * Get a specified usable's script.
+       * Get a specified item's script.
        *
-       * @param usable The usable to load the script for.
+       * @param item The item to load the script for.
        */
       UsableScript* createItemScript(const Item& item) const;
+
+      /**
+       * Get a specified skill's script.
+       *
+       * @param skill The skill to load the script for.
+       */
+      UsableScript* createSkillScript(const Skill& skill) const;
 
       /**
        * Run a specified map script.

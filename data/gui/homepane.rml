@@ -5,7 +5,7 @@
       <link type="text/rcss" href="homepane.rcss" />
    </head>
    <body class="menuPane panel">
-	   <datagrid class="characterGrid" source="homeViewModel.party">
+	   <datagrid id="characterGrid" class="characterGrid" source="homeViewModel.party">
 	      <col fields="portrait" width="25%" formatter="image">Portrait</col>
 	      <col fields="name" width="20%">Name</col>
 	      <col fields="HP" width="20%">HP</col>

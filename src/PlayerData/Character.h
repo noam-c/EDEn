@@ -9,6 +9,7 @@
 
 #include <string>
 #include "EquipData.h"
+#include "SkillList.h"
 
 namespace Json
 {
@@ -28,6 +29,7 @@ class Character
    static const char* NAME_ATTRIBUTE;
 
    static const char* STATS_ELEMENT;
+   static const char* SKILLS_ELEMENT;
 
    static const char* SPRITESHEET_ATTRIBUTE;
    static const char* PORTRAIT_ELEMENT;
@@ -72,6 +74,9 @@ class Character
   
    /** The equipment worn by this Character. */
    EquipData equipment;
+
+   /** The skills known by this Character. */
+   SkillList skills;
  
    /**
     * Loads the archetype for the character, which provides character
@@ -96,6 +101,13 @@ class Character
     * @param statsDataContainer The JSON node containing the stats to load.
     */
    void parseStats(Json::Value& statsDataContainer);
+
+   /**
+    * Parse the skill list from the given node.
+    *
+    * @param skillsDataContainer The JSON node containing the stats to load.
+    */
+   void parseSkills(Json::Value& skillsDataContainer);
 
    public:
       /**
@@ -167,6 +179,11 @@ class Character
        */
       EquipData& getEquipment();
       
+      /**
+       * @return The list of the character's skills.
+       */
+      const SkillList& getSkillList() const;
+
       /**
        * Sets a piece of equipment, and changes the character's stat bonuses accordingly.
        *

@@ -11,6 +11,9 @@
 
 class Skill : public Usable
 {
+   protected:
+      UsableScript* createScript(GameContext& gameContext);
+
    public:
       /**
        * Constructor.
@@ -18,7 +21,6 @@ class Skill : public Usable
        * @param skillNode The JSON node containing the skill metadata to load.
        */
       Skill(Json::Value& skillNode);
-
 };
 
 #endif

@@ -16,6 +16,7 @@ const char* Character::ARCHETYPE_ATTRIBUTE = "archetype";
 const char* Character::NAME_ATTRIBUTE = "name";
 
 const char* Character::STATS_ELEMENT = "Stats";
+const char* Character::SKILLS_ELEMENT = "Skills";
 
 const char* Character::MAX_HP_ATTRIBUTE = "maxHP";
 const char* Character::HP_ATTRIBUTE = "hp";
@@ -85,6 +86,7 @@ Character::Character(const GameContext& gameContext, Json::Value& charToLoad)
 
    parseStats(charToLoad);
    equipment.load(gameContext, charToLoad["Equipment"]);
+   parseSkills(charToLoad);
 }
 
 Character::~Character()
@@ -109,6 +111,21 @@ void Character::parseStats(Json::Value& statsDataContainer)
    intelligence = statsData[Character::INT_ATTRIBUTE].asInt();
 }
 
+void Character::parseSkills(Json::Value& skillsDataContainer)
+{
+   skills.clear();
+
+   DEBUG("Loading skills...");
+   Json::Value& skillListJson = skillsDataContainer[Character::SKILLS_ELEMENT];
+
+   for(int i = 0; i < skillListJson.size(); ++i)
+   {
+      int id = skillListJson[i].asInt();
+      DEBUG("Adding skill ID: %d", id);
+      skills.push_back(id);
+   }
+}
+
 Json::Value Character::serialize() const
 {
    Json::Value characterNode(Json::objectValue);
@@ -129,6 +146,15 @@ Json::Value Character::serialize() const
    statsNode[Character::INT_ATTRIBUTE] = intelligence;
 
    characterNode[Character::STATS_ELEMENT] = statsNode;
+
+   Json::Value skillsNode(Json::arrayValue);
+
+   for(SkillList::const_iterator iter = skills.begin(); iter != skills.end(); ++iter)
+   {
+      skillsNode.append(*iter);
+   }
+
+   characterNode[Character::SKILLS_ELEMENT] = skillsNode;
 
    equipment.serialize(characterNode["Equipment"]);
    
@@ -209,6 +235,11 @@ std::string Character::getSpritesheetId() const
 std::string Character::getPortraitPath() const
 {
    return portraitPath;
+}
+
+const SkillList& Character::getSkillList() const
+{
+   return skills;
 }
 
 EquipData& Character::getEquipment()

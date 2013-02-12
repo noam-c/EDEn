@@ -10,7 +10,10 @@
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
-class CharacterRoster;
+class CharacterDependentMenu;
+class GameContext;
+class PlayerData;
+class MenuShell;
 
 /**
  * A view model that allows a Rocket GUI to bind to player data.
@@ -21,24 +24,50 @@ class CharacterRoster;
  */
 class HomeViewModel : public Rocket::Controls::DataSource
 {
-   /** The character roster to expose to the GUI */
-   const CharacterRoster& characterRoster;
+   /** The game context managing the menu state */
+   GameContext& gameContext;
+
+   /** The player data containing the character roster to expose to the GUI */
+   PlayerData& playerData;
 
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter imageFormatter;
+
+   int selectedDestinationMenu;
+
+   void pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShell);
+   void pushCharacterDependentMenu(int optionIndex, int characterIndex, MenuShell* menuShell);
 
    public:
       /**
        * Constructor.
        *
-       * @param characterRoster The list of the player's characters.
+       * @param gameContext The game context managing the menu state.
+       * @param playerData The player data containing of the player's characters.
        */
-      HomeViewModel(const CharacterRoster& characterRoster);
+      HomeViewModel(GameContext& gameContext, PlayerData& characterRoster);
 
       /**
        * Destructor.
        */
       ~HomeViewModel();
+
+      /**
+       * Signals to the view model that a character was selected in the menu.
+       *
+       * @param slotIndex The character slot that was selected.
+       * @param menuShell The menu shell shared between the menus.
+       */
+      void selectCharacter(int slotIndex, MenuShell* menuShell);
+
+      /**
+       * Handles sidebar option click events by navigating to the
+       * appropriate menu.
+       *
+       * @param optionIndex The index of the sidebar option that was clicked.
+       * @param menuShell The menu shell shared between the menus.
+       */
+      void sidebarClicked(int optionIndex, MenuShell* menuShell);
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

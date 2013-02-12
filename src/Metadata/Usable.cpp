@@ -60,8 +60,13 @@ void Usable::loadScript(GameContext& gameContext)
 {
    if(usableScript == NULL)
    {
-      usableScript = gameContext.getScriptEngine().createItemScript(*this);
+      usableScript = createScript(gameContext);
    }
+}
+
+UsableScript* Usable::createScript(GameContext& gameContext)
+{
+   return gameContext.getScriptEngine().createItemScript(*this);
 }
 
 bool Usable::use(GameContext& gameContext)

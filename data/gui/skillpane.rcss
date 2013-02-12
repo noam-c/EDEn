@@ -1,0 +1,21 @@
+.skillGrid datagridheader
+{
+	height: 0px;
+	visibility: hidden;
+}
+
+.skillGrid datagridrow
+{
+   drag: drag-drop;
+}
+
+.skillGrid datagridcell
+{
+   margin: 0 10px;
+}
+
+.datagridimage
+{
+   width: 32px;
+   height: 32px;
+}

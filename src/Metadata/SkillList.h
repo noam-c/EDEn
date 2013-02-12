@@ -4,12 +4,12 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef ITEM_LIST_H
-#define ITEM_LIST_H
+#ifndef SKILL_LIST_H
+#define SKILL_LIST_H
 
 #include <vector>
 
-typedef unsigned int ItemId;
-typedef std::vector<std::pair<ItemId, int> > ItemList;
+typedef unsigned int SkillId;
+typedef std::vector<SkillId> SkillList;
 
 #endif

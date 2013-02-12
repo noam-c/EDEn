@@ -5,8 +5,14 @@
  */
 
 #include "Skill.h"
+#include "GameContext.h"
 
 Skill::Skill(Json::Value& skillNode) :
    Usable(skillNode)
 {
+}
+
+UsableScript* Skill::createScript(GameContext& gameContext)
+{
+   return gameContext.getScriptEngine().createSkillScript(*this);
 }

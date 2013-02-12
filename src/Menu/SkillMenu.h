@@ -4,15 +4,12 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef HOME_MENU_H
-#define HOME_MENU_H
+#ifndef SKILL_MENU_H
+#define SKILL_MENU_H
 
-#include <stack>
-#include <map>
-
-#include "MenuState.h"
+#include "CharacterDependentMenu.h"
 #include "EdenRocketBindings.h"
-#include "HomeViewModel.h"
+#include "SkillViewModel.h"
 
 namespace Rocket
 {
@@ -34,35 +31,30 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class HomeMenu: public MenuState
+class SkillMenu: public CharacterDependentMenu
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<HomeMenu> bindings;
+   EdenRocketBindings<SkillMenu> bindings;
 
    /** The player data */
    PlayerData& playerData;
 
-   /** The view model */
-   HomeViewModel homeViewModel;
+   /** The view model that exposes the inventory to the GUI */
+   SkillViewModel skillViewModel;
 
    /**
-    * Initializes the home menu pane and populates the sidebar.
+    * Initializes the skill menu pane and populates the sidebar.
     */
    void initialize();
 
-   /**
-    * @param event The click event that occurred in the party list.
-    */
-   void characterClicked(Rocket::Core::Event* event);
-
    protected:
       /**
-       * Activates the home menu and reveals the home pane.
+       * Activates the data menu and reveals the data pane.
        */
       void activate();
 
       /**
-       * Deactivates the home menu and hides the home pane.
+       * Deactivates the data menu and hides the data pane.
        */
       void deactivate();
 
@@ -73,29 +65,26 @@ class HomeMenu: public MenuState
        * @param gameContext The context containing the current player data and execution stack.
        * @param playerData The player data that the menu will display.
        */
-      HomeMenu(GameContext& gameContext, PlayerData& playerData);
+      SkillMenu(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
        *
        * @param gameContext The context containing the current player data and execution stack.
        * @param playerData The player data that the menu will display.
-       * @param menuShell The shell for the menu
+       * @param menuShell The shell for the menu.
        */
-      HomeMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell);
+      SkillMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell);
 
       /**
        * Destructor.
        */
-      ~HomeMenu();
+      ~SkillMenu();
 
-      /**
-       * Handles sidebar option click events by navigating to the
-       * appropriate menu.
-       *
-       * @param optionIndex The index of the sidebar option that was clicked.
-       */
-      void sidebarClicked(int optionIndex);
+      void setCharacter(int characterIndex);
+
+      void skillClicked(Rocket::Core::Event* event);
+      void dragStarted(Rocket::Core::Event* event);
 };
 
 #endif

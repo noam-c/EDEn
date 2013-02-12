@@ -339,6 +339,11 @@ UsableScript* ScriptEngine::createItemScript(const Item& item) const
    return ScriptFactory::getItemScript(luaVM, item);
 }
 
+UsableScript* ScriptEngine::createSkillScript(const Skill& skill) const
+{
+   return ScriptFactory::getSkillScript(luaVM, skill);
+}
+
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)
 {
    Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);
