@@ -8,8 +8,8 @@
 #define ITEM_LIST_H
 
 #include <vector>
+#include "UsableId.h"
 
-typedef unsigned int ItemId;
-typedef std::vector<std::pair<ItemId, int> > ItemList;
+typedef std::vector<std::pair<UsableId, int> > ItemList;
 
 #endif

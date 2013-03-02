@@ -9,6 +9,7 @@
 
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
+#include "UsableId.h"
 
 class Character;
 class GameContext;
@@ -50,7 +51,9 @@ class SkillViewModel : public Rocket::Controls::DataSource
 
       void useSkill(int rowIndex);
 
-      int getSkillId(int rowIndex) const;
+      UsableId getSkillId(int rowIndex) const;
+
+      std::string getCurrentCharacterId() const;
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

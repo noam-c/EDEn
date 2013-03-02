@@ -4,12 +4,9 @@
  *  Copyright (C) 2007-2012 Noam Chitayat. All rights reserved.
  */
 
-#ifndef SKILL_LIST_H
-#define SKILL_LIST_H
+#ifndef USABLE_ID_H
+#define USABLE_ID_H
 
-#include <vector>
-#include "UsableId.h"
-
-typedef std::vector<UsableId> SkillList;
+typedef unsigned int UsableId;
 
 #endif

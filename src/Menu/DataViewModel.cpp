@@ -6,6 +6,7 @@
 
 #include "DataViewModel.h"
 #include "PlayerData.h"
+#include "PlayerDataSummary.h"
 #include "CharacterRoster.h"
 #include "Character.h"
 
@@ -35,7 +36,7 @@ void DataViewModel::saveToSlot(int slotIndex)
 
 void DataViewModel::clearSaveGameList()
 {
-   std::vector<std::pair<std::string, PlayerData*> >::iterator iter;
+   std::vector<std::pair<std::string, PlayerDataSummary*> >::iterator iter;
    for(iter = saveGames.begin(); iter != saveGames.end(); ++iter)
    {
       delete iter->second;
@@ -63,13 +64,13 @@ void DataViewModel::refreshSaveGames()
       std::string filename(entry->d_name);
       if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".edd")
       {
-         PlayerData* data = new PlayerData(gameContext);
+         PlayerDataSummary* saveGameData = new PlayerDataSummary(gameContext);
 
          /** \todo Extract HARDCODED path into a constant. */
          std::string path = "data/savegames/" + filename;
-         data->load(path);
+         saveGameData->load(path);
 
-         saveGames.push_back(std::make_pair(path, data));
+         saveGames.push_back(std::make_pair(path, saveGameData));
       }
    }
 
@@ -80,7 +81,7 @@ void DataViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   PlayerData* saveGameData = saveGames[row_index].second;
+   PlayerDataSummary* saveGameData = saveGames[row_index].second;
    const std::vector<Character*> characters = saveGameData->getRoster()->getParty();
 
    if (table == "saveGames")

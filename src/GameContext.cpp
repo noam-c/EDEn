@@ -52,12 +52,12 @@ GameState::GameStateType GameContext::getCurrentStateType() const
    return GameState::UNKNOWN;
 }
 
-Item* GameContext::getItem(ItemId itemId) const
+Item* GameContext::getItem(UsableId itemId) const
 {
    return metadata.getItem(itemId);
 }
 
-Skill* GameContext::getSkill(SkillId skillId) const
+Skill* GameContext::getSkill(UsableId skillId) const
 {
    return metadata.getSkill(skillId);
 }

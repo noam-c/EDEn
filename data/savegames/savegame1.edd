@@ -104,10 +104,33 @@
 			"quantity" : 10
 		}
 	],
-	"Shortcuts" :
-	[
-	   1,2
-	],
+	"Shortcuts" : 
+   [
+      {
+         "character" : "kain",
+         "id" : 2,
+         "type" : 2
+      },
+      {
+         "id" : 1,
+         "type" : 1
+      },
+      {
+         "character" : "kain",
+         "id" : 1,
+         "type" : 2
+      },
+      {
+         "id" : 2,
+         "type" : 1
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+   ],
 	"Quest" : 
 	{
 		"Quest" : 

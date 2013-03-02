@@ -2,14 +2,14 @@ function canUse()
    return true;
 end
 
-function onMenuUse()
-   print('Casting Heal in the menu.')
+function onMenuUse(character)
+   print(character:getName() .. ' is casting Heal in the menu.')
 end
 
-function onFieldUse()
-   say('Casting Heal in the field.')
+function onFieldUse(character)
+   say(character:getName() .. ' is casting Heal in the field.')
 end
 
-function onBattleUse()
-   print('Casting Heal in battle.')
+function onBattleUse(character)
+   print(character:getName() .. ' is casting Heal in battle.')
 end

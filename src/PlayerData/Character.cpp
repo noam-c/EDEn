@@ -7,6 +7,7 @@
 #include "Character.h"
 #include "json.h"
 #include <fstream>
+#include <algorithm>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
@@ -240,6 +241,24 @@ std::string Character::getPortraitPath() const
 const SkillList& Character::getSkillList() const
 {
    return skills;
+}
+
+bool Character::hasSkill(UsableId skillId) const
+{
+   SkillList::const_iterator skillIter = std::find(skills.begin(), skills.end(), skillId);
+   return skillIter != skills.end();
+}
+
+bool Character::addSkill(UsableId skillId)
+{
+   if(hasSkill(skillId))
+   {
+      // Skill was already added
+      return false;
+   }
+
+   skills.push_back(skillId);
+   return true;
 }
 
 EquipData& Character::getEquipment()

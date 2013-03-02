@@ -12,6 +12,7 @@
 
 class GameContext;
 class PlayerData;
+class PlayerDataSummary;
 
 /**
  * A view model that allows a Rocket GUI to bind to the player's saved games.
@@ -31,7 +32,7 @@ class DataViewModel : public Rocket::Controls::DataSource
    const ImageFormatter imageFormatter;
 
    /** The list of savegame files and their respective data. */
-   std::vector<std::pair<std::string, PlayerData*> > saveGames;
+   std::vector<std::pair<std::string, PlayerDataSummary*> > saveGames;
 
    /**
     * Clears the list of savegames.

@@ -52,7 +52,7 @@ void SkillViewModel::useSkill(int rowIndex)
    }
 
    const SkillList& skillList = selectedCharacter->getSkillList();
-   const SkillId skillId = skillList[rowIndex];
+   const UsableId skillId = skillList[rowIndex];
    Skill* skill = gameContext.getSkill(skillId);
    if(skill == NULL)
    {
@@ -60,12 +60,12 @@ void SkillViewModel::useSkill(int rowIndex)
    }
    else
    {
-      skill->use(gameContext);
+      skill->use(gameContext, selectedCharacter);
       NotifyRowChange("skills", rowIndex, 1);
    }
 }
 
-int SkillViewModel::getSkillId(int rowIndex) const
+UsableId SkillViewModel::getSkillId(int rowIndex) const
 {
    if(selectedCharacter == NULL)
    {
@@ -74,6 +74,16 @@ int SkillViewModel::getSkillId(int rowIndex) const
 
    const SkillList& skillList = selectedCharacter->getSkillList();
    return skillList[rowIndex];
+}
+
+std::string SkillViewModel::getCurrentCharacterId() const
+{
+   if(selectedCharacter != NULL)
+   {
+      return selectedCharacter->getId();
+   }
+
+   return "";
 }
 
 void SkillViewModel::GetRow(Rocket::Core::StringList& row,
@@ -90,7 +100,7 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
       const SkillList& skillList = selectedCharacter->getSkillList();
       for (int i = 0; i < columns.size(); ++i)
       {
-         const SkillId skillId = skillList[row_index];
+         const UsableId skillId = skillList[row_index];
          const Skill* rowSkill = gameContext.getSkill(skillId);
          if (columns[i] == "name")
          {

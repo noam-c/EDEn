@@ -30,6 +30,7 @@ set(HEADERS
   src/Metadata/Skill.h
   src/Metadata/SkillList.h
   src/Metadata/Usable.h
+  src/Metadata/UsableId.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
   src/Menu/CharacterDependentMenu.h
@@ -54,10 +55,12 @@ set(HEADERS
   src/PlayerData/CharacterRoster.h
   src/PlayerData/LuaCharacterRoster.h
   src/PlayerData/PlayerData.h
+  src/PlayerData/PlayerDataSummary.h
   src/PlayerData/EquipData.h
   src/PlayerData/EquipSlot.h
   src/PlayerData/Inventory.h
   src/PlayerData/LuaInventory.h
+  src/PlayerData/Shortcut.h
   src/PlayerData/Quest.h
   src/PlayerData/LuaQuest.h
   src/PlayerData/Messages/RosterUpdateMessage.h
@@ -154,12 +157,14 @@ set(SOURCES
   src/PlayerData/LuaCharacter.cpp
   src/PlayerData/LuaCharacterRoster.cpp
   src/PlayerData/PlayerData.cpp
+  src/PlayerData/PlayerDataSummary.cpp
   src/PlayerData/Quest.cpp
   src/PlayerData/LuaQuest.cpp
   src/PlayerData/EquipData.cpp
   src/PlayerData/EquipSlot.cpp
   src/PlayerData/Inventory.cpp
   src/PlayerData/LuaInventory.cpp
+  src/PlayerData/Shortcut.cpp
   src/PlayerData/Messages/RosterUpdateMessage.cpp
   src/ResourceLoader/Resource.cpp
   src/ResourceLoader/ResourceLoader.cpp

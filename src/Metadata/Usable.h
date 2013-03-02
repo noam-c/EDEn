@@ -8,6 +8,7 @@
 #define USABLE_H
 
 #include <string>
+#include "UsableId.h"
 
 namespace Json
 {
@@ -16,6 +17,7 @@ namespace Json
 
 class GameContext;
 class UsableScript;
+class Character;
 
 /**
  * Metadata for an usable. Since currently, all the games usables are non-customizable (no 'unique' usables),
@@ -25,7 +27,7 @@ class UsableScript;
 class Usable
 {
    /** The unique identifier of this usable. */
-   const int id;
+   const UsableId id;
    
    /** The name of this usable. */
    const std::string name;
@@ -52,12 +54,12 @@ class Usable
       /**
        * Destructor.
        */
-      ~Usable();
+      virtual ~Usable();
 
       /**
        * @return The unique identifier of this usable.
        */
-      const int getId() const;
+      UsableId getId() const;
       
       /**
        * @return The name of this usable.
@@ -69,7 +71,7 @@ class Usable
        */
       const std::string& getIconPath() const;
 
-      bool use(GameContext& gameContext);
+      virtual bool use(GameContext& gameContext, Character* usingCharacter = NULL);
 };
 
 #endif

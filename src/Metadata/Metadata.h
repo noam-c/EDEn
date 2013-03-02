@@ -9,6 +9,7 @@
 
 #include <map>
 #include <string>
+#include "UsableId.h"
 
 namespace Json
 {
@@ -18,8 +19,6 @@ namespace Json
 class GameContext;
 typedef class Usable Item;
 class Skill;
-typedef unsigned int ItemId;
-typedef unsigned int SkillId;
 
 /**
  * A global map holding all the item and skill metadata
@@ -30,10 +29,10 @@ typedef unsigned int SkillId;
 class Metadata
 {
    /** A map of all the items, mapped by Item ID. */
-   std::map<ItemId, Item*> items;
+   std::map<UsableId, Item*> items;
 
    /** A map of all the skills, mapped by Skill ID. */
-   std::map<SkillId, Skill*> skills;
+   std::map<UsableId, Skill*> skills;
 
    Json::Value loadMetadataTable(const char* filePath);
 
@@ -58,14 +57,14 @@ class Metadata
        *
        * @return The metadata for the item with the specified ID.
        */
-      Item* getItem(ItemId key) const;
+      Item* getItem(UsableId key) const;
 
       /**
        * @param key The ID of the skill metadata to be retrieved.
        *
        * @return The metadata for the skill with the specified ID.
        */
-      Skill* getSkill(SkillId key) const;
+      Skill* getSkill(UsableId key) const;
 };
 
 #endif

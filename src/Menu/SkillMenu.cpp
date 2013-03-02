@@ -97,9 +97,11 @@ void SkillMenu::dragStarted(Rocket::Core::Event* event)
          Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
          if(rowElement != NULL)
          {
-            int skillIndex = rowElement->GetParentRelativeIndex();
-            int skillId = skillViewModel.getSkillId(skillIndex);
-            dragElement->SetAttribute("skillId", skillId);
+            const int skillIndex = rowElement->GetParentRelativeIndex();
+            const UsableId skillId = skillViewModel.getSkillId(skillIndex);
+            const std::string characterId = skillViewModel.getCurrentCharacterId();
+            dragElement->SetAttribute("skillId", static_cast<int>(skillId));
+            dragElement->SetAttribute("characterId", characterId.c_str());
             DEBUG("Dragging skill %d.", skillId);
          }
       }

@@ -5,9 +5,12 @@
  */
 
 #include "PlayerData.h"
+#include "GameContext.h"
 #include "Character.h"
 #include "Metadata.h"
 #include "Item.h"
+#include "Skill.h"
+#include "Shortcut.h"
 #include <fstream>
 #include "json.h"
 
@@ -19,14 +22,15 @@ const char* PlayerData::CHARACTER_ELEMENT = "Character";
 
 const char* PlayerData::SHORTCUTS_ELEMENT = "Shortcuts";
 
-const char* PlayerData::SAVE_STATE_ELEMENT = "CurrentLocation";
+const char* PlayerData::SAVE_LOCATION_ELEMENT = "CurrentLocation";
 const char* PlayerData::CHAPTER_ATTRIBUTE = "chapter";
 const char* PlayerData::REGION_ATTRIBUTE = "region";
 const char* PlayerData::MAP_ATTRIBUTE = "map";
 const char* PlayerData::X_ATTRIBUTE = "x";
 const char* PlayerData::Y_ATTRIBUTE = "y";
 
-PlayerData::PlayerData(const GameContext& gameContext) :
+PlayerData::PlayerData(GameContext& gameContext) :
+   gameContext(gameContext),
    roster(gameContext),
    rootQuest(std::string("root")),
    shortcutList(PlayerData::SHORTCUT_BAR_SIZE, 0)
@@ -69,7 +73,7 @@ void PlayerData::clearMessagePipe()
    bindMessagePipe(NULL);
 }
 
-const std::string& PlayerData::getFilePath()
+const std::string& PlayerData::getFilePath() const
 {
    return filePath;
 }
@@ -142,16 +146,14 @@ void PlayerData::parseShortcuts(Json::Value& rootElement)
 {
    // Make sure that the shortcut bar vector is properly sized and initialized.
    shortcutList.clear();
-   shortcutList.resize(PlayerData::SHORTCUT_BAR_SIZE, 0);
+   shortcutList.resize(PlayerData::SHORTCUT_BAR_SIZE, Shortcut::getEmptyShortcut());
 
    DEBUG("Loading shortcuts");
    Json::Value& shortcutListJson = rootElement[PlayerData::SHORTCUTS_ELEMENT];
 
    for(int i = 0; i < PlayerData::SHORTCUT_BAR_SIZE && i < shortcutListJson.size(); ++i)
    {
-      int id = shortcutListJson[i].asInt();
-      DEBUG("Loading shortcut with item ID: %d", id);
-      shortcutList[i] = id;
+      shortcutList[i].load(shortcutListJson[i]);
    }
 }
 
@@ -160,14 +162,17 @@ void PlayerData::serializeShortcuts(Json::Value& outputJson) const
    Json::Value shortcutNode(Json::arrayValue);
    for(ShortcutList::const_iterator iter = shortcutList.begin(); iter != shortcutList.end(); ++iter)
    {
-      int itemNumber = *iter;
-      shortcutNode.append(itemNumber);
+      shortcutNode.append(iter->serialize());
    }
 
    int remainingShortcutSlotCount = PlayerData::SHORTCUT_BAR_SIZE - shortcutNode.size();
-   for(int i = 0; i < remainingShortcutSlotCount; ++i)
+   if(remainingShortcutSlotCount > 0)
    {
-      shortcutNode.append(0);
+      const Json::Value emptyShortcutJson = Shortcut::getEmptyShortcut().serialize();
+      for(int i = 0; i < remainingShortcutSlotCount; ++i)
+      {
+         shortcutNode.append(emptyShortcutJson);
+      }
    }
 
    outputJson[PlayerData::SHORTCUTS_ELEMENT] = shortcutNode;
@@ -175,7 +180,7 @@ void PlayerData::serializeShortcuts(Json::Value& outputJson) const
 
 void PlayerData::parseLocation(Json::Value& rootElement)
 {
-   Json::Value& location = rootElement[PlayerData::SAVE_STATE_ELEMENT];
+   Json::Value& location = rootElement[PlayerData::SAVE_LOCATION_ELEMENT];
    if(!location.isNull())
    {
       DEBUG("Loading current location data...");
@@ -233,12 +238,12 @@ const Inventory* PlayerData::getInventory() const
    return &inventory;
 }
 
-int PlayerData::getShortcut(int index) const
+const Shortcut& PlayerData::getShortcut(int index) const
 {
    return shortcutList[index];
 }
 
-void PlayerData::setShortcut(int index, int itemId)
+void PlayerData::setShortcut(int index, Shortcut& shortcut)
 {
    if (index < 0 || index >= PlayerData::SHORTCUT_BAR_SIZE)
    {
@@ -246,12 +251,52 @@ void PlayerData::setShortcut(int index, int itemId)
       return;
    }
 
-   shortcutList[index] = itemId;
+   shortcutList[index] = Shortcut(shortcut);
+}
+
+void PlayerData::setShortcut(int index, UsableId itemId)
+{
+   Shortcut shortcut(itemId);
+   setShortcut(index, shortcut);
+}
+
+void PlayerData::setShortcut(int index, UsableId skillId, const std::string& characterId)
+{
+   if(!characterId.empty() && roster.getCharacter(characterId) != NULL)
+   {
+      Shortcut shortcut(skillId, characterId);
+      setShortcut(index, shortcut);
+   }
 }
 
 void PlayerData::clearShortcut(int index)
 {
-   setShortcut(index, 0);
+   Shortcut emptyShortcut = Shortcut::getEmptyShortcut();
+   setShortcut(index, emptyShortcut);
+}
+
+bool PlayerData::invokeShortcut(int index)
+{
+   const Shortcut& shortcut = getShortcut(index);
+   if(shortcut.usableType == Shortcut::ITEM)
+   {
+      Item* item = gameContext.getItem(shortcut.usableId);
+      if(item != NULL)
+      {
+         return item->use(gameContext);
+      }
+   }
+   else if(shortcut.usableType == Shortcut::SKILL)
+   {
+      Skill* skill = gameContext.getSkill(shortcut.usableId);
+      Character* usingCharacter = roster.getCharacter(shortcut.characterId);
+      if(skill != NULL && usingCharacter != NULL)
+      {
+         return skill->use(gameContext, usingCharacter);
+      }
+   }
+
+   return false;
 }
 
 CharacterRoster* PlayerData::getRoster()

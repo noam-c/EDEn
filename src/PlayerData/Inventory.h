@@ -38,7 +38,7 @@ class Inventory
     * @param itemId The item ID to search for.
     * @return An iterator to the requested item entry, or items.end() if no item was found.
     */
-   ItemList::const_iterator findItem(int itemId) const;
+   ItemList::const_iterator findItem(UsableId itemId) const;
 
    /**
     * Searches the inventory for the item quantity of the specified item ID.

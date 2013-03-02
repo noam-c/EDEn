@@ -185,6 +185,18 @@ class Character
       const SkillList& getSkillList() const;
 
       /**
+       * @return The list of the character's skills.
+       */
+      bool hasSkill(UsableId skillId) const;
+
+      /**
+       * Adds a skill to the character.
+       *
+       * @param skillId The ID of the skill to add.
+       */
+      bool addSkill(UsableId skillId);
+
+      /**
        * Sets a piece of equipment, and changes the character's stat bonuses accordingly.
        *
        * @param slot The equipment slot to equip.

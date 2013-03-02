@@ -24,12 +24,12 @@ Metadata::Metadata(GameContext& gameContext)
 
 Metadata::~Metadata()
 {
-   for(std::map<ItemId, Item*>::iterator iter = items.begin(); iter != items.end(); ++iter)
+   for(std::map<UsableId, Item*>::iterator iter = items.begin(); iter != items.end(); ++iter)
    {
       delete iter->second;
    }
 
-   for(std::map<SkillId, Skill*>::iterator iter = skills.begin(); iter != skills.end(); ++iter)
+   for(std::map<UsableId, Skill*>::iterator iter = skills.begin(); iter != skills.end(); ++iter)
    {
       delete iter->second;
    }
@@ -92,9 +92,9 @@ void Metadata::loadSkillMetadata()
    DEBUG("Skill data loaded.");
 }
 
-Item* Metadata::getItem(ItemId key) const
+Item* Metadata::getItem(UsableId key) const
 {
-   std::map<ItemId, Item*>::const_iterator itemIterator = items.find(key);
+   std::map<UsableId, Item*>::const_iterator itemIterator = items.find(key);
    if(itemIterator != items.end())
    {
       return itemIterator->second;
@@ -103,9 +103,9 @@ Item* Metadata::getItem(ItemId key) const
    return NULL;
 }
 
-Skill* Metadata::getSkill(SkillId key) const
+Skill* Metadata::getSkill(UsableId key) const
 {
-   std::map<SkillId, Skill*>::const_iterator skillIterator = skills.find(key);
+   std::map<UsableId, Skill*>::const_iterator skillIterator = skills.find(key);
    if(skillIterator != skills.end())
    {
       return skillIterator->second;

@@ -12,6 +12,7 @@
 #include "Script.h"
 
 class Usable;
+class Character;
 
 /**
  * An <code>UsableScript</code> holds functions that determine <code>Usable</code> behaviour.
@@ -58,12 +59,13 @@ class UsableScript : public Script
    /**
     * Call a function on this usable's script.
     *
-    * @param function the function to call
+    * @param function The function to call
+    * @param usingCharacter The character using the usable for this call.
     *
     * @return true iff the script runs to completion, false if the coroutine
     *         yielded, or there was an error in execution.
     */
-   bool callFunction(UsableFunction function);
+   bool callFunction(UsableFunction function, Character* usingCharacter = NULL);
 
    public:
       /**
@@ -82,13 +84,13 @@ class UsableScript : public Script
       /**
        * Destructor.
        */
-      ~UsableScript();
+      virtual ~UsableScript();
 
-      bool onMenuUse();
+      bool onMenuUse(Character* usingCharacter = NULL);
 
-      bool onFieldUse();
+      bool onFieldUse(Character* usingCharacter = NULL);
 
-      bool onBattleUse();
+      bool onBattleUse(Character* usingCharacter = NULL);
 };
 
 #endif

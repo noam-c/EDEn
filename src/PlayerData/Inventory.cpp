@@ -71,7 +71,7 @@ Json::Value Inventory::serialize() const
    return inventoryNode;
 }
 
-ItemList::const_iterator Inventory::findItem(int itemId) const
+ItemList::const_iterator Inventory::findItem(UsableId itemId) const
 {
    ItemList::const_iterator itemIter;
    for(itemIter = items.begin(); itemIter != items.end(); ++itemIter)

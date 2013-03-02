@@ -78,9 +78,10 @@
 		}
 	],
    "Shortcuts" :
-   [
-      2
-   ],
+   [{
+      "id" : 2,
+      "type" : 1
+   }],
 	"Quest" : 
 	{
 		"Quest" : 

@@ -41,7 +41,7 @@ Usable::~Usable()
    }
 }
 
-const int Usable::getId() const
+UsableId Usable::getId() const
 {
    return id;
 }
@@ -69,18 +69,18 @@ UsableScript* Usable::createScript(GameContext& gameContext)
    return gameContext.getScriptEngine().createItemScript(*this);
 }
 
-bool Usable::use(GameContext& gameContext)
+bool Usable::use(GameContext& gameContext, Character* usingCharacter)
 {
    loadScript(gameContext);
 
    switch(gameContext.getCurrentStateType())
    {
       case GameState::MENU:
-         return usableScript->onMenuUse();
+         return usableScript->onMenuUse(usingCharacter);
       case GameState::FIELD:
-         return usableScript->onFieldUse();
+         return usableScript->onFieldUse(usingCharacter);
       case GameState::BATTLE:
-         return usableScript->onBattleUse();
+         return usableScript->onBattleUse(usingCharacter);
    }
 
    DEBUG("Usable used in an unrecognized game state type. Usable script will not run.");

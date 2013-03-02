@@ -21,6 +21,8 @@ class Skill : public Usable
        * @param skillNode The JSON node containing the skill metadata to load.
        */
       Skill(Json::Value& skillNode);
+
+      bool use(GameContext& gameContext, Character* usingCharacter);
 };
 
 #endif

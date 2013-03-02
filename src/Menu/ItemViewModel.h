@@ -9,6 +9,7 @@
 
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
+#include "UsableId.h"
 
 class GameContext;
 class PlayerData;
@@ -45,7 +46,7 @@ class ItemViewModel : public Rocket::Controls::DataSource
 
       void useItem(int rowIndex);
 
-      int getItemId(int rowIndex) const;
+      UsableId getItemId(int rowIndex) const;
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

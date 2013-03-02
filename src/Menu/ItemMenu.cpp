@@ -93,8 +93,8 @@ void ItemMenu::dragStarted(Rocket::Core::Event* event)
          if(rowElement != NULL)
          {
             int itemIndex = rowElement->GetParentRelativeIndex();
-            int itemId = itemViewModel.getItemId(itemIndex);
-            dragElement->SetAttribute("itemId", itemId);
+            UsableId itemId = itemViewModel.getItemId(itemIndex);
+            dragElement->SetAttribute("itemId", static_cast<int>(itemId));
             DEBUG("Dragging item %d.", itemId);
          }
       }

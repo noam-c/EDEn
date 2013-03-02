@@ -106,7 +106,7 @@ UsableScript::~UsableScript()
    // lua_setglobal(luaStack, scriptPath.c_str());
 }
 
-bool UsableScript::callFunction(UsableFunction function)
+bool UsableScript::callFunction(UsableFunction function, Character* usingCharacter)
 {
    if(functionExists[function])
    {
@@ -122,24 +122,31 @@ bool UsableScript::callFunction(UsableFunction function)
       lua_pushstring(luaStack, functionName);
       lua_gettable(luaStack, -2);
 
+      int numArgs = 0;
+      if(usingCharacter != NULL)
+      {
+         luaW_push(luaStack, usingCharacter);
+         numArgs = 1;
+      }
+
       // Run the script
-      return runScript();
+      return runScript(numArgs);
    }
 
    return true;
 }
 
-bool UsableScript::onMenuUse()
+bool UsableScript::onMenuUse(Character* usingCharacter)
 {
-   return callFunction(MENU_USE);
+   return callFunction(MENU_USE, usingCharacter);
 }
 
-bool UsableScript::onFieldUse()
+bool UsableScript::onFieldUse(Character* usingCharacter)
 {
-   return callFunction(FIELD_USE);
+   return callFunction(FIELD_USE, usingCharacter);
 }
 
-bool UsableScript::onBattleUse()
+bool UsableScript::onBattleUse(Character* usingCharacter)
 {
-   return callFunction(BATTLE_USE);
+   return callFunction(BATTLE_USE, usingCharacter);
 }

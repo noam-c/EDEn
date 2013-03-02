@@ -10,10 +10,9 @@
  * can be forward declared in the product.
  */
 #include "GameState.h"
+#include "UsableId.h"
 
 typedef class Usable Item;
-typedef unsigned int ItemId;
-typedef unsigned int SkillId;
 class PlayerData;
 
 class GameContext
@@ -37,8 +36,8 @@ class GameContext
       PlayerData* getCurrentPlayerData() const;
       Scheduler* getCurrentScheduler() const;
       GameState::GameStateType getCurrentStateType() const;
-      Item* getItem(ItemId itemId) const;
-      Skill* getSkill(SkillId skillId) const;
+      Item* getItem(UsableId itemId) const;
+      Skill* getSkill(UsableId skillId) const;
 
       void setCurrentPlayerData(PlayerData* data);
 };

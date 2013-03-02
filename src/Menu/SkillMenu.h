@@ -10,6 +10,7 @@
 #include "CharacterDependentMenu.h"
 #include "EdenRocketBindings.h"
 #include "SkillViewModel.h"
+#include "UsableId.h"
 
 namespace Rocket
 {

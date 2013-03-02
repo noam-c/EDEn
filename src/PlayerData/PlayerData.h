@@ -13,6 +13,7 @@
 #include "CharacterRoster.h"
 #include "Inventory.h"
 #include "Quest.h"
+#include "UsableId.h"
 
 class Character;
 typedef class Usable Item;
@@ -41,7 +42,9 @@ struct SaveLocation
    int y;
 };
 
-typedef std::vector<int> ShortcutList;
+struct Shortcut;
+
+typedef std::vector<Shortcut> ShortcutList;
 
 /**
  * A model representing the player's game data, which includes
@@ -56,12 +59,15 @@ class PlayerData
 
    static const char* SHORTCUTS_ELEMENT;
 
-   static const char* SAVE_STATE_ELEMENT;
+   static const char* SAVE_LOCATION_ELEMENT;
    static const char* CHAPTER_ATTRIBUTE;
    static const char* REGION_ATTRIBUTE;
    static const char* MAP_ATTRIBUTE;
    static const char* X_ATTRIBUTE;
    static const char* Y_ATTRIBUTE;
+
+   /** The game context in which this player session was loaded */
+   GameContext& gameContext;
 
    /** The file from which this player data was last saved/loaded. */
    std::string filePath;
@@ -98,7 +104,9 @@ class PlayerData
 
    void parseLocation(Json::Value& rootElement);
    void serializeLocation(Json::Value& outputJson) const;
-    
+
+   void setShortcut(int index, Shortcut& shortcut);
+
    public:
       static const int PARTY_SIZE = 4;
       static const int SHORTCUT_BAR_SIZE = 10;
@@ -106,7 +114,7 @@ class PlayerData
       /**
        * Constructor.
        */
-      PlayerData(const GameContext& gameContext);
+      PlayerData(GameContext& gameContext);
 
       /**
        * Destructor.
@@ -134,7 +142,7 @@ class PlayerData
       /**
        * @return The file path that this player data was last associated with (saved to or loaded from).
        */
-      const std::string& getFilePath();
+      const std::string& getFilePath() const;
 
       /**
        * Load the player data from a file.
@@ -150,9 +158,11 @@ class PlayerData
        */
       void save(const std::string& path);
 
-      int getShortcut(int index) const;
-      void setShortcut(int index, int itemId);
+      const Shortcut& getShortcut(int index) const;
+      void setShortcut(int index, UsableId itemId);
+      void setShortcut(int index, UsableId itemId, const std::string& characterId);
       void clearShortcut(int index);
+      bool invokeShortcut(int index);
 
       const CharacterRoster* getRoster() const;
       const Inventory* getInventory() const;

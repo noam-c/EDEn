@@ -1,5 +1,6 @@
 quests:add('chapter1')
 kain = roster:createCharacter('kain')
+kain:addSkill(1)
 roster:addToParty(kain)
 narrate("Exodus Draconis", true)
 --narrate('Our story begins four centuries after the angels left this world.')

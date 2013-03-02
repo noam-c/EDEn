@@ -33,11 +33,11 @@ ItemViewModel::~ItemViewModel()
 void ItemViewModel::useItem(int rowIndex)
 {
    const ItemList& itemList = playerData.getInventory()->getItemList();
-   const ItemId itemId = itemList[rowIndex].first;
-   Item* item = gameContext.getItem(itemId);
+   const UsableId usableId = itemList[rowIndex].first;
+   Item* item = gameContext.getItem(usableId);
    if(item == NULL)
    {
-      DEBUG("Tried to use bad item with ID: %d.", itemId);
+      DEBUG("Tried to use bad item with ID: %d.", usableId);
    }
    else
    {
@@ -46,7 +46,7 @@ void ItemViewModel::useItem(int rowIndex)
    }
 }
 
-int ItemViewModel::getItemId(int rowIndex) const
+UsableId ItemViewModel::getItemId(int rowIndex) const
 {
    const ItemList& itemList = playerData.getInventory()->getItemList();
    return itemList[rowIndex].first;
@@ -61,14 +61,14 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
       const ItemList& itemList = playerData.getInventory()->getItemList();
       for (int i = 0; i < columns.size(); ++i)
       {
-         const ItemId itemId = itemList[row_index].first;
+         const UsableId usableId = itemList[row_index].first;
          const int itemQuantity = itemList[row_index].second;
-         const Item* rowItem = gameContext.getItem(itemId);
+         const Item* rowItem = gameContext.getItem(usableId);
          if (columns[i] == "name")
          {
             if(rowItem == NULL)
             {
-               row.push_back(Rocket::Core::String(13, "Unknown %d", itemId));
+               row.push_back(Rocket::Core::String(13, "Unknown %d", usableId));
             }
             else
             {

@@ -24,7 +24,7 @@ static int CharacterL_GetName(lua_State* luaVM)
    const int nargs = lua_gettop(luaVM);
    switch(nargs)
    {
-      case 2:
+      case 1:
       {
          const Character* character = luaW_to<Character>(luaVM, 1);
          if(character != NULL)
@@ -39,9 +39,33 @@ static int CharacterL_GetName(lua_State* luaVM)
    return 1;
 }
 
+static int CharacterL_AddSkill(lua_State* luaVM)
+{
+   bool success = false;
+   const int nargs = lua_gettop(luaVM);
+   Character* character;
+
+   if(nargs > 1)
+   {
+      character = luaW_to<Character>(luaVM, 1);
+      switch(nargs)
+      {
+         case 2:
+         {
+            success = character->addSkill(lua_tonumber(luaVM, 2));
+            break;
+         }
+      }
+   }
+
+   lua_pushboolean(luaVM, success);
+   return 1;
+}
+
 static luaL_reg characterMetatable[] =
 {
    { "getName", CharacterL_GetName },
+   { "addSkill", CharacterL_AddSkill },
    { NULL, NULL }
 };
 
