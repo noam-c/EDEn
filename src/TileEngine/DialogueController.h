@@ -99,7 +99,7 @@ class DialogueController
    
          /** The dialogue itself. */
          std::string dialogue;
-   
+
          /** The task ID waiting on this particular line of dialogue */
          Task* task;
    
@@ -189,7 +189,7 @@ class DialogueController
     * @param speech The speech to enqueue in the dialogue controller. 
     * @param task The ticket to be signalled when the line is finished
     */
-   void addLine(LineType type, const char* speech, Task* task);
+   void addLine(LineType type, const std::string& speech, Task* task);
 
    /**
     * Clears any dialogue currently being displayed onscreen.
@@ -238,7 +238,7 @@ class DialogueController
        * @param speech The dialogue that will be said.
        * @param task The ticket of this speech instruction
        */
-      void say(const char* speech, Task* task);
+      void say(const std::string& speech, Task* task);
    
       /**
        * Enqueue a line of speech narrated or thought by a character.
@@ -246,7 +246,7 @@ class DialogueController
        * @param speech The dialogue that will be narrated.
        * @param task The ticket of this narration instruction
        */
-      void narrate(const char* speech, Task* task);
+      void narrate(const std::string& speech, Task* task);
 
       /**
        * Enables or disables fast mode.

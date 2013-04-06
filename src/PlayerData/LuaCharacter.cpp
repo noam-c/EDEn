@@ -7,57 +7,36 @@
 #include "LuaCharacter.h"
 #include "Character.h"
 
-#include "LuaWrapper.hpp"
-
-// Include the Lua libraries. Since they are written in clean C, the functions
-// need to be included in this fashion to work with the C++ code.
-extern "C"
-{
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-}
+#include "ScriptUtilities.h"
 
 static int CharacterL_GetName(lua_State* luaVM)
 {
-   std::string name;
-   const int nargs = lua_gettop(luaVM);
-   switch(nargs)
+   const Character* character = luaW_check<Character>(luaVM, 1);
+   if(character == NULL)
    {
-      case 1:
-      {
-         const Character* character = luaW_to<Character>(luaVM, 1);
-         if(character != NULL)
-         {
-            name = character->getName();
-         }
-         break;
-      }
+      return lua_error(luaVM);
    }
 
+   std::string name = character->getName();
    lua_pushstring(luaVM, name.c_str());
    return 1;
 }
 
 static int CharacterL_AddSkill(lua_State* luaVM)
 {
-   bool success = false;
-   const int nargs = lua_gettop(luaVM);
-   Character* character;
-
-   if(nargs > 1)
+   Character* character = luaW_check<Character>(luaVM, 1);
+   if(character == NULL)
    {
-      character = luaW_to<Character>(luaVM, 1);
-      switch(nargs)
-      {
-         case 2:
-         {
-            success = character->addSkill(lua_tonumber(luaVM, 2));
-            break;
-         }
-      }
+      return lua_error(luaVM);
    }
 
+   int skillId;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "id", skillId))
+   {
+      return lua_error(luaVM);
+   }
+
+   bool success = character->addSkill(lua_tonumber(luaVM, 2));
    lua_pushboolean(luaVM, success);
    return 1;
 }

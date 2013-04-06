@@ -114,12 +114,12 @@ void TileEngine::receive(const MapExitMessage& message)
    }
 }
 
-void TileEngine::dialogueNarrate(const char* narration, Task* task)
+void TileEngine::dialogueNarrate(const std::string& narration, Task* task)
 {
    dialogue->narrate(narration, task);
 }
 
-void TileEngine::dialogueSay(const char* speech, Task* task)
+void TileEngine::dialogueSay(const std::string& speech, Task* task)
 {
    dialogue->say(speech, task);
 }

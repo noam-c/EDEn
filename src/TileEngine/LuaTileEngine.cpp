@@ -5,20 +5,11 @@
  */
 
 #include "LuaTileEngine.h"
+#include "ScriptUtilities.h"
 #include "TileEngine.h"
 #include "NPC.h"
 #include "Size.h"
 #include "Point2D.h"
-#include "LuaWrapper.hpp"
-
-// Include the Lua libraries. Since they are written in clean C, the functions
-// need to be included in this fashion to work with the C++ code.
-extern "C"
-{
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-}
 
 #include "DebugUtils.h"
 
@@ -28,31 +19,54 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
 {
    NPC* npc = NULL;
    
-   shapes::Size npcSize(32, 32);
-   int nargs = lua_gettop(luaVM);
-   
-   switch(nargs)
+   TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
+   if (tileEngine == NULL)
    {
-      case 7:
-      {
-         npcSize.width = lua_tointeger(luaVM, 6);
-         npcSize.height = lua_tointeger(luaVM, 7);
-      }
-      case 5:
-      {
-         TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-         if (tileEngine)
-         {
-            std::string npcName(lua_tostring(luaVM, 2));
-            std::string spritesheetName(lua_tostring(luaVM, 3));
-            shapes::Point2D npcLocation(lua_tointeger(luaVM, 4), lua_tointeger(luaVM, 5));
-
-            DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
-            DEBUG("NPC Location will be (%d, %d)", npcLocation.x, npcLocation.y);
-            npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize);
-         }
-      }
+      return lua_error(luaVM);
    }
+
+   std::string npcName;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "name", npcName))
+   {
+      return lua_error(luaVM);
+   }
+
+   std::string spritesheetName;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 2, "spritesheet", spritesheetName))
+   {
+      return lua_error(luaVM);
+   }
+
+   int x;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 3, "x", x))
+   {
+      return lua_error(luaVM);
+   }
+
+   int y;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 4, "y", y))
+   {
+      return lua_error(luaVM);
+   }
+
+   int width;
+   if(!ScriptUtilities::getParameter(luaVM, 2, -1, "width", width))
+   {
+      width = 32;
+   }
+
+   int height;
+   if(!ScriptUtilities::getParameter(luaVM, 2, -1, "height", height))
+   {
+      height = 32;
+   }
+
+   DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
+   DEBUG("NPC Location will be (%d, %d)", x, y);
+
+   const shapes::Point2D npcLocation(x, y);
+   const shapes::Size npcSize(width, height);
+   npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize);
    
    luaW_push<Actor>(luaVM, npc);
    return 1;
@@ -60,22 +74,19 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
 
 static int TileEngineL_GetNPC(lua_State* luaVM)
 {
-   NPC* npc = NULL;
-   int nargs = lua_gettop(luaVM);
-   
-   switch(nargs)
+   TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
+   if (tileEngine == NULL)
    {
-      case 5:
-      {
-         TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-         if (tileEngine)
-         {
-            std::string npcName(lua_tostring(luaVM, 2));
-            npc = tileEngine->getNPC(npcName);
-         }
-      }
+      return lua_error(luaVM);
    }
 
+   std::string npcName;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "name", npcName))
+   {
+      return lua_error(luaVM);
+   }
+   
+   NPC* npc = tileEngine->getNPC(npcName);
    luaW_push<NPC>(luaVM, npc);
    return 1;
 }
@@ -83,14 +94,19 @@ static int TileEngineL_GetNPC(lua_State* luaVM)
 static int TileEngineL_TilesToPixels(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-   if (tileEngine)
+   if (tileEngine == NULL)
    {
-      int tileNum = luaL_checknumber(luaVM, 2);
-      lua_pushnumber(luaVM, TileEngine::TILE_SIZE * tileNum);
-      return 1;
+      return lua_error(luaVM);
    }
 
-   return 0;
+   int tileNum;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "tiles", tileNum))
+   {
+      return lua_error(luaVM);
+   }
+
+   lua_pushnumber(luaVM, TileEngine::TILE_SIZE * tileNum);
+   return 1;
 }
 
 static luaL_reg tileEngineMetatable[] =

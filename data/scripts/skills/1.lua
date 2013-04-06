@@ -7,7 +7,7 @@ function onMenuUse(character)
 end
 
 function onFieldUse(character)
-   say(character:getName() .. ' is casting Heal in the field.')
+   say{character:getName() .. ' is casting Heal in the field.'}
 end
 
 function onBattleUse(character)

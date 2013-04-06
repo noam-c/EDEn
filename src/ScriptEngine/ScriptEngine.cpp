@@ -17,6 +17,7 @@
 #include "FileScript.h"
 #include "StringScript.h"
 #include "ScriptFactory.h"
+#include "ScriptUtilities.h"
 
 #include "LuaPlayerCharacter.h"
 #include "LuaActor.h"
@@ -130,7 +131,6 @@ void ScriptEngine::setPlayerData(PlayerData* playerData)
       lua_setglobal(luaVM, "roster");
    }
 }
-
 int ScriptEngine::narrate(lua_State* luaStack)
 {
    Scheduler* scheduler = gameContext.getCurrentScheduler();
@@ -139,28 +139,29 @@ int ScriptEngine::narrate(lua_State* luaStack)
       return 0;
    }
 
-   int nargs = lua_gettop(luaStack);
-   bool waitForFinish = false;
+   std::string text;
+   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "text", text))
+   {
+      DEBUG("Text not found. Cannot add dialogue.");
+      return lua_error(luaStack);
+   }
+
+   bool waitForFinish;
+   if(!ScriptUtilities::getParameter(luaStack, 1, -1, "waitForFinish", waitForFinish))
+   {
+      waitForFinish = false;
+   }
 
    int callResult = 0;
 
-   if(nargs > 0)
+   Task* task = Task::getNextTask(*scheduler);
+   if(waitForFinish)
    {
-      const char* speech = lua_tostring(luaStack, 1);
-      if(nargs == 2)
-      {
-         waitForFinish = (lua_toboolean(luaStack, 2) == 1);
-      }
-
-      Task* task = Task::getNextTask(*scheduler);
-      if(waitForFinish)
-      {
-         callResult = scheduler->block(task);
-      }
-
-      DEBUG("Narrating text: %s", speech);
-      tileEngine->dialogueNarrate(speech, task);
+      callResult = scheduler->block(task);
    }
+
+   DEBUG("Narrating text: %s", text.c_str());
+   tileEngine->dialogueNarrate(text, task);
 
    return callResult;
 }
@@ -173,28 +174,29 @@ int ScriptEngine::say(lua_State* luaStack)
       return 0;
    }
 
-   int nargs = lua_gettop(luaStack);
-   bool waitForFinish = false;
+   std::string text;
+   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "text", text))
+   {
+      DEBUG("Text not found. Cannot add dialogue.");
+      return lua_error(luaStack);
+   }
+
+   bool waitForFinish;
+   if(!ScriptUtilities::getParameter(luaStack, 1, -1, "waitForFinish", waitForFinish))
+   {
+      waitForFinish = false;
+   }
 
    int callResult = 0;
 
-   if(nargs > 0)
+   Task* task = Task::getNextTask(*scheduler);
+   if(waitForFinish)
    {
-      const char* speech = lua_tostring(luaStack, 1);
-      if(nargs == 2)
-      {
-         waitForFinish = (lua_toboolean(luaStack, 2) == 1);
-      }
-
-      Task* task = Task::getNextTask(*scheduler);
-      if(waitForFinish)
-      {
-         callResult = scheduler->block(task);
-      }
-
-      DEBUG("Saying text: %s", speech);
-      tileEngine->dialogueSay(speech, task);
+      callResult = scheduler->block(task);
    }
+
+   DEBUG("Saying text: %s", text.c_str());
+   tileEngine->dialogueSay(text, task);
 
    return callResult;
 }
@@ -207,29 +209,29 @@ int ScriptEngine::playSound(lua_State* luaStack)
       return 0;
    }
 
-   int nargs = lua_gettop(luaStack);
-   bool waitForFinish = false;
-
-   if(nargs > 0)
+   std::string soundId;
+   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "id", soundId))
    {
-      std::string soundName(lua_tostring(luaStack, 1));
-      DEBUG("Playing sound: %s", soundName.c_str());
+      DEBUG("Sound ID not found. Cannot play sound.");
+      return lua_error(luaStack);
+   }
 
-      if(nargs == 2)
-      {
-         waitForFinish = (lua_toboolean(luaStack, 2) == 1);
-      }
+   bool waitForFinish;
+   if(!ScriptUtilities::getParameter(luaStack, 1, -1, "waitForFinish", waitForFinish))
+   {
+      waitForFinish = false;
+   }
 
-      Task* task = Task::getNextTask(*scheduler);
+   DEBUG("Playing sound: %s", soundId.c_str());
 
-      DEBUG("Playing sound: %s", soundName.c_str());
-      Sound* sound = ResourceLoader::getSound(soundName);
-      sound->play(task);
+   Task* task = Task::getNextTask(*scheduler);
 
-      if(waitForFinish)
-      {
-         return scheduler->block(task);
-      }
+   Sound* sound = ResourceLoader::getSound(soundId);
+   sound->play(task);
+
+   if(waitForFinish)
+   {
+      return scheduler->block(task);
    }
 
    return 0;
@@ -237,30 +239,25 @@ int ScriptEngine::playSound(lua_State* luaStack)
 
 int ScriptEngine::playMusic(lua_State* luaStack)
 {
-   int nargs = lua_gettop(luaStack);
-
-   if(nargs > 0)
+   std::string musicId;
+   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "id", musicId))
    {
-      std::string musicName(lua_tostring(luaStack, 1));
-      DEBUG("Playing music: %s", musicName.c_str());
-
-      Music* song = ResourceLoader::getMusic(musicName);
-      song->play();
+      DEBUG("Music ID not found. Cannot play sound.");
+      return lua_error(luaStack);
    }
+
+   DEBUG("Playing music: %s", musicId.c_str());
+
+   Music* song = ResourceLoader::getMusic(musicId);
+   song->play();
 
    return 0;
 }
 
 int ScriptEngine::stopMusic(lua_State* luaStack)
 {
-   int nargs = lua_gettop(luaStack);
-
-   if(nargs == 0)
-   {
-      DEBUG("Stopping music.");
-      Music::stopMusic();
-   }
-
+   DEBUG("Stopping music.");
+   Music::stopMusic();
    return 0;
 }
 
@@ -272,10 +269,16 @@ int ScriptEngine::delay(lua_State* luaStack)
       return 0;
    }
 
-   long timeToWait = (long)lua_tonumber(luaStack, 1);
-   DEBUG("Waiting %d milliseconds", timeToWait);
+   long millisecondsToWait;
+   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "ms", millisecondsToWait))
+   {
+      DEBUG("Delay duration not found. Cannot create timed delay.");
+      return lua_error(luaStack);
+   }
+
+   DEBUG("Waiting %d milliseconds", millisecondsToWait);
    
-   Timer* waitTimer = new Timer(timeToWait);
+   Timer* waitTimer = new Timer(millisecondsToWait);
    scheduler->start(waitTimer);
    
    return scheduler->join(waitTimer);
@@ -283,50 +286,44 @@ int ScriptEngine::delay(lua_State* luaStack)
 
 int ScriptEngine::generateRandom(lua_State* luaStack)
 {
-   int nargs = lua_gettop(luaStack);
-   int min, max;
-   
-   switch(nargs)
+   long minValue;
+   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "min", minValue))
    {
-      case 1:
-      {
-         min = 0;
-         max = (int)luaL_checknumber(luaStack, 1);
-         break;
-      }
-      case 2:
-      {
-         min = (int)luaL_checknumber(luaStack, 1);
-         max = (int)luaL_checknumber(luaStack, 2);
-         break;
-      }
-      default:
-      {
-         /** \todo Error case. */
-         min = 0;
-         max = 1;
-         break;
-      }
+      DEBUG("Minimum value not found. Cannot generate random number.");
+      return lua_error(luaStack);
+   }
+
+   long maxValue;
+   if(!ScriptUtilities::getParameter(luaStack, 1, 2, "max", maxValue))
+   {
+      DEBUG("Maximum value not found. Cannot generate random number.");
+      return lua_error(luaStack);
+   }
+
+   if(maxValue < minValue)
+   {
+      DEBUG("Cannot generate random number: Maximum value is smaller than minimum value.");
+      return lua_error(luaStack);
    }
    
    /** \todo Random number generation is currently unseeded. Use a good seed. */
-   lua_pushnumber(luaStack, (rand() % (max - min)) + min);
+   lua_pushnumber(luaStack, (rand() % (maxValue - minValue)) + minValue);
 
    return 1;
 }
 
 int ScriptEngine::setRegion(lua_State* luaStack)
 {
-   int nargs = lua_gettop(luaStack);
-   if(nargs > 0)
+   std::string regionName;
+   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "name", regionName))
    {
-      std::string regionName(lua_tostring(luaStack, 1));
-      DEBUG("Setting region: %s", regionName.c_str());
-
-      return tileEngine->setRegion(regionName);
+      DEBUG("Region name not found. Cannot set region.");
+      return lua_error(luaStack);
    }
 
-   return 0;
+   DEBUG("Setting region: %s", regionName.c_str());
+
+   return tileEngine->setRegion(regionName);
 }
 
 NPCScript* ScriptEngine::createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName)

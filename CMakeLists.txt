@@ -81,6 +81,7 @@ set(HEADERS
   src/ScriptEngine/ScriptEngine.h
   src/ScriptEngine/ScriptException.h
   src/ScriptEngine/ScriptFactory.h
+  src/ScriptEngine/ScriptUtilities.h
   src/ScriptEngine/StringScript.h
   src/Shapes/Size.h
   src/Shapes/Point2D.h
@@ -183,6 +184,7 @@ set(SOURCES
   src/ScriptEngine/ScriptEngine.cpp
   src/ScriptEngine/ScriptFactory.cpp
   src/ScriptEngine/ScriptFunctions.cpp
+  src/ScriptEngine/ScriptUtilities.cpp
   src/ScriptEngine/StringScript.cpp
   src/Sprites/Animation.cpp
   src/Sprites/Sprite.cpp

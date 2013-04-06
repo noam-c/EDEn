@@ -50,7 +50,7 @@ void DialogueController::initMainDialogue()
    }
 }
 
-void DialogueController::addLine(LineType type, const char* speech, Task* task)
+void DialogueController::addLine(LineType type, const std::string& speech, Task* task)
 {
    Line* nextLine = new Line(type, speech, task);
    if(currLine == NULL)
@@ -64,12 +64,12 @@ void DialogueController::addLine(LineType type, const char* speech, Task* task)
    }
 }
 
-void DialogueController::narrate(const char* speech, Task* task)
+void DialogueController::narrate(const std::string& speech, Task* task)
 {
    addLine(NARRATE, speech, task);
 }
 
-void DialogueController::say(const char* speech, Task* task)
+void DialogueController::say(const std::string& speech, Task* task)
 {
    addLine(SAY, speech, task);
 }

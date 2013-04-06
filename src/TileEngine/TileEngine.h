@@ -182,7 +182,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @param narration The line of dialogue to appear as a narration.
        * @param task The ticket of this narration instruction
        */
-      void dialogueNarrate(const char* narration, Task* task);
+      void dialogueNarrate(const std::string& narration, Task* task);
 
       /**
        * Send a line of dialogue to the DialogueController as speech.
@@ -190,7 +190,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @param speech The line of dialogue to appear as character speech.
        * @param task The ticket of this speech instruction
        */
-      void dialogueSay(const char* speech, Task* task);
+      void dialogueSay(const std::string& speech, Task* task);
       
       /**
        * Set a new location for the gameplay to take place in.
