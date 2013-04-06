@@ -25,9 +25,6 @@ namespace messaging
 
 class Actor
 {
-   /**
-    * A class for asynchronous Actor instructions.
-    */
    class Order;
    class MoveOrder;
    class StandOrder;

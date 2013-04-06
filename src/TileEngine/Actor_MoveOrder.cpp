@@ -85,7 +85,7 @@ bool Actor::MoveOrder::perform(long timePassed)
 	   distanceCovered = floor(cumulativeDistanceCovered);
 	   cumulativeDistanceCovered -= distanceCovered;
    }
-   // If first run, get the best computed path (RFW), end frame
+   // If first run, get the best pre-computed path (RFW), end frame
    // loop infinitely
    //      if there is no next vertex
    //          if Actor is at the destination
@@ -93,7 +93,7 @@ bool Actor::MoveOrder::perform(long timePassed)
    //          else
    //             create a rerouted path (A*)
    //             end frame
-   //          
+   //
    //      face next vertex
    //      if vertex isn't yet acquired
    //          try acquire vertex
