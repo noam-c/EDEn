@@ -31,7 +31,6 @@ static int CharacterListL_CreateCharacter(lua_State* luaVM)
 
 static int CharacterListL_AddToParty(lua_State* luaVM)
 {
-   bool success = false;
    CharacterRoster* characterRoster = luaW_check<CharacterRoster>(luaVM, 1);
    if(characterRoster == NULL)
    {

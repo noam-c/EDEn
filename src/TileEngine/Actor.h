@@ -63,7 +63,6 @@ class Actor
        * Loads a sprite for the actor based on a given Spritesheet.
        * 
        * @param name The name of the actor (must also be the name of its script).
-       * @param sheetName The name of the spritesheet to use for rendering the actor.
        * @param messagePipe The message pipe used to send and receive events.
        * @param entityGrid The map that this actor will be interacting in.
        * @param location The location (in pixels) where the actor will start off.
@@ -71,7 +70,7 @@ class Actor
        * @param movementSpeed The speed of the actor's movement.
        * @param direction The starting direction of the actor.
        */
-      Actor(const std::string& name, const std::string& sheetName, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction);
+      Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction);
 
       /**
        * Destructor.

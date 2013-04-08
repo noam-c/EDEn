@@ -47,9 +47,8 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
        * @param messagePipe The message pipe used to send event messages.
        * @param map The map that the player character will be interacting in.
        * @param playerData The player data that the player character represents.
-       * @param sheetName The name of the spritesheet to use for drawing the player character.
        */
-      PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData, const std::string& sheetName);
+      PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData);
 
       /**
        * Destructor.

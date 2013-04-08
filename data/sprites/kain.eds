@@ -1,0 +1,154 @@
+{
+  "frames": [
+    {
+      "name": "stand_down",
+      "left": 6,
+      "top": 6,
+      "right": 44,
+      "bottom": 69
+    },
+    {
+      "name": "walk_down2",
+      "left": 53,
+      "top": 7,
+      "right": 90,
+      "bottom": 69
+    },
+    {
+      "name": "walk_down3",
+      "left": 102,
+      "top": 6,
+      "right": 140,
+      "bottom": 69
+    },
+    {
+      "name": "walk_down4",
+      "left": 152,
+      "top": 7,
+      "right": 189,
+      "bottom": 69
+    },
+    {
+      "name": "stand_left",
+      "left": 9,
+      "top": 78,
+      "right": 38,
+      "bottom": 141
+    },
+    {
+      "name": "walk_left2",
+      "left": 57,
+      "top": 79,
+      "right": 86,
+      "bottom": 141
+    },
+    {
+      "name": "walk_left3",
+      "left": 105,
+      "top": 78,
+      "right": 134,
+      "bottom": 141
+    },
+    {
+      "name": "walk_left4",
+      "left": 153,
+      "top": 79,
+      "right": 185,
+      "bottom": 141
+    },
+    {
+      "name": "stand_right",
+      "left": 11,
+      "top": 150,
+      "right": 39,
+      "bottom": 213
+    },
+    {
+      "name": "walk_right2",
+      "left": 59,
+      "top": 151,
+      "right": 87,
+      "bottom": 213
+    },
+    {
+      "name": "walk_right3",
+      "left": 107,
+      "top": 150,
+      "right": 135,
+      "bottom": 213
+    },
+    {
+      "name": "walk_right4",
+      "left": 152,
+      "top": 151,
+      "right": 183,
+      "bottom": 213
+    },
+    {
+      "name": "stand_up",
+      "left": 6,
+      "top": 222,
+      "right": 44,
+      "bottom": 285
+    },
+    {
+      "name": "walk_up2",
+      "left": 54,
+      "top": 223,
+      "right": 92,
+      "bottom": 285
+    },
+    {
+      "name": "walk_up3",
+      "left": 102,
+      "top": 222,
+      "right": 140,
+      "bottom": 285
+    },
+    {
+      "name": "walk_up4",
+      "left": 150,
+      "top": 223,
+      "right": 188,
+      "bottom": 285
+    }
+  ],
+  "animations": [
+    {
+      "name": "walk_left",
+      "frames": [
+        "stand_left",
+        "walk_left2",
+        "walk_left3",
+        "walk_left4"
+      ]
+    },
+    {
+      "name": "walk_right",
+      "frames": [
+        "stand_right",
+        "walk_right2",
+        "walk_right3",
+        "walk_right4"
+      ]
+    },
+    {
+      "name": "walk_up",
+      "frames": [
+        "stand_up",
+        "walk_up2",
+        "walk_up3",
+        "walk_up4"
+      ]
+    },
+    {
+      "name": "walk_down",
+      "frames": [
+        "stand_down",
+        "walk_down2",
+        "walk_down3",
+        "walk_down4"
+      ]
+    }
+  ]
+}

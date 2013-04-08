@@ -8,7 +8,6 @@
 #define SCRIPT_UTILITIES_H
 
 #include <string>
-#include <iostream>
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -51,9 +50,7 @@ template<typename T> bool ScriptUtilities::getParameter(lua_State* luaStack, int
       lua_rawget(luaStack, tableIndex);
       if(checkType(luaStack, -1))
       {
-         std::cerr<<"FOUND "<<parameterName<<std::endl;
          result = retrieve(luaStack, -1);
-         std::cerr<<"VALUE IS "<<result<<std::endl;
          foundParameter = true;
       }
 

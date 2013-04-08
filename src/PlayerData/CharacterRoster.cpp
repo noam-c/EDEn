@@ -139,6 +139,16 @@ void CharacterRoster::load(const Json::Value& charactersElement)
          allCharacters[characterId] = currCharacter;
          party.push_back(currCharacter);
       }
+
+      if(partyLeader == NULL && party.size() > 0)
+      {
+         /**
+          * \todo Persist the party leader in the save data and remove
+          * this hardcoded party leader setting.
+          */
+         partyLeader = party[0];
+      }
+
       DEBUG("Party loaded.");
    }
 

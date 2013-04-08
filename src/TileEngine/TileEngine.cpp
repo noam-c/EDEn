@@ -48,7 +48,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    messagePipe.registerListener(this);
 
    loadPlayerData(playerDataPath);
-   playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData, "npc1");
+   playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData);
    gameContext.getScriptEngine().setTileEngine(this);
    gameContext.getScriptEngine().setPlayerData(&playerData);
    dialogue = new DialogueController(*rocketContext, *scheduler, gameContext.getScriptEngine());

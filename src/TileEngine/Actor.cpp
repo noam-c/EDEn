@@ -16,17 +16,16 @@
 
 const int debugFlag = DEBUG_NPC;
 
-Actor::Actor(const std::string& name, const std::string& sheetName, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction) :
+Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction) :
    name(name),
    pixelLoc(location),
    size(size),
    movementSpeed(movementSpeed),
    currDirection(direction),
+   sprite(NULL),
    entityGrid(entityGrid),
    messagePipe(messagePipe)
 {
-   Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
-   sprite = new Sprite(sheet);
 }
 
 Actor::~Actor()
@@ -57,8 +56,11 @@ const shapes::Size& Actor::getSize() const
 
 void Actor::step(long timePassed)
 {
-   sprite->step(timePassed);
-   
+   if(sprite)
+   {
+      sprite->step(timePassed);
+   }
+
    if(!isIdle())
    {
       Order* currentOrder = orders.front();
@@ -144,16 +146,35 @@ void Actor::faceActor(Actor* other)
 void Actor::setSpritesheet(const std::string& sheetName)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
-   sprite->setSheet(sheet);
+   if(sprite == NULL)
+   {
+      sprite = new Sprite(sheet);
+   }
+   else
+   {
+      sprite->setSheet(sheet);
+   }
 }
 
 void Actor::setFrame(const std::string& frameName)
 {
+   if(sprite == NULL)
+   {
+      DEBUG("Failed to set sprite frame because actor %s doesn't have a sprite.", name.c_str());
+      return;
+   }
+
    sprite->setFrame(frameName, currDirection);
 }
 
 void Actor::setAnimation(const std::string& animationName)
 {
+   if(sprite == NULL)
+   {
+      DEBUG("Failed to set sprite animation because actor %s doesn't have a sprite.", name.c_str());
+      return;
+   }
+
    sprite->setAnimation(animationName, currDirection);
 }
 
