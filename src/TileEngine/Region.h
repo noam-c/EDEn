@@ -65,13 +65,6 @@ class Region : public Resource
        * @return the Map with the specified name.
        */
       Map* getMap(const std::string& name);
-
-      /**
-       * Implementation of method in Resource class.
-       *
-       * @return The size of the region resource in memory.
-       */
-      size_t getResourceSize() const;
 };
 
 #endif

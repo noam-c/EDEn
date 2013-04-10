@@ -60,13 +60,6 @@ class Music : public Resource
       Music(ResourceKey name);
 
       /**
-       * Implementation of method in Resource class.
-       *
-       * @return The size of the music resource in memory.
-       */
-      size_t getResourceSize() const;
-
-      /**
        * Play this song.
        */
       void play();

@@ -166,11 +166,6 @@ void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
    glPopAttrib();
 }
 
-size_t Tileset::getResourceSize() const
-{
-   return sizeof(this);
-}
-
 bool Tileset::isPassible(int tileNum) const
 {
    return passibility[tileNum];

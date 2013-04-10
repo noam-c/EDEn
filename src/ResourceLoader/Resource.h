@@ -77,11 +77,6 @@ class Resource
       std::string getResourceName() const;
 
       /**
-       * @return the size that the resource takes up in memory.
-       */
-      virtual size_t getResourceSize() const = 0;
-
-      /**
        * Abstract destructor (forces all Resources to have destructors).
        */
       virtual ~Resource() = 0;

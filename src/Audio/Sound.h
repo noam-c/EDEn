@@ -89,13 +89,6 @@ class Sound : public Resource
       void stop();
 
       /**
-       * Implementation of method in Resource class.
-       *
-       * @return The size of the sound resource in memory.
-       */
-      size_t getResourceSize() const;
-
-      /**
        * Destructor.
        */
       ~Sound();

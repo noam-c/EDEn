@@ -295,8 +295,3 @@ void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
    // We're done with alpha testing, return to default state
    glPopAttrib();
 }
-
-size_t Spritesheet::getResourceSize() const
-{
-   return sizeof(Spritesheet);
-}

@@ -78,8 +78,3 @@ Map* Region::getMap(const std::string& name)
 {
    return areas[name];
 }
-
-size_t Region::getResourceSize() const
-{
-   return sizeof(this);
-}

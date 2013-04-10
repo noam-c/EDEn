@@ -47,13 +47,6 @@ class Tileset : public Resource
       ~Tileset();
 
       /**
-       * Implementation of method in Resource class.
-       *
-       * @return The size of the tileset resource in memory.
-       */
-      size_t getResourceSize() const;
-
-      /**
        * Draws the specified tile to the coordinates specified
        *
        * @param destX The destination x-location (in tiles)

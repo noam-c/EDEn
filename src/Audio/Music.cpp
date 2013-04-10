@@ -34,11 +34,6 @@ void Music::load(const std::string& path)
    }
 }
 
-size_t Music::getResourceSize() const
-{
-   return sizeof(Music);
-}
-
 void Music::setPlayingMusic(Music* music)
 {
    currentMusic = music;
