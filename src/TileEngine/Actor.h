@@ -70,7 +70,7 @@ class Actor
        * @param movementSpeed The speed of the actor's movement.
        * @param direction The starting direction of the actor.
        */
-      Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction);
+       Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction);
 
       /**
        * Destructor.
@@ -83,6 +83,12 @@ class Actor
       void flushOrders();
 
    public:
+      /** The default animation set to use when the Actor is moving. */
+      const static std::string DEFAULT_WALKING_PREFIX;
+
+      /** The default frame set to use when the Actor is not moving. */
+      const static std::string DEFAULT_STANDING_PREFIX;
+   
       /**
        * @return The name of this Actor.
        */

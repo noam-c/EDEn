@@ -109,7 +109,4 @@ class Actor::MoveOrder : public Actor::Order
       void draw();
 };
 
-const std::string WALKING_PREFIX = "walk";
-const std::string STANDING_PREFIX = "stand";
-
 #endif

@@ -14,6 +14,7 @@
 #include "Sound.h"
 #include "Timer.h"
 #include "NPC.h"
+#include "MovementDirection.h"
 #include "FileScript.h"
 #include "StringScript.h"
 #include "ScriptFactory.h"
@@ -42,6 +43,11 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
+#define REGISTER_LUA_ENUM_VALUE(name, value) \
+  lua_pushlstring(luaVM, #name, sizeof(#name)-1); \
+  lua_pushnumber(luaVM, value); \
+  lua_settable(luaVM, -3);
+
 ScriptEngine::ScriptEngine(GameContext& gameContext) :
    gameContext(gameContext)
 {
@@ -56,8 +62,9 @@ ScriptEngine::ScriptEngine(GameContext& gameContext) :
    //initialize standard Lua libraries
    luaL_openlibs(luaVM);
 
-   // register game functions with Lua
+   // register game functions and enums with Lua
    registerFunctions();
+   registerEnums();
 
    // Push this engine instance as a global pointer for the Lua VM
    // This allows global C functions in our API to reference this instance
@@ -82,6 +89,21 @@ ScriptEngine::~ScriptEngine()
       lua_close(luaVM);
       DEBUG("Lua state machine destroyed.");
    }
+}
+
+void ScriptEngine::registerEnums()
+{
+   lua_newtable(luaVM);
+   REGISTER_LUA_ENUM_VALUE(None, NONE);
+   REGISTER_LUA_ENUM_VALUE(Up, UP);
+   REGISTER_LUA_ENUM_VALUE(Down, DOWN);
+   REGISTER_LUA_ENUM_VALUE(Left, LEFT);
+   REGISTER_LUA_ENUM_VALUE(Right, RIGHT);
+   REGISTER_LUA_ENUM_VALUE(UpLeft, UP_LEFT);
+   REGISTER_LUA_ENUM_VALUE(UpRight, UP_RIGHT);
+   REGISTER_LUA_ENUM_VALUE(DownLeft, DOWN_LEFT);
+   REGISTER_LUA_ENUM_VALUE(DownRight, DOWN_RIGHT);
+   lua_setglobal(luaVM, "Direction");
 }
 
 void ScriptEngine::setTileEngine(TileEngine* engine)

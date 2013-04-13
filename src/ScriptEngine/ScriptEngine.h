@@ -65,6 +65,11 @@ class ScriptEngine
    void registerFunctions();
 
    /**
+    * Register some enums in Lua's global space using Lua bindings
+    */
+   void registerEnums();
+
+   /**
     * Converts a script name into a relative path for the associated Lua file
     */
    std::string getScriptPath(const std::string& scriptName);

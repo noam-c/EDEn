@@ -14,6 +14,9 @@
 #include "ActorMoveMessage.h"
 #include "DebugUtils.h"
 
+const std::string Actor::DEFAULT_WALKING_PREFIX = "walk";
+const std::string Actor::DEFAULT_STANDING_PREFIX = "stand";
+
 const int debugFlag = DEBUG_NPC;
 
 Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction) :
@@ -154,6 +157,8 @@ void Actor::setSpritesheet(const std::string& sheetName)
    {
       sprite->setSheet(sheet);
    }
+
+   sprite->setFrame(Actor::DEFAULT_STANDING_PREFIX, currDirection);
 }
 
 void Actor::setFrame(const std::string& frameName)

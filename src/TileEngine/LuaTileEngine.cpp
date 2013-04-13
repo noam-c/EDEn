@@ -61,12 +61,20 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
       height = 32;
    }
 
+   int directionValue;
+   if(!ScriptUtilities::getParameter(luaVM, 2, -1, "direction", directionValue))
+   {
+      directionValue = static_cast<int>(DOWN);
+   }
+
    DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
    DEBUG("NPC Location will be (%d, %d)", x, y);
 
    const shapes::Point2D npcLocation(x, y);
    const shapes::Size npcSize(width, height);
-   npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize);
+   const MovementDirection direction = static_cast<MovementDirection>(directionValue);
+
+   npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize, direction);
    
    luaW_push<Actor>(luaVM, npc);
    return 1;

@@ -40,11 +40,11 @@ void Actor::MoveOrder::updateDirection(MovementDirection newDirection, bool movi
    actor.setDirection(newDirection);
    if(moving)
    {
-      actor.setAnimation(WALKING_PREFIX);
+      actor.setAnimation(Actor::DEFAULT_WALKING_PREFIX);
    }
    else
    {
-      actor.setFrame(STANDING_PREFIX);
+      actor.setFrame(Actor::DEFAULT_STANDING_PREFIX);
    }
 }
 

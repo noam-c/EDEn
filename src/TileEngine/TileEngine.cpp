@@ -183,15 +183,15 @@ void TileEngine::toggleDebugConsole()
    }
 }
 
-NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size)
+NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size, const MovementDirection direction)
 {
    NPC* npcToAdd = NULL;
    
    if(entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
-      npcToAdd = new NPC(gameContext.getScriptEngine(), *scheduler, npcName, spritesheetName,
-                                 messagePipe, entityGrid, currRegion->getName(),
-                                 npcLocation, size);
+      npcToAdd = new NPC(gameContext.getScriptEngine(), *scheduler, npcName, direction,
+                                 spritesheetName, messagePipe, entityGrid,
+                                 currRegion->getName(), npcLocation, size);
       npcList[npcName] = npcToAdd;
       entityGrid.addActor(npcToAdd, npcLocation);
    }

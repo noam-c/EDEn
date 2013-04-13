@@ -16,6 +16,6 @@ Actor::StandOrder::StandOrder(Actor& actor, MovementDirection direction) :
 bool Actor::StandOrder::perform(long timePassed)
 {
    actor.setDirection(direction);
-   actor.setFrame(STANDING_PREFIX);
+   actor.setFrame(Actor::DEFAULT_STANDING_PREFIX);
    return true;
 }

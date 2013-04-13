@@ -220,10 +220,13 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @param spritesheetName The name of the spritesheet to draw the NPC with
        * @param npcLocation The location where we spawn the NPC
        * @param size The size of the new NPC
+       * @param direction The direction that the new NPC will face at first
        *
        * @return The created NPC (or NULL if it could not be placed in the map).
        */
-      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size);
+      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName,
+                  const shapes::Point2D& npcLocation, const shapes::Size& size,
+                  const MovementDirection direction);
 
       /**
        * @param npcName The name of the NPC to find.
