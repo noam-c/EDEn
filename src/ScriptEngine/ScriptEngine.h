@@ -174,8 +174,8 @@ class ScriptEngine
       int say(lua_State* luaStack);
       int playSound(lua_State* luaStack);
       int playMusic(lua_State* luaStack);
-      int fadeMusic(lua_State* luaStack);
       int stopMusic(lua_State* luaStack);
+      int isMusicPlaying(lua_State* luaStack);
       int delay(lua_State* luaStack);
       int generateRandom(lua_State* luaStack);
 

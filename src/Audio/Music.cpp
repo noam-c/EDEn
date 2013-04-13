@@ -39,6 +39,11 @@ void Music::setPlayingMusic(Music* music)
    currentMusic = music;
 }
 
+bool Music::isPlaying()
+{
+   return currentMusic != NULL && Mix_PlayingMusic();
+}
+
 bool Music::isPlaying(Music* music)
 {
    return (music == currentMusic) && Mix_PlayingMusic();
@@ -48,18 +53,22 @@ void Music::fadeOutMusic(int time)
 {
    if(Mix_PlayingMusic())
    {
-      Mix_FadeOutMusic(time);
+      if (time > 0)
+      {
+         Mix_FadeOutMusic(time);
+      }
+      else
+      {
+         Mix_HaltMusic();
+      }
+
       currentMusic = NULL;
    }
 }
 
 void Music::stopMusic()
 {
-   if(Mix_PlayingMusic())
-   {
-      Mix_HaltMusic();
-      currentMusic = NULL;
-   }
+   fadeOutMusic(0);
 }
 
 void Music::play()

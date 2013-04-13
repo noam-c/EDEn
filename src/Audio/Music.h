@@ -14,7 +14,7 @@
  * persistence is successfully implemented.
  */
 // Define this macro as 1 to turn off music
-#define MUSIC_OFF 1
+#define MUSIC_OFF 0
 
 /**
  * This Resource represents a song, and provides an interface for playing,
@@ -63,6 +63,11 @@ class Music : public Resource
        * Play this song.
        */
       void play();
+
+      /**
+       * @return true iff there is music currently being played
+       */
+      static bool isPlaying();
 
       /**
        * Fades out the currently playing song.

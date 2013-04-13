@@ -60,6 +60,11 @@ static int luaStopMusic(lua_State* luaVM)
    return getEngine(luaVM)->stopMusic(luaVM);
 }
 
+static int luaIsMusicPlaying(lua_State* luaVM)
+{
+   return getEngine(luaVM)->isMusicPlaying(luaVM);
+}
+
 static int luaDelay(lua_State* luaVM)
 {
    return getEngine(luaVM)->delay(luaVM);
@@ -77,6 +82,7 @@ void ScriptEngine::registerFunctions()
    REGISTER("playSound", luaPlaySound);
    REGISTER("playMusic", luaPlayMusic);
    REGISTER("stopMusic", luaStopMusic);
+   REGISTER("isMusicPlaying", luaIsMusicPlaying);
    REGISTER("delay", luaDelay);
    REGISTER("random", luaRandom);
 

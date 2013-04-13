@@ -256,9 +256,21 @@ int ScriptEngine::playMusic(lua_State* luaStack)
 
 int ScriptEngine::stopMusic(lua_State* luaStack)
 {
-   DEBUG("Stopping music.");
-   Music::stopMusic();
+   int fadeTime;
+   if(!ScriptUtilities::getParameter(luaStack, 1, -1, "fadeTime", fadeTime))
+   {
+      fadeTime = 0;
+   }
+
+   DEBUG("Stopping music with a fade of %d milliseconds.", fadeTime);
+   Music::fadeOutMusic(fadeTime);
    return 0;
+}
+
+int ScriptEngine::isMusicPlaying(lua_State* luaStack)
+{
+   lua_pushboolean(luaStack, Music::isPlaying());
+   return 1;
 }
 
 int ScriptEngine::delay(lua_State* luaStack)
