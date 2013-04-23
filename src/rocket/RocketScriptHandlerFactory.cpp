@@ -11,7 +11,7 @@ RocketScriptHandlerFactory::~RocketScriptHandlerFactory()
 }
 
 Rocket::Core::EventListener* RocketScriptHandlerFactory::InstanceEventListener(
-      const Rocket::Core::String& value)
+      const Rocket::Core::String& value, Rocket::Core::Element* element)
 {
    return new RocketScriptHandler(gameContext, value);
 }

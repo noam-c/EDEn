@@ -15,7 +15,7 @@ class RocketScriptHandlerFactory : public Rocket::Core::EventListenerInstancer
       virtual ~RocketScriptHandlerFactory();
 
       virtual Rocket::Core::EventListener* InstanceEventListener(
-            const Rocket::Core::String& value);
+            const Rocket::Core::String& value, Rocket::Core::Element* element);
 
       virtual void Release();
 };

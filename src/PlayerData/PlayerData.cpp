@@ -33,7 +33,7 @@ PlayerData::PlayerData(GameContext& gameContext) :
    gameContext(gameContext),
    roster(gameContext),
    rootQuest(std::string("root")),
-   shortcutList(PlayerData::SHORTCUT_BAR_SIZE, 0)
+   shortcutList(PlayerData::SHORTCUT_BAR_SIZE, Shortcut::getEmptyShortcut())
 {
 }
 

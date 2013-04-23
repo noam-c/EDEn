@@ -22,6 +22,7 @@ ZERO_CHECK.vcxproj.user
 eden.sdf
 eden.sln
 eden.suo
+eden.v11.suo
 eden.vcxproj
 eden.vcxproj.filters
 eden.vcxproj.user
@@ -29,5 +30,8 @@ eden.opensdf
 eden.cbp
 eden.layout
 ipch
-
 doc/warn.txt
+Debug
+Release
+MinSizeRel
+RelWithDebInfo

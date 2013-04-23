@@ -180,40 +180,46 @@ void ShortcutBar::refresh()
             static_cast<Usable*>(gameContext.getSkill(shortcut.usableId));
 
       Rocket::Core::Element* shortcutElement = shortcutBarDocument->CreateElement("div");
-      shortcutElement->SetAttribute("class", "shortcut");
+      Rocket::Core::ElementAttributes shortcutElementAttributes;
+      shortcutElementAttributes.Set("class", "shortcut");
 
       if(usable != NULL)
       {
          if (shortcut.usableType == Shortcut::ITEM)
          {
             DEBUG("Adding shortcut for item %d", usable->getId());
-            shortcutElement->SetAttribute("itemId", static_cast<int>(shortcut.usableId));
+            shortcutElementAttributes.Set("itemId", static_cast<int>(shortcut.usableId));
          }
          else
          {
             DEBUG("Adding shortcut for skill %d", usable->getId());
-            shortcutElement->SetAttribute("skillId", static_cast<int>(shortcut.usableId));
-            shortcutElement->SetAttribute("characterId", shortcut.characterId.c_str());
+            shortcutElementAttributes.Set("skillId", static_cast<int>(shortcut.usableId));
+            shortcutElementAttributes.Set("characterId", shortcut.characterId.c_str());
          }
 
          Rocket::Core::String shortcutIconPath("../../");
          shortcutIconPath += usable->getIconPath().c_str();
          Rocket::Core::Element* shortcutIconElement = shortcutBarDocument->CreateElement("img");
-         shortcutIconElement->SetAttribute("src", shortcutIconPath);
-         shortcutIconElement->SetAttribute("class", "shortcutIcon");
+
+         Rocket::Core::ElementAttributes shortcutIconElementAttributes;
+         shortcutIconElementAttributes.Set("src", shortcutIconPath);
+         shortcutIconElementAttributes.Set("class", "shortcutIcon");
 
          if (shortcut.usableType == Shortcut::ITEM)
          {
             const Rocket::Core::String shortcutQuantity(8, "%d", playerData.getInventory()->getItemQuantity(shortcut.usableId));
             Rocket::Core::Element* shortcutQuantityElement = shortcutBarDocument->CreateElement("span");
+
             shortcutQuantityElement->SetInnerRML(shortcutQuantity);
             shortcutQuantityElement->SetAttribute("class", "shortcutQuantity");
             shortcutElement->AppendChild(shortcutQuantityElement);
          }
 
+         shortcutIconElement->SetAttributes(&shortcutIconElementAttributes);
          shortcutElement->AppendChild(shortcutIconElement);
       }
 
+      shortcutElement->SetAttributes(&shortcutElementAttributes);
       shortcutContainer->AppendChild(shortcutElement);
    }
 }

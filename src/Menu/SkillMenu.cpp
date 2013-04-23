@@ -100,8 +100,12 @@ void SkillMenu::dragStarted(Rocket::Core::Event* event)
             const int skillIndex = rowElement->GetParentRelativeIndex();
             const UsableId skillId = skillViewModel.getSkillId(skillIndex);
             const std::string characterId = skillViewModel.getCurrentCharacterId();
-            dragElement->SetAttribute("skillId", static_cast<int>(skillId));
-            dragElement->SetAttribute("characterId", characterId.c_str());
+
+            Rocket::Core::ElementAttributes dragAttributes;
+            dragAttributes.Set("skillId", static_cast<int>(skillId));
+            dragAttributes.Set("characterId", characterId.c_str());
+            dragElement->SetAttributes(&dragAttributes);
+
             DEBUG("Dragging skill %d.", skillId);
          }
       }
