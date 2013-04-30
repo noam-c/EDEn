@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
  */
 
-#ifndef DIMENSIONS_H
-#define DIMENSIONS_H
+#ifndef SIZE_H
+#define SIZE_H
 
 namespace shapes
 {

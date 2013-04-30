@@ -40,8 +40,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    consoleWindow(*rocketContext),
    entityGrid(*this, messagePipe),
    playerData(gameContext),
-   shortcutBar(gameContext, playerData, *rocketContext),
-   mapOffset(0, 0)
+   shortcutBar(gameContext, playerData, *rocketContext)
 {
    scheduler = new Scheduler();
 
@@ -162,12 +161,10 @@ void TileEngine::recalculateMapOffsets()
 {
    const shapes::Size& mapPixelBounds = entityGrid.getMapBounds().getSize() * TILE_SIZE;
 
-   mapOffset.x = mapPixelBounds.width < GraphicsUtil::getInstance()->getWidth() ?
-              (GraphicsUtil::getInstance()->getWidth() - mapPixelBounds.width) >> 1 : 0;
+   const int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - shortcutBar.getHeight();
+   const shapes::Size screenSize(GraphicsUtil::getInstance()->getWidth(), totalUsableHeight);
 
-   int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - shortcutBar.getHeight();
-   mapOffset.y = mapPixelBounds.height < totalUsableHeight ?
-              (totalUsableHeight - mapPixelBounds.height) >> 1 : 0;
+   camera.setViewBounds(screenSize, mapPixelBounds);
 }
 
 void TileEngine::toggleDebugConsole()
@@ -267,9 +264,12 @@ void TileEngine::draw()
    std::vector<Actor*> actors = collectActors();
 
    GraphicsUtil::getInstance()->clearBuffer();
-   GraphicsUtil::getInstance()->setOffset(mapOffset.x, mapOffset.y);
-      // Draw the map layers and actors against an offset (to center all the map elements)
+   if(playerActor->isActive())
+   {
+      camera.setFocalPoint(playerActor->getLocation());
+   }
 
+   camera.apply();
       if(entityGrid.getMapData() == NULL)
       {
          // Draw all the sprites
@@ -312,7 +312,8 @@ void TileEngine::draw()
             }
          }
       }
-   GraphicsUtil::getInstance()->resetOffset();
+
+   camera.reset();
 }
 
 bool TileEngine::step(long timePassed)

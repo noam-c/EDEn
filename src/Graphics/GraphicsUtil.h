@@ -121,15 +121,15 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * absolute; the offset is from the origin, rather than from the current
        * offset.
        *
-       * @param xOffset The x-offset to draw at.
-       * @param yOffset The y-offset to draw at.
+       * @param xOffset The x-offset (from the origin) to draw at.
+       * @param yOffset The y-offset (from the origin) to draw at.
        */
-      void setOffset(int xOffset, int yOffset);
+      void setAbsoluteOffset(int xOffset, int yOffset);
 
       /**
        * Resets the camera offset to 0.
        */
-      void resetOffset();
+      void resetAbsoluteOffset();
 
       /** 
        *  Graphical effect: Fade to a specific colour in a specified time period

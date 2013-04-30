@@ -172,14 +172,14 @@ void GraphicsUtil::clearBuffer()
    glLoadIdentity();
 }
 
-void GraphicsUtil::setOffset(int xOffset, int yOffset)
+void GraphicsUtil::setAbsoluteOffset(int xOffset, int yOffset)
 {
    glTranslated(xOffset - currentXOffset, yOffset - currentYOffset, 0);
    currentXOffset = xOffset;
    currentYOffset = yOffset;
 }
 
-void GraphicsUtil::resetOffset()
+void GraphicsUtil::resetAbsoluteOffset()
 {
    glTranslated(-currentXOffset, -currentYOffset, 0);
    currentXOffset = 0;

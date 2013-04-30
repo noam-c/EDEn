@@ -12,6 +12,7 @@
 #include "MessagePipe.h"
 #include "DebugConsoleWindow.h"
 #include "EntityGrid.h"
+#include "Camera.h"
 #include "Listener.h"
 #include "PlayerData.h"
 #include "ShortcutBar.h"
@@ -67,8 +68,8 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    /** A list of all NPCs in the map, identified by their names. */
    std::map<std::string, NPC*> npcList;
 
-   /** The offset at which elements of the map will be drawn. */
-   shapes::Point2D mapOffset;
+   /** The camera displaying the appropriate subset of the map. */
+   Camera camera;
    
    /**
     * Loads new player data.

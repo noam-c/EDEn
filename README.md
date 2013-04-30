@@ -48,6 +48,9 @@ Windows developers will also need the Windows implementation of dirent.h.
 
 EDEn requires the equivalent runtime libraries to execute.
 
+Maps and tilesets in EDEn are created using the Tiled Map Editor (http://www.mapeditor.org).
+For more information on the Tiled Map (TMX) and Tileset (TSX) formats, please refer to the Tiled wiki (http://github.com/bjorn/tiled/wiki/TMX-Map-Format).
+
 Links
 -----
 

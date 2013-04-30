@@ -226,5 +226,5 @@ void ShortcutBar::refresh()
 
 int ShortcutBar::getHeight() const
 {
-   return shortcutContainer->GetScrollHeight();
+   return shortcutContainer->GetOffsetHeight();
 }
