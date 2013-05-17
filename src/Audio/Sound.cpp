@@ -5,6 +5,7 @@
  */
 
 #include "Sound.h"
+#include "Settings.h"
 #include "Task.h"
 
 #include "DebugUtils.h"
@@ -54,7 +55,7 @@ void Sound::load(const std::string& path)
 
 void Sound::play(Task* task)
 {
-   if(SOUND_OFF || sound == NULL)
+   if(!Settings::isSoundEnabled() || sound == NULL)
    {
       if(task)
       {

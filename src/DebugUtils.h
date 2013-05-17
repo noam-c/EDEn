@@ -52,6 +52,7 @@
 #define DEBUG_MESSAGING   1<<20    // Message passing functionality
 #define DEBUG_TRANSITIONS 1<<21    // Game state transition functionality
 #define DEBUG_METADATA    1<<22    // Game metadata (items, skills)
+#define DEBUG_SETTINGS    1<<23    // Game settings and options
 
 #define DEBUG_ALL           ~0    // Turn on all debug output (verbose, but handy)
 

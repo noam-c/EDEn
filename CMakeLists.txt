@@ -86,6 +86,7 @@ set(HEADERS
   src/Shapes/Size.h
   src/Shapes/Point2D.h
   src/Shapes/Rectangle.h
+  src/Settings/Settings.h
   src/Singleton.h
   src/Sprites/Animation.h
   src/Sprites/FrameSequence.h
@@ -187,6 +188,7 @@ set(SOURCES
   src/ScriptEngine/ScriptFunctions.cpp
   src/ScriptEngine/ScriptUtilities.cpp
   src/ScriptEngine/StringScript.cpp
+  src/Settings/Settings.cpp
   src/Sprites/Animation.cpp
   src/Sprites/Sprite.cpp
   src/Sprites/Spritesheet.cpp
@@ -249,6 +251,7 @@ source_group(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
 source_group(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
 source_group(rocket REGULAR_EXPRESSION src/rocket/.*)
 source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
+source_group(Settings REGULAR_EXPRESSION src/Settings/.*)
 source_group(Shapes REGULAR_EXPRESSION src/Shapes/.*)
 source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
 source_group(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
@@ -277,6 +280,7 @@ include_directories(
   src/ResourceLoader
   src/rocket
   src/ScriptEngine
+  src/Settings
   src/Shapes
   src/Sprites
   src/TileEngine

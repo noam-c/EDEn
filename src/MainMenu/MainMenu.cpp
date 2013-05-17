@@ -70,10 +70,7 @@ bool MainMenu::step(long timePassed)
    scheduler->runCoroutines(timePassed);
    bool done = false;
 
-   if (!MUSIC_OFF)
-   {
-      music->play();
-   }
+   music->play();
 
    waitForInputEvent(done);
 
@@ -154,6 +151,11 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
       }
 
       child = child->GetNextSibling();
+   }
+   
+   if(child == NULL)
+   {
+      return;
    }
 
    if(key == Rocket::Core::Input::KI_RETURN)

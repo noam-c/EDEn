@@ -5,6 +5,7 @@
  */
 
 #include "Music.h"
+#include "Settings.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_AUDIO;
@@ -73,7 +74,7 @@ void Music::stopMusic()
 
 void Music::play()
 {
-   if(MUSIC_OFF || music == NULL) return;
+   if(!Settings::isMusicEnabled() || music == NULL) return;
 
    if(!isPlaying(this))
    {

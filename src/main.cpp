@@ -5,6 +5,7 @@
  */
 
 #include "GraphicsUtil.h"
+#include "Settings.h"
 #include "GameContext.h"
 #include "ExecutionStack.h"
 #include "MainMenu.h"
@@ -26,6 +27,7 @@ int main (int argc, char *argv[])
 {  
    try
    {
+      Settings::load();
       GraphicsUtil::getInstance();
       DEBUG("Initializing execution stack.");
       GameContext gameContext;
