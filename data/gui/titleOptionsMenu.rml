@@ -1,0 +1,12 @@
+<rml>
+   <head>
+      <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="title.rcss" />
+   </head>
+   <body>
+      <div class="title">Options</div>
+      <form>
+         <input type="checkbox">Music enabled</input>
+      </form>
+   </body>
+</rml>
