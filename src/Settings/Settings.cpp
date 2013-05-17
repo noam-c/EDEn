@@ -11,17 +11,50 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SETTINGS;
 
+const std::string Settings::DEFAULT_SETTINGS_PATH = "settings.ini";
 bool Settings::musicEnabled = true;
 bool Settings::soundEnabled = true;
 
-void Settings::load(const std::string filePath)
+void Settings::initialize()
 {
-   DEBUG("Loading settings file %s", filePath.c_str());
+   std::ifstream inputFile(Settings::DEFAULT_SETTINGS_PATH.c_str());
    
-   std::ifstream input(filePath.c_str());
+   if(inputFile)
+   {
+      Settings::load(inputFile);
+   }
+   else
+   {
+      Settings::createNewSettingsFile();
+   }
+}
+
+void Settings::createNewSettingsFile()
+{
+   std::ofstream outputFile(Settings::DEFAULT_SETTINGS_PATH.c_str());
+   Settings::save(outputFile);
+}
+
+void Settings::save(std::ostream& output)
+{
+   if(!output)
+   {
+      T_T("Failed to write settings data.");
+   }
+   
+   Json::Value jsonRoot;
+   
+   jsonRoot["musicEnabled"].operator=(Settings::musicEnabled);
+   jsonRoot["soundEnabled"].operator=(Settings::soundEnabled);
+   
+   output << jsonRoot;
+}
+
+void Settings::load(std::istream& input)
+{
    if(!input)
    {
-      T_T("Failed to open settings file for reading.");
+      T_T("Failed to read settings data.");
    }
    
    Json::Value jsonRoot;

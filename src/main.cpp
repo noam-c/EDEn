@@ -27,7 +27,7 @@ int main (int argc, char *argv[])
 {  
    try
    {
-      Settings::load();
+      Settings::initialize();
       GraphicsUtil::getInstance();
       DEBUG("Initializing execution stack.");
       GameContext gameContext;
