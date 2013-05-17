@@ -33,6 +33,7 @@ set(HEADERS
   src/Metadata/UsableId.h
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
+  src/MainMenu/TitleScreenSettingsMenu.h
   src/Menu/CharacterDependentMenu.h
   src/Menu/DataMenu.h
   src/Menu/DataViewModel.h
@@ -142,6 +143,7 @@ set(SOURCES
   src/Metadata/Usable.cpp
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
+  src/MainMenu/TitleScreenSettingsMenu.cpp
   src/Menu/CharacterDependentMenu.cpp
   src/Menu/DataMenu.cpp
   src/Menu/DataViewModel.cpp

@@ -13,8 +13,10 @@
 
 #include <Rocket/Core.h>
 #include "MenuShell.h"
+#include "TitleScreenSettingsMenu.h"
 #include "TileEngine.h"
 #include "FadeState.h"
+#include "BlendState.h"
 #include "HomeMenu.h"
 #include "PlayerData.h"
 
@@ -56,10 +58,14 @@ void MainMenu::LoadGameAction(Rocket::Core::Event* event)
 
 /**
  * 'Options' was selected.
- * Perform any transitions necessary and load up the options menu interface. (TODO)
+ * Load up the options menu interface.
  */
 void MainMenu::OptionsAction(Rocket::Core::Event* event)
 {
+   TitleScreenSettingsMenu* titleScreenSettingsMenuState = new TitleScreenSettingsMenu(gameContext);
+   gameContext.getExecutionStack().pushState(
+      titleScreenSettingsMenuState,
+      new BlendState(gameContext, this, titleScreenSettingsMenuState, 500));
 }
 
 /**
@@ -79,5 +85,4 @@ void MainMenu::QuitAction(Rocket::Core::Event* event)
    Music::fadeOutMusic(1000);
 
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
-   titleDocument->Close();
 }
