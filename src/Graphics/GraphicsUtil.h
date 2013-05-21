@@ -33,12 +33,6 @@ typedef unsigned int GLuint;
  */
 class GraphicsUtil : public Singleton<GraphicsUtil>
 {
-   /** The screen width (currently HARDCODED) */
-   static const unsigned int width = 800;
-
-   /** The screen height (currently HARDCODED) */
-   static const unsigned int height = 600;
-
    /** The screen surface */
    static SDL_Surface* screen;
 
@@ -51,6 +45,15 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
    /** The system interface that Rocket will use. */
    EdenRocketSystemInterface rocketSystemInterface;
 
+   /** The screen width */
+   unsigned int width;
+   
+   /** The screen height */
+   unsigned int height;
+   
+   /** The bit depth of the screen buffer */
+   unsigned int bitsPerPixel;
+   
    /** The x-offset to draw at (in pixels). */
    int currentXOffset;
 

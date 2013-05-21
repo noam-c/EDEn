@@ -25,6 +25,18 @@ class Settings
    /** True iff sound effects should be played in the game. */
    static bool soundEnabled;
 
+   /** True iff fullscreen mode is enabled in the game. */
+   static bool fullScreenEnabled;
+   
+   /** The height of the game's window. */
+   static unsigned int resolutionHeight;
+
+   /** The width of the game's window. */
+   static unsigned int resolutionWidth;
+
+   /** The bit depth of the game's window. */
+   static unsigned int resolutionBitsPerPixel;
+
    /**
     * Creates a new settings file for the first run of the game.
     */
@@ -56,6 +68,26 @@ class Settings
        * @return true iff the user has enabled music for the game.
        */
       static bool isSoundEnabled();
+
+      /**
+       * @return true iff the user has enabled fullscreen (non-windowed) mode for the game.
+       */
+      static bool isFullScreenEnabled();
+
+      /**
+       * @return the height of the game window.
+       */
+      static unsigned int getResolutionHeight();
+
+      /**
+       * @return the width of the game window.
+       */
+      static unsigned int getResolutionWidth();
+
+      /**
+       * @return the bit depth of the game window.
+       */
+      static unsigned int getResolutionBitsPerPixel();
 };
 
 #endif

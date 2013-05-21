@@ -13,6 +13,7 @@
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include "RocketSDLInputMapping.h"
+#include "Settings.h"
 #include "Size.h"
 #include <dirent.h>
 
@@ -24,6 +25,10 @@ SDL_Surface* GraphicsUtil::screen = NULL;
 
 void GraphicsUtil::initialize()
 {
+   width = Settings::getResolutionWidth();
+   height = Settings::getResolutionHeight();
+   bitsPerPixel = Settings::getResolutionBitsPerPixel();
+
    currentXOffset = 0;
    currentYOffset = 0;
 
@@ -43,14 +48,14 @@ void GraphicsUtil::initSDL()
    // Initialize SDL audio and video bindings
    if(SDL_Init (SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0)
    {
-      printf ("Couldn't initialize SDL: %s\n", SDL_GetError ());
+      DEBUG("Couldn't initialize SDL: %s\n", SDL_GetError());
       exit(1);
    }
 
    // Initialize SDL_mixer audio library
    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers))
    {
-      printf("Unable to open audio: %s\n", SDL_GetError());
+      DEBUG("Unable to open audio: %s\n", SDL_GetError());
       exit(1);
    }
 
@@ -60,11 +65,17 @@ void GraphicsUtil::initSDL()
    // On exit, run the SDL cleanup
    atexit (SDL_Quit);
  
-   // Set 800x600 32-bits video mode (HARDCODED)
-   screen = SDL_SetVideoMode (width, height, 32, SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL);
+   // Set video mode based on user's choice of resolution
+   unsigned int videoModeFlags = SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL;
+   if(Settings::isFullScreenEnabled())
+   {
+      videoModeFlags |= SDL_FULLSCREEN;
+   }
+
+   screen = SDL_SetVideoMode (width, height, bitsPerPixel, videoModeFlags);
    if(screen == NULL)
    {
-      printf ("Couldn't set 800x600x32 video mode: %s\n", SDL_GetError());
+      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", width, height, bitsPerPixel, SDL_GetError());
       exit(1);
    }
 
@@ -88,7 +99,7 @@ void GraphicsUtil::initSDL()
    //Initialize SDL_ttf for use of TrueType Fonts
    if(TTF_Init() == -1)
    {
-      printf("TTF_Init: %s\n", TTF_GetError());
+      DEBUG("TTF_Init: %s\n", TTF_GetError());
       exit(1);
    }
 

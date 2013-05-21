@@ -14,6 +14,10 @@ const int debugFlag = DEBUG_SETTINGS;
 const std::string Settings::DEFAULT_SETTINGS_PATH = "settings.ini";
 bool Settings::musicEnabled = true;
 bool Settings::soundEnabled = true;
+bool Settings::fullScreenEnabled = false;
+unsigned int Settings::resolutionBitsPerPixel = 32;
+unsigned int Settings::resolutionHeight = 768;
+unsigned int Settings::resolutionWidth = 1024;
 
 void Settings::initialize()
 {
@@ -44,8 +48,14 @@ void Settings::save(std::ostream& output)
    
    Json::Value jsonRoot;
    
-   jsonRoot["musicEnabled"].operator=(Settings::musicEnabled);
-   jsonRoot["soundEnabled"].operator=(Settings::soundEnabled);
+   jsonRoot["musicEnabled"] = Settings::musicEnabled;
+   jsonRoot["soundEnabled"] = Settings::soundEnabled;
+   jsonRoot["fullScreenEnabled"] = Settings::fullScreenEnabled;
+   
+   Json::Value& resolutionSettings = jsonRoot["resolution"] = Json::Value(Json::objectValue);
+   resolutionSettings["bitsPerPixel"] = Settings::resolutionBitsPerPixel;
+   resolutionSettings["height"] = Settings::resolutionHeight;
+   resolutionSettings["width"] = Settings::resolutionWidth;
    
    output << jsonRoot;
 }
@@ -68,6 +78,12 @@ void Settings::load(std::istream& input)
    
    Settings::musicEnabled = jsonRoot.get("musicEnabled", true).asBool();
    Settings::soundEnabled = jsonRoot.get("soundEnabled", true).asBool();
+   Settings::fullScreenEnabled = jsonRoot.get("fullScreenEnabled", true).asBool();
+
+   Json::Value& resolutionSettings = jsonRoot["resolution"];
+   Settings::resolutionBitsPerPixel = resolutionSettings.get("bitsPerPixel", 32).asUInt();
+   Settings::resolutionHeight = resolutionSettings.get("height", 768).asUInt();
+   Settings::resolutionWidth = resolutionSettings.get("width", 1024).asUInt();
 }
 
 bool Settings::isMusicEnabled()
@@ -78,4 +94,24 @@ bool Settings::isMusicEnabled()
 bool Settings::isSoundEnabled()
 {
    return Settings::soundEnabled;
+}
+
+bool Settings::isFullScreenEnabled()
+{
+   return Settings::fullScreenEnabled;
+}
+
+unsigned int Settings::getResolutionHeight()
+{
+   return Settings::resolutionHeight;
+}
+
+unsigned int Settings::getResolutionWidth()
+{
+   return Settings::resolutionWidth;
+}
+
+unsigned int Settings::getResolutionBitsPerPixel()
+{
+   return Settings::resolutionBitsPerPixel;
 }
