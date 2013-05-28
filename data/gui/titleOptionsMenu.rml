@@ -5,8 +5,11 @@
    </head>
    <body>
       <div class="title">Options</div>
-      <form>
-         <input type="checkbox">Music enabled</input>
+      <form id="optionsForm">
+         <input id="musicEnabled" type="checkbox">Music enabled</input><br />
+         <input id="soundEnabled" type="checkbox">Sound enabled</input><br />
+
+         <input type="submit">Apply</input>
       </form>
    </body>
 </rml>

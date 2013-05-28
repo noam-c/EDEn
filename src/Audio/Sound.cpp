@@ -55,7 +55,7 @@ void Sound::load(const std::string& path)
 
 void Sound::play(Task* task)
 {
-   if(!Settings::isSoundEnabled() || sound == NULL)
+   if(!Settings::getCurrentSettings().isSoundEnabled() || sound == NULL)
    {
       if(task)
       {

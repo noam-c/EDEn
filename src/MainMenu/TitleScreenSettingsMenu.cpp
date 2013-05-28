@@ -11,6 +11,7 @@
 
 #include "ResourceLoader.h"
 #include "Scheduler.h"
+#include "Settings.h"
 
 #include "DebugUtils.h"
 
@@ -26,6 +27,27 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
 
    if(titleSettingsDocument != NULL)
    {
+      Rocket::Core::Element* optionsForm = titleSettingsDocument->GetElementById("optionsForm");
+      
+      if(optionsForm != NULL)
+      {
+         musicEnabledCheckbox = optionsForm->GetElementById("musicEnabled");
+         if(musicEnabledCheckbox != NULL)
+         {
+            bindings.bindAction(musicEnabledCheckbox, "change", &TitleScreenSettingsMenu::onMusicEnabledChange);
+         }
+
+         soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
+         if(soundEnabledCheckbox != NULL)
+         {
+            bindings.bindAction(soundEnabledCheckbox, "change", &TitleScreenSettingsMenu::onSoundEnabledChange);
+         }
+
+         bindings.bindAction(optionsForm, "submit", &TitleScreenSettingsMenu::onSubmit);
+
+         loadSettings();
+      }
+
       titleSettingsDocument->Show();
    }
 }
@@ -36,6 +58,58 @@ TitleScreenSettingsMenu::~TitleScreenSettingsMenu()
    titleSettingsDocument->RemoveReference();
 
    delete scheduler;
+}
+
+void TitleScreenSettingsMenu::loadSettings()
+{
+   if(musicEnabledCheckbox != NULL)
+   {
+      if(Settings::getCurrentSettings().isMusicEnabled())
+      {
+         musicEnabledCheckbox->SetAttribute("checked", "");
+      }
+      else
+      {
+         musicEnabledCheckbox->RemoveAttribute("checked");
+      }
+   }
+   
+   if(soundEnabledCheckbox != NULL)
+   {
+      if(Settings::getCurrentSettings().isSoundEnabled())
+      {
+         soundEnabledCheckbox->SetAttribute("checked", "");
+      }
+      else
+      {
+         soundEnabledCheckbox->RemoveAttribute("checked");
+      }
+   }
+}
+
+bool TitleScreenSettingsMenu::getCheckboxValue(Rocket::Core::Event* event)
+{
+   return event->GetCurrentElement()->GetAttribute("checked") != NULL;
+}
+
+void TitleScreenSettingsMenu::onMusicEnabledChange(Rocket::Core::Event* event)
+{
+   Settings::getCurrentSettings().setMusicEnabled(TitleScreenSettingsMenu::getCheckboxValue(event));
+}
+
+void TitleScreenSettingsMenu::onSoundEnabledChange(Rocket::Core::Event* event)
+{
+   Settings::getCurrentSettings().setSoundEnabled(TitleScreenSettingsMenu::getCheckboxValue(event));
+}
+
+void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
+{
+   saveSettings();
+}
+
+void TitleScreenSettingsMenu::saveSettings()
+{
+   Settings::getCurrentSettings().save();
 }
 
 bool TitleScreenSettingsMenu::step(long timePassed)

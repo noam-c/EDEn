@@ -25,9 +25,10 @@ SDL_Surface* GraphicsUtil::screen = NULL;
 
 void GraphicsUtil::initialize()
 {
-   width = Settings::getResolutionWidth();
-   height = Settings::getResolutionHeight();
-   bitsPerPixel = Settings::getResolutionBitsPerPixel();
+   const Settings::Resolution& resolution = Settings::getCurrentSettings().getResolution();
+   width = resolution.getWidth();
+   height = resolution.getHeight();
+   bitsPerPixel = resolution.getBitsPerPixel();
 
    currentXOffset = 0;
    currentYOffset = 0;
@@ -67,7 +68,7 @@ void GraphicsUtil::initSDL()
  
    // Set video mode based on user's choice of resolution
    unsigned int videoModeFlags = SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL;
-   if(Settings::isFullScreenEnabled())
+   if(Settings::getCurrentSettings().isFullScreenEnabled())
    {
       videoModeFlags |= SDL_FULLSCREEN;
    }
