@@ -38,13 +38,27 @@ class TitleScreenSettingsMenu: public GameState
 
    /** The title screen RML document */
    Rocket::Core::ElementDocument* titleSettingsDocument;
-
+   
+   /** The music checkbox */
+   Rocket::Core::Element* musicEnabledCheckbox;
+   
+   /** The sound checkbox */
+   Rocket::Core::Element* soundEnabledCheckbox;
+   
    /**
     * Poll and handle the next input event.
     *
     * @param finishState Returned as true if the input event quit out of the main menu.
     */
    void waitForInputEvent(bool& finishState);
+
+   static bool getCheckboxValue(Rocket::Core::Event* event);
+   void loadSettings();
+   void saveSettings();
+
+   void onMusicEnabledChange(Rocket::Core::Event* event);
+   void onSoundEnabledChange(Rocket::Core::Event* event);
+   void onSubmit(Rocket::Core::Event* event);
 
    protected:
       /**

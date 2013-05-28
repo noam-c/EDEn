@@ -12,13 +12,13 @@ body
 
 .title
 {
-	margin-top: 20px;
-	font-size: 48pt;
+   margin-top: 20px;
+   font-size: 48pt;
 }
 
 #menu
 {
-	position: absolute;
+   position: absolute;
    bottom: 50px;
    line-height: 1em;
 }
@@ -32,3 +32,41 @@ body
 {
    color: #999999;
 }
+
+input.checkbox
+{
+   width: 15px;
+   height: 15px;
+   background-color: #ff0000;
+   icon-decorator: image;
+   icon-image: title.png 407px 60px 437px 90px;
+}
+
+input.checkbox:hover
+{
+   icon-image-s: 437px 467px;
+}
+
+input.checkbox:active
+{
+   icon-image-s: 467px 497px;
+}
+
+input.checkbox:checked
+{
+   background-color: #00ff00;
+   icon-image-t: 90px 120px;
+}
+
+input.checkbox:checked:hover
+{
+   icon-image-s: 437px 467px;
+   icon-image-t: 90px 120px;
+}
+
+input.checkbox:checked:active
+{
+   icon-image-s: 467px 497px;
+   icon-image-t: 90px 120px;
+}
+

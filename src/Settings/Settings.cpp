@@ -12,12 +12,34 @@
 const int debugFlag = DEBUG_SETTINGS;
 
 const std::string Settings::DEFAULT_SETTINGS_PATH = "settings.ini";
-bool Settings::musicEnabled = true;
-bool Settings::soundEnabled = true;
-bool Settings::fullScreenEnabled = false;
-unsigned int Settings::resolutionBitsPerPixel = 32;
-unsigned int Settings::resolutionHeight = 768;
-unsigned int Settings::resolutionWidth = 1024;
+Settings Settings::currentSettings;
+
+Settings::Resolution::Resolution(unsigned int width, unsigned int height, unsigned int bitsPerPixel) :
+   height(height),
+   width(width),
+   bitsPerPixel(bitsPerPixel)
+{
+}
+
+unsigned int Settings::Resolution::getHeight() const
+{
+   return height;
+}
+
+unsigned int Settings::Resolution::getWidth() const
+{
+   return width;
+}
+
+unsigned int Settings::Resolution::getBitsPerPixel() const
+{
+   return bitsPerPixel;
+}
+
+Settings& Settings::getCurrentSettings()
+{
+   return currentSettings;
+}
 
 void Settings::initialize()
 {
@@ -25,18 +47,32 @@ void Settings::initialize()
    
    if(inputFile)
    {
-      Settings::load(inputFile);
+      currentSettings.load(inputFile);
    }
    else
    {
-      Settings::createNewSettingsFile();
+      currentSettings.createNewSettingsFile();
    }
+}
+
+Settings::Settings() :
+   musicEnabled(true),
+   soundEnabled(true),
+   fullScreenEnabled(false),
+   resolution(1024, 768, 32)
+{
+   
 }
 
 void Settings::createNewSettingsFile()
 {
+   save();
+}
+
+void Settings::save()
+{
    std::ofstream outputFile(Settings::DEFAULT_SETTINGS_PATH.c_str());
-   Settings::save(outputFile);
+   save(outputFile);
 }
 
 void Settings::save(std::ostream& output)
@@ -53,9 +89,9 @@ void Settings::save(std::ostream& output)
    jsonRoot["fullScreenEnabled"] = Settings::fullScreenEnabled;
    
    Json::Value& resolutionSettings = jsonRoot["resolution"] = Json::Value(Json::objectValue);
-   resolutionSettings["bitsPerPixel"] = Settings::resolutionBitsPerPixel;
-   resolutionSettings["height"] = Settings::resolutionHeight;
-   resolutionSettings["width"] = Settings::resolutionWidth;
+   resolutionSettings["bitsPerPixel"] = Settings::resolution.getBitsPerPixel();
+   resolutionSettings["height"] = Settings::resolution.getHeight();
+   resolutionSettings["width"] = Settings::resolution.getWidth();
    
    output << jsonRoot;
 }
@@ -81,37 +117,49 @@ void Settings::load(std::istream& input)
    Settings::fullScreenEnabled = jsonRoot.get("fullScreenEnabled", true).asBool();
 
    Json::Value& resolutionSettings = jsonRoot["resolution"];
-   Settings::resolutionBitsPerPixel = resolutionSettings.get("bitsPerPixel", 32).asUInt();
-   Settings::resolutionHeight = resolutionSettings.get("height", 768).asUInt();
-   Settings::resolutionWidth = resolutionSettings.get("width", 1024).asUInt();
+   unsigned int resolutionBitsPerPixel = resolutionSettings.get("bitsPerPixel", 32).asUInt();
+   unsigned int resolutionHeight = resolutionSettings.get("height", 768).asUInt();
+   unsigned int resolutionWidth = resolutionSettings.get("width", 1024).asUInt();
+   
+   Settings::resolution = Settings::Resolution(resolutionWidth, resolutionHeight, resolutionBitsPerPixel);
 }
 
-bool Settings::isMusicEnabled()
+bool Settings::isMusicEnabled() const
 {
-   return Settings::musicEnabled;
+   return musicEnabled;
 }
 
-bool Settings::isSoundEnabled()
+void Settings::setMusicEnabled(bool value)
 {
-   return Settings::soundEnabled;
+   musicEnabled = value;
 }
 
-bool Settings::isFullScreenEnabled()
+bool Settings::isSoundEnabled() const
 {
-   return Settings::fullScreenEnabled;
+   return soundEnabled;
 }
 
-unsigned int Settings::getResolutionHeight()
+void Settings::setSoundEnabled(bool value)
 {
-   return Settings::resolutionHeight;
+   soundEnabled = value;
 }
 
-unsigned int Settings::getResolutionWidth()
+bool Settings::isFullScreenEnabled() const
 {
-   return Settings::resolutionWidth;
+   return fullScreenEnabled;
 }
 
-unsigned int Settings::getResolutionBitsPerPixel()
+void Settings::setFullScreenEnabled(bool value)
 {
-   return Settings::resolutionBitsPerPixel;
+   fullScreenEnabled = value;
+}
+
+const Settings::Resolution& Settings::getResolution() const
+{
+   return resolution;
+}
+
+void Settings::setResolution(const Settings::Resolution& value)
+{
+   resolution = value;
 }

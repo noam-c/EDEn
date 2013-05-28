@@ -19,75 +19,118 @@ class Settings
 {
    const static std::string DEFAULT_SETTINGS_PATH;
    
+   static Settings currentSettings;
+   
    /** True iff music should be played in the game. */
-   static bool musicEnabled;
+   bool musicEnabled;
 
    /** True iff sound effects should be played in the game. */
-   static bool soundEnabled;
+   bool soundEnabled;
 
    /** True iff fullscreen mode is enabled in the game. */
-   static bool fullScreenEnabled;
+   bool fullScreenEnabled;
    
-   /** The height of the game's window. */
-   static unsigned int resolutionHeight;
-
-   /** The width of the game's window. */
-   static unsigned int resolutionWidth;
-
-   /** The bit depth of the game's window. */
-   static unsigned int resolutionBitsPerPixel;
+   Settings();
 
    /**
     * Creates a new settings file for the first run of the game.
     */
-   static void createNewSettingsFile();
+   void createNewSettingsFile();
    
    /**
     * Saves the user and game settings to a specified stream.
     *
     * @param output The output stream to save settings to.
     */
-   static void save(std::ostream& output);
+   void save(std::ostream& output);
    
    /**
     * Loads the user and game settings from a specified stream.
     *
     * @param input The input stream to load settings from.
     */
-   static void load(std::istream& input);
+   void load(std::istream& input);
    
    public:
+      class Resolution
+      {
+         /** The height of the game's window. */
+         unsigned int height;
+         
+         /** The width of the game's window. */
+         unsigned int width;
+         
+         /** The bit depth of the game's window. */
+         unsigned int bitsPerPixel;
+         
+         public:
+            Resolution(unsigned int width, unsigned int height, unsigned int bitsPerPixel);
+
+            /** The height of the game's window. */
+            unsigned int getHeight() const;
+
+            /** The width of the game's window. */
+            unsigned int getWidth() const;
+           
+            /** The bit depth of the game's window. */
+            unsigned int getBitsPerPixel() const;
+      };
+   
+   private:
+      Resolution resolution;
+
+   public:
       static void initialize();
+
+      static Settings& getCurrentSettings();
+
+      /**
+       * @return true iff the user has enabled music for the game.
+       */
+      bool isMusicEnabled() const;
    
       /**
-       * @return true iff the user has enabled music for the game.
+       * Updates the settings to enable or disable music per the user's preferences.
+       *
+       * @param musicEnabled Set true iff the user has enabled music for the game.
        */
-      static bool isMusicEnabled();
-
+      void setMusicEnabled(bool musicEnabled);
+      
       /**
        * @return true iff the user has enabled music for the game.
        */
-      static bool isSoundEnabled();
-
+      bool isSoundEnabled() const;
+      
+      /**
+       * Updates the settings to enable or disable sound effects per the user's preferences.
+       *
+       * @param soundEnabled Set true iff the user has enabled sound for the game.
+       */
+      void setSoundEnabled(bool soundEnabled);
+      
       /**
        * @return true iff the user has enabled fullscreen (non-windowed) mode for the game.
        */
-      static bool isFullScreenEnabled();
-
+      bool isFullScreenEnabled() const;
+      
       /**
-       * @return the height of the game window.
+       * Updates the settings to enable or disable fullscreen rendering per the user's preferences.
+       *
+       * @param fullScreenEnabled Set true iff the user has enabled fullscreen rendering for the game.
        */
-      static unsigned int getResolutionHeight();
-
+      void setFullScreenEnabled(bool fullScreenEnabled);
+   
       /**
-       * @return the width of the game window.
+       * @return the resolution of the game window.
        */
-      static unsigned int getResolutionWidth();
+      const Resolution& getResolution() const;
 
+      void setResolution(const Resolution& resolution);
+   
       /**
-       * @return the bit depth of the game window.
+       * Saves the user and game settings to the default settings file.
        */
-      static unsigned int getResolutionBitsPerPixel();
+      void save();
 };
 
 #endif

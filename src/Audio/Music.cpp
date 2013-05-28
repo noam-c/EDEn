@@ -74,7 +74,7 @@ void Music::stopMusic()
 
 void Music::play()
 {
-   if(!Settings::isMusicEnabled() || music == NULL) return;
+   if(!Settings::getCurrentSettings().isMusicEnabled() || music == NULL) return;
 
    if(!isPlaying(this))
    {
