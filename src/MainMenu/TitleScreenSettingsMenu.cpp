@@ -10,6 +10,7 @@
 #include <Rocket/Core.h>
 
 #include "ResourceLoader.h"
+#include "GraphicsUtil.h"
 #include "Scheduler.h"
 #include "Settings.h"
 
@@ -36,13 +37,13 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
          {
             bindings.bindAction(musicEnabledCheckbox, "change", &TitleScreenSettingsMenu::onMusicEnabledChange);
          }
-
+         
          soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
          if(soundEnabledCheckbox != NULL)
          {
             bindings.bindAction(soundEnabledCheckbox, "change", &TitleScreenSettingsMenu::onSoundEnabledChange);
          }
-
+         
          bindings.bindAction(optionsForm, "submit", &TitleScreenSettingsMenu::onSubmit);
 
          loadSettings();
@@ -87,6 +88,11 @@ void TitleScreenSettingsMenu::loadSettings()
    }
 }
 
+void TitleScreenSettingsMenu::revertSettings()
+{
+   Settings::getCurrentSettings().revertChanges();
+}
+
 bool TitleScreenSettingsMenu::getCheckboxValue(Rocket::Core::Event* event)
 {
    return event->GetCurrentElement()->GetAttribute("checked") != NULL;
@@ -104,7 +110,53 @@ void TitleScreenSettingsMenu::onSoundEnabledChange(Rocket::Core::Event* event)
 
 void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
 {
-   saveSettings();
+   if (event->GetParameter<Rocket::Core::String>("submit", "cancel") == "apply")
+   {
+      bool settingsUpdateSuccess = true;
+      if(GraphicsUtil::getInstance()->isVideoModeRefreshRequired())
+      {
+         std::string* errorMsg = NULL;
+         settingsUpdateSuccess = GraphicsUtil::getInstance()->refreshVideoMode(errorMsg);
+         if(!settingsUpdateSuccess)
+         {
+            DEBUG("Failed to refresh video mode:");
+            if(errorMsg != NULL)
+            {
+               DEBUG("%s", errorMsg->c_str());
+               delete errorMsg;
+               errorMsg = NULL;
+            }
+            else
+            {
+               DEBUG("No error message supplied.");
+            }
+            
+            Settings::getCurrentSettings().revertVideoChanges();
+            if(!GraphicsUtil::getInstance()->refreshVideoMode(errorMsg))
+            {
+               if(errorMsg != NULL)
+               {
+                  DEBUG("%s", errorMsg->c_str());
+                  delete errorMsg;
+                  errorMsg = NULL;
+               }
+               
+               T_T("Failed to revert video mode!");
+            }
+         }
+      }
+
+      if(settingsUpdateSuccess)
+      {
+         saveSettings();
+         finished = true;
+      }
+   }
+   else
+   {
+      revertSettings();
+      finished = true;
+   }
 }
 
 void TitleScreenSettingsMenu::saveSettings()

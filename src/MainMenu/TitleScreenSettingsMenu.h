@@ -21,6 +21,7 @@ namespace Rocket
 
 class Music;
 class Sound;
+class Settings;
 
 /**
  * Provides the title screen settings menu, allowing the user to
@@ -45,6 +46,9 @@ class TitleScreenSettingsMenu: public GameState
    /** The sound checkbox */
    Rocket::Core::Element* soundEnabledCheckbox;
    
+   /** The fullscreen checkbox */
+   Rocket::Core::Element* fullScreenEnabledCheckbox;
+   
    /**
     * Poll and handle the next input event.
     *
@@ -55,9 +59,11 @@ class TitleScreenSettingsMenu: public GameState
    static bool getCheckboxValue(Rocket::Core::Event* event);
    void loadSettings();
    void saveSettings();
+   void revertSettings();
 
    void onMusicEnabledChange(Rocket::Core::Event* event);
    void onSoundEnabledChange(Rocket::Core::Event* event);
+   void onFullScreenEnabledChange(Rocket::Core::Event* event);
    void onSubmit(Rocket::Core::Event* event);
 
    protected:

@@ -13,6 +13,8 @@
 #include "EdenRocketRenderInterface.h"
 #include "EdenRocketSystemInterface.h"
 
+class Settings;
+
 struct SDL_Surface;
 union SDL_Event;
 
@@ -45,6 +47,8 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
    /** The system interface that Rocket will use. */
    EdenRocketSystemInterface rocketSystemInterface;
 
+   bool fullScreenEnabled;
+   
    /** The screen width */
    unsigned int width;
    
@@ -66,6 +70,15 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
     * Initializes an OpenGL viewport and projection
     */
    void initSDL();
+   
+   /**
+    * Initializes SDL video mode.
+    *
+    * @param errorMsg The error generated if setting the video mode fails.
+    *
+    * @return true iff setting the video mode was successful.
+    */
+   bool initSDLVideoMode(std::string*& errorMsg);
 
    /**
     * Initializes the Rocket library to render RML pages as GUI elements.
@@ -91,6 +104,10 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       virtual void finish();
 
    public:
+   
+      bool isVideoModeRefreshRequired() const;
+      bool refreshVideoMode(std::string*& errorMsg);
+   
       /**
        * @return The extension manager for this graphical context.
        */
@@ -99,12 +116,12 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       /**
        * @return The width of the screen
        */
-      int getWidth();
+      int getWidth() const;
 
       /**
        * @return The height of the screen
        */
-      int getHeight();
+      int getHeight() const;
 
       /**
        * @param The name of the new Rocket context.

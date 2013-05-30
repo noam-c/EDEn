@@ -19,6 +19,7 @@ class Settings
 {
    const static std::string DEFAULT_SETTINGS_PATH;
    
+   Settings* settingsSnapshot;
    static Settings currentSettings;
    
    /** True iff music should be played in the game. */
@@ -30,7 +31,7 @@ class Settings
    /** True iff fullscreen mode is enabled in the game. */
    bool fullScreenEnabled;
    
-   Settings();
+   Settings(bool isSnapshot = false);
 
    /**
     * Creates a new settings file for the first run of the game.
@@ -65,6 +66,8 @@ class Settings
          
          public:
             Resolution(unsigned int width, unsigned int height, unsigned int bitsPerPixel);
+            Resolution(const Resolution& other);
+            Resolution& operator=(const Resolution& other);
 
             /** The height of the game's window. */
             unsigned int getHeight() const;
@@ -80,9 +83,14 @@ class Settings
       Resolution resolution;
 
    public:
+      Settings(const Settings& other);
+      Settings& operator=(const Settings& other);
+      ~Settings();
+
       static void initialize();
 
       static Settings& getCurrentSettings();
+      static void setCurrentSettings(const Settings& other);
 
       /**
        * @return true iff the user has enabled music for the game.
@@ -131,6 +139,9 @@ class Settings
        * Saves the user and game settings to the default settings file.
        */
       void save();
+   
+      void revertVideoChanges();
+      void revertChanges();
 };
 
 #endif
