@@ -14,31 +14,14 @@ const int debugFlag = DEBUG_SETTINGS;
 const std::string Settings::DEFAULT_SETTINGS_PATH = "settings.ini";
 Settings Settings::currentSettings;
 
-Settings::Resolution::Resolution(unsigned int width, unsigned int height, unsigned int bitsPerPixel) :
-   height(height),
-   width(width),
-   bitsPerPixel(bitsPerPixel)
-{
-}
-
-unsigned int Settings::Resolution::getHeight() const
-{
-   return height;
-}
-
-unsigned int Settings::Resolution::getWidth() const
-{
-   return width;
-}
-
-unsigned int Settings::Resolution::getBitsPerPixel() const
-{
-   return bitsPerPixel;
-}
-
 Settings& Settings::getCurrentSettings()
 {
-   return currentSettings;
+   return Settings::currentSettings;
+}
+
+void Settings::setCurrentSettings(const Settings& other)
+{
+   Settings::currentSettings = other;
 }
 
 void Settings::initialize()
@@ -47,21 +30,53 @@ void Settings::initialize()
    
    if(inputFile)
    {
-      currentSettings.load(inputFile);
+      Settings::currentSettings.load(inputFile);
    }
    else
    {
-      currentSettings.createNewSettingsFile();
+      Settings::currentSettings.createNewSettingsFile();
    }
 }
 
-Settings::Settings() :
+Settings::Settings(bool isSnapshot) :
+   settingsSnapshot(isSnapshot ? NULL : new Settings(true)),
    musicEnabled(true),
    soundEnabled(true),
    fullScreenEnabled(false),
    resolution(1024, 768, 32)
 {
    
+}
+
+Settings::Settings(const Settings& other) :
+   settingsSnapshot(other.settingsSnapshot),
+   musicEnabled(other.musicEnabled),
+   soundEnabled(other.soundEnabled),
+   fullScreenEnabled(other.fullScreenEnabled),
+   resolution(other.resolution)
+{
+   
+}
+
+Settings& Settings::operator=(const Settings& other)
+{
+   if(this != &other)
+   {
+      musicEnabled = other.musicEnabled;
+      soundEnabled = other.soundEnabled;
+      fullScreenEnabled = other.fullScreenEnabled;
+      resolution = other.resolution;
+   }
+   
+   return *this;
+}
+
+Settings::~Settings()
+{
+   if(settingsSnapshot != NULL)
+   {
+      delete settingsSnapshot;
+   }
 }
 
 void Settings::createNewSettingsFile()
@@ -94,6 +109,8 @@ void Settings::save(std::ostream& output)
    resolutionSettings["width"] = Settings::resolution.getWidth();
    
    output << jsonRoot;
+
+   *settingsSnapshot = *this;
 }
 
 void Settings::load(std::istream& input)
@@ -112,16 +129,29 @@ void Settings::load(std::istream& input)
       T_T("Failed to parse settings.");
    }
    
-   Settings::musicEnabled = jsonRoot.get("musicEnabled", true).asBool();
-   Settings::soundEnabled = jsonRoot.get("soundEnabled", true).asBool();
-   Settings::fullScreenEnabled = jsonRoot.get("fullScreenEnabled", true).asBool();
+   musicEnabled = jsonRoot.get("musicEnabled", true).asBool();
+   soundEnabled = jsonRoot.get("soundEnabled", true).asBool();
+   fullScreenEnabled = jsonRoot.get("fullScreenEnabled", true).asBool();
 
    Json::Value& resolutionSettings = jsonRoot["resolution"];
    unsigned int resolutionBitsPerPixel = resolutionSettings.get("bitsPerPixel", 32).asUInt();
    unsigned int resolutionHeight = resolutionSettings.get("height", 768).asUInt();
    unsigned int resolutionWidth = resolutionSettings.get("width", 1024).asUInt();
    
-   Settings::resolution = Settings::Resolution(resolutionWidth, resolutionHeight, resolutionBitsPerPixel);
+   resolution = Settings::Resolution(resolutionWidth, resolutionHeight, resolutionBitsPerPixel);
+
+   *settingsSnapshot = *this;
+}
+
+void Settings::revertVideoChanges()
+{
+   resolution = settingsSnapshot->resolution;
+   fullScreenEnabled = settingsSnapshot->fullScreenEnabled;
+}
+
+void Settings::revertChanges()
+{
+   *this = *settingsSnapshot;
 }
 
 bool Settings::isMusicEnabled() const

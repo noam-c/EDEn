@@ -9,7 +9,8 @@
          <input id="musicEnabled" type="checkbox">Music enabled</input><br />
          <input id="soundEnabled" type="checkbox">Sound enabled</input><br />
 
-         <input type="submit">Apply</input>
+         <input type="submit" value="apply">Apply</input>
+         <input type="submit" value="cancel">Cancel</input>
       </form>
    </body>
 </rml>

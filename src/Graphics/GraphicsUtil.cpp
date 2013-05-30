@@ -26,6 +26,7 @@ SDL_Surface* GraphicsUtil::screen = NULL;
 void GraphicsUtil::initialize()
 {
    const Settings::Resolution& resolution = Settings::getCurrentSettings().getResolution();
+   fullScreenEnabled = Settings::getCurrentSettings().isFullScreenEnabled();
    width = resolution.getWidth();
    height = resolution.getHeight();
    bitsPerPixel = resolution.getBitsPerPixel();
@@ -65,37 +66,19 @@ void GraphicsUtil::initSDL()
 
    // On exit, run the SDL cleanup
    atexit (SDL_Quit);
- 
-   // Set video mode based on user's choice of resolution
-   unsigned int videoModeFlags = SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL;
-   if(Settings::getCurrentSettings().isFullScreenEnabled())
-   {
-      videoModeFlags |= SDL_FULLSCREEN;
-   }
 
-   screen = SDL_SetVideoMode (width, height, bitsPerPixel, videoModeFlags);
-   if(screen == NULL)
+   std::string* errorMsg = NULL;
+   if(!initSDLVideoMode(errorMsg))
    {
-      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", width, height, bitsPerPixel, SDL_GetError());
+      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", width, height, bitsPerPixel, errorMsg->c_str());
       exit(1);
    }
 
-   // Enable Texture Mapping
-   glEnable(GL_TEXTURE_2D);
-
-   // Sprites drawn to screen replace whatever is behind them (tiles, background)
-   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-   // Set up the viewport and reset the projection matrix
-   glViewport(0, 0, width, height);
-   glMatrixMode(GL_PROJECTION);
-   glLoadIdentity();
-
-   // Set the clear color to black
-   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-   // Create a 2D orthogonal perspective (better for 2D games)
-   gluOrtho2D(0.0f, (float)width, (float)height, 0.0f);
+   if(errorMsg != NULL)
+   {
+      delete errorMsg;
+      errorMsg = NULL;
+   }
 
    //Initialize SDL_ttf for use of TrueType Fonts
    if(TTF_Init() == -1)
@@ -109,7 +92,45 @@ void GraphicsUtil::initSDL()
    // We want to enable key repeat
    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
-   SDL_WM_SetCaption ("Buhr Prototype", NULL);
+   SDL_WM_SetCaption ("EDEn", NULL);
+}
+
+bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
+{
+   // Set video mode based on user's choice of resolution
+   unsigned int videoModeFlags = SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL;
+   if(fullScreenEnabled)
+   {
+      videoModeFlags |= SDL_FULLSCREEN;
+   }
+   
+   screen = SDL_SetVideoMode(width, height, bitsPerPixel, videoModeFlags);
+   if(screen == NULL)
+   {
+      errorMsg = new std::string(SDL_GetError());
+      return false;
+   }
+   
+   // Enable Texture Mapping
+   glEnable(GL_TEXTURE_2D);
+   
+   // Sprites drawn to screen replace whatever is behind them (tiles, background)
+   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+   
+   // Set up the viewport and reset the projection matrix
+   glViewport(0, 0, width, height);
+   glMatrixMode(GL_PROJECTION);
+   glLoadIdentity();
+   
+   // Set the clear color to black
+   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+   
+   // Create a 2D orthogonal perspective (better for 2D games)
+   gluOrtho2D(0.0f, (float)width, (float)height, 0.0f);
+
+   glMatrixMode(GL_MODELVIEW);
+
+   return true;
 }
 
 void GraphicsUtil::initRocket()
@@ -162,17 +183,42 @@ void GraphicsUtil::flipScreen()
    SDL_GL_SwapBuffers();
 }
 
+bool GraphicsUtil::isVideoModeRefreshRequired() const
+{
+   const Settings& currentSettings = Settings::getCurrentSettings();
+   const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();
+   
+   return
+      currentSettings.isFullScreenEnabled() != fullScreenEnabled ||
+      currentSettingsResolution.getWidth() != width ||
+      currentSettingsResolution.getHeight() != height ||
+      currentSettingsResolution.getBitsPerPixel() != bitsPerPixel;
+}
+
+bool GraphicsUtil::refreshVideoMode(std::string*& errorMsg)
+{
+   const Settings& currentSettings = Settings::getCurrentSettings();
+   const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();
+
+   fullScreenEnabled = currentSettings.isFullScreenEnabled();
+   width = currentSettingsResolution.getWidth();
+   height = currentSettingsResolution.getHeight();
+   bitsPerPixel = currentSettingsResolution.getBitsPerPixel();
+
+   return initSDLVideoMode(errorMsg);
+}
+
 const OpenGLExtensions& GraphicsUtil::getExtensions() const
 {
    return openGLExtensions;
 }
 
-int GraphicsUtil::getWidth()
+int GraphicsUtil::getWidth() const
 {
    return width;
 }
 
-int GraphicsUtil::getHeight()
+int GraphicsUtil::getHeight() const
 {
    return height;
 }
