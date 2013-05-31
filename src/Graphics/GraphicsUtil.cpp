@@ -135,41 +135,42 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
 
 void GraphicsUtil::initRocket()
 {
-    Rocket::Core::SetSystemInterface(&rocketSystemInterface);
-    Rocket::Core::SetRenderInterface(&rocketRenderInterface);
-    Rocket::Core::Initialise();
-    Rocket::Controls::Initialise();
+   Rocket::Core::SetSystemInterface(&rocketSystemInterface);
+   Rocket::Core::SetRenderInterface(&rocketRenderInterface);
+   Rocket::Core::RegisterPlugin(&rocketContextRegistry);
+   Rocket::Core::Initialise();
+   Rocket::Controls::Initialise();
 
-    const std::string fontLocation = "data/fonts";
-    struct dirent *entry;
-    DIR *dp;
-    dp = opendir(fontLocation.c_str());
-    if (dp == NULL)
-    {
-       T_T("Failed to open data/fonts for font loading.");
-    }
+   const std::string fontLocation = "data/fonts";
+   struct dirent *entry;
+   DIR *dp;
+   dp = opendir(fontLocation.c_str());
+   if (dp == NULL)
+   {
+      T_T("Failed to open data/fonts for font loading.");
+   }
 
-    while((entry = readdir(dp)))
-    {
-       const std::string filename = entry->d_name;
-       if(filename.length() > 4)
-       {
-          const std::string extension = filename.substr(filename.length() - 4, 4);
+   while((entry = readdir(dp)))
+   {
+      const std::string filename = entry->d_name;
+      if(filename.length() > 4)
+      {
+         const std::string extension = filename.substr(filename.length() - 4, 4);
 
-          if(extension == ".ttf" || extension == ".otf")
-          {
-             const std::string path = fontLocation + '/' + entry->d_name;
-             if(!Rocket::Core::FontDatabase::LoadFontFace(path.c_str()))
-             {
-                DEBUG("Failed to load font: %s", path.c_str());
-             }
-          }
-       }
-    }
+         if(extension == ".ttf" || extension == ".otf")
+         {
+            const std::string path = fontLocation + '/' + entry->d_name;
+            if(!Rocket::Core::FontDatabase::LoadFontFace(path.c_str()))
+            {
+               DEBUG("Failed to load font: %s", path.c_str());
+            }
+         }
+      }
+   }
 
-    closedir(dp);
+   closedir(dp);
 
-    RocketSDLInputMapping::initialize();
+   RocketSDLInputMapping::initialize();
 }
 
 Rocket::Core::Context* GraphicsUtil::createRocketContext(const std::string& name)
@@ -205,7 +206,17 @@ bool GraphicsUtil::refreshVideoMode(std::string*& errorMsg)
    height = currentSettingsResolution.getHeight();
    bitsPerPixel = currentSettingsResolution.getBitsPerPixel();
 
-   return initSDLVideoMode(errorMsg);
+   bool success = initSDLVideoMode(errorMsg);
+   if(success)
+   {
+      const std::vector<Rocket::Core::Context*>& activeContexts = rocketContextRegistry.getActiveContexts();
+      for(std::vector<Rocket::Core::Context*>::const_iterator iter = activeContexts.begin(); iter != activeContexts.end(); ++iter)
+      {
+         (*iter)->SetDimensions(Rocket::Core::Vector2i(width, height));
+      }
+   }
+   
+   return success;
 }
 
 const OpenGLExtensions& GraphicsUtil::getExtensions() const

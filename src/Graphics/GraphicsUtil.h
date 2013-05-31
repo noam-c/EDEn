@@ -10,6 +10,7 @@
 #include "Singleton.h"
 
 #include "OpenGLExtensions.h"
+#include "RocketContextRegistry.h"
 #include "EdenRocketRenderInterface.h"
 #include "EdenRocketSystemInterface.h"
 
@@ -47,6 +48,9 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
    /** The system interface that Rocket will use. */
    EdenRocketSystemInterface rocketSystemInterface;
 
+   /** The registry used to track all the contexts for resolution changes. */
+   RocketContextRegistry rocketContextRegistry;
+   
    bool fullScreenEnabled;
    
    /** The screen width */

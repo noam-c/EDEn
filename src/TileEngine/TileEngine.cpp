@@ -257,6 +257,7 @@ void TileEngine::activate()
 {
    GameState::activate();
    shortcutBar.refresh();
+   recalculateMapOffsets();
    playerData.bindMessagePipe(&messagePipe);
 }
 
