@@ -17,7 +17,7 @@
 const std::string Actor::DEFAULT_WALKING_PREFIX = "walk";
 const std::string Actor::DEFAULT_STANDING_PREFIX = "stand";
 
-const int debugFlag = DEBUG_NPC;
+const int debugFlag = DEBUG_ACTOR;
 
 Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction) :
    name(name),

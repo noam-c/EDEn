@@ -138,7 +138,7 @@ class Actor
        *
        * @param dst The coordinates (in pixels) for the actor to move to
        */
-      void move(const shapes::Point2D& dst);
+      virtual void move(const shapes::Point2D& dst);
       
       /**
        * This function changes the actor's spritesheet.

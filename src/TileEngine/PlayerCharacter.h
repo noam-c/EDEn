@@ -69,7 +69,14 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
        * Deactivates the player entity.
        */
       void removeFromMap();
-
+   
+      /**
+       * This function enqueues a movement instruction.
+       *
+       * @param dst The coordinates (in pixels) for the actor to move to
+       */
+      virtual void move(const shapes::Point2D& dst);
+      
       /**
        * Takes player input and determines the character's direction and speed,
        * as well as updating the location based on the speed.

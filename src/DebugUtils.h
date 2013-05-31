@@ -44,7 +44,7 @@
 #define DEBUG_SCRIPT_ENG  1<<12    // Script Engine
 #define DEBUG_AUDIO       1<<13    // Audio functionality
 #define DEBUG_SCHEDULER   1<<14    // Scheduler/coroutine functionality
-#define DEBUG_NPC         1<<15    // NPC functionality
+#define DEBUG_ACTOR       1<<15    // Actor functionality
 #define DEBUG_PATHFINDER  1<<16    // Pathfinding functionality
 #define DEBUG_SPRITE      1<<17    // Sprite/spritesheet functionality
 #define DEBUG_PLAYER      1<<18    // Player data/Character functionality

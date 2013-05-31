@@ -2,6 +2,7 @@
 #include "GraphicsUtil.h"
 #include "Actor.h"
 #include "Point2D.h"
+#include "Rectangle.h"
 
 #include "DebugUtils.h"
 
@@ -29,6 +30,19 @@ void Camera::clearFocalPoint()
    focalPointSet = false;
 }
 
+bool Camera::isPointWithinViewport(const shapes::Point2D& point) const
+{
+   return shapes::Rectangle(offset, viewportSize).contains(point);
+}
+
+shapes::Point2D Camera::getPointWithinScene(const shapes::Point2D& point) const
+{
+   const shapes::Point2D cameraFocalOffset = calculateCameraFocalOffset();
+   return shapes::Point2D(
+      point.x - offset.x - cameraFocalOffset.x,
+      point.y - offset.y - cameraFocalOffset.y);
+}
+
 void Camera::setViewBounds(const shapes::Size& newViewportSize, const shapes::Size& newSceneSize)
 {
    viewportSize = newViewportSize;
@@ -38,6 +52,37 @@ void Camera::setViewBounds(const shapes::Size& newViewportSize, const shapes::Si
 
    offset.y = sceneSize.height < viewportSize.height ?
               (viewportSize.height - sceneSize.height) / 2 : 0;
+}
+
+shapes::Point2D Camera::calculateCameraFocalOffset() const
+{
+   shapes::Point2D cameraFocalOffset = shapes::Point2D::ORIGIN;
+   if (focalPointSet)
+   {
+      if(offset.x == 0)
+      {
+         // Offset the camera's focal point by half the screen width to
+         // center the focal point horizontally
+         cameraFocalOffset.x = focalPoint.x - (viewportSize.width / 2);
+         cameraFocalOffset.x = std::max(cameraFocalOffset.x, 0);
+         
+         const signed int rightCameraBoundary = static_cast<signed int>(sceneSize.width - viewportSize.width);
+         cameraFocalOffset.x = -std::min(cameraFocalOffset.x, rightCameraBoundary);
+      }
+      
+      if(offset.y == 0)
+      {
+         // Offset the camera's focal point by half the screen height to
+         // center the focal point vertically
+         cameraFocalOffset.y = focalPoint.y - (viewportSize.height / 2);
+         cameraFocalOffset.y = std::max(cameraFocalOffset.y, 0);
+         
+         const signed int bottomCameraBoundary = static_cast<signed int>(sceneSize.height - viewportSize.height);
+         cameraFocalOffset.y = -std::min(cameraFocalOffset.y, bottomCameraBoundary);
+      }
+   }
+   
+   return cameraFocalOffset;
 }
 
 void Camera::apply()
@@ -56,35 +101,13 @@ void Camera::apply()
       const int scissorYOffset = GraphicsUtil::getInstance()->getHeight() - viewportSize.height;
       glScissor(0, scissorYOffset, viewportSize.width, viewportSize.height);
 
-      if (focalPointSet)
+      shapes::Point2D cameraFocalOffset = calculateCameraFocalOffset();
+
+      if(cameraFocalOffset != shapes::Point2D::ORIGIN)
       {
-         shapes::Point2D cameraFocalPoint;
-         
-         if(offset.x == 0)
-         {
-            // Offset the camera's focal point by half the screen width to
-            // center the focal point horizontally
-            cameraFocalPoint.x = focalPoint.x - (viewportSize.width / 2);
-            cameraFocalPoint.x = std::max(cameraFocalPoint.x, 0);
-
-            const signed int rightCameraBoundary = static_cast<signed int>(sceneSize.width - viewportSize.width);
-            cameraFocalPoint.x = std::min(cameraFocalPoint.x, rightCameraBoundary);
-         }
-
-         if(offset.y == 0)
-         {
-            // Offset the camera's focal point by half the screen height to
-            // center the focal point vertically
-            cameraFocalPoint.y = focalPoint.y - (viewportSize.height / 2);
-            cameraFocalPoint.y = std::max(cameraFocalPoint.y, 0);
-
-            const signed int bottomCameraBoundary = static_cast<signed int>(sceneSize.height - viewportSize.height);
-            cameraFocalPoint.y = std::min(cameraFocalPoint.y, bottomCameraBoundary);
-         }
-
          // Perform an inverse translation from the focal point to shift
          // the scene to the camera
-         glTranslated(-cameraFocalPoint.x, -cameraFocalPoint.y, 0.0);
+         glTranslated(cameraFocalOffset.x, cameraFocalOffset.y, 0.0);
       }
 
       cameraApplied = true;

@@ -24,7 +24,7 @@ const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData) :
-   Actor("player", messagePipe, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 1.0f, DOWN),
+   Actor("player", messagePipe, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 0.2f, DOWN),
    roster(*playerData.getRoster()),
    active(false),
    cumulativeDistanceCovered(0)
@@ -67,9 +67,16 @@ void PlayerCharacter::removeFromMap()
 {
    if(active)
    {
+      flushOrders();
       entityGrid.removeActor(this);
       active = false;
    }
+}
+
+void PlayerCharacter::move(const shapes::Point2D& dst)
+{
+   flushOrders();
+   Actor::move(dst);
 }
 
 void PlayerCharacter::step(long timePassed)
@@ -113,8 +120,8 @@ void PlayerCharacter::step(long timePassed)
    if(hasVelocity)
    {
       flushOrders();
-      /** \todo This algorithm is different from Actor_MoveOrder.cpp, synchronize. */
-      cumulativeDistanceCovered += getMovementSpeed() * (timePassed / 5.0);
+
+      cumulativeDistanceCovered += getMovementSpeed() * timePassed;
       int distanceTraversed = 0;
       if(cumulativeDistanceCovered > 1.0)
       {

@@ -37,12 +37,39 @@ class Camera
    /** The size of the scene that the camera is pointing at. */
    shapes::Size sceneSize;
 
+   /**
+    * Calculates the offset required to show the focal point as close to the center
+    * of the camera viewport as possible.
+    *
+    * @return The offset to translate the camera with to make the focal point visible.
+    */
+   shapes::Point2D calculateCameraFocalOffset() const;
+   
    public:
       /**
        * Constructor.
        */
       Camera();
 
+      /**
+       * Used to check if a given point is within the bounds of the camera's viewport.
+       *
+       * @param point The point to check (in viewport coordinates).
+       *
+       * @returns true iff the given point is within the camera's viewport.
+       */
+      bool isPointWithinViewport(const shapes::Point2D& point) const;
+
+      /**
+       * Reverses the camera's transformation of the scene to determine
+       * the point in the scene represented by the given point.
+       *
+       * @param point The point to translate (in viewport coordinates).
+       *
+       * @return The given point translated into scene coordinates. 
+       */
+      shapes::Point2D getPointWithinScene(const shapes::Point2D& point) const;
+   
       /**
        * Sets the viewport and scene bounds for the camera.
        *

@@ -106,6 +106,7 @@ void TileEngine::receive(const MapExitMessage& message)
 {
    if(playerActor->isActive())
    {
+      playerActor->removeFromMap();
       std::string exitedMap = entityGrid.getMapName();
       std::string enteredMap = message.mapExit.getNextMap();
       DEBUG("Exit signal received: Exiting %s and entering %s", exitedMap.c_str(), enteredMap.c_str());
@@ -363,6 +364,20 @@ void TileEngine::handleInputEvents(bool& finishState)
                   // This assumes that, once the debug event is consumed here, it is not used anymore
                   delete script;
                   break;
+               }
+            }
+            break;
+         }
+         case SDL_MOUSEBUTTONDOWN:
+         {
+            const shapes::Point2D mouseClickLocation(event.button.x, event.button.y);
+            if(camera.isPointWithinViewport(mouseClickLocation))
+            {
+               const shapes::Point2D pointWithinScene = camera.getPointWithinScene(mouseClickLocation);
+               
+               if(entityGrid.isAreaFree(shapes::Rectangle(pointWithinScene, playerActor->getSize())))
+               {
+                  playerActor->move(pointWithinScene);
                }
             }
             break;

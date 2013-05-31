@@ -12,7 +12,7 @@
 #include <math.h>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_NPC;
+const int debugFlag = DEBUG_ACTOR;
 
 // Define as 1 to draw the NPC's projected path to the screen
 #define DRAW_PATH 0

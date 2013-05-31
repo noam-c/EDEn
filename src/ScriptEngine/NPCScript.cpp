@@ -8,7 +8,7 @@
 #include "NPC.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_NPC;
+const int debugFlag = DEBUG_ACTOR;
 
 #include "LuaWrapper.hpp"
 
