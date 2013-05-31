@@ -13,6 +13,7 @@ eden.xcodeproj
 eden.xcode
 .settings/org.eclipse.cdt.codan.core.prefs
 doc/html
+doc/latex
 ALL_BUILD.vcxproj
 ALL_BUILD.vcxproj.filters
 ALL_BUILD.vcxproj.user

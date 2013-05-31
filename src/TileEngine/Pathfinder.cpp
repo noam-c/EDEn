@@ -154,58 +154,124 @@ Pathfinder::Path Pathfinder::findReroutedPath(const EntityGrid& entityGrid, cons
    return findAStarPath(entityGrid, src, dst, size);
 }
 
+/**
+ * Represents a node in an A* search. Tracks the predecessor node and expected cost
+ * of the node to enable the A* algorithm to track the lowest cost node.
+ *
+ * @author Noam Chitayat
+ */
 class Pathfinder::AStarPoint : public shapes::Point2D
 {
    private:
+      /** The predecessor of this node (the previous node on the shortest discovered path to this node). */
       const AStarPoint* parent;
       
+      /** The actual distance cost from the origin node to this node. */
       float gCost;
+   
+      /** The heuristic distance cost from this node to the destination node. */
       float hCost;
 
+      /** The total expected cost of traveling through this node from the origin to the destination. */
       float fCost;
 
    public:
+      /**
+       * Constructor.
+       *
+       * @param parent The predecessor of this node on a path from the origin.
+       * @param x The x coordinate of this node.
+       * @param y The y coordinate of this node.
+       * @param gCost The actual distance cost required to travel from the origin to this node.
+       * @param hCost The estimated distance cost required to travel from this node to the destination.
+       */
       AStarPoint(const AStarPoint* parent, int x, int y, float gCost, float hCost) : shapes::Point2D(x,y), parent(parent), gCost(gCost), hCost(hCost), fCost(gCost + hCost) {}
 
+      /**
+       * Sets a new predecessor node for this node (if a shorter path to this node is found.)
+       *
+       * @param newParent The new parent node used to travel to this node.
+       */
       void setParent(const AStarPoint* newParent)
       {
          parent = newParent;
       }
-   
+
+      /**
+       * Sets a new actual travel cost from the origin to this node.
+       *
+       * @param newCost The new travel cost from the origin to this node.
+       */
       void setGCost(float newCost)
       {
          gCost = newCost;
          fCost = gCost + hCost;
       }
       
+      /**
+       * Sets a new actual heuristic cost from this node to the destination.
+       *
+       * @param newCost The new heuristic cost from this node to the destination.
+       */
       void setHCost(float newCost)
       {
          hCost = newCost;
          fCost = gCost + hCost;
       }
-      
+   
+      /**
+       * Retrieves the previous node on the shortest currently discovered path from
+       * the origin to the destination.
+       *
+       * @return the predecessor of this node on the shortest discovered path.
+       */
       const AStarPoint* getParent() const
       {
          return parent;
       }
-   
+
+      /**
+       * @return The actual distance cost required to travel from the origin to this node.
+       */
       float getGCost() const
       {
          return gCost;
       }
       
+      /**
+       * @return The estimated distance cost required to travel from this node to the destination.
+       */
       float getHCost() const
       {
          return hCost;
       }
 
+      /**
+       * @return The total expected distance cost required to use this node to travel between the origin and destination.
+       */
       float getFCost() const
       {
          return fCost;
       }
-   
+
+      /**
+       * A comparator used to sort A* nodes in a priority queue.
+       * Given two A* nodes, determines which A* node is currently the lowest cost to use.
+       *
+       * @author Noam Chitayat
+       */
       struct IsLowerPriority
       {
+         /**
+          * Comparison operation between two A* nodes. The lowest cost node is the one
+          * with the lowest total estimated cost (F cost). In the case of a tie, the
+          * highest G cost wins since it is not as deep in the search tree.
+          *
+          * @param lhs An A* node to compare.
+          * @param rhs Another A* node to compare.
+          *
+          * @return true iff lhs has a lower expected cost than rhs.
+          */
          bool operator()(const AStarPoint* lhs, const AStarPoint* rhs) const
          {
             // We consider lhs to have a lower priority if it has a higher total f() cost.
@@ -214,11 +280,21 @@ class Pathfinder::AStarPoint : public shapes::Point2D
             return lhs->fCost > rhs->fCost || (lhs->fCost == rhs->fCost && lhs->gCost < rhs->gCost);
          }
       };
-   
+
+      /**
+       * Equality operation.
+       * Used to determine equality between a coordinate pair and an A* node representing a coordinate.
+       *
+       * @author Noam Chitayat
+       */
       struct ArePointsEqual
       {
+         /** The coordinates to compare to. */
          const shapes::Point2D& point;
          
+         /**
+          * @return true iff this A* node represents the same location as point.
+          */
          bool operator()(const AStarPoint* other) const
          {
             return point == *other;
