@@ -70,7 +70,10 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
 
    /** The camera displaying the appropriate subset of the map. */
    Camera camera;
-   
+
+   /** An optional Actor target for the camera to follow. */
+   Actor* cameraTarget;
+
    /**
     * Loads new player data.
     *
@@ -112,6 +115,20 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
     * Clears all the NPCs on the map.
     */
    void clearNPCs();
+
+   /**
+    * Updates all NPCs on the map.
+    *
+    * @param timePassed the amount of time that has passed since the last frame. 
+    */
+   void stepNPCs(long timePassed);
+
+   /**
+    * Collects all active actors on the map.
+    *
+    * @return a vector of all the active actors.
+    */
+   std::vector<Actor*> collectActors() const;
 
    protected:
       /**
@@ -164,20 +181,6 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
       void receive(const MapExitMessage& message);
 
       /**
-       * Updates all NPCs on the map.
-       *
-       * @param timePassed the amount of time that has passed since the last frame. 
-       */
-      void stepNPCs(long timePassed);
-
-      /**
-       * Collects all active actors on the map.
-       *
-       * @return a vector of all the active actors.
-       */
-      std::vector<Actor*> collectActors() const;
-
-      /**
        * Send a line of dialogue to the DialogueController as a narration.
        *
        * @param narration The line of dialogue to appear as a narration.
@@ -213,6 +216,15 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @return 0 or the yield code for a new map script.
        */
       int setMap(std::string mapName = "");
+
+      /**
+       * Order the camera to slide from one location of the map to another.
+       *
+       * @param origin The origin point to start the slide from.
+       * @param destination The destination point to slide the camera to.
+       * @param speed The speed that the camera should slide with.
+       */
+      void slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed);
 
       /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.

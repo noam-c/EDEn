@@ -96,6 +96,7 @@ set(HEADERS
   src/TileEngine/Actor_Orders.h 
   src/TileEngine/LuaActor.h
   src/TileEngine/Camera.h
+  src/TileEngine/CameraSlider.h
   src/TileEngine/DialogueController.h
   src/TileEngine/EntityGrid.h
   src/TileEngine/Layer.h
@@ -197,6 +198,7 @@ set(SOURCES
   src/TileEngine/Actor_StandOrder.cpp
   src/TileEngine/LuaActor.cpp
   src/TileEngine/Camera.cpp
+  src/TileEngine/CameraSlider.cpp
   src/TileEngine/DialogueController.cpp
   src/TileEngine/EntityGrid.cpp
   src/TileEngine/Layer.cpp

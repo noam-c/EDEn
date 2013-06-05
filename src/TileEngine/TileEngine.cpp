@@ -27,6 +27,7 @@
 #include "DialogueController.h"
 #include "GameContext.h"
 #include "ExecutionStack.h"
+#include "CameraSlider.h"
 #include "RandomTransitionGenerator.h"
 #include "HomeMenu.h"
 
@@ -48,6 +49,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
 
    loadPlayerData(playerDataPath);
    playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData);
+   cameraTarget = playerActor;
    gameContext.getScriptEngine().setTileEngine(this);
    gameContext.getScriptEngine().setPlayerData(&playerData);
    dialogue = new DialogueController(*rocketContext, *scheduler, gameContext.getScriptEngine());
@@ -153,8 +155,16 @@ int TileEngine::setMap(std::string mapName)
    DEBUG("Map set to: %s", mapName.c_str());
 
    recalculateMapOffsets();
-
    return gameContext.getScriptEngine().runMapScript(currRegion->getName(), mapName, *scheduler);
+}
+
+void TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed)
+{
+   if(speed > 0)
+   {
+      cameraTarget = NULL;
+      scheduler->start(new CameraSlider(camera, origin, destination, speed));
+   }
 }
 
 void TileEngine::recalculateMapOffsets()
@@ -264,10 +274,6 @@ void TileEngine::draw()
    std::vector<Actor*> actors = collectActors();
 
    GraphicsUtil::getInstance()->clearBuffer();
-   if(playerActor->isActive())
-   {
-      camera.setFocalPoint(playerActor->getLocation());
-   }
 
    camera.apply();
       if(entityGrid.getMapData() == NULL)
@@ -327,6 +333,12 @@ bool TileEngine::step(long timePassed)
    entityGrid.step(timePassed);
 
    stepNPCs(timePassed);
+
+   if(cameraTarget != NULL &&
+      (cameraTarget != playerActor || playerActor->isActive()))
+   {
+      camera.setFocalPoint(cameraTarget->getLocation());
+   }
 
    return !done;
 }
