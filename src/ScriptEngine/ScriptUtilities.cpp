@@ -57,6 +57,34 @@ bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int para
    return false;
 }
 
+bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, float& value)
+{
+   lua_Number luaNumericResult;
+   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, ScriptUtilities::isNumber, lua_tonumber, luaNumericResult);
+
+   if (foundParameter)
+   {
+      value = static_cast<float>(luaNumericResult);
+      return true;
+   }
+
+   return false;
+}
+
+bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, double& value)
+{
+   lua_Number luaNumericResult;
+   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, ScriptUtilities::isNumber, lua_tonumber, luaNumericResult);
+
+   if (foundParameter)
+   {
+      value = static_cast<double>(luaNumericResult);
+      return true;
+   }
+
+   return false;
+}
+
 bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool& value)
 {
    int booleanValue;

@@ -72,7 +72,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
    Camera camera;
 
    /** An optional Actor target for the camera to follow. */
-   Actor* cameraTarget;
+   const Actor* cameraTarget;
 
    /**
     * Loads new player data.
@@ -164,6 +164,11 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
       TileEngine(GameContext& gameContext, const std::string& chapterName, const std::string& playerDataPath = "");
 
       /**
+       * Destructor.
+       */
+      ~TileEngine();
+
+      /**
        * @return The tile engine's coroutine scheduler.
        */
       Scheduler* getScheduler() const;
@@ -218,6 +223,18 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
       int setMap(std::string mapName = "");
 
       /**
+       * Order the camera to follow a specific actor
+       *
+       * @param target The actor to follow with the camera
+       */
+      void followWithCamera(const Actor* target);
+
+      /**
+       * Order the camera to stop following its target, if it has one.
+       */
+      void releaseCamera();
+
+      /**
        * Order the camera to slide from one location of the map to another.
        *
        * @param origin The origin point to start the slide from.
@@ -225,6 +242,11 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @param speed The speed that the camera should slide with.
        */
       void slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed);
+
+      /**
+       * Get the current location that the camera will reveal.
+       */
+      shapes::Point2D getCurrentCameraLocation() const;
 
       /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.
@@ -252,11 +274,6 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @return The player character in the tile engine.
        */
       PlayerCharacter* getPlayerCharacter() const;
-
-      /**
-       * Destructor.
-       */
-      ~TileEngine();
 };
 
 #endif

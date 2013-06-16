@@ -79,6 +79,13 @@ class Camera
       void setViewBounds(const shapes::Size& newViewportSize, const shapes::Size& newSceneSize);
 
       /**
+       * Gets the current point that the camera is centered around.
+       *
+       * @return The point that the camera is centering on (or origin if the focal point is not set).
+       */
+      const shapes::Point2D& Camera::getFocalPoint() const;
+
+      /**
        * Sets a new point for the camera to center around.
        *
        * @param point The point to center on if the viewport is smaller than the scene on either dimension.

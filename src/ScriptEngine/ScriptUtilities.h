@@ -37,6 +37,8 @@ class ScriptUtilities
       template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T*& value);
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, int& value);
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, long& value);
+      static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, float& value);
+      static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, double& value);
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool& value);
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::string& value);
 };

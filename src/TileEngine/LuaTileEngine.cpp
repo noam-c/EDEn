@@ -99,6 +99,88 @@ static int TileEngineL_GetNPC(lua_State* luaVM)
    return 1;
 }
 
+static int TileEngineL_FollowWithCamera(lua_State* luaVM)
+{
+   TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
+   if (tileEngine == NULL)
+   {
+      return lua_error(luaVM);
+   }
+
+   Actor* target = luaW_check<Actor>(luaVM, 2);
+   if (target == NULL)
+   {
+      return lua_error(luaVM);
+   }
+
+   tileEngine->followWithCamera(target);
+   return 0;
+}
+
+static int TileEngineL_ReleaseCamera(lua_State* luaVM)
+{
+   TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
+   if (tileEngine == NULL)
+   {
+      return lua_error(luaVM);
+   }
+
+   tileEngine->releaseCamera();
+   return 0;
+}
+
+static int TileEngineL_SlideCamera(lua_State* luaVM)
+{
+   TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
+   if (tileEngine == NULL)
+   {
+      return lua_error(luaVM);
+   }
+
+   int destinationX;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "destinationX", destinationX))
+   {
+      return lua_error(luaVM);
+   }
+
+   int destinationY;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 2, "destinationY", destinationY))
+   {
+      return lua_error(luaVM);
+   }
+
+   const shapes::Point2D destination(destinationX, destinationY);
+
+   int originX;
+   int originY;
+   bool originXProvided = ScriptUtilities::getParameter(luaVM, 2, 3, "originX", originX);
+   bool originYProvided = ScriptUtilities::getParameter(luaVM, 2, 4, "originY", originY);
+
+   shapes::Point2D origin;
+   if(originXProvided && originYProvided)
+   {
+      origin.x = originX;
+      origin.y = originY;
+   }
+   else if(!originXProvided && !originYProvided)
+   {
+      origin = tileEngine->getCurrentCameraLocation();
+   }
+   else
+   {
+      return lua_error(luaVM);
+   }
+
+   double speed;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 5, "speed", speed) || speed <= 0.0f)
+   {
+      speed = 0.1f;
+   }
+
+   tileEngine->slideCamera(origin, destination, speed);
+   return 0;
+}
+
 static int TileEngineL_TilesToPixels(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
@@ -121,6 +203,9 @@ static luaL_reg tileEngineMetatable[] =
 {
    { "addNPC", TileEngineL_AddNPC },
    { "getNPC", TileEngineL_GetNPC },
+   { "lockCameraToTarget", TileEngineL_FollowWithCamera },
+   { "unlockCamera", TileEngineL_ReleaseCamera },
+   { "slideCamera", TileEngineL_SlideCamera },
    { "tilesToPixels", TileEngineL_TilesToPixels },
    { NULL, NULL }
 };

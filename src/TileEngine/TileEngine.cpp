@@ -159,12 +159,34 @@ int TileEngine::setMap(std::string mapName)
    return gameContext.getScriptEngine().runMapScript(currRegion->getName(), mapName, *scheduler);
 }
 
+void TileEngine::followWithCamera(const Actor* target)
+{
+   cameraTarget = target;
+}
+
+void TileEngine::releaseCamera()
+{
+   cameraTarget = NULL;
+}
+
 void TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed)
 {
    if(speed > 0)
    {
       cameraTarget = NULL;
       scheduler->start(new CameraSlider(camera, origin, destination, speed));
+   }
+}
+
+shapes::Point2D TileEngine::getCurrentCameraLocation() const
+{
+   if(cameraTarget != NULL)
+   {
+      return cameraTarget->getLocation();
+   }
+   else
+   {
+      return camera.getFocalPoint();
    }
 }
 

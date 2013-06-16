@@ -16,6 +16,11 @@ Camera::Camera() :
 {
 }
 
+const shapes::Point2D& Camera::getFocalPoint() const
+{
+   return focalPointSet ? focalPoint : shapes::Point2D::ORIGIN;
+}
+
 void Camera::setFocalPoint(const shapes::Point2D& point)
 {
    focalPoint = point;
@@ -24,9 +29,7 @@ void Camera::setFocalPoint(const shapes::Point2D& point)
 
 void Camera::clearFocalPoint()
 {
-   focalPoint.x = 0;
-   focalPoint.y = 0;
-
+   focalPoint = shapes::Point2D::ORIGIN;
    focalPointSet = false;
 }
 
