@@ -113,6 +113,7 @@ void TileEngine::receive(const MapExitMessage& message)
       setMap(enteredMap);
       const shapes::Point2D& entryPoint = entityGrid.getMapData()->getMapEntrance(exitedMap);
       playerActor->addToMap(entryPoint);
+      followWithCamera(playerActor);
    }
 }
 
@@ -196,11 +197,12 @@ shapes::Point2D TileEngine::getCurrentCameraLocation() const
 
 void TileEngine::recalculateMapOffsets()
 {
-   const shapes::Size& mapPixelBounds = entityGrid.getMapBounds().getSize() * TILE_SIZE;
+   const shapes::Size mapPixelBounds = entityGrid.getMapData() == NULL ?
+         shapes::Size() :
+         entityGrid.getMapBounds().getSize() * TILE_SIZE;
 
    const int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - shortcutBar.getHeight();
    const shapes::Size screenSize(GraphicsUtil::getInstance()->getWidth(), totalUsableHeight);
-
    camera.setViewBounds(screenSize, mapPixelBounds);
 }
 
