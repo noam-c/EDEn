@@ -107,8 +107,8 @@ static int TileEngineL_FollowWithCamera(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   Actor* target = luaW_check<Actor>(luaVM, 2);
-   if (target == NULL)
+   Actor* target = NULL;
+   if(!ScriptUtilities::getParameter<Actor>(luaVM, 2, 1, "target", target))
    {
       return lua_error(luaVM);
    }
@@ -177,8 +177,7 @@ static int TileEngineL_SlideCamera(lua_State* luaVM)
       speed = 0.1f;
    }
 
-   tileEngine->slideCamera(origin, destination, speed);
-   return 0;
+   return tileEngine->slideCamera(origin, destination, speed);
 }
 
 static int TileEngineL_TilesToPixels(lua_State* luaVM)

@@ -241,7 +241,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @param destination The destination point to slide the camera to.
        * @param speed The speed that the camera should slide with.
        */
-      void slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed);
+      int slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed);
 
       /**
        * Get the current location that the camera will reveal.

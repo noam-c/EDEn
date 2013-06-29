@@ -16,7 +16,7 @@ Camera::Camera() :
 {
 }
 
-const shapes::Point2D& Camera::getFocalPoint() const
+shapes::Point2D Camera::getFocalPoint() const
 {
    return focalPointSet ? focalPoint : shapes::Point2D::ORIGIN;
 }
@@ -44,6 +44,13 @@ shapes::Point2D Camera::getPointWithinScene(const shapes::Point2D& point) const
    return shapes::Point2D(
       point.x - offset.x - cameraFocalOffset.x,
       point.y - offset.y - cameraFocalOffset.y);
+}
+
+shapes::Point2D Camera::getClampedPoint(const shapes::Point2D& point) const
+{
+   return shapes::Point2D(
+      std::min(std::max(point.x, static_cast<signed int>(viewportSize.width / 2)), static_cast<signed int>(sceneSize.width - viewportSize.width / 2)),
+      std::min(std::max(point.y, static_cast<signed int>(viewportSize.height / 2)), static_cast<signed int>(sceneSize.height - viewportSize.height / 2)));
 }
 
 void Camera::setViewBounds(const shapes::Size& newViewportSize, const shapes::Size& newSceneSize)

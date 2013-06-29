@@ -71,6 +71,13 @@ class Camera
       shapes::Point2D getPointWithinScene(const shapes::Point2D& point) const;
    
       /**
+       * @param point The point to clamp.
+       *
+       * @return the closest point to the specified point before the camera would clamp to the scene borders.
+       */
+      shapes::Point2D getClampedPoint(const shapes::Point2D& point) const;
+
+      /*
        * Sets the viewport and scene bounds for the camera.
        *
        * @param newViewportSize The size of the camera's viewport (the area that will be drawn within it).
@@ -83,7 +90,7 @@ class Camera
        *
        * @return The point that the camera is centering on (or origin if the focal point is not set).
        */
-      const shapes::Point2D& Camera::getFocalPoint() const;
+      shapes::Point2D Camera::getFocalPoint() const;
 
       /**
        * Sets a new point for the camera to center around.

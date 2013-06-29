@@ -13,12 +13,12 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 CameraSlider::CameraSlider(Camera& camera, const shapes::Point2D& origin, const shapes::Point2D& destination, double speed) :
    camera(camera),
-   origin(origin),
-   destination(destination),
+   origin(camera.getClampedPoint(origin)),
+   destination(camera.getClampedPoint(destination)),
    totalTimePassed(0)
 {
-   const double xMagnitude = destination.x - origin.x;
-   const double yMagnitude = destination.y - origin.y;
+   const double xMagnitude = this->destination.x - this->origin.x;
+   const double yMagnitude = this->destination.y - this->origin.y;
 
    if(xMagnitude != 0 && yMagnitude != 0)
    {

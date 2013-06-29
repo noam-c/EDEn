@@ -169,13 +169,17 @@ void TileEngine::releaseCamera()
    cameraTarget = NULL;
 }
 
-void TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed)
+int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed)
 {
    if(speed > 0)
    {
+      CameraSlider* slider = new CameraSlider(camera, origin, destination, speed);
       cameraTarget = NULL;
-      scheduler->start(new CameraSlider(camera, origin, destination, speed));
+      scheduler->start(slider);
+      return scheduler->join(slider);
    }
+
+   return 0;
 }
 
 shapes::Point2D TileEngine::getCurrentCameraLocation() const
