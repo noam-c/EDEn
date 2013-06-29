@@ -39,7 +39,6 @@ EDEn depends on the following development libraries to build the source:
 
 * SDL 1.2
 * SDL_image 1.2
-* SDL_ttf 2.0
 * SDL_mixer 1.2
 * Lua 5.1
 * libRocket
