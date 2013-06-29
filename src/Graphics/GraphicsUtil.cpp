@@ -9,7 +9,6 @@
 #include "SDL_opengl.h"
 #include "SDL_image.h"
 #include "SDL_mixer.h"
-#include "SDL_ttf.h"
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 #include "RocketSDLInputMapping.h"
@@ -78,13 +77,6 @@ void GraphicsUtil::initSDL()
    {
       delete errorMsg;
       errorMsg = NULL;
-   }
-
-   //Initialize SDL_ttf for use of TrueType Fonts
-   if(TTF_Init() == -1)
-   {
-      DEBUG("TTF_Init: %s\n", TTF_GetError());
-      exit(1);
    }
 
    // We want unicode
@@ -297,12 +289,6 @@ void GraphicsUtil::finish()
 {
    // Shut down Rocket
    Rocket::Core::Shutdown();
-
-   //Destroy the SDL_ttf stuff
-   if(!TTF_WasInit())
-   {
-      TTF_Quit();
-   }
 
    // Destroy SDL stuff
    SDL_Quit();
