@@ -20,10 +20,10 @@
 
 const int debugFlag = DEBUG_GRAPHICS;
 
-SDL_Surface* GraphicsUtil::screen = NULL;
-
 void GraphicsUtil::initialize()
 {
+   window = NULL;
+   openGLContext = NULL;
    const Settings::Resolution& resolution = Settings::getCurrentSettings().getResolution();
    fullScreenEnabled = Settings::getCurrentSettings().isFullScreenEnabled();
    width = resolution.getWidth();
@@ -78,31 +78,50 @@ void GraphicsUtil::initSDL()
       delete errorMsg;
       errorMsg = NULL;
    }
-
-   // We want unicode
-   SDL_EnableUNICODE(1);
-   // We want to enable key repeat
-   SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-
-   SDL_WM_SetCaption ("EDEn", NULL);
 }
 
 bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
 {
    // Set video mode based on user's choice of resolution
-   unsigned int videoModeFlags = SDL_HWSURFACE | SDL_OPENGL | SDL_HWACCEL;
+   unsigned int windowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
    if(fullScreenEnabled)
    {
-      videoModeFlags |= SDL_FULLSCREEN;
+      windowFlags |= SDL_WINDOW_FULLSCREEN;
    }
-   
-   screen = SDL_SetVideoMode(width, height, bitsPerPixel, videoModeFlags);
-   if(screen == NULL)
+
+   if(window != NULL)
+   {
+      SDL_DestroyWindow(window);
+   }
+
+   window = SDL_CreateWindow(
+      "EDEn",
+      SDL_WINDOWPOS_CENTERED,
+      SDL_WINDOWPOS_CENTERED,
+      width,
+      height,
+      static_cast<SDL_WindowFlags>(windowFlags));
+
+   if(window == NULL)
    {
       errorMsg = new std::string(SDL_GetError());
       return false;
    }
-   
+
+   if(openGLContext != NULL)
+   {
+      SDL_GL_MakeCurrent(window, openGLContext);
+   }
+   else
+   {
+      openGLContext = SDL_GL_CreateContext(window);
+      if(!openGLContext)
+      {
+         errorMsg = new std::string(SDL_GetError());
+         return false;
+      }
+   }
+
    // Enable Texture Mapping
    glEnable(GL_TEXTURE_2D);
    
@@ -118,7 +137,7 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
    
    // Create a 2D orthogonal perspective (better for 2D games)
-   gluOrtho2D(0.0f, (float)width, (float)height, 0.0f);
+   glOrtho(0.0f, (float)width, (float)height, 0.0f, -1, 1);
 
    glMatrixMode(GL_MODELVIEW);
 
@@ -173,7 +192,7 @@ Rocket::Core::Context* GraphicsUtil::createRocketContext(const std::string& name
 void GraphicsUtil::flipScreen()
 {
    glFlush();
-   SDL_GL_SwapBuffers();
+   SDL_GL_SwapWindow(window);
 }
 
 bool GraphicsUtil::isVideoModeRefreshRequired() const
@@ -290,6 +309,18 @@ void GraphicsUtil::finish()
    // Shut down Rocket
    Rocket::Core::Shutdown();
 
-   // Destroy SDL stuff
+   // Destroy SDL audio and video stuff
+   Mix_CloseAudio();
+
+   if(openGLContext != NULL)
+   {
+      SDL_GL_DeleteContext(GraphicsUtil::openGLContext);
+   }
+
+   if(window != NULL)
+   {
+      SDL_DestroyWindow(GraphicsUtil::window);
+   }
+
    SDL_Quit();
 }

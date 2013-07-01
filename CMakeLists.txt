@@ -309,15 +309,15 @@ add_executable( eden ${SOURCES} ${HEADERS} )
 IF(WIN32)
   target_link_libraries(
     eden
-    SDLmain
+    SDL2main
     debug rocketCore_d
     debug rocketControls_d
     optimized rocketCore
     optimized rocketControls
     lua5.1
-    SDL_image
-    SDL_mixer
-    SDL
+    SDL2_image
+    SDL2_mixer
+    SDL2
     opengl32
     glu32
   )

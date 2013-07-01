@@ -24,14 +24,14 @@ class RocketSDLInputMapping
     * The mapping between the SDLKey keyboard input enum to the
     * Rocket KeyIdentifier enum.
     */
-   static std::map<SDLKey, Rocket::Core::Input::KeyIdentifier> keyMap;
+   static std::map<SDL_Keycode, Rocket::Core::Input::KeyIdentifier> keyMap;
 
    /**
     * @param modifiers The SDL keyboard event's keyboard modifiers.
     *
     * @return The Rocket representation of the keyboard modifiers currently pressed by the user.
     */
-   static int getKeyModifierState(const SDLMod& modifiers);
+   static int getKeyModifierState(const SDL_Keymod& modifiers);
 
    /**
     * @param mouseButtonEvent The SDL event structure for the user's mouse click.

@@ -9,7 +9,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_ROCKET;
 
-std::map<SDLKey, Rocket::Core::Input::KeyIdentifier> RocketSDLInputMapping::keyMap;
+std::map<SDL_Keycode, Rocket::Core::Input::KeyIdentifier> RocketSDLInputMapping::keyMap;
 
 void RocketSDLInputMapping::initialize()
 {
@@ -84,16 +84,16 @@ void RocketSDLInputMapping::initialize()
    keyMap[SDLK_z] = Rocket::Core::Input::KI_Z;
    keyMap[SDLK_DELETE] = Rocket::Core::Input::KI_DELETE;
 
-   keyMap[SDLK_KP0] = Rocket::Core::Input::KI_NUMPAD0;
-   keyMap[SDLK_KP1] = Rocket::Core::Input::KI_NUMPAD1;
-   keyMap[SDLK_KP2] = Rocket::Core::Input::KI_NUMPAD2;
-   keyMap[SDLK_KP3] = Rocket::Core::Input::KI_NUMPAD3;
-   keyMap[SDLK_KP4] = Rocket::Core::Input::KI_NUMPAD4;
-   keyMap[SDLK_KP5] = Rocket::Core::Input::KI_NUMPAD5;
-   keyMap[SDLK_KP6] = Rocket::Core::Input::KI_NUMPAD6;
-   keyMap[SDLK_KP7] = Rocket::Core::Input::KI_NUMPAD7;
-   keyMap[SDLK_KP8] = Rocket::Core::Input::KI_NUMPAD8;
-   keyMap[SDLK_KP9] = Rocket::Core::Input::KI_NUMPAD9;
+   keyMap[SDLK_KP_0] = Rocket::Core::Input::KI_NUMPAD0;
+   keyMap[SDLK_KP_1] = Rocket::Core::Input::KI_NUMPAD1;
+   keyMap[SDLK_KP_2] = Rocket::Core::Input::KI_NUMPAD2;
+   keyMap[SDLK_KP_3] = Rocket::Core::Input::KI_NUMPAD3;
+   keyMap[SDLK_KP_4] = Rocket::Core::Input::KI_NUMPAD4;
+   keyMap[SDLK_KP_5] = Rocket::Core::Input::KI_NUMPAD5;
+   keyMap[SDLK_KP_6] = Rocket::Core::Input::KI_NUMPAD6;
+   keyMap[SDLK_KP_7] = Rocket::Core::Input::KI_NUMPAD7;
+   keyMap[SDLK_KP_8] = Rocket::Core::Input::KI_NUMPAD8;
+   keyMap[SDLK_KP_9] = Rocket::Core::Input::KI_NUMPAD9;
    keyMap[SDLK_KP_PERIOD] = Rocket::Core::Input::KI_DECIMAL;
    keyMap[SDLK_KP_DIVIDE] = Rocket::Core::Input::KI_DIVIDE;
    keyMap[SDLK_KP_MULTIPLY] = Rocket::Core::Input::KI_MULTIPLY;
@@ -128,22 +128,20 @@ void RocketSDLInputMapping::initialize()
    keyMap[SDLK_F14] = Rocket::Core::Input::KI_F14;
    keyMap[SDLK_F15] = Rocket::Core::Input::KI_F15;
 
-   keyMap[SDLK_NUMLOCK] = Rocket::Core::Input::KI_NUMLOCK;
+   keyMap[SDLK_NUMLOCKCLEAR] = Rocket::Core::Input::KI_NUMLOCK;
    keyMap[SDLK_CAPSLOCK] = Rocket::Core::Input::KI_CAPITAL;
-   keyMap[SDLK_SCROLLOCK] = Rocket::Core::Input::KI_SCROLL;
+   keyMap[SDLK_SCROLLLOCK] = Rocket::Core::Input::KI_SCROLL;
    keyMap[SDLK_RSHIFT] = Rocket::Core::Input::KI_RSHIFT;
    keyMap[SDLK_LSHIFT] = Rocket::Core::Input::KI_LSHIFT;
-   keyMap[SDLK_RMETA] = Rocket::Core::Input::KI_RMETA;
-   keyMap[SDLK_LMETA] = Rocket::Core::Input::KI_LMETA;
-   keyMap[SDLK_LSUPER] = Rocket::Core::Input::KI_LWIN;
-   keyMap[SDLK_RSUPER] = Rocket::Core::Input::KI_RWIN;
+   keyMap[SDLK_RGUI] = Rocket::Core::Input::KI_RMETA;
+   keyMap[SDLK_LGUI] = Rocket::Core::Input::KI_LMETA;
 
    keyMap[SDLK_HELP] = Rocket::Core::Input::KI_HELP;
-   keyMap[SDLK_PRINT] = Rocket::Core::Input::KI_PRINT;
-   keyMap[SDLK_BREAK] = Rocket::Core::Input::KI_PAUSE;
+   keyMap[SDLK_PRINTSCREEN] = Rocket::Core::Input::KI_PRINT;
+   keyMap[SDLK_PAUSE] = Rocket::Core::Input::KI_PAUSE;
 }
 
-int RocketSDLInputMapping::getKeyModifierState(const SDLMod& modifiers)
+int RocketSDLInputMapping::getKeyModifierState(const SDL_Keymod& modifiers)
 {
    int rocketModifierState = 0;
 
@@ -162,7 +160,7 @@ int RocketSDLInputMapping::getKeyModifierState(const SDLMod& modifiers)
       rocketModifierState |= Rocket::Core::Input::KM_ALT;
    }
 
-   if ((modifiers & KMOD_META) != 0)
+   if ((modifiers & KMOD_GUI) != 0)
    {
       rocketModifierState |= Rocket::Core::Input::KM_META;
    }
@@ -211,28 +209,17 @@ void RocketSDLInputMapping::handleSDLEvent(Rocket::Core::Context* context, const
    {
       case SDL_MOUSEBUTTONUP:
       {
-         if(event.button.button != SDL_BUTTON_WHEELUP && event.button.button != SDL_BUTTON_WHEELDOWN)
-         {
-            context->ProcessMouseButtonUp(RocketSDLInputMapping::mapMouseButton(event.button), RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
-         }
-
+         context->ProcessMouseButtonUp(RocketSDLInputMapping::mapMouseButton(event.button), RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
          break;
       }
       case SDL_MOUSEBUTTONDOWN:
       {
-         if(event.button.button == SDL_BUTTON_WHEELUP)
-         {
-            context->ProcessMouseWheel(-1, RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
-         }
-         else if(event.button.button == SDL_BUTTON_WHEELDOWN)
-         {
-            context->ProcessMouseWheel(1, RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
-         }
-         else
-         {
-            context->ProcessMouseButtonDown(RocketSDLInputMapping::mapMouseButton(event.button), RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
-         }
-
+         context->ProcessMouseButtonDown(RocketSDLInputMapping::mapMouseButton(event.button), RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
+         break;
+      }
+      case SDL_MOUSEWHEEL:
+      {
+         context->ProcessMouseWheel(event.wheel.y, RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
          break;
       }
       case SDL_MOUSEMOTION:
@@ -243,16 +230,16 @@ void RocketSDLInputMapping::handleSDLEvent(Rocket::Core::Context* context, const
       case SDL_KEYUP:
       case SDL_KEYDOWN:
       {
-         std::map<SDLKey, Rocket::Core::Input::KeyIdentifier>::const_iterator keyMapResult = keyMap.find(event.key.keysym.sym);
+         std::map<SDL_Keycode, Rocket::Core::Input::KeyIdentifier>::const_iterator keyMapResult = keyMap.find(event.key.keysym.sym);
          Rocket::Core::Input::KeyIdentifier keyMapping = keyMapResult != keyMap.end() ? keyMapResult->second : Rocket::Core::Input::KI_UNKNOWN;
 
          if(event.type == SDL_KEYUP)
          {
-            context->ProcessKeyUp(keyMapping, RocketSDLInputMapping::getKeyModifierState(event.key.keysym.mod));
+            context->ProcessKeyUp(keyMapping, RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
          }
          else
          {
-            context->ProcessKeyDown(keyMapping, RocketSDLInputMapping::getKeyModifierState(event.key.keysym.mod));
+            context->ProcessKeyDown(keyMapping, RocketSDLInputMapping::getKeyModifierState(SDL_GetModState()));
 
             if(event.key.keysym.unicode >= ' ' && (event.key.keysym.unicode <= '~'))
             {

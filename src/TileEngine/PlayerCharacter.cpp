@@ -87,27 +87,27 @@ void PlayerCharacter::step(long timePassed)
    int xDirection = 0;
    int yDirection = 0;
 
-   Uint8 *keystate = SDL_GetKeyState(NULL);
-   if(!keystate[SDLK_UP] && keystate[SDLK_DOWN])
+   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+   if(!keystate[SDL_SCANCODE_UP] && keystate[SDL_SCANCODE_DOWN])
    {
       // Positive velocity in the y-axis
       direction = DOWN;
       yDirection = 1;      
    }
-   else if(keystate[SDLK_UP] && !keystate[SDLK_DOWN])
+   else if(keystate[SDL_SCANCODE_UP] && !keystate[SDL_SCANCODE_DOWN])
    {
       // Negative velocity in the y-axis
       direction = UP;
       yDirection = -1;
    }
 
-   if(!keystate[SDLK_LEFT] && keystate[SDLK_RIGHT])
+   if(!keystate[SDL_SCANCODE_LEFT] && keystate[SDL_SCANCODE_RIGHT])
    {
       // Positive velocity in the x-axis
       direction = direction == UP ? UP_RIGHT : direction == DOWN ? DOWN_RIGHT : RIGHT;
       xDirection = 1;
    }
-   else if(keystate[SDLK_LEFT] && !keystate[SDLK_RIGHT])
+   else if(keystate[SDL_SCANCODE_LEFT] && !keystate[SDL_SCANCODE_RIGHT])
    {
       // Negative velocity in the x-axis
       direction = direction == UP ? UP_LEFT : direction == DOWN ? DOWN_LEFT : LEFT;

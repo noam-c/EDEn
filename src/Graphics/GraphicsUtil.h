@@ -16,7 +16,8 @@
 
 class Settings;
 
-struct SDL_Surface;
+struct SDL_Window;
+typedef void* SDL_GLContext;
 union SDL_Event;
 
 namespace shapes
@@ -36,8 +37,11 @@ typedef unsigned int GLuint;
  */
 class GraphicsUtil : public Singleton<GraphicsUtil>
 {
-   /** The screen surface */
-   static SDL_Surface* screen;
+   /** The main window */
+   SDL_Window* window;
+
+   /** The OpenGL context used by the main window */
+   SDL_GLContext openGLContext;
 
    /** The OpenGL Extensions */
    OpenGLExtensions openGLExtensions;
