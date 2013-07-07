@@ -16,6 +16,11 @@ Most of the code is Copyright 2013 Noam Chitayat. Contributors retain copyright 
 
 The EDEn source is released under the terms of the Ruby License, with the following exceptions:
 
+* The following CMake scripts (located in the CMakeModules folder) are modified from CMake source code, and are thus made available under CMake's BSD license. Please refer to CMakeModules/CMakeCopyright.md for additional information.
+  - FindSDL2.cmake
+  - FindSDL2_image.cmake
+  - FindSDL2_mixer.cmake
+
 * Code in the json folder or under the Json namespace is part of the JsonCpp JSON parsing library.
 
 	JsonCpp is copryright 2007-2013 Baptiste Lepilleur. Distributed under MIT license, or public domain if desired and recognized in your jurisdiction.
@@ -35,6 +40,8 @@ For the full text of the Ruby license in use, please refer to the LICENSE.txt fi
 Dependencies
 ------------
 
+EDEn makes use of the CMake build system.
+
 EDEn depends on the following development libraries to build the source:
 
 * SDL 2.0
@@ -53,6 +60,7 @@ For more information on the Tiled Map (TMX) and Tileset (TSX) formats, please re
 Links
 -----
 
+* CMake - http://www.cmake.org
 * SDL Cross-platform Library - http://www.libsdl.org
 * libRocket - http://www.librocket.com
 * Lua Programming Language - http://www.lua.org
