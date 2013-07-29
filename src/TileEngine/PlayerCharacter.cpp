@@ -122,7 +122,7 @@ void PlayerCharacter::step(long timePassed)
       flushOrders();
 
       cumulativeDistanceCovered += getMovementSpeed() * timePassed;
-      int distanceTraversed = 0;
+      unsigned int distanceTraversed = 0;
       if(cumulativeDistanceCovered > 1.0)
       {
          distanceTraversed = floor(cumulativeDistanceCovered);
@@ -131,7 +131,14 @@ void PlayerCharacter::step(long timePassed)
 
       sprite->setAnimation(WALKING_PREFIX, direction);
       setDirection(direction);
-      moving = entityGrid.moveToClosestPoint(this, xDirection, yDirection, distanceTraversed);
+
+      // In frames where distance is traversed, notify the entity grid of our movement
+      // intention and set our "moving" state based on if we are actually moving
+      // anywhere (e.g. haven't walked into a wall or another Actor).
+      // If no actual distance is traversed, we are still moving but haven't yet had
+      // time to act on the user's desired movement
+      moving = distanceTraversed == 0 ||
+         entityGrid.moveToClosestPoint(this, xDirection, yDirection, distanceTraversed);
    }
    else if(isIdle())
    {
