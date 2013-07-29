@@ -176,7 +176,7 @@ int ScriptEngine::narrate(lua_State* luaStack)
 
    int callResult = 0;
 
-   Task* task = Task::getNextTask(*scheduler);
+   Task* task = scheduler->createNewTask();
    if(waitForFinish)
    {
       callResult = scheduler->block(task);
@@ -211,7 +211,7 @@ int ScriptEngine::say(lua_State* luaStack)
 
    int callResult = 0;
 
-   Task* task = Task::getNextTask(*scheduler);
+   Task* task = scheduler->createNewTask();
    if(waitForFinish)
    {
       callResult = scheduler->block(task);
@@ -246,7 +246,7 @@ int ScriptEngine::playSound(lua_State* luaStack)
 
    DEBUG("Playing sound: %s", soundId.c_str());
 
-   Task* task = Task::getNextTask(*scheduler);
+   Task* task = scheduler->createNewTask();
 
    Sound* sound = ResourceLoader::getSound(soundId);
    sound->play(task);

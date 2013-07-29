@@ -20,8 +20,13 @@ class Scheduler;
  */
 class Task
 {
+   friend class Scheduler;
+
+   /** True iff the Scheduler managing this Task has been destroyed. */
+   bool schedulerDestroyed;
+
    /** The unique identifier for this task */
-   TaskId id;
+   const TaskId id;
    
    /** The scheduler to signal when this task is finished */
    Scheduler& scheduler;
@@ -33,28 +38,20 @@ class Task
     *  @param taskId The task ID for this task.
     *  @param scheduler The scheduler to signal when the task is completed.
     */
-   Task(TaskId taskId, Scheduler& scheduler);
+   Task(const TaskId taskId, Scheduler& scheduler);
 
    /**
-    * Destructor. Private so that Tasks (which self-destruct)
-    * can't get declared on the stack.
+    * Destructor.
     */
    ~Task();
 
+   /**
+    * Signals to a task that the Scheduler has been destroyed,
+    * so that it doesn't try to operate on the Scheduler when it is signalled.
+    */
+   void signalSchedulerDestroyed();
+
    public:
-      /**
-       *  Create and return a new task.
-       *
-       *  @param scheduler The scheduler to signal when the new task completes.
-       *  @return A newly created task associated with the given scheduler.
-       */
-      static Task* getNextTask(Scheduler& scheduler);
-
-      /**
-       *  @return the unique identifier of this Task.
-       */
-      TaskId getTaskId() const;
-
       /**
        *  Signals the scheduler that the Task has finished, and destroys
        *  this object. (Yes, this method triggers a self-destruct)

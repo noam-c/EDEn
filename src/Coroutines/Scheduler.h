@@ -40,6 +40,11 @@ class Scheduler
    /** A list of joining/waiting coroutines, indexed by the Coroutine on which they are waiting */
    typedef std::map<Coroutine*, Coroutine*> JoinList;
 
+   /** A list of Tasks, indexed by their Task IDs */
+   typedef std::map<TaskId, Task*> TaskMap;
+
+   /** A queue of Tasks */
+   typedef std::queue<Task*> TaskQueue;
 
    /** The list of currently blocked coroutines in this scheduler */
    BlockList blockedCoroutines;
@@ -47,20 +52,29 @@ class Scheduler
    /** The list of currently joining/waiting coroutines in this scheduler */
    JoinList joiningCoroutines;
 
-   /** The list of newly readied coroutines to be added to the ready list in the next run. */
+   /** The list of newly readied coroutines to be added to the ready list in the next frame. */
    CoroutineList unstartedCoroutines;
 
-   /** The list of ready coroutines to be resumed during the next run. */
+   /** The list of ready coroutines to be resumed during the next frame. */
    CoroutineList readyCoroutines;
 
-   /** A list of coroutines to remove from the ready list after a run. */
+   /** A list of coroutines to remove from the ready list after a frame. */
    CoroutineQueue finishedCoroutines;
 
-   /** A list of coroutines to delete after a run. */
-   CoroutineQueue deletedCoroutines;
+   /** A list of the active tasks created and managed by this Scheduler. */
+   TaskMap activeTasks;
+
+   /** A list of coroutines to delete after a frame. */
+   CoroutineQueue coroutinesToDelete;
+
+   /** A list of tasks to delete after a frame. */
+   TaskQueue tasksToDelete;
 
    /** The currently running coroutine */
    Coroutine* runningCoroutine;
+
+   /** The next available unique task identifier. */
+   TaskId nextId;
 
    /**
     * Signal that a Coroutine has run to completion so that waiting Coroutines
@@ -99,12 +113,19 @@ class Scheduler
       void start(Coroutine* coroutine);
 
       /**
+       *  Create and return a new task.
+       *
+       *  @return A newly created task associated with this scheduler.
+       */
+      Task* createNewTask();
+
+      /**
        * Signals that an instruction has been completed so that the scheduler
        * can unblock any waiting Coroutines.
        *
-       * @param finishedTask The ID of the instruction that has been finished.
+       * @param finishedTaskId The ID of the instruction that has been finished.
        */
-      void taskDone(TaskId finishedTask);
+      void completeTask(TaskId finishedTaskId);
 
       /**
        * Block a Coroutine and make it wait until another Coroutine has finished

@@ -10,15 +10,8 @@
 
 const int debugFlag = DEBUG_SCHEDULER;
 
-/** The next available unique task identifier. */
-static TaskId nextId = 0;
-
-Task* Task::getNextTask(Scheduler& scheduler)
-{
-   return new Task(nextId++, scheduler);
-}
-
 Task::Task(TaskId taskId, Scheduler& scheduler) :
+   schedulerDestroyed(false),
    id(taskId),
    scheduler(scheduler)
 {}
@@ -27,13 +20,23 @@ Task::~Task()
 {
 }
 
-TaskId Task::getTaskId() const
+void Task::signalSchedulerDestroyed()
 {
-   return id;
+   schedulerDestroyed = true;
 }
 
 void Task::signal()
 {
-   scheduler.taskDone(id);
-   delete this;
+   if(!schedulerDestroyed)
+   {
+      scheduler.completeTask(id);
+   }
+   else
+   {
+      // If the Scheduler has been cleaned up,
+      // the Task has to manage its own cleanup.
+
+      /** \todo Remove this code when Tasks are managed using smart pointers. */
+      delete this;
+   }
 }

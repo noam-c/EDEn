@@ -90,7 +90,7 @@ class Camera
        *
        * @return The point that the camera is centering on (or origin if the focal point is not set).
        */
-      shapes::Point2D Camera::getFocalPoint() const;
+      shapes::Point2D getFocalPoint() const;
 
       /**
        * Sets a new point for the camera to center around.
