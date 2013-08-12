@@ -46,7 +46,7 @@ class PlayerData;
 class MenuState : public GameState
 {
    /** True iff the menu shell was created internally, rather than passed in. */
-   bool internalMenuShell;
+   bool m_internalMenuShell;
 
    /**
     * Wait for and handle the input event.
@@ -57,13 +57,13 @@ class MenuState : public GameState
 
    protected:
       /** The shell that holds the common menu controls */
-      MenuShell* menuShell;
+      MenuShell* m_menuShell;
 
       /** The list of sidebar options associated with this menu state. */
-      std::vector<MenuShellOption> sidebarOptions;
+      std::vector<MenuShellOption> m_sidebarOptions;
 
       /** The menu pane RML document */
-      Rocket::Core::ElementDocument* paneDocument;
+      Rocket::Core::ElementDocument* m_paneDocument;
 
       /**
        * Sets this menu state to be the current one.

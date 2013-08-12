@@ -63,16 +63,16 @@ class NPCScript : public Script
     * (e.g. functionExists[IDLE] returns true iff the NPC script had an idle
     * function declared)
     */
-   std::vector<bool> functionExists;
+   std::vector<bool> m_functionExists;
 
    /** The NPC controlled by this script's execution. */
-   NPC* npc;
+   NPC* m_npc;
 
    /** True iff the NPC script received a signal to call the NPC's activate function. */
-   bool activated;
+   bool m_activated;
 
    /** True iff the NPC script is finished and should be unscheduled. */
-   bool finished;
+   bool m_finished;
 
    public:
       /**

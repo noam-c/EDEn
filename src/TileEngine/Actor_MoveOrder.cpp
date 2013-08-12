@@ -19,55 +19,55 @@ const int debugFlag = DEBUG_ACTOR;
 
 Actor::MoveOrder::MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid) :
    Order(actor),
-   pathInitialized(false),
-   movementBegun(false),
-   dst(destination),
-   entityGrid(entityGrid),
-   cumulativeDistanceCovered(0)
+   m_pathInitialized(false),
+   m_movementBegun(false),
+   m_dst(destination),
+   m_entityGrid(entityGrid),
+   m_cumulativeDistanceCovered(0)
 {	
 }
 
 Actor::MoveOrder::~MoveOrder()
 {
-   if(movementBegun)
+   if(m_movementBegun)
    {
-      entityGrid.abortMovement(&actor, lastWaypoint, nextWaypoint);
+      m_entityGrid.abortMovement(&m_actor, m_lastWaypoint, m_nextWaypoint);
    }
 }
 
 void Actor::MoveOrder::updateDirection(MovementDirection newDirection, bool moving)
 {
-   actor.setDirection(newDirection);
+   m_actor.setDirection(newDirection);
    if(moving)
    {
-      actor.setAnimation(Actor::DEFAULT_WALKING_PREFIX);
+      m_actor.setAnimation(Actor::DEFAULT_WALKING_PREFIX);
    }
    else
    {
-      actor.setFrame(Actor::DEFAULT_STANDING_PREFIX);
+      m_actor.setFrame(Actor::DEFAULT_STANDING_PREFIX);
    }
 }
 
 void Actor::MoveOrder::updateNextWaypoint(shapes::Point2D location, MovementDirection& direction)
 {
-   lastWaypoint = location;
-   nextWaypoint = path.front();
+   m_lastWaypoint = location;
+   m_nextWaypoint = m_path.front();
    
    // Set the direction based on where the next tile is relative to the current location.
    // For now, when the Actor must move diagonally, it will always face up or down
-   if(location.y < nextWaypoint.y)
+   if(location.y < m_nextWaypoint.y)
    {
       direction = DOWN;
    }
-   else if(location.y > nextWaypoint.y)
+   else if(location.y > m_nextWaypoint.y)
    {
       direction = UP;
    }
-   else if(location.x < nextWaypoint.x)
+   else if(location.x < m_nextWaypoint.x)
    {
       direction = RIGHT;
    }
-   else if(location.x > nextWaypoint.x)
+   else if(location.x > m_nextWaypoint.x)
    {
       direction = LEFT;
    }
@@ -75,15 +75,15 @@ void Actor::MoveOrder::updateNextWaypoint(shapes::Point2D location, MovementDire
 
 bool Actor::MoveOrder::perform(long timePassed)
 {
-   shapes::Point2D location = actor.getLocation();
-   MovementDirection newDirection = actor.getDirection();
-   const float vel = actor.getMovementSpeed();
-   cumulativeDistanceCovered +=timePassed * vel;   
+   shapes::Point2D location = m_actor.getLocation();
+   MovementDirection newDirection = m_actor.getDirection();
+   const float vel = m_actor.getMovementSpeed();
+   m_cumulativeDistanceCovered +=timePassed * vel;
    long distanceCovered = 0;
-   if(cumulativeDistanceCovered > 1.0)
+   if(m_cumulativeDistanceCovered > 1.0)
    {
-	   distanceCovered = floor(cumulativeDistanceCovered);
-	   cumulativeDistanceCovered -= distanceCovered;
+	   distanceCovered = floor(m_cumulativeDistanceCovered);
+	   m_cumulativeDistanceCovered -= distanceCovered;
    }
    // If first run, get the best pre-computed path (RFW), end frame
    // loop infinitely
@@ -110,95 +110,95 @@ bool Actor::MoveOrder::perform(long timePassed)
    //
    // end frame
 
-   if(!pathInitialized)
+   if(!m_pathInitialized)
    {
-      DEBUG("Finding an ideal path from %d,%d to %d,%d", location.x, location.y, dst.x, dst.y);  
-      path = entityGrid.findBestPath(location, dst);
-      if(path.empty())
+      DEBUG("Finding an ideal path from %d,%d to %d,%d", location.x, location.y, m_dst.x, m_dst.y);
+      m_path = m_entityGrid.findBestPath(location, m_dst);
+      if(m_path.empty())
       {
          // If this path is blocked, then there must be a permanent obstruction.
          return true;
       }
 
       // If a path was found, note that we have a path and end the frame
-      pathInitialized = true;
+      m_pathInitialized = true;
       return false;
    }
 
    for(;;)
    {
-      if(path.empty())
+      if(m_path.empty())
       {
-         updateDirection(actor.getDirection(), false);
-         actor.setLocation(location);
-         if(location != dst)
+         updateDirection(m_actor.getDirection(), false);
+         m_actor.setLocation(location);
+         if(location != m_dst)
          {
-            path = entityGrid.findReroutedPath(location, dst, actor.getSize());
+            m_path = m_entityGrid.findReroutedPath(location, m_dst, m_actor.getSize());
             return false;
          }
 
          return true;
       }
       
-      if(!movementBegun)
+      if(!m_movementBegun)
       {
-         movementBegun = entityGrid.beginMovement(&actor, path.front());
-         if(!movementBegun)
+         m_movementBegun = m_entityGrid.beginMovement(&m_actor, m_path.front());
+         if(!m_movementBegun)
          {
-            path = entityGrid.findReroutedPath(location, dst, actor.getSize());
-            updateDirection(actor.getDirection(), false);
-            actor.setLocation(location);
+            m_path = m_entityGrid.findReroutedPath(location, m_dst, m_actor.getSize());
+            updateDirection(m_actor.getDirection(), false);
+            m_actor.setLocation(location);
             return false;
          }
 
-         DEBUG("Next waypoint: %d,%d", nextWaypoint.x, nextWaypoint.y);
+         DEBUG("Next waypoint: %d,%d", m_nextWaypoint.x, m_nextWaypoint.y);
          updateNextWaypoint(location, newDirection);
          updateDirection(newDirection, true);
       }
       
-      const long stepDistance = std::max(abs(location.x - nextWaypoint.x), abs(location.y - nextWaypoint.y));
+      const long stepDistance = std::max(abs(location.x - m_nextWaypoint.x), abs(location.y - m_nextWaypoint.y));
       
       if (distanceCovered < stepDistance)
       {
          // The Actor will not be able to make it to the next waypoint in this frame
          // Move towards the waypoint as much as possible.
-         if(location.x < nextWaypoint.x)
+         if(location.x < m_nextWaypoint.x)
          {
             location.x += distanceCovered;
-            if(location.x > nextWaypoint.x) location.x = nextWaypoint.x;
+            if(location.x > m_nextWaypoint.x) location.x = m_nextWaypoint.x;
          }
-         else if(location.x > nextWaypoint.x)
+         else if(location.x > m_nextWaypoint.x)
          {
             location.x -= distanceCovered;
-            if(location.x < nextWaypoint.x) location.x = nextWaypoint.x;
+            if(location.x < m_nextWaypoint.x) location.x = m_nextWaypoint.x;
          }
          
-         if(location.y < nextWaypoint.y)
+         if(location.y < m_nextWaypoint.y)
          {
             location.y += distanceCovered;
-            if(location.y > nextWaypoint.y) location.y = nextWaypoint.y;
+            if(location.y > m_nextWaypoint.y) location.y = m_nextWaypoint.y;
          }
-         else if(location.y > nextWaypoint.y)
+         else if(location.y > m_nextWaypoint.y)
          {
             location.y -= distanceCovered;
-            if(location.y < nextWaypoint.y) location.y = nextWaypoint.y;
+            if(location.y < m_nextWaypoint.y) location.y = m_nextWaypoint.y;
          }
          
          // Movement for this frame is finished
-         actor.setLocation(location);
+         m_actor.setLocation(location);
          return false;
       }
       
       // The Actor can reach the next waypoint in this frame
       distanceCovered -= stepDistance;
       
-      DEBUG("Reached waypoint %d,%d", nextWaypoint.x, nextWaypoint.y);
-      entityGrid.endMovement(&actor, lastWaypoint, nextWaypoint);
-      movementBegun = false;
+      DEBUG("Reached waypoint %d,%d", m_nextWaypoint.x, m_nextWaypoint.y);
+      m_entityGrid.endMovement(&m_actor, m_lastWaypoint, m_nextWaypoint);
+      m_movementBegun = false;
 
       // Update the current waypoint and dequeue it from the path
-      location = nextWaypoint;
-      path.pop_front();
+      location = m_nextWaypoint;
+      m_path.pop_front();
    }
 
    return false;
@@ -208,12 +208,12 @@ void Actor::MoveOrder::draw()
 {
    if(DRAW_PATH)
    {
-      if(path.empty()) return;
+      if(m_path.empty()) return;
 
       glDisable(GL_TEXTURE_2D);
       glColor3f(1.0f, 0.0f, 0.0f);
       glBegin(GL_LINE_STRIP);
-      for(EntityGrid::Path::const_iterator iter = path.begin(); iter != path.end(); ++iter)
+      for(EntityGrid::Path::const_iterator iter = m_path.begin(); iter != m_path.end(); ++iter)
       {
          shapes::Point2D point(iter->x + TileEngine::TILE_SIZE / 2, iter->y + TileEngine::TILE_SIZE / 2);
          glVertex3d(point.x, point.y, 0);

@@ -30,7 +30,7 @@ class Inventory
    static const char* ITEM_QUANTITY_ATTRIBUTE;
 
    /** The items held in the inventory. */
-   ItemList items;
+   ItemList m_items;
 
    /**
     * Searches the inventory for the item quantity of the specified item ID.

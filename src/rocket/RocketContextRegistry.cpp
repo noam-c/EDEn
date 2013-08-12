@@ -15,17 +15,17 @@ int RocketContextRegistry::GetEventClasses()
 
 void RocketContextRegistry::OnContextCreate(Rocket::Core::Context* context)
 {
-   activeRocketContexts.push_back(context);
+   m_activeRocketContexts.push_back(context);
 }
 
 void RocketContextRegistry::OnContextDestroy(Rocket::Core::Context* context)
 {
    // Search for the context to remove from back to front, since contexts are usually
    // destroyed in reverse order of creation.
-   std::remove(activeRocketContexts.rbegin(), activeRocketContexts.rend(), context);
+   std::remove(m_activeRocketContexts.rbegin(), m_activeRocketContexts.rend(), context);
 }
 
 const std::vector<Rocket::Core::Context*>& RocketContextRegistry::getActiveContexts() const
 {
-   return activeRocketContexts;
+   return m_activeRocketContexts;
 }

@@ -38,39 +38,39 @@ typedef unsigned int GLuint;
 class GraphicsUtil : public Singleton<GraphicsUtil>
 {
    /** The main window */
-   SDL_Window* window;
+   SDL_Window* m_window;
 
    /** The OpenGL context used by the main window */
-   SDL_GLContext openGLContext;
+   SDL_GLContext m_openGLContext;
 
    /** The OpenGL Extensions */
-   OpenGLExtensions openGLExtensions;
+   OpenGLExtensions m_openGLExtensions;
 
    /** The render interface that Rocket will use. */
-   EdenRocketRenderInterface rocketRenderInterface;
+   EdenRocketRenderInterface m_rocketRenderInterface;
 
    /** The system interface that Rocket will use. */
-   EdenRocketSystemInterface rocketSystemInterface;
+   EdenRocketSystemInterface m_rocketSystemInterface;
 
    /** The registry used to track all the contexts for resolution changes. */
-   RocketContextRegistry rocketContextRegistry;
+   RocketContextRegistry m_rocketContextRegistry;
    
-   bool fullScreenEnabled;
+   bool m_fullScreenEnabled;
    
    /** The screen width */
-   unsigned int width;
+   unsigned int m_width;
    
    /** The screen height */
-   unsigned int height;
+   unsigned int m_height;
    
    /** The bit depth of the screen buffer */
-   unsigned int bitsPerPixel;
+   unsigned int m_bitsPerPixel;
    
    /** The x-offset to draw at (in pixels). */
-   int currentXOffset;
+   int m_currentXOffset;
 
    /** The y-offset to draw at (in pixels). */
-   int currentYOffset;
+   int m_currentYOffset;
 
    /**
     * Initializes SDL audio and video bindings

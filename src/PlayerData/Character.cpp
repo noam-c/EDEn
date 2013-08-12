@@ -55,38 +55,38 @@ Json::Value Character::loadArchetype(const std::string& archetypeId)
 }
 
 Character::Character(const GameContext& gameContext, const std::string& id) :
-   id(id)
+   m_id(id)
 {
    Json::Value archetypeData = Character::loadArchetype(id);
-   name = archetypeData[Character::NAME_ATTRIBUTE].asString();
-   spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
+   m_name = archetypeData[Character::NAME_ATTRIBUTE].asString();
+   m_spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
 
    parseStats(archetypeData);
-   equipment.load(gameContext, archetypeData["Equipment"]);
+   m_equipment.load(gameContext, archetypeData["Equipment"]);
 
    // Start off the character with full HP/SP
-   hp = maxHP;
-   sp = maxSP;
+   m_hp = m_maxHP;
+   m_sp = m_maxSP;
 }
 
 Character::Character(const GameContext& gameContext, Json::Value& charToLoad)
 {
-   id = charToLoad[Character::ID_ATTRIBUTE].asString();
+   m_id = charToLoad[Character::ID_ATTRIBUTE].asString();
 
-   std::string archetypeId = archetype = charToLoad[Character::ARCHETYPE_ATTRIBUTE].asString();
+   std::string archetypeId = m_archetype = charToLoad[Character::ARCHETYPE_ATTRIBUTE].asString();
    if(archetypeId.empty())
    {
-      archetypeId = id;
+      archetypeId = m_id;
    }
 
    Json::Value archetypeData = Character::loadArchetype(archetypeId);
-   name = archetypeData[Character::NAME_ATTRIBUTE].asString();
-   spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
+   m_name = archetypeData[Character::NAME_ATTRIBUTE].asString();
+   m_spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
 
    parseStats(charToLoad);
-   equipment.load(gameContext, charToLoad["Equipment"]);
+   m_equipment.load(gameContext, charToLoad["Equipment"]);
    parseSkills(charToLoad);
 }
 
@@ -97,24 +97,24 @@ Character::~Character()
 void Character::parsePortraitData(Json::Value& portraitDataContainer)
 {
    Json::Value& portraitData = portraitDataContainer[Character::PORTRAIT_ELEMENT];
-   portraitPath = portraitData[Character::PORTRAIT_PATH_ATTRIBUTE].asString();
+   m_portraitPath = portraitData[Character::PORTRAIT_PATH_ATTRIBUTE].asString();
 }
 
 void Character::parseStats(Json::Value& statsDataContainer)
 {
    Json::Value& statsData = statsDataContainer[Character::STATS_ELEMENT];
 
-   hp = statsData[Character::HP_ATTRIBUTE].asInt();
-   sp = statsData[Character::SP_ATTRIBUTE].asInt();
-   maxHP = statsData[Character::MAX_HP_ATTRIBUTE].asInt();
-   maxSP = statsData[Character::MAX_SP_ATTRIBUTE].asInt();
-   strength = statsData[Character::STR_ATTRIBUTE].asInt();
-   intelligence = statsData[Character::INT_ATTRIBUTE].asInt();
+   m_hp = statsData[Character::HP_ATTRIBUTE].asInt();
+   m_sp = statsData[Character::SP_ATTRIBUTE].asInt();
+   m_maxHP = statsData[Character::MAX_HP_ATTRIBUTE].asInt();
+   m_maxSP = statsData[Character::MAX_SP_ATTRIBUTE].asInt();
+   m_strength = statsData[Character::STR_ATTRIBUTE].asInt();
+   m_intelligence = statsData[Character::INT_ATTRIBUTE].asInt();
 }
 
 void Character::parseSkills(Json::Value& skillsDataContainer)
 {
-   skills.clear();
+   m_skills.clear();
 
    DEBUG("Loading skills...");
    Json::Value& skillListJson = skillsDataContainer[Character::SKILLS_ELEMENT];
@@ -123,7 +123,7 @@ void Character::parseSkills(Json::Value& skillsDataContainer)
    {
       int id = skillListJson[i].asInt();
       DEBUG("Adding skill ID: %d", id);
-      skills.push_back(id);
+      m_skills.push_back(id);
    }
 }
 
@@ -131,122 +131,122 @@ Json::Value Character::serialize() const
 {
    Json::Value characterNode(Json::objectValue);
    
-   if(!archetype.empty())
+   if(!m_archetype.empty())
    {
-      characterNode[Character::ARCHETYPE_ATTRIBUTE] = archetype;
+      characterNode[Character::ARCHETYPE_ATTRIBUTE] = m_archetype;
    }
 
-   characterNode[Character::ID_ATTRIBUTE] = id;
+   characterNode[Character::ID_ATTRIBUTE] = m_id;
 
    Json::Value statsNode(Json::objectValue);
-   statsNode[Character::HP_ATTRIBUTE] = hp;
-   statsNode[Character::SP_ATTRIBUTE] = sp;
-   statsNode[Character::MAX_HP_ATTRIBUTE] = maxHP;
-   statsNode[Character::MAX_SP_ATTRIBUTE] = maxSP;
-   statsNode[Character::STR_ATTRIBUTE] = strength;
-   statsNode[Character::INT_ATTRIBUTE] = intelligence;
+   statsNode[Character::HP_ATTRIBUTE] = m_hp;
+   statsNode[Character::SP_ATTRIBUTE] = m_sp;
+   statsNode[Character::MAX_HP_ATTRIBUTE] = m_maxHP;
+   statsNode[Character::MAX_SP_ATTRIBUTE] = m_maxSP;
+   statsNode[Character::STR_ATTRIBUTE] = m_strength;
+   statsNode[Character::INT_ATTRIBUTE] = m_intelligence;
 
    characterNode[Character::STATS_ELEMENT] = statsNode;
 
    Json::Value skillsNode(Json::arrayValue);
 
-   for(SkillList::const_iterator iter = skills.begin(); iter != skills.end(); ++iter)
+   for(SkillList::const_iterator iter = m_skills.begin(); iter != m_skills.end(); ++iter)
    {
       skillsNode.append(*iter);
    }
 
    characterNode[Character::SKILLS_ELEMENT] = skillsNode;
 
-   equipment.serialize(characterNode["Equipment"]);
+   m_equipment.serialize(characterNode["Equipment"]);
    
    return characterNode;
 }
 
 int Character::getMaxHP() const
 {
-   return maxHP;
+   return m_maxHP;
 }
 
 int Character::getMaxSP() const
 {
-   return maxSP;
+   return m_maxSP;
 }
 
 int Character::getHP() const
 {
-   return hp;
+   return m_hp;
 }
 
 int Character::getSP() const
 {
-   return sp;
+   return m_sp;
 }
 
 int Character::getStrength() const
 {
-   return strength;
+   return m_strength;
 }
 
 int Character::getIntelligence() const
 {
-   return intelligence;
+   return m_intelligence;
 }
 
 int Character::getVitality() const
 {
 
-   return vitality;
+   return m_vitality;
 }
 
 int Character::getReflex() const
 {
-   return reflex;
+   return m_reflex;
 }
 
 int Character::getFocus() const
 {
-   return focus;
+   return m_focus;
 }
 
 int Character::getEndurance() const
 {
-   return endurance;
+   return m_endurance;
 }
 
 int Character::getAgility() const
 {
-   return agility;
+   return m_agility;
 }
 
 std::string Character::getId() const
 {
-   return id;
+   return m_id;
 }
 
 std::string Character::getName() const
 {
-   return name;
+   return m_name;
 }
 
 std::string Character::getSpritesheetId() const
 {
-   return spritesheetId;
+   return m_spritesheetId;
 }
 
 std::string Character::getPortraitPath() const
 {
-   return portraitPath;
+   return m_portraitPath;
 }
 
 const SkillList& Character::getSkillList() const
 {
-   return skills;
+   return m_skills;
 }
 
 bool Character::hasSkill(UsableId skillId) const
 {
-   SkillList::const_iterator skillIter = std::find(skills.begin(), skills.end(), skillId);
-   return skillIter != skills.end();
+   SkillList::const_iterator skillIter = std::find(m_skills.begin(), m_skills.end(), skillId);
+   return skillIter != m_skills.end();
 }
 
 bool Character::addSkill(UsableId skillId)
@@ -257,13 +257,13 @@ bool Character::addSkill(UsableId skillId)
       return false;
    }
 
-   skills.push_back(skillId);
+   m_skills.push_back(skillId);
    return true;
 }
 
 EquipData& Character::getEquipment()
 {
-   return equipment;
+   return m_equipment;
 }
 
 bool Character::equip(EquipSlot& slot, const Item* newEquipment)

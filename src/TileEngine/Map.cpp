@@ -27,7 +27,7 @@ Map::Map()
 {
 }
 
-Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
+Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
 {
    DEBUG("Loading map file %s", filePath.c_str());
    
@@ -58,7 +58,7 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
    root->Attribute("width", &width);
    root->Attribute("height", &height);
    
-   bounds = shapes::Rectangle(shapes::Point2D::ORIGIN, shapes::Size(width, height));
+   m_bounds = shapes::Rectangle(shapes::Point2D::ORIGIN, shapes::Size(width, height));
    
    const TiXmlElement* layerElement = root->FirstChildElement("layer");
    while(layerElement != NULL)
@@ -66,12 +66,12 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
       const std::string layerName(layerElement->Attribute("name"));
       if(layerName == "background")
       {
-         backgroundLayers.push_back(new Layer(layerElement, bounds));
+         m_backgroundLayers.push_back(new Layer(layerElement, m_bounds));
          DEBUG("Background layer added.");
       }
       else if(layerName == "foreground")
       {
-         foregroundLayers.push_back(new Layer(layerElement, bounds));
+         m_foregroundLayers.push_back(new Layer(layerElement, m_bounds));
          DEBUG("Foreground layer added.");
       }
       
@@ -111,23 +111,23 @@ Map::Map(const std::string& name, const std::string& filePath) : mapName(name)
 Map::~Map()
 {
    std::vector<Layer*>::const_iterator iter;
-   for(iter = backgroundLayers.begin(); iter != backgroundLayers.end(); ++iter)
+   for(iter = m_backgroundLayers.begin(); iter != m_backgroundLayers.end(); ++iter)
    {
       delete *iter;
    }
 
-   for(iter = foregroundLayers.begin(); iter != foregroundLayers.end(); ++iter)
+   for(iter = m_foregroundLayers.begin(); iter != m_foregroundLayers.end(); ++iter)
    {
       delete *iter;
    }
 
-   const unsigned int height = bounds.getHeight();
+   const unsigned int height = m_bounds.getHeight();
    for(unsigned int i = 0; i < height; ++i)
    {
-      delete [] passibilityMap[i];
+      delete [] m_passibilityMap[i];
    }
 
-   delete [] passibilityMap;
+   delete [] m_passibilityMap;
 }
 
 void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
@@ -157,7 +157,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
             {
                for(int x = rect.left; x < rect.right; ++x)
                {
-                  passibilityMap[y][x] = false;
+                  m_passibilityMap[y][x] = false;
                }  
             }
          }
@@ -199,7 +199,7 @@ void Map::parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement)
 
          if(!previousMap.empty())
          {
-            mapEntrances[previousMap] = entrance;
+            m_mapEntrances[previousMap] = entrance;
          }
 
          objectElement = objectElement->NextSiblingElement("object");
@@ -244,7 +244,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
 
          if(rect.getWidth() > 0 && rect.getHeight() > 0 && !nextMap.empty())
          {
-            mapExits.push_back(MapExit(nextMap, rect));
+            m_mapExits.push_back(MapExit(nextMap, rect));
          }
 
          objectElement = objectElement->NextSiblingElement("object");
@@ -254,50 +254,50 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
 
 bool Map::isPassible(int x, int y) const
 {
-    return passibilityMap[y][x];
+    return m_passibilityMap[y][x];
 }
 
 void Map::initializePassibilityMatrix()
 {
-   const unsigned int width = bounds.getWidth();
-   const unsigned int height = bounds.getHeight();
+   const unsigned int width = m_bounds.getWidth();
+   const unsigned int height = m_bounds.getHeight();
 
-   passibilityMap = new bool*[height];
+   m_passibilityMap = new bool*[height];
    for(unsigned int y = 0; y < height; ++y)
    {
-      passibilityMap[y] = new bool[width];
+      m_passibilityMap[y] = new bool[width];
       for(unsigned int x = 0; x < width; ++x)
       {
-         passibilityMap[y][x] = true;
+         m_passibilityMap[y][x] = true;
       }
    }
 }
 
 const std::string& Map::getName() const
 {
-   return mapName;
+   return m_name;
 }
 
 const shapes::Rectangle& Map::getBounds() const
 {
-   return bounds;
+   return m_bounds;
 }
 
 const std::vector<TriggerZone>& Map::getTriggerZones() const
 {
-   return triggerZones;
+   return m_triggerZones;
 }
 
 const std::vector<MapExit>& Map::getMapExits() const
 {
-   return mapExits;
+   return m_mapExits;
 }
 
 const shapes::Point2D& Map::getMapEntrance(const std::string& previousMap) const
 {
-   std::map<std::string, shapes::Point2D>::const_iterator result = mapEntrances.find(previousMap);
+   std::map<std::string, shapes::Point2D>::const_iterator result = m_mapEntrances.find(previousMap);
 
-   if(result == mapEntrances.end())
+   if(result == m_mapEntrances.end())
    {
       return shapes::Point2D::ORIGIN;
    }
@@ -307,7 +307,7 @@ const shapes::Point2D& Map::getMapEntrance(const std::string& previousMap) const
 
 bool** Map::getPassibilityMatrix() const
 {
-   return passibilityMap;
+   return m_passibilityMap;
 }
 
 void Map::step(long timePassed) const
@@ -318,7 +318,7 @@ void Map::drawBackground(int row) const
 {
    if(DRAW_PASSIBILITY)
    {
-      const unsigned int width = bounds.getWidth();
+      const unsigned int width = m_bounds.getWidth();
 
       for(unsigned int column = 0; column < width; ++column)
       {
@@ -336,7 +336,7 @@ void Map::drawBackground(int row) const
    {
       bool firstLayer = true;
       std::vector<Layer*>::const_iterator iter;
-      for(iter = backgroundLayers.begin(); iter != backgroundLayers.end(); ++iter)
+      for(iter = m_backgroundLayers.begin(); iter != m_backgroundLayers.end(); ++iter)
       {
          (*iter)->draw(row, !firstLayer);
          firstLayer = false;
@@ -349,7 +349,7 @@ void Map::drawForeground(int row) const
    if(!DRAW_PASSIBILITY)
    {
       std::vector<Layer*>::const_iterator iter;
-      for(iter = foregroundLayers.begin(); iter != foregroundLayers.end(); ++iter)
+      for(iter = m_foregroundLayers.begin(); iter != m_foregroundLayers.end(); ++iter)
       {
          (*iter)->draw(row, true);
       }

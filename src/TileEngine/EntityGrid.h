@@ -58,22 +58,22 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
    static const float INFINITY;
    
    /** The tile engine that moderates this grid. */
-   const TileEngine& tileEngine;
+   const TileEngine& m_tileEngine;
 
    /** The message pipe used for trigger events. */
-   messaging::MessagePipe& messagePipe;
+   messaging::MessagePipe& m_messagePipe;
 
    /** The map on which the grid is overlaid. */
-   const Map* map;
+   const Map* m_map;
 
    /** The pathfinding component used to navigate in this map. */
-   Pathfinder pathfinder;
+   Pathfinder m_pathfinder;
    
    /** The map of entities and states for each of the tiles. */
-   TileState** collisionMap;
+   TileState** m_collisionMap;
 
    /** The bounds of the pathfinder map. */
-   shapes::Rectangle collisionMapBounds;
+   shapes::Rectangle m_collisionMapBounds;
    
    /**
     * Clean up the grid data and listeners.
@@ -164,9 +164,9 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * Sets a new map to operate on. Initializes the collision map and
        * runs computations on it to inform heuristics for best path calculations.
        *
-       * @param newMapData The new map to operate on.
+       * @param map The new map to operate on.
        */
-      void setMapData(const Map* newMapData);
+      void setMapData(const Map* map);
    
       /**
        * @return The name of the map.

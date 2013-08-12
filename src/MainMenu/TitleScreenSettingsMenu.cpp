@@ -20,70 +20,70 @@ const int debugFlag = DEBUG_SETTINGS | DEBUG_TITLE;
 
 TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
    GameState(gameContext, GameState::TITLE, "TitleScreenSettingsMenu"),
-   bindings(this)
+   m_bindings(this)
 {
-   scheduler = new Scheduler();
+   m_scheduler = new Scheduler();
 
-   titleSettingsDocument = rocketContext->LoadDocument("data/gui/titleOptionsMenu.rml");
+   m_titleSettingsDocument = m_rocketContext->LoadDocument("data/gui/titleOptionsMenu.rml");
 
-   if(titleSettingsDocument != NULL)
+   if(m_titleSettingsDocument != NULL)
    {
-      Rocket::Core::Element* optionsForm = titleSettingsDocument->GetElementById("optionsForm");
+      Rocket::Core::Element* optionsForm = m_titleSettingsDocument->GetElementById("optionsForm");
       
       if(optionsForm != NULL)
       {
-         musicEnabledCheckbox = optionsForm->GetElementById("musicEnabled");
-         if(musicEnabledCheckbox != NULL)
+         m_musicEnabledCheckbox = optionsForm->GetElementById("musicEnabled");
+         if(m_musicEnabledCheckbox != NULL)
          {
-            bindings.bindAction(musicEnabledCheckbox, "change", &TitleScreenSettingsMenu::onMusicEnabledChange);
+            m_bindings.bindAction(m_musicEnabledCheckbox, "change", &TitleScreenSettingsMenu::onMusicEnabledChange);
          }
          
-         soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
-         if(soundEnabledCheckbox != NULL)
+         m_soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
+         if(m_soundEnabledCheckbox != NULL)
          {
-            bindings.bindAction(soundEnabledCheckbox, "change", &TitleScreenSettingsMenu::onSoundEnabledChange);
+            m_bindings.bindAction(m_soundEnabledCheckbox, "change", &TitleScreenSettingsMenu::onSoundEnabledChange);
          }
          
-         bindings.bindAction(optionsForm, "submit", &TitleScreenSettingsMenu::onSubmit);
+         m_bindings.bindAction(optionsForm, "submit", &TitleScreenSettingsMenu::onSubmit);
 
          loadSettings();
       }
 
-      titleSettingsDocument->Show();
+      m_titleSettingsDocument->Show();
    }
 }
 
 TitleScreenSettingsMenu::~TitleScreenSettingsMenu()
 {
-   titleSettingsDocument->Close();
-   titleSettingsDocument->RemoveReference();
+   m_titleSettingsDocument->Close();
+   m_titleSettingsDocument->RemoveReference();
 
-   delete scheduler;
+   delete m_scheduler;
 }
 
 void TitleScreenSettingsMenu::loadSettings()
 {
-   if(musicEnabledCheckbox != NULL)
+   if(m_musicEnabledCheckbox != NULL)
    {
       if(Settings::getCurrentSettings().isMusicEnabled())
       {
-         musicEnabledCheckbox->SetAttribute("checked", "");
+         m_musicEnabledCheckbox->SetAttribute("checked", "");
       }
       else
       {
-         musicEnabledCheckbox->RemoveAttribute("checked");
+         m_musicEnabledCheckbox->RemoveAttribute("checked");
       }
    }
    
-   if(soundEnabledCheckbox != NULL)
+   if(m_soundEnabledCheckbox != NULL)
    {
       if(Settings::getCurrentSettings().isSoundEnabled())
       {
-         soundEnabledCheckbox->SetAttribute("checked", "");
+         m_soundEnabledCheckbox->SetAttribute("checked", "");
       }
       else
       {
-         soundEnabledCheckbox->RemoveAttribute("checked");
+         m_soundEnabledCheckbox->RemoveAttribute("checked");
       }
    }
 }
@@ -110,7 +110,7 @@ void TitleScreenSettingsMenu::onSoundEnabledChange(Rocket::Core::Event* event)
 
 void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
 {
-   if (event->GetParameter<Rocket::Core::String>("submit", "cancel") == "apply")
+   if(event->GetParameter<Rocket::Core::String>("submit", "cancel") == "apply")
    {
       bool settingsUpdateSuccess = true;
       if(GraphicsUtil::getInstance()->isVideoModeRefreshRequired())
@@ -149,13 +149,13 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
       if(settingsUpdateSuccess)
       {
          saveSettings();
-         finished = true;
+         m_finished = true;
       }
    }
    else
    {
       revertSettings();
-      finished = true;
+      m_finished = true;
    }
 }
 
@@ -166,12 +166,12 @@ void TitleScreenSettingsMenu::saveSettings()
 
 bool TitleScreenSettingsMenu::step(long timePassed)
 {
-   if(finished)
+   if(m_finished)
    {
       return false;
    }
 
-   scheduler->runCoroutines(timePassed);
+   m_scheduler->runCoroutines(timePassed);
    bool done = false;
 
    waitForInputEvent(done);
@@ -199,7 +199,7 @@ void TitleScreenSettingsMenu::waitForInputEvent(bool& finishState)
          {
             case SDLK_ESCAPE:
             {
-               finished = true;
+               m_finished = true;
                return;
             }
             default:
@@ -212,7 +212,7 @@ void TitleScreenSettingsMenu::waitForInputEvent(bool& finishState)
       }
       case SDL_QUIT:
       {
-         finished = true;
+         m_finished = true;
          return;
       }
       default:
@@ -230,5 +230,5 @@ void TitleScreenSettingsMenu::draw()
 
 Scheduler* TitleScreenSettingsMenu::getScheduler() const
 {
-   return scheduler;
+   return m_scheduler;
 }

@@ -36,12 +36,12 @@ class Resource
     * True iff the resource has been successfully initialized.
     * False iff the resource is currently in an uninitialized stub/zombie state.
     */
-   bool initialized;
+   bool m_initialized;
    
    /**
     * The name of the resource.
     */
-   const ResourceKey& name;
+   const ResourceKey& m_name;
 
    /**
     * Loading function for initialization of the resource from file.

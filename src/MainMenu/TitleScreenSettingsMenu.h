@@ -32,22 +32,22 @@ class Settings;
 class TitleScreenSettingsMenu: public GameState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<TitleScreenSettingsMenu> bindings;
+   EdenRocketBindings<TitleScreenSettingsMenu> m_bindings;
 
    /** The coroutine scheduler for the main menu's GUI scripts */
-   Scheduler* scheduler;
+   Scheduler* m_scheduler;
 
    /** The title screen RML document */
-   Rocket::Core::ElementDocument* titleSettingsDocument;
+   Rocket::Core::ElementDocument* m_titleSettingsDocument;
    
    /** The music checkbox */
-   Rocket::Core::Element* musicEnabledCheckbox;
+   Rocket::Core::Element* m_musicEnabledCheckbox;
    
    /** The sound checkbox */
-   Rocket::Core::Element* soundEnabledCheckbox;
+   Rocket::Core::Element* m_soundEnabledCheckbox;
    
    /** The fullscreen checkbox */
-   Rocket::Core::Element* fullScreenEnabledCheckbox;
+   Rocket::Core::Element* m_fullScreenEnabledCheckbox;
    
    /**
     * Poll and handle the next input event.

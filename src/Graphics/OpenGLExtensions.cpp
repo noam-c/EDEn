@@ -8,49 +8,49 @@
 #include "SDL.h"
 
 OpenGLExtensions::OpenGLExtensions() : 
-   _glBindFramebufferEXT(NULL),
-   _glDeleteFramebuffersEXT(NULL),
-   _glGenFramebuffersEXT(NULL),
-   _glFramebufferTexture2DEXT(NULL),
-   framebuffersEnabled(false)
+   m_glBindFramebufferEXT(NULL),
+   m_glDeleteFramebuffersEXT(NULL),
+   m_glGenFramebuffersEXT(NULL),
+   m_glFramebufferTexture2DEXT(NULL),
+   m_framebuffersEnabled(false)
 {
 }
 
 void OpenGLExtensions::initialize()
 {
-   _glBindFramebufferEXT = reinterpret_cast<glBindFramebufferFunction>(SDL_GL_GetProcAddress("glBindFramebufferEXT"));
-   _glDeleteFramebuffersEXT = reinterpret_cast<glDeleteFramebuffersFunction>(SDL_GL_GetProcAddress("glDeleteFramebuffersEXT"));
-   _glGenFramebuffersEXT = reinterpret_cast<glGenFramebuffersFunction>(SDL_GL_GetProcAddress("glGenFramebuffersEXT"));
-   _glFramebufferTexture2DEXT = reinterpret_cast<glFramebufferTexture2DFunction>(SDL_GL_GetProcAddress("glFramebufferTexture2DEXT"));
+   m_glBindFramebufferEXT = reinterpret_cast<glBindFramebufferFunction>(SDL_GL_GetProcAddress("glBindFramebufferEXT"));
+   m_glDeleteFramebuffersEXT = reinterpret_cast<glDeleteFramebuffersFunction>(SDL_GL_GetProcAddress("glDeleteFramebuffersEXT"));
+   m_glGenFramebuffersEXT = reinterpret_cast<glGenFramebuffersFunction>(SDL_GL_GetProcAddress("glGenFramebuffersEXT"));
+   m_glFramebufferTexture2DEXT = reinterpret_cast<glFramebufferTexture2DFunction>(SDL_GL_GetProcAddress("glFramebufferTexture2DEXT"));
 
-   framebuffersEnabled = 
-      _glBindFramebufferEXT != NULL &&
-      _glDeleteFramebuffersEXT != NULL &&
-      _glGenFramebuffersEXT != NULL &&
-      _glFramebufferTexture2DEXT != NULL;
+   m_framebuffersEnabled =
+      m_glBindFramebufferEXT != NULL &&
+      m_glDeleteFramebuffersEXT != NULL &&
+      m_glGenFramebuffersEXT != NULL &&
+      m_glFramebufferTexture2DEXT != NULL;
 }
 
 bool OpenGLExtensions::isFrameBuffersEnabled() const
 {
-   return framebuffersEnabled;
+   return m_framebuffersEnabled;
 }
 
 OpenGLExtensions::glBindFramebufferFunction OpenGLExtensions::getBindFramebufferFunction() const
 {
-   return _glBindFramebufferEXT;
+   return m_glBindFramebufferEXT;
 }
 
 OpenGLExtensions::glDeleteFramebuffersFunction OpenGLExtensions::getDeleteFramebuffersFunction() const
 {
-   return _glDeleteFramebuffersEXT;
+   return m_glDeleteFramebuffersEXT;
 }
 
 OpenGLExtensions::glGenFramebuffersFunction OpenGLExtensions::getGenFramebuffersFunction() const
 {
-   return _glGenFramebuffersEXT;
+   return m_glGenFramebuffersEXT;
 }
 
 OpenGLExtensions::glFramebufferTexture2DFunction OpenGLExtensions::getFramebufferTexture2DFunction() const
 {
-   return _glFramebufferTexture2DEXT;
+   return m_glFramebufferTexture2DEXT;
 }

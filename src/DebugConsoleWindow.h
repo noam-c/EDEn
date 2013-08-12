@@ -27,19 +27,19 @@ namespace Rocket
 class DebugConsoleWindow
 {
    /** The event binding collection for the debug window */
-   EdenRocketBindings<DebugConsoleWindow> bindings;
+   EdenRocketBindings<DebugConsoleWindow> m_bindings;
 
    /** The Rocket context that holds this console window. */
-   Rocket::Core::Context& context;
+   Rocket::Core::Context& m_context;
 
    /** The Rocket document representing the debug console GUI */
-   Rocket::Core::ElementDocument* consoleDocument;
+   Rocket::Core::ElementDocument* m_consoleDocument;
 
    /** The Rocket element that holds the command history. */
-   Rocket::Core::Element* logElement;
+   Rocket::Core::Element* m_logElement;
 
    /** The Rocket element that holds the text box. */
-   Rocket::Controls::ElementFormControlInput* commandElement;
+   Rocket::Controls::ElementFormControlInput* m_commandElement;
 
    public:
       /**

@@ -35,13 +35,10 @@ class Sound;
 class SkillMenu: public CharacterDependentMenu
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<SkillMenu> bindings;
-
-   /** The player data */
-   PlayerData& playerData;
+   EdenRocketBindings<SkillMenu> m_bindings;
 
    /** The view model that exposes the inventory to the GUI */
-   SkillViewModel skillViewModel;
+   SkillViewModel m_skillViewModel;
 
    /**
     * Initializes the skill menu pane and populates the sidebar.

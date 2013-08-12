@@ -14,19 +14,19 @@ class TransitionState : public GameState
 {
    protected:
       /** The total time elapsed since the transition began. */
-      long totalTime;
+      long m_totalTime;
 
       /** The length of time that the transition will take to complete. */
-      const long transitionLength;
+      const long m_transitionLength;
 
       /** The progress (value between 0 and 1) through the transition. */
-      double progress;
+      double m_progress;
 
       /** A screen capture texture for the old state. */
-      ScreenTexture oldStateTexture;
+      ScreenTexture m_oldStateTexture;
 
       /** A screen capture texture for the new state. */
-      ScreenTexture newStateTexture;
+      ScreenTexture m_newStateTexture;
 
       /**
        * Update the transition to the right timeframe.

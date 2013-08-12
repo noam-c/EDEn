@@ -48,7 +48,7 @@ class DialogueController
 
    class DialogueCoroutine : public Coroutine
    {
-      DialogueController& dialogueController;
+      DialogueController& m_dialogueController;
       
       public:
          /**
@@ -88,10 +88,10 @@ class DialogueController
    class Line
    {
       /** A queue of upcoming open script brackets ('<' characters) */
-      std::queue<int> openScriptBrackets;
+      std::queue<int> m_openScriptBrackets;
 
       /** A queue of upcoming close script brackets ('>' characters) */
-      std::queue<int> closeScriptBrackets;
+      std::queue<int> m_closeScriptBrackets;
 
       public:
          /** The type of line (how it should be displayed) */
@@ -125,38 +125,38 @@ class DialogueController
    };
 
    /** The queue to hold all the pending dialogue sequences. */
-   std::queue<Line*> lineQueue;
+   std::queue<Line*> m_lineQueue;
 
    /** The script engine to call when embedded instructions are found */
-   ScriptEngine& scriptEngine;
+   ScriptEngine& m_scriptEngine;
 
    /** The scheduler that will be used to manage script coroutines that arise during the dialogue. */
-   Scheduler& scheduler;
+   Scheduler& m_scheduler;
 
    /** The Rocket context that will manage the dialogue boxes */
-   Rocket::Core::Context& context;
+   Rocket::Core::Context& m_context;
 
    /** Main dialogue box for speech or narration */
-   DialogueBox* mainDialogue;
+   DialogueBox* m_mainDialogue;
 
    /** 
     * How much time since a letter was added to the screen's dialogue box 
     * from the current line.
     */
-   int dialogueTime;
+   int m_dialogueTime;
 
    /**
     * The number of characters that should be placed on the screen.
     */
-   unsigned int charsToShow;
+   unsigned int m_charsToShow;
 
    /**
     * True iff the user has indicated that dialogue should flow more quickly.
     */
-   bool fastMode;
+   bool m_fastMode;
 
    /** The current line of dialogue */
-   Line* currLine;
+   Line* m_currLine;
 
    /**
     * Initialize the main dialogue box.

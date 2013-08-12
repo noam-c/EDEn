@@ -44,23 +44,23 @@ extern "C"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
 #define REGISTER_LUA_ENUM_VALUE(name, value) \
-  lua_pushlstring(luaVM, #name, sizeof(#name)-1); \
-  lua_pushnumber(luaVM, value); \
-  lua_settable(luaVM, -3);
+  lua_pushlstring(m_luaVM, #name, sizeof(#name)-1); \
+  lua_pushnumber(m_luaVM, value); \
+  lua_settable(m_luaVM, -3);
 
 ScriptEngine::ScriptEngine(GameContext& gameContext) :
-   gameContext(gameContext)
+   m_gameContext(gameContext)
 {
-   luaVM = luaL_newstate();
+   m_luaVM = luaL_newstate();
 
-   if(luaVM == NULL)
+   if(m_luaVM == NULL)
    {
       // An error occurred
       T_T("Unable to initialize Lua state machine");
    }
 
    //initialize standard Lua libraries
-   luaL_openlibs(luaVM);
+   luaL_openlibs(m_luaVM);
 
    // register game functions and enums with Lua
    registerFunctions();
@@ -69,31 +69,31 @@ ScriptEngine::ScriptEngine(GameContext& gameContext) :
    // Push this engine instance as a global pointer for the Lua VM
    // This allows global C functions in our API to reference this instance
    // (thus eliminating the need for a global ScriptEngine instance or singleton)
-   lua_pushlightuserdata(luaVM, this);
-   lua_setglobal(luaVM, SCRIPT_ENG_LUA_NAME);
+   lua_pushlightuserdata(m_luaVM, this);
+   lua_setglobal(m_luaVM, SCRIPT_ENG_LUA_NAME);
    
-   luaopen_TileEngine(luaVM);
-   luaopen_Actor(luaVM);
-   luaopen_PlayerCharacter(luaVM);
-   luaopen_Quest(luaVM);
-   luaopen_Inventory(luaVM);
-   luaopen_Character(luaVM);
-   luaopen_CharacterRoster(luaVM);
+   luaopen_TileEngine(m_luaVM);
+   luaopen_Actor(m_luaVM);
+   luaopen_PlayerCharacter(m_luaVM);
+   luaopen_Quest(m_luaVM);
+   luaopen_Inventory(m_luaVM);
+   luaopen_Character(m_luaVM);
+   luaopen_CharacterRoster(m_luaVM);
 }
 
 ScriptEngine::~ScriptEngine()
 {
-   if(luaVM)
+   if(m_luaVM)
    {
       DEBUG("Destroying Lua state machine...");
-      lua_close(luaVM);
+      lua_close(m_luaVM);
       DEBUG("Lua state machine destroyed.");
    }
 }
 
 void ScriptEngine::registerEnums()
 {
-   lua_newtable(luaVM);
+   lua_newtable(m_luaVM);
    REGISTER_LUA_ENUM_VALUE(None, NONE);
    REGISTER_LUA_ENUM_VALUE(Up, UP);
    REGISTER_LUA_ENUM_VALUE(Down, DOWN);
@@ -103,59 +103,59 @@ void ScriptEngine::registerEnums()
    REGISTER_LUA_ENUM_VALUE(UpRight, UP_RIGHT);
    REGISTER_LUA_ENUM_VALUE(DownLeft, DOWN_LEFT);
    REGISTER_LUA_ENUM_VALUE(DownRight, DOWN_RIGHT);
-   lua_setglobal(luaVM, "Direction");
+   lua_setglobal(m_luaVM, "Direction");
 }
 
 void ScriptEngine::setTileEngine(TileEngine* engine)
 {
-   tileEngine = engine;
-   if(tileEngine != NULL)
+   m_tileEngine = engine;
+   if(m_tileEngine != NULL)
    {
-      luaW_push(luaVM, tileEngine);
-      lua_setglobal(luaVM, "map");
+      luaW_push(m_luaVM, m_tileEngine);
+      lua_setglobal(m_luaVM, "map");
 
-      luaW_push(luaVM, tileEngine->getPlayerCharacter());
-      lua_setglobal(luaVM, "playerSprite");
+      luaW_push(m_luaVM, m_tileEngine->getPlayerCharacter());
+      lua_setglobal(m_luaVM, "playerSprite");
    }
    else
    {
-      lua_pushnil(luaVM);
-      lua_setglobal(luaVM, "map");
+      lua_pushnil(m_luaVM);
+      lua_setglobal(m_luaVM, "map");
 
-      lua_pushnil(luaVM);
-      lua_setglobal(luaVM, "playerSprite");
+      lua_pushnil(m_luaVM);
+      lua_setglobal(m_luaVM, "playerSprite");
    }
 }
 
 void ScriptEngine::setPlayerData(PlayerData* playerData)
 {
-   this->playerData = playerData;
-   if(this->playerData != NULL)
+   m_playerData = playerData;
+   if(m_playerData != NULL)
    {
-      luaW_push(luaVM, this->playerData->getRootQuest());
-      lua_setglobal(luaVM, "quests");
+      luaW_push(m_luaVM, m_playerData->getRootQuest());
+      lua_setglobal(m_luaVM, "quests");
 
-      luaW_push(luaVM, this->playerData->getInventory());
-      lua_setglobal(luaVM, "inventory");
+      luaW_push(m_luaVM, m_playerData->getInventory());
+      lua_setglobal(m_luaVM, "inventory");
 
-      luaW_push(luaVM, this->playerData->getRoster());
-      lua_setglobal(luaVM, "roster");
+      luaW_push(m_luaVM, m_playerData->getRoster());
+      lua_setglobal(m_luaVM, "roster");
    }
    else
    {
-      lua_pushnil(luaVM);
-      lua_setglobal(luaVM, "quests");
+      lua_pushnil(m_luaVM);
+      lua_setglobal(m_luaVM, "quests");
 
-      lua_pushnil(luaVM);
-      lua_setglobal(luaVM, "inventory");
+      lua_pushnil(m_luaVM);
+      lua_setglobal(m_luaVM, "inventory");
 
-      lua_pushnil(luaVM);
-      lua_setglobal(luaVM, "roster");
+      lua_pushnil(m_luaVM);
+      lua_setglobal(m_luaVM, "roster");
    }
 }
 int ScriptEngine::narrate(lua_State* luaStack)
 {
-   Scheduler* scheduler = gameContext.getCurrentScheduler();
+   Scheduler* scheduler = m_gameContext.getCurrentScheduler();
    if (scheduler == NULL)
    {
       return 0;
@@ -183,14 +183,14 @@ int ScriptEngine::narrate(lua_State* luaStack)
    }
 
    DEBUG("Narrating text: %s", text.c_str());
-   tileEngine->dialogueNarrate(text, task);
+   m_tileEngine->dialogueNarrate(text, task);
 
    return callResult;
 }
 
 int ScriptEngine::say(lua_State* luaStack)
 {
-   Scheduler* scheduler = gameContext.getCurrentScheduler();
+   Scheduler* scheduler = m_gameContext.getCurrentScheduler();
    if (scheduler == NULL)
    {
       return 0;
@@ -218,14 +218,14 @@ int ScriptEngine::say(lua_State* luaStack)
    }
 
    DEBUG("Saying text: %s", text.c_str());
-   tileEngine->dialogueSay(text, task);
+   m_tileEngine->dialogueSay(text, task);
 
    return callResult;
 }
 
 int ScriptEngine::playSound(lua_State* luaStack)
 {
-   Scheduler* scheduler = gameContext.getCurrentScheduler();
+   Scheduler* scheduler = m_gameContext.getCurrentScheduler();
    if (scheduler == NULL)
    {
       return 0;
@@ -297,7 +297,7 @@ int ScriptEngine::isMusicPlaying(lua_State* luaStack)
 
 int ScriptEngine::delay(lua_State* luaStack)
 {
-   Scheduler* scheduler = gameContext.getCurrentScheduler();
+   Scheduler* scheduler = m_gameContext.getCurrentScheduler();
    if (scheduler == NULL)
    {
       return 0;
@@ -357,33 +357,33 @@ int ScriptEngine::setRegion(lua_State* luaStack)
 
    DEBUG("Setting region: %s", regionName.c_str());
 
-   return tileEngine->setRegion(regionName);
+   return m_tileEngine->setRegion(regionName);
 }
 
 NPCScript* ScriptEngine::createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName)
 {
-   return ScriptFactory::createNPCCoroutine(luaVM, npc, regionName, mapName);
+   return ScriptFactory::createNPCCoroutine(m_luaVM, npc, regionName, mapName);
 }
 
 UsableScript* ScriptEngine::createItemScript(const Item& item) const
 {
-   return ScriptFactory::getItemScript(luaVM, item);
+   return ScriptFactory::getItemScript(m_luaVM, item);
 }
 
 UsableScript* ScriptEngine::createSkillScript(const Skill& skill) const
 {
-   return ScriptFactory::getSkillScript(luaVM, skill);
+   return ScriptFactory::getSkillScript(m_luaVM, skill);
 }
 
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)
 {
-   Script* mapScript = ScriptFactory::getMapScript(luaVM, regionName, mapName);
+   Script* mapScript = ScriptFactory::getMapScript(m_luaVM, regionName, mapName);
    return runScript(mapScript, scheduler);
 }
 
 int ScriptEngine::runChapterScript(const std::string& chapterName, Scheduler& scheduler)
 {
-   Script* chapterScript = ScriptFactory::getChapterScript(luaVM, chapterName);
+   Script* chapterScript = ScriptFactory::getChapterScript(m_luaVM, chapterName);
    return runScript(chapterScript, scheduler);
 }
 
@@ -402,7 +402,7 @@ int ScriptEngine::runScript(Script* script, Scheduler& scheduler)
 int ScriptEngine::runScriptString(const std::string& scriptString, Scheduler& scheduler)
 {
    DEBUG("Running script string: %s", scriptString.c_str());
-   StringScript* newScript = new StringScript(luaVM, scriptString);
+   StringScript* newScript = new StringScript(m_luaVM, scriptString);
    scheduler.start(newScript);
 
    if(scheduler.hasRunningCoroutine())

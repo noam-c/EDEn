@@ -27,23 +27,23 @@ class CharacterRoster
 {
    static const char* PARTY_ELEMENT;
 
-   const GameContext& gameContext;
+   const GameContext& m_gameContext;
 
    /** The message pipe used to send messages about updates to the roster. */
-   const messaging::MessagePipe* messagePipe;
+   const messaging::MessagePipe* m_messagePipe;
 
    /** The lead character in the party, who the player sees when they are playing the game. */
-   Character* partyLeader;
+   Character* m_partyLeader;
 
    /** The characters in the main party, who interact with the world and participate in combat. */
-   std::vector<Character*> party;
+   std::vector<Character*> m_party;
 
    /**
     * A list of all playable characters encountered.
     * This includes characters in the party, but also includes characters encountered by the player,
     * but currently inaccessible for play.
     */
-   std::map<std::string, Character*> allCharacters;
+   std::map<std::string, Character*> m_allCharacters;
 
    void signalRosterUpdate();
    void deleteCharacterList();

@@ -19,78 +19,76 @@ const int debugFlag = DEBUG_MENU;
 
 DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData) :
    MenuState(gameContext, playerData, "DataMenu"),
-   bindings(this),
-   playerData(playerData),
-   dataViewModel(gameContext, playerData)
+   m_bindings(this),
+   m_dataViewModel(gameContext, playerData)
 {
    initialize();
 }
 
 DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
    MenuState(gameContext, "DataMenu", menuShell),
-   bindings(this),
-   playerData(playerData),
-   dataViewModel(gameContext, playerData)
+   m_bindings(this),
+   m_dataViewModel(gameContext, playerData)
 {
    initialize();
 }
 
 void DataMenu::initialize()
 {
-   paneDocument = menuShell->getRocketContext()->LoadDocument("data/gui/datapane.rml");
-   if(paneDocument != NULL)
+   m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/datapane.rml");
+   if(m_paneDocument != NULL)
    {
-      bindings.bindAction(paneDocument, "saveGameGrid", "click", &DataMenu::saveGameClicked);
+      m_bindings.bindAction(m_paneDocument, "saveGameGrid", "click", &DataMenu::saveGameClicked);
    }
 
-   confirmSaveDocument = menuShell->getRocketContext()->LoadDocument("data/gui/dataconfirmsave.rml");
-   if(confirmSaveDocument != NULL)
+   m_confirmSaveDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/dataconfirmsave.rml");
+   if(m_confirmSaveDocument != NULL)
    {
-      bindings.bindAction(confirmSaveDocument, "confirm", "click", &DataMenu::confirmClicked);
-      bindings.bindAction(confirmSaveDocument, "cancel", "click", &DataMenu::cancelClicked);
+      m_bindings.bindAction(m_confirmSaveDocument, "confirm", "click", &DataMenu::confirmClicked);
+      m_bindings.bindAction(m_confirmSaveDocument, "cancel", "click", &DataMenu::cancelClicked);
    }
 
-   slotToSave = -1;
+   m_slotToSave = -1;
 
-   sidebarOptions.push_back("Items");
-   sidebarOptions.push_back("Equip");
-   sidebarOptions.push_back("Status");
-   sidebarOptions.push_back("Skills");
-   sidebarOptions.push_back("Formation");
-   sidebarOptions.push_back("Party Change");
-   sidebarOptions.push_back("Options");
-   sidebarOptions.push_back("Data");
+   m_sidebarOptions.push_back("Items");
+   m_sidebarOptions.push_back("Equip");
+   m_sidebarOptions.push_back("Status");
+   m_sidebarOptions.push_back("Skills");
+   m_sidebarOptions.push_back("Formation");
+   m_sidebarOptions.push_back("Party Change");
+   m_sidebarOptions.push_back("Options");
+   m_sidebarOptions.push_back("Data");
 }
 
 DataMenu::~DataMenu()
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Close();
-      paneDocument->RemoveReference();
+      m_paneDocument->Close();
+      m_paneDocument->RemoveReference();
    }
 
-   if(confirmSaveDocument != NULL)
+   if(m_confirmSaveDocument != NULL)
    {
-      confirmSaveDocument->Close();
-      confirmSaveDocument->RemoveReference();
+      m_confirmSaveDocument->Close();
+      m_confirmSaveDocument->RemoveReference();
    }
 }
 
 void DataMenu::activate()
 {
    MenuState::activate();
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Show();
+      m_paneDocument->Show();
    }
 }
 
 void DataMenu::deactivate()
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Hide();
+      m_paneDocument->Hide();
    }
 }
 
@@ -105,28 +103,28 @@ void DataMenu::sidebarClicked(int optionIndex)
 
 void DataMenu::showConfirmDialog(int index)
 {
-   slotToSave = index;
-   if (confirmSaveDocument != NULL)
+   m_slotToSave = index;
+   if (m_confirmSaveDocument != NULL)
    {
-      confirmSaveDocument->Show(Rocket::Core::ElementDocument::MODAL);
+      m_confirmSaveDocument->Show(Rocket::Core::ElementDocument::MODAL);
    }
 }
 
 void DataMenu::hideConfirmDialog()
 {
-   slotToSave = -1;
-   if(confirmSaveDocument != NULL)
+   m_slotToSave = -1;
+   if(m_confirmSaveDocument != NULL)
    {
       // Need to call Show without focus flags first, to release modal focus :(
-      confirmSaveDocument->Show();
+      m_confirmSaveDocument->Show();
 
-      confirmSaveDocument->Hide();
+      m_confirmSaveDocument->Hide();
    }
 }
 
 void DataMenu::confirmClicked(Rocket::Core::Event* event)
 {
-   dataViewModel.saveToSlot(slotToSave);
+   m_dataViewModel.saveToSlot(m_slotToSave);
    hideConfirmDialog();
 }
 

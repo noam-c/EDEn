@@ -13,24 +13,24 @@
 const int debugFlag = DEBUG_ROCKET;
 
 DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
-   bindings(this),
-   context(context)
+   m_bindings(this),
+   m_context(context)
 {
-   context.AddReference();
+   m_context.AddReference();
 
-   consoleDocument = context.LoadDocument("data/gui/debugConsole.rml");
-   if(consoleDocument != NULL)
+   m_consoleDocument = context.LoadDocument("data/gui/debugConsole.rml");
+   if(m_consoleDocument != NULL)
    {
-      logElement = consoleDocument->GetElementById("commandLog");
-      if(logElement == NULL)
+      m_logElement = m_consoleDocument->GetElementById("commandLog");
+      if(m_logElement == NULL)
       {
          DEBUG("Warning: missing \"commandLog\" element in debug console window.");
       }
 
-      commandElement = dynamic_cast<Rocket::Controls::ElementFormControlInput*>(consoleDocument->GetElementById("commandPrompt"));
-      if(commandElement != NULL)
+      m_commandElement = dynamic_cast<Rocket::Controls::ElementFormControlInput*>(m_consoleDocument->GetElementById("commandPrompt"));
+      if(m_commandElement != NULL)
       {
-         bindings.bindAction(commandElement, "keydown", &DebugConsoleWindow::onKeyPress);
+         m_bindings.bindAction(m_commandElement, "keydown", &DebugConsoleWindow::onKeyPress);
       }
       else
       {
@@ -41,18 +41,18 @@ DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
 
 DebugConsoleWindow::~DebugConsoleWindow()
 {
-   if(consoleDocument != NULL)
+   if(m_consoleDocument != NULL)
    {
-      consoleDocument->RemoveReference();
-      consoleDocument->Close();
+      m_consoleDocument->RemoveReference();
+      m_consoleDocument->Close();
    }
 
-   context.RemoveReference();
+   m_context.RemoveReference();
 }
 
 void DebugConsoleWindow::onFocus(Rocket::Core::Event* event)
 {
-   commandElement->Focus();
+   m_commandElement->Focus();
 }
 
 void DebugConsoleWindow::onKeyPress(Rocket::Core::Event* event)
@@ -61,19 +61,19 @@ void DebugConsoleWindow::onKeyPress(Rocket::Core::Event* event)
 
    if(key == Rocket::Core::Input::KI_RETURN)
    {
-      Rocket::Core::String text = commandElement->GetValue();
+      Rocket::Core::String text = m_commandElement->GetValue();
       if(text.Length() > 0)
       {
-         Rocket::Core::Element* entryElement = logElement->GetOwnerDocument()->CreateElement("div");
-         Rocket::Core::ElementText* textElement = logElement->GetOwnerDocument()->CreateTextNode(text);
+         Rocket::Core::Element* entryElement = m_logElement->GetOwnerDocument()->CreateElement("div");
+         Rocket::Core::ElementText* textElement = m_logElement->GetOwnerDocument()->CreateTextNode(text);
 
          entryElement->AppendChild(textElement);
-         logElement->AppendChild(entryElement);
+         m_logElement->AppendChild(entryElement);
 
          entryElement->RemoveReference();
          textElement->RemoveReference();
 
-         commandElement->SetValue("");
+         m_commandElement->SetValue("");
 
          SDL_Event event;
          event.type = SDL_USEREVENT;
@@ -90,15 +90,15 @@ void DebugConsoleWindow::onKeyPress(Rocket::Core::Event* event)
 
 bool DebugConsoleWindow::isVisible() const
 {
-   return consoleDocument->IsVisible();
+   return m_consoleDocument->IsVisible();
 }
 
 void DebugConsoleWindow::show()
 {
-   consoleDocument->Show(Rocket::Core::ElementDocument::MODAL);
+   m_consoleDocument->Show(Rocket::Core::ElementDocument::MODAL);
 }
 
 void DebugConsoleWindow::hide()
 {
-   consoleDocument->Hide();
+   m_consoleDocument->Hide();
 }

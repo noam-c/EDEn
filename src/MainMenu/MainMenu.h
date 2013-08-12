@@ -32,22 +32,22 @@ class Sound;
 class MainMenu: public GameState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<MainMenu> bindings;
+   EdenRocketBindings<MainMenu> m_bindings;
 
    /** The coroutine scheduler for the main menu's GUI scripts */
-   Scheduler* scheduler;
+   Scheduler* m_scheduler;
 
    /** Main menu music */
-   Music* music;
+   Music* m_music;
 
    /** Sound for hovering over an option */
-   Sound* reselectSound;
+   Sound* m_reselectSound;
 
    /** Sound for picking an option */
-   Sound* chooseSound;
+   Sound* m_chooseSound;
 
    /** The title screen RML document */
-   Rocket::Core::ElementDocument* titleDocument;
+   Rocket::Core::ElementDocument* m_titleDocument;
 
    /**
     * Poll and handle the next input event.

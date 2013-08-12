@@ -22,10 +22,10 @@
 template<typename T> class EdenRocketBindings
 {
    /** The view model instance containing the event handler functions to call. */
-   T* instance;
+   T* m_instance;
 
    /** The listeners created by the view model. */
-   std::vector<RocketListener<T>* > listeners;
+   std::vector<RocketListener<T>* > m_listeners;
 
    /**
     * Private default constructor.
@@ -39,7 +39,7 @@ template<typename T> class EdenRocketBindings
        * @param instance The view model that is constructing and
        *                 managing this EdenRocketBindings instance.
        */
-      EdenRocketBindings(T* instance) : instance(instance) {}
+      EdenRocketBindings(T* instance) : m_instance(instance) {}
 
       /**
        * Destructor.
@@ -47,7 +47,7 @@ template<typename T> class EdenRocketBindings
       ~EdenRocketBindings()
       {
          typename std::vector<RocketListener<T>* >::iterator iter;
-         for(iter = listeners.begin(); iter != listeners.end(); ++iter)
+         for(iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
          {
             delete *iter;
          }
@@ -84,8 +84,8 @@ template<typename T> class EdenRocketBindings
        */
       void bindAction(Rocket::Core::Element* element, const char* eventType, void (T::*handler)(Rocket::Core::Event*), bool capture = false)
       {
-         RocketListener<T>* listener = new RocketListener<T>(element, eventType, capture, std::bind1st(std::mem_fun(handler), instance));
-         listeners.push_back(listener);
+         RocketListener<T>* listener = new RocketListener<T>(element, eventType, capture, std::bind1st(std::mem_fun(handler), m_instance));
+         m_listeners.push_back(listener);
       }
 };
 

@@ -20,22 +20,22 @@
 class Camera
 {
    /** True iff the camera's transformations have been applied to the renderer. */
-   bool cameraApplied;
+   bool m_cameraApplied;
 
    /** The focal point for the camera to center around. */
-   shapes::Point2D focalPoint;
+   shapes::Point2D m_focalPoint;
 
    /** True iff there is a focal point set for the camera to center around. */
-   bool focalPointSet;
+   bool m_focalPointSet;
 
    /** The offset from the top-left corner of the window to the top-left corner of the camera's viewport. */
-   shapes::Point2D offset;
+   shapes::Point2D m_offset;
 
    /** The size of the camera's viewport. */
-   shapes::Size viewportSize;
+   shapes::Size m_viewportSize;
 
    /** The size of the scene that the camera is pointing at. */
-   shapes::Size sceneSize;
+   shapes::Size m_sceneSize;
 
    /**
     * Calculates the offset required to show the focal point as close to the center
@@ -80,10 +80,10 @@ class Camera
       /*
        * Sets the viewport and scene bounds for the camera.
        *
-       * @param newViewportSize The size of the camera's viewport (the area that will be drawn within it).
-       * @param newSceneSize The size of the scene that the camera is pointing at.
+       * @param viewportSize The size of the camera's viewport (the area that will be drawn within it).
+       * @param sceneSize The size of the scene that the camera is pointing at.
        */
-      void setViewBounds(const shapes::Size& newViewportSize, const shapes::Size& newSceneSize);
+      void setViewBounds(const shapes::Size& viewportSize, const shapes::Size& sceneSize);
 
       /**
        * Gets the current point that the camera is centered around.

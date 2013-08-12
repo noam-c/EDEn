@@ -37,28 +37,28 @@ class Map
    static const char MAP_DELIM = ':';
 
    /** The name of this map */
-   std::string mapName;
+   std::string m_name;
 
    /** Background layers, which are drawn behind the sprite layer (behind NPCs, player, etc.) */
-   std::vector<Layer*> backgroundLayers;
+   std::vector<Layer*> m_backgroundLayers;
 
    /** Foreground layers, which are drawn in front of the sprite layer (in front of NPCs, player, etc.) */
-   std::vector<Layer*> foregroundLayers;
+   std::vector<Layer*> m_foregroundLayers;
 
    /** The passibility of the map */
-   bool** passibilityMap;
+   bool** m_passibilityMap;
 
    /** The list of the map's trigger zones */
-   std::vector<TriggerZone> triggerZones;
+   std::vector<TriggerZone> m_triggerZones;
 
    /** The list of the map's entrances */
-   std::map<std::string, shapes::Point2D> mapEntrances;
+   std::map<std::string, shapes::Point2D> m_mapEntrances;
 
    /** The list of the map's exits */
-   std::vector<MapExit> mapExits;
+   std::vector<MapExit> m_mapExits;
 
    /** The bounds (in tiles) of this map */
-   shapes::Rectangle bounds;
+   shapes::Rectangle m_bounds;
 
    /**
     * @return true iff the tile at this location of the map is passible

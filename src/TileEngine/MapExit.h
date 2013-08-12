@@ -12,8 +12,8 @@
 
 class MapExit
 {
-   std::string nextMap;
-   shapes::Rectangle bounds;
+   std::string m_nextMap;
+   shapes::Rectangle m_bounds;
 
    public:
       MapExit(const std::string& nextMap, const shapes::Rectangle& bounds);

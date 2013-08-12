@@ -27,31 +27,31 @@ typedef class Usable Item;
 class EquipData
 {
    /** The equipment slot for headgear. */
-   EquipSlot head;
+   EquipSlot m_head;
 
    /** The equipment slot for armour. */
-   EquipSlot body;
+   EquipSlot m_body;
 
    /** The equipment slot for the default weapon. */
-   EquipSlot primaryWeapon;
+   EquipSlot m_primaryWeapon;
 
    /** The equipment slot for the default item held in the non-weapon hand (i.e. shields). */
-   EquipSlot primaryOffhand;
+   EquipSlot m_primaryOffhand;
 
    /** The equipment slot for the secondary weapon. */
-   EquipSlot secondaryWeapon;
+   EquipSlot m_secondaryWeapon;
 
    /** The equipment slot for the secondary item held in the non-weapon hand (i.e. shields). */
-   EquipSlot secondaryOffhand;
+   EquipSlot m_secondaryOffhand;
 
    /** The equipment slot for capes and overgarments. */
-   EquipSlot garment;
+   EquipSlot m_garment;
 
    /** The equipment slot for footgear. */
-   EquipSlot feet;
+   EquipSlot m_feet;
 
    /** The accessories equipped by the character. Characters can equip multiple accessories. */
-   std::vector<EquipSlot> accessories;
+   std::vector<EquipSlot> m_accessories;
    
    public:
       /**

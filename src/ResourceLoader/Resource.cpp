@@ -7,25 +7,25 @@
 #include "Resource.h"
 
 Resource::Resource(const ResourceKey& name) :
-   initialized(false),
-   name(name)
+   m_initialized(false),
+   m_name(name)
 {
 }
 
 bool Resource::isInitialized() const
 {
-   return initialized;
+   return m_initialized;
 }
 
 void Resource::initialize(const char* path)
 {
    load(path);
-   initialized = true;
+   m_initialized = true;
 }
 
 std::string Resource::getResourceName() const
 {
-   return std::string(name);
+   return std::string(m_name);
 }
 
 Resource::~Resource()

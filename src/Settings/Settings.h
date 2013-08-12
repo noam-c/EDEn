@@ -19,17 +19,17 @@ class Settings
 {
    const static std::string DEFAULT_SETTINGS_PATH;
    
-   Settings* settingsSnapshot;
+   Settings* m_settingsSnapshot;
    static Settings currentSettings;
    
    /** True iff music should be played in the game. */
-   bool musicEnabled;
+   bool m_musicEnabled;
 
    /** True iff sound effects should be played in the game. */
-   bool soundEnabled;
+   bool m_soundEnabled;
 
    /** True iff fullscreen mode is enabled in the game. */
-   bool fullScreenEnabled;
+   bool m_fullScreenEnabled;
    
    Settings(bool isSnapshot = false);
 
@@ -80,7 +80,7 @@ class Settings
       };
    
    private:
-      Resolution resolution;
+      Resolution m_resolution;
 
    public:
       Settings(const Settings& other);

@@ -20,45 +20,45 @@
 const int debugFlag = DEBUG_MENU;
 
 ShortcutBar::ShortcutBar(GameContext& gameContext, PlayerData& playerData, Rocket::Core::Context& rocketContext) :
-   bindings(this),
-   rocketContext(rocketContext),
-   gameContext(gameContext),
-   playerData(playerData)
+   m_bindings(this),
+   m_rocketContext(rocketContext),
+   m_gameContext(gameContext),
+   m_playerData(playerData)
 {
-   rocketContext.AddReference();
+   m_rocketContext.AddReference();
 
-   shortcutBarDocument = rocketContext.LoadDocument("data/gui/shortcutBar.rml");
-   if(shortcutBarDocument != NULL)
+   m_shortcutBarDocument = rocketContext.LoadDocument("data/gui/shortcutBar.rml");
+   if(m_shortcutBarDocument != NULL)
    {
-      shortcutContainer = shortcutBarDocument->GetElementById("shortcutContainer");
-      if (shortcutContainer != NULL)
+      m_shortcutContainer = m_shortcutBarDocument->GetElementById("shortcutContainer");
+      if (m_shortcutContainer != NULL)
       {
-         bindings.bindAction(shortcutContainer, "dragdrop", &ShortcutBar::usableDropped);
-         bindings.bindAction(shortcutContainer, "click", &ShortcutBar::shortcutClicked);
+         m_bindings.bindAction(m_shortcutContainer, "dragdrop", &ShortcutBar::usableDropped);
+         m_bindings.bindAction(m_shortcutContainer, "click", &ShortcutBar::shortcutClicked);
       }
 
       refresh();
 
-      shortcutBarDocument->Show();
+      m_shortcutBarDocument->Show();
    }
 }
 
 ShortcutBar::~ShortcutBar()
 {
-   if(shortcutBarDocument != NULL)
+   if(m_shortcutBarDocument != NULL)
    {
-      shortcutBarDocument->RemoveReference();
-      shortcutBarDocument->Close();
+      m_shortcutBarDocument->RemoveReference();
+      m_shortcutBarDocument->Close();
    }
 
-   rocketContext.RemoveReference();
+   m_rocketContext.RemoveReference();
 }
 
 void ShortcutBar::shortcutClicked(Rocket::Core::Event* event)
 {
    Rocket::Core::Element* shortcutElement = event->GetTargetElement();
 
-   while(shortcutElement != NULL && shortcutElement->GetParentNode() != shortcutContainer)
+   while(shortcutElement != NULL && shortcutElement->GetParentNode() != m_shortcutContainer)
    {
       shortcutElement = shortcutElement->GetParentNode();
    }
@@ -77,7 +77,7 @@ void ShortcutBar::shortcutClicked(Rocket::Core::Event* event)
          ++shortcutIndex;
       }
 
-      bool shortcutInvoked = playerData.invokeShortcut(shortcutIndex);
+      bool shortcutInvoked = m_playerData.invokeShortcut(shortcutIndex);
       if (shortcutInvoked)
       {
          refresh();
@@ -110,7 +110,7 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
 
          // Only drops on direct children of the shortcut container count as
          // shortcut drops
-         if(dropElement->GetParentNode() == shortcutContainer)
+         if(dropElement->GetParentNode() == m_shortcutContainer)
          {
             // Find the index of the shortcut
             int dropTargetIndex = 0;
@@ -126,18 +126,18 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
             if(isItem)
             {
                DEBUG("Dropping item %d on shortcut index %d.", usableId, dropTargetIndex);
-               playerData.setShortcut(dropTargetIndex, usableId);
+               m_playerData.setShortcut(dropTargetIndex, usableId);
                isShortcutSet = true;
             }
             else if(isSkill)
             {
                const std::string characterId = dragElement->GetAttribute<Rocket::Core::String>("characterId", "").CString();
-               Character* character = playerData.getRoster()->getCharacter(characterId);
+               Character* character = m_playerData.getRoster()->getCharacter(characterId);
 
                if(character != NULL)
                {
                   DEBUG("Dropping skill %d on shortcut index %d.", usableId, dropTargetIndex);
-                  playerData.setShortcut(dropTargetIndex, usableId, characterId);
+                  m_playerData.setShortcut(dropTargetIndex, usableId, characterId);
                   isShortcutSet = true;
                }
             }
@@ -146,7 +146,7 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
             {
                // If the drag was initiated from the shortcut bar, then
                // clear out the shortcut's original slot
-               if (dragElement->GetParentNode() == shortcutContainer)
+               if (dragElement->GetParentNode() == m_shortcutContainer)
                {
                   int dragTargetIndex = 0;
                   for(;;)
@@ -156,7 +156,7 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
                      ++dragTargetIndex;
                   }
 
-                  playerData.clearShortcut(dragTargetIndex);
+                  m_playerData.clearShortcut(dragTargetIndex);
                }
             }
 
@@ -169,17 +169,17 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
 void ShortcutBar::refresh()
 {
    DEBUG("Refreshing shortcut bar...");
-   shortcutContainer->SetInnerRML("");
+   m_shortcutContainer->SetInnerRML("");
 
    for (int i = 0; i < PlayerData::SHORTCUT_BAR_SIZE; ++i)
    {
-      const Shortcut& shortcut = playerData.getShortcut(i);
+      const Shortcut& shortcut = m_playerData.getShortcut(i);
       const Usable* usable =
             shortcut.usableType == Shortcut::ITEM ?
-            static_cast<Usable*>(gameContext.getItem(shortcut.usableId)) :
-            static_cast<Usable*>(gameContext.getSkill(shortcut.usableId));
+            static_cast<Usable*>(m_gameContext.getItem(shortcut.usableId)) :
+            static_cast<Usable*>(m_gameContext.getSkill(shortcut.usableId));
 
-      Rocket::Core::Element* shortcutElement = shortcutBarDocument->CreateElement("div");
+      Rocket::Core::Element* shortcutElement = m_shortcutBarDocument->CreateElement("div");
       Rocket::Core::ElementAttributes shortcutElementAttributes;
       shortcutElementAttributes.Set("class", "shortcut");
 
@@ -199,7 +199,7 @@ void ShortcutBar::refresh()
 
          Rocket::Core::String shortcutIconPath("../../");
          shortcutIconPath += usable->getIconPath().c_str();
-         Rocket::Core::Element* shortcutIconElement = shortcutBarDocument->CreateElement("img");
+         Rocket::Core::Element* shortcutIconElement = m_shortcutBarDocument->CreateElement("img");
 
          Rocket::Core::ElementAttributes shortcutIconElementAttributes;
          shortcutIconElementAttributes.Set("src", shortcutIconPath);
@@ -207,8 +207,8 @@ void ShortcutBar::refresh()
 
          if (shortcut.usableType == Shortcut::ITEM)
          {
-            const Rocket::Core::String shortcutQuantity(8, "%d", playerData.getInventory()->getItemQuantity(shortcut.usableId));
-            Rocket::Core::Element* shortcutQuantityElement = shortcutBarDocument->CreateElement("span");
+            const Rocket::Core::String shortcutQuantity(8, "%d", m_playerData.getInventory()->getItemQuantity(shortcut.usableId));
+            Rocket::Core::Element* shortcutQuantityElement = m_shortcutBarDocument->CreateElement("span");
 
             shortcutQuantityElement->SetInnerRML(shortcutQuantity);
             shortcutQuantityElement->SetAttribute("class", "shortcutQuantity");
@@ -220,11 +220,11 @@ void ShortcutBar::refresh()
       }
 
       shortcutElement->SetAttributes(&shortcutElementAttributes);
-      shortcutContainer->AppendChild(shortcutElement);
+      m_shortcutContainer->AppendChild(shortcutElement);
    }
 }
 
 int ShortcutBar::getHeight() const
 {
-   return shortcutContainer->GetOffsetHeight();
+   return m_shortcutContainer->GetOffsetHeight();
 }

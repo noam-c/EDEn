@@ -19,9 +19,9 @@ const int debugFlag = DEBUG_PLAYER;
 const char* CharacterRoster::PARTY_ELEMENT = "Party";
 
 CharacterRoster::CharacterRoster(const GameContext& gameContext) :
-   gameContext(gameContext),
-   messagePipe(NULL),
-   partyLeader(NULL)
+   m_gameContext(gameContext),
+   m_messagePipe(NULL),
+   m_partyLeader(NULL)
 {
 }
 
@@ -32,22 +32,22 @@ CharacterRoster::~CharacterRoster()
 
 void CharacterRoster::signalRosterUpdate()
 {
-   if(messagePipe != NULL)
+   if(m_messagePipe != NULL)
    {
-      messagePipe->sendMessage(RosterUpdateMessage());
+      m_messagePipe->sendMessage(RosterUpdateMessage());
    }
 }
 
 void CharacterRoster::bindMessagePipe(const messaging::MessagePipe* pipe)
 {
-   messagePipe = pipe;
+   m_messagePipe = pipe;
 }
 
 void CharacterRoster::deleteCharacterList()
 {
    DEBUG("Destroying character roster...");
 
-   for(std::map<std::string, Character*>::iterator iter = allCharacters.begin(); iter != allCharacters.end(); ++iter)
+   for(std::map<std::string, Character*>::iterator iter = m_allCharacters.begin(); iter != m_allCharacters.end(); ++iter)
    {
       DEBUG("Destroying character %s", (iter->first).c_str());
       delete iter->second;
@@ -59,38 +59,38 @@ void CharacterRoster::deleteCharacterList()
 
 void CharacterRoster::clear()
 {
-   partyLeader = NULL;
-   party.clear();
+   m_partyLeader = NULL;
+   m_party.clear();
 
    deleteCharacterList();
-   allCharacters.clear();
+   m_allCharacters.clear();
 }
 
 Character* CharacterRoster::loadNewCharacter(const std::string& id)
 {
    if(getCharacter(id) == NULL)
    {
-      allCharacters[id] = new Character(gameContext, id);
+      m_allCharacters[id] = new Character(m_gameContext, id);
       signalRosterUpdate();
    }
 
-   return allCharacters[id];
+   return m_allCharacters[id];
 }
 
 Character* CharacterRoster::getPartyLeader() const
 {
-   return partyLeader;
+   return m_partyLeader;
 }
 
 Character* CharacterRoster::getCharacter(const std::string& id) const
 {
-   std::map<std::string, Character*>::const_iterator iter = allCharacters.find(id);
-   return iter != allCharacters.end() ? iter->second : NULL;
+   std::map<std::string, Character*>::const_iterator iter = m_allCharacters.find(id);
+   return iter != m_allCharacters.end() ? iter->second : NULL;
 }
 
 const std::vector<Character*>& CharacterRoster::getParty() const
 {
-   return party;
+   return m_party;
 }
 
 void CharacterRoster::addToParty(Character* character)
@@ -100,19 +100,19 @@ void CharacterRoster::addToParty(Character* character)
       return;
    }
 
-   if(partyLeader == NULL)
+   if(m_partyLeader == NULL)
    {
-      partyLeader = character;
+      m_partyLeader = character;
    }
 
-   if(std::find(party.begin(), party.end(), character) == party.end())
+   if(std::find(m_party.begin(), m_party.end(), character) == m_party.end())
    {
-      party.push_back(character);
+      m_party.push_back(character);
    }
 
-   if(allCharacters.find(character->getId()) == allCharacters.end())
+   if(m_allCharacters.find(character->getId()) == m_allCharacters.end())
    {
-      allCharacters[character->getId()] = character;
+      m_allCharacters[character->getId()] = character;
    }
 
    signalRosterUpdate();
@@ -133,20 +133,20 @@ void CharacterRoster::load(const Json::Value& charactersElement)
       {
          Json::Value characterNode = partyElement[i];
          DEBUG("Adding character %d...", i);
-         Character* currCharacter = new Character(gameContext, characterNode);
+         Character* currCharacter = new Character(m_gameContext, characterNode);
 
          std::string characterId = currCharacter->getId();
-         allCharacters[characterId] = currCharacter;
-         party.push_back(currCharacter);
+         m_allCharacters[characterId] = currCharacter;
+         m_party.push_back(currCharacter);
       }
 
-      if(partyLeader == NULL && party.size() > 0)
+      if(m_partyLeader == NULL && m_party.size() > 0)
       {
          /**
           * \todo Persist the party leader in the save data and remove
           * this hardcoded party leader setting.
           */
-         partyLeader = party[0];
+         m_partyLeader = m_party[0];
       }
 
       DEBUG("Party loaded.");
@@ -159,7 +159,7 @@ Json::Value CharacterRoster::serialize() const
 {
    Json::Value charactersNode(Json::objectValue);
    Json::Value partyNode(Json::arrayValue);
-   for(std::vector<Character*>::const_iterator iter = party.begin(); iter != party.end(); ++iter)
+   for(std::vector<Character*>::const_iterator iter = m_party.begin(); iter != m_party.end(); ++iter)
    {
       const Character* character = *iter;
       partyNode.append(character->serialize());
@@ -171,16 +171,16 @@ Json::Value CharacterRoster::serialize() const
 
 void CharacterRoster::removeFromParty(Character* character)
 {
-   if(party.size() == 1)
+   if(m_party.size() == 1)
    {
-      std::remove(party.begin(), party.end(), character);
-      partyLeader = NULL;
+      std::remove(m_party.begin(), m_party.end(), character);
+      m_partyLeader = NULL;
    }
-   else if(party.size() > 1 && partyLeader == character)
+   else if(m_party.size() > 1 && m_partyLeader == character)
    {
-      std::vector<Character*>::iterator iter = std::find(party.begin(), party.end(), character);
-      partyLeader = *(iter + 1 != party.end() ? iter + 1 : party.begin());
-      party.erase(iter);
+      std::vector<Character*>::iterator iter = std::find(m_party.begin(), m_party.end(), character);
+      m_partyLeader = *(iter + 1 != m_party.end() ? iter + 1 : m_party.begin());
+      m_party.erase(iter);
    }
 
    signalRosterUpdate();

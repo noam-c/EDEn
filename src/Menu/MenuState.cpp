@@ -16,38 +16,38 @@ const int debugFlag = DEBUG_MENU;
 
 MenuState::MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName) :
    GameState(gameContext, GameState::MENU, stateName),
-   internalMenuShell(true)
+   m_internalMenuShell(true)
 {
-   menuShell = new MenuShell(gameContext, playerData, rocketContext);
+   m_menuShell = new MenuShell(gameContext, playerData, m_rocketContext);
 }
 
 MenuState::MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* menuShell) :
    GameState(gameContext, GameState::MENU, stateName, menuShell->getRocketContext()),
-   internalMenuShell(false),
-   menuShell(menuShell)
+   m_internalMenuShell(false),
+   m_menuShell(menuShell)
 {
 }
 
 MenuState::~MenuState()
 {
-   if(internalMenuShell)
+   if(m_internalMenuShell)
    {
-      delete menuShell;
+      delete m_menuShell;
    }
 }
 
 void MenuState::activate()
 {
    GameState::activate();
-   menuShell->changeMenuState(this);
+   m_menuShell->changeMenuState(this);
 }
 
 
 bool MenuState::step(long timePassed)
 {
-   if(finished) return false;
+   if(m_finished) return false;
 
-   menuShell->getScheduler()->runCoroutines(timePassed);
+   m_menuShell->getScheduler()->runCoroutines(timePassed);
    bool done = false;
 
    waitForInputEvent(done);
@@ -100,7 +100,7 @@ void MenuState::waitForInputEvent(bool& finishState)
 
 Scheduler* MenuState::getScheduler() const
 {
-   return menuShell->getScheduler();
+   return m_menuShell->getScheduler();
 }
 
 void MenuState::draw()
@@ -109,7 +109,7 @@ void MenuState::draw()
 
 std::vector<MenuShellOption> MenuState::getSidebarOptions()
 {
-   return sidebarOptions;
+   return m_sidebarOptions;
 }
 
 void MenuState::sidebarClicked(int optionIndex)
@@ -118,8 +118,8 @@ void MenuState::sidebarClicked(int optionIndex)
 
 void MenuState::setSidebarEnabled(bool enabled)
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->SetClass("noSidebar", !enabled);
+      m_paneDocument->SetClass("noSidebar", !enabled);
    }
 }

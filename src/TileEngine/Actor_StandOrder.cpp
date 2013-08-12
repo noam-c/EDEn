@@ -9,13 +9,13 @@
 
 Actor::StandOrder::StandOrder(Actor& actor, MovementDirection direction) :
    Order(actor),
-   direction(direction)
+   m_direction(direction)
 {
 }
 
 bool Actor::StandOrder::perform(long timePassed)
 {
-   actor.setDirection(direction);
-   actor.setFrame(Actor::DEFAULT_STANDING_PREFIX);
+   m_actor.setDirection(m_direction);
+   m_actor.setFrame(Actor::DEFAULT_STANDING_PREFIX);
    return true;
 }

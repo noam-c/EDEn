@@ -22,11 +22,11 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-HomeViewModel::HomeViewModel(GameContext& gameContext, PlayerData& playerData)
-   : Rocket::Controls::DataSource("homeViewModel"),
-     gameContext(gameContext),
-     playerData(playerData),
-     selectedDestinationMenu(-1)
+HomeViewModel::HomeViewModel(GameContext& gameContext, PlayerData& playerData) :
+   Rocket::Controls::DataSource("homeViewModel"),
+   m_gameContext(gameContext),
+   m_playerData(playerData),
+   m_selectedDestinationMenu(-1)
 {
 }
 
@@ -40,7 +40,7 @@ void HomeViewModel::pushCharacterDependentMenu(int optionIndex, int characterInd
    switch(optionIndex)
    {
       case 3:
-         newState = new SkillMenu(gameContext, playerData, menuShell);
+         newState = new SkillMenu(m_gameContext, m_playerData, menuShell);
          DEBUG("Skill menu constructed");
          break;
       default:
@@ -50,7 +50,7 @@ void HomeViewModel::pushCharacterDependentMenu(int optionIndex, int characterInd
    if(newState != NULL)
    {
       newState->setCharacter(characterIndex);
-      gameContext.getExecutionStack().pushState(newState);
+      m_gameContext.getExecutionStack().pushState(newState);
    }
 }
 
@@ -60,11 +60,11 @@ void HomeViewModel::pushCharacterIndependentMenu(int optionIndex, MenuShell* men
    switch(optionIndex)
    {
       case 0:
-         newState = new ItemMenu(gameContext, playerData, menuShell);
+         newState = new ItemMenu(m_gameContext, m_playerData, menuShell);
          DEBUG("Item menu constructed.");
          break;
       case 7:
-         newState = new DataMenu(gameContext, playerData, menuShell);
+         newState = new DataMenu(m_gameContext, m_playerData, menuShell);
          DEBUG("Data menu constructed.");
          break;
       default:
@@ -74,7 +74,7 @@ void HomeViewModel::pushCharacterIndependentMenu(int optionIndex, MenuShell* men
    if(newState != NULL)
    {
       DEBUG("Pushing new menu state.");
-      gameContext.getExecutionStack().pushState(newState);
+      m_gameContext.getExecutionStack().pushState(newState);
    }
 }
 
@@ -86,18 +86,18 @@ void HomeViewModel::selectCharacter(int slotIndex, MenuShell* menuShell)
     * \todo Add default destination menu here for when a player clicks
     *       on a character before clicking on a sidebar action.
     */
-   if(selectedDestinationMenu >= 0)
+   if(m_selectedDestinationMenu >= 0)
    {
-      pushCharacterDependentMenu(selectedDestinationMenu, slotIndex, menuShell);
+      pushCharacterDependentMenu(m_selectedDestinationMenu, slotIndex, menuShell);
       DEBUG("Character-dependent menu state pushed onto stack.");
    }
 
-   selectedDestinationMenu = -1;
+   m_selectedDestinationMenu = -1;
 }
 
 void HomeViewModel::sidebarClicked(int optionIndex, MenuShell* menuShell)
 {
-   if(selectedDestinationMenu == -1)
+   if(m_selectedDestinationMenu == -1)
    {
       switch(optionIndex)
       {
@@ -106,7 +106,7 @@ void HomeViewModel::sidebarClicked(int optionIndex, MenuShell* menuShell)
             pushCharacterIndependentMenu(optionIndex, menuShell);
             break;
          case 3:
-            selectedDestinationMenu = optionIndex;
+            m_selectedDestinationMenu = optionIndex;
             break;
          default:
             break;
@@ -118,7 +118,7 @@ void HomeViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   Character* character = playerData.getRoster()->getParty()[row_index];
+   Character* character = m_playerData.getRoster()->getParty()[row_index];
 
    if (table == "party")
    {
@@ -156,7 +156,7 @@ int HomeViewModel::GetNumRows(const Rocket::Core::String& table)
 {
    if (table == "party")
    {
-      return playerData.getRoster()->getParty().size();
+      return m_playerData.getRoster()->getParty().size();
    }
 
    return 0;

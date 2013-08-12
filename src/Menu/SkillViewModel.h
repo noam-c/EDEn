@@ -24,15 +24,15 @@ class SkillViewModel : public Rocket::Controls::DataSource
 {
    const static Rocket::Core::String UnknownSkillIconPath;
 
-   GameContext& gameContext;
+   GameContext& m_gameContext;
 
    /** The currently loaded player data. */
-   PlayerData& playerData;
+   PlayerData& m_playerData;
 
-   Character* selectedCharacter;
+   Character* m_selectedCharacter;
 
    /** The formatter to use when exposing images to the GUI. */
-   const ImageFormatter imageFormatter;
+   const ImageFormatter m_imageFormatter;
 
    public:
       /**

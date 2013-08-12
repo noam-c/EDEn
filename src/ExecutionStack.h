@@ -26,12 +26,12 @@ class ExecutionStack
     * The stack that holds the various states that the player
     * has transitioned through.
     */
-   std::stack<GameState*> stateStack;
+   std::stack<GameState*> m_stateStack;
 
    /**
     * The next state to push after the current transition completes.
     */
-   GameState* nextState;
+   GameState* m_nextState;
 
    /**
     * Remove and delete the most recent state pushed on the stack.

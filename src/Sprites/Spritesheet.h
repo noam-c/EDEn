@@ -54,25 +54,25 @@ class Spritesheet : public Resource
    static const std::string UNTITLED_LINE;
 
    /** The spritesheet texture */
-   Texture* texture;
+   Texture* m_texture;
 
    /** Spritesheet size (in pixels) */
-   shapes::Size size;
+   shapes::Size m_size;
 
    /** The list of frames, which hold locations of different sprites in the sheet. */
-   std::vector<shapes::Rectangle> frameList;
+   std::vector<shapes::Rectangle> m_frameList;
 
    /** The number of frames available in the spritesheet. */
-   int numFrames;
+   int m_numFrames;
 
    /** The mapping of frame names to their indices in the frameList array. */
-   std::map<std::string, int> frameIndices;
+   std::map<std::string, int> m_frameIndices;
 
    /** The number of animations available in the spritesheet. */
-   int numAnimations;
+   int m_numAnimations;
 
    /** The mapping of animation names to their frame lists. */
-   std::map<std::string, const FrameSequence*> animationList;
+   std::map<std::string, const FrameSequence*> m_animationList;
 
    /**
     * Loads the spritesheet image into an OpenGL texture, and loads the

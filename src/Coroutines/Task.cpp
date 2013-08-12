@@ -11,9 +11,9 @@
 const int debugFlag = DEBUG_SCHEDULER;
 
 Task::Task(TaskId taskId, Scheduler& scheduler) :
-   schedulerDestroyed(false),
-   id(taskId),
-   scheduler(scheduler)
+   m_schedulerDestroyed(false),
+   m_id(taskId),
+   m_scheduler(scheduler)
 {}
 
 Task::~Task()
@@ -22,14 +22,14 @@ Task::~Task()
 
 void Task::signalSchedulerDestroyed()
 {
-   schedulerDestroyed = true;
+   m_schedulerDestroyed = true;
 }
 
 void Task::signal()
 {
-   if(!schedulerDestroyed)
+   if(!m_schedulerDestroyed)
    {
-      scheduler.completeTask(id);
+      m_scheduler.completeTask(m_id);
    }
    else
    {

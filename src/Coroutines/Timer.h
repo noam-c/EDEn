@@ -20,7 +20,7 @@
 class Timer : public Coroutine
 {
    /** The amount of time left before this timer is finished. */
-   long timeLeft;
+   long m_timeLeft;
 
    public:
       /**

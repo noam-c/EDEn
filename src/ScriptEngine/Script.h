@@ -22,13 +22,13 @@ class Script : public Coroutine
 {
    protected:
       /** The stack and execution coroutine of this script. */
-      lua_State* luaStack;
+      lua_State* m_luaStack;
 
       /** The name of the script. */
-      std::string scriptName;
+      std::string m_scriptName;
 
       /** Flag indicating whether or not the script is currently in the middle of a run */
-      bool running;
+      bool m_running;
 
       /**
        * Runs the script until completion or yielding. Prints out any errors encountered

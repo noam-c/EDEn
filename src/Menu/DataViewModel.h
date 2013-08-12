@@ -23,16 +23,16 @@ class PlayerDataSummary;
  */
 class DataViewModel : public Rocket::Controls::DataSource
 {
-   const GameContext& gameContext;
+   const GameContext& m_gameContext;
 
    /** The currently loaded player data. */
-   PlayerData& playerData;
+   PlayerData& m_playerData;
 
    /** The formatter to use when exposing images to the GUI. */
-   const ImageFormatter imageFormatter;
+   const ImageFormatter m_imageFormatter;
 
    /** The list of savegame files and their respective data. */
-   std::vector<std::pair<std::string, PlayerDataSummary*> > saveGames;
+   std::vector<std::pair<std::string, PlayerDataSummary*> > m_saveGames;
 
    /**
     * Clears the list of savegames.

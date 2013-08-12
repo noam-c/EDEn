@@ -27,19 +27,19 @@ class Animation;
 class Sprite
 {
    /** The spritesheet containing this sprite's frames. */
-   Spritesheet* sheet;
+   Spritesheet* m_sheet;
 
    /** The index of the current static frame within the sheet. -1 if an animation is used instead. */
-   int frameIndex;
+   int m_frameIndex;
    
    /** The animation structure to use to animate this sprite. NULL if a static frame is used instead. */
-   Animation* animation;
+   Animation* m_animation;
    
    /** The name of the current frame/animation being used. */
-   std::string currName;
+   std::string m_currName;
    
    /** The direction that the current frame/animation is facing. */
-   MovementDirection currDirection;
+   MovementDirection m_currDirection;
    
    /**
     * @param direction A direction to convert to a string.
@@ -70,9 +70,9 @@ class Sprite
       /**
        * Change the spritesheet for this sprite (changes the look of it)
        *
-       * @param newSheet The new Spritesheet to use.
+       * @param sheet The new Spritesheet to use.
        */
-      void setSheet(Spritesheet* newSheet);
+      void setSheet(Spritesheet* sheet);
    
       /**
        * Set a static frame to draw for this sprite.

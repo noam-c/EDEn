@@ -25,15 +25,15 @@ class MenuShell;
 class HomeViewModel : public Rocket::Controls::DataSource
 {
    /** The game context managing the menu state */
-   GameContext& gameContext;
+   GameContext& m_gameContext;
 
    /** The player data containing the character roster to expose to the GUI */
-   PlayerData& playerData;
+   PlayerData& m_playerData;
 
    /** The formatter to use when exposing images to the GUI. */
-   const ImageFormatter imageFormatter;
+   const ImageFormatter m_imageFormatter;
 
-   int selectedDestinationMenu;
+   int m_selectedDestinationMenu;
 
    void pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShell);
    void pushCharacterDependentMenu(int optionIndex, int characterIndex, MenuShell* menuShell);

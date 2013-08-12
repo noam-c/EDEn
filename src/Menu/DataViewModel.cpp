@@ -17,8 +17,8 @@ const int debugFlag = DEBUG_MENU;
 
 DataViewModel::DataViewModel(const GameContext& gameContext, PlayerData& playerData) :
       Rocket::Controls::DataSource("dataViewModel"),
-      gameContext(gameContext),
-      playerData(playerData)
+      m_gameContext(gameContext),
+      m_playerData(playerData)
 {
    refreshSaveGames();
 }
@@ -29,20 +29,20 @@ DataViewModel::~DataViewModel()
 
 void DataViewModel::saveToSlot(int slotIndex)
 {
-   playerData.save(saveGames[slotIndex].first);
-   *(saveGames[slotIndex].second) = playerData;
+   m_playerData.save(m_saveGames[slotIndex].first);
+   *(m_saveGames[slotIndex].second) = m_playerData;
    NotifyRowChange("saveGames", slotIndex, 1);
 }
 
 void DataViewModel::clearSaveGameList()
 {
    std::vector<std::pair<std::string, PlayerDataSummary*> >::iterator iter;
-   for(iter = saveGames.begin(); iter != saveGames.end(); ++iter)
+   for(iter = m_saveGames.begin(); iter != m_saveGames.end(); ++iter)
    {
       delete iter->second;
    }
 
-   saveGames.clear();
+   m_saveGames.clear();
 }
 
 void DataViewModel::refreshSaveGames()
@@ -64,13 +64,13 @@ void DataViewModel::refreshSaveGames()
       std::string filename(entry->d_name);
       if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".edd")
       {
-         PlayerDataSummary* saveGameData = new PlayerDataSummary(gameContext);
+         PlayerDataSummary* saveGameData = new PlayerDataSummary(m_gameContext);
 
          /** \todo Extract HARDCODED path into a constant. */
          std::string path = "data/savegames/" + filename;
          saveGameData->load(path);
 
-         saveGames.push_back(std::make_pair(path, saveGameData));
+         m_saveGames.push_back(std::make_pair(path, saveGameData));
       }
    }
 
@@ -81,7 +81,7 @@ void DataViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   PlayerDataSummary* saveGameData = saveGames[row_index].second;
+   PlayerDataSummary* saveGameData = m_saveGames[row_index].second;
    const std::vector<Character*> characters = saveGameData->getRoster()->getParty();
 
    if (table == "saveGames")
@@ -140,7 +140,7 @@ int DataViewModel::GetNumRows(const Rocket::Core::String& table)
 {
    if (table == "saveGames")
    {
-      return saveGames.size();
+      return m_saveGames.size();
    }
 
    return 0;

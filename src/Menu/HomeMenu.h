@@ -37,13 +37,10 @@ class Sound;
 class HomeMenu: public MenuState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<HomeMenu> bindings;
-
-   /** The player data */
-   PlayerData& playerData;
+   EdenRocketBindings<HomeMenu> m_bindings;
 
    /** The view model */
-   HomeViewModel homeViewModel;
+   HomeViewModel m_homeViewModel;
 
    /**
     * Initializes the home menu pane and populates the sidebar.

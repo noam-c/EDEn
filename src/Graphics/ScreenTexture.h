@@ -33,7 +33,7 @@ class ScreenTexture : public Texture
       /**
        * The frame buffer to draw to when recording the screen contents.
        */
-      GLuint frameBuffer;
+      GLuint m_frameBuffer;
 
    public:
       /**

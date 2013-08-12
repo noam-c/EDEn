@@ -12,8 +12,8 @@ class TriggerZone;
 
 struct MapTriggerMessage
 {
-   const TriggerZone& triggerZone;
-   const Actor* const triggeringActor;
+   const TriggerZone& m_triggerZone;
+   const Actor* const m_triggeringActor;
    
    MapTriggerMessage(const TriggerZone& triggerZone, const Actor* const movingActor);
 };

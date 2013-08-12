@@ -18,30 +18,30 @@ const int debugFlag = DEBUG_GAME_STATE;
 const int GameState::MAX_FRAME_TIME = 32;
 
 GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName) :
-   time(SDL_GetTicks()),
-   stateType(stateType),
-   gameContext(gameContext)
+   m_time(SDL_GetTicks()),
+   m_stateType(stateType),
+   m_gameContext(gameContext)
 {
-   rocketContext = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
+   m_rocketContext = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
 }
 
 GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName, Rocket::Core::Context* context) :
-   stateType(stateType),
-   gameContext(gameContext),
-   rocketContext(context)
+   m_stateType(stateType),
+   m_gameContext(gameContext),
+   m_rocketContext(context)
 {
    context->AddReference();
 }
 
 GameState::~GameState()
 {
-   rocketContext->RemoveReference();
+   m_rocketContext->RemoveReference();
 }
 
 void GameState::activate()
 {
-   finished = false;
-   rocketContext->Update();
+   m_finished = false;
+   m_rocketContext->Update();
 }
 
 void GameState::deactivate()
@@ -50,26 +50,26 @@ void GameState::deactivate()
 
 bool GameState::advanceFrame()
 {
-   rocketContext->Update();
+   m_rocketContext->Update();
 
-   long prevTime = time;
-   time = SDL_GetTicks();
+   long prevTime = m_time;
+   m_time = SDL_GetTicks();
 
-   long timePassed = std::min<long>(time - prevTime, GameState::MAX_FRAME_TIME);
+   long timePassed = std::min<long>(m_time - prevTime, GameState::MAX_FRAME_TIME);
 
    return step(timePassed);
 }
 
 void GameState::handleEvent(const SDL_Event& event)
 {
-   RocketSDLInputMapping::handleSDLEvent(rocketContext, event);
+   RocketSDLInputMapping::handleSDLEvent(m_rocketContext, event);
 }
 
 void GameState::drawFrame()
 {
    draw();
 
-   rocketContext->Render();
+   m_rocketContext->Render();
 
    // Make sure everything is displayed on screen
    GraphicsUtil::getInstance()->flipScreen();
@@ -82,5 +82,5 @@ Scheduler* GameState::getScheduler() const
 
 GameState::GameStateType GameState::getStateType() const
 {
-   return stateType;
+   return m_stateType;
 }

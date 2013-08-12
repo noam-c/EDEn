@@ -8,7 +8,7 @@ class RocketScriptHandler;
 
 class RocketScriptHandlerFactory : public Rocket::Core::EventListenerInstancer
 {
-   GameContext& gameContext;
+   GameContext& m_gameContext;
 
    public:
       RocketScriptHandlerFactory(GameContext& gameContext);

@@ -41,23 +41,23 @@ class ScriptEngine
    /**
     * The tile engine to execute commands on
     */
-   TileEngine* tileEngine;
+   TileEngine* m_tileEngine;
    
    /**
     * The player data to execute commands on
     */
-   PlayerData* playerData;
+   PlayerData* m_playerData;
 
    /**
     * The game context that contains the current game state and
     * player game data.
     */
-   GameContext& gameContext;
+   GameContext& m_gameContext;
 
    /**
     * The main Lua execution coroutine and stack
     */
-   lua_State* luaVM;
+   lua_State* m_luaVM;
 
    /**
     * Register some functions in Lua's global space using Lua bindings

@@ -40,39 +40,39 @@ class Task;
 class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
 {
    /** The current region that the player is in. */
-   Region* currRegion;
+   Region* m_currRegion;
    
-   messaging::MessagePipe messagePipe;
+   messaging::MessagePipe m_messagePipe;
 
    /** The debug console window to be used for diagnostics. */
-   DebugConsoleWindow consoleWindow;
+   DebugConsoleWindow m_consoleWindow;
 
    /** The current map that the player is in. */
-   EntityGrid entityGrid;
+   EntityGrid m_entityGrid;
 
    /** The player data */
-   PlayerData playerData;
+   PlayerData m_playerData;
 
    /** The window containing the player's shortcuts. */
-   ShortcutBar shortcutBar;
+   ShortcutBar m_shortcutBar;
 
    /** Controller for dialogue and narrations. */
-   DialogueController* dialogue;
+   DialogueController* m_dialogue;
 
    /** The coroutine scheduler used by the tile engine. */
-   Scheduler* scheduler;
+   Scheduler* m_scheduler;
 
    /** The actor representing the player character on the map */
-   PlayerCharacter* playerActor;
+   PlayerCharacter* m_playerActor;
 
    /** A list of all NPCs in the map, identified by their names. */
-   std::map<std::string, NPC*> npcList;
+   std::map<std::string, NPC*> m_npcList;
 
    /** The camera displaying the appropriate subset of the map. */
-   Camera camera;
+   Camera m_camera;
 
    /** An optional Actor target for the camera to follow. */
-   const Actor* cameraTarget;
+   const Actor* m_cameraTarget;
 
    /**
     * Loads new player data.

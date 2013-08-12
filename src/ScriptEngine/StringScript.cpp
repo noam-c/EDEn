@@ -18,8 +18,8 @@ extern "C"
 StringScript::StringScript(lua_State* luaVM, const std::string& scriptString) :
    Script(scriptString)
 {
-   luaStack = lua_newthread(luaVM);
-   luaL_loadstring(luaStack, scriptString.c_str());
+   m_luaStack = lua_newthread(luaVM);
+   luaL_loadstring(m_luaStack, scriptString.c_str());
 }
 
 StringScript::~StringScript()

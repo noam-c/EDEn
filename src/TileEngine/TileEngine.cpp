@@ -38,21 +38,21 @@ const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName, const std::string& playerDataPath) :
    GameState(gameContext, GameState::FIELD, "TileEngine"),
-   consoleWindow(*rocketContext),
-   entityGrid(*this, messagePipe),
-   playerData(gameContext),
-   shortcutBar(gameContext, playerData, *rocketContext)
+   m_consoleWindow(*m_rocketContext),
+   m_entityGrid(*this, m_messagePipe),
+   m_playerData(gameContext),
+   m_shortcutBar(gameContext, m_playerData, *m_rocketContext)
 {
-   scheduler = new Scheduler();
+   m_scheduler = new Scheduler();
 
-   messagePipe.registerListener(this);
+   m_messagePipe.registerListener(this);
 
    loadPlayerData(playerDataPath);
-   playerActor = new PlayerCharacter(messagePipe, entityGrid, playerData);
-   cameraTarget = playerActor;
+   m_playerActor = new PlayerCharacter(m_messagePipe, m_entityGrid, m_playerData);
+   m_cameraTarget = m_playerActor;
    gameContext.getScriptEngine().setTileEngine(this);
-   gameContext.getScriptEngine().setPlayerData(&playerData);
-   dialogue = new DialogueController(*rocketContext, *scheduler, gameContext.getScriptEngine());
+   gameContext.getScriptEngine().setPlayerData(&m_playerData);
+   m_dialogue = new DialogueController(*m_rocketContext, *m_scheduler, gameContext.getScriptEngine());
 
    startChapter(chapterName);
 }
@@ -60,78 +60,78 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
 TileEngine::~TileEngine()
 {
    clearNPCs();
-   messagePipe.unregisterListener(this);
-   delete dialogue;
-   delete playerActor;
-   delete scheduler;
+   m_messagePipe.unregisterListener(this);
+   delete m_dialogue;
+   delete m_playerActor;
+   delete m_scheduler;
 }
 
 void TileEngine::loadPlayerData(const std::string& path)
 {
    if(!path.empty())
    {
-      playerData.load(path);
-      shortcutBar.refresh();
+      m_playerData.load(path);
+      m_shortcutBar.refresh();
    }
 }
 
 void TileEngine::startChapter(const std::string& chapterName)
 {
-   gameContext.getScriptEngine().runChapterScript(chapterName, *scheduler);
+   m_gameContext.getScriptEngine().runChapterScript(chapterName, *m_scheduler);
 }
 
 void TileEngine::clearNPCs()
 {
    std::map<std::string, NPC*>::iterator iter;
 
-   for(iter = npcList.begin(); iter != npcList.end(); ++iter)
+   for(iter = m_npcList.begin(); iter != m_npcList.end(); ++iter)
    {
       delete iter->second;
    }
 
-   npcList.clear();
+   m_npcList.clear();
 }
 
 Scheduler* TileEngine::getScheduler() const
 {
-   return scheduler;
+   return m_scheduler;
 }
 
 std::string TileEngine::getMapName() const
 {
-   return entityGrid.getMapName();
+   return m_entityGrid.getMapName();
 }
 
 void TileEngine::receive(const MapExitMessage& message)
 {
-   if(playerActor->isActive())
+   if(m_playerActor->isActive())
    {
-      playerActor->removeFromMap();
-      std::string exitedMap = entityGrid.getMapName();
+      m_playerActor->removeFromMap();
+      std::string exitedMap = m_entityGrid.getMapName();
       std::string enteredMap = message.mapExit.getNextMap();
       DEBUG("Exit signal received: Exiting %s and entering %s", exitedMap.c_str(), enteredMap.c_str());
       setMap(enteredMap);
-      const shapes::Point2D& entryPoint = entityGrid.getMapData()->getMapEntrance(exitedMap);
-      playerActor->addToMap(entryPoint);
-      followWithCamera(playerActor);
+      const shapes::Point2D& entryPoint = m_entityGrid.getMapData()->getMapEntrance(exitedMap);
+      m_playerActor->addToMap(entryPoint);
+      followWithCamera(m_playerActor);
    }
 }
 
 void TileEngine::dialogueNarrate(const std::string& narration, Task* task)
 {
-   dialogue->narrate(narration, task);
+   m_dialogue->narrate(narration, task);
 }
 
 void TileEngine::dialogueSay(const std::string& speech, Task* task)
 {
-   dialogue->say(speech, task);
+   m_dialogue->say(speech, task);
 }
 
 int TileEngine::setRegion(const std::string& regionName, const std::string& mapName)
 {
    DEBUG("Loading region: %s", regionName.c_str());
-   currRegion = ResourceLoader::getRegion(regionName);
-   DEBUG("Loaded region: %s", currRegion->getName().c_str());
+   m_currRegion = ResourceLoader::getRegion(regionName);
+   DEBUG("Loaded region: %s", m_currRegion->getName().c_str());
 
    return setMap(mapName);
 }
@@ -139,45 +139,45 @@ int TileEngine::setRegion(const std::string& regionName, const std::string& mapN
 int TileEngine::setMap(std::string mapName)
 {
    clearNPCs();
-   playerActor->removeFromMap();
+   m_playerActor->removeFromMap();
 
    DEBUG("Setting map...");
    if(!mapName.empty())
    {
       // If a map name was supplied, then we set this map and run its script
-      entityGrid.setMapData(currRegion->getMap(mapName));
+      m_entityGrid.setMapData(m_currRegion->getMap(mapName));
    }
    else
    {
       // Otherwise, we use the region's default starting map
-      entityGrid.setMapData(currRegion->getStartingMap());
-      mapName = entityGrid.getMapName();
+      m_entityGrid.setMapData(m_currRegion->getStartingMap());
+      mapName = m_entityGrid.getMapName();
    }
 
    DEBUG("Map set to: %s", mapName.c_str());
 
    recalculateMapOffsets();
-   return gameContext.getScriptEngine().runMapScript(currRegion->getName(), mapName, *scheduler);
+   return m_gameContext.getScriptEngine().runMapScript(m_currRegion->getName(), mapName, *m_scheduler);
 }
 
 void TileEngine::followWithCamera(const Actor* target)
 {
-   cameraTarget = target;
+   m_cameraTarget = target;
 }
 
 void TileEngine::releaseCamera()
 {
-   cameraTarget = NULL;
+   m_cameraTarget = NULL;
 }
 
 int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed)
 {
    if(speed > 0)
    {
-      CameraSlider* slider = new CameraSlider(camera, origin, destination, speed);
-      cameraTarget = NULL;
-      scheduler->start(slider);
-      return scheduler->join(slider);
+      CameraSlider* slider = new CameraSlider(m_camera, origin, destination, speed);
+      m_cameraTarget = NULL;
+      m_scheduler->start(slider);
+      return m_scheduler->join(slider);
    }
 
    return 0;
@@ -185,37 +185,37 @@ int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D
 
 shapes::Point2D TileEngine::getCurrentCameraLocation() const
 {
-   if(cameraTarget != NULL)
+   if(m_cameraTarget != NULL)
    {
-      return cameraTarget->getLocation();
+      return m_cameraTarget->getLocation();
    }
    else
    {
-      return camera.getFocalPoint();
+      return m_camera.getFocalPoint();
    }
 }
 
 void TileEngine::recalculateMapOffsets()
 {
-   const shapes::Size mapPixelBounds = entityGrid.getMapData() == NULL ?
+   const shapes::Size mapPixelBounds = m_entityGrid.getMapData() == NULL ?
          shapes::Size() :
-         entityGrid.getMapBounds().getSize() * TILE_SIZE;
+         m_entityGrid.getMapBounds().getSize() * TILE_SIZE;
 
-   const int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - shortcutBar.getHeight();
+   const int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - m_shortcutBar.getHeight();
    const shapes::Size screenSize(GraphicsUtil::getInstance()->getWidth(), totalUsableHeight);
-   camera.setViewBounds(screenSize, mapPixelBounds);
+   m_camera.setViewBounds(screenSize, mapPixelBounds);
 }
 
 void TileEngine::toggleDebugConsole()
 {
-   bool consoleWindowVisible = consoleWindow.isVisible();
+   bool consoleWindowVisible = m_consoleWindow.isVisible();
    if(consoleWindowVisible)
    {
-      consoleWindow.hide();
+      m_consoleWindow.hide();
    }
    else
    {
-      consoleWindow.show();
+      m_consoleWindow.show();
    }
 }
 
@@ -223,13 +223,13 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
 {
    NPC* npcToAdd = NULL;
    
-   if(entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
+   if(m_entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
-      npcToAdd = new NPC(gameContext.getScriptEngine(), *scheduler, npcName, direction,
-                                 spritesheetName, messagePipe, entityGrid,
-                                 currRegion->getName(), npcLocation, size);
-      npcList[npcName] = npcToAdd;
-      entityGrid.addActor(npcToAdd, npcLocation);
+      npcToAdd = new NPC(m_gameContext.getScriptEngine(), *m_scheduler, npcName, direction,
+                                 spritesheetName, m_messagePipe, m_entityGrid,
+                                 m_currRegion->getName(), npcLocation, size);
+      m_npcList[npcName] = npcToAdd;
+      m_entityGrid.addActor(npcToAdd, npcLocation);
    }
    else
    {
@@ -241,8 +241,8 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
 
 NPC* TileEngine::getNPC(const std::string& npcName) const
 {
-   std::map<std::string, NPC*>::const_iterator npcIterator = npcList.find(npcName);
-   if(npcIterator != npcList.end())
+   std::map<std::string, NPC*>::const_iterator npcIterator = m_npcList.find(npcName);
+   if(npcIterator != m_npcList.end())
    {
       return npcIterator->second;
    }
@@ -252,22 +252,22 @@ NPC* TileEngine::getNPC(const std::string& npcName) const
 
 PlayerCharacter* TileEngine::getPlayerCharacter() const
 {
-   return playerActor;
+   return m_playerActor;
 }
 
 void TileEngine::activate()
 {
    GameState::activate();
-   shortcutBar.refresh();
+   m_shortcutBar.refresh();
    recalculateMapOffsets();
-   playerData.bindMessagePipe(&messagePipe);
+   m_playerData.bindMessagePipe(&m_messagePipe);
 }
 
 void TileEngine::stepNPCs(long timePassed)
 {
    std::map<std::string, NPC*>::iterator iter;
 
-   for(iter = npcList.begin(); iter != npcList.end(); ++iter)
+   for(iter = m_npcList.begin(); iter != m_npcList.end(); ++iter)
    {
       NPC* currNPC = iter->second;
       currNPC->step(timePassed);
@@ -279,15 +279,15 @@ std::vector<Actor*> TileEngine::collectActors() const
    std::vector<Actor*> actors;
    std::map<std::string, NPC*>::const_iterator iter;
 
-   for(iter = npcList.begin(); iter != npcList.end(); ++iter)
+   for(iter = m_npcList.begin(); iter != m_npcList.end(); ++iter)
    {
       NPC* currNPC = iter->second;
       actors.push_back(currNPC);
    }
 
-   if(playerActor->isActive())
+   if(m_playerActor->isActive())
    {
-      actors.push_back(playerActor);
+      actors.push_back(m_playerActor);
    }
 
    return actors;
@@ -305,8 +305,8 @@ void TileEngine::draw()
 
    GraphicsUtil::getInstance()->clearBuffer();
 
-   camera.apply();
-      if(entityGrid.getMapData() == NULL)
+   m_camera.apply();
+      if(m_entityGrid.getMapData() == NULL)
       {
          // Draw all the sprites
          std::vector<Actor*>::iterator nextActorToDraw;
@@ -321,13 +321,13 @@ void TileEngine::draw()
 
          std::vector<Actor*>::iterator nextActorToDraw = actors.begin();
 
-         const unsigned int mapHeight = entityGrid.getMapBounds().getHeight();
+         const unsigned int mapHeight = m_entityGrid.getMapBounds().getHeight();
          for(int row = 0; row < mapHeight; ++row)
          {
             // Start by drawing a row of the background layers, if the map exists
-            if(entityGrid.getMapData() != NULL)
+            if(m_entityGrid.getMapData() != NULL)
             {
-               entityGrid.drawBackground(row);
+               m_entityGrid.drawBackground(row);
             }
          }
 
@@ -342,32 +342,32 @@ void TileEngine::draw()
             }
 
             // Draw a row of the foreground layers, if the map exists
-            if(entityGrid.getMapData() != NULL)
+            if(m_entityGrid.getMapData() != NULL)
             {
-               entityGrid.drawForeground(row);
+               m_entityGrid.drawForeground(row);
             }
          }
       }
 
-   camera.reset();
+   m_camera.reset();
 }
 
 bool TileEngine::step(long timePassed)
 {
    bool done = false;
-   scheduler->runCoroutines(timePassed);
+   m_scheduler->runCoroutines(timePassed);
 
    handleInputEvents(done);
 
-   playerActor->step(timePassed);
-   entityGrid.step(timePassed);
+   m_playerActor->step(timePassed);
+   m_entityGrid.step(timePassed);
 
    stepNPCs(timePassed);
 
-   if(cameraTarget != NULL &&
-      (cameraTarget != playerActor || playerActor->isActive()))
+   if(m_cameraTarget != NULL &&
+      (m_cameraTarget != m_playerActor || m_playerActor->isActive()))
    {
-      camera.setFocalPoint(cameraTarget->getLocation());
+      m_camera.setFocalPoint(m_cameraTarget->getLocation());
    }
 
    return !done;
@@ -388,7 +388,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                case DEBUG_CONSOLE_EVENT:
                {
                   std::string* script = (std::string*)event.user.data1;
-                  gameContext.getScriptEngine().runScriptString(*script, *scheduler);
+                  m_gameContext.getScriptEngine().runScriptString(*script, *m_scheduler);
 
                   // This assumes that, once the debug event is consumed here, it is not used anymore
                   delete script;
@@ -400,13 +400,13 @@ void TileEngine::handleInputEvents(bool& finishState)
          case SDL_MOUSEBUTTONDOWN:
          {
             const shapes::Point2D mouseClickLocation(event.button.x, event.button.y);
-            if(camera.isPointWithinViewport(mouseClickLocation))
+            if(m_camera.isPointWithinViewport(mouseClickLocation))
             {
-               const shapes::Point2D pointWithinScene = camera.getPointWithinScene(mouseClickLocation);
+               const shapes::Point2D pointWithinScene = m_camera.getPointWithinScene(mouseClickLocation);
                
-               if(entityGrid.isAreaFree(shapes::Rectangle(pointWithinScene, playerActor->getSize())))
+               if(m_entityGrid.isAreaFree(shapes::Rectangle(pointWithinScene, m_playerActor->getSize())))
                {
-                  playerActor->move(pointWithinScene);
+                  m_playerActor->move(pointWithinScene);
                }
             }
             break;
@@ -417,12 +417,12 @@ void TileEngine::handleInputEvents(bool& finishState)
             {
                case SDLK_SPACE:
                {
-                  if(!consoleWindow.isVisible())
+                  if(!m_consoleWindow.isVisible())
                   {
-                     if(dialogue->hasDialogue())
+                     if(m_dialogue->hasDialogue())
                      {
-                        dialogue->setFastModeEnabled(true);
-                        dialogue->nextLine();
+                        m_dialogue->setFastModeEnabled(true);
+                        m_dialogue->nextLine();
                      }
                      else
                      {
@@ -443,15 +443,15 @@ void TileEngine::handleInputEvents(bool& finishState)
                }
                case SDLK_TAB:
                {
-                  if(!consoleWindow.isVisible())
+                  if(!m_consoleWindow.isVisible())
                   {
                      // Clear the message pipe in preparation for the new state.
                      // The Tile Engine message pipe will be rebound when the Tile Engine state
                      // is activated again.
-                     playerData.clearMessagePipe();
+                     m_playerData.clearMessagePipe();
 
-                     HomeMenu* menu = new HomeMenu(gameContext, playerData);
-                     gameContext.getExecutionStack().pushState(menu, RandomTransitionGenerator::create(gameContext, this, menu));
+                     HomeMenu* menu = new HomeMenu(m_gameContext, m_playerData);
+                     m_gameContext.getExecutionStack().pushState(menu, RandomTransitionGenerator::create(m_gameContext, this, menu));
                      return;
                   }
                }
@@ -464,15 +464,15 @@ void TileEngine::handleInputEvents(bool& finishState)
          }
          case SDL_KEYUP:
          {
-            if(!consoleWindow.isVisible())
+            if(!m_consoleWindow.isVisible())
             {
                switch(event.key.keysym.sym)
                {
                   case SDLK_SPACE:
                   {
-                     if(dialogue->hasDialogue())
+                     if(m_dialogue->hasDialogue())
                      {
-                        dialogue->setFastModeEnabled(false);
+                        m_dialogue->setFastModeEnabled(false);
                      }
                      return;
                   }
@@ -502,7 +502,7 @@ void TileEngine::handleInputEvents(bool& finishState)
 
 void TileEngine::action()
 {
-   NPC* npcToActivate = static_cast<NPC*>(entityGrid.getAdjacentActor(playerActor));
+   NPC* npcToActivate = static_cast<NPC*>(m_entityGrid.getAdjacentActor(m_playerActor));
    if(npcToActivate != NULL)
    {
       npcToActivate->activate();

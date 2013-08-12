@@ -32,8 +32,8 @@ const std::string Spritesheet::UNTITLED_LINE = "untitled";
 
 Spritesheet::Spritesheet(ResourceKey name) :
    Resource(name),
-   texture(NULL),
-   numFrames(0)
+   m_texture(NULL),
+   m_numFrames(0)
 {
 }
 
@@ -41,14 +41,14 @@ Spritesheet::~Spritesheet()
 {
    // Delete the frame lists for the animations
    std::map<std::string, const FrameSequence*>::iterator iter;
-   for(iter = animationList.begin(); iter != animationList.end(); ++iter)
+   for(iter = m_animationList.begin(); iter != m_animationList.end(); ++iter)
    {
       delete iter->second;
    }
 
-   if(texture != NULL)
+   if(m_texture != NULL)
    {
-      delete texture;
+      delete m_texture;
    }
 }
 
@@ -59,8 +59,8 @@ void Spritesheet::load(const std::string& path)
    imgPath += IMG_EXTENSION;
 
    DEBUG("Loading spritesheet image \"%s\"...", imgPath.c_str());
-   texture = new Texture(imgPath);
-   size = texture->getSize();
+   m_texture = new Texture(imgPath);
+   m_size = m_texture->getSize();
 
    // Load in the spritesheet data file, which tells the engine where
    // each frame is in the image
@@ -94,19 +94,19 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
 {
    // Get the frames array in the spritesheet data
    Json::Value& framesElement = rootElement["frames"];
-   numFrames = framesElement.size();
+   m_numFrames = framesElement.size();
    
    // This spritesheet is well-formed only if the "frames" element is a non-empty array
    // (i.e. there are frames in the spritesheet)
-   if(!framesElement.isArray() || numFrames <= 0)
+   if(!framesElement.isArray() || m_numFrames <= 0)
    {
       DEBUG("No frames found in spritesheet.");
       T_T("Empty (invalid) spritesheet constructed.");
    }
 
    DEBUG("Loading frames...");
-   frameList.reserve(numFrames);
-   for(int i = 0; i < numFrames; ++i)
+   m_frameList.reserve(m_numFrames);
+   for(int i = 0; i < m_numFrames; ++i)
    {
       Json::Value& currFrame = framesElement[i];
       
@@ -119,7 +119,7 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
       }
       
       // Make sure this frame name has not already been used in this file
-      if(frameIndices.find(frameName) != frameIndices.end())
+      if(m_frameIndices.find(frameName) != m_frameIndices.end())
       {
          DEBUG("Duplicated name %s in spritesheet.", frameName.c_str());
          T_T("Parse error reading spritesheet.");
@@ -136,11 +136,11 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
             currFrame["bottom"].asInt(),
             currFrame["right"].asInt());
 
-      frameList.push_back(rect);
+      m_frameList.push_back(rect);
       DEBUG("Frame %s loaded in with coordinates %d, %d, %d, %d",
             frameName.c_str(), rect.left, rect.top, rect.right, rect.bottom);
 
-      frameIndices[frameName] = i;
+      m_frameIndices[frameName] = i;
    }
 
    DEBUG("Frames loaded.");
@@ -170,7 +170,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
       }
       
       // Make sure this animation name has not already been used in this file
-      if(animationList.find(animationName) != animationList.end())
+      if(m_animationList.find(animationName) != m_animationList.end())
       {
          DEBUG("Duplicated animation name %s in spritesheet.", animationName.c_str());
          T_T("Parse error reading spritesheet.");
@@ -194,8 +194,8 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
          std::string frameName = frameArray[i].asString();
 
          // Ensure that the frame exists in the frame list and grab the associated frame index
-         std::map<std::string, int>::const_iterator frameIndexIter = frameIndices.find(frameName);
-         if(frameIndexIter == frameIndices.end())
+         std::map<std::string, int>::const_iterator frameIndexIter = m_frameIndices.find(frameName);
+         if(frameIndexIter == m_frameIndices.end())
          {
             DEBUG("Found invalid frame name '%s' in animation %s", frameName.c_str(), animationName.c_str());
             T_T("Parse error reading spritesheet.");
@@ -210,14 +210,14 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
       }
 
       // Bind the animation name to the next available animation index
-      animationList[animationName] = frameSequence;
+      m_animationList[animationName] = frameSequence;
    }
 }
 
 int Spritesheet::getFrameIndex(const std::string& frameName) const
 {
-   std::map<std::string, int>::const_iterator frameIndex = frameIndices.find(frameName);
-   if(frameIndex != frameIndices.end() && frameIndex->second < numFrames)
+   std::map<std::string, int>::const_iterator frameIndex = m_frameIndices.find(frameName);
+   if(frameIndex != m_frameIndices.end() && frameIndex->second < m_numFrames)
    {
       return frameIndex->second;
    }
@@ -227,8 +227,8 @@ int Spritesheet::getFrameIndex(const std::string& frameName) const
 
 Animation* Spritesheet::getAnimation(const std::string& animationName) const
 {
-   std::map<std::string, const FrameSequence*>::const_iterator animFrames = animationList.find(animationName);
-   if(animFrames != animationList.end())
+   std::map<std::string, const FrameSequence*>::const_iterator animFrames = m_animationList.find(animationName);
+   if(animFrames != m_animationList.end())
    {
       return new Animation(animationName, *(animFrames->second));
    }
@@ -246,13 +246,13 @@ void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
       return;
    }
 
-   if(frameIndex < 0 || frameIndex > numFrames)
+   if(frameIndex < 0 || frameIndex > m_numFrames)
    {
       DEBUG("Spritesheet frame index %d out of bounds!", frameIndex);
       return;
    }
 
-   const shapes::Rectangle& frame = frameList[frameIndex];
+   const shapes::Rectangle& frame = m_frameList[frameIndex];
 
    /**
     * \todo We can do all these calculations when the frames are initialized
@@ -261,10 +261,10 @@ void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
    const int frameHeight = frame.getHeight();
    const int frameWidth = frame.getWidth();
 
-   float frameTop = frame.top / float(size.height);
-   float frameBottom = frame.bottom / float(size.height);
-   float frameLeft = frame.left / float(size.width);
-   float frameRight = frame.right / float(size.width);
+   float frameTop = frame.top / float(m_size.height);
+   float frameBottom = frame.bottom / float(m_size.height);
+   float frameLeft = frame.left / float(m_size.width);
+   float frameRight = frame.right / float(m_size.width);
    
    float destLeft = float(point.x);
    float destBottom = float(point.y);
@@ -283,7 +283,7 @@ void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
    // Set the alpha blending evaluation function
    glAlphaFunc(GL_GREATER, 0.1f);
 
-   texture->bind();
+   m_texture->bind();
 
    glBegin(GL_QUADS);
       glTexCoord2f(frameLeft, frameTop); glVertex3f(destLeft, destTop, 0.0f);

@@ -38,7 +38,7 @@ class ScriptEngine;
 class NPC : public Actor
 {
    /** The NPC's coroutine of execution */
-   NPCScript* npcCoroutine;
+   NPCScript* m_coroutine;
 
    public:
       /**

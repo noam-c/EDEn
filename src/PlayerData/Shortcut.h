@@ -30,8 +30,9 @@ struct Shortcut
       EMPTY = 0,
       ITEM = 1,
       SKILL = 2,
-   } usableType;
+   };
 
+   UsableType usableType;
    UsableId usableId;
    std::string characterId;
 

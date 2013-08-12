@@ -34,19 +34,16 @@ class Sound;
 class DataMenu: public MenuState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<DataMenu> bindings;
-
-   /** The player data */
-   PlayerData& playerData;
+   EdenRocketBindings<DataMenu> m_bindings;
 
    /** The view model that exposes the savegames to the GUI */
-   DataViewModel dataViewModel;
+   DataViewModel m_dataViewModel;
 
    /** The RML document for the Confirm Save window in the data menu */
-   Rocket::Core::ElementDocument* confirmSaveDocument;
+   Rocket::Core::ElementDocument* m_confirmSaveDocument;
 
    /** The slot to save to after the user confirms the save. */
-   int slotToSave;
+   int m_slotToSave;
 
    /**
     * Displays the confirmation dialog to ensure that the user wants

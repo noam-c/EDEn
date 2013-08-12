@@ -12,14 +12,14 @@
 const int debugFlag = DEBUG_EXEC_STACK;
 
 ExecutionStack::ExecutionStack() :
-   nextState(NULL)
+   m_nextState(NULL)
 {
 }
 
 ExecutionStack::~ExecutionStack()
 {
    // Delete all states on the stack
-   while(!stateStack.empty())
+   while(!m_stateStack.empty())
    {
       popState();
    }
@@ -27,54 +27,54 @@ ExecutionStack::~ExecutionStack()
 
 void ExecutionStack::popState()
 {
-   GameState* topState = stateStack.top();
+   GameState* topState = m_stateStack.top();
    topState->deactivate();
-   stateStack.pop();
+   m_stateStack.pop();
    delete topState;
 
-   if(nextState)
+   if(m_nextState)
    {
-      pushState(nextState);
-      nextState = NULL;
+      pushState(m_nextState);
+      m_nextState = NULL;
    }
 }
 
 GameState* ExecutionStack::getCurrentState() const
 {
-   return stateStack.top();
+   return m_stateStack.top();
 }
 
 
 void ExecutionStack::pushState(GameState* newState, GameState* transitionState)
 {
-   if(!stateStack.empty())
+   if(!m_stateStack.empty())
    {
-      stateStack.top()->deactivate();
+      m_stateStack.top()->deactivate();
    }
 
    if(transitionState)
    {
-      stateStack.push(transitionState);
-      if(nextState)
+      m_stateStack.push(transitionState);
+      if(m_nextState)
       {
          T_T("Attempted to push a transition in the middle of a transition.");
       }
 
-      nextState = newState;
+      m_nextState = newState;
    }
    else
    {
-      stateStack.push(newState);
+      m_stateStack.push(newState);
    }
 
-   stateStack.top()->activate();
+   m_stateStack.top()->activate();
 }
 
 void ExecutionStack::execute()
 {
-   while(!stateStack.empty())
+   while(!m_stateStack.empty())
    {
-      GameState* currentState = stateStack.top();
+      GameState* currentState = m_stateStack.top();
       if(currentState->advanceFrame())
       {
          // The state is still active, so draw its results
@@ -86,9 +86,9 @@ void ExecutionStack::execute()
          // Delete the current state if it is finished, then
          // reactivate the next state atop the stack.
          popState();
-         if(!stateStack.empty())
+         if(!m_stateStack.empty())
          {
-            stateStack.top()->activate();
+            m_stateStack.top()->activate();
          }
       }
    }

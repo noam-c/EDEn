@@ -15,8 +15,8 @@
 const int debugFlag = DEBUG_TILE_ENG;
 
 Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
-   bounds(bounds),
-   heightOffset(0)
+   m_bounds(bounds),
+   m_heightOffset(0)
 {
    const TiXmlElement* propertiesElement = layerData->FirstChildElement("properties");
 
@@ -26,19 +26,19 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
       if(std::string(propertyElement->Attribute("name")) == "tilesetName")
       {
          std::string tilesetName = propertyElement->Attribute("value");
-         tileset = ResourceLoader::getTileset(tilesetName);
+         m_tileset = ResourceLoader::getTileset(tilesetName);
       }
       else if(std::string(propertyElement->Attribute("name")) == "heightOffset")
       {
-         propertyElement->Attribute("value", &heightOffset);
-         DEBUG("Height offset found: %d", heightOffset);
-         if(heightOffset < 0) heightOffset = 0;
+         propertyElement->Attribute("value", &m_heightOffset);
+         DEBUG("Height offset found: %d", m_heightOffset);
+         if(m_heightOffset < 0) m_heightOffset = 0;
       }
 
       propertyElement = propertyElement->NextSiblingElement("property");
    }
 
-   if(tileset == NULL)
+   if(m_tileset == NULL)
    {
       T_T("Layer doesn't contain a tileset.");
    }
@@ -50,50 +50,50 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
    const unsigned int width = bounds.getWidth();
    const unsigned int height = bounds.getHeight();
 
-   tileMap = new int*[height];
+   m_tileMap = new int*[height];
    for(unsigned int y = 0; y < height; ++y)
    {
-      tileMap[y] = new int[width];
-      if (y < heightOffset || y >= height - heightOffset)
+      m_tileMap[y] = new int[width];
+      if (y < m_heightOffset || y >= height - m_heightOffset)
       {
          for(unsigned int x = 0; x < width; ++x)
          {
-            tileMap[y][x] = -1;
+            m_tileMap[y][x] = -1;
          }
       }
    }
 
-   for(unsigned int y = 0; y < height - heightOffset; ++y)
+   for(unsigned int y = 0; y < height - m_heightOffset; ++y)
    {
       for(unsigned int x = 0; x < width; ++x)
       {
          std::string entry;
          std::getline(layerStream, entry, ',');
-         tileMap[y + heightOffset][x] = atoi(entry.c_str()) - 1;
+         m_tileMap[y + m_heightOffset][x] = atoi(entry.c_str()) - 1;
       }
    }
 }
 
 Layer::~Layer()
 {
-   const unsigned int height = bounds.getHeight();
+   const unsigned int height = m_bounds.getHeight();
    for(unsigned int i = 0; i < height; ++i)
    {
-      delete [] tileMap[i];
+      delete [] m_tileMap[i];
    }
 
-   delete [] tileMap;
+   delete [] m_tileMap;
 }
 
 void Layer::draw(int row, bool isForeground) const
 {
-   const unsigned int width = bounds.getWidth();
+   const unsigned int width = m_bounds.getWidth();
    for(unsigned int column = 0; column < width; ++column)
    {
-      const int tileNum = tileMap[row][column];
+      const int tileNum = m_tileMap[row][column];
       if(tileNum != -1)
       {
-         tileset->draw(column, row - heightOffset, tileNum, isForeground);
+         m_tileset->draw(column, row - m_heightOffset, tileNum, isForeground);
       }
    }
 }

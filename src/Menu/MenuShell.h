@@ -37,30 +37,30 @@ class Scheduler;
 class MenuShell
 {
    /** The Rocket context which holds the shell's GUI components. */
-   Rocket::Core::Context* rocketContext;
+   Rocket::Core::Context* m_rocketContext;
 
    /** The RML document holding the shell GUI components. */
-   Rocket::Core::ElementDocument* shellDocument;
+   Rocket::Core::ElementDocument* m_shellDocument;
 
    /**
     * The element containing the sidebar list for
     * the active menu's related actions.
     */
-   Rocket::Core::Element* sidebarElement;
+   Rocket::Core::Element* m_sidebarElement;
 
    /**
     * The shortcut bar containing the player's set of shortcuts.
     */
-   ShortcutBar shortcutBar;
+   ShortcutBar m_shortcutBar;
 
    /** The event binding collection for the sidebar */
-   EdenRocketBindings<MenuShell> bindings;
+   EdenRocketBindings<MenuShell> m_bindings;
 
    /** The currently active menu state */
-   MenuState* currentState;
+   MenuState* m_currentState;
 
    /** The menu's script scheduler */
-   Scheduler* scheduler;
+   Scheduler* m_scheduler;
 
    /**
     * Refreshes the menu shell GUI components.

@@ -16,13 +16,13 @@ std::map<int, Sound*> Sound::playingList;
 
 bool Sound::ownsChannel(Sound* sound, int channel)
 {
-   return sound == playingList[channel];
+   return sound == Sound::playingList[channel];
 }
 
 void Sound::channelFinished(int channel)
 {
    DEBUG("Channel %d finished playing.", channel);
-   Sound* finishedSound = playingList[channel];
+   Sound* finishedSound = Sound::playingList[channel];
 
    if(finishedSound != NULL)
    {  finishedSound->finished();
@@ -31,7 +31,7 @@ void Sound::channelFinished(int channel)
 
 Sound::Sound(ResourceKey name) :
    Resource(name),
-   playingChannel(-1)
+   m_playingChannel(-1)
 {
 }
 
@@ -43,9 +43,9 @@ void Sound::load(const std::string& path)
    Mix_ChannelFinished(&Sound::channelFinished);
 
    DEBUG("Loading WAV %s", path.c_str());
-   sound = Mix_LoadWAV(path.c_str());
+   m_sound = Mix_LoadWAV(path.c_str());
 
-   if(sound == NULL)
+   if(m_sound == NULL)
    {
       T_T(Mix_GetError());
    }
@@ -55,7 +55,7 @@ void Sound::load(const std::string& path)
 
 void Sound::play(Task* task)
 {
-   if(!Settings::getCurrentSettings().isSoundEnabled() || sound == NULL)
+   if(!Settings::getCurrentSettings().isSoundEnabled() || m_sound == NULL)
    {
       if(task)
       {
@@ -65,45 +65,45 @@ void Sound::play(Task* task)
       return;
    }
 
-   playingChannel = Mix_PlayChannel(-1, sound, 0);
-   if(playingChannel == -1)
+   m_playingChannel = Mix_PlayChannel(-1, m_sound, 0);
+   if(m_playingChannel == -1)
    {
       DEBUG("There was a problem playing the sound ""%s"": %s", getResourceName().c_str(), Mix_GetError());
    }
 
-   playingList[playingChannel] = this;
-   playTask = task;
+   Sound::playingList[m_playingChannel] = this;
+   m_playTask = task;
 }
 
 void Sound::stop()
 {
-   if(ownsChannel(this, playingChannel))
+   if(ownsChannel(this, m_playingChannel))
    {
-      Mix_HaltChannel(playingChannel);
+      Mix_HaltChannel(m_playingChannel);
    }
 }
 
 void Sound::finished()
 {
    DEBUG("Sound finished.");
-   if(playTask)
+   if(m_playTask)
    {
-      playTask->signal();
-      playTask = NULL;
+      m_playTask->signal();
+      m_playTask = NULL;
    }
 
-   playingChannel = -1;
+   m_playingChannel = -1;
 }
 
 Sound::~Sound()
 {
-   if(sound != NULL)
+   if(m_sound != NULL)
    {
-      if(ownsChannel(this, playingChannel))
+      if(ownsChannel(this, m_playingChannel))
       {
          stop();
       }
 
-      Mix_FreeChunk(sound);
+      Mix_FreeChunk(m_sound);
    }
 }

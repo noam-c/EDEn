@@ -5,8 +5,8 @@
 #include "RocketScriptHandlerFactory.h"
 
 GameContext::GameContext() :
-   scriptEngine(*this),
-   metadata(*this)
+   m_scriptEngine(*this),
+   m_metadata(*this)
 {
    Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(*this));
 }
@@ -17,22 +17,22 @@ GameContext::~GameContext()
 
 ExecutionStack& GameContext::getExecutionStack()
 {
-   return executionStack;
+   return m_executionStack;
 }
 
 ScriptEngine& GameContext::getScriptEngine()
 {
-   return scriptEngine;
+   return m_scriptEngine;
 }
 
 PlayerData* GameContext::getCurrentPlayerData() const
 {
-   return playerData;
+   return m_playerData;
 }
 
 Scheduler* GameContext::getCurrentScheduler() const
 {
-   GameState* currentState = executionStack.getCurrentState();
+   GameState* currentState = m_executionStack.getCurrentState();
    if (currentState != NULL)
    {
       return currentState->getScheduler();
@@ -43,7 +43,7 @@ Scheduler* GameContext::getCurrentScheduler() const
 
 GameState::GameStateType GameContext::getCurrentStateType() const
 {
-   GameState* currentState = executionStack.getCurrentState();
+   GameState* currentState = m_executionStack.getCurrentState();
    if (currentState != NULL)
    {
       return currentState->getStateType();
@@ -54,15 +54,15 @@ GameState::GameStateType GameContext::getCurrentStateType() const
 
 Item* GameContext::getItem(UsableId itemId) const
 {
-   return metadata.getItem(itemId);
+   return m_metadata.getItem(itemId);
 }
 
 Skill* GameContext::getSkill(UsableId skillId) const
 {
-   return metadata.getSkill(skillId);
+   return m_metadata.getSkill(skillId);
 }
 
-void GameContext::setCurrentPlayerData(PlayerData* data)
+void GameContext::setCurrentPlayerData(PlayerData* playerData)
 {
-   playerData = data;
+   m_playerData = playerData;
 }

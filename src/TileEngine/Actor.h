@@ -30,32 +30,32 @@ class Actor
    class StandOrder;
 
    /** The Actor's name */
-   const std::string name;
+   const std::string m_name;
    
    /** A queue of orders for the actor to perform */
-   std::queue<Order*> orders;
+   std::queue<Order*> m_orders;
 
    /** The current location of the actor (in pixels) */
-   shapes::Point2D pixelLoc;
+   shapes::Point2D m_pixelLoc;
    
    /** The size of the actor (in pixels) */
-   shapes::Size size;
+   shapes::Size m_size;
    
    /** The movement speed of the actor */
-   float movementSpeed;
+   float m_movementSpeed;
    
    /** The direction that the actor is currently facing */
-   MovementDirection currDirection;
+   MovementDirection m_currDirection;
    
    protected:
       /** The Actor's associated sprite, which is drawn on screen. */
-      Sprite* sprite;
+      Sprite* m_sprite;
       
       /** The grid of actors which this Actor interacts with. */
-      EntityGrid& entityGrid;
+      EntityGrid& m_entityGrid;
       
       /** The message pipe used to send and receive events. */
-      messaging::MessagePipe& messagePipe;
+      messaging::MessagePipe& m_messagePipe;
 
       /**
        * Constructor for the actor.

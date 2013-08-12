@@ -33,17 +33,17 @@ class Exception : public std::exception
    /**
     * The name of the function from which this Exception was thrown.
     */
-   const std::string function;
+   const std::string m_function;
 
    /**
     * The line number from which this Exception was thrown.
     */
-   int line;
+   int m_line;
 
    /**
     * The message associated with the Exception.
     */
-   const std::string message;
+   const std::string m_message;
 
    public:
       /**

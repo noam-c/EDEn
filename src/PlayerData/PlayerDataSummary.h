@@ -33,14 +33,11 @@ class PlayerDataSummary
    static const char* CHARACTER_LIST_ELEMENT;
    static const char* CHARACTER_ELEMENT;
 
-   /** The game context in which this player session was loaded */
-   const GameContext& gameContext;
-
    /** The file from which this player data was last saved/loaded. */
-   std::string filePath;
+   std::string m_filePath;
 
    /** The roster of characters in the player's party or encountered by the player. */
-   CharacterRoster roster;
+   CharacterRoster m_roster;
    
    void parseCharactersAndParty(Json::Value& rootElement);
 

@@ -24,63 +24,61 @@ const int debugFlag = DEBUG_MENU;
 
 HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData) :
    MenuState(gameContext, playerData, "HomeMenu"),
-   bindings(this),
-   playerData(playerData),
-   homeViewModel(gameContext, playerData)
+   m_bindings(this),
+   m_homeViewModel(gameContext, playerData)
 {
    initialize();
 }
 
 HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
    MenuState(gameContext, "HomeMenu", menuShell),
-   bindings(this),
-   playerData(playerData),
-   homeViewModel(gameContext, playerData)
+   m_bindings(this),
+   m_homeViewModel(gameContext, playerData)
 {
    initialize();
 }
 
 HomeMenu::~HomeMenu()
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Close();
-      paneDocument->RemoveReference();
+      m_paneDocument->Close();
+      m_paneDocument->RemoveReference();
    }
 }
 
 void HomeMenu::initialize()
 {
-   paneDocument = menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");
-   if(paneDocument != NULL)
+   m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");
+   if(m_paneDocument != NULL)
    {
-      bindings.bindAction(paneDocument, "characterGrid", "click", &HomeMenu::characterClicked);
+      m_bindings.bindAction(m_paneDocument, "characterGrid", "click", &HomeMenu::characterClicked);
    }
 
-   sidebarOptions.push_back("Items");
-   sidebarOptions.push_back("Equip");
-   sidebarOptions.push_back("Status");
-   sidebarOptions.push_back("Skills");
-   sidebarOptions.push_back("Formation");
-   sidebarOptions.push_back("Party Change");
-   sidebarOptions.push_back("Options");
-   sidebarOptions.push_back("Data");
+   m_sidebarOptions.push_back("Items");
+   m_sidebarOptions.push_back("Equip");
+   m_sidebarOptions.push_back("Status");
+   m_sidebarOptions.push_back("Skills");
+   m_sidebarOptions.push_back("Formation");
+   m_sidebarOptions.push_back("Party Change");
+   m_sidebarOptions.push_back("Options");
+   m_sidebarOptions.push_back("Data");
 }
 
 void HomeMenu::activate()
 {
    MenuState::activate();
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Show();
+      m_paneDocument->Show();
    }
 }
 
 void HomeMenu::deactivate()
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Hide();
+      m_paneDocument->Hide();
    }
 }
 
@@ -102,12 +100,12 @@ void HomeMenu::characterClicked(Rocket::Core::Event* event)
       {
          DEBUG("Character click registered.");
          int characterIndex = rowElement->GetParentRelativeIndex();
-         homeViewModel.selectCharacter(characterIndex, menuShell);
+         m_homeViewModel.selectCharacter(characterIndex, m_menuShell);
       }
    }
 }
 
 void HomeMenu::sidebarClicked(int optionIndex)
 {
-   homeViewModel.sidebarClicked(optionIndex, menuShell);
+   m_homeViewModel.sidebarClicked(optionIndex, m_menuShell);
 }

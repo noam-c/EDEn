@@ -55,27 +55,27 @@ class Quest
    /**
     * The name of the quest.
     */
-   std::string name;
+   std::string m_name;
    
    /**
     * An optional description of the quest.
     */
-   std::string description;
+   std::string m_description;
    
    /**
     * True iff the quest is considered optional (i.e. a sidequest)
     */
-   bool optional;
+   bool m_optional;
    
    /**
     * True iff the quest has been completed.
     */
-   bool completed;
+   bool m_completed;
 
    /**
     * The subquests required by this quest.
     */
-   QuestLog subquests;
+   QuestLog m_subquests;
 
    
    public:

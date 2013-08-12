@@ -23,13 +23,13 @@ class Task
    friend class Scheduler;
 
    /** True iff the Scheduler managing this Task has been destroyed. */
-   bool schedulerDestroyed;
+   bool m_schedulerDestroyed;
 
    /** The unique identifier for this task */
-   const TaskId id;
+   const TaskId m_id;
    
    /** The scheduler to signal when this task is finished */
-   Scheduler& scheduler;
+   Scheduler& m_scheduler;
 
    /**
     *  Constructor. Assigns a new task ID and associates a Scheduler with the

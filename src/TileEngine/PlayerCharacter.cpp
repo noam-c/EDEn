@@ -25,9 +25,9 @@ const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData) :
    Actor("player", messagePipe, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 0.2f, DOWN),
-   roster(*playerData.getRoster()),
-   active(false),
-   cumulativeDistanceCovered(0)
+   m_roster(*playerData.getRoster()),
+   m_active(false),
+   m_cumulativeDistanceCovered(0)
 {
    messagePipe.registerListener(this);
 }
@@ -38,17 +38,17 @@ PlayerCharacter::~PlayerCharacter()
 
 bool PlayerCharacter::isActive() const
 {
-    return active;
+    return m_active;
 }
 
 void PlayerCharacter::addToMap(const shapes::Point2D& location)
 {
-   if(roster.getPartyLeader() != NULL)
+   if(m_roster.getPartyLeader() != NULL)
    {
-      if(!active && entityGrid.addActor(this, location))
+      if(!m_active && m_entityGrid.addActor(this, location))
       {
          setLocation(location);
-         active = true;
+         m_active = true;
       }
    }
    else
@@ -65,11 +65,11 @@ void PlayerCharacter::addToMap(const shapes::Point2D& location)
 
 void PlayerCharacter::removeFromMap()
 {
-   if(active)
+   if(m_active)
    {
       flushOrders();
-      entityGrid.removeActor(this);
-      active = false;
+      m_entityGrid.removeActor(this);
+      m_active = false;
    }
 }
 
@@ -81,7 +81,7 @@ void PlayerCharacter::move(const shapes::Point2D& dst)
 
 void PlayerCharacter::step(long timePassed)
 {
-   if(!active) return;
+   if(!m_active) return;
 
    MovementDirection direction = getDirection();
    int xDirection = 0;
@@ -121,15 +121,15 @@ void PlayerCharacter::step(long timePassed)
    {
       flushOrders();
 
-      cumulativeDistanceCovered += getMovementSpeed() * timePassed;
+      m_cumulativeDistanceCovered += getMovementSpeed() * timePassed;
       unsigned int distanceTraversed = 0;
-      if(cumulativeDistanceCovered > 1.0)
+      if(m_cumulativeDistanceCovered > 1.0)
       {
-         distanceTraversed = floor(cumulativeDistanceCovered);
-         cumulativeDistanceCovered -= distanceTraversed;
+         distanceTraversed = floor(m_cumulativeDistanceCovered);
+         m_cumulativeDistanceCovered -= distanceTraversed;
       }
 
-      sprite->setAnimation(WALKING_PREFIX, direction);
+      m_sprite->setAnimation(WALKING_PREFIX, direction);
       setDirection(direction);
 
       // In frames where distance is traversed, notify the entity grid of our movement
@@ -138,7 +138,7 @@ void PlayerCharacter::step(long timePassed)
       // If no actual distance is traversed, we are still moving but haven't yet had
       // time to act on the user's desired movement
       moving = distanceTraversed == 0 ||
-         entityGrid.moveToClosestPoint(this, xDirection, yDirection, distanceTraversed);
+         m_entityGrid.moveToClosestPoint(this, xDirection, yDirection, distanceTraversed);
    }
    else if(isIdle())
    {
@@ -147,7 +147,7 @@ void PlayerCharacter::step(long timePassed)
 
    if (!moving)
    {
-      sprite->setFrame(STANDING_PREFIX, direction);
+      m_sprite->setFrame(STANDING_PREFIX, direction);
    }
 
    Actor::step(timePassed);
@@ -155,7 +155,7 @@ void PlayerCharacter::step(long timePassed)
 
 void PlayerCharacter::draw()
 {
-   if(active)
+   if(m_active)
    {
       Actor::draw();
    }
@@ -163,7 +163,7 @@ void PlayerCharacter::draw()
 
 void PlayerCharacter::receive(const RosterUpdateMessage& message)
 {
-   const Character* leader = roster.getPartyLeader();
+   const Character* leader = m_roster.getPartyLeader();
    if (leader != NULL)
    {
       setSpritesheet(leader->getSpritesheetId());

@@ -9,9 +9,9 @@
 
 Exception::Exception(const std::string& function,
        int line, const std::string& message) :
-   function(function),
-   line(line),
-   message(message)
+   m_function(function),
+   m_line(line),
+   m_message(message)
 {
 }
 
@@ -22,22 +22,22 @@ Exception::~Exception() throw()
 std::string Exception::getFullMessage() const
 {
    std::stringstream err;
-   err << message << "\n at line " << line << " of function " << function << '\n';
+   err << m_message << "\n at line " << m_line << " of function " << m_function << '\n';
 
    return err.str();
 }
 
 const std::string& Exception::getMessage() const
 {
-   return message;
+   return m_message;
 }
 
 const std::string& Exception::getFunction() const
 {
-   return function;
+   return m_function;
 }
 
 int Exception::getLine() const
 {
-   return line;
+   return m_line;
 }

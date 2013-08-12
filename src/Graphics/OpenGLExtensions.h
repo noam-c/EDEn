@@ -26,27 +26,27 @@ class OpenGLExtensions
    /**
     * The pointer to the glBindFramebufferEXT function.
     */
-   glBindFramebufferFunction _glBindFramebufferEXT;
+   glBindFramebufferFunction m_glBindFramebufferEXT;
 
    /**
     * The pointer to the glDeleteFramebuffersEXT function.
     */
-   glDeleteFramebuffersFunction _glDeleteFramebuffersEXT;
+   glDeleteFramebuffersFunction m_glDeleteFramebuffersEXT;
 
    /**
     * The pointer to the glGenFramebuffersEXT function.
     */
-   glGenFramebuffersFunction _glGenFramebuffersEXT;
+   glGenFramebuffersFunction m_glGenFramebuffersEXT;
 
    /**
     * The pointer to the glFramebufferTexture2DEXT function.
     */
-   glFramebufferTexture2DFunction _glFramebufferTexture2DEXT;
+   glFramebufferTexture2DFunction m_glFramebufferTexture2DEXT;
 
    /**
     * Flag indicating whether or not Frame Buffer Objects (FBOs) are supported on this device.
     */
-   bool framebuffersEnabled;
+   bool m_framebuffersEnabled;
 
    public:
 

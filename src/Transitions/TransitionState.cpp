@@ -15,13 +15,13 @@ const int debugFlag = DEBUG_TRANSITIONS;
 TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName,
       GameState* oldState, GameState* newState, long transitionLength) :
       GameState(gameContext, GameState::TRANSITION, stateName),
-      totalTime(0),
-      transitionLength(transitionLength),
-      progress(1.0f)
+      m_totalTime(0),
+      m_transitionLength(transitionLength),
+      m_progress(1.0f)
 {
    if(oldState != NULL)
    {
-      if(!captureStateToTexture(oldState, oldStateTexture))
+      if(!captureStateToTexture(oldState, m_oldStateTexture))
       {
          DEBUG("Failed to create screen capture for old state.");
       }
@@ -29,7 +29,7 @@ TransitionState::TransitionState(GameContext& gameContext, const std::string& st
 
    if(newState != NULL)
    {
-      if(!captureStateToTexture(newState, newStateTexture))
+      if(!captureStateToTexture(newState, m_newStateTexture))
       {
          DEBUG("Failed to create screen capture for new state.");
       }
@@ -55,16 +55,16 @@ bool TransitionState::captureStateToTexture(GameState* state, ScreenTexture& scr
 
 bool TransitionState::step(long timePassed)
 {
-   totalTime += timePassed;
-   if (totalTime > transitionLength)
+   m_totalTime += timePassed;
+   if (m_totalTime > m_transitionLength)
    {
       DEBUG("Finishing transition.");
       return false;
    }
 
-   progress = static_cast<double>(totalTime)
-         / static_cast<double>(transitionLength);
+   m_progress = static_cast<double>(m_totalTime)
+         / static_cast<double>(m_transitionLength);
 
-   DEBUG("Continuing transition (%dms passed).", totalTime);
+   DEBUG("Continuing transition (%dms passed).", m_totalTime);
    return true;
 }

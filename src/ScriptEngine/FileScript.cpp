@@ -21,9 +21,9 @@ extern "C"
 FileScript::FileScript(lua_State* luaVM, const std::string& scriptPath) :
    Script(scriptPath)
 {
-   luaStack = lua_newthread(luaVM);
+   m_luaStack = lua_newthread(luaVM);
    DEBUG("Script ID %d loading file %s", getId(), scriptPath.c_str());
-   luaL_loadfile(luaStack, scriptPath.c_str());
+   luaL_loadfile(m_luaStack, scriptPath.c_str());
 }
 
 FileScript::~FileScript()

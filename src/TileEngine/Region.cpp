@@ -14,13 +14,13 @@ const int debugFlag = DEBUG_RES_LOAD;
 
 Region::Region(const ResourceKey& name) :
    Resource(name),
-   regionName(name)
+   m_name(name)
 {
 }
 
 Region::~Region()
 {
-   for(std::map<std::string, Map*>::iterator i = areas.begin(); i != areas.end(); ++i)
+   for(std::map<std::string, Map*>::iterator i = m_areas.begin(); i != m_areas.end(); ++i)
    {
       delete (i->second);
    }
@@ -55,7 +55,7 @@ void Region::load(const std::string& path)
       try
       {
          Map* nextMap = new Map(iter->substr(0, iter->length() - 4), mapFile);
-         areas[nextMap->getName()] = nextMap;
+         m_areas[nextMap->getName()] = nextMap;
       }
       catch(Exception& e)
       {
@@ -66,15 +66,15 @@ void Region::load(const std::string& path)
 
 std::string Region::getName() const
 {
-   return regionName;
+   return m_name;
 }
 
 Map* Region::getStartingMap()
 {
-   return areas.begin()->second;
+   return m_areas.begin()->second;
 }
 
 Map* Region::getMap(const std::string& name)
 {
-   return areas[name];
+   return m_areas[name];
 }

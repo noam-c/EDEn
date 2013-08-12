@@ -9,7 +9,7 @@
 int Coroutine::nextCoroutineId = 0;
 
 Coroutine::Coroutine() :
-      coroutineId(nextCoroutineId++)
+      m_coroutineId(nextCoroutineId++)
 {
 }
 
@@ -19,7 +19,7 @@ Coroutine::~Coroutine()
 
 int Coroutine::getId() const
 {
-   return coroutineId;
+   return m_coroutineId;
 }
 
 int Coroutine::yield()

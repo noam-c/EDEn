@@ -32,13 +32,13 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
    static const std::string STANDING_PREFIX;
    
    /** The character roster that the character represents. */
-   const CharacterRoster& roster;
+   const CharacterRoster& m_roster;
 
    /** True iff the player entity is active on the map. */
-   bool active;
+   bool m_active;
   
    /** Total distance for the character to move. */
-   float cumulativeDistanceCovered;
+   float m_cumulativeDistanceCovered;
 
    public:
       /**

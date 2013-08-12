@@ -42,13 +42,13 @@ class Sound : public Resource
    static void channelFinished(int channel);
 
    /** A Task object used to signal waiting coroutines when this sound object is done playing. */
-   Task* playTask;
+   Task* m_playTask;
 
    /** The SDL sound resource. */
-   Mix_Chunk* sound;
+   Mix_Chunk* m_sound;
 
    /** This sound's current channel. */
-   int playingChannel;
+   int m_playingChannel;
 
    /**
     * Loads the music resource with the specified file name and path.

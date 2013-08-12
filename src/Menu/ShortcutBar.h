@@ -24,22 +24,22 @@ class PlayerData;
 class ShortcutBar
 {
    /** The event binding collection for the debug window */
-   EdenRocketBindings<ShortcutBar> bindings;
+   EdenRocketBindings<ShortcutBar> m_bindings;
 
    /** The Rocket context that holds this console window */
-   Rocket::Core::Context& rocketContext;
+   Rocket::Core::Context& m_rocketContext;
 
    /** The game context containing the item metadata */
-   GameContext& gameContext;
+   GameContext& m_gameContext;
 
    /** The Player data containing the shortcut set */
-   PlayerData& playerData;
+   PlayerData& m_playerData;
 
    /** The Rocket document representing the shortcut bar GUI */
-   Rocket::Core::ElementDocument* shortcutBarDocument;
+   Rocket::Core::ElementDocument* m_shortcutBarDocument;
 
    /** The Rocket element that contains the shortcut bar icons */
-   Rocket::Core::Element* shortcutContainer;
+   Rocket::Core::Element* m_shortcutContainer;
 
    public:
       /**

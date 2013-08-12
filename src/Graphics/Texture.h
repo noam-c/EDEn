@@ -23,13 +23,13 @@ class Texture
 {
    protected:
       /** The texture handle */
-      GLuint textureHandle;
+      GLuint m_textureHandle;
 
       /** True iff the texture was successfully generated */
-      bool valid;
+      bool m_valid;
 
       /** Texture size (in pixels) */
-      shapes::Size size;
+      shapes::Size m_size;
 
       /** Default constructor (used when subclass initializes the texture). */
       Texture();

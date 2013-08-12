@@ -43,40 +43,40 @@ class Character
    static const char* INT_ATTRIBUTE;
 
    /** The character's ID for data lookups. */
-   std::string id;
+   std::string m_id;
 
    /** The name of the character. */
-   std::string name;
+   std::string m_name;
 
    /** The archetype that was loaded for this character (empty if the default archetype was used). */
-   std::string archetype;
+   std::string m_archetype;
 
    /** The path to the character portrait (used in dialogue and menus). */
-   std::string portraitPath;
+   std::string m_portraitPath;
 
    /** The ID of the spritesheet resource used for this character. */
-   std::string spritesheetId;
+   std::string m_spritesheetId;
 
    // Character status attributes
-   int strength;
-   int intelligence;
-   int vitality;
-   int reflex;
-   int focus;
-   int endurance;
-   int agility;
+   int m_strength;
+   int m_intelligence;
+   int m_vitality;
+   int m_reflex;
+   int m_focus;
+   int m_endurance;
+   int m_agility;
 
    // Health and stamina of the character.
-   int maxHP;
-   int maxSP;
-   int hp;
-   int sp;
+   int m_maxHP;
+   int m_maxSP;
+   int m_hp;
+   int m_sp;
   
    /** The equipment worn by this Character. */
-   EquipData equipment;
+   EquipData m_equipment;
 
    /** The skills known by this Character. */
-   SkillList skills;
+   SkillList m_skills;
  
    /**
     * Loads the archetype for the character, which provides character

@@ -13,10 +13,10 @@
 const int debugFlag = DEBUG_SPRITE;
 
 Sprite::Sprite(Spritesheet* sheet) :
-   sheet(sheet),
-   frameIndex(0),
-   animation(NULL),
-   currDirection(NONE)
+   m_sheet(sheet),
+   m_frameIndex(0),
+   m_animation(NULL),
+   m_currDirection(NONE)
 {
 }
 
@@ -27,22 +27,22 @@ Sprite::~Sprite()
 
 void Sprite::clearCurrentFrame()
 {
-   if(animation)
+   if(m_animation != NULL)
    {
-      delete animation;
-      animation = NULL;
+      delete m_animation;
+      m_animation = NULL;
    }
 
    // Default to frame 0 for now.
-   frameIndex = 0;
+   m_frameIndex = 0;
 
-   currDirection = NONE;
-   currName = "";
+   m_currDirection = NONE;
+   m_currName = "";
 }
 
-void Sprite::setSheet(Spritesheet* newSheet)
+void Sprite::setSheet(Spritesheet* sheet)
 {
-   sheet = newSheet;
+   m_sheet = sheet;
 
    // A new sheet invalidates the current frame information.
    clearCurrentFrame();
@@ -82,58 +82,58 @@ std::string Sprite::toDirectionString(MovementDirection direction)
 
 void Sprite::setFrame(const std::string& frameName, MovementDirection direction)
 {
-   if(animation == NULL && frameName == currName && direction == currDirection) return;
+   if(m_animation == NULL && frameName == m_currName && direction == m_currDirection) return;
 
-   int newFrameIndex;
+   int frameIndex;
    
-   if(direction == NONE || (newFrameIndex = sheet->getFrameIndex(frameName + toDirectionString(direction))) < 0)
+   if(direction == NONE || (frameIndex = m_sheet->getFrameIndex(frameName + toDirectionString(direction))) < 0)
    {
-      newFrameIndex = sheet->getFrameIndex(frameName);
+      frameIndex = m_sheet->getFrameIndex(frameName);
    }
    
-   if(newFrameIndex < 0)
+   if(frameIndex < 0)
    {
       //DEBUG("Failed to find sprite frame.");
    }
 
    clearCurrentFrame();
-   currName = frameName;
-   currDirection = direction;
-   frameIndex = newFrameIndex;
+   m_currName = frameName;
+   m_currDirection = direction;
+   m_frameIndex = frameIndex;
 }
 
 void Sprite::setAnimation(const std::string& animationName, MovementDirection direction)
 {
-   if(animation != NULL && animationName == currName && direction == currDirection) return;
+   if(m_animation != NULL && animationName == m_currName && direction == m_currDirection) return;
 
-   Animation* newAnimation;
+   Animation* animation;
 
-   if(direction == NONE || (newAnimation = sheet->getAnimation(animationName + toDirectionString(direction))) == NULL)
+   if(direction == NONE || (animation = m_sheet->getAnimation(animationName + toDirectionString(direction))) == NULL)
    {
-      newAnimation = sheet->getAnimation(animationName);
+      animation = m_sheet->getAnimation(animationName);
    }
 
-   if(newAnimation == NULL)
+   if(animation == NULL)
    {
       DEBUG("Failed to find animation.");
    }
 
    clearCurrentFrame();
-   currName = animationName;
-   currDirection = direction;
-   animation = newAnimation;
+   m_currName = animationName;
+   m_currDirection = direction;
+   m_animation = animation;
 }
 
 void Sprite::step(long timePassed)
 {
-   if(animation != NULL)
+   if(m_animation != NULL)
    {
-      animation->update(timePassed);
+      m_animation->update(timePassed);
    }
 }
 
 void Sprite::draw(const shapes::Point2D& point) const
 {
-   int indexToDraw = animation != NULL ? animation->getIndex() : frameIndex;
-   sheet->draw(point, indexToDraw);
+   int indexToDraw = m_animation != NULL ? m_animation->getIndex() : m_frameIndex;
+   m_sheet->draw(point, indexToDraw);
 }

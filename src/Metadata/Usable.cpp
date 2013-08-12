@@ -26,41 +26,41 @@ extern "C"
 const int debugFlag = DEBUG_METADATA;
 
 Usable::Usable(Json::Value& node) :
-   id(node["id"].asInt()),
-   name(node["name"].asString()),
-   iconPath(node["icon"].asString()),
-   usableScript(NULL)
+   m_id(node["id"].asInt()),
+   m_name(node["name"].asString()),
+   m_iconPath(node["icon"].asString()),
+   m_usableScript(NULL)
 {
 }
 
 Usable::~Usable()
 {
-   if(usableScript != NULL)
+   if(m_usableScript != NULL)
    {
-      delete usableScript;
+      delete m_usableScript;
    }
 }
 
 UsableId Usable::getId() const
 {
-   return id;
+   return m_id;
 }
 
 const std::string& Usable::getName() const
 {
-   return name;
+   return m_name;
 }
 
 const std::string& Usable::getIconPath() const
 {
-   return iconPath;
+   return m_iconPath;
 }
 
 void Usable::loadScript(GameContext& gameContext)
 {
-   if(usableScript == NULL)
+   if(m_usableScript == NULL)
    {
-      usableScript = createScript(gameContext);
+      m_usableScript = createScript(gameContext);
    }
 }
 
@@ -76,11 +76,14 @@ bool Usable::use(GameContext& gameContext, Character* usingCharacter)
    switch(gameContext.getCurrentStateType())
    {
       case GameState::MENU:
-         return usableScript->onMenuUse(usingCharacter);
+         return m_usableScript->onMenuUse(usingCharacter);
       case GameState::FIELD:
-         return usableScript->onFieldUse(usingCharacter);
+         return m_usableScript->onFieldUse(usingCharacter);
       case GameState::BATTLE:
-         return usableScript->onBattleUse(usingCharacter);
+         return m_usableScript->onBattleUse(usingCharacter);
+      default:
+         // Fall through to return below.
+         break;
    }
 
    DEBUG("Usable used in an unrecognized game state type. Usable script will not run.");

@@ -26,10 +26,10 @@ const char* UsableScript::FUNCTION_NAMES[] = { "onMenuUse", "onFieldUse", "onBat
 
 UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, const Usable& usable) :
    Script(scriptPath),
-   usable(usable),
-   functionExists(NUM_FUNCTIONS)
+   m_usable(usable),
+   m_functionExists(NUM_FUNCTIONS)
 {
-   luaStack = lua_newthread(luaVM);
+   m_luaStack = lua_newthread(luaVM);
 
    // Run through the script to gather all the usable's functions
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
@@ -38,7 +38,7 @@ UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, cons
 
    if(result != 0)
    {
-      DEBUG("Error loading usable functions for usable ID %d: %s", usable.getId(), lua_tostring(luaStack, -1));
+      DEBUG("Error loading usable functions for usable ID %d: %s", m_usable.getId(), lua_tostring(m_luaStack, -1));
    }
 
    // All the below code simply takes all the global functions that the script
@@ -54,26 +54,26 @@ UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, cons
    // do using the Lua/C++ API.
 
    // Create a table for this NPC's functions
-   lua_createtable(luaStack, 0, NUM_FUNCTIONS);
+   lua_createtable(m_luaStack, 0, NUM_FUNCTIONS);
 
    for(int i = 0; i < NUM_FUNCTIONS; ++i)
    {
       DEBUG("Checking for function %s.", FUNCTION_NAMES[i]);
 
       // Push the function name into the table
-      lua_pushstring(luaStack, FUNCTION_NAMES[i]);
+      lua_pushstring(m_luaStack, FUNCTION_NAMES[i]);
 
       // Push the function pointer onto the stack
-      lua_getglobal(luaStack, FUNCTION_NAMES[i]);
+      lua_getglobal(m_luaStack, FUNCTION_NAMES[i]);
 
       // Do a type-check here and push an empty function if needed
-      if(!lua_isfunction(luaStack, -1))
+      if(!lua_isfunction(m_luaStack, -1))
       {
          // Pop off the bad value and the function name
-         lua_pop(luaStack, 2);
+         lua_pop(m_luaStack, 2);
 
          // This function is not available for the NPC
-         functionExists[i] = false;
+         m_functionExists[i] = false;
 
          DEBUG("%s was not found to be a function!", FUNCTION_NAMES[i]);
       }
@@ -81,21 +81,21 @@ UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, cons
       {
          // Grabs the table explicitly, and uses the string function name as a key
          // to push in the global function we found (pops string and function off the stack)
-         lua_settable(luaStack, -3);
+         lua_settable(m_luaStack, -3);
 
          // Remove the function from the global table so nobody else accidentally runs into it
-         lua_pushnil(luaStack);
-         lua_setglobal(luaStack, FUNCTION_NAMES[i]);
+         lua_pushnil(m_luaStack);
+         lua_setglobal(m_luaStack, FUNCTION_NAMES[i]);
 
          // The function is valid for the usable
-         functionExists[i] = true;
+         m_functionExists[i] = true;
 
          DEBUG("Function %s was found and loaded", FUNCTION_NAMES[i]);
       }
    }
 
    // Push the table into the global space with the file path as the name
-   lua_setglobal(luaStack, scriptName.c_str());
+   lua_setglobal(m_luaStack, m_scriptName.c_str());
 }
 
 UsableScript::~UsableScript()
@@ -108,24 +108,24 @@ UsableScript::~UsableScript()
 
 bool UsableScript::callFunction(UsableFunction function, Character* usingCharacter)
 {
-   if(functionExists[function])
+   if(m_functionExists[function])
    {
       // Load the table of Lua functions for this NPC
-      lua_getglobal(luaStack, scriptName.c_str());
+      lua_getglobal(m_luaStack, m_scriptName.c_str());
 
       // Grab the function name
       const char* functionName = FUNCTION_NAMES[function];
 
-      DEBUG("Usable ID %d running function %s", usable.getId(), functionName);
+      DEBUG("Usable ID %d running function %s", m_usable.getId(), functionName);
 
       // Get the function from the NPC function table and push it on the stack
-      lua_pushstring(luaStack, functionName);
-      lua_gettable(luaStack, -2);
+      lua_pushstring(m_luaStack, functionName);
+      lua_gettable(m_luaStack, -2);
 
       int numArgs = 0;
       if(usingCharacter != NULL)
       {
-         luaW_push(luaStack, usingCharacter);
+         luaW_push(m_luaStack, usingCharacter);
          numArgs = 1;
       }
 

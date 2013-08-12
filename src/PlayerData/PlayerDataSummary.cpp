@@ -17,8 +17,7 @@ const char* PlayerDataSummary::CHARACTER_LIST_ELEMENT = "Characters";
 const char* PlayerDataSummary::CHARACTER_ELEMENT = "Character";
 
 PlayerDataSummary::PlayerDataSummary(const GameContext& gameContext) :
-   gameContext(gameContext),
-   roster(gameContext)
+   m_roster(gameContext)
 {
 }
 
@@ -34,14 +33,14 @@ PlayerDataSummary& PlayerDataSummary::operator=(const PlayerData& playerData)
     * can be replaced with proper assignment operators without bloating the code to
     * copy objects on the heap.
     */
-   roster.load(playerData.getRoster()->serialize());
+   m_roster.load(playerData.getRoster()->serialize());
 
    return *this;
 }
 
 const std::string& PlayerDataSummary::getFilePath() const
 {
-   return filePath;
+   return m_filePath;
 }
 
 void PlayerDataSummary::load(const std::string& path)
@@ -65,17 +64,17 @@ void PlayerDataSummary::load(const std::string& path)
    
    parseCharactersAndParty(jsonRoot);
    
-   filePath = path;
+   m_filePath = path;
 }
 
 void PlayerDataSummary::parseCharactersAndParty(Json::Value& rootElement)
 {
    DEBUG("Loading character roster...");
    Json::Value& charactersElement = rootElement[PlayerDataSummary::CHARACTER_LIST_ELEMENT];
-   roster.load(charactersElement);
+   m_roster.load(charactersElement);
 }
 
 const CharacterRoster* PlayerDataSummary::getRoster() const
 {
-   return &roster;
+   return &m_roster;
 }

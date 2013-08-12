@@ -20,23 +20,23 @@ class UsableScript;
 class Character;
 
 /**
- * Metadata for an usable. Since currently, all the games usables are non-customizable (no 'unique' usables),
+ * Metadata for a usable. Since currently, all the games usables are non-customizable (no 'unique' usables),
  * a template is sufficient for describing all the properties that an usable will have. As a result,
  * Usable is not an object representative of a single usable found in the world; it is the information describing a given usable.
  */
 class Usable
 {
    /** The unique identifier of this usable. */
-   const UsableId id;
+   const UsableId m_id;
    
    /** The name of this usable. */
-   const std::string name;
+   const std::string m_name;
 
    /** The path to the icon use to represent this usable visually. */
-   const std::string iconPath;
+   const std::string m_iconPath;
 
    /** The script that dictates what the usable does when used. */
-   UsableScript* usableScript;
+   UsableScript* m_usableScript;
 
    void loadScript(GameContext& gameContext);
 

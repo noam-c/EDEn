@@ -18,9 +18,9 @@ const char* Quest::COMPLETED_ATTRIBUTE = "completed";
 const char* Quest::OPTIONAL_ATTRIBUTE = "optional";
 
 Quest::Quest(const std::string& name, const std::string& description, bool optional, bool completed) :
-  name(name),
-  optional(optional),
-  completed(completed)
+  m_name(name),
+  m_optional(optional),
+  m_completed(completed)
 {
 }
 
@@ -31,7 +31,7 @@ Quest::Quest(const Json::Value& questJson)
 
 Quest::~Quest()
 {
-   for(QuestLog::iterator i  = subquests.begin(); i != subquests.end(); ++i)
+   for(QuestLog::iterator i  = m_subquests.begin(); i != m_subquests.end(); ++i)
    {
       delete i->second;
    }
@@ -39,38 +39,38 @@ Quest::~Quest()
 
 void Quest::load(const Json::Value& questTree)
 {
-   subquests.clear();
+   m_subquests.clear();
 
-   name = questTree[Quest::NAME_ATTRIBUTE].asString();
+   m_name = questTree[Quest::NAME_ATTRIBUTE].asString();
    const Json::Value& descriptionElement = questTree[Quest::DESCRIPTION_ELEMENT];
-   description = descriptionElement.isString() ? descriptionElement.asString() : "";
+   m_description = descriptionElement.isString() ? descriptionElement.asString() : "";
    
-   completed = questTree[Quest::COMPLETED_ATTRIBUTE].asBool();
-   optional = questTree[Quest::OPTIONAL_ATTRIBUTE].asBool();
+   m_completed = questTree[Quest::COMPLETED_ATTRIBUTE].asBool();
+   m_optional = questTree[Quest::OPTIONAL_ATTRIBUTE].asBool();
 
    const Json::Value& subquestNode = questTree[Quest::QUEST_ELEMENT];
    for(Json::Value::iterator iter = subquestNode.begin(); iter != subquestNode.end(); ++iter)
    {
       Quest* subquest = new Quest(*iter);
-      subquests[subquest->getName()] = subquest;
+      m_subquests[subquest->getName()] = subquest;
    }
 }
 
 Json::Value Quest::serialize() const
 {
    Json::Value questNode(Json::objectValue);
-   questNode[Quest::NAME_ATTRIBUTE] = name;
+   questNode[Quest::NAME_ATTRIBUTE] = m_name;
    
-   if(!description.empty())
+   if(!m_description.empty())
    {
-      questNode[Quest::DESCRIPTION_ELEMENT] = description;
+      questNode[Quest::DESCRIPTION_ELEMENT] = m_description;
    }
    
-   questNode[Quest::COMPLETED_ATTRIBUTE] = completed;
-   questNode[Quest::OPTIONAL_ATTRIBUTE] = optional;
+   questNode[Quest::COMPLETED_ATTRIBUTE] = m_completed;
+   questNode[Quest::OPTIONAL_ATTRIBUTE] = m_optional;
    
    Json::Value subquestsNode(Json::arrayValue);
-   for(QuestLog::const_iterator iter  = subquests.begin(); iter != subquests.end(); ++iter)
+   for(QuestLog::const_iterator iter  = m_subquests.begin(); iter != m_subquests.end(); ++iter)
    {
       Json::Value subquestNode = iter->second->serialize();
       subquestsNode.append(subquestNode);
@@ -83,21 +83,21 @@ Json::Value Quest::serialize() const
 
 void Quest::addQuest(Quest* quest)
 {
-   DEBUG("Adding quest %s to quest %s.", quest->name.c_str(), name.c_str());
-   subquests[quest->name] = quest;
+   DEBUG("Adding quest %s to quest %s.", quest->m_name.c_str(), m_name.c_str());
+   m_subquests[quest->m_name] = quest;
 }
 
 Quest* Quest::getQuest(const std::string& questPath) const
 {
-   DEBUG("In quest %s, looking for subquest: %s", name.c_str(), questPath.c_str());
+   DEBUG("In quest %s, looking for subquest: %s", m_name.c_str(), questPath.c_str());
    std::string::size_type endOfRootQuest = questPath.find_first_of("/");
    if(endOfRootQuest == std::string::npos)
    {
       // Base case: the quest to find is a direct subquest (or doesn't exist at all)
-      std::map<std::string, Quest*>::const_iterator subquestIter = subquests.find(questPath);
-      if(subquestIter != subquests.end())
+      std::map<std::string, Quest*>::const_iterator subquestIter = m_subquests.find(questPath);
+      if(subquestIter != m_subquests.end())
       {
-         DEBUG("Found quest %s in quest %s", questPath.c_str(), name.c_str());
+         DEBUG("Found quest %s in quest %s", questPath.c_str(), m_name.c_str());
          return subquestIter->second;
       }
 
@@ -110,8 +110,8 @@ Quest* Quest::getQuest(const std::string& questPath) const
    std::string rootQuestName = questPath.substr(0, endOfRootQuest);
    std::string relativeQuestPath = questPath.substr(endOfRootQuest + 1);
    
-   std::map<std::string, Quest*>::const_iterator subquestIter = subquests.find(rootQuestName);
-   if(subquestIter != subquests.end())
+   std::map<std::string, Quest*>::const_iterator subquestIter = m_subquests.find(rootQuestName);
+   if(subquestIter != m_subquests.end())
    {
       return subquestIter->second->getQuest(relativeQuestPath);
    }
@@ -123,21 +123,21 @@ Quest* Quest::getQuest(const std::string& questPath) const
 
 void Quest::complete()
 {
-   completed = true;
-   subquests.clear();
+   m_completed = true;
+   m_subquests.clear();
 }
 
 bool Quest::isCompleted() const
 {
-   return completed;
+   return m_completed;
 }
 
 std::string Quest::getName() const
 {
-   return name;
+   return m_name;
 }
 
 std::string Quest::getDescription() const
 {
-   return description;
+   return m_description;
 }

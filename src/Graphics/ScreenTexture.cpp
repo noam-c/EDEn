@@ -14,7 +14,7 @@ const int debugFlag = DEBUG_GRAPHICS;
 
 ScreenTexture::ScreenTexture()
 {
-   size = shapes::Size(GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight());
+   m_size = shapes::Size(GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight());
    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
 
    glEnable(GL_TEXTURE_2D);
@@ -23,14 +23,14 @@ ScreenTexture::ScreenTexture()
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.width, size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_size.width, m_size.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 
    glPopAttrib();
 
    const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
    if(extensions.isFrameBuffersEnabled())
    {
-      (*extensions.getGenFramebuffersFunction())(1, &frameBuffer);
+      (*extensions.getGenFramebuffersFunction())(1, &m_frameBuffer);
    }
 }
 
@@ -39,8 +39,8 @@ void ScreenTexture::startCapture()
    const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
    if(extensions.isFrameBuffersEnabled())
    {
-      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, frameBuffer);
-      (*extensions.getFramebufferTexture2DFunction())(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, textureHandle, 0);
+      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, m_frameBuffer);
+      (*extensions.getFramebufferTexture2DFunction())(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_textureHandle, 0);
    }
 }
 
@@ -52,7 +52,7 @@ void ScreenTexture::endCapture()
       (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, 0);
    }
 
-   valid = true;
+   m_valid = true;
 }
 
 ScreenTexture::~ScreenTexture()
@@ -60,7 +60,7 @@ ScreenTexture::~ScreenTexture()
    const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
    if(extensions.isFrameBuffersEnabled())
    {
-      (*extensions.getDeleteFramebuffersFunction())(1, &frameBuffer);
+      (*extensions.getDeleteFramebuffersFunction())(1, &m_frameBuffer);
    }
 }
 

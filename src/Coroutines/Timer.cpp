@@ -10,7 +10,7 @@
 const int debugFlag = DEBUG_SCHEDULER;
 
 Timer::Timer(long timeLeft) :
-   timeLeft(timeLeft)
+   m_timeLeft(timeLeft)
 {
    DEBUG("Timer ID is %d", getId());
 }
@@ -22,6 +22,6 @@ Timer::~Timer()
 
 bool Timer::resume(long timePassed)
 {
-   timeLeft -= timePassed;
-   return timeLeft < 0;
+   m_timeLeft -= timePassed;
+   return m_timeLeft < 0;
 }

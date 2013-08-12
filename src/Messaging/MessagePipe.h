@@ -23,23 +23,23 @@ namespace messaging
    {
       template<typename T> class ListenerList
       {
-         std::set<Listener<T>*> listeners;
+         std::set<Listener<T>*> m_listeners;
          
          public:
             void registerListener(Listener<T>* listener)
             {
-               listeners.insert(listener);
+               m_listeners.insert(listener);
             }
             
             void unregisterListener(Listener<T>* listener)
             {
-               listeners.erase(listener);
+               m_listeners.erase(listener);
             }
 
             void send(const T& message) const
             {
                typename std::set<Listener<T>*>::const_iterator iter;
-               for(iter = listeners.begin(); iter != listeners.end(); ++iter)
+               for(iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
                {
                   (*iter)->receive(message);
                }

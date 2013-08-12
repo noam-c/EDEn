@@ -34,13 +34,10 @@ class Sound;
 class ItemMenu: public MenuState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<ItemMenu> bindings;
-
-   /** The player data */
-   PlayerData& playerData;
+   EdenRocketBindings<ItemMenu> m_bindings;
 
    /** The view model that exposes the inventory to the GUI */
-   ItemViewModel itemViewModel;
+   ItemViewModel m_itemViewModel;
 
    /**
     * Initializes the item menu pane and populates the sidebar.

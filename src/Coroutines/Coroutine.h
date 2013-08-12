@@ -23,7 +23,7 @@ class Coroutine
 
    protected:
       /** The numeric identified of this coroutine (currently just used for debugging) */
-      int coroutineId;
+      int m_coroutineId;
 
    public:
       

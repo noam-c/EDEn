@@ -1,6 +1,6 @@
 #include "MapTriggerMessage.h"
 
 MapTriggerMessage::MapTriggerMessage(const TriggerZone& triggerZone, const Actor* const triggeringActor) :
-   triggerZone(triggerZone),
-   triggeringActor(triggeringActor)
+   m_triggerZone(triggerZone),
+   m_triggeringActor(triggeringActor)
 {}

@@ -36,11 +36,11 @@ void SpinState::draw()
    glEnable(GL_TEXTURE_2D);
    glDisable(GL_BLEND);
    glDisable(GL_DEPTH_TEST);
-   oldStateTexture.bind();
+   m_oldStateTexture.bind();
 
    // Warp the standard cosine curve by the progress through the transition, which will produce
    // a gradual increase in amplitude
-   float scaleFactor = cos(progress*PI) * progress + 1.0f;
+   float scaleFactor = cos(m_progress * PI) * m_progress + 1.0f;
 
    // Keep the setup matrix in tact (if changes are applied elsewhere)
    glPushMatrix();
@@ -52,7 +52,7 @@ void SpinState::draw()
    glScalef(scaleFactor, scaleFactor, 1.0f);
 
    // Rotate according to progress through the transition
-   glRotatef(progress * progress * transitionLength * 0.25f, 0.0f, 0.0f, 1.0f);
+   glRotatef(m_progress * m_progress * m_transitionLength * 0.25f, 0.0f, 0.0f, 1.0f);
 
    // Translate back to top,left to draw texture as expected
    glTranslatef(-width/2.0f, -height/2.0f, 0.0f);

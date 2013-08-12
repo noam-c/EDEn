@@ -14,15 +14,15 @@
 const int debugFlag = DEBUG_MENU;
 
 MenuShell::MenuShell(GameContext& gameContext, PlayerData& playerData, Rocket::Core::Context* rocketContext) :
-   rocketContext(rocketContext),
-   shortcutBar(gameContext, playerData, *rocketContext),
-   bindings(this),
-   currentState(NULL)
+   m_rocketContext(rocketContext),
+   m_shortcutBar(gameContext, playerData, *rocketContext),
+   m_bindings(this),
+   m_currentState(NULL)
 {
-   scheduler = new Scheduler();
+   m_scheduler = new Scheduler();
 
-   rocketContext->AddReference();
-   shellDocument = rocketContext->LoadDocument("data/gui/menushell.rml");
+   m_rocketContext->AddReference();
+   m_shellDocument = m_rocketContext->LoadDocument("data/gui/menushell.rml");
 
    Rocket::Core::ElementDocument* background = rocketContext->LoadDocument("data/gui/menubg.rml");
 
@@ -32,69 +32,69 @@ MenuShell::MenuShell(GameContext& gameContext, PlayerData& playerData, Rocket::C
       background->RemoveReference();
    }
 
-   if(shellDocument != NULL)
+   if(m_shellDocument != NULL)
    {
-      shellDocument->Show();
-      sidebarElement = shellDocument->GetElementById("sidebar");
-      bindings.bindAction(sidebarElement, "click", &MenuShell::sidebarClicked);
+      m_shellDocument->Show();
+      m_sidebarElement = m_shellDocument->GetElementById("sidebar");
+      m_bindings.bindAction(m_sidebarElement, "click", &MenuShell::sidebarClicked);
    }
 }
 
 MenuShell::~MenuShell()
 {
-   shellDocument->RemoveReference();
-   rocketContext->RemoveReference();
+   m_shellDocument->RemoveReference();
+   m_rocketContext->RemoveReference();
 }
 
 Rocket::Core::Context* MenuShell::getRocketContext() const
 {
-   return rocketContext;
+   return m_rocketContext;
 }
 
 Scheduler* MenuShell::getScheduler() const
 {
-   return scheduler;
+   return m_scheduler;
 }
 
 Rocket::Core::ElementDocument* MenuShell::getShellDocument() const
 {
-   return shellDocument;
+   return m_shellDocument;
 }
 
 void MenuShell::refresh()
 {
-   sidebarElement->SetInnerRML("");
+   m_sidebarElement->SetInnerRML("");
 
-   std::vector<MenuShellOption> sidebarOptions = currentState->getSidebarOptions();
+   std::vector<MenuShellOption> sidebarOptions = m_currentState->getSidebarOptions();
 
    bool sidebarEnabled = !sidebarOptions.empty();
    if(sidebarEnabled)
    {
-      sidebarElement->SetClass("noSidebar", false);
+      m_sidebarElement->SetClass("noSidebar", false);
       std::vector<MenuShellOption>::iterator iter;
       for(iter = sidebarOptions.begin(); iter != sidebarOptions.end(); ++iter)
       {
-         Rocket::Core::Element* element = shellDocument->CreateElement("div");
+         Rocket::Core::Element* element = m_shellDocument->CreateElement("div");
          element->SetClass("sidebarOption", true);
-         element->AppendChild(shellDocument->CreateTextNode(iter->c_str()));
-         sidebarElement->AppendChild(element);
+         element->AppendChild(m_shellDocument->CreateTextNode(iter->c_str()));
+         m_sidebarElement->AppendChild(element);
       }
    }
 
-   sidebarElement->SetClass("noSidebar", !sidebarEnabled);
-   currentState->setSidebarEnabled(sidebarEnabled);
+   m_sidebarElement->SetClass("noSidebar", !sidebarEnabled);
+   m_currentState->setSidebarEnabled(sidebarEnabled);
 }
 
 void MenuShell::changeMenuState(MenuState* newState)
 {
-   currentState = newState;
+   m_currentState = newState;
    refresh();
 }
 
 void MenuShell::sidebarClicked(Rocket::Core::Event* event)
 {
    Rocket::Core::Element* target = event->GetTargetElement();
-   if(target->GetParentNode() == sidebarElement)
+   if(target->GetParentNode() == m_sidebarElement)
    {
       int childIndex = 0;
 
@@ -105,6 +105,6 @@ void MenuShell::sidebarClicked(Rocket::Core::Event* event)
          ++childIndex;
       }
 
-      currentState->sidebarClicked(childIndex);
+      m_currentState->sidebarClicked(childIndex);
    }
 }

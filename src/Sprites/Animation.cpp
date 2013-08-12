@@ -12,10 +12,10 @@ const int debugFlag = DEBUG_SPRITE;
 #define MILLISECONDS_PER_FRAME 100
 
 Animation::Animation(const std::string& name, const FrameSequence& frameSequence) :
-   name(name),
-   frameSequence(frameSequence),
-   curr(frameSequence.begin()),
-   timeToNextAnimation(MILLISECONDS_PER_FRAME)
+   m_name(name),
+   m_frameSequence(frameSequence),
+   m_curr(frameSequence.begin()),
+   m_timeToNextAnimation(MILLISECONDS_PER_FRAME)
 {}
 
 Animation::~Animation()
@@ -24,20 +24,20 @@ Animation::~Animation()
 
 void Animation::update(long timePassed)
 {
-   timeToNextAnimation -= timePassed;
-   while(timeToNextAnimation < 0)
+   m_timeToNextAnimation -= timePassed;
+   while(m_timeToNextAnimation < 0)
    {
-      if(++curr == frameSequence.end()) curr = frameSequence.begin();
-      timeToNextAnimation += MILLISECONDS_PER_FRAME;
+      if(++m_curr == m_frameSequence.end()) m_curr = m_frameSequence.begin();
+      m_timeToNextAnimation += MILLISECONDS_PER_FRAME;
    }
 }
 
 int Animation::getIndex() const
 {
-   return *curr;
+   return *m_curr;
 }
 
 const std::string& Animation::getName() const
 {
-   return name;
+   return m_name;
 }

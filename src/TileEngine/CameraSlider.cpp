@@ -12,50 +12,50 @@
 const int debugFlag = DEBUG_TILE_ENG;
 
 CameraSlider::CameraSlider(Camera& camera, const shapes::Point2D& origin, const shapes::Point2D& destination, double speed) :
-   camera(camera),
-   origin(camera.getClampedPoint(origin)),
-   destination(camera.getClampedPoint(destination)),
-   totalTimePassed(0)
+   m_camera(camera),
+   m_origin(camera.getClampedPoint(origin)),
+   m_destination(camera.getClampedPoint(destination)),
+   m_totalTimePassed(0)
 {
-   const double xMagnitude = this->destination.x - this->origin.x;
-   const double yMagnitude = this->destination.y - this->origin.y;
+   const double xMagnitude = m_destination.x - m_origin.x;
+   const double yMagnitude = m_destination.y - m_origin.y;
 
    if(xMagnitude != 0 && yMagnitude != 0)
    {
       const double angle = atan2(yMagnitude, xMagnitude);
-      xSpeed = cos(angle) * speed;
-      ySpeed = sin(angle) * speed;
+      m_xSpeed = cos(angle) * speed;
+      m_ySpeed = sin(angle) * speed;
    }
    else if(xMagnitude == 0)
    {
-      xSpeed = 0;
-      ySpeed = speed;
+      m_xSpeed = 0;
+      m_ySpeed = speed;
    }
    else //if(yMagnitude == 0)
    {
-      xSpeed = speed;
-      ySpeed = 0;
+      m_xSpeed = speed;
+      m_ySpeed = 0;
    }
 }
 
 bool CameraSlider::resume(long timePassed)
 {
-   totalTimePassed += timePassed;
+   m_totalTimePassed += timePassed;
 
-   const int xDistanceMoved = xSpeed * totalTimePassed;
-   const int yDistanceMoved = ySpeed * totalTimePassed;
+   const int xDistanceMoved = m_xSpeed * m_totalTimePassed;
+   const int yDistanceMoved = m_ySpeed * m_totalTimePassed;
 
    shapes::Point2D focalPoint;
 
-   focalPoint.x = destination.x < origin.x ?
-      std::max(origin.x - xDistanceMoved, destination.x) :
-      std::min(origin.x + xDistanceMoved, destination.x);
+   focalPoint.x = m_destination.x < m_origin.x ?
+      std::max(m_origin.x - xDistanceMoved, m_destination.x) :
+      std::min(m_origin.x + xDistanceMoved, m_destination.x);
 
-   focalPoint.y = destination.y < origin.y ?
-      std::max(origin.y - yDistanceMoved, destination.y) :
-      std::min(origin.y + yDistanceMoved, destination.y);
+   focalPoint.y = m_destination.y < m_origin.y ?
+      std::max(m_origin.y - yDistanceMoved, m_destination.y) :
+      std::min(m_origin.y + yDistanceMoved, m_destination.y);
 
-   camera.setFocalPoint(focalPoint);
+   m_camera.setFocalPoint(focalPoint);
 
-   return focalPoint == destination;
+   return focalPoint == m_destination;
 }

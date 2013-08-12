@@ -18,15 +18,15 @@ const int debugFlag = DEBUG_RES_LOAD | DEBUG_TILE_ENG;
 
 Tileset::Tileset(ResourceKey name) :
    Resource(name),
-   texture(NULL)
+   m_texture(NULL)
 {
 }
 
 Tileset::~Tileset()
 {
-   if(texture != NULL)
+   if(m_texture != NULL)
    {
-      delete texture;
+      delete m_texture;
    }
 }
 
@@ -66,16 +66,16 @@ void Tileset::load(const std::string& path)
    std::string imagePath = imageElement->Attribute("source");
    DEBUG("Loading tileset image \"%s\"...", imagePath.c_str());
 
-   texture = new Texture(std::string("data/tilesets/") + imagePath);
-   size = texture->getSize() / TileEngine::TILE_SIZE;
+   m_texture = new Texture(std::string("data/tilesets/") + imagePath);
+   m_size = m_texture->getSize() / TileEngine::TILE_SIZE;
 
    // \todo When Tiled makes it easier, the tileset data needs to hold the default
    // passibility matrix for a Tileset
    // Since maps will rarely change the passibility of tiles, it doesn't make
    // sense to hold passibility within each map's data; a map's Lua script
    // should be able to cheat default passibility if necessary.
-   passibility.resize(size.width * size.height);
-   std::fill(passibility.begin(), passibility.end(), true);
+   m_passibility.resize(m_size.width * m_size.height);
+   std::fill(m_passibility.begin(), m_passibility.end(), true);
 
    TiXmlElement* tileElement = root->FirstChildElement("tile");
    while(tileElement != NULL)
@@ -91,7 +91,7 @@ void Tileset::load(const std::string& path)
          if(std::string(propertyElement->Attribute("name")) == "collision")
          {
             const std::string collision = propertyElement->Attribute("value");
-            passibility[tileNum] = collision != "true";
+            m_passibility[tileNum] = collision != "true";
             break;
          }
 
@@ -104,8 +104,8 @@ void Tileset::load(const std::string& path)
 
 void Tileset::draw(int destX, int destY, int tileNum, bool useAlphaTesting)
 {
-   int tilesetX = tileNum % size.width;
-   int tilesetY = tileNum / size.width;
+   int tilesetX = tileNum % m_size.width;
+   int tilesetY = tileNum / m_size.width;
 
    float destLeft = float(destX * TileEngine::TILE_SIZE);
    float destRight = float((destX + 1) * TileEngine::TILE_SIZE);
@@ -115,10 +115,10 @@ void Tileset::draw(int destX, int destY, int tileNum, bool useAlphaTesting)
    float tileRight = float((tilesetX + 1) * TileEngine::TILE_SIZE - 1);
    float tileBottom = float((tilesetY + 1) * TileEngine::TILE_SIZE - 1);
 
-   float top = float(tilesetY) / size.height;
-   float bottom = float(tileBottom) / (size.height * TileEngine::TILE_SIZE - 1);
-   float left = float(tilesetX) / size.width;
-   float right = float(tileRight) / (size.width * TileEngine::TILE_SIZE - 1);
+   float top = float(tilesetY) / m_size.height;
+   float bottom = float(tileBottom) / (m_size.height * TileEngine::TILE_SIZE - 1);
+   float left = float(tilesetX) / m_size.width;
+   float right = float(tileRight) / (m_size.width * TileEngine::TILE_SIZE - 1);
 
    glPushAttrib(GL_COLOR_BUFFER_BIT);
 
@@ -134,7 +134,7 @@ void Tileset::draw(int destX, int destY, int tileNum, bool useAlphaTesting)
       glAlphaFunc(GL_GREATER, 0.1f);
    }
 
-   texture->bind();
+   m_texture->bind();
 
    glBegin(GL_QUADS);
       glTexCoord2f(left, top); glVertex3f(destLeft, destTop, 0.0f);
@@ -168,5 +168,5 @@ void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
 
 bool Tileset::isPassible(int tileNum) const
 {
-   return passibility[tileNum];
+   return m_passibility[tileNum];
 }

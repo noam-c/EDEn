@@ -36,7 +36,7 @@ class Music : public Resource
    static inline void setPlayingMusic(Music* music);
 
    /** The SDL music object for this music resource */
-   Mix_Music* music;
+   Mix_Music* m_music;
 
    /**
     * Loads the music resource with the specified file name and path.

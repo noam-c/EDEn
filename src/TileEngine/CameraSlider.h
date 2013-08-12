@@ -20,19 +20,19 @@ class Camera;
 class CameraSlider : public Coroutine
 {
    /** The camera to manipulate. */
-   Camera& camera;
+   Camera& m_camera;
 
-   const shapes::Point2D origin;
-   const shapes::Point2D destination;
+   const shapes::Point2D m_origin;
+   const shapes::Point2D m_destination;
 
    /** The amount of time that has passed since the slide began. */
-   long totalTimePassed;
+   long m_totalTimePassed;
    
    /** The speed of the camera slide on the x-axis. */
-   double xSpeed;
+   double m_xSpeed;
 
    /** The speed of the camera slide on the y-axis. */
-   double ySpeed;
+   double m_ySpeed;
 
    public:
       /**

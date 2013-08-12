@@ -7,16 +7,16 @@
 #include "TriggerZone.h"
 
 TriggerZone::TriggerZone(const std::string& name, const shapes::Rectangle& bounds) :
-   name(name),
-   bounds(bounds)
+   m_name(name),
+   m_bounds(bounds)
 {}
 
 const shapes::Rectangle& TriggerZone::getBounds() const
 {
-    return bounds;
+    return m_bounds;
 }
 
 const std::string TriggerZone::getName() const
 {
-    return name;
+    return m_name;
 }

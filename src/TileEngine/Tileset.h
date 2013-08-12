@@ -22,13 +22,13 @@ class Texture;
 class Tileset : public Resource
 {
    /** Tileset size (in tiles) */
-   shapes::Size size;
+   shapes::Size m_size;
 
    /** Passibility matrix */
-   std::vector<bool> passibility;
+   std::vector<bool> m_passibility;
 
    /** The tile texture */
-   Texture* texture;
+   Texture* m_texture;
 
    void load(const std::string& path);
 

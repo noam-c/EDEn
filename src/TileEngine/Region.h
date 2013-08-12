@@ -28,10 +28,10 @@ class Map;
 class Region : public Resource
 {
    /** The name of the region. */
-   std::string regionName;
+   std::string m_name;
 
    /** The list of maps in this region, keyed by map names. */
-   std::map<std::string, Map*> areas;
+   std::map<std::string, Map*> m_areas;
 
    /**
     * Loads this region from the specified EDR file.

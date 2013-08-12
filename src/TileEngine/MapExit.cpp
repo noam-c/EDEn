@@ -7,16 +7,16 @@
 #include "MapExit.h"
 
 MapExit::MapExit(const std::string& nextMap, const shapes::Rectangle& bounds) :
-   nextMap(nextMap),
-   bounds(bounds)
+   m_nextMap(nextMap),
+   m_bounds(bounds)
 {}
 
 const shapes::Rectangle& MapExit::getBounds() const
 {
-    return bounds;
+    return m_bounds;
 }
 
 const std::string MapExit::getNextMap() const
 {
-    return nextMap;
+    return m_nextMap;
 }

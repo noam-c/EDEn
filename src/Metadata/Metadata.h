@@ -29,10 +29,10 @@ class Skill;
 class Metadata
 {
    /** A map of all the items, mapped by Item ID. */
-   std::map<UsableId, Item*> items;
+   std::map<UsableId, Item*> m_items;
 
    /** A map of all the skills, mapped by Skill ID. */
-   std::map<UsableId, Skill*> skills;
+   std::map<UsableId, Skill*> m_skills;
 
    Json::Value loadMetadataTable(const char* filePath);
 

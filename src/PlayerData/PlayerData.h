@@ -67,28 +67,28 @@ class PlayerData
    static const char* Y_ATTRIBUTE;
 
    /** The game context in which this player session was loaded */
-   GameContext& gameContext;
+   GameContext& m_gameContext;
 
    /** The file from which this player data was last saved/loaded. */
-   std::string filePath;
+   std::string m_filePath;
 
    /** All the items that are in the player's item bag. Includes usables, keys, and unused equipment. */
-   Inventory inventory;
+   Inventory m_inventory;
 
    /** The roster of characters in the player's party or encountered by the player. */
-   CharacterRoster roster;
+   CharacterRoster m_roster;
 
    /** The top-level quest for the game. Contains all the quests that the player can complete. */
-   Quest rootQuest;
+   Quest m_rootQuest;
 
    /** The current chapter being played (if the game was saved in the middle of a chapter. */
-   std::string currChapter;
+   std::string m_currChapter;
 
    /** The player's shortcut list. */
-   ShortcutList shortcutList;
+   ShortcutList m_shortcutList;
 
    /** The location of the last save point used. */
-   SaveLocation saveLocation;
+   SaveLocation m_saveLocation;
    
    void parseCharactersAndParty(Json::Value& rootElement);
    void serializeCharactersAndParty(Json::Value& outputJson) const;

@@ -31,7 +31,7 @@ void BlendState::draw()
 
    glEnable(GL_TEXTURE_2D);
 
-   oldStateTexture.bind();
+   m_oldStateTexture.bind();
    glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);
       glTexCoord2f(1.0f, 1.0f); glVertex3f(width, 0.0f, 0.0f);
@@ -41,10 +41,10 @@ void BlendState::draw()
 
    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
-   newStateTexture.bind();
+   m_newStateTexture.bind();
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-   glColor4f(1.0f, 1.0f, 1.0f, progress);
+   glColor4f(1.0f, 1.0f, 1.0f, m_progress);
 
    glBegin(GL_QUADS);
       glTexCoord2f(0.0f, 1.0f); glVertex3f(0.0f, 0.0f, 0.0f);

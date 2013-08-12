@@ -20,7 +20,7 @@ extern "C"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
 #define REGISTER(luaName, function) DEBUG("Registering function: %s", luaName); \
-                                    lua_register(luaVM, luaName, function)
+                                    lua_register(m_luaVM, luaName, function)
 
 static ScriptEngine* getEngine(lua_State* luaVM)
 {

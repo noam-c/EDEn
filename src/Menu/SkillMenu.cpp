@@ -21,61 +21,59 @@ const int debugFlag = DEBUG_MENU;
 
 SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData) :
    CharacterDependentMenu(gameContext, playerData, "SkillMenu"),
-   bindings(this),
-   playerData(playerData),
-   skillViewModel(gameContext, playerData)
+   m_bindings(this),
+   m_skillViewModel(gameContext, playerData)
 {
    initialize();
 }
 
 SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
    CharacterDependentMenu(gameContext, "SkillMenu", menuShell),
-   bindings(this),
-   playerData(playerData),
-   skillViewModel(gameContext, playerData)
+   m_bindings(this),
+   m_skillViewModel(gameContext, playerData)
 {
    initialize();
 }
 
 void SkillMenu::initialize()
 {
-   paneDocument = menuShell->getRocketContext()->LoadDocument("data/gui/skillpane.rml");
-   if(paneDocument != NULL)
+   m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/skillpane.rml");
+   if(m_paneDocument != NULL)
    {
-      bindings.bindAction(paneDocument, "skillGrid", "click", &SkillMenu::skillClicked);
-      bindings.bindAction(paneDocument, "skillGrid", "dragstart", &SkillMenu::dragStarted);
+      m_bindings.bindAction(m_paneDocument, "skillGrid", "click", &SkillMenu::skillClicked);
+      m_bindings.bindAction(m_paneDocument, "skillGrid", "dragstart", &SkillMenu::dragStarted);
    }
 }
 
 SkillMenu::~SkillMenu()
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Close();
-      paneDocument->RemoveReference();
+      m_paneDocument->Close();
+      m_paneDocument->RemoveReference();
    }
 }
 
 void SkillMenu::activate()
 {
    MenuState::activate();
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Show();
+      m_paneDocument->Show();
    }
 }
 
 void SkillMenu::deactivate()
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Hide();
+      m_paneDocument->Hide();
    }
 }
 
 void SkillMenu::setCharacter(int characterIndex)
 {
-   skillViewModel.setCharacter(characterIndex);
+   m_skillViewModel.setCharacter(characterIndex);
 }
 
 void SkillMenu::dragStarted(Rocket::Core::Event* event)
@@ -98,8 +96,8 @@ void SkillMenu::dragStarted(Rocket::Core::Event* event)
          if(rowElement != NULL)
          {
             const int skillIndex = rowElement->GetParentRelativeIndex();
-            const UsableId skillId = skillViewModel.getSkillId(skillIndex);
-            const std::string characterId = skillViewModel.getCurrentCharacterId();
+            const UsableId skillId = m_skillViewModel.getSkillId(skillIndex);
+            const std::string characterId = m_skillViewModel.getCurrentCharacterId();
 
             Rocket::Core::ElementAttributes dragAttributes;
             dragAttributes.Set("skillId", static_cast<int>(skillId));
@@ -129,7 +127,7 @@ void SkillMenu::skillClicked(Rocket::Core::Event* event)
       if(rowElement != NULL)
       {
          int skillIndex = rowElement->GetParentRelativeIndex();
-         skillViewModel.useSkill(skillIndex);
+         m_skillViewModel.useSkill(skillIndex);
       }
    }
 }

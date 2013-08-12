@@ -30,47 +30,47 @@ enum MainMenuActions
 
 MainMenu::MainMenu(GameContext& gameContext) :
    GameState(gameContext, GameState::TITLE, "MainMenu"),
-   bindings(this)
+   m_bindings(this)
 {
-   scheduler = new Scheduler();
+   m_scheduler = new Scheduler();
 
-   chooseSound = ResourceLoader::getSound("choose");
-   reselectSound = ResourceLoader::getSound("reselect");
+   m_chooseSound = ResourceLoader::getSound("choose");
+   m_reselectSound = ResourceLoader::getSound("reselect");
 
-   music = ResourceLoader::getMusic("title.mp3");
+   m_music = ResourceLoader::getMusic("title.mp3");
 
-   titleDocument = rocketContext->LoadDocument("data/gui/title.rml");
+   m_titleDocument = m_rocketContext->LoadDocument("data/gui/title.rml");
 
-   if(titleDocument != NULL)
+   if(m_titleDocument != NULL)
    {
-      titleDocument->Show();
-      bindings.bindAction(titleDocument, "newGameAction", "click", &MainMenu::NewGameAction);
-      bindings.bindAction(titleDocument, "menuPrototypeAction", "click", &MainMenu::MenuPrototypeAction);
-      bindings.bindAction(titleDocument, "loadGameAction", "click", &MainMenu::LoadGameAction);
-      bindings.bindAction(titleDocument, "optionsAction", "click", &MainMenu::OptionsAction);
-      bindings.bindAction(titleDocument, "aboutAction", "click", &MainMenu::AboutAction);
-      bindings.bindAction(titleDocument, "quitGameAction", "click", &MainMenu::QuitAction);
+      m_titleDocument->Show();
+      m_bindings.bindAction(m_titleDocument, "newGameAction", "click", &MainMenu::NewGameAction);
+      m_bindings.bindAction(m_titleDocument, "menuPrototypeAction", "click", &MainMenu::MenuPrototypeAction);
+      m_bindings.bindAction(m_titleDocument, "loadGameAction", "click", &MainMenu::LoadGameAction);
+      m_bindings.bindAction(m_titleDocument, "optionsAction", "click", &MainMenu::OptionsAction);
+      m_bindings.bindAction(m_titleDocument, "aboutAction", "click", &MainMenu::AboutAction);
+      m_bindings.bindAction(m_titleDocument, "quitGameAction", "click", &MainMenu::QuitAction);
 
-      bindings.bindAction(titleDocument, "keydown", &MainMenu::listKeyDown);
+      m_bindings.bindAction(m_titleDocument, "keydown", &MainMenu::listKeyDown);
    }
 }
 
 MainMenu::~MainMenu()
 {
-   titleDocument->Close();
-   titleDocument->RemoveReference();
+   m_titleDocument->Close();
+   m_titleDocument->RemoveReference();
 
-   delete scheduler;
+   delete m_scheduler;
 }
 
 bool MainMenu::step(long timePassed)
 {
-   if(finished) return false;
+   if(m_finished) return false;
 
-   scheduler->runCoroutines(timePassed);
+   m_scheduler->runCoroutines(timePassed);
    bool done = false;
 
-   music->play();
+   m_music->play();
 
    waitForInputEvent(done);
 
@@ -136,7 +136,7 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
          return;
    }
 
-   Rocket::Core::Element* list = titleDocument->GetElementById("menu");
+   Rocket::Core::Element* list = m_titleDocument->GetElementById("menu");
    if(list == NULL)
    {
       return;
@@ -188,5 +188,5 @@ void MainMenu::draw()
 
 Scheduler* MainMenu::getScheduler() const
 {
-   return scheduler;
+   return m_scheduler;
 }

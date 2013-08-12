@@ -7,8 +7,8 @@ class GameContext;
 
 class RocketScriptHandler : public Rocket::Core::EventListener
 {
-   GameContext& gameContext;
-   const std::string scriptString;
+   GameContext& m_gameContext;
+   const std::string m_scriptString;
 
    public:
       RocketScriptHandler(GameContext& gameContext, Rocket::Core::String scriptString);

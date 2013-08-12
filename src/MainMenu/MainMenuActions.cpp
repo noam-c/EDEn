@@ -31,9 +31,9 @@
  */
 void MainMenu::NewGameAction(Rocket::Core::Event* event)
 {
-   TileEngine* tileEngine = new TileEngine(gameContext, CHAP1);
-   gameContext.getExecutionStack().pushState(tileEngine, new FadeState(gameContext, this));
-   chooseSound->play();
+   TileEngine* tileEngine = new TileEngine(m_gameContext, CHAP1);
+   m_gameContext.getExecutionStack().pushState(tileEngine, new FadeState(m_gameContext, this));
+   m_chooseSound->play();
    Music::fadeOutMusic(1000);
 }
 
@@ -43,10 +43,10 @@ void MainMenu::NewGameAction(Rocket::Core::Event* event)
  */
 void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
 {
-   PlayerData* playerData = new PlayerData(gameContext);
+   PlayerData* playerData = new PlayerData(m_gameContext);
    playerData->load(SAVE_GAME);
 
-   gameContext.getExecutionStack().pushState(new HomeMenu(gameContext, *playerData));
+   m_gameContext.getExecutionStack().pushState(new HomeMenu(m_gameContext, *playerData));
 }
 
 /**
@@ -62,10 +62,10 @@ void MainMenu::LoadGameAction(Rocket::Core::Event* event)
  */
 void MainMenu::OptionsAction(Rocket::Core::Event* event)
 {
-   TitleScreenSettingsMenu* titleScreenSettingsMenuState = new TitleScreenSettingsMenu(gameContext);
-   gameContext.getExecutionStack().pushState(
+   TitleScreenSettingsMenu* titleScreenSettingsMenuState = new TitleScreenSettingsMenu(m_gameContext);
+   m_gameContext.getExecutionStack().pushState(
       titleScreenSettingsMenuState,
-      new BlendState(gameContext, this, titleScreenSettingsMenuState, 500));
+      new BlendState(m_gameContext, this, titleScreenSettingsMenuState, 500));
 }
 
 /**
@@ -80,8 +80,8 @@ void MainMenu::AboutAction(Rocket::Core::Event* event)
  */
 void MainMenu::QuitAction(Rocket::Core::Event* event)
 {
-   finished = true;
-   chooseSound->play();
+   m_finished = true;
+   m_chooseSound->play();
    Music::fadeOutMusic(1000);
 
    GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);

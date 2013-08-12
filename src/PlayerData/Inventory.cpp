@@ -17,7 +17,7 @@ Inventory& Inventory::operator=(const Inventory& inventory)
 {
    if(&inventory != this)
    {
-      items = inventory.items;
+      m_items = inventory.m_items;
    }
 
    return *this;
@@ -25,7 +25,7 @@ Inventory& Inventory::operator=(const Inventory& inventory)
 
 const ItemList& Inventory::getItemList() const
 {
-   return items;
+   return m_items;
 }
 
 ItemList Inventory::getItemsByTypes(std::vector<int> acceptedTypes) const
@@ -34,26 +34,26 @@ ItemList Inventory::getItemsByTypes(std::vector<int> acceptedTypes) const
     * \todo This method needs to properly filter through the inventory by type,
     * This must be done once item type is loaded into the Item structure.
     */
-   return items;
+   return m_items;
 }
 
 void Inventory::load(const Json::Value& inventoryJson)
 {
-   items.clear();
+   m_items.clear();
 
    for(Json::Value::iterator iter = inventoryJson.begin(); iter != inventoryJson.end(); ++iter)
    {
       int itemNum, itemQuantity;
       itemNum = (*iter)[Inventory::ITEM_NUM_ATTRIBUTE].asInt();
       itemQuantity = (*iter)[Inventory::ITEM_QUANTITY_ATTRIBUTE].asInt();
-      items.push_back(std::make_pair(itemNum, itemQuantity));
+      m_items.push_back(std::make_pair(itemNum, itemQuantity));
    }
 }
 
 Json::Value Inventory::serialize() const
 {
    Json::Value inventoryNode(Json::arrayValue);
-   for(ItemList::const_iterator iter = items.begin(); iter != items.end(); ++iter)
+   for(ItemList::const_iterator iter = m_items.begin(); iter != m_items.end(); ++iter)
    {
       int itemNumber = iter->first;
       int itemQuantity = iter->second;
@@ -74,7 +74,7 @@ Json::Value Inventory::serialize() const
 ItemList::const_iterator Inventory::findItem(UsableId itemId) const
 {
    ItemList::const_iterator itemIter;
-   for(itemIter = items.begin(); itemIter != items.end(); ++itemIter)
+   for(itemIter = m_items.begin(); itemIter != m_items.end(); ++itemIter)
    {
       if(itemIter->first == itemId)
       {
@@ -88,7 +88,7 @@ ItemList::const_iterator Inventory::findItem(UsableId itemId) const
 ItemList::iterator Inventory::findItem(int itemId)
 {
    ItemList::iterator itemIter;
-   for(itemIter = items.begin(); itemIter != items.end(); ++itemIter)
+   for(itemIter = m_items.begin(); itemIter != m_items.end(); ++itemIter)
    {
       if(itemIter->first == itemId)
       {
@@ -102,7 +102,7 @@ ItemList::iterator Inventory::findItem(int itemId)
 int Inventory::getItemQuantity(int itemId) const
 {
    ItemList::const_iterator itemIter = findItem(itemId);
-   if(itemIter != items.end())
+   if(itemIter != m_items.end())
    {
       return itemIter->second;
    }
@@ -118,9 +118,9 @@ bool Inventory::addItem(int itemId, int quantity)
    }
    
    ItemList::iterator itemIter = findItem(itemId);
-   if(itemIter == items.end())
+   if(itemIter == m_items.end())
    {
-      items.push_back(std::make_pair(itemId, quantity));
+      m_items.push_back(std::make_pair(itemId, quantity));
    }
    else
    {
@@ -137,7 +137,7 @@ bool Inventory::removeItem(int itemId, int quantity)
       return false;
    }
    
-   for(ItemList::iterator iter = items.begin(); iter != items.end(); ++iter)
+   for(ItemList::iterator iter = m_items.begin(); iter != m_items.end(); ++iter)
    {
       int& existingQuantity = iter->second;
       if(iter->first == itemId)
@@ -149,7 +149,7 @@ bool Inventory::removeItem(int itemId, int quantity)
             existingQuantity -= quantity;
             if(existingQuantity == 0)
             {
-               items.erase(iter);
+               m_items.erase(iter);
             }
             
             return true;

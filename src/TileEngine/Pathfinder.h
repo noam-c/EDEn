@@ -40,19 +40,19 @@ class Pathfinder
    static const float INFINITY;
 
    /** The Roy-Floyd-Warshall distance matrix. This 2D array holds best-path distances between all tiles. */
-   float** distanceMatrix;
+   float** m_distanceMatrix;
 
    /** The Roy-Floyd-Warshall successor matrix. This 2D array holds the best tile to move to, given a source and a destination. */
-   int** successorMatrix;
+   int** m_successorMatrix;
    
    /** The size (in pixels) of each tile. */
-   int movementTileSize;
+   int m_movementTileSize;
    
    /** The grid to compute paths on. */
-   TileState** collisionGrid;
+   TileState** m_collisionGrid;
    
    /** The bounds (in tiles) of the grid. */
-   shapes::Rectangle collisionGridBounds;
+   shapes::Rectangle m_collisionGridBounds;
    
    /**
     * Convert a tile number into pixel coordinates.

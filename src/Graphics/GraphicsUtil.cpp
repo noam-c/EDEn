@@ -22,19 +22,19 @@ const int debugFlag = DEBUG_GRAPHICS;
 
 void GraphicsUtil::initialize()
 {
-   window = NULL;
-   openGLContext = NULL;
+   m_window = NULL;
+   m_openGLContext = NULL;
    const Settings::Resolution& resolution = Settings::getCurrentSettings().getResolution();
-   fullScreenEnabled = Settings::getCurrentSettings().isFullScreenEnabled();
-   width = resolution.getWidth();
-   height = resolution.getHeight();
-   bitsPerPixel = resolution.getBitsPerPixel();
+   m_fullScreenEnabled = Settings::getCurrentSettings().isFullScreenEnabled();
+   m_width = resolution.getWidth();
+   m_height = resolution.getHeight();
+   m_bitsPerPixel = resolution.getBitsPerPixel();
 
-   currentXOffset = 0;
-   currentYOffset = 0;
+   m_currentXOffset = 0;
+   m_currentYOffset = 0;
 
    initSDL();
-   openGLExtensions.initialize();
+   m_openGLExtensions.initialize();
    initRocket();
 }
 
@@ -69,7 +69,7 @@ void GraphicsUtil::initSDL()
    std::string* errorMsg = NULL;
    if(!initSDLVideoMode(errorMsg))
    {
-      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", width, height, bitsPerPixel, errorMsg->c_str());
+      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", m_width, m_height, m_bitsPerPixel, errorMsg->c_str());
       exit(1);
    }
 
@@ -84,38 +84,38 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
 {
    // Set video mode based on user's choice of resolution
    unsigned int windowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
-   if(fullScreenEnabled)
+   if(m_fullScreenEnabled)
    {
       windowFlags |= SDL_WINDOW_FULLSCREEN;
    }
 
-   if(window != NULL)
+   if(m_window != NULL)
    {
-      SDL_DestroyWindow(window);
+      SDL_DestroyWindow(m_window);
    }
 
-   window = SDL_CreateWindow(
+   m_window = SDL_CreateWindow(
       "EDEn",
       SDL_WINDOWPOS_CENTERED,
       SDL_WINDOWPOS_CENTERED,
-      width,
-      height,
+      m_width,
+      m_height,
       static_cast<SDL_WindowFlags>(windowFlags));
 
-   if(window == NULL)
+   if(m_window == NULL)
    {
       errorMsg = new std::string(SDL_GetError());
       return false;
    }
 
-   if(openGLContext != NULL)
+   if(m_openGLContext != NULL)
    {
-      SDL_GL_MakeCurrent(window, openGLContext);
+      SDL_GL_MakeCurrent(m_window, m_openGLContext);
    }
    else
    {
-      openGLContext = SDL_GL_CreateContext(window);
-      if(!openGLContext)
+      m_openGLContext = SDL_GL_CreateContext(m_window);
+      if(!m_openGLContext)
       {
          errorMsg = new std::string(SDL_GetError());
          return false;
@@ -129,7 +129,7 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
    
    // Set up the viewport and reset the projection matrix
-   glViewport(0, 0, width, height);
+   glViewport(0, 0, m_width, m_height);
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
    
@@ -137,7 +137,7 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
    
    // Create a 2D orthogonal perspective (better for 2D games)
-   glOrtho(0.0f, (float)width, (float)height, 0.0f, -1, 1);
+   glOrtho(0.0f, (float)m_width, (float)m_height, 0.0f, -1, 1);
 
    glMatrixMode(GL_MODELVIEW);
 
@@ -146,9 +146,9 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
 
 void GraphicsUtil::initRocket()
 {
-   Rocket::Core::SetSystemInterface(&rocketSystemInterface);
-   Rocket::Core::SetRenderInterface(&rocketRenderInterface);
-   Rocket::Core::RegisterPlugin(&rocketContextRegistry);
+   Rocket::Core::SetSystemInterface(&m_rocketSystemInterface);
+   Rocket::Core::SetRenderInterface(&m_rocketRenderInterface);
+   Rocket::Core::RegisterPlugin(&m_rocketContextRegistry);
    Rocket::Core::Initialise();
    Rocket::Controls::Initialise();
 
@@ -186,13 +186,13 @@ void GraphicsUtil::initRocket()
 
 Rocket::Core::Context* GraphicsUtil::createRocketContext(const std::string& name)
 {
-   return Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(width, height));
+   return Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(m_width, m_height));
 }
 
 void GraphicsUtil::flipScreen()
 {
    glFlush();
-   SDL_GL_SwapWindow(window);
+   SDL_GL_SwapWindow(m_window);
 }
 
 bool GraphicsUtil::isVideoModeRefreshRequired() const
@@ -201,10 +201,10 @@ bool GraphicsUtil::isVideoModeRefreshRequired() const
    const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();
    
    return
-      currentSettings.isFullScreenEnabled() != fullScreenEnabled ||
-      currentSettingsResolution.getWidth() != width ||
-      currentSettingsResolution.getHeight() != height ||
-      currentSettingsResolution.getBitsPerPixel() != bitsPerPixel;
+      currentSettings.isFullScreenEnabled() != m_fullScreenEnabled ||
+      currentSettingsResolution.getWidth() != m_width ||
+      currentSettingsResolution.getHeight() != m_height ||
+      currentSettingsResolution.getBitsPerPixel() != m_bitsPerPixel;
 }
 
 bool GraphicsUtil::refreshVideoMode(std::string*& errorMsg)
@@ -212,18 +212,18 @@ bool GraphicsUtil::refreshVideoMode(std::string*& errorMsg)
    const Settings& currentSettings = Settings::getCurrentSettings();
    const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();
 
-   fullScreenEnabled = currentSettings.isFullScreenEnabled();
-   width = currentSettingsResolution.getWidth();
-   height = currentSettingsResolution.getHeight();
-   bitsPerPixel = currentSettingsResolution.getBitsPerPixel();
+   m_fullScreenEnabled = currentSettings.isFullScreenEnabled();
+   m_width = currentSettingsResolution.getWidth();
+   m_height = currentSettingsResolution.getHeight();
+   m_bitsPerPixel = currentSettingsResolution.getBitsPerPixel();
 
    bool success = initSDLVideoMode(errorMsg);
    if(success)
    {
-      const std::vector<Rocket::Core::Context*>& activeContexts = rocketContextRegistry.getActiveContexts();
+      const std::vector<Rocket::Core::Context*>& activeContexts = m_rocketContextRegistry.getActiveContexts();
       for(std::vector<Rocket::Core::Context*>::const_iterator iter = activeContexts.begin(); iter != activeContexts.end(); ++iter)
       {
-         (*iter)->SetDimensions(Rocket::Core::Vector2i(width, height));
+         (*iter)->SetDimensions(Rocket::Core::Vector2i(m_width, m_height));
       }
    }
    
@@ -232,17 +232,17 @@ bool GraphicsUtil::refreshVideoMode(std::string*& errorMsg)
 
 const OpenGLExtensions& GraphicsUtil::getExtensions() const
 {
-   return openGLExtensions;
+   return m_openGLExtensions;
 }
 
 int GraphicsUtil::getWidth() const
 {
-   return width;
+   return m_width;
 }
 
 int GraphicsUtil::getHeight() const
 {
-   return height;
+   return m_height;
 }
 
 void GraphicsUtil::clearBuffer()
@@ -254,16 +254,16 @@ void GraphicsUtil::clearBuffer()
 
 void GraphicsUtil::setAbsoluteOffset(int xOffset, int yOffset)
 {
-   glTranslated(xOffset - currentXOffset, yOffset - currentYOffset, 0);
-   currentXOffset = xOffset;
-   currentYOffset = yOffset;
+   glTranslated(xOffset - m_currentXOffset, yOffset - m_currentYOffset, 0);
+   m_currentXOffset = xOffset;
+   m_currentYOffset = yOffset;
 }
 
 void GraphicsUtil::resetAbsoluteOffset()
 {
-   glTranslated(-currentXOffset, -currentYOffset, 0);
-   currentXOffset = 0;
-   currentYOffset = 0;
+   glTranslated(-m_currentXOffset, -m_currentYOffset, 0);
+   m_currentXOffset = 0;
+   m_currentYOffset = 0;
 }
 
 void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
@@ -283,9 +283,9 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
       glBegin(GL_QUADS);
          glColor4f(red, green, blue, alpha);
          glVertex3f( 0.0f,         0.0f,          0.0f);
-         glVertex3f( (float)width, 0.0f,          0.0f);
-         glVertex3f( (float)width, (float)height, 0.0f);
-         glVertex3f( 0.0f,         (float)height, 0.0f);
+         glVertex3f( (float)m_width, 0.0f,          0.0f);
+         glVertex3f( (float)m_width, (float)m_height, 0.0f);
+         glVertex3f( 0.0f,         (float)m_height, 0.0f);
       glEnd();
 
       GraphicsUtil::getInstance()->flipScreen();
@@ -312,14 +312,14 @@ void GraphicsUtil::finish()
    // Destroy SDL audio and video stuff
    Mix_CloseAudio();
 
-   if(openGLContext != NULL)
+   if(m_openGLContext != NULL)
    {
-      SDL_GL_DeleteContext(GraphicsUtil::openGLContext);
+      SDL_GL_DeleteContext(m_openGLContext);
    }
 
-   if(window != NULL)
+   if(m_window != NULL)
    {
-      SDL_DestroyWindow(GraphicsUtil::window);
+      SDL_DestroyWindow(m_window);
    }
 
    SDL_Quit();

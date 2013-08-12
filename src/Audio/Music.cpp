@@ -19,17 +19,17 @@ Music::Music(ResourceKey name) :
 
 Music::~Music()
 {
-   if(music != NULL)
+   if(m_music != NULL)
    {
-      Mix_FreeMusic(music);
+      Mix_FreeMusic(m_music);
    }
 }
 
 void Music::load(const std::string& path)
 {
-   music = Mix_LoadMUS(path.c_str());
+   m_music = Mix_LoadMUS(path.c_str());
 
-   if(music == NULL)
+   if(m_music == NULL)
    {
       T_T(Mix_GetError());
    }
@@ -42,12 +42,12 @@ void Music::setPlayingMusic(Music* music)
 
 bool Music::isPlaying()
 {
-   return currentMusic != NULL && Mix_PlayingMusic();
+   return Music::currentMusic != NULL && Mix_PlayingMusic();
 }
 
 bool Music::isPlaying(Music* music)
 {
-   return (music == currentMusic) && Mix_PlayingMusic();
+   return (music == Music::currentMusic) && Mix_PlayingMusic();
 }
 
 void Music::fadeOutMusic(int time)
@@ -63,7 +63,7 @@ void Music::fadeOutMusic(int time)
          Mix_HaltMusic();
       }
 
-      currentMusic = NULL;
+      Music::currentMusic = NULL;
    }
 }
 
@@ -74,12 +74,12 @@ void Music::stopMusic()
 
 void Music::play()
 {
-   if(!Settings::getCurrentSettings().isMusicEnabled() || music == NULL) return;
+   if(!Settings::getCurrentSettings().isMusicEnabled() || m_music == NULL) return;
 
    if(!isPlaying(this))
    {
       setPlayingMusic(this);
-      if(Mix_PlayMusic(music, 0) < 0)
+      if(Mix_PlayMusic(m_music, 0) < 0)
       {
          DEBUG("There was a problem playing the music: %s", Mix_GetError());
       }

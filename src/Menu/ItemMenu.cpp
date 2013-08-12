@@ -21,55 +21,53 @@ const int debugFlag = DEBUG_MENU;
 
 ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData) :
    MenuState(gameContext, playerData, "ItemMenu"),
-   bindings(this),
-   playerData(playerData),
-   itemViewModel(gameContext, playerData)
+   m_bindings(this),
+   m_itemViewModel(gameContext, playerData)
 {
    initialize();
 }
 
 ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
    MenuState(gameContext, "ItemMenu", menuShell),
-   bindings(this),
-   playerData(playerData),
-   itemViewModel(gameContext, playerData)
+   m_bindings(this),
+   m_itemViewModel(gameContext, playerData)
 {
    initialize();
 }
 
 void ItemMenu::initialize()
 {
-   paneDocument = menuShell->getRocketContext()->LoadDocument("data/gui/itempane.rml");
-   if(paneDocument != NULL)
+   m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/itempane.rml");
+   if(m_paneDocument != NULL)
    {
-      bindings.bindAction(paneDocument, "itemGrid", "click", &ItemMenu::itemClicked);
-      bindings.bindAction(paneDocument, "itemGrid", "dragstart", &ItemMenu::dragStarted);
+      m_bindings.bindAction(m_paneDocument, "itemGrid", "click", &ItemMenu::itemClicked);
+      m_bindings.bindAction(m_paneDocument, "itemGrid", "dragstart", &ItemMenu::dragStarted);
    }
 }
 
 ItemMenu::~ItemMenu()
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Close();
-      paneDocument->RemoveReference();
+      m_paneDocument->Close();
+      m_paneDocument->RemoveReference();
    }
 }
 
 void ItemMenu::activate()
 {
    MenuState::activate();
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Show();
+      m_paneDocument->Show();
    }
 }
 
 void ItemMenu::deactivate()
 {
-   if(paneDocument != NULL)
+   if(m_paneDocument != NULL)
    {
-      paneDocument->Hide();
+      m_paneDocument->Hide();
    }
 }
 
@@ -93,7 +91,7 @@ void ItemMenu::dragStarted(Rocket::Core::Event* event)
          if(rowElement != NULL)
          {
             int itemIndex = rowElement->GetParentRelativeIndex();
-            UsableId itemId = itemViewModel.getItemId(itemIndex);
+            UsableId itemId = m_itemViewModel.getItemId(itemIndex);
             dragElement->SetAttribute("itemId", static_cast<int>(itemId));
             DEBUG("Dragging item %d.", itemId);
          }
@@ -118,7 +116,7 @@ void ItemMenu::itemClicked(Rocket::Core::Event* event)
       if(rowElement != NULL)
       {
          int itemIndex = rowElement->GetParentRelativeIndex();
-         itemViewModel.useItem(itemIndex);
+         m_itemViewModel.useItem(itemIndex);
       }
    }
 }

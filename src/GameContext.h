@@ -17,15 +17,15 @@ class PlayerData;
 
 class GameContext
 {
-   ExecutionStack executionStack;
-   ScriptEngine scriptEngine;
-   Metadata metadata;
+   ExecutionStack m_executionStack;
+   ScriptEngine m_scriptEngine;
+   Metadata m_metadata;
   
    /**
     *  \todo Load or set PlayerData in GameContext and, where appropriate,
     *  pass the context around instead of the PlayerData.
     */
-   PlayerData* playerData;
+   PlayerData* m_playerData;
 
    public:
       GameContext();
@@ -39,7 +39,7 @@ class GameContext
       Item* getItem(UsableId itemId) const;
       Skill* getSkill(UsableId skillId) const;
 
-      void setCurrentPlayerData(PlayerData* data);
+      void setCurrentPlayerData(PlayerData* playerData);
 };
 
 #endif

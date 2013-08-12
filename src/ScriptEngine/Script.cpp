@@ -19,8 +19,8 @@ extern "C"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
 Script::Script(const std::string& name) :
-   scriptName(name),
-   running(false)
+   m_scriptName(name),
+   m_running(false)
 {
 }
 
@@ -30,35 +30,35 @@ Script::~Script()
 
 bool Script::runScript(int numArgs)
 {
-   if(!luaStack)
+   if(!m_luaStack)
    {
       T_T("Attempting to run an uninitialized script!");
    }
 
-   running = true;
+   m_running = true;
 
-   DEBUG("Resuming script with name %s, coroutine ID %d...", scriptName.c_str(), coroutineId);
-   DEBUG("Lua Coroutine Address: 0x%x", luaStack);
+   DEBUG("Resuming script with name %s, coroutine ID %d...", m_scriptName.c_str(), m_coroutineId);
+   DEBUG("Lua Coroutine Address: 0x%x", m_luaStack);
 
-   int returnCode = lua_resume(luaStack, numArgs);
+   int returnCode = lua_resume(m_luaStack, numArgs);
    switch(returnCode)
    {
       case 0:
       {
-         DEBUG("Script %d finished.", coroutineId);
-         running = false;
+         DEBUG("Script %d finished.", m_coroutineId);
+         m_running = false;
          return true;
       }
       case LUA_YIELD:
       {
-         DEBUG("Script %d yielded.", coroutineId);
+         DEBUG("Script %d yielded.", m_coroutineId);
          return false;
       }
       default:
       {
          // An error occurred: Print out the error message
-         DEBUG("Error running script: %s", lua_tostring(luaStack, -1));
-         running = false;
+         DEBUG("Error running script: %s", lua_tostring(m_luaStack, -1));
+         m_running = false;
          T_T("An error occured running this script.");
          return true;
       }
@@ -73,5 +73,5 @@ bool Script::resume(long /*timePassed*/)
 
 int Script::yield()
 {
-   return lua_yield(luaStack, 0);
+   return lua_yield(m_luaStack, 0);
 }

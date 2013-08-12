@@ -28,7 +28,7 @@ namespace Rocket
 class RocketContextRegistry : public Rocket::Core::Plugin
 {
    /** The list of currently active Rocket contexts. */
-   std::vector<Rocket::Core::Context*> activeRocketContexts;
+   std::vector<Rocket::Core::Context*> m_activeRocketContexts;
 
    public:
       /**

@@ -20,16 +20,16 @@
 class Animation
 {
    /** The name of this animation. */
-   const std::string& name;
+   const std::string& m_name;
    
    /** The sequence of frames in this animation. */
-   const FrameSequence& frameSequence;
+   const FrameSequence& m_frameSequence;
    
    /** The current frame that we are at in the list. */
-   FrameSequence::const_iterator curr;
+   FrameSequence::const_iterator m_curr;
    
    /** The time left until the Animation needs to move to the next frame. */
-   long timeToNextAnimation;
+   long m_timeToNextAnimation;
    
 public:
    /**

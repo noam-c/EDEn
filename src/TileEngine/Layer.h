@@ -20,19 +20,19 @@ class TiXmlElement;
 class Layer
 {
    /** The name of the tileset in use by this layer */
-   std::string tilesetName;
+   std::string m_tilesetName;
 
    /** Tileset in use by this map */
-   Tileset* tileset;
+   Tileset* m_tileset;
 
    /** The tiles of the map (as numbers referring to points in the Tileset) */
-   int** tileMap;
+   int** m_tileMap;
 
    /** The bounds (in tiles) of the map containing this layer. */
-   const shapes::Rectangle& bounds;
+   const shapes::Rectangle& m_bounds;
 
    /** The height offset (in tiles) of this layer. */
-   int heightOffset;
+   int m_heightOffset;
 
    public:
       /**

@@ -47,34 +47,34 @@ class Scheduler
    typedef std::queue<Task*> TaskQueue;
 
    /** The list of currently blocked coroutines in this scheduler */
-   BlockList blockedCoroutines;
+   BlockList m_blockedCoroutines;
 
    /** The list of currently joining/waiting coroutines in this scheduler */
-   JoinList joiningCoroutines;
+   JoinList m_joiningCoroutines;
 
    /** The list of newly readied coroutines to be added to the ready list in the next frame. */
-   CoroutineList unstartedCoroutines;
+   CoroutineList m_unstartedCoroutines;
 
    /** The list of ready coroutines to be resumed during the next frame. */
-   CoroutineList readyCoroutines;
+   CoroutineList m_readyCoroutines;
 
    /** A list of coroutines to remove from the ready list after a frame. */
-   CoroutineQueue finishedCoroutines;
+   CoroutineQueue m_finishedCoroutines;
 
    /** A list of the active tasks created and managed by this Scheduler. */
-   TaskMap activeTasks;
+   TaskMap m_activeTasks;
 
    /** A list of coroutines to delete after a frame. */
-   CoroutineQueue coroutinesToDelete;
+   CoroutineQueue m_coroutinesToDelete;
 
    /** A list of tasks to delete after a frame. */
-   TaskQueue tasksToDelete;
+   TaskQueue m_tasksToDelete;
 
    /** The currently running coroutine */
-   Coroutine* runningCoroutine;
+   Coroutine* m_runningCoroutine;
 
    /** The next available unique task identifier. */
-   TaskId nextId;
+   TaskId m_nextId;
 
    /**
     * Signal that a Coroutine has run to completion so that waiting Coroutines

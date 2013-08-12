@@ -20,8 +20,8 @@
 class Actor::Order
 {
    protected:
-      Actor& actor;
-      Order(Actor& actor) : actor(actor) {}
+      Actor& m_actor;
+      Order(Actor& actor) : m_actor(actor) {}
    
    public:
       virtual bool perform(long timePassed) = 0;
@@ -37,7 +37,7 @@ class Actor::Order
  */
 class Actor::StandOrder : public Actor::Order
 {
-   MovementDirection direction;
+   MovementDirection m_direction;
 
    public:
       StandOrder(Actor& actor, MovementDirection direction);
@@ -56,31 +56,31 @@ class Actor::MoveOrder : public Actor::Order
     * Tracks if the move order has calculated a path from
     * the Actor's current location to the destination.
     */
-   bool pathInitialized;
+   bool m_pathInitialized;
 
    /**
     * Tracks if the Actor has begun movement
     * towards the next node in its path.
     */
-   bool movementBegun;
+   bool m_movementBegun;
 
    /** The destination that the Actor will move to. */
-   const shapes::Point2D dst;
+   const shapes::Point2D m_dst;
 
    /** The last node that the Actor successfully moved to. */
-   shapes::Point2D lastWaypoint;
+   shapes::Point2D m_lastWaypoint;
 
    /** The next node that the Actor will move to. */
-   shapes::Point2D nextWaypoint;
+   shapes::Point2D m_nextWaypoint;
 
    /** The grid that the Actor is moving along. */
-   EntityGrid& entityGrid;
+   EntityGrid& m_entityGrid;
 
    /** The path that the Actor will use to get to the destination. */
-   EntityGrid::Path path;
+   EntityGrid::Path m_path;
 
    /** Total distance for the character to move. */
-   float cumulativeDistanceCovered;
+   float m_cumulativeDistanceCovered;
 
    /**
     * Update the direction that the Actor is facing, as well as the sprite used.

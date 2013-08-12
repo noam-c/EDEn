@@ -20,56 +20,56 @@ const std::string Actor::DEFAULT_STANDING_PREFIX = "stand";
 const int debugFlag = DEBUG_ACTOR;
 
 Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction) :
-   name(name),
-   pixelLoc(location),
-   size(size),
-   movementSpeed(movementSpeed),
-   currDirection(direction),
-   sprite(NULL),
-   entityGrid(entityGrid),
-   messagePipe(messagePipe)
+   m_name(name),
+   m_pixelLoc(location),
+   m_size(size),
+   m_movementSpeed(movementSpeed),
+   m_currDirection(direction),
+   m_sprite(NULL),
+   m_entityGrid(entityGrid),
+   m_messagePipe(messagePipe)
 {
 }
 
 Actor::~Actor()
 {
    flushOrders();
-   delete sprite;
+   delete m_sprite;
 }
 
 void Actor::flushOrders()
 {
-   while(!orders.empty())
+   while(!m_orders.empty())
    {
-      Order* order = orders.front();
-      orders.pop();
+      Order* order = m_orders.front();
+      m_orders.pop();
       delete order;
    }
 }
 
 const std::string& Actor::getName() const
 {
-   return name;
+   return m_name;
 }
 
 const shapes::Size& Actor::getSize() const
 {
-   return size;
+   return m_size;
 }
 
 void Actor::step(long timePassed)
 {
-   if(sprite)
+   if(m_sprite)
    {
-      sprite->step(timePassed);
+      m_sprite->step(timePassed);
    }
 
    if(!isIdle())
    {
-      Order* currentOrder = orders.front();
+      Order* currentOrder = m_orders.front();
       if(currentOrder->perform(timePassed))
       {
-         orders.pop();
+         m_orders.pop();
          delete currentOrder;
       }
    }
@@ -77,28 +77,28 @@ void Actor::step(long timePassed)
 
 void Actor::draw()
 {
-   if(sprite)
+   if(m_sprite)
    {
-      sprite->draw(shapes::Point2D(pixelLoc.x, pixelLoc.y + TileEngine::TILE_SIZE));
+      m_sprite->draw(shapes::Point2D(m_pixelLoc.x, m_pixelLoc.y + TileEngine::TILE_SIZE));
    }
    
-   if(!orders.empty())
+   if(!m_orders.empty())
    {
-      orders.front()->draw();
+      m_orders.front()->draw();
    }
 }
 
 bool Actor::isIdle() const
 {
-   return orders.empty();
+   return m_orders.empty();
 }
 
 void Actor::move(const shapes::Point2D& dst)
 {
-   if(entityGrid.withinMap(dst))
+   if(m_entityGrid.withinMap(dst))
    {
-      DEBUG("Sending move order to %s: %d,%d", name.c_str(), dst.x, dst.y);
-      orders.push(new MoveOrder(*this, dst, entityGrid));
+      DEBUG("Sending move order to %s: %d,%d", m_name.c_str(), dst.x, dst.y);
+      m_orders.push(new MoveOrder(*this, dst, m_entityGrid));
    }
    else
    {
@@ -108,7 +108,7 @@ void Actor::move(const shapes::Point2D& dst)
 
 void Actor::stand(MovementDirection direction)
 {
-   orders.push(new StandOrder(*this, direction));
+   m_orders.push(new StandOrder(*this, direction));
 }
 
 void Actor::faceActor(Actor* other)
@@ -149,68 +149,68 @@ void Actor::faceActor(Actor* other)
 void Actor::setSpritesheet(const std::string& sheetName)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
-   if(sprite == NULL)
+   if(m_sprite == NULL)
    {
-      sprite = new Sprite(sheet);
+      m_sprite = new Sprite(sheet);
    }
    else
    {
-      sprite->setSheet(sheet);
+      m_sprite->setSheet(sheet);
    }
 
-   sprite->setFrame(Actor::DEFAULT_STANDING_PREFIX, currDirection);
+   m_sprite->setFrame(Actor::DEFAULT_STANDING_PREFIX, m_currDirection);
 }
 
 void Actor::setFrame(const std::string& frameName)
 {
-   if(sprite == NULL)
+   if(m_sprite == NULL)
    {
-      DEBUG("Failed to set sprite frame because actor %s doesn't have a sprite.", name.c_str());
+      DEBUG("Failed to set sprite frame because actor %s doesn't have a sprite.", m_name.c_str());
       return;
    }
 
-   sprite->setFrame(frameName, currDirection);
+   m_sprite->setFrame(frameName, m_currDirection);
 }
 
 void Actor::setAnimation(const std::string& animationName)
 {
-   if(sprite == NULL)
+   if(m_sprite == NULL)
    {
-      DEBUG("Failed to set sprite animation because actor %s doesn't have a sprite.", name.c_str());
+      DEBUG("Failed to set sprite animation because actor %s doesn't have a sprite.", m_name.c_str());
       return;
    }
 
-   sprite->setAnimation(animationName, currDirection);
+   m_sprite->setAnimation(animationName, m_currDirection);
 }
 
 void Actor::setLocation(const shapes::Point2D& location)
 {
-   const shapes::Point2D oldLocation = pixelLoc;
-   pixelLoc = location;
-   messagePipe.sendMessage(ActorMoveMessage(oldLocation, location, this));
+   const shapes::Point2D oldLocation = m_pixelLoc;
+   m_pixelLoc = location;
+   m_messagePipe.sendMessage(ActorMoveMessage(oldLocation, location, this));
 }
 
 const shapes::Point2D& Actor::getLocation() const
 {
-   return pixelLoc;
+   return m_pixelLoc;
 }
 
 void Actor::setDirection(MovementDirection direction)
 {
-   currDirection = direction;
+   m_currDirection = direction;
 }
 
 MovementDirection Actor::getDirection() const
 {
-   return currDirection;
+   return m_currDirection;
 }
 
 void Actor::setMovementSpeed(float speed)
 {
-   movementSpeed = speed;
+   m_movementSpeed = speed;
 }
 
 float Actor::getMovementSpeed() const
 {
-   return movementSpeed;
+   return m_movementSpeed;
 }

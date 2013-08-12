@@ -45,7 +45,7 @@ class UsableScript : public Script
    static const char* FUNCTION_NAMES[];
 
    /** The usable that runs this script. */
-   const Usable& usable;
+   const Usable& m_usable;
 
    /**
     * A mapping to determine whether or not each function exists and
@@ -54,7 +54,7 @@ class UsableScript : public Script
     * (e.g. functionExists[MENU_USE] returns true iff the Usable script had a menu usage
     * function declared)
     */
-   std::vector<bool> functionExists;
+   std::vector<bool> m_functionExists;
 
    /**
     * Call a function on this usable's script.

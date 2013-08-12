@@ -54,23 +54,23 @@ class GameState
       const static int MAX_FRAME_TIME;
 
       /** Timestamp of the last logic step of the state. */
-      unsigned long time;
+      unsigned long m_time;
 
       /** The type of the current game state. */
-      GameStateType stateType;
+      GameStateType m_stateType;
 
    protected:
       /** The game context responsible for the state's data and execution. */
-      GameContext& gameContext;
+      GameContext& m_gameContext;
    
       /** The Rocket context for any GUI created by the state. */
-      Rocket::Core::Context* rocketContext;
+      Rocket::Core::Context* m_rocketContext;
 
       /** True iff the Rocket context was created internally (and thus should also be destroyed internally) */
-      bool internalContext;
+      bool m_internalContext;
 
       /** Set true to signal the state logic to terminate so that the state is destroyed. */
-      bool finished;
+      bool m_finished;
 
       /**
        * Constructor.
