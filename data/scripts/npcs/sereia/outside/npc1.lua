@@ -5,14 +5,14 @@ end
 
 function activate(me)
    me:lookAt{playerSprite}
-   if not quests:get{path='chapter1/carryAConvo'}:isStarted() then
+   if not quests:isStarted{path='chapter1/carryAConvo'} then
       say{'Oh, hello!'}
       say{'Can you do me a favour? Can you talk to the other guy for me?', waitForFinish=true}
-      local carryAConvoQuest = quests:get{'chapter1'}:add{id='carryAConvo', description='Carry a conversation between two NPCs'}
-      carryAConvoQuest:add{id='talkToNPC', description='Talk to the second NPC'}
-   elseif quests:get{'chapter1/carryAConvo'}:isComplete() then
+      local carryAConvoQuest = quests:get{'chapter1'}:add{name='carryAConvo', description='Carry a conversation between two NPCs'}
+      carryAConvoQuest:add{name='talkToNPC', description='Talk to the second NPC'}
+   elseif quests:isComplete{'chapter1/carryAConvo'} then
       say{'Thank you again!', waitForFinish=true}
-   elseif quests:get{'chapter1/carryAConvo/talkToNPC'}:isComplete() then
+   elseif quests:isComplete{'chapter1/carryAConvo/talkToNPC'} then
       say{'Thank you so much! Have a reward!', waitForFinish=true}
       inventory:addItem{id=1, quantity=1}
       quests:get{'chapter1/carryAConvo'}:complete()

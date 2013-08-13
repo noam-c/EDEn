@@ -132,9 +132,21 @@ class Quest
       Quest* getQuest(const std::string& questPath) const;
    
       /**
+       * @param questPath A "/"-delimited path from the quest to the requested subquest.
+       * @return true iff the quest at the path specified by questPath has been started.
+       */
+      bool isStarted(const std::string& questPath) const;
+      
+      /**
        * @return true iff the quest has been completed.
        */
       bool isCompleted() const;
+   
+      /**
+       * @param questPath A "/"-delimited path from the quest to the requested subquest.
+       * @return true iff the quest at the path specified by questPath has been completed.
+       */
+      bool isCompleted(const std::string& questPath) const;
    
       /**
        * Completes the quest.

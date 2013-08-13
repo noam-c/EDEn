@@ -132,6 +132,17 @@ bool Quest::isCompleted() const
    return m_completed;
 }
 
+bool Quest::isStarted(const std::string& questPath) const
+{
+   return getQuest(questPath)!= NULL;
+}
+
+bool Quest::isCompleted(const std::string& questPath) const
+{
+   Quest* subquest = getQuest(questPath);
+   return subquest != NULL && subquest->isCompleted();
+}
+
 std::string Quest::getName() const
 {
    return m_name;
