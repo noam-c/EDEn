@@ -4,17 +4,17 @@ body
    font-size: 16pt;
    position: relative;
    height: 100%;
-   width: 100%;
+   padding: 5px;
+   margin: 5px;
    z-index: 2;
 }
 
 .dialogueText
 {
-   position: absolute;
    color: #FFFFFF;
 }
 
-.dialogueText.narration
+body.narration
 {
    text-align: center;
    top: 50%;
@@ -22,13 +22,36 @@ body
    height: 16pt;
 }
 
-.dialogueText.speech
+body.speech
 {
    background-color: #0033AB;
    border-color: #000000AA;
    border-width: 3px;
-   padding: 5px;
-   margin: 5px;
    height: 64pt;
    bottom: 0;
 }
+
+.readyNote
+{
+   visibility: hidden;
+}
+
+.dialogueComplete .readyNote
+{
+   visibility: visible;
+}
+
+.dialogueComplete.speech .readyNote
+{
+   display: block;
+   position: absolute;
+   text-align: right;
+   bottom: 0;
+   margin: 5px;
+}
+
+.dialogueComplete.narration .readyNote
+{
+   margin-left: 10px;
+}
+

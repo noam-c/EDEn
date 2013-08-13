@@ -40,18 +40,18 @@ DialogueController::DialogueController(Rocket::Core::Context& context, Scheduler
 
 DialogueController::~DialogueController()
 {
-   if(m_mainDialogue != NULL)
+   if(m_dialogueBoxDocument != NULL)
    {
-      m_mainDialogue->GetOwnerDocument()->Close();
+      m_dialogueBoxDocument->Close();
    }
 }
 
 void DialogueController::initMainDialogue()
 {
-   Rocket::Core::ElementDocument* dialogueBoxDocument = m_context.LoadDocument("data/gui/dialogueBox.rml");
-   if(dialogueBoxDocument != NULL)
+   m_dialogueBoxDocument = m_context.LoadDocument("data/gui/dialogueBox.rml");
+   if(m_dialogueBoxDocument != NULL)
    {
-      m_mainDialogue = dialogueBoxDocument->GetElementById("textArea");
+      m_mainDialogue = m_dialogueBoxDocument->GetElementById("textArea");
    }
 }
 
@@ -84,8 +84,8 @@ void DialogueController::setDialogue(LineType type)
    m_mainDialogue->GetOwnerDocument()->Show();
 
    bool isSpeech = type == SAY;
-   m_mainDialogue->SetClass("speech", isSpeech);
-   m_mainDialogue->SetClass("narration", !isSpeech);
+   m_dialogueBoxDocument->SetClass("speech", isSpeech);
+   m_dialogueBoxDocument->SetClass("narration", !isSpeech);
 }
 
 void DialogueController::setFastModeEnabled(bool enabled)
@@ -116,13 +116,14 @@ void DialogueController::advanceDialogue()
 
    std::string dialogue = m_currLine->dialogue;
 
-   // If we have run to the end of the dialogue, we show all the text
-   // and signal that the associated task is done.
-   if(dialogue.size() <= m_charsToShow)
+   // If we have run to the end of the dialogue, we show all the text.
+   if(m_charsToShow >= dialogue.size())
    {
       m_charsToShow = dialogue.size();
    }
 
+   m_dialogueBoxDocument->SetClass("dialogueComplete", dialogueComplete());
+   
    // Display the necessary piece of text in the text box
    dialogue = dialogue.substr(0, m_charsToShow);
    m_mainDialogue->SetInnerRML(dialogue.c_str());
@@ -145,6 +146,8 @@ void DialogueController::clearDialogue()
 
    if(m_currLine)
    {
+      // Signal that the associated task is done before
+      // clearing out the completed line.
       m_currLine->task->signal();
       delete m_currLine;
       m_currLine = NULL;

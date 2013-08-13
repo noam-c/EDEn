@@ -4,6 +4,7 @@
       <link type="text/rcss" href="dialogueBox.rcss" />
    </head>
    <body>
-      <div id="textArea" class="dialogueText"></div>
+      <span id="textArea" class="dialogueText"></span>
+      <span class="readyNote">&gt;</span>
    </body>
 </rml>

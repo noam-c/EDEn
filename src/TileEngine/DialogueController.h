@@ -21,6 +21,7 @@ namespace Rocket
    {
       class Context;
       class Element;
+      class ElementDocument;
    };
 };
 
@@ -136,6 +137,9 @@ class DialogueController
    /** The Rocket context that will manage the dialogue boxes */
    Rocket::Core::Context& m_context;
 
+   /** The RML document holding the main dialogue box */
+   Rocket::Core::ElementDocument* m_dialogueBoxDocument;
+   
    /** Main dialogue box for speech or narration */
    DialogueBox* m_mainDialogue;
 
