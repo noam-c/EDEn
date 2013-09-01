@@ -12,7 +12,7 @@
 
 class TriggerZone
 {
-   const std::string m_name;
+   std::string m_name;
    shapes::Rectangle m_bounds;
 
    public:

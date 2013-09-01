@@ -22,6 +22,8 @@
 #include "Map.h"
 #include "MapExit.h"
 #include "MapExitMessage.h"
+#include "MapTriggerMessage.h"
+#include "TriggerZone.h"
 #include "Pathfinder.h"
 #include "Rectangle.h"
 #include "DialogueController.h"
@@ -30,6 +32,7 @@
 #include "CameraSlider.h"
 #include "RandomTransitionGenerator.h"
 #include "HomeMenu.h"
+#include "MapTriggerCallback.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TILE_ENG;
@@ -45,7 +48,8 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
 {
    m_scheduler = new Scheduler();
 
-   m_messagePipe.registerListener(this);
+   m_messagePipe.registerListener<MapExitMessage>(this);
+   m_messagePipe.registerListener<MapTriggerMessage>(this);
 
    loadPlayerData(playerDataPath);
    m_playerActor = new PlayerCharacter(m_messagePipe, m_entityGrid, m_playerData);
@@ -59,8 +63,10 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
 
 TileEngine::~TileEngine()
 {
+   clearMapListeners();
    clearNPCs();
-   m_messagePipe.unregisterListener(this);
+   m_messagePipe.unregisterListener<MapTriggerMessage>(this);
+   m_messagePipe.unregisterListener<MapExitMessage>(this);
    delete m_dialogue;
    delete m_playerActor;
    delete m_scheduler;
@@ -78,6 +84,18 @@ void TileEngine::loadPlayerData(const std::string& path)
 void TileEngine::startChapter(const std::string& chapterName)
 {
    m_gameContext.getScriptEngine().runChapterScript(chapterName, *m_scheduler);
+}
+
+void TileEngine::clearMapListeners()
+{
+   std::vector<std::pair<std::string, MapTriggerCallback*> >::iterator iter;
+
+   for(iter = m_triggerScripts.begin(); iter != m_triggerScripts.end(); ++iter)
+   {
+      delete iter->second;
+   }
+   
+   m_triggerScripts.clear();
 }
 
 void TileEngine::clearNPCs()
@@ -117,6 +135,22 @@ void TileEngine::receive(const MapExitMessage& message)
    }
 }
 
+void TileEngine::receive(const MapTriggerMessage& message)
+{
+   for(std::vector<std::pair<std::string, MapTriggerCallback*> >::iterator iter = m_triggerScripts.begin(); iter != m_triggerScripts.end(); ++iter)
+   {
+      if(iter->first == message.triggerZone.getName())
+      {
+         Actor* triggeringActor =
+            message.triggeringActor == m_playerActor ?
+            static_cast<Actor*>(m_playerActor) :
+            getNPC(message.triggeringActor->getName());
+         
+         iter->second->callback(triggeringActor);
+      }
+   }
+}
+
 void TileEngine::dialogueNarrate(const std::string& narration, Task* task)
 {
    m_dialogue->narrate(narration, task);
@@ -138,6 +172,7 @@ int TileEngine::setRegion(const std::string& regionName, const std::string& mapN
 
 int TileEngine::setMap(std::string mapName)
 {
+   clearMapListeners();
    clearNPCs();
    m_playerActor->removeFromMap();
 
@@ -248,6 +283,11 @@ NPC* TileEngine::getNPC(const std::string& npcName) const
    }
 
    return NULL;
+}
+
+void TileEngine::addTriggerListener(const std::string& triggerName, MapTriggerCallback* callback)
+{
+   m_triggerScripts.push_back(std::pair<std::string, MapTriggerCallback*>(triggerName, callback));
 }
 
 PlayerCharacter* TileEngine::getPlayerCharacter() const

@@ -129,7 +129,7 @@ class ScriptEngine
        * @param scheduler The scheduler that will manage the new script coroutine.
        */
       int runChapterScript(const std::string& chapterName, Scheduler& scheduler);
-
+      
       /**
        * Run a string of script with the specified name.
        *
@@ -137,6 +137,13 @@ class ScriptEngine
        * @param scheduler The scheduler that will manage the new script coroutine.
        */
       int runScriptString(const std::string& scriptString, Scheduler& scheduler);
+      
+      /**
+       * Call a script function object.
+       *
+       * @param scriptFunction The raw script function to run.
+       */
+      int runScriptFunction(void* scriptFunction);
 
       /**
        * Set the tile engine to send commands to.

@@ -7,3 +7,10 @@ map:addNPC{'npc3', spritesheet='npc1', x=map:tilesToPixels{0}, y=map:tilesToPixe
 --map:addNPC{'npc7', spritesheet='npc1', x=map:tilesToPixels{9}, y=map:tilesToPixels{0}}
 --map:addNPC{'npc8', spritesheet='npc1', x=map:tilesToPixels{9}, y=map:tilesToPixels{4}}
 --map:addNPC{'npc9', spritesheet='npc1', x=map:tilesToPixels{9}, y=map:tilesToPixels{9}}
+
+niceGarden = 'Nice garden.'
+function gardenEntered()
+   say{niceGarden}
+end
+
+map:addTriggerListener{name='garden', handler=gardenEntered}

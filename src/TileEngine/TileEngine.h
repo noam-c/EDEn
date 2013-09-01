@@ -28,6 +28,8 @@ class Region;
 class DialogueController;
 class Task;
 
+struct MapTriggerCallback;
+
 /**
  * GameState that coordinates all the gameplay involving walking around fields
  * (towns or dungeons).
@@ -37,12 +39,14 @@ class Task;
  *
  * @author Noam Chitayat
  */
-class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
+class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, public messaging::Listener<MapTriggerMessage>
 {
    /** The current region that the player is in. */
    Region* m_currRegion;
    
    messaging::MessagePipe m_messagePipe;
+   
+   std::vector<std::pair<std::string, MapTriggerCallback*> > m_triggerScripts;
 
    /** The debug console window to be used for diagnostics. */
    DebugConsoleWindow m_consoleWindow;
@@ -110,6 +114,11 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
     * Handles activation of NPCs when the player presses the action key.
     */
    void action();
+   
+   /**
+    * Clears all the listeners bound to the map.
+    */
+   void clearMapListeners();
    
    /**
     * Clears all the NPCs on the map.
@@ -184,7 +193,14 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        * @param message The map exit message.
        */
       void receive(const MapExitMessage& message);
-
+      
+      /**
+       * Handler for map trigger entry.
+       *
+       * @param message The map trigger message.
+       */
+      void receive(const MapTriggerMessage& message);
+      
       /**
        * Send a line of dialogue to the DialogueController as a narration.
        *
@@ -270,6 +286,15 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>
        */
       NPC* getNPC(const std::string& npcName) const;
 
+      /**
+       * Adds a listener for a specific trigger zone on the Map, which will
+       * execute the specified callback.
+       *
+       * @param triggerName The name of the trigger to listen for.
+       * @param callback The script callback to execute when an Actor sets off the specified trigger.
+       */
+      void addTriggerListener(const std::string& triggerName, MapTriggerCallback* callback);
+   
       /**
        * @return The player character in the tile engine.
        */

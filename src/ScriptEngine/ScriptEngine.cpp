@@ -404,12 +404,20 @@ int ScriptEngine::runScriptString(const std::string& scriptString, Scheduler& sc
    DEBUG("Running script string: %s", scriptString.c_str());
    StringScript* newScript = new StringScript(m_luaVM, scriptString);
    scheduler.start(newScript);
-
+   
    if(scheduler.hasRunningCoroutine())
    {
       return scheduler.join(newScript);
    }
+   
+   return 0;
+}
 
+int ScriptEngine::runScriptFunction(void* scriptFunction)
+{
+   lua_pushlightuserdata(m_luaVM, scriptFunction);
+   lua_pcall(m_luaVM, 0, 0, 0);
+   
    return 0;
 }
 

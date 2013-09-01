@@ -10,6 +10,7 @@
 #include "NPC.h"
 #include "Size.h"
 #include "Point2D.h"
+#include "MapTriggerCallback.h"
 
 #include "DebugUtils.h"
 
@@ -24,60 +25,83 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
    {
       return lua_error(luaVM);
    }
-
+   
    std::string npcName;
    if(!ScriptUtilities::getParameter(luaVM, 2, 1, "name", npcName))
    {
       return lua_error(luaVM);
    }
-
+   
    std::string spritesheetName;
    if(!ScriptUtilities::getParameter(luaVM, 2, 2, "spritesheet", spritesheetName))
    {
       return lua_error(luaVM);
    }
-
+   
    int x;
    if(!ScriptUtilities::getParameter(luaVM, 2, 3, "x", x))
    {
       return lua_error(luaVM);
    }
-
+   
    int y;
    if(!ScriptUtilities::getParameter(luaVM, 2, 4, "y", y))
    {
       return lua_error(luaVM);
    }
-
+   
    int width;
    if(!ScriptUtilities::getParameter(luaVM, 2, -1, "width", width))
    {
       width = 32;
    }
-
+   
    int height;
    if(!ScriptUtilities::getParameter(luaVM, 2, -1, "height", height))
    {
       height = 32;
    }
-
+   
    int directionValue;
    if(!ScriptUtilities::getParameter(luaVM, 2, -1, "direction", directionValue))
    {
       directionValue = static_cast<int>(DOWN);
    }
-
+   
    DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
    DEBUG("NPC Location will be (%d, %d)", x, y);
-
+   
    const shapes::Point2D npcLocation(x, y);
    const shapes::Size npcSize(width, height);
    const MovementDirection direction = static_cast<MovementDirection>(directionValue);
-
+   
    npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize, direction);
    
    luaW_push<Actor>(luaVM, npc);
    return 1;
+}
+
+static int TileEngineL_AddTriggerListener(lua_State* luaVM)
+{
+   TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
+   if (tileEngine == NULL)
+   {
+      return lua_error(luaVM);
+   }
+   
+   std::string triggerName;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "name", triggerName))
+   {
+      return lua_error(luaVM);
+   }
+   
+   lua_pushstring(luaVM, "handler");
+   lua_rawget(luaVM, 2);
+   MapTriggerCallback* callback = new MapTriggerCallback(luaVM);
+   
+   tileEngine->addTriggerListener(triggerName, callback);
+   
+   return 0;
 }
 
 static int TileEngineL_GetNPC(lua_State* luaVM)
@@ -201,6 +225,7 @@ static int TileEngineL_TilesToPixels(lua_State* luaVM)
 static luaL_reg tileEngineMetatable[] =
 {
    { "addNPC", TileEngineL_AddNPC },
+   { "addTriggerListener", TileEngineL_AddTriggerListener },
    { "getNPC", TileEngineL_GetNPC },
    { "lockCameraToTarget", TileEngineL_FollowWithCamera },
    { "unlockCamera", TileEngineL_ReleaseCamera },

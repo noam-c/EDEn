@@ -82,7 +82,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="entrances" width="30" height="20" visible="0">
+ <objectgroup name="entrances" width="30" height="20">
   <object x="384" y="608" width="32" height="32">
    <properties>
     <property name="entrance" value="outside2"/>
@@ -200,4 +200,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup name="triggers" width="30" height="20">
+  <object x="480" y="256" width="160" height="160">
+   <properties>
+    <property name="trigger" value="garden"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

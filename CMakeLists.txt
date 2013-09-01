@@ -77,14 +77,15 @@ set(HEADERS
   src/rocket/RocketScriptHandler.h
   src/rocket/RocketScriptHandlerFactory.h
   src/ScriptEngine/FileScript.h
+  src/ScriptEngine/MapTriggerCallback.h
   src/ScriptEngine/NPCScript.h
-  src/ScriptEngine/UsableScript.h
   src/ScriptEngine/Script.h
   src/ScriptEngine/ScriptEngine.h
   src/ScriptEngine/ScriptException.h
   src/ScriptEngine/ScriptFactory.h
   src/ScriptEngine/ScriptUtilities.h
   src/ScriptEngine/StringScript.h
+  src/ScriptEngine/UsableScript.h
   src/Shapes/Size.h
   src/Shapes/Point2D.h
   src/Shapes/Rectangle.h
@@ -185,14 +186,15 @@ set(SOURCES
   src/Shapes/Point2D.cpp
   src/Shapes/Rectangle.cpp
   src/ScriptEngine/FileScript.cpp
+  src/ScriptEngine/MapTriggerCallback.cpp
   src/ScriptEngine/NPCScript.cpp
-  src/ScriptEngine/UsableScript.cpp
   src/ScriptEngine/Script.cpp
   src/ScriptEngine/ScriptEngine.cpp
   src/ScriptEngine/ScriptFactory.cpp
   src/ScriptEngine/ScriptFunctions.cpp
   src/ScriptEngine/ScriptUtilities.cpp
   src/ScriptEngine/StringScript.cpp
+  src/ScriptEngine/UsableScript.cpp
   src/Settings/Settings.cpp
   src/Settings/SettingsResolution.cpp
   src/Sprites/Animation.cpp

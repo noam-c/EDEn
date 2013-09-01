@@ -81,6 +81,7 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
    bool hasCollisionLayer = false;
    bool hasEntrancesLayer = false;
    bool hasExitsLayer = false;
+   bool hasTriggersLayer = false;
 
    const TiXmlElement* objectGroupElement = root->FirstChildElement("objectgroup");
    while(objectGroupElement != NULL)
@@ -101,6 +102,12 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
          parseMapExitsGroup(objectGroupElement);
          hasExitsLayer = true;
       }
+      else if(objectGroupName == "triggers" && !hasTriggersLayer)
+      {
+         parseMapTriggersGroup(objectGroupElement);
+         hasTriggersLayer = true;
+      }
+      
       
       objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
    }
@@ -215,7 +222,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
       shapes::Point2D topLeft;
       int width;
       int height;
-
+      
       const TiXmlElement* objectElement = exitsGroupElement->FirstChildElement("object");
       while(objectElement != NULL)
       {
@@ -224,7 +231,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
          objectElement->Attribute("width", &width);
          objectElement->Attribute("height", &height);
          std::string nextMap;
-
+         
          const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
          const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
          while(propertyElement != NULL)
@@ -234,19 +241,64 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
                nextMap = propertyElement->Attribute("value");
                break;
             }
-
+            
             propertyElement = propertyElement->NextSiblingElement("property");
          }
-
+         
          shapes::Rectangle rect(topLeft, shapes::Size(width, height));
          DEBUG("Found exit %s at %d,%d with width %d and height %d.",
                nextMap.c_str(), topLeft.x, topLeft.y, rect.getWidth(), rect.getHeight());
-
+         
          if(rect.getWidth() > 0 && rect.getHeight() > 0 && !nextMap.empty())
          {
             m_mapExits.push_back(MapExit(nextMap, rect));
          }
+         
+         objectElement = objectElement->NextSiblingElement("object");
+      }
+   }
+}
 
+void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
+{
+   DEBUG("Loading exit layer.");
+   if(triggersGroupElement != NULL)
+   {
+      shapes::Point2D topLeft;
+      int width;
+      int height;
+      
+      const TiXmlElement* objectElement = triggersGroupElement->FirstChildElement("object");
+      while(objectElement != NULL)
+      {
+         objectElement->Attribute("x", &topLeft.x);
+         objectElement->Attribute("y", &topLeft.y);
+         objectElement->Attribute("width", &width);
+         objectElement->Attribute("height", &height);
+         std::string name;
+         
+         const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
+         const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
+         while(propertyElement != NULL)
+         {
+            if(std::string(propertyElement->Attribute("name")) == "trigger")
+            {
+               name = propertyElement->Attribute("value");
+               break;
+            }
+            
+            propertyElement = propertyElement->NextSiblingElement("property");
+         }
+         
+         shapes::Rectangle rect(topLeft, shapes::Size(width, height));
+         DEBUG("Found trigger %s at %d,%d with width %d and height %d.",
+               name.c_str(), topLeft.x, topLeft.y, rect.getWidth(), rect.getHeight());
+         
+         if(rect.getWidth() > 0 && rect.getHeight() > 0)
+         {
+            m_triggerZones.push_back(TriggerZone(name, rect));
+         }
+         
          objectElement = objectElement->NextSiblingElement("object");
       }
    }

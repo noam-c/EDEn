@@ -74,11 +74,16 @@ class Map
     * Parse the map layer that holds map entrance data.
     */
    void parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement);
-
+   
    /**
     * Parse the map layer that holds map exit data.
     */
    void parseMapExitsGroup(const TiXmlElement* exitsGroupElement);
+   
+   /**
+    * Parse the map layer that holds map trigger zone data.
+    */
+   void parseMapTriggersGroup(const TiXmlElement* triggersGroupElement);
 
    /**
     * Creates a 2-dimensional map that corresponds to the passibility of this Map
