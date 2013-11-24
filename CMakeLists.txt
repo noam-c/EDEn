@@ -308,6 +308,10 @@ add_definitions(
 
 add_executable( eden ${SOURCES} ${HEADERS} )
 
+add_custom_command(TARGET eden POST_BUILD
+     DEPENDS "${CMAKE_SOURCE_DIR}/data"
+     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/data" "$<TARGET_FILE_DIR:eden>/data")
+
 IF(WIN32)
   target_link_libraries(
     eden
@@ -323,7 +327,7 @@ IF(WIN32)
     opengl32
     glu32
   )
-ELSE(WIN32)
+ELSE()
 	INCLUDE(FindOpenGL)
 	INCLUDE(FindSDL2)
 	INCLUDE(FindSDL2_image)
@@ -347,5 +351,5 @@ ELSE(WIN32)
 	include_directories(BEFORE SYSTEM ${INCL_HEADERS})
 
 	target_link_libraries( eden ${LIBROCKET_LIBRARY} ${LIBROCKET_CONTROLS_LIBRARY} ${LIBROCKET_DEBUGGER_LIBRARY} ${LUA_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARIES} ${SDL2_LIBRARY} ${OPENGL_LIBRARIES} )
-ENDIF(WIN32)
+ENDIF()
 
