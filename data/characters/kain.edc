@@ -1,9 +1,9 @@
 {
-	"name" : "Kain",
-	"Portrait" : 
-	{
-		"path" : "data/characters/kain.jpg"
-	},
+   "name" : "Kain",
+   "Portrait" : 
+   {
+      "path" : "data/characters/kain.jpg"
+   },
    "Spritesheet" : "kain",
    "Stats" :
    {
