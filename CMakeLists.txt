@@ -51,6 +51,7 @@ set(HEADERS
   src/Messaging/MessagePipe.h
   src/Messaging/Listener.h
   src/MovementDirection.h
+  src/PlayerData/Aspect.h
   src/PlayerData/Character.h
   src/PlayerData/LuaCharacter.h
   src/PlayerData/CharacterRoster.h
@@ -160,6 +161,7 @@ set(SOURCES
   src/Menu/SkillViewModel.cpp
   src/Menu/ShortcutBar.cpp
   src/Messaging/MessagePipe.cpp
+  src/PlayerData/Aspect.cpp
   src/PlayerData/Character.cpp
   src/PlayerData/CharacterRoster.cpp
   src/PlayerData/LuaCharacter.cpp

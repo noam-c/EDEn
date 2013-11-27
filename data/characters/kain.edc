@@ -5,12 +5,32 @@
       "path" : "data/characters/kain.jpg"
    },
    "Spritesheet" : "kain",
-   "Stats" :
+   "Aspects" : [
+      {
+         "name": "Mystic",
+         "stats": {
+            "int" : 4,
+            "str" : 0.5,
+            "maxSP" : 15,
+            "maxHP" : 5
+         }
+      },
+      {
+         "name": "Hunter",
+         "stats": {
+            "int" : 1,
+            "str" : 5,
+            "maxSP" : 5,
+            "maxHP" : 10
+         }
+      }
+   ],
+   "baseStats" :
    {
+      "str" : 7,
       "int" : 6,
       "maxHP" : 200,
-      "maxSP" : 30,
-      "str" : 7
+      "maxSP" : 30
    },
    "Equipment" :
    {

@@ -5,12 +5,33 @@
       "path" : "data/characters/akrom.jpg"
    },
    "Spritesheet" : "npc1",
-   "Stats" : 
+   "Aspects" : [
+      {
+         "name": "Alchemist",
+         "stats":
+         {
+            "int" : 1,
+            "str" : 0.05,
+            "maxSP" : 15,
+            "maxHP" : 5
+         }
+      },
+      {
+         "name": "Gunner",
+         "stats": {
+            "int" : 1,
+            "str" : 5,
+            "maxSP" : 5,
+            "maxHP" : 10
+         }
+      }
+   ],
+   "baseStats" :
    {
       "int" : 6,
-      "maxHP" : 200,
+      "str" : 7,
       "maxSP" : 30,
-      "str" : 7
+      "maxHP" : 200
    },
    "Equipment" :
    {

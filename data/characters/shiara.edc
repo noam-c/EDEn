@@ -4,8 +4,21 @@
    {
       "path" : "data/characters/shiara.png"
    },
+   "Aspects" :
+   [
+      {
+         "Name" : "Mystic",
+         "stats" : 
+         {
+             "int" : 2,
+             "maxHP" : 1,
+             "maxSP" : 5,
+             "str" : 0
+         } 
+      } 
+   ],
    "Spritesheet" : "npc1",
-   "Stats" :
+   "baseStats" :
    {
       "int" : 6,
       "maxHP" : 200,

@@ -5,14 +5,13 @@
 		[
 			{
 		      "id" : "akrom",
+		      "name" : "Akrom",
+		      "aspect" : 0,
+		      "level" : 1,
 				"Stats" : 
 				{
 	            "hp" : 150,
-	            "int" : 6,
-	            "maxHP" : 200,
-	            "maxSP" : 30,
-	            "sp" : 0,
-	            "str" : 7
+	            "sp" : 0
 				},
 				"Equipment" :
 				{
@@ -33,14 +32,13 @@
 
 			{
 			   "id" : "kain",
+			   "name" : "Kain",
+			   "aspect": 0,
+			   "level" : 1,
 				"Stats" : 
 				{
 	            "hp" : 100,
-	            "int" : 8,
-	            "maxHP" : 150,
-	            "maxSP" : 60,
-	            "sp" : 50,
-	            "str" : 5
+	            "sp" : 50
 				},
 				"Equipment" :
             {

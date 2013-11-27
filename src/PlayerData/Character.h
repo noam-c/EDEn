@@ -8,6 +8,7 @@
 #define CHARACTER_H
 
 #include <string>
+#include <map>
 #include "EquipData.h"
 #include "SkillList.h"
 
@@ -15,6 +16,9 @@ namespace Json
 {
    class Value;
 };
+
+class Aspect;
+class CharacterArchetype;
 
 /**
  * A model holding the data for a character that can be used by the player.
@@ -28,19 +32,23 @@ class Character
    static const char* ARCHETYPE_ATTRIBUTE;
    static const char* NAME_ATTRIBUTE;
 
+   static const char* BASE_STATS_ELEMENT;
    static const char* STATS_ELEMENT;
    static const char* SKILLS_ELEMENT;
-
+   static const char* EQUIPMENT_ELEMENT;
+   static const char* ASPECTS_ELEMENT;
+   
    static const char* SPRITESHEET_ATTRIBUTE;
    static const char* PORTRAIT_ELEMENT;
    static const char* PORTRAIT_PATH_ATTRIBUTE;
 
+   static const char* LEVEL_ATTRIBUTE;
+   static const char* ASPECT_ATTRIBUTE;
+
    static const char* MAX_HP_ATTRIBUTE;
-   static const char* HP_ATTRIBUTE;
    static const char* MAX_SP_ATTRIBUTE;
+   static const char* HP_ATTRIBUTE;
    static const char* SP_ATTRIBUTE;
-   static const char* STR_ATTRIBUTE;
-   static const char* INT_ATTRIBUTE;
 
    /** The character's ID for data lookups. */
    std::string m_id;
@@ -50,26 +58,29 @@ class Character
 
    /** The archetype that was loaded for this character (empty if the default archetype was used). */
    std::string m_archetype;
-
+   
+   /** The currently available Aspects for this character. */
+   std::vector<Aspect> m_archetypeAspects;
+   
+   /** The currently chosen Aspect for this character. */
+   unsigned int m_selectedAspect;
+   
    /** The path to the character portrait (used in dialogue and menus). */
    std::string m_portraitPath;
 
    /** The ID of the spritesheet resource used for this character. */
    std::string m_spritesheetId;
 
-   // Character status attributes
-   int m_strength;
-   int m_intelligence;
-   int m_vitality;
-   int m_reflex;
-   int m_focus;
-   int m_endurance;
-   int m_agility;
+   /** Character status attributes */
+   std::map<std::string, int> m_baseStats;
+   
+   /** Current level of the character. */
+   unsigned int m_level;
 
-   // Health and stamina of the character.
-   int m_maxHP;
-   int m_maxSP;
+   /** Current health of the character. */
    int m_hp;
+
+   /** Current stamina of the character. */
    int m_sp;
   
    /** The equipment worn by this Character. */
@@ -96,11 +107,25 @@ class Character
    void parsePortraitData(Json::Value& portraitDataContainer);
    
    /**
-    * Parse the stats from the given node.
+    * Parse the aspect data from the aspect array.
+    *
+    * @param aspectsDataContainer The JSON node containing the list of aspects to load.
+    */
+   void parseAspects(Json::Value& aspectsDataContainer);
+   
+   /**
+    * Parse the base stats from the given node.
+    *
+    * @param baseStatsDataContainer The JSON node containing the base stats to load.
+    */
+   void parseBaseStats(Json::Value& baseStatsDataContainer);
+   
+   /**
+    * Parse the current stats from the given node.
     *
     * @param statsDataContainer The JSON node containing the stats to load.
     */
-   void parseStats(Json::Value& statsDataContainer);
+   void parseCurrentStats(Json::Value& statsDataContainer);
 
    /**
     * Parse the skill list from the given node.
@@ -115,8 +140,9 @@ class Character
        * Initializes the entire character using the base archetype data.
        *
        * @param id The id of the new character.
+       * @param level The starting level of the new character.
        */
-      Character(const Metadata& metadata, const std::string& id);
+      Character(const Metadata& metadata, const std::string& id, int level = 1);
 
       /**
        * Constructor used to load an existing character.
@@ -159,21 +185,19 @@ class Character
        */
       std::string getPortraitPath() const;
 
-      // Getters for the health and stamina.
+      /**
+       * @param The name of the requested status attribute.
+       *
+       * @return The current value for the requested status attribute.
+       */
+      int getStatAttribute(const std::string& attributeName) const;
+
+      // Getters for health and stamina.
       int getMaxHP() const;
       int getMaxSP() const;
       int getHP() const;
       int getSP() const;
 
-      // Getters for the character attributes.
-      int getStrength() const;
-      int getIntelligence() const;
-      int getVitality() const;
-      int getReflex() const;
-      int getFocus() const;
-      int getEndurance() const;
-      int getAgility() const;
-      
       /**
        * @return The character's equipment information.
        */

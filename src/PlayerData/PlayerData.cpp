@@ -221,7 +221,8 @@ void PlayerData::save(const std::string& path)
       T_T("Failed to open save game file for writing.");
    }
 
-   output << playerDataNode;
+   Json::StyledStreamWriter writer("   ");
+   writer.write(output, playerDataNode);
    
    m_filePath = path;
 }
