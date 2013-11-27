@@ -14,7 +14,7 @@
 class Map;
 
 /**
- * A Region is a large spatial area that the player can walk around within.
+ * A Region is a large spatial area within which the player can freely move.
  * Technically speaking, it's a set of Map instances that are tied together
  * as a cohesive unit that is loaded all at once to allow seamless transitioning
  * between locations in the same area, such as different houses in a town,
@@ -34,9 +34,9 @@ class Region : public Resource
    std::map<std::string, Map*> m_areas;
 
    /**
-    * Loads this region from the specified EDR file.
+    * Loads this region from the specified directory.
     *
-    * @param path The path to the file containing the region and its maps.
+    * @param path The path to the directory containing the region's maps.
     */
    virtual void load(const std::string& path);
 
