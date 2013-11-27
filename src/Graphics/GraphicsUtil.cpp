@@ -191,7 +191,6 @@ Rocket::Core::Context* GraphicsUtil::createRocketContext(const std::string& name
 
 void GraphicsUtil::flipScreen()
 {
-   glFlush();
    SDL_GL_SwapWindow(m_window);
 }
 
