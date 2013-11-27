@@ -42,12 +42,12 @@
                   "types" : [ 8, 11 ]
                }
             },
-            "Skills" : [ 1, 2 ],
-            "Stats" : 
+            "Portrait" : 
             {
-               "hp" : 100,
-               "sp" : 50
+               "path" : "data/characters/kain.jpg"
             },
+            "Skills" : [ 1, 2 ],
+            "Spritesheet" : "kain",
             "baseStats" : 
             {
                "int" : 6,
@@ -55,9 +55,11 @@
                "maxSP" : 30,
                "str" : 7
             },
+            "hp" : 0,
             "id" : "kain",
             "level" : 1,
-            "name" : "Kain"
+            "name" : "Kain",
+            "sp" : 0
          },
          
          {
@@ -97,12 +99,12 @@
                   "types" : [ 8, 11 ]
                }
             },
-            "Skills" : [],
-            "Stats" : 
+            "Portrait" : 
             {
-               "hp" : 150,
-               "sp" : 0
+               "path" : "data/characters/akrom.jpg"
             },
+            "Skills" : [],
+            "Spritesheet" : "npc1",
             "baseStats" : 
             {
                "int" : 6,
@@ -110,9 +112,11 @@
                "maxSP" : 30,
                "str" : 7
             },
+            "hp" : 0,
             "id" : "akrom",
             "level" : 1,
-            "name" : "Akrom"
+            "name" : "Akrom",
+            "sp" : 0
          },
          
          {
@@ -152,12 +156,12 @@
                   "types" : [ 8, 11 ]
                }
             },
-            "Skills" : [],
-            "Stats" : 
+            "Portrait" : 
             {
-               "hp" : 100,
-               "sp" : 100
+               "path" : "data/characters/shiara.png"
             },
+            "Skills" : [],
+            "Spritesheet" : "npc1",
             "baseStats" : 
             {
                "int" : 12,
@@ -165,9 +169,11 @@
                "maxSP" : 100,
                "str" : 2
             },
+            "hp" : 0,
             "id" : "shiara",
             "level" : 1,
-            "name" : "Shiara"
+            "name" : "Shiara",
+            "sp" : 0
          }
       ]
    },

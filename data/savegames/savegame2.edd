@@ -1,103 +1,167 @@
-{
-	"Characters" : 
-	{
-		"Party" : 
-		[
-			{
-		      "id" : "akrom",
-		      "name" : "Akrom",
-		      "aspect" : 0,
-		      "level" : 1,
-				"Stats" : 
-				{
-	            "hp" : 150,
-	            "sp" : 0
-				},
-				"Equipment" :
-				{
-					"Head":{"types":[0],"equipped":300},
-					"Body":{"types":[1],"equipped":401},
-					"Wpn1":{"types":[8,11],"equipped":503},
-					"Off1":{"types":[],"enabled":false},
-					"Wpn2":{"types":[8,11],"equipped":503},
-					"Off2":{"types":[],"enabled":false},
-					"Accessories":
-					[
-						{"types":[4],"equipped":902},
-						{"types":[4],"equipped":902}
-					],
-					"Feet":{"types":[2]}
-				}
-			},
 
-			{
-			   "id" : "kain",
-			   "name" : "Kain",
-			   "aspect": 0,
-			   "level" : 1,
-				"Stats" : 
-				{
-	            "hp" : 100,
-	            "sp" : 50
-				},
-				"Equipment" :
+{
+   "Characters" : 
+   {
+      "Party" : 
+      [
+         
+         {
+            "Equipment" : 
             {
-               "Head":{"types":[0],"equipped":300},
-               "Body":{"types":[1],"equipped":401},
- 					"Wpn1":{"types":[8,11],"equipped":503},
-					"Off1":{"types":[],"enabled":false},
-					"Wpn2":{"types":[8,11],"equipped":503},
-					"Off2":{"types":[],"enabled":false},
-               "Accessories":
-               [
-                  {"types":[4],"equipped":902},
-                  {"types":[4],"equipped":902}
-               ],
-					"Feet":{"types":[2]}
+               "Body" : 
+               {
+                  "equipped" : 401,
+                  "types" : [ 1 ]
+               },
+               "Feet" : 
+               {
+                  "types" : [ 2 ]
+               },
+               "Garment" : null,
+               "Head" : 
+               {
+                  "equipped" : 300,
+                  "types" : [ 0 ]
+               },
+               "Off1" : 
+               {
+                  "enabled" : false
+               },
+               "Off2" : 
+               {
+                  "enabled" : false
+               },
+               "Wpn1" : 
+               {
+                  "equipped" : 503,
+                  "types" : [ 8, 11 ]
+               },
+               "Wpn2" : 
+               {
+                  "equipped" : 503,
+                  "types" : [ 8, 11 ]
+               }
             },
-            "Skills" :
+            "Portrait" : 
+            {
+               "path" : "data/characters/akrom.jpg"
+            },
+            "Skills" : [],
+            "Spritesheet" : "npc1",
+            "baseStats" : {},
+            "hp" : 0,
+            "id" : "akrom",
+            "level" : 1,
+            "name" : "Akrom",
+            "sp" : 0
+         },
+         
+         {
+            "Equipment" : 
+            {
+               "Body" : 
+               {
+                  "equipped" : 401,
+                  "types" : [ 1 ]
+               },
+               "Feet" : 
+               {
+                  "types" : [ 2 ]
+               },
+               "Garment" : null,
+               "Head" : 
+               {
+                  "equipped" : 300,
+                  "types" : [ 0 ]
+               },
+               "Off1" : 
+               {
+                  "enabled" : false
+               },
+               "Off2" : 
+               {
+                  "enabled" : false
+               },
+               "Wpn1" : 
+               {
+                  "equipped" : 503,
+                  "types" : [ 8, 11 ]
+               },
+               "Wpn2" : 
+               {
+                  "equipped" : 503,
+                  "types" : [ 8, 11 ]
+               }
+            },
+            "Portrait" : 
+            {
+               "path" : "data/characters/kain.jpg"
+            },
+            "Skills" : [ 1, 2 ],
+            "Spritesheet" : "kain",
+            "baseStats" : {},
+            "hp" : 0,
+            "id" : "kain",
+            "level" : 1,
+            "name" : "Kain",
+            "sp" : 0
+         }
+      ]
+   },
+   "Inventory" : 
+   [
+      
+      {
+         "itemNum" : 1,
+         "quantity" : 5
+      },
+      
+      {
+         "itemNum" : 2,
+         "quantity" : 10
+      }
+   ],
+   "Quest" : 
+   {
+      "Quest" : 
+      [
+         
+         {
+            "Description" : "The old man said he wanted five tiger pelts...",
+            "Quest" : 
             [
-               1,2
-            ]
-			}
-		]
-	},
-	"Inventory" : 
-	[
-		
-		{
-			"itemNum" : 1,
-			"quantity" : 5
-		},
-		
-		{
-			"itemNum" : 2,
-			"quantity" : 10
-		}
-	],
-   "Shortcuts" :
-   [{
-      "id" : 2,
-      "type" : 1
-   }],
-	"Quest" : 
-	{
-		"Quest" : 
-		[{
-			"Description" : "The old man said he wanted five tiger pelts...",
-			"Quest" : 
-			[{
-				"Quest" : [],
-				"completed" : false,
-				"name" : "Kill five tigers",
-				"optional" : false
-			}],
-			"completed" : false,
-			"name" : "Five Tigers",
-			"optional" : false
-		}],
-		"completed" : false,
-		"name" : "root",
-		"optional" : false
-	}
+               
+               {
+                  "Quest" : [],
+                  "completed" : false,
+                  "name" : "Kill five tigers",
+                  "optional" : false
+               }
+            ],
+            "completed" : false,
+            "name" : "Five Tigers",
+            "optional" : false
+         }
+      ],
+      "completed" : false,
+      "name" : "root",
+      "optional" : false
+   },
+   "Shortcuts" : 
+   [
+      
+      {
+         "id" : 2,
+         "type" : 1
+      },
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+   ]
 }

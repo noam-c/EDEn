@@ -69,15 +69,6 @@ Character::Character(const Metadata& metadata, const std::string& id, int level)
    m_spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
    parseAspects(archetypeData);
-
-   const Json::Value& aspectsData = archetypeData[Character::ASPECTS_ELEMENT];
-   if(aspectsData.isArray())
-   {
-      for(int i = 0; i < aspectsData.size(); ++i)
-      {
-         m_archetypeAspects.push_back(aspectsData[i]);
-      }
-   }
    
    parseBaseStats(archetypeData);
    m_equipment.load(metadata, archetypeData[Character::EQUIPMENT_ELEMENT]);
@@ -101,10 +92,10 @@ Character::Character(const Metadata& metadata, Json::Value& charToLoad)
    }
 
    Json::Value archetypeData = Character::loadArchetype(archetypeId);
-   
-   m_spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
-   parsePortraitData(archetypeData);
    parseAspects(archetypeData);
+   
+   m_spritesheetId = charToLoad[Character::SPRITESHEET_ATTRIBUTE].asString();
+   parsePortraitData(charToLoad);
 
    parseBaseStats(charToLoad);
    m_equipment.load(metadata, charToLoad[Character::EQUIPMENT_ELEMENT]);
@@ -178,6 +169,12 @@ Json::Value Character::serialize() const
    characterNode[Character::ID_ATTRIBUTE] = m_id;
    characterNode[Character::LEVEL_ATTRIBUTE] = m_level;
    characterNode[Character::NAME_ATTRIBUTE] = m_name;
+
+   characterNode[Character::SPRITESHEET_ATTRIBUTE] = m_spritesheetId;
+
+   Json::Value portraitData(Json::objectValue);
+   portraitData[Character::PORTRAIT_PATH_ATTRIBUTE] = m_portraitPath;
+   characterNode[Character::PORTRAIT_ELEMENT] = portraitData;
 
    Json::Value baseStatsNode(Json::objectValue);
    for(std::map<std::string, int>::const_iterator iter = m_baseStats.begin(); iter != m_baseStats.end(); ++iter)
