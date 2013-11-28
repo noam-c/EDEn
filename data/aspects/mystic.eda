@@ -6,6 +6,10 @@
       "str" : 0.5,
       "maxSP" : 15,
       "maxHP" : 5
-   }
+   },
+   "skills": [
+      { "id": 3, "requires": [2] },
+      { "id": 2 }
+   ]
 }
 

@@ -14,6 +14,9 @@ namespace Json
 
 #include <map>
 #include <string>
+#include <vector>
+
+#include "UsableId.h"
 
 /**
  * An 'Aspect' represents a facet of a character
@@ -32,9 +35,11 @@ namespace Json
  */
 class Aspect
 {
-   static const char* ID_ELEMENT;
-   static const char* NAME_ELEMENT;
+   static const char* ID_ATTRIBUTE;
+   static const char* NAME_ATTRIBUTE;
    static const char* STATS_ELEMENT;
+   static const char* SKILLS_ELEMENT;
+   static const char* PREREQUISITES_ELEMENT;
 
    /**
     * A helper class to encapsulate the
@@ -74,6 +79,10 @@ class Aspect
    
    /** The displayed name of the aspect. */
    std::string m_name;
+   
+   typedef std::vector<UsableId> PrerequisiteList;
+   typedef std::vector<std::pair<UsableId, PrerequisiteList> > SkillTree;
+   SkillTree m_skillTree;
 
    /** The set of stat attribute bonuses granted by the Aspect. */
    std::map<std::string, StatBonusCalculation> m_statBonusCalculations;
@@ -84,6 +93,8 @@ class Aspect
     * @param aspectToLoad The JSON node representing the Aspect.
     */
    Aspect(const Json::Value& aspectToLoad);
+   
+   void validateSkillTree() const;
    
    public:
       /**

@@ -1,14 +1,19 @@
 #include "Aspect.h"
+#include <algorithm>
 #include <fstream>
 #include <cmath>
+#include <queue>
+#include <map>
 #include "json.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_PLAYER;
 
-const char* Aspect::ID_ELEMENT = "id";
-const char* Aspect::NAME_ELEMENT = "name";
+const char* Aspect::ID_ATTRIBUTE = "id";
+const char* Aspect::NAME_ATTRIBUTE = "name";
 const char* Aspect::STATS_ELEMENT = "stats";
+const char* Aspect::SKILLS_ELEMENT = "skills";
+const char* Aspect::PREREQUISITES_ELEMENT = "requires";
 
 Aspect::StatBonusCalculation::StatBonusCalculation(const Json::Value& statBonusNode) :
    m_coefficient(std::max<double>(statBonusNode.asDouble(), 1))
@@ -50,8 +55,8 @@ Aspect* Aspect::loadAspect(const std::string& aspectId)
 
 Aspect::Aspect(const Json::Value& aspectToLoad)
 {
-   m_id = aspectToLoad[Aspect::ID_ELEMENT].asString();
-   m_name = aspectToLoad[Aspect::NAME_ELEMENT].asString();
+   m_id = aspectToLoad[Aspect::ID_ATTRIBUTE].asString();
+   m_name = aspectToLoad[Aspect::NAME_ATTRIBUTE].asString();
    
    const Json::Value& statBonuses = aspectToLoad[Aspect::STATS_ELEMENT];
    for(Json::Value::const_iterator iter = statBonuses.begin(); iter != statBonuses.end(); ++iter)
@@ -59,10 +64,95 @@ Aspect::Aspect(const Json::Value& aspectToLoad)
       std::pair<std::string, StatBonusCalculation> statCalculation(iter.key().asString(), *iter);
       m_statBonusCalculations.insert(statCalculation);
    }
+
+   const Json::Value& skills = aspectToLoad[Aspect::SKILLS_ELEMENT];
+   if(skills.isArray())
+   {
+      for(Json::Value::const_iterator iter = skills.begin(); iter != skills.end(); ++iter)
+      {
+         UsableId skillId = (*iter)[Aspect::ID_ATTRIBUTE].asUInt();
+         const Json::Value& prereqsNode = (*iter)[Aspect::PREREQUISITES_ELEMENT];
+
+         PrerequisiteList prereqs;
+         
+         if(prereqsNode.isArray())
+         {
+            for(Json::Value::const_iterator iter = prereqsNode.begin(); iter != prereqsNode.end(); ++iter)
+            {
+               UsableId prereqId = (*iter).asUInt();
+               prereqs.push_back(prereqId);
+            }
+         }
+         
+         m_skillTree.push_back(std::pair<UsableId, PrerequisiteList>(skillId, prereqs));
+      }
+
+      validateSkillTree();
+   }
 }
 
 Aspect::~Aspect()
 {
+}
+
+void Aspect::validateSkillTree() const
+{
+   const int numSkills = m_skillTree.size();
+
+   std::map<UsableId, int> skillTreeMap;
+   
+   // Validate that there aren't any duplicates and build
+   // a map for the skills
+   // \todo Can this function be implemented efficiently without a map?
+   for(int i = 0; i < numSkills; ++i)
+   {
+      UsableId id = m_skillTree[i].first;
+      if(skillTreeMap.find(id) != skillTreeMap.end())
+      {
+         T_T("Skill tree for aspect has a duplicated skill");
+      }
+      
+      skillTreeMap[id] = i;
+   }
+   
+   // Validate that there aren't any prerequisite cycles
+   int currentColor = 0;
+   std::vector<int> traversedColor(numSkills, -1);
+
+   std::queue<int> bfsQueue;
+
+   for(int i = 0; i < numSkills; ++i)
+   {
+      if(traversedColor[i] >= 0) continue;
+
+      bfsQueue.push(i);
+      while(!bfsQueue.empty())
+      {
+         int currentNode = bfsQueue.front();
+         bfsQueue.pop();
+         
+         if(traversedColor[currentNode] >= 0)
+         {
+            if(traversedColor[currentNode] == currentColor)
+            {
+               T_T("Skill tree for aspect has a cycle");
+            }
+         }
+         else
+         {
+            traversedColor[currentNode] = currentColor;
+         }
+         
+         PrerequisiteList prereqs = m_skillTree[currentNode].second;
+         for(PrerequisiteList::const_iterator iter = prereqs.begin(); iter != prereqs.end(); ++iter)
+         {
+            std::map<UsableId, int>::const_iterator skillNode = skillTreeMap.find(*iter);
+            bfsQueue.push(skillNode->second);
+         }
+      }
+
+      ++currentColor;
+   }
 }
 
 std::string Aspect::getId() const

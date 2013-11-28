@@ -2,6 +2,7 @@
 	"data" : 
 	[
 		{"id" : 1, "name" : "Heal", "icon": "data/images/icons/S_Holy01.png"},
-		{"id" : 2, "name" : "Fireball",  "icon": "data/images/icons/S_Fire03.png"}
+		{"id" : 2, "name" : "Fireball",  "icon": "data/images/icons/S_Fire03.png"},
+		{"id" : 3, "name" : "Heal2",  "icon": "data/images/icons/S_Holy02.png"}
 	]
 }
