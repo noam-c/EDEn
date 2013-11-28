@@ -6,6 +6,7 @@
       [
          
          {
+            "Aspects" : [ "mystic", "hunter" ],
             "Equipment" : 
             {
                "Body" : 
@@ -63,6 +64,7 @@
          },
          
          {
+            "Aspects" : [ "alchemist", "gunner" ],
             "Equipment" : 
             {
                "Body" : 
@@ -120,6 +122,7 @@
          },
          
          {
+            "Aspects" : [ "mystic" ],
             "Equipment" : 
             {
                "Body" : 

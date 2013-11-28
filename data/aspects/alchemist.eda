@@ -1,0 +1,11 @@
+{
+   "id": "alchemist",
+   "name": "Alchemist",
+   "stats": {
+      "int" : 1,
+      "str" : 0.05,
+      "maxSP" : 15,
+      "maxHP" : 5
+   }
+}
+

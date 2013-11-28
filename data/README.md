@@ -1,10 +1,12 @@
 The data folder contains all the assets required to present a game in EDEn. It consists of the following subdirectories:
 
-* **characters** - Contains character schemas that may be applied to characters when they are initially created
+* **aspects** - Contains metadata for aspects that characters can use.
+
+* **characters** - Contains character schemas that may be applied to characters when they are initially created.
 
 * **fonts** - Contains TrueType fonts to be used in the game.
 
-* **gui** - Contains representations of the different UI elements used in the game, as well as the visual styles that can be applied to them
+* **gui** - Contains representations of the different UI elements used in the game, as well as the visual styles that can be applied to them.
 
 * **images** - Contains miscellaneous, static images used by various parts of the game.
 
@@ -12,7 +14,7 @@ The data folder contains all the assets required to present a game in EDEn. It c
 
 * **music** - Contains music played in the game.
 
-* **regions** - Contains map metadata that specifies layout and tilesets used by places that the player can visit in the game (cities, dungeons, etc.)
+* **regions** - Contains map metadata that specifies layout and tilesets used by places that the player can visit in the game (cities, dungeons, etc.).
 
 * **savegames** - Contains save files created by the player.
 
@@ -22,5 +24,5 @@ The data folder contains all the assets required to present a game in EDEn. It c
 
 * **sprites** - Contains spritesheet images and associated spritesheet metadata.
 
-* **tilesets** - Contains images and metadata that, together, represent tilesets that can be used to present maps
+* **tilesets** - Contains images and metadata that, together, represent tilesets that can be used to present maps.
 

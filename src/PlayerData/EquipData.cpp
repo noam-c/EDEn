@@ -16,7 +16,7 @@ EquipData::EquipData()
 {
 }
 
-void EquipData::load(const Metadata& metadata, Json::Value& equipment)
+void EquipData::load(const Metadata& metadata, const Json::Value& equipment)
 {
    if(equipment.isNull())
    {
@@ -32,7 +32,7 @@ void EquipData::load(const Metadata& metadata, Json::Value& equipment)
    m_garment.load(metadata, equipment["Garment"]);
    m_feet.load(metadata, equipment["Feet"]);
 
-   Json::Value& accessoriesNode = equipment["Accessories"];
+   const Json::Value& accessoriesNode = equipment["Accessories"];
    int numAccessories = accessoriesNode.size();
 
    m_accessories.resize(numAccessories);

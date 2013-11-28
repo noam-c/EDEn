@@ -1,0 +1,11 @@
+{  
+   "id": "hunter",
+   "name": "Hunter",
+   "stats": {
+      "int" : 1, 
+      "str" : 5, 
+      "maxSP" : 5, 
+      "maxHP" : 10 
+   }  
+}
+

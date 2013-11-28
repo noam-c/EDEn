@@ -15,20 +15,20 @@ EquipSlot::EquipSlot() :
 {
 }
 
-void EquipSlot::load(const Metadata& metadata, Json::Value& inputJson)
+void EquipSlot::load(const Metadata& metadata, const Json::Value& inputJson)
 {
    if(inputJson.isNull())
    {
       return;
    }
    
-   Json::Value& equippedIdNode = inputJson["equipped"];
+   const Json::Value& equippedIdNode = inputJson["equipped"];
    if(equippedIdNode.isInt())
    {
       equipped = metadata.getItem(equippedIdNode.asInt());
    }
    
-   Json::Value& acceptedTypesNode = inputJson["types"];
+   const Json::Value& acceptedTypesNode = inputJson["types"];
    int numAcceptedTypes = acceptedTypesNode.size();
    if(numAcceptedTypes > 0)
    {
@@ -39,7 +39,7 @@ void EquipSlot::load(const Metadata& metadata, Json::Value& inputJson)
       }
    }
    
-   Json::Value& enabledNode = inputJson["enabled"];
+   const Json::Value& enabledNode = inputJson["enabled"];
    if(enabledNode.isBool())
    {
       enabled = enabledNode.asBool();

@@ -54,7 +54,7 @@ struct EquipSlot
     *
     * @param inputJson The JSON node containing the slot information.
     */
-   void load(const Metadata& metadata, Json::Value& inputJson);
+   void load(const Metadata& metadata, const Json::Value& inputJson);
    
    /**
     * Serialize the slot information into a JSON node.

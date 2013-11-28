@@ -6,24 +6,8 @@
    },
    "Spritesheet" : "kain",
    "Aspects" : [
-      {
-         "name": "Mystic",
-         "stats": {
-            "int" : 4,
-            "str" : 0.5,
-            "maxSP" : 15,
-            "maxHP" : 5
-         }
-      },
-      {
-         "name": "Hunter",
-         "stats": {
-            "int" : 1,
-            "str" : 5,
-            "maxSP" : 5,
-            "maxHP" : 10
-         }
-      }
+      "mystic",
+      "hunter"
    ],
    "baseStats" :
    {

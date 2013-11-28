@@ -1,0 +1,11 @@
+{
+   "id" : "mystic",
+   "name": "Mystic",
+   "stats": {
+      "int" : 4,
+      "str" : 0.5,
+      "maxSP" : 15,
+      "maxHP" : 5
+   }
+}
+

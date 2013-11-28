@@ -60,7 +60,7 @@ class Character
    std::string m_archetype;
    
    /** The currently available Aspects for this character. */
-   std::vector<Aspect> m_archetypeAspects;
+   std::vector<Aspect*> m_archetypeAspects;
    
    /** The currently chosen Aspect for this character. */
    unsigned int m_selectedAspect;
@@ -100,39 +100,46 @@ class Character
    static Json::Value loadArchetype(const std::string& archetypeId);
 
    /**
+    * Parse archetype data from either a saved character or an archetype.
+    *
+    * @param archetypeData The archetype data to load.
+    */
+   void parseArchetypeData(const Metadata& metadata, const Json::Value& archetypeData);
+   
+   /**
     * Parse the portrait path from the character node.
     *
     * @param portraitDataContainer The JSON node containing the portrait data to load.
     */
-   void parsePortraitData(Json::Value& portraitDataContainer);
+   void parsePortraitData(const Json::Value& portraitDataContainer);
    
    /**
     * Parse the aspect data from the aspect array.
     *
     * @param aspectsDataContainer The JSON node containing the list of aspects to load.
     */
-   void parseAspects(Json::Value& aspectsDataContainer);
+   void parseAspects(const Json::Value& aspectsDataContainer);
    
    /**
     * Parse the base stats from the given node.
     *
     * @param baseStatsDataContainer The JSON node containing the base stats to load.
     */
-   void parseBaseStats(Json::Value& baseStatsDataContainer);
+   void parseBaseStats(const Json::Value& baseStatsDataContainer);
    
    /**
     * Parse the current stats from the given node.
     *
     * @param statsDataContainer The JSON node containing the stats to load.
     */
-   void parseCurrentStats(Json::Value& statsDataContainer);
+   void parseCurrentStats(const Json::Value& statsDataContainer);
 
    /**
     * Parse the skill list from the given node.
     *
     * @param skillsDataContainer The JSON node containing the stats to load.
     */
-   void parseSkills(Json::Value& skillsDataContainer);
+   void parseSkills(const Json::Value& skillsDataContainer);
 
    public:
       /**
@@ -149,7 +156,7 @@ class Character
        *
        * @param charToLoad The JSON node containing the character's data.
        */
-      Character(const Metadata& metadata, Json::Value& charToLoad);
+      Character(const Metadata& metadata, const Json::Value& charToLoad);
    
       /**
        * Destructor.

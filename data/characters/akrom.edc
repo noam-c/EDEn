@@ -6,25 +6,8 @@
    },
    "Spritesheet" : "npc1",
    "Aspects" : [
-      {
-         "name": "Alchemist",
-         "stats":
-         {
-            "int" : 1,
-            "str" : 0.05,
-            "maxSP" : 15,
-            "maxHP" : 5
-         }
-      },
-      {
-         "name": "Gunner",
-         "stats": {
-            "int" : 1,
-            "str" : 5,
-            "maxSP" : 5,
-            "maxHP" : 10
-         }
-      }
+      "alchemist",
+      "gunner"
    ],
    "baseStats" :
    {
