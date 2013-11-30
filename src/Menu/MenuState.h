@@ -23,7 +23,6 @@ namespace Rocket
 
 class MenuShell;
 class GameContext;
-class PlayerData;
 
 /**
  * The in-game menu goes through many different states based on choices that the player makes
@@ -94,7 +93,7 @@ class MenuState : public GameState
        * @param gameContext The context containing the current player data and execution stack.
        * @param stateName The unique name of the state.
        */
-      MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName);
+      MenuState(GameContext& gameContext, const std::string& stateName);
 
       /**
        * Constructor.

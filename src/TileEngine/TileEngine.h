@@ -54,9 +54,6 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
    /** The current map that the player is in. */
    EntityGrid m_entityGrid;
 
-   /** The player data */
-   PlayerData m_playerData;
-
    /** The window containing the player's shortcuts. */
    ShortcutBar m_shortcutBar;
 

@@ -43,8 +43,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    GameState(gameContext, GameState::FIELD, "TileEngine"),
    m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
-   m_playerData(gameContext),
-   m_shortcutBar(gameContext, m_playerData, *m_rocketContext)
+   m_shortcutBar(gameContext, *m_rocketContext)
 {
    m_scheduler = new Scheduler();
 
@@ -52,10 +51,9 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    m_messagePipe.registerListener<MapTriggerMessage>(this);
 
    loadPlayerData(playerDataPath);
-   m_playerActor = new PlayerCharacter(m_messagePipe, m_entityGrid, m_playerData);
+   m_playerActor = new PlayerCharacter(m_messagePipe, m_entityGrid, gameContext.getCurrentPlayerData());
    m_cameraTarget = m_playerActor;
    gameContext.getScriptEngine().setTileEngine(this);
-   gameContext.getScriptEngine().setPlayerData(&m_playerData);
    m_dialogue = new DialogueController(*m_rocketContext, *m_scheduler, gameContext.getScriptEngine());
 
    startChapter(chapterName);
@@ -76,7 +74,7 @@ void TileEngine::loadPlayerData(const std::string& path)
 {
    if(!path.empty())
    {
-      m_playerData.load(path);
+      m_gameContext.getCurrentPlayerData().load(path);
       m_shortcutBar.refresh();
    }
 }
@@ -300,7 +298,7 @@ void TileEngine::activate()
    GameState::activate();
    m_shortcutBar.refresh();
    recalculateMapOffsets();
-   m_playerData.bindMessagePipe(&m_messagePipe);
+   m_gameContext.getCurrentPlayerData().bindMessagePipe(&m_messagePipe);
 }
 
 void TileEngine::stepNPCs(long timePassed)
@@ -488,9 +486,9 @@ void TileEngine::handleInputEvents(bool& finishState)
                      // Clear the message pipe in preparation for the new state.
                      // The Tile Engine message pipe will be rebound when the Tile Engine state
                      // is activated again.
-                     m_playerData.clearMessagePipe();
+                     m_gameContext.getCurrentPlayerData().clearMessagePipe();
 
-                     HomeMenu* menu = new HomeMenu(m_gameContext, m_playerData);
+                     HomeMenu* menu = new HomeMenu(m_gameContext);
                      m_gameContext.getExecutionStack().pushState(menu, RandomTransitionGenerator::create(m_gameContext, this, menu));
                      return;
                   }

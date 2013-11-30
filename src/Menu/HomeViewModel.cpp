@@ -22,10 +22,9 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-HomeViewModel::HomeViewModel(GameContext& gameContext, PlayerData& playerData) :
+HomeViewModel::HomeViewModel(GameContext& gameContext) :
    Rocket::Controls::DataSource("homeViewModel"),
    m_gameContext(gameContext),
-   m_playerData(playerData),
    m_selectedDestinationMenu(-1)
 {
 }
@@ -40,7 +39,7 @@ void HomeViewModel::pushCharacterDependentMenu(int optionIndex, int characterInd
    switch(optionIndex)
    {
       case 3:
-         newState = new SkillMenu(m_gameContext, m_playerData, menuShell);
+         newState = new SkillMenu(m_gameContext, menuShell);
          DEBUG("Skill menu constructed");
          break;
       default:
@@ -60,11 +59,11 @@ void HomeViewModel::pushCharacterIndependentMenu(int optionIndex, MenuShell* men
    switch(optionIndex)
    {
       case 0:
-         newState = new ItemMenu(m_gameContext, m_playerData, menuShell);
+         newState = new ItemMenu(m_gameContext, menuShell);
          DEBUG("Item menu constructed.");
          break;
       case 7:
-         newState = new DataMenu(m_gameContext, m_playerData, menuShell);
+         newState = new DataMenu(m_gameContext, menuShell);
          DEBUG("Data menu constructed.");
          break;
       default:
@@ -118,7 +117,7 @@ void HomeViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   Character* character = m_playerData.getRoster()->getParty()[row_index];
+   Character* character = m_gameContext.getCurrentPlayerData().getRoster()->getParty()[row_index];
 
    if (table == "party")
    {
@@ -156,7 +155,7 @@ int HomeViewModel::GetNumRows(const Rocket::Core::String& table)
 {
    if (table == "party")
    {
-      return m_playerData.getRoster()->getParty().size();
+      return m_gameContext.getCurrentPlayerData().getRoster()->getParty().size();
    }
 
    return 0;

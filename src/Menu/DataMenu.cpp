@@ -17,18 +17,18 @@
 
 const int debugFlag = DEBUG_MENU;
 
-DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData) :
-   MenuState(gameContext, playerData, "DataMenu"),
+DataMenu::DataMenu(GameContext& gameContext) :
+   MenuState(gameContext, "DataMenu"),
    m_bindings(this),
-   m_dataViewModel(gameContext, playerData)
+   m_dataViewModel(gameContext)
 {
    initialize();
 }
 
-DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
+DataMenu::DataMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "DataMenu", menuShell),
    m_bindings(this),
-   m_dataViewModel(gameContext, playerData)
+   m_dataViewModel(gameContext)
 {
    initialize();
 }

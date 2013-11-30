@@ -13,9 +13,9 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuShell::MenuShell(GameContext& gameContext, PlayerData& playerData, Rocket::Core::Context* rocketContext) :
+MenuShell::MenuShell(GameContext& gameContext, Rocket::Core::Context* rocketContext) :
    m_rocketContext(rocketContext),
-   m_shortcutBar(gameContext, playerData, *rocketContext),
+   m_shortcutBar(gameContext, *rocketContext),
    m_bindings(this),
    m_currentState(NULL)
 {

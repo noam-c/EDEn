@@ -12,7 +12,6 @@
 #include "UsableId.h"
 
 class GameContext;
-class PlayerData;
 
 /**
  * A view model that allows a Rocket GUI to bind to the player's inventory.
@@ -25,19 +24,14 @@ class ItemViewModel : public Rocket::Controls::DataSource
 
    GameContext& m_gameContext;
 
-   /** The currently loaded player data. */
-   PlayerData& m_playerData;
-
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
 
    public:
       /**
        * Constructor.
-       *
-       * @param playerData The currently loaded player data.
        */
-      ItemViewModel(GameContext& gameContext, PlayerData& playerData);
+      ItemViewModel(GameContext& gameContext);
 
       /**
        * Destructor.

@@ -19,18 +19,18 @@
 
 const int debugFlag = DEBUG_MENU;
 
-ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData) :
-   MenuState(gameContext, playerData, "ItemMenu"),
+ItemMenu::ItemMenu(GameContext& gameContext) :
+   MenuState(gameContext, "ItemMenu"),
    m_bindings(this),
-   m_itemViewModel(gameContext, playerData)
+   m_itemViewModel(gameContext)
 {
    initialize();
 }
 
-ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
+ItemMenu::ItemMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "ItemMenu", menuShell),
    m_bindings(this),
-   m_itemViewModel(gameContext, playerData)
+   m_itemViewModel(gameContext)
 {
    initialize();
 }

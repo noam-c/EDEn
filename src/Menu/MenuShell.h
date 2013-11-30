@@ -82,7 +82,7 @@ class MenuShell
        *
        * @param rocketContext The menu context that will contain the menu shell GUI.
        */
-      MenuShell(GameContext& gameContext, PlayerData& playerData, Rocket::Core::Context* rocketContext);
+      MenuShell(GameContext& gameContext, Rocket::Core::Context* rocketContext);
 
       /**
        * Destructor.

@@ -11,7 +11,6 @@
 #include "ImageFormatter.h"
 
 class GameContext;
-class PlayerData;
 class PlayerDataSummary;
 
 /**
@@ -23,10 +22,7 @@ class PlayerDataSummary;
  */
 class DataViewModel : public Rocket::Controls::DataSource
 {
-   const GameContext& m_gameContext;
-
-   /** The currently loaded player data. */
-   PlayerData& m_playerData;
+   GameContext& m_gameContext;
 
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
@@ -43,10 +39,8 @@ class DataViewModel : public Rocket::Controls::DataSource
    public:
       /**
        * Constructor.
-       *
-       * @param playerData The currently loaded player data.
        */
-      DataViewModel(const GameContext& gameContext, PlayerData& playerData);
+      DataViewModel(GameContext& gameContext);
 
       /**
        * Destructor.

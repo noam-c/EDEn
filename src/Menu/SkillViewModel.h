@@ -13,7 +13,6 @@
 
 class Character;
 class GameContext;
-class PlayerData;
 
 /**
  * A view model that allows a Rocket GUI to bind to the player's inventory.
@@ -26,9 +25,6 @@ class SkillViewModel : public Rocket::Controls::DataSource
 
    GameContext& m_gameContext;
 
-   /** The currently loaded player data. */
-   PlayerData& m_playerData;
-
    Character* m_selectedCharacter;
 
    /** The formatter to use when exposing images to the GUI. */
@@ -37,10 +33,8 @@ class SkillViewModel : public Rocket::Controls::DataSource
    public:
       /**
        * Constructor.
-       *
-       * @param playerData The currently loaded player data.
        */
-      SkillViewModel(GameContext& gameContext, PlayerData& playerData);
+      SkillViewModel(GameContext& gameContext);
 
       /**
        * Destructor.

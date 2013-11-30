@@ -22,18 +22,18 @@
 
 const int debugFlag = DEBUG_MENU;
 
-HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData) :
-   MenuState(gameContext, playerData, "HomeMenu"),
+HomeMenu::HomeMenu(GameContext& gameContext) :
+   MenuState(gameContext, "HomeMenu"),
    m_bindings(this),
-   m_homeViewModel(gameContext, playerData)
+   m_homeViewModel(gameContext)
 {
    initialize();
 }
 
-HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
+HomeMenu::HomeMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "HomeMenu", menuShell),
    m_bindings(this),
-   m_homeViewModel(gameContext, playerData)
+   m_homeViewModel(gameContext)
 {
    initialize();
 }

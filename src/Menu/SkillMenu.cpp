@@ -19,18 +19,18 @@
 
 const int debugFlag = DEBUG_MENU;
 
-SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData) :
-   CharacterDependentMenu(gameContext, playerData, "SkillMenu"),
+SkillMenu::SkillMenu(GameContext& gameContext) :
+   CharacterDependentMenu(gameContext, "SkillMenu"),
    m_bindings(this),
-   m_skillViewModel(gameContext, playerData)
+   m_skillViewModel(gameContext)
 {
    initialize();
 }
 
-SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell) :
+SkillMenu::SkillMenu(GameContext& gameContext, MenuShell* menuShell) :
    CharacterDependentMenu(gameContext, "SkillMenu", menuShell),
    m_bindings(this),
-   m_skillViewModel(gameContext, playerData)
+   m_skillViewModel(gameContext)
 {
    initialize();
 }

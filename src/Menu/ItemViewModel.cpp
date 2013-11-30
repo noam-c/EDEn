@@ -19,10 +19,9 @@ const int debugFlag = DEBUG_MENU;
 
 const Rocket::Core::String ItemViewModel::UnknownItemIconPath("data/images/icons/I_Rock01.png");
 
-ItemViewModel::ItemViewModel(GameContext& gameContext, PlayerData& playerData) :
+ItemViewModel::ItemViewModel(GameContext& gameContext) :
       Rocket::Controls::DataSource("itemViewModel"),
-      m_gameContext(gameContext),
-      m_playerData(playerData)
+      m_gameContext(gameContext)
 {
 }
 
@@ -32,7 +31,7 @@ ItemViewModel::~ItemViewModel()
 
 void ItemViewModel::useItem(int rowIndex)
 {
-   const ItemList& itemList = m_playerData.getInventory()->getItemList();
+   const ItemList& itemList = m_gameContext.getCurrentPlayerData().getInventory()->getItemList();
    const UsableId usableId = itemList[rowIndex].first;
    Item* item = m_gameContext.getItem(usableId);
    if(item == NULL)
@@ -48,7 +47,7 @@ void ItemViewModel::useItem(int rowIndex)
 
 UsableId ItemViewModel::getItemId(int rowIndex) const
 {
-   const ItemList& itemList = m_playerData.getInventory()->getItemList();
+   const ItemList& itemList = m_gameContext.getCurrentPlayerData().getInventory()->getItemList();
    return itemList[rowIndex].first;
 }
 
@@ -58,7 +57,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
 {
    if (table == "items")
    {
-      const ItemList& itemList = m_playerData.getInventory()->getItemList();
+      const ItemList& itemList = m_gameContext.getCurrentPlayerData().getInventory()->getItemList();
       for (int i = 0; i < columns.size(); ++i)
       {
          const UsableId usableId = itemList[row_index].first;
@@ -98,7 +97,7 @@ int ItemViewModel::GetNumRows(const Rocket::Core::String& table)
 {
    if (table == "items")
    {
-      return m_playerData.getInventory()->getItemList().size();
+      return m_gameContext.getCurrentPlayerData().getInventory()->getItemList().size();
    }
 
    return 0;

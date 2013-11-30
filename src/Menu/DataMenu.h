@@ -21,7 +21,6 @@ namespace Rocket
    };
 };
 
-class PlayerData;
 class Sound;
 
 /**
@@ -102,18 +101,16 @@ class DataMenu: public MenuState
        * Constructor. Initializes the menu GUI.
        *
        * @param gameContext The context containing the current player data and execution stack.
-       * @param playerData The player data that the menu will display.
        */
-      DataMenu(GameContext& gameContext, PlayerData& playerData);
+      DataMenu(GameContext& gameContext);
 
       /**
        * Constructor. Initializes the menu GUI.
        *
        * @param gameContext The context containing the current player data and execution stack.
-       * @param playerData The player data that the menu will display.
        * @param menuShell The shell for the menu
        */
-      DataMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell);
+      DataMenu(GameContext& gameContext,MenuShell* menuShell);
 
       /**
        * Destructor.

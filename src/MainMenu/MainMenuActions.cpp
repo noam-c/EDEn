@@ -43,10 +43,8 @@ void MainMenu::NewGameAction(Rocket::Core::Event* event)
  */
 void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
 {
-   PlayerData* playerData = new PlayerData(m_gameContext);
-   playerData->load(SAVE_GAME);
-
-   m_gameContext.getExecutionStack().pushState(new HomeMenu(m_gameContext, *playerData));
+   m_gameContext.getCurrentPlayerData().load(SAVE_GAME);
+   m_gameContext.getExecutionStack().pushState(new HomeMenu(m_gameContext));
 }
 
 /**

@@ -19,7 +19,6 @@ namespace Rocket
 };
 
 class GameContext;
-class PlayerData;
 
 class ShortcutBar
 {
@@ -31,9 +30,6 @@ class ShortcutBar
 
    /** The game context containing the item metadata */
    GameContext& m_gameContext;
-
-   /** The Player data containing the shortcut set */
-   PlayerData& m_playerData;
 
    /** The Rocket document representing the shortcut bar GUI */
    Rocket::Core::ElementDocument* m_shortcutBarDocument;
@@ -47,7 +43,7 @@ class ShortcutBar
        *
        * @param rocketContext The Rocket context to which this console window should attach.
        */
-      ShortcutBar(GameContext& gameContext, PlayerData& playerData, Rocket::Core::Context& rocketContext);
+      ShortcutBar(GameContext& gameContext, Rocket::Core::Context& rocketContext);
 
       /**
        * Destructor.

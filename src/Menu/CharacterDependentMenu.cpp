@@ -2,8 +2,8 @@
 
 
 
-CharacterDependentMenu::CharacterDependentMenu(GameContext& gameContext, PlayerData& playerData, const std::string& stateName) :
-   MenuState(gameContext, playerData, stateName)
+CharacterDependentMenu::CharacterDependentMenu(GameContext& gameContext, const std::string& stateName) :
+   MenuState(gameContext, stateName)
 {
 }
 

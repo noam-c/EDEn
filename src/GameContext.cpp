@@ -6,9 +6,11 @@
 
 GameContext::GameContext() :
    m_scriptEngine(*this),
-   m_metadata(*this)
+   m_metadata(*this),
+   m_playerData(*this)
 {
    Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(*this));
+   m_scriptEngine.setPlayerData(&m_playerData);
 }
 
 GameContext::~GameContext()
@@ -25,7 +27,7 @@ ScriptEngine& GameContext::getScriptEngine()
    return m_scriptEngine;
 }
 
-PlayerData* GameContext::getCurrentPlayerData() const
+PlayerData& GameContext::getCurrentPlayerData()
 {
    return m_playerData;
 }
@@ -60,9 +62,4 @@ Item* GameContext::getItem(UsableId itemId) const
 Skill* GameContext::getSkill(UsableId skillId) const
 {
    return m_metadata.getSkill(skillId);
-}
-
-void GameContext::setCurrentPlayerData(PlayerData* playerData)
-{
-   m_playerData = playerData;
 }

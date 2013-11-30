@@ -12,7 +12,6 @@
 
 class CharacterDependentMenu;
 class GameContext;
-class PlayerData;
 class MenuShell;
 
 /**
@@ -27,9 +26,6 @@ class HomeViewModel : public Rocket::Controls::DataSource
    /** The game context managing the menu state */
    GameContext& m_gameContext;
 
-   /** The player data containing the character roster to expose to the GUI */
-   PlayerData& m_playerData;
-
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
 
@@ -43,9 +39,8 @@ class HomeViewModel : public Rocket::Controls::DataSource
        * Constructor.
        *
        * @param gameContext The game context managing the menu state.
-       * @param playerData The player data containing of the player's characters.
        */
-      HomeViewModel(GameContext& gameContext, PlayerData& characterRoster);
+      HomeViewModel(GameContext& gameContext);
 
       /**
        * Destructor.

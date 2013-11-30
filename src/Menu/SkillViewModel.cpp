@@ -20,10 +20,9 @@ const int debugFlag = DEBUG_MENU;
 
 const Rocket::Core::String SkillViewModel::UnknownSkillIconPath("data/images/icons/I_Rock01.png");
 
-SkillViewModel::SkillViewModel(GameContext& gameContext, PlayerData& playerData) :
+SkillViewModel::SkillViewModel(GameContext& gameContext) :
       Rocket::Controls::DataSource("skillViewModel"),
       m_gameContext(gameContext),
-      m_playerData(playerData),
       m_selectedCharacter(NULL)
 {
 }
@@ -34,7 +33,7 @@ SkillViewModel::~SkillViewModel()
 
 void SkillViewModel::setCharacter(int characterIndex)
 {
-   CharacterRoster* roster = m_playerData.getRoster();
+   CharacterRoster* roster = m_gameContext.getCurrentPlayerData().getRoster();
 
    m_selectedCharacter = roster != NULL ?
       m_selectedCharacter = roster->getParty()[characterIndex] :

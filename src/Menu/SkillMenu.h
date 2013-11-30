@@ -22,7 +22,6 @@ namespace Rocket
    };
 };
 
-class PlayerData;
 class Sound;
 
 /**
@@ -61,18 +60,16 @@ class SkillMenu: public CharacterDependentMenu
        * Constructor. Initializes the menu GUI.
        *
        * @param gameContext The context containing the current player data and execution stack.
-       * @param playerData The player data that the menu will display.
        */
-      SkillMenu(GameContext& gameContext, PlayerData& playerData);
+      SkillMenu(GameContext& gameContext);
 
       /**
        * Constructor. Initializes the menu GUI.
        *
        * @param gameContext The context containing the current player data and execution stack.
-       * @param playerData The player data that the menu will display.
        * @param menuShell The shell for the menu.
        */
-      SkillMenu(GameContext& gameContext, PlayerData& playerData, MenuShell* menuShell);
+      SkillMenu(GameContext& gameContext, MenuShell* menuShell);
 
       /**
        * Destructor.

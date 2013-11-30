@@ -5,6 +5,7 @@
  */
 
 #include "DataViewModel.h"
+#include "GameContext.h"
 #include "PlayerData.h"
 #include "PlayerDataSummary.h"
 #include "CharacterRoster.h"
@@ -15,10 +16,9 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-DataViewModel::DataViewModel(const GameContext& gameContext, PlayerData& playerData) :
+DataViewModel::DataViewModel(GameContext& gameContext) :
       Rocket::Controls::DataSource("dataViewModel"),
-      m_gameContext(gameContext),
-      m_playerData(playerData)
+      m_gameContext(gameContext)
 {
    refreshSaveGames();
 }
@@ -29,8 +29,9 @@ DataViewModel::~DataViewModel()
 
 void DataViewModel::saveToSlot(int slotIndex)
 {
-   m_playerData.save(m_saveGames[slotIndex].first);
-   *(m_saveGames[slotIndex].second) = m_playerData;
+   PlayerData& currentData = m_gameContext.getCurrentPlayerData();
+   currentData.save(m_saveGames[slotIndex].first);
+   *(m_saveGames[slotIndex].second) = currentData;
    NotifyRowChange("saveGames", slotIndex, 1);
 }
 
