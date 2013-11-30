@@ -58,13 +58,26 @@ Aspect::Aspect(const Json::Value& aspectToLoad)
    m_id = aspectToLoad[Aspect::ID_ATTRIBUTE].asString();
    m_name = aspectToLoad[Aspect::NAME_ATTRIBUTE].asString();
    
+   parseStatBonuses(aspectToLoad);
+   parseSkillTree(aspectToLoad);
+}
+
+Aspect::~Aspect()
+{
+}
+
+void Aspect::parseStatBonuses(const Json::Value& aspectToLoad)
+{
    const Json::Value& statBonuses = aspectToLoad[Aspect::STATS_ELEMENT];
    for(Json::Value::const_iterator iter = statBonuses.begin(); iter != statBonuses.end(); ++iter)
    {
       std::pair<std::string, StatBonusCalculation> statCalculation(iter.key().asString(), *iter);
       m_statBonusCalculations.insert(statCalculation);
    }
+}
 
+void Aspect::parseSkillTree(const Json::Value& aspectToLoad)
+{
    const Json::Value& skills = aspectToLoad[Aspect::SKILLS_ELEMENT];
    if(skills.isArray())
    {
@@ -72,7 +85,7 @@ Aspect::Aspect(const Json::Value& aspectToLoad)
       {
          UsableId skillId = (*iter)[Aspect::ID_ATTRIBUTE].asUInt();
          const Json::Value& prereqsNode = (*iter)[Aspect::PREREQUISITES_ELEMENT];
-
+         
          PrerequisiteList prereqs;
          
          if(prereqsNode.isArray())
@@ -89,10 +102,6 @@ Aspect::Aspect(const Json::Value& aspectToLoad)
 
       validateSkillTree();
    }
-}
-
-Aspect::~Aspect()
-{
 }
 
 void Aspect::validateSkillTree() const
@@ -123,8 +132,13 @@ void Aspect::validateSkillTree() const
 
    for(int i = 0; i < numSkills; ++i)
    {
+      // If we've already seen this node, searched
+      // all its prerequisite chains and
+      // haven't thrown, then it can't lead to a cycle
       if(traversedColor[i] >= 0) continue;
 
+      // Perform a standard breadth-first search from
+      // this node
       bfsQueue.push(i);
       while(!bfsQueue.empty())
       {
@@ -135,18 +149,27 @@ void Aspect::validateSkillTree() const
          {
             if(traversedColor[currentNode] == currentColor)
             {
+               // If the color of the node is the current color,
+               // then the breadth-first search has found a cycle
                T_T("Skill tree for aspect has a cycle");
             }
          }
          else
          {
+            // Color the node with the current color
             traversedColor[currentNode] = currentColor;
          }
          
+         // Push all of this node's prerequisites into the breadth-first search queue
          PrerequisiteList prereqs = m_skillTree[currentNode].second;
          for(PrerequisiteList::const_iterator iter = prereqs.begin(); iter != prereqs.end(); ++iter)
          {
             std::map<UsableId, int>::const_iterator skillNode = skillTreeMap.find(*iter);
+            if(skillNode == skillTreeMap.end())
+            {
+               T_T("One of the skills in this aspect's tree has a prerequisite that isn't in the tree.")
+            }
+
             bfsQueue.push(skillNode->second);
          }
       }

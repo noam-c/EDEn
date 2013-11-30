@@ -80,9 +80,11 @@ class Aspect
    /** The displayed name of the aspect. */
    std::string m_name;
    
+   /** A list of prerequisite skills. */
    typedef std::vector<UsableId> PrerequisiteList;
-   typedef std::vector<std::pair<UsableId, PrerequisiteList> > SkillTree;
-   SkillTree m_skillTree;
+
+   /** The skill tree for the Aspect's skills and prerequisites */
+   std::vector<std::pair<UsableId, PrerequisiteList> > m_skillTree;
 
    /** The set of stat attribute bonuses granted by the Aspect. */
    std::map<std::string, StatBonusCalculation> m_statBonusCalculations;
@@ -94,6 +96,23 @@ class Aspect
     */
    Aspect(const Json::Value& aspectToLoad);
    
+   /**
+    * Loads the stat bonuses for the aspect.
+    *
+    * @param aspectToLoad The JSON node representing the Aspect.
+    */
+   void parseStatBonuses(const Json::Value& aspectToLoad);
+
+   /**
+    * Loads the skill tree for the aspect.
+    *
+    * @param aspectToLoad The JSON node representing the Aspect.
+    */
+   void parseSkillTree(const Json::Value& aspectToLoad);
+
+   /**
+    * Validates that the Aspect's skill tree is well-formed
+    */
    void validateSkillTree() const;
    
    public:
