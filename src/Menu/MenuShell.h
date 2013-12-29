@@ -10,7 +10,7 @@
 #include <vector>
 #include <string>
 #include "EdenRocketBindings.h"
-#include "ShortcutBar.h"
+#include "GameState.h"
 
 namespace Rocket
 {
@@ -24,7 +24,11 @@ namespace Rocket
 };
 
 class MenuState;
+class Metadata;
+class PlayerData;
 class Scheduler;
+class ScriptEngine;
+class ShortcutBar;
 
 /**
  * The menu shell contains the foundations of the in-game menu.
@@ -51,7 +55,7 @@ class MenuShell
    /**
     * The shortcut bar containing the player's set of shortcuts.
     */
-   ShortcutBar m_shortcutBar;
+   const ShortcutBar* m_shortcutBar;
 
    /** The event binding collection for the sidebar */
    EdenRocketBindings<MenuShell> m_bindings;
@@ -82,12 +86,14 @@ class MenuShell
        *
        * @param rocketContext The menu context that will contain the menu shell GUI.
        */
-      MenuShell(GameContext& gameContext, Rocket::Core::Context* rocketContext);
+      MenuShell(Rocket::Core::Context* rocketContext);
 
       /**
        * Destructor.
        */
       ~MenuShell();
+   
+      void initializeShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType);
 
       /**
        * @return The Rocket context managing the shell GUI.

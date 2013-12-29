@@ -8,6 +8,7 @@
 #include "Settings.h"
 #include "GameContext.h"
 #include "ExecutionStack.h"
+#include "ScriptEngine.h"
 #include "MainMenu.h"
 #include "ResourceLoader.h"
 #include <iostream>
@@ -29,12 +30,17 @@ int main (int argc, char *argv[])
    {
       Settings::initialize();
       GraphicsUtil::getInstance();
+
       DEBUG("Initializing execution stack.");
-      GameContext gameContext;
+      ExecutionStack executionStack;
+      ScriptEngine scriptEngine(executionStack);
+      GameContext gameContext(scriptEngine);
+
       DEBUG("Pushing Main Menu state.");
-      gameContext.getExecutionStack().pushState(new MainMenu(gameContext));
+      executionStack.pushState(new MainMenu(gameContext));
+
       DEBUG("Beginning game execution.");
-      gameContext.getExecutionStack().execute();
+      executionStack.execute();
 
       DEBUG("Game is finished. Freeing resources and destroying singletons.");
       ResourceLoader::freeAll();

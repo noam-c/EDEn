@@ -22,6 +22,7 @@ namespace Rocket
 };
 
 class MenuShell;
+class ShortcutBar;
 class GameContext;
 
 /**
@@ -57,6 +58,8 @@ class MenuState : public GameState
    protected:
       /** The shell that holds the common menu controls */
       MenuShell* m_menuShell;
+
+      ShortcutBar* m_shortcutBar;
 
       /** The list of sidebar options associated with this menu state. */
       std::vector<MenuShellOption> m_sidebarOptions;

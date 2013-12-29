@@ -13,16 +13,16 @@ Skill::Skill(Json::Value& skillNode) :
 {
 }
 
-UsableScript* Skill::createScript(GameContext& gameContext)
+UsableScript* Skill::createScript(ScriptEngine& scriptEngine)
 {
-   return gameContext.getScriptEngine().createSkillScript(*this);
+   return scriptEngine.createSkillScript(*this);
 }
 
-bool Skill::use(GameContext& gameContext, Character* usingCharacter)
+bool Skill::use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter)
 {
    if(usingCharacter != NULL && usingCharacter->hasSkill(getId()))
    {
-      return Usable::use(gameContext, usingCharacter);
+      return Usable::use(scriptEngine, gameStateType, usingCharacter);
    }
 
    return false;

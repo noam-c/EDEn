@@ -30,7 +30,6 @@ const char* PlayerData::X_ATTRIBUTE = "x";
 const char* PlayerData::Y_ATTRIBUTE = "y";
 
 PlayerData::PlayerData(GameContext& gameContext) :
-   m_gameContext(gameContext),
    m_roster(gameContext),
    m_rootQuest(std::string("root")),
    m_shortcutList(PlayerData::SHORTCUT_BAR_SIZE, Shortcut::getEmptyShortcut())
@@ -273,30 +272,6 @@ void PlayerData::clearShortcut(int index)
 {
    Shortcut emptyShortcut = Shortcut::getEmptyShortcut();
    setShortcut(index, emptyShortcut);
-}
-
-bool PlayerData::invokeShortcut(int index)
-{
-   const Shortcut& shortcut = getShortcut(index);
-   if(shortcut.usableType == Shortcut::ITEM)
-   {
-      Item* item = m_gameContext.getItem(shortcut.usableId);
-      if(item != NULL)
-      {
-         return item->use(m_gameContext);
-      }
-   }
-   else if(shortcut.usableType == Shortcut::SKILL)
-   {
-      Skill* skill = m_gameContext.getSkill(shortcut.usableId);
-      Character* usingCharacter = m_roster.getCharacter(shortcut.characterId);
-      if(skill != NULL && usingCharacter != NULL)
-      {
-         return skill->use(m_gameContext, usingCharacter);
-      }
-   }
-
-   return false;
 }
 
 CharacterRoster* PlayerData::getRoster()

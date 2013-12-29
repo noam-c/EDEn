@@ -41,6 +41,11 @@ class HomeMenu: public MenuState
    /** The view model */
    HomeViewModel m_homeViewModel;
 
+   int m_selectedDestinationMenu;
+   
+   void pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShell);
+   void pushCharacterDependentMenu(int optionIndex, int characterIndex, MenuShell* menuShell);
+   
    /**
     * Initializes the home menu pane and populates the sidebar.
     */
@@ -50,6 +55,14 @@ class HomeMenu: public MenuState
     * @param event The click event that occurred in the party list.
     */
    void characterClicked(Rocket::Core::Event* event);
+   
+   /**
+    * Signals to the view model that a character was selected in the menu.
+    *
+    * @param slotIndex The character slot that was selected.
+    * @param menuShell The menu shell shared between the menus.
+    */
+   void selectCharacter(int slotIndex, MenuShell* menuShell);
 
    protected:
       /**

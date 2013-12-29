@@ -11,7 +11,8 @@
 #include "ImageFormatter.h"
 #include "UsableId.h"
 
-class GameContext;
+class Metadata;
+class PlayerData;
 
 /**
  * A view model that allows a Rocket GUI to bind to the player's inventory.
@@ -22,7 +23,8 @@ class ItemViewModel : public Rocket::Controls::DataSource
 {
    const static Rocket::Core::String UnknownItemIconPath;
 
-   GameContext& m_gameContext;
+   const Metadata& m_metadata;
+   PlayerData& m_playerData;
 
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
@@ -31,14 +33,12 @@ class ItemViewModel : public Rocket::Controls::DataSource
       /**
        * Constructor.
        */
-      ItemViewModel(GameContext& gameContext);
+      ItemViewModel(const Metadata& metadata, PlayerData& playerData);
 
       /**
        * Destructor.
        */
       ~ItemViewModel();
-
-      void useItem(int rowIndex);
 
       UsableId getItemId(int rowIndex) const;
 
@@ -58,6 +58,8 @@ class ItemViewModel : public Rocket::Controls::DataSource
        * @return The number of rows in the specified table.
        */
       int GetNumRows(const Rocket::Core::String& table);
+   
+      void refresh(int rowIndex);
 };
 
 #endif

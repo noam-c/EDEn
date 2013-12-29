@@ -12,7 +12,7 @@
 class Skill : public Usable
 {
    protected:
-      UsableScript* createScript(GameContext& gameContext);
+      UsableScript* createScript(ScriptEngine& scriptEngine);
 
    public:
       /**
@@ -22,7 +22,7 @@ class Skill : public Usable
        */
       Skill(Json::Value& skillNode);
 
-      bool use(GameContext& gameContext, Character* usingCharacter);
+      bool use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter);
 };
 
 #endif

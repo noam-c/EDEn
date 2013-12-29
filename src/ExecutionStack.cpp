@@ -44,6 +44,17 @@ GameState* ExecutionStack::getCurrentState() const
    return m_stateStack.top();
 }
 
+Scheduler* ExecutionStack::getCurrentScheduler() const
+{
+   GameState* currentState = getCurrentState();
+   if(currentState != NULL)
+   {
+      return currentState->getScheduler();
+   }
+   
+   return NULL;
+}
+
 
 void ExecutionStack::pushState(GameState* newState, GameState* transitionState)
 {
@@ -51,9 +62,13 @@ void ExecutionStack::pushState(GameState* newState, GameState* transitionState)
    {
       m_stateStack.top()->deactivate();
    }
+   
+   newState->setExecutionStack(this);
 
    if(transitionState)
    {
+      transitionState->setExecutionStack(this);
+
       m_stateStack.push(transitionState);
       if(m_nextState)
       {

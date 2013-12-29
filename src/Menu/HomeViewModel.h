@@ -10,9 +10,7 @@
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
-class CharacterDependentMenu;
-class GameContext;
-class MenuShell;
+class PlayerData;
 
 /**
  * A view model that allows a Rocket GUI to bind to player data.
@@ -23,46 +21,24 @@ class MenuShell;
  */
 class HomeViewModel : public Rocket::Controls::DataSource
 {
-   /** The game context managing the menu state */
-   GameContext& m_gameContext;
+   /** The player data backing the menu state */
+   PlayerData& m_playerData;
 
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
-
-   int m_selectedDestinationMenu;
-
-   void pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShell);
-   void pushCharacterDependentMenu(int optionIndex, int characterIndex, MenuShell* menuShell);
 
    public:
       /**
        * Constructor.
        *
-       * @param gameContext The game context managing the menu state.
+       * @param playerData The player data backing the menu state.
        */
-      HomeViewModel(GameContext& gameContext);
+      HomeViewModel(PlayerData& playerData);
 
       /**
        * Destructor.
        */
       ~HomeViewModel();
-
-      /**
-       * Signals to the view model that a character was selected in the menu.
-       *
-       * @param slotIndex The character slot that was selected.
-       * @param menuShell The menu shell shared between the menus.
-       */
-      void selectCharacter(int slotIndex, MenuShell* menuShell);
-
-      /**
-       * Handles sidebar option click events by navigating to the
-       * appropriate menu.
-       *
-       * @param optionIndex The index of the sidebar option that was clicked.
-       * @param menuShell The menu shell shared between the menus.
-       */
-      void sidebarClicked(int optionIndex, MenuShell* menuShell);
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

@@ -3,15 +3,15 @@
 
 #include <Rocket/Core.h>
 
-class GameContext;
+class ScriptEngine;
 class RocketScriptHandler;
 
 class RocketScriptHandlerFactory : public Rocket::Core::EventListenerInstancer
 {
-   GameContext& m_gameContext;
+   ScriptEngine& m_scriptEngine;
 
    public:
-      RocketScriptHandlerFactory(GameContext& gameContext);
+      RocketScriptHandlerFactory(ScriptEngine& scriptEngine);
       virtual ~RocketScriptHandlerFactory();
 
       virtual Rocket::Core::EventListener* InstanceEventListener(

@@ -8,14 +8,16 @@
 #include "GraphicsUtil.h"
 #include "MenuState.h"
 #include "Scheduler.h"
+#include "ShortcutBar.h"
+#include "GameContext.h"
 #include <Rocket/Core.h>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuShell::MenuShell(GameContext& gameContext, Rocket::Core::Context* rocketContext) :
+MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
    m_rocketContext(rocketContext),
-   m_shortcutBar(gameContext, *rocketContext),
+   m_shortcutBar(NULL),
    m_bindings(this),
    m_currentState(NULL)
 {
@@ -42,8 +44,21 @@ MenuShell::MenuShell(GameContext& gameContext, Rocket::Core::Context* rocketCont
 
 MenuShell::~MenuShell()
 {
+   if(m_shortcutBar != NULL)
+   {
+      delete m_shortcutBar;
+   }
+   
    m_shellDocument->RemoveReference();
    m_rocketContext->RemoveReference();
+}
+
+void MenuShell::initializeShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType)
+{
+   if(m_shortcutBar == NULL)
+   {
+      m_shortcutBar = new ShortcutBar(playerData, scriptEngine, metadata, stateType, *m_rocketContext);
+   }
 }
 
 Rocket::Core::Context* MenuShell::getRocketContext() const

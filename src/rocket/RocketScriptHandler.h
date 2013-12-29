@@ -3,15 +3,15 @@
 
 #include <Rocket/Core.h>
 
-class GameContext;
+class ScriptEngine;
 
 class RocketScriptHandler : public Rocket::Core::EventListener
 {
-   GameContext& m_gameContext;
+   ScriptEngine& m_scriptEngine;
    const std::string m_scriptString;
 
    public:
-      RocketScriptHandler(GameContext& gameContext, Rocket::Core::String scriptString);
+      RocketScriptHandler(ScriptEngine& scriptEngine, Rocket::Core::String scriptString);
 
       virtual ~RocketScriptHandler();
 

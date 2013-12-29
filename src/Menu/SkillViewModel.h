@@ -13,6 +13,8 @@
 
 class Character;
 class GameContext;
+class Metadata;
+class SkillMenu;
 
 /**
  * A view model that allows a Rocket GUI to bind to the player's inventory.
@@ -23,7 +25,8 @@ class SkillViewModel : public Rocket::Controls::DataSource
 {
    const static Rocket::Core::String UnknownSkillIconPath;
 
-   GameContext& m_gameContext;
+   SkillMenu& m_skillMenu;
+   const Metadata& m_metadata;
 
    Character* m_selectedCharacter;
 
@@ -34,16 +37,14 @@ class SkillViewModel : public Rocket::Controls::DataSource
       /**
        * Constructor.
        */
-      SkillViewModel(GameContext& gameContext);
+      SkillViewModel(SkillMenu& skillMenu, const Metadata& metadata);
 
       /**
        * Destructor.
        */
       ~SkillViewModel();
 
-      void setCharacter(int characterIndex);
-
-      void useSkill(int rowIndex);
+      void setCharacter(Character* character);
 
       UsableId getSkillId(int rowIndex) const;
 
@@ -65,6 +66,9 @@ class SkillViewModel : public Rocket::Controls::DataSource
        * @return The number of rows in the specified table.
        */
       int GetNumRows(const Rocket::Core::String& table);
+   
+      void refresh();
+      void refresh(int rowIndex);
 };
 
 #endif

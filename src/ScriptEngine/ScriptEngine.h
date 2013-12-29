@@ -15,7 +15,7 @@
 // We will need to talk to the tile engine and player data from Lua
 class TileEngine;
 class PlayerData;
-class GameContext;
+class ExecutionStack;
 
 class Scheduler;
 class Script;
@@ -49,10 +49,9 @@ class ScriptEngine
    PlayerData* m_playerData;
 
    /**
-    * The game context that contains the current game state and
-    * player game data.
+    * The stack managing the current game state.
     */
-   GameContext& m_gameContext;
+   ExecutionStack& m_executionStack;
 
    /**
     * The main Lua execution coroutine and stack
@@ -86,9 +85,9 @@ class ScriptEngine
       /** 
        * Constructor. Initializes a Lua VM and initializes members as needed.
        *
-       * @param gameContext The context containing the current game state and data.
+       * @param executionStack The stack containing the current game state.
        */
-      ScriptEngine(GameContext& gameContext);
+      ScriptEngine(ExecutionStack& executionStack);
 
       /**
        * Get a specified NPC script.
@@ -134,9 +133,8 @@ class ScriptEngine
        * Run a string of script with the specified name.
        *
        * @param scriptString The name of the script to run.
-       * @param scheduler The scheduler that will manage the new script coroutine.
        */
-      int runScriptString(const std::string& scriptString, Scheduler& scheduler);
+      int runScriptString(const std::string& scriptString);
       
       /**
        * Call a script function object.

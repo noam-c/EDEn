@@ -19,9 +19,10 @@ const int debugFlag = DEBUG_MENU;
 
 const Rocket::Core::String ItemViewModel::UnknownItemIconPath("data/images/icons/I_Rock01.png");
 
-ItemViewModel::ItemViewModel(GameContext& gameContext) :
-      Rocket::Controls::DataSource("itemViewModel"),
-      m_gameContext(gameContext)
+ItemViewModel::ItemViewModel(const Metadata& metadata, PlayerData& playerData) :
+   Rocket::Controls::DataSource("itemViewModel"),
+   m_metadata(metadata),
+   m_playerData(playerData)
 {
 }
 
@@ -29,25 +30,9 @@ ItemViewModel::~ItemViewModel()
 {
 }
 
-void ItemViewModel::useItem(int rowIndex)
-{
-   const ItemList& itemList = m_gameContext.getCurrentPlayerData().getInventory()->getItemList();
-   const UsableId usableId = itemList[rowIndex].first;
-   Item* item = m_gameContext.getItem(usableId);
-   if(item == NULL)
-   {
-      DEBUG("Tried to use bad item with ID: %d.", usableId);
-   }
-   else
-   {
-      item->use(m_gameContext);
-      NotifyRowChange("items", rowIndex, 1);
-   }
-}
-
 UsableId ItemViewModel::getItemId(int rowIndex) const
 {
-   const ItemList& itemList = m_gameContext.getCurrentPlayerData().getInventory()->getItemList();
+   const ItemList& itemList = m_playerData.getInventory()->getItemList();
    return itemList[rowIndex].first;
 }
 
@@ -57,12 +42,12 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
 {
    if (table == "items")
    {
-      const ItemList& itemList = m_gameContext.getCurrentPlayerData().getInventory()->getItemList();
+      const ItemList& itemList = m_playerData.getInventory()->getItemList();
       for (int i = 0; i < columns.size(); ++i)
       {
          const UsableId usableId = itemList[row_index].first;
          const int itemQuantity = itemList[row_index].second;
-         const Item* rowItem = m_gameContext.getItem(usableId);
+         const Item* rowItem = m_metadata.getItem(usableId);
          if (columns[i] == "name")
          {
             if(rowItem == NULL)
@@ -97,8 +82,13 @@ int ItemViewModel::GetNumRows(const Rocket::Core::String& table)
 {
    if (table == "items")
    {
-      return m_gameContext.getCurrentPlayerData().getInventory()->getItemList().size();
+      return m_playerData.getInventory()->getItemList().size();
    }
 
    return 0;
+}
+
+void ItemViewModel::refresh(int rowIndex)
+{
+   NotifyRowChange("items", rowIndex, 1);
 }

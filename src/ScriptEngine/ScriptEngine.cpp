@@ -48,8 +48,8 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
   lua_pushnumber(m_luaVM, value); \
   lua_settable(m_luaVM, -3);
 
-ScriptEngine::ScriptEngine(GameContext& gameContext) :
-   m_gameContext(gameContext)
+ScriptEngine::ScriptEngine(ExecutionStack& executionStack) :
+   m_executionStack(executionStack)
 {
    m_luaVM = luaL_newstate();
 
@@ -155,7 +155,7 @@ void ScriptEngine::setPlayerData(PlayerData* playerData)
 }
 int ScriptEngine::narrate(lua_State* luaStack)
 {
-   Scheduler* scheduler = m_gameContext.getCurrentScheduler();
+   Scheduler* scheduler = m_executionStack.getCurrentScheduler();
    if (scheduler == NULL)
    {
       return 0;
@@ -190,7 +190,7 @@ int ScriptEngine::narrate(lua_State* luaStack)
 
 int ScriptEngine::say(lua_State* luaStack)
 {
-   Scheduler* scheduler = m_gameContext.getCurrentScheduler();
+   Scheduler* scheduler = m_executionStack.getCurrentScheduler();
    if (scheduler == NULL)
    {
       return 0;
@@ -225,7 +225,7 @@ int ScriptEngine::say(lua_State* luaStack)
 
 int ScriptEngine::playSound(lua_State* luaStack)
 {
-   Scheduler* scheduler = m_gameContext.getCurrentScheduler();
+   Scheduler* scheduler = m_executionStack.getCurrentScheduler();
    if (scheduler == NULL)
    {
       return 0;
@@ -297,7 +297,7 @@ int ScriptEngine::isMusicPlaying(lua_State* luaStack)
 
 int ScriptEngine::delay(lua_State* luaStack)
 {
-   Scheduler* scheduler = m_gameContext.getCurrentScheduler();
+   Scheduler* scheduler = m_executionStack.getCurrentScheduler();
    if (scheduler == NULL)
    {
       return 0;
@@ -399,15 +399,17 @@ int ScriptEngine::runScript(Script* script, Scheduler& scheduler)
    return 0;
 }
 
-int ScriptEngine::runScriptString(const std::string& scriptString, Scheduler& scheduler)
+int ScriptEngine::runScriptString(const std::string& scriptString)
 {
    DEBUG("Running script string: %s", scriptString.c_str());
    StringScript* newScript = new StringScript(m_luaVM, scriptString);
-   scheduler.start(newScript);
+
+   Scheduler* scheduler = m_executionStack.getCurrentScheduler();
+   scheduler->start(newScript);
    
-   if(scheduler.hasRunningCoroutine())
+   if(scheduler->hasRunningCoroutine())
    {
-      return scheduler.join(newScript);
+      return scheduler->join(newScript);
    }
    
    return 0;

@@ -1,8 +1,8 @@
 #include "RocketScriptHandlerFactory.h"
 #include "RocketScriptHandler.h"
 
-RocketScriptHandlerFactory::RocketScriptHandlerFactory(GameContext& gameContext) :
-   m_gameContext(gameContext)
+RocketScriptHandlerFactory::RocketScriptHandlerFactory(ScriptEngine& scriptEngine) :
+   m_scriptEngine(scriptEngine)
 {
 }
 
@@ -13,7 +13,7 @@ RocketScriptHandlerFactory::~RocketScriptHandlerFactory()
 Rocket::Core::EventListener* RocketScriptHandlerFactory::InstanceEventListener(
       const Rocket::Core::String& value, Rocket::Core::Element* element)
 {
-   return new RocketScriptHandler(m_gameContext, value);
+   return new RocketScriptHandler(m_scriptEngine, value);
 }
 
 void RocketScriptHandlerFactory::Release()

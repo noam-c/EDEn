@@ -43,7 +43,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    GameState(gameContext, GameState::FIELD, "TileEngine"),
    m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
-   m_shortcutBar(gameContext, *m_rocketContext)
+   m_shortcutBar(gameContext.getCurrentPlayerData(), gameContext.getScriptEngine(), gameContext.getMetadata(), getStateType(), *m_rocketContext)
 {
    m_scheduler = new Scheduler();
 
@@ -426,7 +426,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                case DEBUG_CONSOLE_EVENT:
                {
                   std::string* script = (std::string*)event.user.data1;
-                  m_gameContext.getScriptEngine().runScriptString(*script, *m_scheduler);
+                  m_gameContext.getScriptEngine().runScriptString(*script);
 
                   // This assumes that, once the debug event is consumed here, it is not used anymore
                   delete script;
@@ -489,7 +489,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                      m_gameContext.getCurrentPlayerData().clearMessagePipe();
 
                      HomeMenu* menu = new HomeMenu(m_gameContext);
-                     m_gameContext.getExecutionStack().pushState(menu, RandomTransitionGenerator::create(m_gameContext, this, menu));
+                     getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, this, menu));
                      return;
                   }
                }

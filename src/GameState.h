@@ -9,6 +9,7 @@
 
 #include <string>
 
+class ExecutionStack;
 class GameContext;
 class Scheduler;
 
@@ -38,6 +39,8 @@ union SDL_Event;
  */
 class GameState
 {
+   friend class ExecutionStack;
+
    public:
       enum GameStateType
       {
@@ -58,8 +61,14 @@ class GameState
 
       /** The type of the current game state. */
       GameStateType m_stateType;
+   
+      ExecutionStack* m_executionStack;
+   
+      void setExecutionStack(ExecutionStack* executionStack);
 
    protected:
+      ExecutionStack* getExecutionStack() const;
+
       /** The game context responsible for the state's data and execution. */
       GameContext& m_gameContext;
    

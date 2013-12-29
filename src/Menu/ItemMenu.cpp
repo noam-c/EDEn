@@ -22,7 +22,7 @@ const int debugFlag = DEBUG_MENU;
 ItemMenu::ItemMenu(GameContext& gameContext) :
    MenuState(gameContext, "ItemMenu"),
    m_bindings(this),
-   m_itemViewModel(gameContext)
+   m_itemViewModel(gameContext.getMetadata(), gameContext.getCurrentPlayerData())
 {
    initialize();
 }
@@ -30,7 +30,7 @@ ItemMenu::ItemMenu(GameContext& gameContext) :
 ItemMenu::ItemMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "ItemMenu", menuShell),
    m_bindings(this),
-   m_itemViewModel(gameContext)
+   m_itemViewModel(gameContext.getMetadata(), gameContext.getCurrentPlayerData())
 {
    initialize();
 }
@@ -116,7 +116,23 @@ void ItemMenu::itemClicked(Rocket::Core::Event* event)
       if(rowElement != NULL)
       {
          int itemIndex = rowElement->GetParentRelativeIndex();
-         m_itemViewModel.useItem(itemIndex);
+         useItem(itemIndex);
       }
+   }
+}
+
+void ItemMenu::useItem(int itemIndex)
+{
+   const ItemList& itemList = m_gameContext.getCurrentPlayerData().getInventory()->getItemList();
+   const UsableId usableId = itemList[itemIndex].first;
+   Item* item = m_gameContext.getItem(usableId);
+   if(item == NULL)
+   {
+      DEBUG("Tried to use bad item with ID: %d.", usableId);
+   }
+   else
+   {
+      item->use(m_gameContext.getScriptEngine(), getStateType());
+      m_itemViewModel.refresh(itemIndex);
    }
 }

@@ -13,6 +13,8 @@
 #include "GameContext.h"
 #include "PlayerData.h"
 #include "Skill.h"
+#include "SkillList.h"
+#include "Character.h"
 
 #include "ExecutionStack.h"
 #include "DebugUtils.h"
@@ -22,7 +24,8 @@ const int debugFlag = DEBUG_MENU;
 SkillMenu::SkillMenu(GameContext& gameContext) :
    CharacterDependentMenu(gameContext, "SkillMenu"),
    m_bindings(this),
-   m_skillViewModel(gameContext)
+   m_selectedCharacter(NULL),
+   m_skillViewModel(*this, gameContext.getMetadata())
 {
    initialize();
 }
@@ -30,7 +33,7 @@ SkillMenu::SkillMenu(GameContext& gameContext) :
 SkillMenu::SkillMenu(GameContext& gameContext, MenuShell* menuShell) :
    CharacterDependentMenu(gameContext, "SkillMenu", menuShell),
    m_bindings(this),
-   m_skillViewModel(gameContext)
+   m_skillViewModel(*this, gameContext.getMetadata())
 {
    initialize();
 }
@@ -73,7 +76,13 @@ void SkillMenu::deactivate()
 
 void SkillMenu::setCharacter(int characterIndex)
 {
-   m_skillViewModel.setCharacter(characterIndex);
+   CharacterRoster* roster = m_gameContext.getCurrentPlayerData().getRoster();
+   
+   m_selectedCharacter = roster != NULL && roster->getParty().size() > characterIndex ?
+      roster->getParty()[characterIndex] :
+      NULL;
+
+   m_skillViewModel.refresh();
 }
 
 void SkillMenu::dragStarted(Rocket::Core::Event* event)
@@ -127,7 +136,29 @@ void SkillMenu::skillClicked(Rocket::Core::Event* event)
       if(rowElement != NULL)
       {
          int skillIndex = rowElement->GetParentRelativeIndex();
-         m_skillViewModel.useSkill(skillIndex);
+         useSkill(skillIndex);
       }
    }
 }
+
+void SkillMenu::useSkill(int rowIndex)
+{
+   if(m_selectedCharacter == NULL)
+   {
+      return;
+   }
+   
+   const SkillList& skillList = m_selectedCharacter->getSkillList();
+   const UsableId skillId = skillList[rowIndex];
+   Skill* skill = m_gameContext.getSkill(skillId);
+   if(skill == NULL)
+   {
+      DEBUG("Tried to use bad skill with ID: %d.", skillId);
+   }
+   else
+   {
+      skill->use(m_gameContext.getScriptEngine(), getStateType(), m_selectedCharacter);
+      m_skillViewModel.refresh(rowIndex);
+   }
+}
+

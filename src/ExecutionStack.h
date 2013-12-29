@@ -11,6 +11,7 @@
 #include <stack>
 
 class GameState;
+class Scheduler;
 
 /**
  * The heart of the game's execution.
@@ -59,11 +60,16 @@ class ExecutionStack
        * @param transitionState an optional transition state used to introduce the new state visually
        */
       void pushState(GameState* newState, GameState* transitionState = NULL);
-
+      
       /**
        * @return The currently executing game state.
        */
       GameState* getCurrentState() const;
+      
+      /**
+       * @return The currently executing game state's scheduler.
+       */
+      Scheduler* getCurrentScheduler() const;
 
       /**
        * Execute the game loop.

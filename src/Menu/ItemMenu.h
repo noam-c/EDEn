@@ -42,6 +42,10 @@ class ItemMenu: public MenuState
     * Initializes the item menu pane and populates the sidebar.
     */
    void initialize();
+   
+   void itemClicked(Rocket::Core::Event* event);
+   void useItem(int rowIndex);
+   void dragStarted(Rocket::Core::Event* event);
 
    protected:
       /**
@@ -74,9 +78,6 @@ class ItemMenu: public MenuState
        * Destructor.
        */
       ~ItemMenu();
-
-      void itemClicked(Rocket::Core::Event* event);
-      void dragStarted(Rocket::Core::Event* event);
 };
 
 #endif

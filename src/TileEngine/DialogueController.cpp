@@ -26,7 +26,6 @@ bool DialogueController::DialogueCoroutine::resume(long timePassed)
 
 DialogueController::DialogueController(Rocket::Core::Context& context, Scheduler& scheduler, ScriptEngine& engine) :
    m_scriptEngine(engine),
-   m_scheduler(scheduler),
    m_context(context),
    m_mainDialogue(NULL),
    m_fastMode(false),
@@ -110,7 +109,7 @@ void DialogueController::advanceDialogue()
       {
          m_charsToShow = openIndex;
          std::string script = m_currLine->removeNextScriptString();
-         m_scriptEngine.runScriptString(script, m_scheduler);
+         m_scriptEngine.runScriptString(script);
       }
    }
 

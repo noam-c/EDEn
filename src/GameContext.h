@@ -17,20 +17,17 @@ typedef class Usable Item;
 
 class GameContext
 {
-   ExecutionStack m_executionStack;
-   ScriptEngine m_scriptEngine;
+   ScriptEngine& m_scriptEngine;
    Metadata m_metadata;
    PlayerData m_playerData;
 
    public:
-      GameContext();
+      GameContext(ScriptEngine& scriptEngine);
       ~GameContext();
 
-      ExecutionStack& getExecutionStack();
       ScriptEngine& getScriptEngine();
+      const Metadata& getMetadata() const;
       PlayerData& getCurrentPlayerData();
-      Scheduler* getCurrentScheduler() const;
-      GameState::GameStateType getCurrentStateType() const;
       Item* getItem(UsableId itemId) const;
       Skill* getSkill(UsableId skillId) const;
 };

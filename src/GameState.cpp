@@ -38,6 +38,16 @@ GameState::~GameState()
    m_rocketContext->RemoveReference();
 }
 
+ExecutionStack* GameState::getExecutionStack() const
+{
+   return m_executionStack;
+}
+
+void GameState::setExecutionStack(ExecutionStack* executionStack)
+{
+   m_executionStack = executionStack;
+}
+
 void GameState::activate()
 {
    m_finished = false;

@@ -9,13 +9,14 @@
 
 #include <string>
 #include "UsableId.h"
+#include "GameState.h"
 
 namespace Json
 {
    class Value;
 };
 
-class GameContext;
+class ScriptEngine;
 class UsableScript;
 class Character;
 
@@ -38,10 +39,10 @@ class Usable
    /** The script that dictates what the usable does when used. */
    UsableScript* m_usableScript;
 
-   void loadScript(GameContext& gameContext);
+   void loadScript(ScriptEngine& scriptEngine);
 
    protected:
-      virtual UsableScript* createScript(GameContext& gameContext);
+      virtual UsableScript* createScript(ScriptEngine& scriptEngine);
 
    public:
       /**
@@ -71,7 +72,7 @@ class Usable
        */
       const std::string& getIconPath() const;
 
-      virtual bool use(GameContext& gameContext, Character* usingCharacter = NULL);
+      virtual bool use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter = NULL);
 };
 
 #endif

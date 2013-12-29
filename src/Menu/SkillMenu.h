@@ -35,6 +35,8 @@ class SkillMenu: public CharacterDependentMenu
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings<SkillMenu> m_bindings;
+   
+   Character* m_selectedCharacter;
 
    /** The view model that exposes the inventory to the GUI */
    SkillViewModel m_skillViewModel;
@@ -43,6 +45,11 @@ class SkillMenu: public CharacterDependentMenu
     * Initializes the skill menu pane and populates the sidebar.
     */
    void initialize();
+   
+   void skillClicked(Rocket::Core::Event* event);
+   void dragStarted(Rocket::Core::Event* event);
+   
+   void useSkill(int rowIndex);
 
    protected:
       /**
@@ -77,9 +84,6 @@ class SkillMenu: public CharacterDependentMenu
       ~SkillMenu();
 
       void setCharacter(int characterIndex);
-
-      void skillClicked(Rocket::Core::Event* event);
-      void dragStarted(Rocket::Core::Event* event);
 };
 
 #endif

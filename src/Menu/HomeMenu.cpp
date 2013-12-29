@@ -7,6 +7,11 @@
 #include "HomeMenu.h"
 #include "MenuShell.h"
 
+#include "CharacterDependentMenu.h"
+#include "DataMenu.h"
+#include "ItemMenu.h"
+#include "SkillMenu.h"
+
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 
@@ -25,7 +30,8 @@ const int debugFlag = DEBUG_MENU;
 HomeMenu::HomeMenu(GameContext& gameContext) :
    MenuState(gameContext, "HomeMenu"),
    m_bindings(this),
-   m_homeViewModel(gameContext)
+   m_homeViewModel(gameContext.getCurrentPlayerData()),
+   m_selectedDestinationMenu(-1)
 {
    initialize();
 }
@@ -33,7 +39,8 @@ HomeMenu::HomeMenu(GameContext& gameContext) :
 HomeMenu::HomeMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "HomeMenu", menuShell),
    m_bindings(this),
-   m_homeViewModel(gameContext)
+   m_homeViewModel(gameContext.getCurrentPlayerData()),
+   m_selectedDestinationMenu(-1)
 {
    initialize();
 }
@@ -100,12 +107,87 @@ void HomeMenu::characterClicked(Rocket::Core::Event* event)
       {
          DEBUG("Character click registered.");
          int characterIndex = rowElement->GetParentRelativeIndex();
-         m_homeViewModel.selectCharacter(characterIndex, m_menuShell);
+         selectCharacter(characterIndex, m_menuShell);
       }
    }
 }
 
 void HomeMenu::sidebarClicked(int optionIndex)
 {
-   m_homeViewModel.sidebarClicked(optionIndex, m_menuShell);
+   if(m_selectedDestinationMenu == -1)
+   {
+      switch(optionIndex)
+      {
+         case 0:
+         case 7:
+            pushCharacterIndependentMenu(optionIndex, m_menuShell);
+            break;
+         case 3:
+            m_selectedDestinationMenu = optionIndex;
+            break;
+         default:
+            break;
+      }
+   }
+}
+
+void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, MenuShell* menuShell)
+{
+   CharacterDependentMenu* newState = NULL;
+   switch(optionIndex)
+   {
+      case 3:
+         newState = new SkillMenu(m_gameContext, menuShell);
+         DEBUG("Skill menu constructed");
+         break;
+      default:
+         break;
+   }
+   
+   if(newState != NULL)
+   {
+      newState->setCharacter(characterIndex);
+      getExecutionStack()->pushState(newState);
+   }
+}
+
+void HomeMenu::pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShell)
+{
+   MenuState* newState = NULL;
+   switch(optionIndex)
+   {
+      case 0:
+         newState = new ItemMenu(m_gameContext, menuShell);
+         DEBUG("Item menu constructed.");
+         break;
+      case 7:
+         newState = new DataMenu(m_gameContext, menuShell);
+         DEBUG("Data menu constructed.");
+         break;
+      default:
+         break;
+   }
+   
+   if(newState != NULL)
+   {
+      DEBUG("Pushing new menu state.");
+      getExecutionStack()->pushState(newState);
+   }
+}
+
+void HomeMenu::selectCharacter(int slotIndex, MenuShell* menuShell)
+{
+   DEBUG("Character selected at slot %d", slotIndex);
+   
+   /**
+    * \todo Add default destination menu here for when a player clicks
+    *       on a character before clicking on a sidebar action.
+    */
+   if(m_selectedDestinationMenu >= 0)
+   {
+      pushCharacterDependentMenu(m_selectedDestinationMenu, slotIndex, menuShell);
+      DEBUG("Character-dependent menu state pushed onto stack.");
+   }
+   
+   m_selectedDestinationMenu = -1;
 }

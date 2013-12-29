@@ -19,10 +19,13 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-ShortcutBar::ShortcutBar(GameContext& gameContext, Rocket::Core::Context& rocketContext) :
+ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType, Rocket::Core::Context& rocketContext) :
    m_bindings(this),
    m_rocketContext(rocketContext),
-   m_gameContext(gameContext)
+   m_metadata(metadata),
+   m_playerData(playerData),
+   m_scriptEngine(scriptEngine),
+   m_stateType(stateType)
 {
    m_rocketContext.AddReference();
 
@@ -76,12 +79,37 @@ void ShortcutBar::shortcutClicked(Rocket::Core::Event* event)
          ++shortcutIndex;
       }
 
-      bool shortcutInvoked = m_gameContext.getCurrentPlayerData().invokeShortcut(shortcutIndex);
+      bool shortcutInvoked = invokeShortcut(shortcutIndex);
       if (shortcutInvoked)
       {
          refresh();
       }
    }
+}
+
+bool ShortcutBar::invokeShortcut(int shortcutIndex)
+{
+   const Shortcut& shortcut = m_playerData.getShortcut(shortcutIndex);
+   if(shortcut.usableType == Shortcut::ITEM)
+   {
+      Item* item = m_metadata.getItem(shortcut.usableId);
+      if(item != NULL)
+      {
+         return item->use(m_scriptEngine, m_stateType);
+      }
+   }
+   else if(shortcut.usableType == Shortcut::SKILL)
+   {
+      Skill* skill = m_metadata.getSkill(shortcut.usableId);
+      CharacterRoster* roster = m_playerData.getRoster();
+      Character* usingCharacter = roster != NULL ? roster->getCharacter(shortcut.characterId) : NULL;
+      if(skill != NULL && usingCharacter != NULL)
+      {
+         return skill->use(m_scriptEngine, m_stateType, usingCharacter);
+      }
+   }
+   
+   return false;
 }
 
 void ShortcutBar::usableDropped(Rocket::Core::Event* event)
@@ -125,18 +153,18 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
             if(isItem)
             {
                DEBUG("Dropping item %d on shortcut index %d.", usableId, dropTargetIndex);
-               m_gameContext.getCurrentPlayerData().setShortcut(dropTargetIndex, usableId);
+               m_playerData.setShortcut(dropTargetIndex, usableId);
                isShortcutSet = true;
             }
             else if(isSkill)
             {
                const std::string characterId = dragElement->GetAttribute<Rocket::Core::String>("characterId", "").CString();
-               Character* character = m_gameContext.getCurrentPlayerData().getRoster()->getCharacter(characterId);
+               Character* character = m_playerData.getRoster()->getCharacter(characterId);
 
                if(character != NULL)
                {
                   DEBUG("Dropping skill %d on shortcut index %d.", usableId, dropTargetIndex);
-                  m_gameContext.getCurrentPlayerData().setShortcut(dropTargetIndex, usableId, characterId);
+                  m_playerData.setShortcut(dropTargetIndex, usableId, characterId);
                   isShortcutSet = true;
                }
             }
@@ -155,7 +183,7 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
                      ++dragTargetIndex;
                   }
 
-                  m_gameContext.getCurrentPlayerData().clearShortcut(dragTargetIndex);
+                  m_playerData.clearShortcut(dragTargetIndex);
                }
             }
 
@@ -172,11 +200,11 @@ void ShortcutBar::refresh()
 
    for (int i = 0; i < PlayerData::SHORTCUT_BAR_SIZE; ++i)
    {
-      const Shortcut& shortcut = m_gameContext.getCurrentPlayerData().getShortcut(i);
+      const Shortcut& shortcut = m_playerData.getShortcut(i);
       const Usable* usable =
             shortcut.usableType == Shortcut::ITEM ?
-            static_cast<Usable*>(m_gameContext.getItem(shortcut.usableId)) :
-            static_cast<Usable*>(m_gameContext.getSkill(shortcut.usableId));
+            static_cast<Usable*>(m_metadata.getItem(shortcut.usableId)) :
+            static_cast<Usable*>(m_metadata.getSkill(shortcut.usableId));
 
       Rocket::Core::Element* shortcutElement = m_shortcutBarDocument->CreateElement("div");
       Rocket::Core::ElementAttributes shortcutElementAttributes;
@@ -206,7 +234,7 @@ void ShortcutBar::refresh()
 
          if (shortcut.usableType == Shortcut::ITEM)
          {
-            const Rocket::Core::String shortcutQuantity(8, "%d", m_gameContext.getCurrentPlayerData().getInventory()->getItemQuantity(shortcut.usableId));
+            const Rocket::Core::String shortcutQuantity(8, "%d", m_playerData.getInventory()->getItemQuantity(shortcut.usableId));
             Rocket::Core::Element* shortcutQuantityElement = m_shortcutBarDocument->CreateElement("span");
 
             shortcutQuantityElement->SetInnerRML(shortcutQuantity);

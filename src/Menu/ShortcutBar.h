@@ -8,6 +8,7 @@
 #define SHORTCUT_BAR_H
 
 #include "EdenRocketBindings.h"
+#include "GameState.h"
 
 namespace Rocket
 {
@@ -18,7 +19,9 @@ namespace Rocket
    };
 };
 
-class GameContext;
+class Metadata;
+class PlayerData;
+class ScriptEngine;
 
 class ShortcutBar
 {
@@ -28,8 +31,17 @@ class ShortcutBar
    /** The Rocket context that holds this console window */
    Rocket::Core::Context& m_rocketContext;
 
-   /** The game context containing the item metadata */
-   GameContext& m_gameContext;
+   /** The item and skill metadata */
+   const Metadata& m_metadata;
+   
+   /** The player data providing the shortcuts. */
+   PlayerData& m_playerData;
+   
+   /** The script engine to use to run a shortcut's script. */
+   ScriptEngine& m_scriptEngine;
+   
+   /** The type of game state driving the shortcuts. */
+   const GameState::GameStateType m_stateType;
 
    /** The Rocket document representing the shortcut bar GUI */
    Rocket::Core::ElementDocument* m_shortcutBarDocument;
@@ -37,13 +49,15 @@ class ShortcutBar
    /** The Rocket element that contains the shortcut bar icons */
    Rocket::Core::Element* m_shortcutContainer;
 
+   bool invokeShortcut(int shortcutIndex);
+
    public:
       /**
        * Constructor.
        *
        * @param rocketContext The Rocket context to which this console window should attach.
        */
-      ShortcutBar(GameContext& gameContext, Rocket::Core::Context& rocketContext);
+      ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType, Rocket::Core::Context& rocketContext);
 
       /**
        * Destructor.

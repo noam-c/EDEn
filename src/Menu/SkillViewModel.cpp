@@ -7,9 +7,9 @@
 #include "SkillViewModel.h"
 #include "PlayerData.h"
 #include "GameContext.h"
-#include "PlayerData.h"
 #include "Character.h"
 #include "Skill.h"
+#include "SkillMenu.h"
 
 #include "dirent.h"
 #include <sstream>
@@ -20,48 +20,16 @@ const int debugFlag = DEBUG_MENU;
 
 const Rocket::Core::String SkillViewModel::UnknownSkillIconPath("data/images/icons/I_Rock01.png");
 
-SkillViewModel::SkillViewModel(GameContext& gameContext) :
+SkillViewModel::SkillViewModel(SkillMenu& skillMenu, const Metadata& metadata) :
       Rocket::Controls::DataSource("skillViewModel"),
-      m_gameContext(gameContext),
+      m_skillMenu(skillMenu),
+      m_metadata(metadata),
       m_selectedCharacter(NULL)
 {
 }
 
 SkillViewModel::~SkillViewModel()
 {
-}
-
-void SkillViewModel::setCharacter(int characterIndex)
-{
-   CharacterRoster* roster = m_gameContext.getCurrentPlayerData().getRoster();
-
-   m_selectedCharacter = roster != NULL ?
-      m_selectedCharacter = roster->getParty()[characterIndex] :
-      NULL;
-
-
-   NotifyRowChange("skills");
-}
-
-void SkillViewModel::useSkill(int rowIndex)
-{
-   if(m_selectedCharacter == NULL)
-   {
-      return;
-   }
-
-   const SkillList& skillList = m_selectedCharacter->getSkillList();
-   const UsableId skillId = skillList[rowIndex];
-   Skill* skill = m_gameContext.getSkill(skillId);
-   if(skill == NULL)
-   {
-      DEBUG("Tried to use bad skill with ID: %d.", skillId);
-   }
-   else
-   {
-      skill->use(m_gameContext, m_selectedCharacter);
-      NotifyRowChange("skills", rowIndex, 1);
-   }
 }
 
 UsableId SkillViewModel::getSkillId(int rowIndex) const
@@ -100,7 +68,7 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
       for (int i = 0; i < columns.size(); ++i)
       {
          const UsableId skillId = skillList[row_index];
-         const Skill* rowSkill = m_gameContext.getSkill(skillId);
+         const Skill* rowSkill = m_metadata.getSkill(skillId);
          if (columns[i] == "name")
          {
             if(rowSkill == NULL)
@@ -135,4 +103,14 @@ int SkillViewModel::GetNumRows(const Rocket::Core::String& table)
    }
 
    return 0;
+}
+
+void SkillViewModel::refresh()
+{
+   NotifyRowChange("skills");
+}
+
+void SkillViewModel::refresh(int rowIndex)
+{
+   NotifyRowChange("skills", rowIndex, 1);
 }

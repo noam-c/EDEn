@@ -56,24 +56,24 @@ const std::string& Usable::getIconPath() const
    return m_iconPath;
 }
 
-void Usable::loadScript(GameContext& gameContext)
+void Usable::loadScript(ScriptEngine& scriptEngine)
 {
    if(m_usableScript == NULL)
    {
-      m_usableScript = createScript(gameContext);
+      m_usableScript = createScript(scriptEngine);
    }
 }
 
-UsableScript* Usable::createScript(GameContext& gameContext)
+UsableScript* Usable::createScript(ScriptEngine& scriptEngine)
 {
-   return gameContext.getScriptEngine().createItemScript(*this);
+   return scriptEngine.createItemScript(*this);
 }
 
-bool Usable::use(GameContext& gameContext, Character* usingCharacter)
+bool Usable::use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter)
 {
-   loadScript(gameContext);
+   loadScript(scriptEngine);
 
-   switch(gameContext.getCurrentStateType())
+   switch(gameStateType)
    {
       case GameState::MENU:
          return m_usableScript->onMenuUse(usingCharacter);

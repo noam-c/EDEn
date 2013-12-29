@@ -32,7 +32,7 @@
 void MainMenu::NewGameAction(Rocket::Core::Event* event)
 {
    TileEngine* tileEngine = new TileEngine(m_gameContext, CHAP1);
-   m_gameContext.getExecutionStack().pushState(tileEngine, new FadeState(m_gameContext, this));
+   getExecutionStack()->pushState(tileEngine, new FadeState(m_gameContext, this));
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
 }
@@ -44,7 +44,7 @@ void MainMenu::NewGameAction(Rocket::Core::Event* event)
 void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
 {
    m_gameContext.getCurrentPlayerData().load(SAVE_GAME);
-   m_gameContext.getExecutionStack().pushState(new HomeMenu(m_gameContext));
+   getExecutionStack()->pushState(new HomeMenu(m_gameContext));
 }
 
 /**
@@ -61,7 +61,7 @@ void MainMenu::LoadGameAction(Rocket::Core::Event* event)
 void MainMenu::OptionsAction(Rocket::Core::Event* event)
 {
    TitleScreenSettingsMenu* titleScreenSettingsMenuState = new TitleScreenSettingsMenu(m_gameContext);
-   m_gameContext.getExecutionStack().pushState(
+   getExecutionStack()->pushState(
       titleScreenSettingsMenuState,
       new BlendState(m_gameContext, this, titleScreenSettingsMenuState, 500));
 }

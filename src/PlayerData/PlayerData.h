@@ -66,9 +66,6 @@ class PlayerData
    static const char* X_ATTRIBUTE;
    static const char* Y_ATTRIBUTE;
 
-   /** The game context in which this player session was loaded */
-   GameContext& m_gameContext;
-
    /** The file from which this player data was last saved/loaded. */
    std::string m_filePath;
 
@@ -162,7 +159,6 @@ class PlayerData
       void setShortcut(int index, UsableId itemId);
       void setShortcut(int index, UsableId itemId, const std::string& characterId);
       void clearShortcut(int index);
-      bool invokeShortcut(int index);
 
       const CharacterRoster* getRoster() const;
       const Inventory* getInventory() const;
