@@ -1,5 +1,5 @@
 #include "RocketScriptHandler.h"
-#include "GameContext.h"
+#include "ScriptEngine.h"
 
 RocketScriptHandler::RocketScriptHandler(ScriptEngine& scriptEngine, Rocket::Core::String scriptString) :
    m_scriptEngine(scriptEngine),

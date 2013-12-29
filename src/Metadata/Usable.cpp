@@ -7,7 +7,6 @@
 #include "Usable.h"
 #include "json.h"
 
-#include "GameContext.h"
 #include "ScriptEngine.h"
 #include "UsableScript.h"
 

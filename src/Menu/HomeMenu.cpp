@@ -21,7 +21,6 @@
 
 #include "PlayerData.h"
 
-#include "GameContext.h"
 #include "ExecutionStack.h"
 #include "DebugUtils.h"
 
@@ -30,7 +29,7 @@ const int debugFlag = DEBUG_MENU;
 HomeMenu::HomeMenu(GameContext& gameContext) :
    MenuState(gameContext, "HomeMenu"),
    m_bindings(this),
-   m_homeViewModel(gameContext.getCurrentPlayerData()),
+   m_homeViewModel(getCurrentPlayerData()),
    m_selectedDestinationMenu(-1)
 {
    initialize();
@@ -39,7 +38,7 @@ HomeMenu::HomeMenu(GameContext& gameContext) :
 HomeMenu::HomeMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "HomeMenu", menuShell),
    m_bindings(this),
-   m_homeViewModel(gameContext.getCurrentPlayerData()),
+   m_homeViewModel(getCurrentPlayerData()),
    m_selectedDestinationMenu(-1)
 {
    initialize();

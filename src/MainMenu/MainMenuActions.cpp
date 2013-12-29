@@ -5,7 +5,6 @@
  */
 
 #include "MainMenu.h"
-#include "GameContext.h"
 #include "ExecutionStack.h"
 #include "GraphicsUtil.h"
 #include "Music.h"
@@ -43,7 +42,7 @@ void MainMenu::NewGameAction(Rocket::Core::Event* event)
  */
 void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
 {
-   m_gameContext.getCurrentPlayerData().load(SAVE_GAME);
+   getCurrentPlayerData().load(SAVE_GAME);
    getExecutionStack()->pushState(new HomeMenu(m_gameContext));
 }
 

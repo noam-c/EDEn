@@ -10,7 +10,8 @@
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
-class GameContext;
+class DataMenu;
+class PlayerData;
 class PlayerDataSummary;
 
 /**
@@ -22,42 +23,21 @@ class PlayerDataSummary;
  */
 class DataViewModel : public Rocket::Controls::DataSource
 {
-   GameContext& m_gameContext;
+   const DataMenu& m_dataMenu;
 
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
-
-   /** The list of savegame files and their respective data. */
-   std::vector<std::pair<std::string, PlayerDataSummary*> > m_saveGames;
-
-   /**
-    * Clears the list of savegames.
-    * Used during destruction or refresh.
-    */
-   void clearSaveGameList();
 
    public:
       /**
        * Constructor.
        */
-      DataViewModel(GameContext& gameContext);
+      DataViewModel(DataMenu& dataMenu);
 
       /**
        * Destructor.
        */
       ~DataViewModel();
-
-      /**
-       * Refreshes the list of save games.
-       */
-      void refreshSaveGames();
-
-      /**
-       * Saves the current player data to the given save slot.
-       *
-       * @param slotIndex The slot at which the game will be saved.
-       */
-      void saveToSlot(int slotIndex);
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.
@@ -75,6 +55,8 @@ class DataViewModel : public Rocket::Controls::DataSource
        * @return The number of rows in the specified table.
        */
       int GetNumRows(const Rocket::Core::String& table);
+
+      void refresh(int rowIndex);
 };
 
 #endif

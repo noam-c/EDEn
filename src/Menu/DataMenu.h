@@ -22,6 +22,7 @@ namespace Rocket
 };
 
 class Sound;
+typedef std::vector<std::pair<std::string, PlayerDataSummary*> > SaveGameList;
 
 /**
  * The home menu is the first menu state of the menu.
@@ -35,6 +36,9 @@ class DataMenu: public MenuState
    /** The event binding collection for this GUI */
    EdenRocketBindings<DataMenu> m_bindings;
 
+   /** The list of savegame files and their respective data. */
+   SaveGameList m_saveGames;
+   
    /** The view model that exposes the savegames to the GUI */
    DataViewModel m_dataViewModel;
 
@@ -79,6 +83,25 @@ class DataMenu: public MenuState
     * @param event The Rocket GUI event that indicates which slot was clicked.
     */
    void saveGameClicked(Rocket::Core::Event* event);
+   
+   
+   /**
+    * Clears the list of savegames.
+    * Used during destruction or refresh.
+    */
+   void clearSaveGameList();
+   
+   /**
+    * Refreshes the list of save games.
+    */
+   void refreshSaveGames();
+   
+   /**
+    * Saves the current player data to the given save slot.
+    *
+    * @param slotIndex The slot at which the game will be saved.
+    */
+   void saveToSlot(int slotIndex);
 
    /**
     * Initializes the data menu pane and populates the sidebar.
@@ -124,6 +147,8 @@ class DataMenu: public MenuState
        * @param optionIndex The index of the sidebar option that was clicked.
        */
       void sidebarClicked(int optionIndex);
+   
+      const SaveGameList& getSaveGames() const;
 };
 
 #endif

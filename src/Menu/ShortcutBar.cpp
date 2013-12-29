@@ -9,7 +9,7 @@
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 
-#include "GameContext.h"
+#include "Metadata.h"
 #include "PlayerData.h"
 #include "Character.h"
 #include "Shortcut.h"

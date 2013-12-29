@@ -11,7 +11,10 @@
 
 class ExecutionStack;
 class GameContext;
+class Metadata;
+class PlayerData;
 class Scheduler;
+class ScriptEngine;
 
 namespace Rocket
 {
@@ -68,10 +71,13 @@ class GameState
 
    protected:
       ExecutionStack* getExecutionStack() const;
+      PlayerData& getCurrentPlayerData() const;
+      ScriptEngine& getScriptEngine() const;
+      const Metadata& getMetadata() const;
 
-      /** The game context responsible for the state's data and execution. */
+      /** The game context responsible for the game's data and settings. */
       GameContext& m_gameContext;
-   
+      
       /** The Rocket context for any GUI created by the state. */
       Rocket::Core::Context* m_rocketContext;
 

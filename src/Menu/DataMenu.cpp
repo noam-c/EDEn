@@ -11,6 +11,9 @@
 #include <Rocket/Controls.h>
 
 #include "PlayerData.h"
+#include "PlayerDataSummary.h"
+
+#include "dirent.h"
 
 #include "ExecutionStack.h"
 #include "DebugUtils.h"
@@ -20,7 +23,7 @@ const int debugFlag = DEBUG_MENU;
 DataMenu::DataMenu(GameContext& gameContext) :
    MenuState(gameContext, "DataMenu"),
    m_bindings(this),
-   m_dataViewModel(gameContext)
+   m_dataViewModel(*this)
 {
    initialize();
 }
@@ -28,7 +31,7 @@ DataMenu::DataMenu(GameContext& gameContext) :
 DataMenu::DataMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "DataMenu", menuShell),
    m_bindings(this),
-   m_dataViewModel(gameContext)
+   m_dataViewModel(*this)
 {
    initialize();
 }
@@ -58,6 +61,8 @@ void DataMenu::initialize()
    m_sidebarOptions.push_back("Party Change");
    m_sidebarOptions.push_back("Options");
    m_sidebarOptions.push_back("Data");
+   
+   refreshSaveGames();
 }
 
 DataMenu::~DataMenu()
@@ -124,7 +129,7 @@ void DataMenu::hideConfirmDialog()
 
 void DataMenu::confirmClicked(Rocket::Core::Event* event)
 {
-   m_dataViewModel.saveToSlot(m_slotToSave);
+   saveToSlot(m_slotToSave);
    hideConfirmDialog();
 }
 
@@ -153,4 +158,60 @@ void DataMenu::saveGameClicked(Rocket::Core::Event* event)
          showConfirmDialog(saveGameIndex);
       }
    }
+}
+
+void DataMenu::saveToSlot(int slotIndex)
+{
+   PlayerData& currentData = getCurrentPlayerData();
+   currentData.save(m_saveGames[slotIndex].first);
+   *(m_saveGames[slotIndex].second) = currentData;
+   m_dataViewModel.refresh(slotIndex);
+}
+
+void DataMenu::clearSaveGameList()
+{
+   std::vector<std::pair<std::string, PlayerDataSummary*> >::iterator iter;
+   for(iter = m_saveGames.begin(); iter != m_saveGames.end(); ++iter)
+   {
+      delete iter->second;
+   }
+   
+   m_saveGames.clear();
+}
+
+void DataMenu::refreshSaveGames()
+{
+   clearSaveGameList();
+   
+   struct dirent *entry;
+   DIR *dp;
+   
+   /** \todo Extract HARDCODED path into a constant. */
+   dp = opendir("data/savegames");
+   if (dp == NULL)
+   {
+      T_T("Failed to open data/savegames for save game listing.");
+   }
+   
+   while((entry = readdir(dp)))
+   {
+      std::string filename(entry->d_name);
+      if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".edd")
+      {
+         PlayerDataSummary* saveGameData = new PlayerDataSummary(getMetadata());
+         
+         /** \todo Extract HARDCODED path into a constant. */
+         std::string path = "data/savegames/" + filename;
+         saveGameData->load(path);
+         
+         m_saveGames.push_back(std::make_pair(path, saveGameData));
+      }
+   }
+   
+   closedir(dp);
+}
+
+const SaveGameList& DataMenu::getSaveGames() const
+{
+   return m_saveGames;
 }

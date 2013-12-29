@@ -22,6 +22,7 @@ namespace Rocket
 class Music;
 class Sound;
 class Settings;
+class Scheduler;
 
 /**
  * Provides the title screen settings menu, allowing the user to

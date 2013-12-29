@@ -7,7 +7,7 @@
 #include "ScriptEngine.h"
 #include "TileEngine.h"
 #include "PlayerData.h"
-#include "GameContext.h"
+#include "ExecutionStack.h"
 #include "Scheduler.h"
 #include "ResourceLoader.h"
 #include "Music.h"

@@ -16,8 +16,8 @@ const int debugFlag = DEBUG_PLAYER;
 const char* PlayerDataSummary::CHARACTER_LIST_ELEMENT = "Characters";
 const char* PlayerDataSummary::CHARACTER_ELEMENT = "Character";
 
-PlayerDataSummary::PlayerDataSummary(const GameContext& gameContext) :
-   m_roster(gameContext)
+PlayerDataSummary::PlayerDataSummary(const Metadata& metadata) :
+   m_roster(metadata)
 {
 }
 

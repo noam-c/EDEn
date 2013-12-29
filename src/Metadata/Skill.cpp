@@ -5,7 +5,7 @@
  */
 
 #include "Skill.h"
-#include "GameContext.h"
+#include "ScriptEngine.h"
 #include "Character.h"
 
 Skill::Skill(Json::Value& skillNode) :

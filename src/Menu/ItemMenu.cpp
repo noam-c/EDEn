@@ -10,7 +10,7 @@
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 
-#include "GameContext.h"
+#include "Metadata.h"
 #include "PlayerData.h"
 #include "Item.h"
 
@@ -22,7 +22,7 @@ const int debugFlag = DEBUG_MENU;
 ItemMenu::ItemMenu(GameContext& gameContext) :
    MenuState(gameContext, "ItemMenu"),
    m_bindings(this),
-   m_itemViewModel(gameContext.getMetadata(), gameContext.getCurrentPlayerData())
+   m_itemViewModel(getMetadata(), getCurrentPlayerData())
 {
    initialize();
 }
@@ -30,7 +30,7 @@ ItemMenu::ItemMenu(GameContext& gameContext) :
 ItemMenu::ItemMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "ItemMenu", menuShell),
    m_bindings(this),
-   m_itemViewModel(gameContext.getMetadata(), gameContext.getCurrentPlayerData())
+   m_itemViewModel(getMetadata(), getCurrentPlayerData())
 {
    initialize();
 }
@@ -123,16 +123,16 @@ void ItemMenu::itemClicked(Rocket::Core::Event* event)
 
 void ItemMenu::useItem(int itemIndex)
 {
-   const ItemList& itemList = m_gameContext.getCurrentPlayerData().getInventory()->getItemList();
+   const ItemList& itemList = getCurrentPlayerData().getInventory()->getItemList();
    const UsableId usableId = itemList[itemIndex].first;
-   Item* item = m_gameContext.getItem(usableId);
+   Item* item = getMetadata().getItem(usableId);
    if(item == NULL)
    {
       DEBUG("Tried to use bad item with ID: %d.", usableId);
    }
    else
    {
-      item->use(m_gameContext.getScriptEngine(), getStateType());
+      item->use(getScriptEngine(), getStateType());
       m_itemViewModel.refresh(itemIndex);
    }
 }

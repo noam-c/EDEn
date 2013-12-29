@@ -116,14 +116,14 @@ class Character
        *
        * @param id The id of the new character.
        */
-      Character(const GameContext& gameContext, const std::string& id);
+      Character(const Metadata& metadata, const std::string& id);
 
       /**
        * Constructor used to load an existing character.
        *
        * @param charToLoad The JSON node containing the character's data.
        */
-      Character(const GameContext& gameContext, Json::Value& charToLoad);
+      Character(const Metadata& metadata, Json::Value& charToLoad);
    
       /**
        * Destructor.

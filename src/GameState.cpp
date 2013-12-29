@@ -6,6 +6,7 @@
 
 #include "GameState.h"
 #include "GraphicsUtil.h"
+#include "GameContext.h"
 
 #include <SDL.h>
 
@@ -46,6 +47,22 @@ ExecutionStack* GameState::getExecutionStack() const
 void GameState::setExecutionStack(ExecutionStack* executionStack)
 {
    m_executionStack = executionStack;
+}
+
+
+PlayerData& GameState::getCurrentPlayerData() const
+{
+   return m_gameContext.getCurrentPlayerData();
+}
+
+const Metadata& GameState::getMetadata() const
+{
+   return m_gameContext.getMetadata();
+}
+
+ScriptEngine& GameState::getScriptEngine() const
+{
+   return m_gameContext.getScriptEngine();
 }
 
 void GameState::activate()

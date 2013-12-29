@@ -21,13 +21,13 @@ namespace messaging
 };
 
 class Character;
-class GameContext;
+class Metadata;
 
 class CharacterRoster
 {
    static const char* PARTY_ELEMENT;
 
-   const GameContext& m_gameContext;
+   const Metadata& m_metadata;
 
    /** The message pipe used to send messages about updates to the roster. */
    const messaging::MessagePipe* m_messagePipe;
@@ -53,7 +53,7 @@ class CharacterRoster
       /**
        * Constructor.
        */
-      CharacterRoster(const GameContext& gameContext);
+      CharacterRoster(const Metadata& metadata);
 
       /**
        * Destructor.

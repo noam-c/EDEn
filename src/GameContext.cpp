@@ -1,5 +1,5 @@
 #include "GameContext.h"
-#include "GameState.h"
+#include "ScriptEngine.h"
 
 #include <Rocket/Core/Factory.h>
 #include "RocketScriptHandlerFactory.h"

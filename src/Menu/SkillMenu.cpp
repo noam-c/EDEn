@@ -10,7 +10,7 @@
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 
-#include "GameContext.h"
+#include "Metadata.h"
 #include "PlayerData.h"
 #include "Skill.h"
 #include "SkillList.h"
@@ -25,7 +25,7 @@ SkillMenu::SkillMenu(GameContext& gameContext) :
    CharacterDependentMenu(gameContext, "SkillMenu"),
    m_bindings(this),
    m_selectedCharacter(NULL),
-   m_skillViewModel(*this, gameContext.getMetadata())
+   m_skillViewModel(*this, getMetadata())
 {
    initialize();
 }
@@ -33,7 +33,7 @@ SkillMenu::SkillMenu(GameContext& gameContext) :
 SkillMenu::SkillMenu(GameContext& gameContext, MenuShell* menuShell) :
    CharacterDependentMenu(gameContext, "SkillMenu", menuShell),
    m_bindings(this),
-   m_skillViewModel(*this, gameContext.getMetadata())
+   m_skillViewModel(*this, getMetadata())
 {
    initialize();
 }
@@ -76,7 +76,7 @@ void SkillMenu::deactivate()
 
 void SkillMenu::setCharacter(int characterIndex)
 {
-   CharacterRoster* roster = m_gameContext.getCurrentPlayerData().getRoster();
+   CharacterRoster* roster = getCurrentPlayerData().getRoster();
    
    m_selectedCharacter = roster != NULL && roster->getParty().size() > characterIndex ?
       roster->getParty()[characterIndex] :
@@ -150,14 +150,14 @@ void SkillMenu::useSkill(int rowIndex)
    
    const SkillList& skillList = m_selectedCharacter->getSkillList();
    const UsableId skillId = skillList[rowIndex];
-   Skill* skill = m_gameContext.getSkill(skillId);
+   Skill* skill = getMetadata().getSkill(skillId);
    if(skill == NULL)
    {
       DEBUG("Tried to use bad skill with ID: %d.", skillId);
    }
    else
    {
-      skill->use(m_gameContext.getScriptEngine(), getStateType(), m_selectedCharacter);
+      skill->use(getScriptEngine(), getStateType(), m_selectedCharacter);
       m_skillViewModel.refresh(rowIndex);
    }
 }

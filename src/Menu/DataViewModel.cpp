@@ -5,84 +5,30 @@
  */
 
 #include "DataViewModel.h"
-#include "GameContext.h"
 #include "PlayerData.h"
 #include "PlayerDataSummary.h"
 #include "CharacterRoster.h"
 #include "Character.h"
-
-#include "dirent.h"
+#include "DataMenu.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-DataViewModel::DataViewModel(GameContext& gameContext) :
+DataViewModel::DataViewModel(DataMenu& dataMenu) :
       Rocket::Controls::DataSource("dataViewModel"),
-      m_gameContext(gameContext)
+      m_dataMenu(dataMenu)
 {
-   refreshSaveGames();
 }
 
 DataViewModel::~DataViewModel()
 {
 }
 
-void DataViewModel::saveToSlot(int slotIndex)
-{
-   PlayerData& currentData = m_gameContext.getCurrentPlayerData();
-   currentData.save(m_saveGames[slotIndex].first);
-   *(m_saveGames[slotIndex].second) = currentData;
-   NotifyRowChange("saveGames", slotIndex, 1);
-}
-
-void DataViewModel::clearSaveGameList()
-{
-   std::vector<std::pair<std::string, PlayerDataSummary*> >::iterator iter;
-   for(iter = m_saveGames.begin(); iter != m_saveGames.end(); ++iter)
-   {
-      delete iter->second;
-   }
-
-   m_saveGames.clear();
-}
-
-void DataViewModel::refreshSaveGames()
-{
-   clearSaveGameList();
-
-   struct dirent *entry;
-   DIR *dp;
-
-   /** \todo Extract HARDCODED path into a constant. */
-   dp = opendir("data/savegames");
-   if (dp == NULL)
-   {
-      T_T("Failed to open data/savegames for save game listing.");
-   }
-
-   while((entry = readdir(dp)))
-   {
-      std::string filename(entry->d_name);
-      if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".edd")
-      {
-         PlayerDataSummary* saveGameData = new PlayerDataSummary(m_gameContext);
-
-         /** \todo Extract HARDCODED path into a constant. */
-         std::string path = "data/savegames/" + filename;
-         saveGameData->load(path);
-
-         m_saveGames.push_back(std::make_pair(path, saveGameData));
-      }
-   }
-
-   closedir(dp);
-}
-
 void DataViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   PlayerDataSummary* saveGameData = m_saveGames[row_index].second;
+   PlayerDataSummary* saveGameData = m_dataMenu.getSaveGames()[row_index].second;
    const std::vector<Character*> characters = saveGameData->getRoster()->getParty();
 
    if (table == "saveGames")
@@ -141,8 +87,13 @@ int DataViewModel::GetNumRows(const Rocket::Core::String& table)
 {
    if (table == "saveGames")
    {
-      return m_saveGames.size();
+      return m_dataMenu.getSaveGames().size();
    }
 
    return 0;
+}
+
+void DataViewModel::refresh(int rowIndex)
+{
+   NotifyRowChange("saveGames", rowIndex, 1);
 }

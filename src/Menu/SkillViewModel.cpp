@@ -6,7 +6,7 @@
 
 #include "SkillViewModel.h"
 #include "PlayerData.h"
-#include "GameContext.h"
+#include "Metadata.h"
 #include "Character.h"
 #include "Skill.h"
 #include "SkillMenu.h"

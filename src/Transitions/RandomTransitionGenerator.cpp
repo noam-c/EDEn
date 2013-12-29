@@ -6,7 +6,6 @@
 
 #include "RandomTransitionGenerator.h"
 #include "ExecutionStack.h"
-#include "GameState.h"
 #include "FadeState.h"
 #include "SpinState.h"
 #include "BlendState.h"

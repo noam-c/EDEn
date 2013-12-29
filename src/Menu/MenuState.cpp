@@ -10,7 +10,6 @@
 #include <Rocket/Core.h>
 #include "RocketSDLInputMapping.h"
 #include "EdenRocketBindings.h"
-#include "GameContext.h"
 #include "ShortcutBar.h"
 
 #include "DebugUtils.h"
@@ -21,7 +20,7 @@ MenuState::MenuState(GameContext& gameContext, const std::string& stateName) :
    m_internalMenuShell(true)
 {
    m_menuShell = new MenuShell(m_rocketContext);
-   m_menuShell->initializeShortcutBar(gameContext.getCurrentPlayerData(), gameContext.getScriptEngine(), gameContext.getMetadata(), getStateType());
+   m_menuShell->initializeShortcutBar(getCurrentPlayerData(), getScriptEngine(), getMetadata(), getStateType());
 }
 
 MenuState::MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* menuShell) :

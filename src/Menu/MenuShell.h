@@ -10,6 +10,11 @@
 #include <vector>
 #include <string>
 #include "EdenRocketBindings.h"
+
+/**
+ * \todo Change this include to forward declarations when enums
+ * can be forward declared in the product.
+ */
 #include "GameState.h"
 
 namespace Rocket

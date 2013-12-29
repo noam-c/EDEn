@@ -9,7 +9,6 @@
 #include "MenuState.h"
 #include "Scheduler.h"
 #include "ShortcutBar.h"
-#include "GameContext.h"
 #include <Rocket/Core.h>
 
 #include "DebugUtils.h"

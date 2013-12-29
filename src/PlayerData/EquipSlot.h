@@ -15,7 +15,7 @@ namespace Json
    class Value;
 };
 
-class GameContext;
+class Metadata;
 typedef class Usable Item;
 
 /**
@@ -54,7 +54,7 @@ struct EquipSlot
     *
     * @param inputJson The JSON node containing the slot information.
     */
-   void load(const GameContext& gameContext, Json::Value& inputJson);
+   void load(const Metadata& metadata, Json::Value& inputJson);
    
    /**
     * Serialize the slot information into a JSON node.

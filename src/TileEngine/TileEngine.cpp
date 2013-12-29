@@ -27,7 +27,6 @@
 #include "Pathfinder.h"
 #include "Rectangle.h"
 #include "DialogueController.h"
-#include "GameContext.h"
 #include "ExecutionStack.h"
 #include "CameraSlider.h"
 #include "RandomTransitionGenerator.h"
@@ -43,7 +42,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    GameState(gameContext, GameState::FIELD, "TileEngine"),
    m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
-   m_shortcutBar(gameContext.getCurrentPlayerData(), gameContext.getScriptEngine(), gameContext.getMetadata(), getStateType(), *m_rocketContext)
+   m_shortcutBar(getCurrentPlayerData(), getScriptEngine(), getMetadata(), getStateType(), *m_rocketContext)
 {
    m_scheduler = new Scheduler();
 
@@ -51,10 +50,10 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    m_messagePipe.registerListener<MapTriggerMessage>(this);
 
    loadPlayerData(playerDataPath);
-   m_playerActor = new PlayerCharacter(m_messagePipe, m_entityGrid, gameContext.getCurrentPlayerData());
+   m_playerActor = new PlayerCharacter(m_messagePipe, m_entityGrid, getCurrentPlayerData());
    m_cameraTarget = m_playerActor;
-   gameContext.getScriptEngine().setTileEngine(this);
-   m_dialogue = new DialogueController(*m_rocketContext, *m_scheduler, gameContext.getScriptEngine());
+   getScriptEngine().setTileEngine(this);
+   m_dialogue = new DialogueController(*m_rocketContext, *m_scheduler, getScriptEngine());
 
    startChapter(chapterName);
 }
@@ -74,14 +73,14 @@ void TileEngine::loadPlayerData(const std::string& path)
 {
    if(!path.empty())
    {
-      m_gameContext.getCurrentPlayerData().load(path);
+      getCurrentPlayerData().load(path);
       m_shortcutBar.refresh();
    }
 }
 
 void TileEngine::startChapter(const std::string& chapterName)
 {
-   m_gameContext.getScriptEngine().runChapterScript(chapterName, *m_scheduler);
+   getScriptEngine().runChapterScript(chapterName, *m_scheduler);
 }
 
 void TileEngine::clearMapListeners()
@@ -190,7 +189,7 @@ int TileEngine::setMap(std::string mapName)
    DEBUG("Map set to: %s", mapName.c_str());
 
    recalculateMapOffsets();
-   return m_gameContext.getScriptEngine().runMapScript(m_currRegion->getName(), mapName, *m_scheduler);
+   return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, *m_scheduler);
 }
 
 void TileEngine::followWithCamera(const Actor* target)
@@ -258,7 +257,7 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
    
    if(m_entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
-      npcToAdd = new NPC(m_gameContext.getScriptEngine(), *m_scheduler, npcName, direction,
+      npcToAdd = new NPC(getScriptEngine(), *m_scheduler, npcName, direction,
                                  spritesheetName, m_messagePipe, m_entityGrid,
                                  m_currRegion->getName(), npcLocation, size);
       m_npcList[npcName] = npcToAdd;
@@ -298,7 +297,7 @@ void TileEngine::activate()
    GameState::activate();
    m_shortcutBar.refresh();
    recalculateMapOffsets();
-   m_gameContext.getCurrentPlayerData().bindMessagePipe(&m_messagePipe);
+   getCurrentPlayerData().bindMessagePipe(&m_messagePipe);
 }
 
 void TileEngine::stepNPCs(long timePassed)
@@ -426,7 +425,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                case DEBUG_CONSOLE_EVENT:
                {
                   std::string* script = (std::string*)event.user.data1;
-                  m_gameContext.getScriptEngine().runScriptString(*script);
+                  getScriptEngine().runScriptString(*script);
 
                   // This assumes that, once the debug event is consumed here, it is not used anymore
                   delete script;
@@ -486,7 +485,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                      // Clear the message pipe in preparation for the new state.
                      // The Tile Engine message pipe will be rebound when the Tile Engine state
                      // is activated again.
-                     m_gameContext.getCurrentPlayerData().clearMessagePipe();
+                     getCurrentPlayerData().clearMessagePipe();
 
                      HomeMenu* menu = new HomeMenu(m_gameContext);
                      getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, this, menu));

@@ -13,6 +13,7 @@
 #include "UsableId.h"
 
 class Character;
+class Metadata;
 class PlayerData;
 typedef class Usable Item;
 struct EquipSlot;
@@ -47,7 +48,7 @@ class PlayerDataSummary
       /**
        * Constructor.
        */
-      PlayerDataSummary(const GameContext& gameContext);
+      PlayerDataSummary(const Metadata& metadata);
 
       /**
        * Destructor.

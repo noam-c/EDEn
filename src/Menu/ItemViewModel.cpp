@@ -6,7 +6,7 @@
 
 #include "ItemViewModel.h"
 #include "PlayerData.h"
-#include "GameContext.h"
+#include "Metadata.h"
 #include "Inventory.h"
 #include "Item.h"
 

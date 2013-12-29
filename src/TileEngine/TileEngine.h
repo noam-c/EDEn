@@ -7,7 +7,6 @@
 #ifndef TILE_ENGINE_H
 #define TILE_ENGINE_H
 
-#include "GameState.h"
 
 #include "MessagePipe.h"
 #include "DebugConsoleWindow.h"

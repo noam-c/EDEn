@@ -18,6 +18,7 @@
 class Character;
 typedef class Usable Item;
 struct EquipSlot;
+class Metadata;
 
 namespace Json
 {
@@ -111,7 +112,7 @@ class PlayerData
       /**
        * Constructor.
        */
-      PlayerData(GameContext& gameContext);
+      PlayerData(const Metadata& metadata);
 
       /**
        * Destructor.

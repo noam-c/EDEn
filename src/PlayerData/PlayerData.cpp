@@ -5,7 +5,6 @@
  */
 
 #include "PlayerData.h"
-#include "GameContext.h"
 #include "Character.h"
 #include "Metadata.h"
 #include "Item.h"
@@ -29,8 +28,8 @@ const char* PlayerData::MAP_ATTRIBUTE = "map";
 const char* PlayerData::X_ATTRIBUTE = "x";
 const char* PlayerData::Y_ATTRIBUTE = "y";
 
-PlayerData::PlayerData(GameContext& gameContext) :
-   m_roster(gameContext),
+PlayerData::PlayerData(const Metadata& metadata) :
+   m_roster(metadata),
    m_rootQuest(std::string("root")),
    m_shortcutList(PlayerData::SHORTCUT_BAR_SIZE, Shortcut::getEmptyShortcut())
 {
