@@ -11,6 +11,10 @@
 
 class Skill : public Usable
 {
+   static const char* MASTERY_ATTRIBUTE;
+
+   unsigned int m_masteryThreshold;
+
    protected:
       UsableScript* createScript(ScriptEngine& scriptEngine);
 
@@ -21,6 +25,9 @@ class Skill : public Usable
        * @param skillNode The JSON node containing the skill metadata to load.
        */
       Skill(Json::Value& skillNode);
+   
+      unsigned int getAdeptitudeThreshold();
+      unsigned int getMasteryThreshold();
 
       bool use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter);
 };

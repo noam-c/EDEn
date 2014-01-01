@@ -9,6 +9,8 @@
 #include <fstream>
 #include <algorithm>
 #include "Aspect.h"
+#include "Metadata.h"
+#include "Skill.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
@@ -60,6 +62,7 @@ Json::Value Character::loadArchetype(const std::string& archetypeId)
 }
 
 Character::Character(const Metadata& metadata, const std::string& id, int level) :
+   m_metadata(metadata),
    m_id(id),
    m_selectedAspect(0),
    m_level(level)
@@ -71,7 +74,8 @@ Character::Character(const Metadata& metadata, const std::string& id, int level)
    m_sp = getMaxSP();
 }
 
-Character::Character(const Metadata& metadata, const Json::Value& charToLoad)
+Character::Character(const Metadata& metadata, const Json::Value& charToLoad) :
+   m_metadata(metadata)
 {
    m_id = charToLoad[Character::ID_ATTRIBUTE].asString();
    m_selectedAspect = charToLoad.get(Character::ASPECT_ATTRIBUTE, 0).asInt();
@@ -137,17 +141,21 @@ void Character::parseBaseStats(const Json::Value& baseStatsDataContainer)
 
 void Character::parseSkills(const Json::Value& skillsDataContainer)
 {
-   m_skills.clear();
+   m_availableSkills.clear();
+   m_skillUsage.clear();
 
    DEBUG("Loading skills...");
    const Json::Value& skillListJson = skillsDataContainer[Character::SKILLS_ELEMENT];
 
-   for(int i = 0; i < skillListJson.size(); ++i)
+   for(Json::Value::const_iterator baseStatNameIter = skillListJson.begin(); baseStatNameIter != skillListJson.end(); ++baseStatNameIter)
    {
-      int id = skillListJson[i].asInt();
-      DEBUG("Adding skill ID: %d", id);
-      m_skills.push_back(id);
+      UsableId skillId = atoi(baseStatNameIter.key().asCString());
+      const std::pair<UsableId, unsigned int> skillUsage(skillId, (*baseStatNameIter).asUInt());
+      DEBUG("Adding skill ID: %d", skillId);
+      m_skillUsage.insert(skillUsage);
    }
+   
+   refreshAvailableSkills();
 }
 
 Json::Value Character::serialize() const
@@ -191,9 +199,9 @@ Json::Value Character::serialize() const
 
    Json::Value skillsNode(Json::arrayValue);
 
-   for(SkillList::const_iterator iter = m_skills.begin(); iter != m_skills.end(); ++iter)
+   for(SkillUsage::const_iterator iter = m_skillUsage.begin(); iter != m_skillUsage.end(); ++iter)
    {
-      skillsNode.append(*iter);
+      skillsNode[iter->first] = iter->second;
    }
 
    characterNode[Character::SKILLS_ELEMENT] = skillsNode;
@@ -255,24 +263,54 @@ std::string Character::getPortraitPath() const
 
 const SkillList& Character::getSkillList() const
 {
-   return m_skills;
+   return m_availableSkills;
+}
+
+void Character::refreshAvailableSkills()
+{
+   std::vector<UsableId> adeptSkills;
+   for(SkillUsage::const_iterator iter = m_skillUsage.begin(); iter != m_skillUsage.end(); ++iter)
+   {
+      if(iter->second >= m_metadata.getSkill(iter->first)->getAdeptitudeThreshold())
+      {
+         std::vector<UsableId>::iterator insertionPoint = std::lower_bound(adeptSkills.begin(), adeptSkills.end(), iter->first);
+         adeptSkills.insert(insertionPoint, iter->first);
+      }
+   }
+   
+   const Aspect* currentAspect = m_archetypeAspects[m_selectedAspect];
+   std::vector<UsableId> aspectSkills = currentAspect->getAvailableSkills(adeptSkills);
+
+   m_availableSkills.resize(adeptSkills.size() + aspectSkills.size());
+   std::merge(adeptSkills.begin(), adeptSkills.end(), aspectSkills.begin(), aspectSkills.end(), m_availableSkills.begin());
 }
 
 bool Character::hasSkill(UsableId skillId) const
 {
-   SkillList::const_iterator skillIter = std::find(m_skills.begin(), m_skills.end(), skillId);
-   return skillIter != m_skills.end();
+   SkillList availableSkills = m_availableSkills;
+   SkillList::const_iterator skillIter = std::find(availableSkills.begin(), availableSkills.end(), skillId);
+   return skillIter != availableSkills.end();
 }
 
-bool Character::addSkill(UsableId skillId)
+bool Character::incrementSkillUsage(UsableId skillId)
 {
-   if(hasSkill(skillId))
+   if(!hasSkill(skillId))
    {
-      // Skill was already added
+      // If the character doesn't have the skill
+      // then it's not possible to use it
       return false;
    }
 
-   m_skills.push_back(skillId);
+   SkillUsage::iterator iter = m_skillUsage.find(skillId);
+   if(iter == m_skillUsage.end())
+   {
+      m_skillUsage[skillId] = 1;
+   }
+   else
+   {
+      ++(iter->second);
+   }
+
    return true;
 }
 

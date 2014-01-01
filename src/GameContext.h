@@ -19,8 +19,6 @@ class GameContext
    ScriptEngine& getScriptEngine();
    const Metadata& getMetadata() const;
    PlayerData& getCurrentPlayerData();
-   Item* getItem(UsableId itemId) const;
-   Skill* getSkill(UsableId skillId) const;
 
    public:
       GameContext(ScriptEngine& scriptEngine);

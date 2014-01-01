@@ -162,3 +162,8 @@ void SkillMenu::useSkill(int rowIndex)
    }
 }
 
+Character* SkillMenu::getSelectedCharacter() const
+{
+   return m_selectedCharacter;
+}
+

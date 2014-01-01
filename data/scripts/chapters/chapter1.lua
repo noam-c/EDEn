@@ -1,6 +1,5 @@
 quests:add{name='chapter1'}
 kain = roster:createCharacter{'kain'}
-kain:addSkill{id=1}
 roster:addToParty{kain}
 narrate{"EDEn Chapter 1", waitForFinish=true}
 setRegion{'sereia'}

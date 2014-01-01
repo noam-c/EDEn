@@ -85,7 +85,7 @@ class Aspect
 
    /** The skill tree for the Aspect's skills and prerequisites */
    std::vector<std::pair<UsableId, PrerequisiteList> > m_skillTree;
-
+   
    /** The set of stat attribute bonuses granted by the Aspect. */
    std::map<std::string, StatBonusCalculation> m_statBonusCalculations;
    
@@ -144,6 +144,8 @@ class Aspect
        * @return The bonus granted to the attribute, proportional to the given level.
        */
       int getAspectBonus(const std::string& stat, unsigned int level) const;
+   
+      std::vector<UsableId> getAvailableSkills(const std::vector<UsableId>& adeptSkills) const;
 };
 
 #endif

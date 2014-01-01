@@ -24,10 +24,14 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_METADATA;
 
+const char* Usable::ID_ATTRIBUTE = "id";
+const char* Usable::NAME_ATTRIBUTE = "name";
+const char* Usable::ICON_ATTRIBUTE = "icon";
+
 Usable::Usable(Json::Value& node) :
-   m_id(node["id"].asInt()),
-   m_name(node["name"].asString()),
-   m_iconPath(node["icon"].asString()),
+   m_id(node[Usable::ID_ATTRIBUTE].asInt()),
+   m_name(node[Usable::NAME_ATTRIBUTE].asString()),
+   m_iconPath(node[Usable::ICON_ATTRIBUTE].asString()),
    m_usableScript(NULL)
 {
 }

@@ -22,29 +22,9 @@ static int CharacterL_GetName(lua_State* luaVM)
    return 1;
 }
 
-static int CharacterL_AddSkill(lua_State* luaVM)
-{
-   Character* character = luaW_check<Character>(luaVM, 1);
-   if(character == NULL)
-   {
-      return lua_error(luaVM);
-   }
-
-   int skillId;
-   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "id", skillId))
-   {
-      return lua_error(luaVM);
-   }
-
-   bool success = character->addSkill(lua_tonumber(luaVM, 2));
-   lua_pushboolean(luaVM, success);
-   return 1;
-}
-
 static luaL_reg characterMetatable[] =
 {
    { "getName", CharacterL_GetName },
-   { "addSkill", CharacterL_AddSkill },
    { NULL, NULL }
 };
 

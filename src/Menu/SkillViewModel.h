@@ -28,8 +28,6 @@ class SkillViewModel : public Rocket::Controls::DataSource
    SkillMenu& m_skillMenu;
    const Metadata& m_metadata;
 
-   Character* m_selectedCharacter;
-
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
 

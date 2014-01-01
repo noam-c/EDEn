@@ -93,11 +93,13 @@ void Aspect::parseSkillTree(const Json::Value& aspectToLoad)
             for(Json::Value::const_iterator iter = prereqsNode.begin(); iter != prereqsNode.end(); ++iter)
             {
                UsableId prereqId = (*iter).asUInt();
-               prereqs.push_back(prereqId);
+               PrerequisiteList::iterator insertionPoint = std::lower_bound(prereqs.begin(), prereqs.end(), prereqId);
+               prereqs.insert(insertionPoint, prereqId);
             }
          }
-         
-         m_skillTree.push_back(std::pair<UsableId, PrerequisiteList>(skillId, prereqs));
+
+         std::pair<UsableId, PrerequisiteList> skillAndPrereqs(skillId, prereqs);
+         m_skillTree.push_back(skillAndPrereqs);
       }
 
       validateSkillTree();
@@ -192,4 +194,25 @@ int Aspect::getAspectBonus(const std::string& stat, unsigned int level) const
    }
    
    return 0;
+}
+
+std::vector<UsableId> Aspect::getAvailableSkills(const std::vector<UsableId>& adeptSkills) const
+{
+   std::vector<UsableId> availableSkills;
+   for(std::vector<std::pair<UsableId, PrerequisiteList> >::const_iterator iter = m_skillTree.begin(); iter != m_skillTree.end(); ++iter)
+   {
+      bool skillAlreadyAdept = std::binary_search(adeptSkills.begin(), adeptSkills.end(), iter->first);
+      if(skillAlreadyAdept)
+      {
+         continue;
+      }
+
+      PrerequisiteList prerequisites = iter->second;
+      if(std::includes(adeptSkills.begin(), adeptSkills.end(), prerequisites.begin(), prerequisites.end()))
+      {
+         availableSkills.push_back(iter->first);
+      }
+   }
+   
+   return availableSkills;
 }

@@ -23,8 +23,7 @@ const Rocket::Core::String SkillViewModel::UnknownSkillIconPath("data/images/ico
 SkillViewModel::SkillViewModel(SkillMenu& skillMenu, const Metadata& metadata) :
       Rocket::Controls::DataSource("skillViewModel"),
       m_skillMenu(skillMenu),
-      m_metadata(metadata),
-      m_selectedCharacter(NULL)
+      m_metadata(metadata)
 {
 }
 
@@ -34,20 +33,22 @@ SkillViewModel::~SkillViewModel()
 
 UsableId SkillViewModel::getSkillId(int rowIndex) const
 {
-   if(m_selectedCharacter == NULL)
+   Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
+   if(selectedCharacter == NULL)
    {
       return 0;
    }
 
-   const SkillList& skillList = m_selectedCharacter->getSkillList();
+   const SkillList& skillList = selectedCharacter->getSkillList();
    return skillList[rowIndex];
 }
 
 std::string SkillViewModel::getCurrentCharacterId() const
 {
-   if(m_selectedCharacter != NULL)
+   Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
+   if(selectedCharacter != NULL)
    {
-      return m_selectedCharacter->getId();
+      return selectedCharacter->getId();
    }
 
    return "";
@@ -57,14 +58,15 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   if(m_selectedCharacter == NULL)
+   Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
+   if(selectedCharacter == NULL)
    {
       return;
    }
 
    if (table == "skills")
    {
-      const SkillList& skillList = m_selectedCharacter->getSkillList();
+      const SkillList& skillList = selectedCharacter->getSkillList();
       for (int i = 0; i < columns.size(); ++i)
       {
          const UsableId skillId = skillList[row_index];
@@ -97,9 +99,10 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
 
 int SkillViewModel::GetNumRows(const Rocket::Core::String& table)
 {
-   if(m_selectedCharacter != NULL && table == "skills")
+   Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
+   if(selectedCharacter != NULL && table == "skills")
    {
-      return m_selectedCharacter->getSkillList().size();
+      return selectedCharacter->getSkillList().size();
    }
 
    return 0;

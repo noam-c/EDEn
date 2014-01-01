@@ -83,6 +83,7 @@ class SkillMenu: public CharacterDependentMenu
        */
       ~SkillMenu();
 
+      Character* getSelectedCharacter() const;
       void setCharacter(int characterIndex);
 };
 

@@ -5,11 +5,15 @@
  */
 
 #include "Skill.h"
+#include "json.h"
 #include "ScriptEngine.h"
 #include "Character.h"
 
+const char* Skill::MASTERY_ATTRIBUTE = "mastery";
+
 Skill::Skill(Json::Value& skillNode) :
-   Usable(skillNode)
+   Usable(skillNode),
+   m_masteryThreshold(skillNode[Skill::MASTERY_ATTRIBUTE].asUInt())
 {
 }
 
@@ -26,4 +30,14 @@ bool Skill::use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateTy
    }
 
    return false;
+}
+
+unsigned int Skill::getAdeptitudeThreshold()
+{
+   return m_masteryThreshold / 2;
+}
+
+unsigned int Skill::getMasteryThreshold()
+{
+   return m_masteryThreshold;
 }

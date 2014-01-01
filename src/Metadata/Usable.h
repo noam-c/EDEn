@@ -32,6 +32,10 @@ class Character;
  */
 class Usable
 {
+   static const char* ID_ATTRIBUTE;
+   static const char* NAME_ATTRIBUTE;
+   static const char* ICON_ATTRIBUTE;
+
    /** The unique identifier of this usable. */
    const UsableId m_id;
    

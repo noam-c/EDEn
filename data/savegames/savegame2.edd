@@ -47,7 +47,7 @@
             {
                "path" : "data/characters/akrom.jpg"
             },
-            "Skills" : [],
+            "Skills" : {},
             "Spritesheet" : "npc1",
             "baseStats" : {},
             "hp" : 0,
@@ -99,7 +99,7 @@
             {
                "path" : "data/characters/kain.jpg"
             },
-            "Skills" : [ 1, 2 ],
+            "Skills" : { "1": 15, "2": 30 },
             "Spritesheet" : "kain",
             "baseStats" : {},
             "hp" : 0,

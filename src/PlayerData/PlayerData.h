@@ -79,7 +79,7 @@ class PlayerData
    /** The top-level quest for the game. Contains all the quests that the player can complete. */
    Quest m_rootQuest;
 
-   /** The current chapter being played (if the game was saved in the middle of a chapter. */
+   /** The current chapter being played (if the game was saved in the middle of a chapter). */
    std::string m_currChapter;
 
    /** The player's shortcut list. */

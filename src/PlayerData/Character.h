@@ -19,6 +19,7 @@ namespace Json
 
 class Aspect;
 class CharacterArchetype;
+class Metadata;
 
 /**
  * A model holding the data for a character that can be used by the player.
@@ -50,9 +51,15 @@ class Character
    static const char* HP_ATTRIBUTE;
    static const char* SP_ATTRIBUTE;
 
+   /** Represents a set of skills and the amount of times the Character has successfully used them. */
+   typedef std::map<UsableId, unsigned int> SkillUsage;
+   
+   /** The metadata containing skill information. */
+   const Metadata& m_metadata;
+   
    /** The character's ID for data lookups. */
    std::string m_id;
-
+   
    /** The name of the character. */
    std::string m_name;
 
@@ -85,9 +92,12 @@ class Character
   
    /** The equipment worn by this Character. */
    EquipData m_equipment;
-
+   
    /** The skills known by this Character. */
-   SkillList m_skills;
+   SkillList m_availableSkills;
+   
+   /** The skills that the Character has used. */
+   SkillUsage m_skillUsage;
  
    /**
     * Loads the archetype for the character, which provides character
@@ -140,6 +150,8 @@ class Character
     * @param skillsDataContainer The JSON node containing the stats to load.
     */
    void parseSkills(const Json::Value& skillsDataContainer);
+   
+   void refreshAvailableSkills();
 
    public:
       /**
@@ -221,11 +233,11 @@ class Character
       bool hasSkill(UsableId skillId) const;
 
       /**
-       * Adds a skill to the character.
+       * Marks a successful skill usage for the character.
        *
-       * @param skillId The ID of the skill to add.
+       * @param skillId The ID of the skill that was successfully used.
        */
-      bool addSkill(UsableId skillId);
+      bool incrementSkillUsage(UsableId skillId);
 
       /**
        * Sets a piece of equipment, and changes the character's stat bonuses accordingly.
