@@ -64,17 +64,6 @@ class HomeMenu: public MenuState
     */
    void selectCharacter(int slotIndex, MenuShell* menuShell);
 
-   protected:
-      /**
-       * Activates the home menu and reveals the home pane.
-       */
-      void activate();
-
-      /**
-       * Deactivates the home menu and hides the home pane.
-       */
-      void deactivate();
-
    public:
       /**
        * Constructor. Initializes the menu GUI.

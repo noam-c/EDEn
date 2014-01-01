@@ -71,7 +71,12 @@ class MenuState : public GameState
        * Sets this menu state to be the current one.
        */
       virtual void activate();
-
+      
+      /**
+       * Removes this menu state from active use.
+       */
+      virtual void deactivate();
+      
       /**
        * @return The scheduler used to manage the menu's coroutines
        */

@@ -47,17 +47,6 @@ class ItemMenu: public MenuState
    void useItem(int rowIndex);
    void dragStarted(Rocket::Core::Event* event);
 
-   protected:
-      /**
-       * Activates the data menu and reveals the data pane.
-       */
-      void activate();
-
-      /**
-       * Deactivates the data menu and hides the data pane.
-       */
-      void deactivate();
-
    public:
       /**
        * Constructor. Initializes the menu GUI.

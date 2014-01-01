@@ -67,33 +67,10 @@ void DataMenu::initialize()
 
 DataMenu::~DataMenu()
 {
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Close();
-      m_paneDocument->RemoveReference();
-   }
-
    if(m_confirmSaveDocument != NULL)
    {
       m_confirmSaveDocument->Close();
       m_confirmSaveDocument->RemoveReference();
-   }
-}
-
-void DataMenu::activate()
-{
-   MenuState::activate();
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Show();
-   }
-}
-
-void DataMenu::deactivate()
-{
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Hide();
    }
 }
 

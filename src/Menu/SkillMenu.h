@@ -51,17 +51,6 @@ class SkillMenu: public CharacterDependentMenu
    
    void useSkill(int rowIndex);
 
-   protected:
-      /**
-       * Activates the data menu and reveals the data pane.
-       */
-      void activate();
-
-      /**
-       * Deactivates the data menu and hides the data pane.
-       */
-      void deactivate();
-
    public:
       /**
        * Constructor. Initializes the menu GUI.

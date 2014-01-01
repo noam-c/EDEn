@@ -47,28 +47,6 @@ void ItemMenu::initialize()
 
 ItemMenu::~ItemMenu()
 {
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Close();
-      m_paneDocument->RemoveReference();
-   }
-}
-
-void ItemMenu::activate()
-{
-   MenuState::activate();
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Show();
-   }
-}
-
-void ItemMenu::deactivate()
-{
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Hide();
-   }
 }
 
 void ItemMenu::dragStarted(Rocket::Core::Event* event)

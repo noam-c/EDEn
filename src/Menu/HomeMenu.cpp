@@ -46,11 +46,6 @@ HomeMenu::HomeMenu(GameContext& gameContext, MenuShell* menuShell) :
 
 HomeMenu::~HomeMenu()
 {
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Close();
-      m_paneDocument->RemoveReference();
-   }
 }
 
 void HomeMenu::initialize()
@@ -69,23 +64,6 @@ void HomeMenu::initialize()
    m_sidebarOptions.push_back("Party Change");
    m_sidebarOptions.push_back("Options");
    m_sidebarOptions.push_back("Data");
-}
-
-void HomeMenu::activate()
-{
-   MenuState::activate();
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Show();
-   }
-}
-
-void HomeMenu::deactivate()
-{
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Hide();
-   }
 }
 
 void HomeMenu::characterClicked(Rocket::Core::Event* event)

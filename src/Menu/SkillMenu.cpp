@@ -50,28 +50,6 @@ void SkillMenu::initialize()
 
 SkillMenu::~SkillMenu()
 {
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Close();
-      m_paneDocument->RemoveReference();
-   }
-}
-
-void SkillMenu::activate()
-{
-   MenuState::activate();
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Show();
-   }
-}
-
-void SkillMenu::deactivate()
-{
-   if(m_paneDocument != NULL)
-   {
-      m_paneDocument->Hide();
-   }
 }
 
 void SkillMenu::setCharacter(int characterIndex)

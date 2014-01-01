@@ -37,12 +37,30 @@ MenuState::~MenuState()
    {
       delete m_menuShell;
    }
+   
+   if(m_paneDocument != NULL)
+   {
+      m_paneDocument->Close();
+      m_paneDocument->RemoveReference();
+   }
 }
 
 void MenuState::activate()
 {
    GameState::activate();
    m_menuShell->changeMenuState(this);
+   if(m_paneDocument != NULL)
+   {
+      m_paneDocument->Show();
+   }
+}
+
+void MenuState::deactivate()
+{
+   if(m_paneDocument != NULL)
+   {
+      m_paneDocument->Hide();
+   }
 }
 
 
