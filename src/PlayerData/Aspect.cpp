@@ -99,34 +99,39 @@ void Aspect::parseSkillTree(const Json::Value& aspectToLoad)
          }
 
          std::pair<UsableId, PrerequisiteList> skillAndPrereqs(skillId, prereqs);
-         m_skillTree.push_back(skillAndPrereqs);
+         SkillGraph::iterator insertionPoint = std::lower_bound(m_skillTree.begin(), m_skillTree.end(), skillAndPrereqs);
+         m_skillTree.insert(insertionPoint, skillAndPrereqs);
       }
 
       validateSkillTree();
    }
 }
 
+bool Aspect::CompareUsableId::operator()(const UsableId value, const Aspect::SkillNode& node) const
+{
+   return node.first < value;
+}
+
+bool Aspect::CompareUsableId::operator()(const Aspect::SkillNode& node, const UsableId value) const
+{
+   return node.first < value;
+}
+
 void Aspect::validateSkillTree() const
 {
    const int numSkills = m_skillTree.size();
 
-   std::map<UsableId, int> skillTreeMap;
-   
-   // Validate that there aren't any duplicates and build
-   // a map for the skills
-   // \todo Can this function be implemented efficiently without a map?
-   for(int i = 0; i < numSkills; ++i)
+   // Validate that there aren't any duplicates
+   for(int i = 1; i < numSkills; ++i)
    {
-      UsableId id = m_skillTree[i].first;
-      if(skillTreeMap.find(id) != skillTreeMap.end())
+      if(m_skillTree[i - 1].first == m_skillTree[i].first)
       {
          T_T("Skill tree for aspect has a duplicated skill");
       }
-      
-      skillTreeMap[id] = i;
    }
    
    // Validate that there aren't any prerequisite cycles
+   // by using graph coloring
    int currentColor = 0;
    std::vector<int> traversedColor(numSkills, -1);
 
@@ -166,13 +171,18 @@ void Aspect::validateSkillTree() const
          PrerequisiteList prereqs = m_skillTree[currentNode].second;
          for(PrerequisiteList::const_iterator iter = prereqs.begin(); iter != prereqs.end(); ++iter)
          {
-            std::map<UsableId, int>::const_iterator skillNode = skillTreeMap.find(*iter);
-            if(skillNode == skillTreeMap.end())
+            const UsableId& prereq = *iter;
+            
+            // Use std::lower_bound in order to search using
+            // binary search instead of linear search
+            SkillGraph::const_iterator skillNodeIter = std::lower_bound(m_skillTree.begin(), m_skillTree.end(), prereq, Aspect::CompareUsableId());
+            if((skillNodeIter == m_skillTree.end() || skillNodeIter->first != prereq))
             {
                T_T("One of the skills in this aspect's tree has a prerequisite that isn't in the tree.")
             }
-
-            bfsQueue.push(skillNode->second);
+            
+            int indexOfPrereq = (skillNodeIter - m_skillTree.begin());
+            bfsQueue.push(indexOfPrereq);
          }
       }
 
@@ -199,7 +209,7 @@ int Aspect::getAspectBonus(const std::string& stat, unsigned int level) const
 std::vector<UsableId> Aspect::getAvailableSkills(const std::vector<UsableId>& adeptSkills) const
 {
    std::vector<UsableId> availableSkills;
-   for(std::vector<std::pair<UsableId, PrerequisiteList> >::const_iterator iter = m_skillTree.begin(); iter != m_skillTree.end(); ++iter)
+   for(SkillGraph::const_iterator iter = m_skillTree.begin(); iter != m_skillTree.end(); ++iter)
    {
       bool skillAlreadyAdept = std::binary_search(adeptSkills.begin(), adeptSkills.end(), iter->first);
       if(skillAlreadyAdept)
