@@ -10,6 +10,7 @@
 #include "TileState.h"
 #include <limits>
 #include <algorithm>
+#include <cstdlib>
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PATHFINDER;
