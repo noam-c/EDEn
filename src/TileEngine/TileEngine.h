@@ -27,7 +27,9 @@ class Region;
 class DialogueController;
 class Task;
 
+struct MapExitMessage;
 struct MapTriggerCallback;
+struct MapTriggerMessage;
 
 /**
  * GameState that coordinates all the gameplay involving walking around fields

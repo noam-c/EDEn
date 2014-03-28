@@ -20,9 +20,9 @@ Region::Region(const ResourceKey& name) :
 
 Region::~Region()
 {
-   for(std::map<std::string, Map*>::iterator i = m_areas.begin(); i != m_areas.end(); ++i)
+   for(auto pair : m_areas)
    {
-      delete (i->second);
+      delete (pair.second);
    }
 }
 

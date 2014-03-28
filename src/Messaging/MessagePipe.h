@@ -8,20 +8,20 @@
 #define MESSAGE_PIPE_H
 
 #include <set>
+#include <map>
 
 #include "Listener.h"
 #include "DebugUtils.h"
-
-struct ActorMoveMessage;
-struct MapTriggerMessage;
-struct MapExitMessage;
-struct RosterUpdateMessage;
+#include <typeinfo>
+#include <typeindex>
 
 namespace messaging
 {
    class MessagePipe
    {
-      template<typename T> class ListenerList
+      class ListenerListBase {};
+      
+      template<typename T> class ListenerList : public ListenerListBase
       {
          std::set<Listener<T>*> m_listeners;
          
@@ -39,50 +39,58 @@ namespace messaging
             void send(const T& message) const
             {
                typename std::set<Listener<T>*>::const_iterator iter;
-               for(iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
+               for(auto listener: m_listeners)
                {
-                  (*iter)->receive(message);
+                  listener->receive(message);
                }
             }
       };
 
-      ListenerList<ActorMoveMessage> actorMoveMessages;
-      ListenerList<MapTriggerMessage> mapTriggerMessages;
-      ListenerList<MapExitMessage> mapExitMessages;
-      ListenerList<RosterUpdateMessage> rosterUpdateMessages;
+      std::map<std::type_index, ListenerListBase*> listenerLists;
+      
+      template<typename T> ListenerList<T>* getListenerList() const
+      {
+         auto listenerListIter = listenerLists.find(std::type_index(typeid(T)));
+         if(listenerListIter != listenerLists.end())
+         {
+            return static_cast<ListenerList<T>*>(listenerListIter->second);
+         }
+         
+         return nullptr;
+      }
+      
+      template<typename T> ListenerList<T>* getOrCreateListenerList() {
+         auto listenerList = getListenerList<T>();
+         
+         if(listenerList == nullptr)
+         {
+            listenerList = new ListenerList<T>();
+            listenerLists.insert(std::make_pair(std::type_index(typeid(T)), listenerList));
+         }
+
+         return listenerList;
+      }
       
       public:
          template<typename T> void registerListener(Listener<T>* listener)
          {
-            T_T("This listener type is unsupported.");
+            getOrCreateListenerList<T>()->registerListener(listener);
          }
 
          template<typename T> void unregisterListener(Listener<T>* listener)
          {
-            T_T("This listener type is unsupported.");
+            getOrCreateListenerList<T>()->unregisterListener(listener);
          }
 
          template<typename T> void sendMessage(const T& message) const
          {
-            T_T("This message type is unsupported.");
+            auto listenerList = getListenerList<T>();
+            if(listenerList != nullptr)
+            {
+               listenerList->send(message);
+            }
          }
    };
-
-   template<> void MessagePipe::registerListener(Listener<ActorMoveMessage>* listener);
-   template<> void MessagePipe::unregisterListener(Listener<ActorMoveMessage>* listener);
-   template<> void MessagePipe::sendMessage(const ActorMoveMessage& message) const;
-
-   template<> void MessagePipe::registerListener(Listener<MapTriggerMessage>* listener);
-   template<> void MessagePipe::unregisterListener(Listener<MapTriggerMessage>* listener);
-   template<> void MessagePipe::sendMessage(const MapTriggerMessage& message) const;
-
-   template<> void MessagePipe::registerListener(Listener<MapExitMessage>* listener);
-   template<> void MessagePipe::unregisterListener(Listener<MapExitMessage>* listener);
-   template<> void MessagePipe::sendMessage(const MapExitMessage& message) const;
-
-   template<> void MessagePipe::registerListener(Listener<RosterUpdateMessage>* listener);
-   template<> void MessagePipe::unregisterListener(Listener<RosterUpdateMessage>* listener);
-   template<> void MessagePipe::sendMessage(const RosterUpdateMessage& message) const;
 };
 
 #endif

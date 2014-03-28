@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8.5)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
 
-project( eden )
+PROJECT(eden)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 
-set(HEADERS
+SET(HEADERS
   src/Audio/Music.h
   src/Audio/Sound.h
   src/Coroutines/Coroutine.h
@@ -129,7 +129,7 @@ set(HEADERS
   src/TODOLIST.h
 )
 
-set(SOURCES 
+SET(SOURCES 
   src/tinyxml/tinystr.cpp
   src/tinyxml/tinyxml.cpp
   src/tinyxml/tinyxmlerror.cpp
@@ -160,7 +160,6 @@ set(SOURCES
   src/Menu/SkillMenu.cpp
   src/Menu/SkillViewModel.cpp
   src/Menu/ShortcutBar.cpp
-  src/Messaging/MessagePipe.cpp
   src/PlayerData/Aspect.cpp
   src/PlayerData/Character.cpp
   src/PlayerData/CharacterRoster.cpp
@@ -244,39 +243,39 @@ set(SOURCES
   src/Graphics/Texture.cpp
 )
 
-set(SOURCE_GROUP_DELIMITER "/")
+SET(SOURCE_GROUP_DELIMITER "/")
 
 IF(NOT ${CMAKE_GENERATOR} STREQUAL "Xcode")
-   source_group("//" REGULAR_EXPRESSION src/[^/]*)
+   SOURCE_GROUP("//" REGULAR_EXPRESSION src/[^/]*)
 ENDIF()
 
-source_group(Audio REGULAR_EXPRESSION src/Audio/.*)
-source_group(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
-source_group(Metadata REGULAR_EXPRESSION src/Metadata/.*)
-source_group(Graphics REGULAR_EXPRESSION src/Graphics/.*)
-source_group(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
-source_group(Menu REGULAR_EXPRESSION src/Menu/.*)
-source_group(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
-source_group(Messaging REGULAR_EXPRESSION src/Messaging/.*)
-source_group(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
-source_group(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
-source_group(rocket REGULAR_EXPRESSION src/rocket/.*)
-source_group(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
-source_group(Settings REGULAR_EXPRESSION src/Settings/.*)
-source_group(Shapes REGULAR_EXPRESSION src/Shapes/.*)
-source_group(Sprites REGULAR_EXPRESSION src/Sprites/.*)
-source_group(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
-source_group(Transitions REGULAR_EXPRESSION src/Transitions/.*)
-source_group(json REGULAR_EXPRESSION src/json/.*)
-source_group(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
-source_group(tinyxml REGULAR_EXPRESSION src/tinyxml/.*)
+SOURCE_GROUP(Audio REGULAR_EXPRESSION src/Audio/.*)
+SOURCE_GROUP(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
+SOURCE_GROUP(Metadata REGULAR_EXPRESSION src/Metadata/.*)
+SOURCE_GROUP(Graphics REGULAR_EXPRESSION src/Graphics/.*)
+SOURCE_GROUP(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
+SOURCE_GROUP(Menu REGULAR_EXPRESSION src/Menu/.*)
+SOURCE_GROUP(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
+SOURCE_GROUP(Messaging REGULAR_EXPRESSION src/Messaging/.*)
+SOURCE_GROUP(PlayerData REGULAR_EXPRESSION src/PlayerData/.*)
+SOURCE_GROUP(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
+SOURCE_GROUP(rocket REGULAR_EXPRESSION src/rocket/.*)
+SOURCE_GROUP(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
+SOURCE_GROUP(Settings REGULAR_EXPRESSION src/Settings/.*)
+SOURCE_GROUP(Shapes REGULAR_EXPRESSION src/Shapes/.*)
+SOURCE_GROUP(Sprites REGULAR_EXPRESSION src/Sprites/.*)
+SOURCE_GROUP(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
+SOURCE_GROUP(Transitions REGULAR_EXPRESSION src/Transitions/.*)
+SOURCE_GROUP(json REGULAR_EXPRESSION src/json/.*)
+SOURCE_GROUP(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
+SOURCE_GROUP(tinyxml REGULAR_EXPRESSION src/tinyxml/.*)
 
 IF(NOT ${CMAKE_GENERATOR} STREQUAL "Xcode")
-   source_group("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
-   source_group("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.*)
+   SOURCE_GROUP("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
+   SOURCE_GROUP("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.*)
 ENDIF()
 
-include_directories( 
+INCLUDE_DIRECTORIES(
   src
   src/Audio
   src/Coroutines
@@ -302,56 +301,74 @@ include_directories(
   src/tinyxml
 )
 
-add_definitions( 
+ADD_DEFINITIONS(
   -Wall
   -DDEBUG_MODE
   -D_CONSOLE
 )
 
-add_executable( eden ${SOURCES} ${HEADERS} )
+ADD_EXECUTABLE(eden ${SOURCES} ${HEADERS})
 
-add_custom_command(TARGET eden POST_BUILD
+ADD_CUSTOM_COMMAND(TARGET eden POST_BUILD
      DEPENDS "${CMAKE_SOURCE_DIR}/data"
      COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/data" "$<TARGET_FILE_DIR:eden>/data")
 
-IF(WIN32)
-  target_link_libraries(
-    eden
-    SDL2main
-    debug rocketCore_d
-    debug rocketControls_d
-    optimized rocketCore
-    optimized rocketControls
-    lua5.1
-    SDL2_image
-    SDL2_mixer
-    SDL2
-    opengl32
-    glu32
-  )
+INCLUDE(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+IF(COMPILER_SUPPORTS_CXX11)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+ELSEIF(COMPILER_SUPPORTS_CXX0X)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 ELSE()
-	INCLUDE(FindOpenGL)
-	INCLUDE(FindSDL2)
-	INCLUDE(FindSDL2_image)
-	INCLUDE(FindSDL2_mixer)
-	INCLUDE(FindLua51)
-	INCLUDE(FindLibRocket)
-	INCLUDE(FindLibRocketControls)
-	INCLUDE(FindLibRocketDebug)
+   MESSAGE(SEND_ERROR "Compiler ${CMAKE_CXX_COMPILER} does not support C++11. EDEn requires C++11 support to compile correctly.")
+ENDIF()
 
-	set(INCL_HEADERS
-	  ${LUA_INCLUDE_DIR}
-	  ${ROCKET_INCLUDE_DIR}
-	  ${ROCKET_CONTROLS_INCLUDE_DIR}
-	  ${ROCKET_DEBUGGER_INCLUDE_DIR}
-	  ${SDL2_INCLUDE_DIR}
-	  ${SDL2_IMAGE_INCLUDE_DIRS}
-	  ${SDL2_MIXER_INCLUDE_DIRS}
-	  ${OPENGL_INCLUDE_DIR}
-	)
+IF(${CMAKE_GENERATOR} STREQUAL "Xcode")
+   SET(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
+   SET(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++0x")
+   SET(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++0x -stdlib=libc++ -g -Wall")
+ENDIF()
 
-	include_directories(BEFORE SYSTEM ${INCL_HEADERS})
-
-	target_link_libraries( eden ${LIBROCKET_LIBRARY} ${LIBROCKET_CONTROLS_LIBRARY} ${LIBROCKET_DEBUGGER_LIBRARY} ${LUA_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARIES} ${SDL2_LIBRARY} ${OPENGL_LIBRARIES} )
+IF(WIN32)
+   TARGET_LINK_LIBRARIES(
+      eden
+      SDL2main
+      debug rocketCore_d
+      debug rocketControls_d
+      optimized rocketCore
+      optimized rocketControls
+      lua5.1
+      SDL2_image
+      SDL2_mixer
+      SDL2
+      opengl32
+      glu32
+   )  
+ELSE()
+   INCLUDE(FindOpenGL)
+   INCLUDE(FindSDL2)
+   INCLUDE(FindSDL2_image)
+   INCLUDE(FindSDL2_mixer)
+   INCLUDE(FindLua51)
+   INCLUDE(FindLibRocket)
+   INCLUDE(FindLibRocketControls)
+   INCLUDE(FindLibRocketDebug)
+   
+   SET(INCL_HEADERS
+      ${LUA_INCLUDE_DIR}
+      ${ROCKET_INCLUDE_DIR}
+      ${ROCKET_CONTROLS_INCLUDE_DIR}
+      ${ROCKET_DEBUGGER_INCLUDE_DIR}
+      ${SDL2_INCLUDE_DIR}
+      ${SDL2_IMAGE_INCLUDE_DIRS}
+      ${SDL2_MIXER_INCLUDE_DIRS}
+      ${OPENGL_INCLUDE_DIR}
+   )
+   
+   INCLUDE_DIRECTORIES(BEFORE SYSTEM ${INCL_HEADERS})
+   
+   TARGET_LINK_LIBRARIES(eden ${LIBROCKET_LIBRARY} ${LIBROCKET_CONTROLS_LIBRARY} ${LIBROCKET_DEBUGGER_LIBRARY} ${LUA_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARIES} ${SDL2_LIBRARY} ${OPENGL_LIBRARIES})
 ENDIF()
 
