@@ -102,13 +102,13 @@ class DialogueController
          std::string dialogue;
 
          /** The task ID waiting on this particular line of dialogue */
-         Task* task;
+         std::shared_ptr<Task> task;
    
          /**
           *  Constructor. Initializes values and indexes the locations of
           *  embedded scripts in the line of dialogue for later use.
           */
-         Line(LineType type, const std::string& dialogue, Task* task);
+         Line(LineType type, const std::string& dialogue, const std::shared_ptr<Task>& task);
 
          /**
           *  Gets the next embdedded script bracket pair.
@@ -190,7 +190,7 @@ class DialogueController
     * @param speech The speech to enqueue in the dialogue controller. 
     * @param task The ticket to be signalled when the line is finished
     */
-   void addLine(LineType type, const std::string& speech, Task* task);
+   void addLine(LineType type, const std::string& speech, const std::shared_ptr<Task>& task);
 
    /**
     * Clears any dialogue currently being displayed onscreen.
@@ -239,7 +239,7 @@ class DialogueController
        * @param speech The dialogue that will be said.
        * @param task The ticket of this speech instruction
        */
-      void say(const std::string& speech, Task* task);
+      void say(const std::string& speech, const std::shared_ptr<Task>& task);
    
       /**
        * Enqueue a line of speech narrated or thought by a character.
@@ -247,7 +247,7 @@ class DialogueController
        * @param speech The dialogue that will be narrated.
        * @param task The ticket of this narration instruction
        */
-      void narrate(const std::string& speech, Task* task);
+      void narrate(const std::string& speech, const std::shared_ptr<Task>& task);
 
       /**
        * Enables or disables fast mode.

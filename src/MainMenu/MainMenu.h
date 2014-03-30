@@ -10,6 +10,8 @@
 #include "GameState.h"
 #include "EdenRocketBindings.h"
 
+#include <memory>
+
 namespace Rocket
 {
    namespace Core
@@ -38,13 +40,13 @@ class MainMenu: public GameState
    Scheduler* m_scheduler;
 
    /** Main menu music */
-   Music* m_music;
+   std::shared_ptr<Music> m_music;
 
    /** Sound for hovering over an option */
-   Sound* m_reselectSound;
+   std::shared_ptr<Sound> m_reselectSound;
 
    /** Sound for picking an option */
-   Sound* m_chooseSound;
+   std::shared_ptr<Sound> m_chooseSound;
 
    /** The title screen RML document */
    Rocket::Core::ElementDocument* m_titleDocument;

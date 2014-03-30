@@ -32,25 +32,6 @@ void Music::load(const std::string& path)
    }
 }
 
-void Music::setCurrentlyPlayingMusic()
-{
-   if(isCurrentlyPlayingMusic())
-   {
-      // This song is already the currently playing song,
-      // so we're done here.
-      return;
-   }
-
-   if(Mix_PlayMusic(m_music.get(), 0) < 0)
-   {
-      DEBUG("There was a problem playing the music: %s", Mix_GetError());
-      Music::currentMusic.reset();
-      return;
-   }
-
-   Music::currentMusic.reset(this);
-}
-
 bool Music::isMusicPlaying()
 {
    return Music::currentMusic && Mix_PlayingMusic();
@@ -90,5 +71,19 @@ void Music::play()
       return;
    }
 
-   setCurrentlyPlayingMusic();
+   if(isCurrentlyPlayingMusic())
+   {
+      // This song is already the currently playing song,
+      // so we're done here.
+      return;
+   }
+   
+   if(Mix_PlayMusic(m_music.get(), 0) < 0)
+   {
+      DEBUG("There was a problem playing the music: %s", Mix_GetError());
+      Music::currentMusic.reset();
+      return;
+   }
+   
+   Music::currentMusic = std::static_pointer_cast<Music>(shared_from_this());
 }

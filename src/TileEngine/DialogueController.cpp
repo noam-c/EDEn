@@ -54,7 +54,7 @@ void DialogueController::initMainDialogue()
    }
 }
 
-void DialogueController::addLine(LineType type, const std::string& speech, Task* task)
+void DialogueController::addLine(LineType type, const std::string& speech, const std::shared_ptr<Task>& task)
 {
    Line* nextLine = new Line(type, speech, task);
    if(m_currLine == nullptr)
@@ -68,12 +68,12 @@ void DialogueController::addLine(LineType type, const std::string& speech, Task*
    }
 }
 
-void DialogueController::narrate(const std::string& speech, Task* task)
+void DialogueController::narrate(const std::string& speech, const std::shared_ptr<Task>& task)
 {
    addLine(NARRATE, speech, task);
 }
 
-void DialogueController::say(const std::string& speech, Task* task)
+void DialogueController::say(const std::string& speech, const std::shared_ptr<Task>& task)
 {
    addLine(SAY, speech, task);
 }
@@ -207,7 +207,7 @@ bool DialogueController::resume(long timePassed)
    return false;
 }
 
-DialogueController::Line::Line(LineType type, const std::string& dialogue, Task* task) :
+DialogueController::Line::Line(LineType type, const std::string& dialogue, const std::shared_ptr<Task>& task) :
    type(type),
    dialogue(dialogue),
    task(task)

@@ -8,6 +8,7 @@
 #define RESOURCE_H
 
 #include "ResourceKey.h"
+#include <memory>
 
 /**
  * A Resource is any object that is loaded from a file resource and managed
@@ -30,7 +31,7 @@
  *
  * @author Noam Chitayat
  */
-class Resource
+class Resource : public std::enable_shared_from_this<Resource>
 {
    /**
     * True iff the resource has been successfully initialized.

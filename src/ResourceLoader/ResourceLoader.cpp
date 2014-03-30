@@ -21,47 +21,47 @@ const int debugFlag = DEBUG_RES_LOAD;
 const std::string ResourceLoader::PATHS[] = {"data/sounds/", "data/regions/", "data/tilesets/", "data/music/", "data/sprites/"};
 const std::string ResourceLoader::EXTENSIONS[] = {".wav", "/", ".tsx", "", ""};
 
-std::map<ResourceKey, Resource*> ResourceLoader::resources;
+std::map<ResourceKey, std::shared_ptr<Resource>> ResourceLoader::resources;
 
 std::string ResourceLoader::getPath(ResourceKey name, ResourceType type)
 {
    return PATHS[type] + name + EXTENSIONS[type];
 }
 
-Resource* ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
+std::shared_ptr<Resource> ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
 {
    // Construct a new resource instance based on the resource type
-   Resource* newResource = nullptr;
+   std::shared_ptr<Resource> newResource(nullptr);
    switch(type)
    {
       case MUSIC:
       {
          // Create a resource to hold a song
-         newResource = new Music(name);
+         newResource = std::make_shared<Music>(name);
          break;
       }
       case SOUND:
       {
          // Create a resource to hold a sound effect
-         newResource = new Sound(name);
+         newResource = std::make_shared<Sound>(name);
          break;
       }
       case TILESET:
       {
          // Create a resource to hold a tile set
-         newResource = new Tileset(name);
+         newResource = std::make_shared<Tileset>(name);
          break;
       }
       case REGION:
       {
          // Create a resource to hold a region
-         newResource = new Region(name);
+         newResource = std::make_shared<Region>(name);
          break;
       }
       case SPRITESHEET:
       {
          // Create a resource to hold a spritesheet
-         newResource = new Spritesheet(name);
+         newResource = std::make_shared<Spritesheet>(name);
          break;
       }
    }
@@ -74,7 +74,7 @@ Resource* ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
    return newResource;
 }
 
-void ResourceLoader::tryInitialize(Resource* resource, ResourceKey name, ResourceType type)
+void ResourceLoader::tryInitialize(const std::shared_ptr<Resource>& resource, ResourceKey name, ResourceType type)
 {
    DEBUG("Trying to initialize resource %s", name.c_str());
    // Get the path to the data for this resource
@@ -93,11 +93,12 @@ void ResourceLoader::tryInitialize(Resource* resource, ResourceKey name, Resourc
    }
 }
 
-Resource* ResourceLoader::getResource(ResourceKey name, ResourceType type)
+std::shared_ptr<Resource> ResourceLoader::getResource(ResourceKey name, ResourceType type)
 {
-   Resource* resource = nullptr;
+   std::shared_ptr<Resource> resource(nullptr);
 
-   if(resources.find(name) == resources.end())
+   auto resourceIter = resources.find(name);
+   if(resourceIter == resources.end())
    {
       // If the resource is not already in the resource map, it is not
       // currently being cached. Construct a resource and load the data.
@@ -106,7 +107,7 @@ Resource* ResourceLoader::getResource(ResourceKey name, ResourceType type)
    else
    {
       // If the resource is cached, check that it is already initialized.
-      resource = resources[name];
+      resource = resourceIter->second;
       if(!resource->isInitialized())
       {
          // If it is not (because of a prior failure to initialize),
@@ -118,38 +119,32 @@ Resource* ResourceLoader::getResource(ResourceKey name, ResourceType type)
    return resource;
 }
 
-Music* ResourceLoader::getMusic(ResourceKey name)
+std::shared_ptr<Music> ResourceLoader::getMusic(ResourceKey name)
 {
-   return static_cast<Music*>(getResource(name, MUSIC));
+   return std::static_pointer_cast<Music>(getResource(name, MUSIC));
 }
 
-Sound* ResourceLoader::getSound(ResourceKey name)
+std::shared_ptr<Sound> ResourceLoader::getSound(ResourceKey name)
 {
-   return static_cast<Sound*>(getResource(name, SOUND));
+   return std::static_pointer_cast<Sound>(getResource(name, SOUND));
 }
 
-Tileset* ResourceLoader::getTileset(ResourceKey name)
+std::shared_ptr<Tileset> ResourceLoader::getTileset(ResourceKey name)
 {
-   return static_cast<Tileset*>(getResource(name, TILESET));
+   return std::static_pointer_cast<Tileset>(getResource(name, TILESET));
 }
 
-Region* ResourceLoader::getRegion(ResourceKey name)
+std::shared_ptr<Region> ResourceLoader::getRegion(ResourceKey name)
 {
-   return static_cast<Region*>(getResource(name, REGION));
+   return std::static_pointer_cast<Region>(getResource(name, REGION));
 }
 
-Spritesheet* ResourceLoader::getSpritesheet(ResourceKey name)
+std::shared_ptr<Spritesheet> ResourceLoader::getSpritesheet(ResourceKey name)
 {
-   return static_cast<Spritesheet*>(getResource(name, SPRITESHEET));
+   return std::static_pointer_cast<Spritesheet>(getResource(name, SPRITESHEET));
 }
 
 void ResourceLoader::freeAll()
 {
-   // Iterate through the resource map and clear out all of the cached resources
-   for(std::map<ResourceKey, Resource*>::iterator i = resources.begin(); i != resources.end(); ++i)
-   {
-      delete (i->second);
-   }
-
    resources.clear();
 }

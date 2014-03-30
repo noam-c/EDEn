@@ -7,6 +7,7 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
+#include <memory>
 #include <string>
 
 #include "MovementDirection.h"
@@ -27,7 +28,7 @@ class Animation;
 class Sprite
 {
    /** The spritesheet containing this sprite's frames. */
-   Spritesheet* m_sheet;
+   std::shared_ptr<Spritesheet> m_sheet;
 
    /** The index of the current static frame within the sheet. -1 if an animation is used instead. */
    int m_frameIndex;
@@ -55,7 +56,7 @@ class Sprite
        *
        * @param sheet The spritesheet to use to draw this sprite.
        */
-      Sprite(Spritesheet* sheet);
+      Sprite(const std::shared_ptr<Spritesheet>& sheet);
 
       /**
        * Destructor.
@@ -72,7 +73,7 @@ class Sprite
        *
        * @param sheet The new Spritesheet to use.
        */
-      void setSheet(Spritesheet* sheet);
+      void setSheet(const std::shared_ptr<Spritesheet>& sheet);
    
       /**
        * Set a static frame to draw for this sprite.

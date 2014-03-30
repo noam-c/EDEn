@@ -43,7 +43,7 @@ static int QuestL_AddQuest(lua_State* luaVM)
       completed = false;
    }
 
-   std::shared_ptr<Quest> newQuest(new Quest(name, description, completed, optional));
+   auto newQuest = std::make_shared<Quest>(name, description, completed, optional);
    parentQuest->addQuest(newQuest);
    luaW_push<Quest>(luaVM, newQuest.get());
    return 1;

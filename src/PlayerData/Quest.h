@@ -122,7 +122,7 @@ class Quest
       /**
        * Add a subquest to this quest's log.
        */
-      void addQuest(std::shared_ptr<Quest> quest);
+      void addQuest(const std::shared_ptr<Quest>& quest);
    
       /**
        * Recursively searches for the subquest on the path specified.

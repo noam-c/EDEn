@@ -41,11 +41,6 @@ class Task
    Task(const TaskId taskId, Scheduler& scheduler);
 
    /**
-    * Destructor.
-    */
-   ~Task();
-
-   /**
     * Signals to a task that the Scheduler has been destroyed,
     * so that it doesn't try to operate on the Scheduler when it is signalled.
     */
@@ -57,6 +52,11 @@ class Task
        *  this object. (Yes, this method triggers a self-destruct)
        */
       void signal();
+
+      /**
+       * Destructor.
+       */
+      ~Task();
 };
 
 #endif

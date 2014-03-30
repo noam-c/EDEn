@@ -10,6 +10,7 @@
 #include "TaskId.h"
 
 #include <map>
+#include <memory>
 #include <set>
 #include <queue>
 
@@ -41,10 +42,10 @@ class Scheduler
    typedef std::map<Coroutine*, Coroutine*> JoinList;
 
    /** A list of Tasks, indexed by their Task IDs */
-   typedef std::map<TaskId, Task*> TaskMap;
+   typedef std::map<TaskId, std::shared_ptr<Task>> TaskMap;
 
    /** A queue of Tasks */
-   typedef std::queue<Task*> TaskQueue;
+   typedef std::queue<std::shared_ptr<Task>> TaskQueue;
 
    /** The list of currently blocked coroutines in this scheduler */
    BlockList m_blockedCoroutines;
@@ -103,7 +104,7 @@ class Scheduler
        *
        * @return a yield code from the Coroutine being blocked
        */
-      int block(Task* task);
+      int block(const std::shared_ptr<Task>& task);
 
       /**
        * Add a Coroutine to the scheduler by enqueuing it to be started on the next run.
@@ -117,7 +118,7 @@ class Scheduler
        *
        *  @return A newly created task associated with this scheduler.
        */
-      Task* createNewTask();
+      std::shared_ptr<Task> createNewTask();
 
       /**
        * Signals that an instruction has been completed so that the scheduler

@@ -12,25 +12,24 @@
 
 const int debugFlag = DEBUG_AUDIO;
 
-std::map<int, Sound*> Sound::playingList;
-
-bool Sound::ownsChannel(Sound* sound, int channel)
-{
-   return sound == Sound::playingList[channel];
-}
+std::map<int, std::shared_ptr<Sound>> Sound::playingList;
 
 void Sound::channelFinished(int channel)
 {
    DEBUG("Channel %d finished playing.", channel);
-   Sound* finishedSound = Sound::playingList[channel];
+   std::shared_ptr<Sound> finishedSound = Sound::playingList[channel];
 
-   if(finishedSound != nullptr)
-   {  finishedSound->finished();
+   if(finishedSound)
+   {
+      finishedSound->finished();
    }
+   
+   Sound::playingList[channel].reset();
 }
 
 Sound::Sound(ResourceKey name) :
    Resource(name),
+   m_sound(nullptr, &Mix_FreeChunk),
    m_playingChannel(-1)
 {
 }
@@ -43,9 +42,9 @@ void Sound::load(const std::string& path)
    Mix_ChannelFinished(&Sound::channelFinished);
 
    DEBUG("Loading WAV %s", path.c_str());
-   m_sound = Mix_LoadWAV(path.c_str());
+   m_sound.reset(Mix_LoadWAV(path.c_str()));
 
-   if(m_sound == nullptr)
+   if(!m_sound)
    {
       T_T(Mix_GetError());
    }
@@ -53,9 +52,9 @@ void Sound::load(const std::string& path)
    DEBUG("Successfully loaded WAV %s.", path.c_str());
 }
 
-void Sound::play(Task* task)
+void Sound::play(const std::shared_ptr<Task>& task)
 {
-   if(!Settings::getCurrentSettings().isSoundEnabled() || m_sound == nullptr)
+   if(!Settings::getCurrentSettings().isSoundEnabled() || !m_sound)
    {
       if(task)
       {
@@ -65,19 +64,19 @@ void Sound::play(Task* task)
       return;
    }
 
-   m_playingChannel = Mix_PlayChannel(-1, m_sound, 0);
+   m_playingChannel = Mix_PlayChannel(-1, m_sound.get(), 0);
    if(m_playingChannel == -1)
    {
       DEBUG("There was a problem playing the sound ""%s"": %s", getResourceName().c_str(), Mix_GetError());
    }
 
-   Sound::playingList[m_playingChannel] = this;
+   Sound::playingList[m_playingChannel] = std::static_pointer_cast<Sound>(shared_from_this());
    m_playTask = task;
 }
 
 void Sound::stop()
 {
-   if(ownsChannel(this, m_playingChannel))
+   if(m_playingChannel >= 0 && this == Sound::playingList[m_playingChannel].get())
    {
       Mix_HaltChannel(m_playingChannel);
    }
@@ -89,7 +88,7 @@ void Sound::finished()
    if(m_playTask)
    {
       m_playTask->signal();
-      m_playTask = nullptr;
+      m_playTask.reset();
    }
 
    m_playingChannel = -1;
@@ -97,13 +96,6 @@ void Sound::finished()
 
 Sound::~Sound()
 {
-   if(m_sound != nullptr)
-   {
-      if(ownsChannel(this, m_playingChannel))
-      {
-         stop();
-      }
-
-      Mix_FreeChunk(m_sound);
-   }
+   DEBUG("Deleting sound: %s", getResourceName().c_str());
+   stop();
 }

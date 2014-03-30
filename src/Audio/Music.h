@@ -27,13 +27,6 @@ class Music : public Resource
     */
    inline bool isCurrentlyPlayingMusic() const;
 
-   /**
-    * Sets the currently playing music.
-    *
-    * @param music The music to play.
-    */
-   inline void setCurrentlyPlayingMusic();
-
    /** The SDL music object for this music resource */
    std::unique_ptr<Mix_Music, void(*)(Mix_Music*)> m_music;
 

@@ -18,6 +18,7 @@
 #include "Point2D.h"
 
 #include <map>
+#include <memory>
 #include <string>
 
 class NPC;
@@ -43,7 +44,7 @@ struct MapTriggerMessage;
 class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, public messaging::Listener<MapTriggerMessage>
 {
    /** The current region that the player is in. */
-   Region* m_currRegion;
+   std::shared_ptr<Region> m_currRegion;
    
    messaging::MessagePipe m_messagePipe;
    
@@ -205,7 +206,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * @param narration The line of dialogue to appear as a narration.
        * @param task The ticket of this narration instruction
        */
-      void dialogueNarrate(const std::string& narration, Task* task);
+      void dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task);
 
       /**
        * Send a line of dialogue to the DialogueController as speech.
@@ -213,7 +214,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * @param speech The line of dialogue to appear as character speech.
        * @param task The ticket of this speech instruction
        */
-      void dialogueSay(const std::string& speech, Task* task);
+      void dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task);
       
       /**
        * Set a new location for the gameplay to take place in.

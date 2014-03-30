@@ -7,6 +7,7 @@
 #ifndef LAYER_H
 #define LAYER_H
 
+#include <memory>
 #include <string>
 
 namespace shapes
@@ -23,7 +24,7 @@ class Layer
    std::string m_tilesetName;
 
    /** Tileset in use by this map */
-   Tileset* m_tileset;
+   std::shared_ptr<Tileset> m_tileset;
 
    /** The tiles of the map (as numbers referring to points in the Tileset) */
    int** m_tileMap;

@@ -47,7 +47,7 @@ void Quest::load(const Json::Value& questTree)
    const Json::Value& subquestListNode = questTree[Quest::QUEST_ELEMENT];
    for(const auto& subquestNode : subquestListNode)
    {
-      std::shared_ptr<Quest> subquest(new Quest(subquestNode));
+      auto subquest = std::make_shared<Quest>(subquestNode);
       m_subquests[subquest->getName()] = subquest;
    }
 }
@@ -77,7 +77,7 @@ Json::Value Quest::serialize() const
    return questNode;
 }
 
-void Quest::addQuest(std::shared_ptr<Quest> quest)
+void Quest::addQuest(const std::shared_ptr<Quest>& quest)
 {
    DEBUG("Adding quest %s to quest %s.", quest->m_name.c_str(), m_name.c_str());
    m_subquests.insert(std::make_pair(quest->m_name, quest));

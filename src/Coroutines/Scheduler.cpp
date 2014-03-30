@@ -67,10 +67,10 @@ Scheduler::~Scheduler()
    // do not delete them. However, deactivate them so that they don't try to signal this
    // (now deleted) scheduler.
    TaskMap::iterator taskMapIter;
-   for(taskMapIter = m_activeTasks.begin(); taskMapIter != m_activeTasks.end(); ++taskMapIter)
+   for(auto& taskIter : m_activeTasks)
    {
-      Task* taskToDeactivate = taskMapIter->second;
-      if(taskToDeactivate != nullptr)
+      auto& taskToDeactivate = taskIter.second;
+      if(taskToDeactivate)
       {
          taskToDeactivate->signalSchedulerDestroyed();
       }
@@ -90,12 +90,7 @@ Scheduler::~Scheduler()
       m_coroutinesToDelete.pop();
    }
 
-   // Delete all the tasks waiting to be destroyed.
-   while(!m_tasksToDelete.empty())
-   {
-      delete m_tasksToDelete.front();
-      m_tasksToDelete.pop();
-   }
+   m_tasksToDelete = {};
 }
 
 void Scheduler::printFinishedQueue()
@@ -131,7 +126,7 @@ bool Scheduler::hasRunningCoroutine() const
    return m_runningCoroutine != nullptr;
 }
 
-int Scheduler::block(Task* pendingTask)
+int Scheduler::block(const std::shared_ptr<Task>& pendingTask)
 {
    DEBUG("Blocking coroutine %d on task %d...", m_runningCoroutine->getId(), pendingTask->m_id);
 
@@ -155,27 +150,12 @@ int Scheduler::block(Task* pendingTask)
    return m_runningCoroutine->yield();
 }
 
-Task* Scheduler::createNewTask()
+std::shared_ptr<Task> Scheduler::createNewTask()
 {
    TaskId taskId = m_nextId;
-   Task* nextTask = nullptr;
-
-   try
-   {
-      nextTask = new Task(taskId, *this);
-      m_activeTasks[taskId] = nextTask;
-      m_nextId++;
-   }
-   catch(std::exception& e)
-   {
-      if(nextTask != nullptr)
-      {
-         delete nextTask;
-         nextTask = nullptr;
-      }
-
-      DEBUG("Failed to create new task: %s", e.what());
-   }
+   std::shared_ptr<Task> nextTask(new Task(taskId, *this));
+   m_activeTasks[taskId] = nextTask;
+   m_nextId++;
 
    return nextTask;
 }
@@ -318,11 +298,5 @@ void Scheduler::runCoroutines(long timePassed)
       m_coroutinesToDelete.pop();
    }
 
-   while(!m_tasksToDelete.empty())
-   {
-      Task* task = m_tasksToDelete.front();
-      DEBUG("Deleting task %d", task->m_id);
-      delete task;
-      m_tasksToDelete.pop();
-   }
+   m_tasksToDelete = {};
 }

@@ -22,17 +22,7 @@ class Task;
 class Sound : public Resource
 {
    /** The map of currently playing Sound resources based on channel. */
-   static std::map<int, Sound*> playingList;
-
-   /**
-    * Checks whether or not a specified sound owns a certain channel.
-    *
-    * @param sound The sound to check.
-    * @param channel The channel to check ownership of.
-    *
-    * @return true iff sound is playing on channel.
-    */
-   static bool ownsChannel(Sound* sound, int channel);
+   static std::map<int, std::shared_ptr<Sound>> playingList;
 
    /**
     * A callback used when a channel is released and its sound is done playing.
@@ -42,10 +32,10 @@ class Sound : public Resource
    static void channelFinished(int channel);
 
    /** A Task object used to signal waiting coroutines when this sound object is done playing. */
-   Task* m_playTask;
+   std::shared_ptr<Task> m_playTask;
 
    /** The SDL sound resource. */
-   Mix_Chunk* m_sound;
+   std::unique_ptr<Mix_Chunk, void(*)(Mix_Chunk*)> m_sound;
 
    /** This sound's current channel. */
    int m_playingChannel;
@@ -75,7 +65,7 @@ class Sound : public Resource
        *
        * @param task A task to signal when the sound completes. (optional)
        */
-      void play(Task* task = nullptr);
+      void play(const std::shared_ptr<Task>& task = nullptr);
 
       /**
        * Stop this sound if it is currently playing.

@@ -12,7 +12,7 @@
 
 const int debugFlag = DEBUG_SPRITE;
 
-Sprite::Sprite(Spritesheet* sheet) :
+Sprite::Sprite(const std::shared_ptr<Spritesheet>& sheet) :
    m_sheet(sheet),
    m_frameIndex(0),
    m_animation(nullptr),
@@ -40,7 +40,7 @@ void Sprite::clearCurrentFrame()
    m_currName = "";
 }
 
-void Sprite::setSheet(Spritesheet* sheet)
+void Sprite::setSheet(const std::shared_ptr<Spritesheet>& sheet)
 {
    m_sheet = sheet;
 

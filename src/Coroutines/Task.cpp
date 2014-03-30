@@ -18,6 +18,7 @@ Task::Task(TaskId taskId, Scheduler& scheduler) :
 
 Task::~Task()
 {
+   DEBUG("Deleting task %d", m_id);
 }
 
 void Task::signalSchedulerDestroyed()
@@ -30,13 +31,5 @@ void Task::signal()
    if(!m_schedulerDestroyed)
    {
       m_scheduler.completeTask(m_id);
-   }
-   else
-   {
-      // If the Scheduler has been cleaned up,
-      // the Task has to manage its own cleanup.
-
-      /** \todo Remove this code when Tasks are managed using smart pointers. */
-      delete this;
    }
 }

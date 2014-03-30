@@ -20,6 +20,8 @@
 #include "ScriptFactory.h"
 #include "ScriptUtilities.h"
 
+#include <memory>
+
 #include "LuaPlayerCharacter.h"
 #include "LuaActor.h"
 #include "LuaTileEngine.h"
@@ -176,7 +178,7 @@ int ScriptEngine::narrate(lua_State* luaStack)
 
    int callResult = 0;
 
-   Task* task = scheduler->createNewTask();
+   auto task = scheduler->createNewTask();
    if(waitForFinish)
    {
       callResult = scheduler->block(task);
@@ -211,7 +213,7 @@ int ScriptEngine::say(lua_State* luaStack)
 
    int callResult = 0;
 
-   Task* task = scheduler->createNewTask();
+   auto task = scheduler->createNewTask();
    if(waitForFinish)
    {
       callResult = scheduler->block(task);
@@ -246,9 +248,9 @@ int ScriptEngine::playSound(lua_State* luaStack)
 
    DEBUG("Playing sound: %s", soundId.c_str());
 
-   Task* task = scheduler->createNewTask();
+   auto task(scheduler->createNewTask());
 
-   Sound* sound = ResourceLoader::getSound(soundId);
+   std::shared_ptr<Sound> sound = ResourceLoader::getSound(soundId);
    sound->play(task);
 
    if(waitForFinish)
@@ -270,7 +272,7 @@ int ScriptEngine::playMusic(lua_State* luaStack)
 
    DEBUG("Playing music: %s", musicId.c_str());
 
-   Music* song = ResourceLoader::getMusic(musicId);
+   std::shared_ptr<Music> song = ResourceLoader::getMusic(musicId);
    song->play();
 
    return 0;

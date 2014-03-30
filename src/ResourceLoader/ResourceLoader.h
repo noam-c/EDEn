@@ -8,6 +8,7 @@
 #define RESOURCE_LOADER_H
 
 #include <map>
+#include <memory>
 #include <string>
 #include "ResourceKey.h"
 #include "SDL_mixer.h"
@@ -59,7 +60,7 @@ class ResourceLoader
    static const std::string EXTENSIONS[];
 
    /** A map to hold all the currently loaded resources, organized by key */
-   static std::map<ResourceKey, Resource*> resources;
+   static std::map<ResourceKey, std::shared_ptr<Resource>> resources;
 
    /**
     * Create a resource specified by the given unique key-type pair, and load
@@ -71,7 +72,7 @@ class ResourceLoader
     *
     * @return A pointer to the created resource.
     */
-   static Resource* loadNewResource(ResourceKey name, ResourceType type);
+   static std::shared_ptr<Resource> loadNewResource(ResourceKey name, ResourceType type);
 
    /**
     * Attempts to initialize the resource by loading its data from file.
@@ -82,7 +83,7 @@ class ResourceLoader
     * @param name The name of the resource.
     * @param type The type of resource.
     */
-   static void tryInitialize(Resource* resource, ResourceKey name, ResourceType type);
+   static void tryInitialize(const std::shared_ptr<Resource>& resource, ResourceKey name, ResourceType type);
 
    /**
     * Get the path to a certain resource based on its name and type.
@@ -103,7 +104,7 @@ class ResourceLoader
     *
     * @return A pointer to the resource requested.
     */
-   static Resource* getResource(ResourceKey name, ResourceType type);
+   static std::shared_ptr<Resource> getResource(ResourceKey name, ResourceType type);
 
    public:
       /**
@@ -115,35 +116,35 @@ class ResourceLoader
        *
        * @return The piece of music given by the specified name.
        */
-      static Music* getMusic(ResourceKey name);
+      static std::shared_ptr<Music> getMusic(ResourceKey name);
 
       /**
        * @param name The name of the sound resource.
        *
        * @return The sound effect given by the specified name.
        */
-      static Sound* getSound(ResourceKey name);
+      static std::shared_ptr<Sound> getSound(ResourceKey name);
 
       /**
        * @param name The name of the tileset resource.
        *
        * @return The tileset given by the specified name.
        */
-      static Tileset* getTileset(ResourceKey name);
+      static std::shared_ptr<Tileset> getTileset(ResourceKey name);
 
       /**
        * @param name The name of the spritesheet resource.
        *
        * @return The spritesheet given by the specified name.
        */
-      static Spritesheet* getSpritesheet(ResourceKey name);
+      static std::shared_ptr<Spritesheet> getSpritesheet(ResourceKey name);
 
       /**
        * @param name The name of the region resource.
        *
        * @return The region data given by the specified name.
        */
-      static Region* getRegion(ResourceKey name);
+      static std::shared_ptr<Region> getRegion(ResourceKey name);
 
       /**
        * Free all of the memory taken up by the resources, deleting all the

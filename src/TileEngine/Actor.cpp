@@ -56,7 +56,7 @@ const shapes::Size& Actor::getSize() const
 
 void Actor::step(long timePassed)
 {
-   if(m_sprite != nullptr)
+   if(m_sprite)
    {
       m_sprite->step(timePassed);
    }
@@ -73,7 +73,7 @@ void Actor::step(long timePassed)
 
 void Actor::draw()
 {
-   if(m_sprite != nullptr)
+   if(m_sprite)
    {
       m_sprite->draw(shapes::Point2D(m_pixelLoc.x, m_pixelLoc.y + TileEngine::TILE_SIZE));
    }
@@ -144,8 +144,8 @@ void Actor::faceActor(Actor* other)
 
 void Actor::setSpritesheet(const std::string& sheetName)
 {
-   Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
-   if(m_sprite == nullptr)
+   std::shared_ptr<Spritesheet> sheet = ResourceLoader::getSpritesheet(sheetName);
+   if(!m_sprite)
    {
       m_sprite = std::move(std::unique_ptr<Sprite>(new Sprite(sheet)));
    }
@@ -159,7 +159,7 @@ void Actor::setSpritesheet(const std::string& sheetName)
 
 void Actor::setFrame(const std::string& frameName)
 {
-   if(m_sprite == nullptr)
+   if(!m_sprite)
    {
       DEBUG("Failed to set sprite frame because actor %s doesn't have a sprite.", m_name.c_str());
       return;
@@ -170,7 +170,7 @@ void Actor::setFrame(const std::string& frameName)
 
 void Actor::setAnimation(const std::string& animationName)
 {
-   if(m_sprite == nullptr)
+   if(!m_sprite)
    {
       DEBUG("Failed to set sprite animation because actor %s doesn't have a sprite.", m_name.c_str());
       return;
