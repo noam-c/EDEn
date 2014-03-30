@@ -67,7 +67,7 @@ class Character
    std::string m_archetype;
    
    /** The currently available Aspects for this character. */
-   std::vector<Aspect*> m_archetypeAspects;
+   std::vector<std::unique_ptr<Aspect>> m_archetypeAspects;
    
    /** The currently chosen Aspect for this character. */
    unsigned int m_selectedAspect;

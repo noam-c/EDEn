@@ -27,7 +27,7 @@ MenuState::MenuState(GameContext& gameContext, const std::string& stateName, Men
    GameState(gameContext, GameState::MENU, stateName, menuShell->getRocketContext()),
    m_internalMenuShell(false),
    m_menuShell(menuShell),
-   m_shortcutBar(NULL)
+   m_shortcutBar(nullptr)
 {
 }
 
@@ -38,7 +38,7 @@ MenuState::~MenuState()
       delete m_menuShell;
    }
    
-   if(m_paneDocument != NULL)
+   if(m_paneDocument != nullptr)
    {
       m_paneDocument->Close();
       m_paneDocument->RemoveReference();
@@ -49,7 +49,7 @@ void MenuState::activate()
 {
    GameState::activate();
    m_menuShell->changeMenuState(this);
-   if(m_paneDocument != NULL)
+   if(m_paneDocument != nullptr)
    {
       m_paneDocument->Show();
    }
@@ -57,7 +57,7 @@ void MenuState::activate()
 
 void MenuState::deactivate()
 {
-   if(m_paneDocument != NULL)
+   if(m_paneDocument != nullptr)
    {
       m_paneDocument->Hide();
    }
@@ -139,7 +139,7 @@ void MenuState::sidebarClicked(int optionIndex)
 
 void MenuState::setSidebarEnabled(bool enabled)
 {
-   if(m_paneDocument != NULL)
+   if(m_paneDocument != nullptr)
    {
       m_paneDocument->SetClass("noSidebar", !enabled);
    }

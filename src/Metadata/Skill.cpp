@@ -24,7 +24,7 @@ UsableScript* Skill::createScript(ScriptEngine& scriptEngine)
 
 bool Skill::use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter)
 {
-   if(usingCharacter != NULL && usingCharacter->hasSkill(getId()))
+   if(usingCharacter != nullptr && usingCharacter->hasSkill(getId()))
    {
       return Usable::use(scriptEngine, gameStateType, usingCharacter);
    }

@@ -34,7 +34,7 @@ SkillViewModel::~SkillViewModel()
 UsableId SkillViewModel::getSkillId(int rowIndex) const
 {
    Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
-   if(selectedCharacter == NULL)
+   if(selectedCharacter == nullptr)
    {
       return 0;
    }
@@ -46,7 +46,7 @@ UsableId SkillViewModel::getSkillId(int rowIndex) const
 std::string SkillViewModel::getCurrentCharacterId() const
 {
    Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
-   if(selectedCharacter != NULL)
+   if(selectedCharacter != nullptr)
    {
       return selectedCharacter->getId();
    }
@@ -59,7 +59,7 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::StringList& columns)
 {
    Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
-   if(selectedCharacter == NULL)
+   if(selectedCharacter == nullptr)
    {
       return;
    }
@@ -73,7 +73,7 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
          const Skill* rowSkill = m_metadata.getSkill(skillId);
          if (columns[i] == "name")
          {
-            if(rowSkill == NULL)
+            if(rowSkill == nullptr)
             {
                row.push_back(Rocket::Core::String(13, "Unknown %d", skillId));
             }
@@ -84,7 +84,7 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
          }
          else if (columns[i] == "icon")
          {
-            if(rowSkill == NULL)
+            if(rowSkill == nullptr)
             {
                row.push_back(SkillViewModel::UnknownSkillIconPath);
             }
@@ -100,7 +100,7 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
 int SkillViewModel::GetNumRows(const Rocket::Core::String& table)
 {
    Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
-   if(selectedCharacter != NULL && table == "skills")
+   if(selectedCharacter != nullptr && table == "skills")
    {
       return selectedCharacter->getSkillList().size();
    }

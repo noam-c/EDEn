@@ -24,7 +24,7 @@ void Sound::channelFinished(int channel)
    DEBUG("Channel %d finished playing.", channel);
    Sound* finishedSound = Sound::playingList[channel];
 
-   if(finishedSound != NULL)
+   if(finishedSound != nullptr)
    {  finishedSound->finished();
    }
 }
@@ -45,7 +45,7 @@ void Sound::load(const std::string& path)
    DEBUG("Loading WAV %s", path.c_str());
    m_sound = Mix_LoadWAV(path.c_str());
 
-   if(m_sound == NULL)
+   if(m_sound == nullptr)
    {
       T_T(Mix_GetError());
    }
@@ -55,7 +55,7 @@ void Sound::load(const std::string& path)
 
 void Sound::play(Task* task)
 {
-   if(!Settings::getCurrentSettings().isSoundEnabled() || m_sound == NULL)
+   if(!Settings::getCurrentSettings().isSoundEnabled() || m_sound == nullptr)
    {
       if(task)
       {
@@ -89,7 +89,7 @@ void Sound::finished()
    if(m_playTask)
    {
       m_playTask->signal();
-      m_playTask = NULL;
+      m_playTask = nullptr;
    }
 
    m_playingChannel = -1;
@@ -97,7 +97,7 @@ void Sound::finished()
 
 Sound::~Sound()
 {
-   if(m_sound != NULL)
+   if(m_sound != nullptr)
    {
       if(ownsChannel(this, m_playingChannel))
       {

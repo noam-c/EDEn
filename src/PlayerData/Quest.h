@@ -9,6 +9,7 @@
 
 #include <string>
 #include <map>
+#include <memory>
 
 namespace Json
 {
@@ -49,7 +50,7 @@ class Quest
    /**
     * Represents a table of quests, indexed by their names.
     */
-   typedef std::map<std::string, Quest*> QuestLog;
+   typedef std::map<std::string, std::shared_ptr<Quest>> QuestLog;
 
    
    /**
@@ -121,15 +122,15 @@ class Quest
       /**
        * Add a subquest to this quest's log.
        */
-      void addQuest(Quest* quest);
+      void addQuest(std::shared_ptr<Quest> quest);
    
       /**
        * Recursively searches for the subquest on the path specified.
        *
        * @param questPath A "/"-delimited path from the quest to the requested subquest.
-       * @return The quest at the path specified by questPath, or NULL if it could not be found.
+       * @return The quest at the path specified by questPath, or nullptr if it could not be found.
        */
-      Quest* getQuest(const std::string& questPath) const;
+      const std::weak_ptr<Quest> getQuest(const std::string& questPath) const;
    
       /**
        * @param questPath A "/"-delimited path from the quest to the requested subquest.

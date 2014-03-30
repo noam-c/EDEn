@@ -10,44 +10,55 @@
 
 const int debugFlag = DEBUG_AUDIO;
 
-Music* Music::currentMusic = NULL;
+std::shared_ptr<Music> Music::currentMusic(nullptr);
 
 Music::Music(ResourceKey name) :
-   Resource(name)
+   Resource(name),
+   m_music(nullptr, &Mix_FreeMusic)
 {
 }
 
 Music::~Music()
 {
-   if(m_music != NULL)
-   {
-      Mix_FreeMusic(m_music);
-   }
 }
 
 void Music::load(const std::string& path)
 {
-   m_music = Mix_LoadMUS(path.c_str());
+   m_music.reset(Mix_LoadMUS(path.c_str()));
 
-   if(m_music == NULL)
+   if(!m_music)
    {
       T_T(Mix_GetError());
    }
 }
 
-void Music::setPlayingMusic(Music* music)
+void Music::setCurrentlyPlayingMusic()
 {
-   currentMusic = music;
+   if(isCurrentlyPlayingMusic())
+   {
+      // This song is already the currently playing song,
+      // so we're done here.
+      return;
+   }
+
+   if(Mix_PlayMusic(m_music.get(), 0) < 0)
+   {
+      DEBUG("There was a problem playing the music: %s", Mix_GetError());
+      Music::currentMusic.reset();
+      return;
+   }
+
+   Music::currentMusic.reset(this);
 }
 
-bool Music::isPlaying()
+bool Music::isMusicPlaying()
 {
-   return Music::currentMusic != NULL && Mix_PlayingMusic();
+   return Music::currentMusic && Mix_PlayingMusic();
 }
 
-bool Music::isPlaying(Music* music)
+bool Music::isCurrentlyPlayingMusic() const
 {
-   return (music == Music::currentMusic) && Mix_PlayingMusic();
+   return Music::isMusicPlaying() && this == Music::currentMusic.get();
 }
 
 void Music::fadeOutMusic(int time)
@@ -63,7 +74,7 @@ void Music::fadeOutMusic(int time)
          Mix_HaltMusic();
       }
 
-      Music::currentMusic = NULL;
+      Music::currentMusic.reset();
    }
 }
 
@@ -74,14 +85,10 @@ void Music::stopMusic()
 
 void Music::play()
 {
-   if(!Settings::getCurrentSettings().isMusicEnabled() || m_music == NULL) return;
-
-   if(!isPlaying(this))
+   if(!Settings::getCurrentSettings().isMusicEnabled() || !m_music)
    {
-      setPlayingMusic(this);
-      if(Mix_PlayMusic(m_music, 0) < 0)
-      {
-         DEBUG("There was a problem playing the music: %s", Mix_GetError());
-      }
+      return;
    }
+
+   setCurrentlyPlayingMusic();
 }

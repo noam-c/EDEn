@@ -24,7 +24,7 @@ const int debugFlag = DEBUG_MENU;
 SkillMenu::SkillMenu(GameContext& gameContext) :
    CharacterDependentMenu(gameContext, "SkillMenu"),
    m_bindings(this),
-   m_selectedCharacter(NULL),
+   m_selectedCharacter(nullptr),
    m_skillViewModel(*this, getMetadata())
 {
    initialize();
@@ -41,7 +41,7 @@ SkillMenu::SkillMenu(GameContext& gameContext, MenuShell* menuShell) :
 void SkillMenu::initialize()
 {
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/skillpane.rml");
-   if(m_paneDocument != NULL)
+   if(m_paneDocument != nullptr)
    {
       m_bindings.bindAction(m_paneDocument, "skillGrid", "click", &SkillMenu::skillClicked);
       m_bindings.bindAction(m_paneDocument, "skillGrid", "dragstart", &SkillMenu::dragStarted);
@@ -56,31 +56,31 @@ void SkillMenu::setCharacter(int characterIndex)
 {
    CharacterRoster* roster = getCurrentPlayerData().getRoster();
    
-   m_selectedCharacter = roster != NULL && roster->getParty().size() > characterIndex ?
+   m_selectedCharacter = roster != nullptr && roster->getParty().size() > characterIndex ?
       roster->getParty()[characterIndex] :
-      NULL;
+      nullptr;
 
    m_skillViewModel.refresh();
 }
 
 void SkillMenu::dragStarted(Rocket::Core::Event* event)
 {
-   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event->GetParameter< void* >("drag_element", NULL));
-   if (dragElement != NULL)
+   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event->GetParameter< void* >("drag_element", nullptr));
+   if (dragElement != nullptr)
    {
       Rocket::Core::Element* target = event->GetTargetElement();
 
       // Move up the DOM to the datagridrow skill holding this element
-      while(target->GetParentNode() != NULL && target->GetTagName() != "datagridrow")
+      while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
       {
          target = target->GetParentNode();
       }
 
-      if(target != NULL)
+      if(target != nullptr)
       {
          // If we found a row element, cast it and get its index
          Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
-         if(rowElement != NULL)
+         if(rowElement != nullptr)
          {
             const int skillIndex = rowElement->GetParentRelativeIndex();
             const UsableId skillId = m_skillViewModel.getSkillId(skillIndex);
@@ -102,16 +102,16 @@ void SkillMenu::skillClicked(Rocket::Core::Event* event)
    Rocket::Core::Element* target = event->GetTargetElement();
 
    // Move up the DOM to the datagridrow skill holding this element
-   while(target->GetParentNode() != NULL && target->GetTagName() != "datagridrow")
+   while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
    {
       target = target->GetParentNode();
    }
 
-   if(target != NULL)
+   if(target != nullptr)
    {
       // If we found a row element, cast it and get its index
       Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
-      if(rowElement != NULL)
+      if(rowElement != nullptr)
       {
          int skillIndex = rowElement->GetParentRelativeIndex();
          useSkill(skillIndex);
@@ -121,7 +121,7 @@ void SkillMenu::skillClicked(Rocket::Core::Event* event)
 
 void SkillMenu::useSkill(int rowIndex)
 {
-   if(m_selectedCharacter == NULL)
+   if(m_selectedCharacter == nullptr)
    {
       return;
    }
@@ -129,7 +129,7 @@ void SkillMenu::useSkill(int rowIndex)
    const SkillList& skillList = m_selectedCharacter->getSkillList();
    const UsableId skillId = skillList[rowIndex];
    Skill* skill = getMetadata().getSkill(skillId);
-   if(skill == NULL)
+   if(skill == nullptr)
    {
       DEBUG("Tried to use bad skill with ID: %d.", skillId);
    }

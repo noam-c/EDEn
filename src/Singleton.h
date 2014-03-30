@@ -7,10 +7,6 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
-#ifndef NULL
-   #define NULL 0
-#endif
-
 /**
  * The Singleton template class is a helper class that stores all the code
  * necessary to implement a Singleton class.
@@ -81,11 +77,11 @@ template<class C> class Singleton
          {
             Singleton<C>::instance->finish();
             delete Singleton<C>::instance;
-            Singleton<C>::instance = NULL;
+            Singleton<C>::instance = nullptr;
          }
       }
 };
 
-template<class C> Singleton<C>* Singleton<C>::instance = NULL;
+template<class C> Singleton<C>* Singleton<C>::instance = nullptr;
 
 #endif

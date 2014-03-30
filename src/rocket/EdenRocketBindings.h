@@ -67,7 +67,7 @@ template<typename T> class EdenRocketBindings
       void bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, void (T::*handler)(Rocket::Core::Event*), bool capture = false)
       {
          Rocket::Core::Element* element = document->GetElementById(id);
-         if(element != NULL)
+         if(element != nullptr)
          {
             bindAction(element, eventType, handler);
          }

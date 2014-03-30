@@ -30,7 +30,7 @@ int Aspect::StatBonusCalculation::getBonusForLevel(unsigned int level) const
    return ceil(level * m_coefficient);
 }
 
-Aspect* Aspect::loadAspect(const std::string& aspectId)
+std::unique_ptr<Aspect> Aspect::loadAspect(const std::string& aspectId)
 {
    const std::string path = std::string("data/aspects/") + aspectId + ".eda";
    DEBUG("Loading aspect %s in file %s", aspectId.c_str(), path.c_str());
@@ -50,7 +50,7 @@ Aspect* Aspect::loadAspect(const std::string& aspectId)
       T_T("Failed to parse aspect data.");
    }
    
-   return new Aspect(jsonRoot);
+   return std::unique_ptr<Aspect>(new Aspect(jsonRoot));
 }
 
 Aspect::Aspect(const Json::Value& aspectToLoad)

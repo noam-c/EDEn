@@ -8,10 +8,10 @@
 #include "SDL.h"
 
 OpenGLExtensions::OpenGLExtensions() : 
-   m_glBindFramebufferEXT(NULL),
-   m_glDeleteFramebuffersEXT(NULL),
-   m_glGenFramebuffersEXT(NULL),
-   m_glFramebufferTexture2DEXT(NULL),
+   m_glBindFramebufferEXT(nullptr),
+   m_glDeleteFramebuffersEXT(nullptr),
+   m_glGenFramebuffersEXT(nullptr),
+   m_glFramebufferTexture2DEXT(nullptr),
    m_framebuffersEnabled(false)
 {
 }
@@ -24,10 +24,10 @@ void OpenGLExtensions::initialize()
    m_glFramebufferTexture2DEXT = reinterpret_cast<glFramebufferTexture2DFunction>(SDL_GL_GetProcAddress("glFramebufferTexture2DEXT"));
 
    m_framebuffersEnabled =
-      m_glBindFramebufferEXT != NULL &&
-      m_glDeleteFramebuffersEXT != NULL &&
-      m_glGenFramebuffersEXT != NULL &&
-      m_glFramebufferTexture2DEXT != NULL;
+      m_glBindFramebufferEXT != nullptr &&
+      m_glDeleteFramebuffersEXT != nullptr &&
+      m_glGenFramebuffersEXT != nullptr &&
+      m_glFramebufferTexture2DEXT != nullptr;
 }
 
 bool OpenGLExtensions::isFrameBuffersEnabled() const

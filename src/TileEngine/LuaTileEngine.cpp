@@ -18,10 +18,10 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
 
 static int TileEngineL_AddNPC(lua_State* luaVM)
 {
-   NPC* npc = NULL;
+   NPC* npc = nullptr;
    
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-   if (tileEngine == NULL)
+   if (tileEngine == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -84,7 +84,7 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
 static int TileEngineL_AddTriggerListener(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-   if (tileEngine == NULL)
+   if (tileEngine == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -107,7 +107,7 @@ static int TileEngineL_AddTriggerListener(lua_State* luaVM)
 static int TileEngineL_GetNPC(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-   if (tileEngine == NULL)
+   if (tileEngine == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -126,12 +126,12 @@ static int TileEngineL_GetNPC(lua_State* luaVM)
 static int TileEngineL_FollowWithCamera(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-   if (tileEngine == NULL)
+   if (tileEngine == nullptr)
    {
       return lua_error(luaVM);
    }
 
-   Actor* target = NULL;
+   Actor* target = nullptr;
    if(!ScriptUtilities::getParameter<Actor>(luaVM, 2, 1, "target", target))
    {
       return lua_error(luaVM);
@@ -144,7 +144,7 @@ static int TileEngineL_FollowWithCamera(lua_State* luaVM)
 static int TileEngineL_ReleaseCamera(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-   if (tileEngine == NULL)
+   if (tileEngine == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -156,7 +156,7 @@ static int TileEngineL_ReleaseCamera(lua_State* luaVM)
 static int TileEngineL_SlideCamera(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-   if (tileEngine == NULL)
+   if (tileEngine == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -207,7 +207,7 @@ static int TileEngineL_SlideCamera(lua_State* luaVM)
 static int TileEngineL_TilesToPixels(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
-   if (tileEngine == NULL)
+   if (tileEngine == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -231,10 +231,10 @@ static luaL_reg tileEngineMetatable[] =
    { "unlockCamera", TileEngineL_ReleaseCamera },
    { "slideCamera", TileEngineL_SlideCamera },
    { "tilesToPixels", TileEngineL_TilesToPixels },
-   { NULL, NULL }
+   { nullptr, nullptr }
 };
 
 void luaopen_TileEngine(lua_State* luaVM)
 {
-   luaW_register<TileEngine>(luaVM, "TileEngine", NULL, tileEngineMetatable, NULL, NULL);
+   luaW_register<TileEngine>(luaVM, "TileEngine", nullptr, tileEngineMetatable, nullptr, nullptr);
 }

@@ -50,7 +50,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
          const Item* rowItem = m_metadata.getItem(usableId);
          if (columns[i] == "name")
          {
-            if(rowItem == NULL)
+            if(rowItem == nullptr)
             {
                row.push_back(Rocket::Core::String(13, "Unknown %d", usableId));
             }
@@ -65,7 +65,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
          }
          else if (columns[i] == "icon")
          {
-            if(rowItem == NULL)
+            if(rowItem == nullptr)
             {
                row.push_back(ItemViewModel::UnknownItemIconPath);
             }

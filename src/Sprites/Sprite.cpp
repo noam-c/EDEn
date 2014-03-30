@@ -15,7 +15,7 @@ const int debugFlag = DEBUG_SPRITE;
 Sprite::Sprite(Spritesheet* sheet) :
    m_sheet(sheet),
    m_frameIndex(0),
-   m_animation(NULL),
+   m_animation(nullptr),
    m_currDirection(NONE)
 {
 }
@@ -27,10 +27,10 @@ Sprite::~Sprite()
 
 void Sprite::clearCurrentFrame()
 {
-   if(m_animation != NULL)
+   if(m_animation != nullptr)
    {
       delete m_animation;
-      m_animation = NULL;
+      m_animation = nullptr;
    }
 
    // Default to frame 0 for now.
@@ -82,7 +82,7 @@ std::string Sprite::toDirectionString(MovementDirection direction)
 
 void Sprite::setFrame(const std::string& frameName, MovementDirection direction)
 {
-   if(m_animation == NULL && frameName == m_currName && direction == m_currDirection) return;
+   if(m_animation == nullptr && frameName == m_currName && direction == m_currDirection) return;
 
    int frameIndex;
    
@@ -104,16 +104,16 @@ void Sprite::setFrame(const std::string& frameName, MovementDirection direction)
 
 void Sprite::setAnimation(const std::string& animationName, MovementDirection direction)
 {
-   if(m_animation != NULL && animationName == m_currName && direction == m_currDirection) return;
+   if(m_animation != nullptr && animationName == m_currName && direction == m_currDirection) return;
 
    Animation* animation;
 
-   if(direction == NONE || (animation = m_sheet->getAnimation(animationName + toDirectionString(direction))) == NULL)
+   if(direction == NONE || (animation = m_sheet->getAnimation(animationName + toDirectionString(direction))) == nullptr)
    {
       animation = m_sheet->getAnimation(animationName);
    }
 
-   if(animation == NULL)
+   if(animation == nullptr)
    {
       DEBUG("Failed to find animation.");
    }
@@ -126,7 +126,7 @@ void Sprite::setAnimation(const std::string& animationName, MovementDirection di
 
 void Sprite::step(long timePassed)
 {
-   if(m_animation != NULL)
+   if(m_animation != nullptr)
    {
       m_animation->update(timePassed);
    }
@@ -134,6 +134,6 @@ void Sprite::step(long timePassed)
 
 void Sprite::draw(const shapes::Point2D& point) const
 {
-   int indexToDraw = m_animation != NULL ? m_animation->getIndex() : m_frameIndex;
+   int indexToDraw = m_animation != nullptr ? m_animation->getIndex() : m_frameIndex;
    m_sheet->draw(point, indexToDraw);
 }

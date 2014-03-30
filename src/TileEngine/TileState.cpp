@@ -5,7 +5,6 @@
  */
 
 #include "TileState.h"
-#define NULL 0
 
 TileState::TileState(EntityType type, void* entity) :
    entityType(type),

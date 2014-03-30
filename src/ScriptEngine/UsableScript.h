@@ -65,7 +65,7 @@ class UsableScript : public Script
     * @return true iff the script runs to completion, false if the coroutine
     *         yielded, or there was an error in execution.
     */
-   bool callFunction(UsableFunction function, Character* usingCharacter = NULL);
+   bool callFunction(UsableFunction function, Character* usingCharacter = nullptr);
 
    public:
       /**
@@ -86,11 +86,11 @@ class UsableScript : public Script
        */
       virtual ~UsableScript();
 
-      bool onMenuUse(Character* usingCharacter = NULL);
+      bool onMenuUse(Character* usingCharacter = nullptr);
 
-      bool onFieldUse(Character* usingCharacter = NULL);
+      bool onFieldUse(Character* usingCharacter = nullptr);
 
-      bool onBattleUse(Character* usingCharacter = NULL);
+      bool onBattleUse(Character* usingCharacter = nullptr);
 };
 
 #endif

@@ -19,7 +19,7 @@ TransitionState::TransitionState(GameContext& gameContext, const std::string& st
       m_transitionLength(transitionLength),
       m_progress(1.0f)
 {
-   if(oldState != NULL)
+   if(oldState != nullptr)
    {
       if(!captureStateToTexture(oldState, m_oldStateTexture))
       {
@@ -27,7 +27,7 @@ TransitionState::TransitionState(GameContext& gameContext, const std::string& st
       }
    }
 
-   if(newState != NULL)
+   if(newState != nullptr)
    {
       if(!captureStateToTexture(newState, m_newStateTexture))
       {

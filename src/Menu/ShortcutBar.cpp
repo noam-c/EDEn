@@ -30,10 +30,10 @@ ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, con
    m_rocketContext.AddReference();
 
    m_shortcutBarDocument = rocketContext.LoadDocument("data/gui/shortcutBar.rml");
-   if(m_shortcutBarDocument != NULL)
+   if(m_shortcutBarDocument != nullptr)
    {
       m_shortcutContainer = m_shortcutBarDocument->GetElementById("shortcutContainer");
-      if (m_shortcutContainer != NULL)
+      if (m_shortcutContainer != nullptr)
       {
          m_bindings.bindAction(m_shortcutContainer, "dragdrop", &ShortcutBar::usableDropped);
          m_bindings.bindAction(m_shortcutContainer, "click", &ShortcutBar::shortcutClicked);
@@ -47,7 +47,7 @@ ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, con
 
 ShortcutBar::~ShortcutBar()
 {
-   if(m_shortcutBarDocument != NULL)
+   if(m_shortcutBarDocument != nullptr)
    {
       m_shortcutBarDocument->RemoveReference();
       m_shortcutBarDocument->Close();
@@ -60,14 +60,14 @@ void ShortcutBar::shortcutClicked(Rocket::Core::Event* event)
 {
    Rocket::Core::Element* shortcutElement = event->GetTargetElement();
 
-   while(shortcutElement != NULL && shortcutElement->GetParentNode() != m_shortcutContainer)
+   while(shortcutElement != nullptr && shortcutElement->GetParentNode() != m_shortcutContainer)
    {
       shortcutElement = shortcutElement->GetParentNode();
    }
 
    // Only handle the click if it went to a shortcut
    // (direct child of the shortcut bar container)
-   if (shortcutElement != NULL)
+   if (shortcutElement != nullptr)
    {
       // Find the index of the shortcut
       int shortcutIndex = 0;
@@ -75,7 +75,7 @@ void ShortcutBar::shortcutClicked(Rocket::Core::Event* event)
       for(;;)
       {
          shortcutElement = shortcutElement->GetPreviousSibling();
-         if (shortcutElement == NULL) break;
+         if (shortcutElement == nullptr) break;
          ++shortcutIndex;
       }
 
@@ -93,7 +93,7 @@ bool ShortcutBar::invokeShortcut(int shortcutIndex)
    if(shortcut.usableType == Shortcut::ITEM)
    {
       Item* item = m_metadata.getItem(shortcut.usableId);
-      if(item != NULL)
+      if(item != nullptr)
       {
          return item->use(m_scriptEngine, m_stateType);
       }
@@ -102,8 +102,8 @@ bool ShortcutBar::invokeShortcut(int shortcutIndex)
    {
       Skill* skill = m_metadata.getSkill(shortcut.usableId);
       CharacterRoster* roster = m_playerData.getRoster();
-      Character* usingCharacter = roster != NULL ? roster->getCharacter(shortcut.characterId) : NULL;
-      if(skill != NULL && usingCharacter != NULL)
+      Character* usingCharacter = roster != nullptr ? roster->getCharacter(shortcut.characterId) : nullptr;
+      if(skill != nullptr && usingCharacter != nullptr)
       {
          return skill->use(m_scriptEngine, m_stateType, usingCharacter);
       }
@@ -114,8 +114,8 @@ bool ShortcutBar::invokeShortcut(int shortcutIndex)
 
 void ShortcutBar::usableDropped(Rocket::Core::Event* event)
 {
-   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event->GetParameter< void* >("drag_element", NULL));
-   if (dragElement != NULL)
+   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event->GetParameter< void* >("drag_element", nullptr));
+   if (dragElement != nullptr)
    {
       const bool isItem = dragElement->HasAttribute("itemId");
       const bool isSkill = dragElement->HasAttribute("skillId") && dragElement->HasAttribute("characterId");
@@ -145,7 +145,7 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
             for(;;)
             {
                dropElement = dropElement->GetPreviousSibling();
-               if (dropElement == NULL) break;
+               if (dropElement == nullptr) break;
                ++dropTargetIndex;
             }
 
@@ -161,7 +161,7 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
                const std::string characterId = dragElement->GetAttribute<Rocket::Core::String>("characterId", "").CString();
                Character* character = m_playerData.getRoster()->getCharacter(characterId);
 
-               if(character != NULL)
+               if(character != nullptr)
                {
                   DEBUG("Dropping skill %d on shortcut index %d.", usableId, dropTargetIndex);
                   m_playerData.setShortcut(dropTargetIndex, usableId, characterId);
@@ -179,7 +179,7 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
                   for(;;)
                   {
                      dragElement = dragElement->GetPreviousSibling();
-                     if (dragElement == NULL) break;
+                     if (dragElement == nullptr) break;
                      ++dragTargetIndex;
                   }
 
@@ -210,7 +210,7 @@ void ShortcutBar::refresh()
       Rocket::Core::ElementAttributes shortcutElementAttributes;
       shortcutElementAttributes.Set("class", "shortcut");
 
-      if(usable != NULL)
+      if(usable != nullptr)
       {
          if (shortcut.usableType == Shortcut::ITEM)
          {

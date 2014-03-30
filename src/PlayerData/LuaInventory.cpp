@@ -12,7 +12,7 @@
 static int InventoryL_GetItemCount(lua_State* luaVM)
 {
    const Inventory* inventory = luaW_check<Inventory>(luaVM, 1);
-   if(inventory == NULL)
+   if(inventory == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -31,7 +31,7 @@ static int InventoryL_GetItemCount(lua_State* luaVM)
 static int InventoryL_AddItem(lua_State* luaVM)
 {
    Inventory* inventory = luaW_check<Inventory>(luaVM, 1);
-   if(inventory == NULL)
+   if(inventory == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -56,7 +56,7 @@ static int InventoryL_AddItem(lua_State* luaVM)
 static int InventoryL_RemoveItem(lua_State* luaVM)
 {
    Inventory* inventory = luaW_check<Inventory>(luaVM, 1);
-   if(inventory == NULL)
+   if(inventory == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -83,10 +83,10 @@ static luaL_reg inventoryMetatable[] =
    { "getItemCount", InventoryL_GetItemCount },
    { "addItem", InventoryL_AddItem },
    { "removeItem", InventoryL_RemoveItem },
-   { NULL, NULL }
+   { nullptr, nullptr }
 };
 
 void luaopen_Inventory(lua_State* luaVM)
 {
-   luaW_register<Inventory>(luaVM, "Inventory", NULL, inventoryMetatable, NULL, NULL);
+   luaW_register<Inventory>(luaVM, "Inventory", nullptr, inventoryMetatable, nullptr, nullptr);
 }

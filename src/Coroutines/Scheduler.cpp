@@ -12,7 +12,7 @@
 const int debugFlag = DEBUG_SCHEDULER;
 
 Scheduler::Scheduler() :
-   m_runningCoroutine(NULL),
+   m_runningCoroutine(nullptr),
    m_nextId(0)
 {
 }
@@ -24,7 +24,7 @@ Scheduler::~Scheduler()
    for(blockListIter = m_blockedCoroutines.begin(); blockListIter != m_blockedCoroutines.end(); ++blockListIter)
    {
       Coroutine* coroutineToDelete = blockListIter->second;
-      if(coroutineToDelete != NULL)
+      if(coroutineToDelete != nullptr)
       {
          delete coroutineToDelete;
       }
@@ -35,7 +35,7 @@ Scheduler::~Scheduler()
    for(joinListIter = m_joiningCoroutines.begin(); joinListIter != m_joiningCoroutines.end(); ++joinListIter)
    {
       Coroutine* coroutineToDelete = joinListIter->second;
-      if(coroutineToDelete != NULL)
+      if(coroutineToDelete != nullptr)
       {
          delete coroutineToDelete;
       }
@@ -46,7 +46,7 @@ Scheduler::~Scheduler()
    for(unstartedListIter = m_unstartedCoroutines.begin(); unstartedListIter != m_unstartedCoroutines.end(); ++unstartedListIter)
    {
       Coroutine* coroutineToDelete = *unstartedListIter;
-      if(coroutineToDelete != NULL)
+      if(coroutineToDelete != nullptr)
       {
          delete coroutineToDelete;
       }
@@ -57,7 +57,7 @@ Scheduler::~Scheduler()
    for(readyListIter = m_readyCoroutines.begin(); readyListIter != m_readyCoroutines.end(); ++readyListIter)
    {
       Coroutine* coroutineToDelete = *readyListIter;
-      if(coroutineToDelete != NULL)
+      if(coroutineToDelete != nullptr)
       {
          delete coroutineToDelete;
       }
@@ -70,7 +70,7 @@ Scheduler::~Scheduler()
    for(taskMapIter = m_activeTasks.begin(); taskMapIter != m_activeTasks.end(); ++taskMapIter)
    {
       Task* taskToDeactivate = taskMapIter->second;
-      if(taskToDeactivate != NULL)
+      if(taskToDeactivate != nullptr)
       {
          taskToDeactivate->signalSchedulerDestroyed();
       }
@@ -128,7 +128,7 @@ void Scheduler::start(Coroutine* coroutine)
 
 bool Scheduler::hasRunningCoroutine() const
 {
-   return m_runningCoroutine != NULL;
+   return m_runningCoroutine != nullptr;
 }
 
 int Scheduler::block(Task* pendingTask)
@@ -158,7 +158,7 @@ int Scheduler::block(Task* pendingTask)
 Task* Scheduler::createNewTask()
 {
    TaskId taskId = m_nextId;
-   Task* nextTask = NULL;
+   Task* nextTask = nullptr;
 
    try
    {
@@ -168,10 +168,10 @@ Task* Scheduler::createNewTask()
    }
    catch(std::exception& e)
    {
-      if(nextTask != NULL)
+      if(nextTask != nullptr)
       {
          delete nextTask;
-         nextTask = NULL;
+         nextTask = nullptr;
       }
 
       DEBUG("Failed to create new task: %s", e.what());
@@ -194,7 +194,7 @@ void Scheduler::completeTask(TaskId finishedTaskId)
       m_unstartedCoroutines.insert(resumingCoroutine);
 
       // Remove the coroutine from the block list
-      m_blockedCoroutines[finishedTaskId] = NULL;
+      m_blockedCoroutines[finishedTaskId] = nullptr;
    }
 
    TaskMap::iterator finishedTaskIterator = m_activeTasks.find(finishedTaskId);
@@ -244,7 +244,7 @@ void Scheduler::coroutineDone(Coroutine* coroutine)
       m_unstartedCoroutines.insert(resumingCoroutine);
 
       // Clear the joining coroutine out of the joining list
-      m_joiningCoroutines[coroutine] = NULL;
+      m_joiningCoroutines[coroutine] = nullptr;
    }
 }
 
@@ -296,7 +296,7 @@ void Scheduler::runCoroutines(long timePassed)
    }
 
    // Clear the running coroutine since none are running now
-   m_runningCoroutine = NULL;
+   m_runningCoroutine = nullptr;
 
    // If there are any finished/blocked coroutines,
    // remove them from the ready coroutine list

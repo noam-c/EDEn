@@ -13,6 +13,7 @@ namespace Json
 };
 
 #include <map>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -156,9 +157,9 @@ class Aspect
        *
        * @param aspectId The ID of the aspect to load.
        *
-       * @return The requested Aspect or NULL if it is not found.
+       * @return The requested Aspect or nullptr if it is not found.
        */
-      static Aspect* loadAspect(const std::string& aspectId);
+      static std::unique_ptr<Aspect> loadAspect(const std::string& aspectId);
 
       /**
        * Destructor.

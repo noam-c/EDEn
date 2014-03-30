@@ -18,13 +18,13 @@ const int debugFlag = DEBUG_RES_LOAD | DEBUG_TILE_ENG;
 
 Tileset::Tileset(ResourceKey name) :
    Resource(name),
-   m_texture(NULL)
+   m_texture(nullptr)
 {
 }
 
 Tileset::~Tileset()
 {
-   if(m_texture != NULL)
+   if(m_texture != nullptr)
    {
       delete m_texture;
    }
@@ -57,7 +57,7 @@ void Tileset::load(const std::string& path)
    }
 
    TiXmlElement* imageElement = root->FirstChildElement("image");
-   if(imageElement == NULL)
+   if(imageElement == nullptr)
    {
       DEBUG("Expected image data in tileset.");
       T_T("Failed to parse tileset data.");
@@ -78,7 +78,7 @@ void Tileset::load(const std::string& path)
    std::fill(m_passibility.begin(), m_passibility.end(), true);
 
    TiXmlElement* tileElement = root->FirstChildElement("tile");
-   while(tileElement != NULL)
+   while(tileElement != nullptr)
    {
       int tileNum = -1;
       tileElement->Attribute("id", &tileNum);
@@ -86,7 +86,7 @@ void Tileset::load(const std::string& path)
       TiXmlElement* propertiesElement = tileElement->FirstChildElement("properties");
 
       TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
-      while(propertyElement != NULL)
+      while(propertyElement != nullptr)
       {
          if(std::string(propertyElement->Attribute("name")) == "collision")
          {

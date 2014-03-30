@@ -10,7 +10,7 @@
 #include "json.h"
 
 EquipSlot::EquipSlot() :
-   equipped(NULL),
+   equipped(nullptr),
    enabled(true)
 {
 }
@@ -48,7 +48,7 @@ void EquipSlot::load(const Metadata& metadata, const Json::Value& inputJson)
 
 void EquipSlot::serialize(Json::Value& slotNode) const
 {
-   if(equipped != NULL)
+   if(equipped != nullptr)
    {
       slotNode["equipped"] = equipped->getId();
    }

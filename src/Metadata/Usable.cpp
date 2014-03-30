@@ -32,13 +32,13 @@ Usable::Usable(Json::Value& node) :
    m_id(node[Usable::ID_ATTRIBUTE].asInt()),
    m_name(node[Usable::NAME_ATTRIBUTE].asString()),
    m_iconPath(node[Usable::ICON_ATTRIBUTE].asString()),
-   m_usableScript(NULL)
+   m_usableScript(nullptr)
 {
 }
 
 Usable::~Usable()
 {
-   if(m_usableScript != NULL)
+   if(m_usableScript != nullptr)
    {
       delete m_usableScript;
    }
@@ -61,7 +61,7 @@ const std::string& Usable::getIconPath() const
 
 void Usable::loadScript(ScriptEngine& scriptEngine)
 {
-   if(m_usableScript == NULL)
+   if(m_usableScript == nullptr)
    {
       m_usableScript = createScript(scriptEngine);
    }

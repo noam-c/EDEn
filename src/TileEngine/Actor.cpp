@@ -25,7 +25,7 @@ Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, Entit
    m_size(size),
    m_movementSpeed(movementSpeed),
    m_currDirection(direction),
-   m_sprite(NULL),
+   m_sprite(nullptr),
    m_entityGrid(entityGrid),
    m_messagePipe(messagePipe)
 {
@@ -34,16 +34,13 @@ Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, Entit
 Actor::~Actor()
 {
    flushOrders();
-   delete m_sprite;
 }
 
 void Actor::flushOrders()
 {
    while(!m_orders.empty())
    {
-      Order* order = m_orders.front();
       m_orders.pop();
-      delete order;
    }
 }
 
@@ -59,25 +56,24 @@ const shapes::Size& Actor::getSize() const
 
 void Actor::step(long timePassed)
 {
-   if(m_sprite)
+   if(m_sprite != nullptr)
    {
       m_sprite->step(timePassed);
    }
 
    if(!isIdle())
    {
-      Order* currentOrder = m_orders.front();
+      auto& currentOrder = m_orders.front();
       if(currentOrder->perform(timePassed))
       {
          m_orders.pop();
-         delete currentOrder;
       }
    }
 }
 
 void Actor::draw()
 {
-   if(m_sprite)
+   if(m_sprite != nullptr)
    {
       m_sprite->draw(shapes::Point2D(m_pixelLoc.x, m_pixelLoc.y + TileEngine::TILE_SIZE));
    }
@@ -98,7 +94,7 @@ void Actor::move(const shapes::Point2D& dst)
    if(m_entityGrid.withinMap(dst))
    {
       DEBUG("Sending move order to %s: %d,%d", m_name.c_str(), dst.x, dst.y);
-      m_orders.push(new MoveOrder(*this, dst, m_entityGrid));
+      m_orders.push(std::unique_ptr<Order>(new MoveOrder(*this, dst, m_entityGrid)));
    }
    else
    {
@@ -108,7 +104,7 @@ void Actor::move(const shapes::Point2D& dst)
 
 void Actor::stand(MovementDirection direction)
 {
-   m_orders.push(new StandOrder(*this, direction));
+   m_orders.push(std::unique_ptr<Order>(new StandOrder(*this, direction)));
 }
 
 void Actor::faceActor(Actor* other)
@@ -149,9 +145,9 @@ void Actor::faceActor(Actor* other)
 void Actor::setSpritesheet(const std::string& sheetName)
 {
    Spritesheet* sheet = ResourceLoader::getSpritesheet(sheetName);
-   if(m_sprite == NULL)
+   if(m_sprite == nullptr)
    {
-      m_sprite = new Sprite(sheet);
+      m_sprite = std::move(std::unique_ptr<Sprite>(new Sprite(sheet)));
    }
    else
    {
@@ -163,7 +159,7 @@ void Actor::setSpritesheet(const std::string& sheetName)
 
 void Actor::setFrame(const std::string& frameName)
 {
-   if(m_sprite == NULL)
+   if(m_sprite == nullptr)
    {
       DEBUG("Failed to set sprite frame because actor %s doesn't have a sprite.", m_name.c_str());
       return;
@@ -174,7 +170,7 @@ void Actor::setFrame(const std::string& frameName)
 
 void Actor::setAnimation(const std::string& animationName)
 {
-   if(m_sprite == NULL)
+   if(m_sprite == nullptr)
    {
       DEBUG("Failed to set sprite animation because actor %s doesn't have a sprite.", m_name.c_str());
       return;

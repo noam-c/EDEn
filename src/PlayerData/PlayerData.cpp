@@ -68,7 +68,7 @@ void PlayerData::bindMessagePipe(const messaging::MessagePipe* messagePipe)
 
 void PlayerData::clearMessagePipe()
 {
-   bindMessagePipe(NULL);
+   bindMessagePipe(nullptr);
 }
 
 const std::string& PlayerData::getFilePath() const
@@ -261,7 +261,7 @@ void PlayerData::setShortcut(int index, UsableId itemId)
 
 void PlayerData::setShortcut(int index, UsableId skillId, const std::string& characterId)
 {
-   if(!characterId.empty() && m_roster.getCharacter(characterId) != NULL)
+   if(!characterId.empty() && m_roster.getCharacter(characterId) != nullptr)
    {
       Shortcut shortcut(skillId, characterId);
       setShortcut(index, shortcut);

@@ -104,7 +104,7 @@ void GameState::drawFrame()
 
 Scheduler* GameState::getScheduler() const
 {
-   return NULL;
+   return nullptr;
 }
 
 GameState::GameStateType GameState::getStateType() const

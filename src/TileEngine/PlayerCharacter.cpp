@@ -43,7 +43,7 @@ bool PlayerCharacter::isActive() const
 
 void PlayerCharacter::addToMap(const shapes::Point2D& location)
 {
-   if(m_roster.getPartyLeader() != NULL)
+   if(m_roster.getPartyLeader() != nullptr)
    {
       if(!m_active && m_entityGrid.addActor(this, location))
       {
@@ -87,7 +87,7 @@ void PlayerCharacter::step(long timePassed)
    int xDirection = 0;
    int yDirection = 0;
 
-   const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+   const Uint8 *keystate = SDL_GetKeyboardState(nullptr);
    if(!keystate[SDL_SCANCODE_UP] && keystate[SDL_SCANCODE_DOWN])
    {
       // Positive velocity in the y-axis
@@ -164,7 +164,7 @@ void PlayerCharacter::draw()
 void PlayerCharacter::receive(const RosterUpdateMessage& message)
 {
    const Character* leader = m_roster.getPartyLeader();
-   if (leader != NULL)
+   if (leader != nullptr)
    {
       setSpritesheet(leader->getSpritesheetId());
    }

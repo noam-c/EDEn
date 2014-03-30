@@ -7,10 +7,6 @@
 #ifndef SHORTCUT_H
 #define SHORTCUT_H
 
-#ifndef NULL
-   #define NULL 0
-#endif
-
 #include "UsableId.h"
 #include <string>
 

@@ -19,16 +19,16 @@ DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
    m_context.AddReference();
 
    m_consoleDocument = context.LoadDocument("data/gui/debugConsole.rml");
-   if(m_consoleDocument != NULL)
+   if(m_consoleDocument != nullptr)
    {
       m_logElement = m_consoleDocument->GetElementById("commandLog");
-      if(m_logElement == NULL)
+      if(m_logElement == nullptr)
       {
          DEBUG("Warning: missing \"commandLog\" element in debug console window.");
       }
 
       m_commandElement = dynamic_cast<Rocket::Controls::ElementFormControlInput*>(m_consoleDocument->GetElementById("commandPrompt"));
-      if(m_commandElement != NULL)
+      if(m_commandElement != nullptr)
       {
          m_bindings.bindAction(m_commandElement, "keydown", &DebugConsoleWindow::onKeyPress);
       }
@@ -41,7 +41,7 @@ DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
 
 DebugConsoleWindow::~DebugConsoleWindow()
 {
-   if(m_consoleDocument != NULL)
+   if(m_consoleDocument != nullptr)
    {
       m_consoleDocument->RemoveReference();
       m_consoleDocument->Close();
@@ -81,7 +81,7 @@ void DebugConsoleWindow::onKeyPress(Rocket::Core::Event* event)
 
          // Create a copy of the string that was entered into the debug console and embed it in the SDL event
          event.user.data1 = new std::string(text.CString());
-         event.user.data2 = NULL;
+         event.user.data2 = nullptr;
 
          SDL_PushEvent(&event);
       }

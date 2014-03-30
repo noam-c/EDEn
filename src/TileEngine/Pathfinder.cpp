@@ -41,9 +41,9 @@ int Pathfinder::pixelsToTileNum(const shapes::Point2D& pixelLocation) const
 }
 
 Pathfinder::Pathfinder() :
-   m_distanceMatrix(NULL),
-   m_successorMatrix(NULL),
-   m_collisionGrid(NULL)
+   m_distanceMatrix(nullptr),
+   m_successorMatrix(nullptr),
+   m_collisionGrid(nullptr)
 {
 }
 
@@ -305,7 +305,7 @@ class Pathfinder::AStarPoint : public shapes::Point2D
 
 Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const
 {
-   if(m_collisionGrid == NULL) return Path();
+   if(m_collisionGrid == nullptr) return Path();
 
    const TileState& entityState = m_collisionGrid[src.y / m_movementTileSize][src.x / m_movementTileSize];
 
@@ -320,7 +320,7 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
    std::vector<bool> discovered(NUM_TILES, false);
    const shapes::Point2D srcTile(src.x / m_movementTileSize, src.y / m_movementTileSize);
    
-   openSet.push_back(new AStarPoint(NULL, srcTile.x, srcTile.y, 0, 0));
+   openSet.push_back(new AStarPoint(nullptr, srcTile.x, srcTile.y, 0, 0));
    std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());         
 
    const int sourceTileNum = pixelsToTileNum(src);
@@ -342,7 +342,7 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
       {
          DEBUG("Found goal point %d,%d", cheapestPoint->x, cheapestPoint->y);
          const AStarPoint* curr = cheapestPoint;
-         while(curr != NULL)
+         while(curr != nullptr)
          {
             path.push_front(shapes::Point2D(curr->x * m_movementTileSize, curr->y * m_movementTileSize));
             curr = curr->getParent();
@@ -452,7 +452,7 @@ void Pathfinder::deleteRoyFloydWarshallMatrices()
       }
 
       delete [] m_distanceMatrix;
-      m_distanceMatrix = NULL;
+      m_distanceMatrix = nullptr;
    }
 
    if(m_successorMatrix)
@@ -463,6 +463,6 @@ void Pathfinder::deleteRoyFloydWarshallMatrices()
       }
 
       delete [] m_successorMatrix;
-      m_successorMatrix = NULL;
+      m_successorMatrix = nullptr;
    }
 }

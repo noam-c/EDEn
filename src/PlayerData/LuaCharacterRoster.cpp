@@ -13,7 +13,7 @@
 static int CharacterListL_CreateCharacter(lua_State* luaVM)
 {
    CharacterRoster* characterRoster = luaW_check<CharacterRoster>(luaVM, 1);
-   if(characterRoster == NULL)
+   if(characterRoster == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -32,7 +32,7 @@ static int CharacterListL_CreateCharacter(lua_State* luaVM)
 static int CharacterListL_AddToParty(lua_State* luaVM)
 {
    CharacterRoster* characterRoster = luaW_check<CharacterRoster>(luaVM, 1);
-   if(characterRoster == NULL)
+   if(characterRoster == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -51,10 +51,10 @@ static luaL_reg characterRosterMetatable[] =
 {
    { "createCharacter", CharacterListL_CreateCharacter },
    { "addToParty", CharacterListL_AddToParty },
-   { NULL, NULL }
+   { nullptr, nullptr }
 };
 
 void luaopen_CharacterRoster(lua_State* luaVM)
 {
-   luaW_register<CharacterRoster>(luaVM, "CharacterRoster", NULL, characterRosterMetatable, NULL, NULL);
+   luaW_register<CharacterRoster>(luaVM, "CharacterRoster", nullptr, characterRosterMetatable, nullptr, nullptr);
 }

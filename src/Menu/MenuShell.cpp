@@ -16,9 +16,9 @@ const int debugFlag = DEBUG_MENU;
 
 MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
    m_rocketContext(rocketContext),
-   m_shortcutBar(NULL),
+   m_shortcutBar(nullptr),
    m_bindings(this),
-   m_currentState(NULL)
+   m_currentState(nullptr)
 {
    m_scheduler = new Scheduler();
 
@@ -27,13 +27,13 @@ MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
 
    Rocket::Core::ElementDocument* background = rocketContext->LoadDocument("data/gui/menubg.rml");
 
-   if (background != NULL)
+   if (background != nullptr)
    {
       background->Show(Rocket::Core::ElementDocument::NONE);
       background->RemoveReference();
    }
 
-   if(m_shellDocument != NULL)
+   if(m_shellDocument != nullptr)
    {
       m_shellDocument->Show();
       m_sidebarElement = m_shellDocument->GetElementById("sidebar");
@@ -43,7 +43,7 @@ MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
 
 MenuShell::~MenuShell()
 {
-   if(m_shortcutBar != NULL)
+   if(m_shortcutBar != nullptr)
    {
       delete m_shortcutBar;
    }
@@ -54,7 +54,7 @@ MenuShell::~MenuShell()
 
 void MenuShell::initializeShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType)
 {
-   if(m_shortcutBar == NULL)
+   if(m_shortcutBar == nullptr)
    {
       m_shortcutBar = new ShortcutBar(playerData, scriptEngine, metadata, stateType, *m_rocketContext);
    }
@@ -115,7 +115,7 @@ void MenuShell::sidebarClicked(Rocket::Core::Event* event)
       for(;;)
       {
          target = target->GetPreviousSibling();
-         if(target == NULL) break;
+         if(target == nullptr) break;
          ++childIndex;
       }
 

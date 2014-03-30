@@ -36,8 +36,8 @@ const float EntityGrid::INFINITY = std::numeric_limits<float>::infinity();
 EntityGrid::EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe) :
    m_tileEngine(tileEngine),
    m_messagePipe(messagePipe),
-   m_map(NULL),
-   m_collisionMap(NULL)
+   m_map(nullptr),
+   m_collisionMap(nullptr)
 {
    messagePipe.registerListener(this);
 }
@@ -66,7 +66,7 @@ void EntityGrid::setMapData(const Map* map)
    DEBUG("Resetting entity grid...");
    clearMap();
    m_map = map;
-   if(m_map == NULL) return;
+   if(m_map == nullptr) return;
 
    const int collisionTileRatio = TileEngine::TILE_SIZE / MOVEMENT_TILE_SIZE;
    m_collisionMapBounds = shapes::Rectangle(shapes::Point2D::ORIGIN, map->getBounds().getSize() * collisionTileRatio);
@@ -83,7 +83,7 @@ void EntityGrid::setMapData(const Map* map)
       {
          bool passible = passibilityMap[y / collisionTileRatio][x / collisionTileRatio];
          row[x].entityType = passible ? TileState::FREE : TileState::OBSTACLE;
-         row[x].entity = NULL;
+         row[x].entity = nullptr;
       }
    }
 
@@ -162,9 +162,9 @@ void EntityGrid::removeActor(Actor* actor)
 
 Actor* EntityGrid::getAdjacentActor(Actor* actor) const
 {
-   if(m_collisionMap == NULL)
+   if(m_collisionMap == nullptr)
    {
-      return NULL;
+      return nullptr;
    }
    
    shapes::Point2D adjacentLocation = actor->getLocation();
@@ -231,12 +231,12 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
       }
    }
    
-   return NULL;
+   return nullptr;
 }
 
 bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) const
 {
-   if(m_collisionMap == NULL || state.entityType == TileState::FREE)
+   if(m_collisionMap == nullptr || state.entityType == TileState::FREE)
    {
       return false;
    }
@@ -299,7 +299,7 @@ void EntityGrid::freeArea(const shapes::Point2D& previousLocation, const shapes:
 
 bool EntityGrid::isAreaFree(const shapes::Rectangle& area) const
 {
-   if(m_collisionMap == NULL) return false;
+   if(m_collisionMap == nullptr) return false;
 
    shapes::Rectangle areaRect = getCollisionMapEdges(area);
 
@@ -412,7 +412,7 @@ void EntityGrid::endMovement(Actor* actor, const shapes::Point2D& src, const sha
 
 void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
 {
-   if(m_collisionMap == NULL) return;
+   if(m_collisionMap == nullptr) return;
 
    for(int collisionMapY = area.top; collisionMapY <= area.bottom; ++collisionMapY)
    {
@@ -425,7 +425,7 @@ void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
 
 void EntityGrid::drawBackground(int y) const
 {
-   if(m_map == NULL) return;
+   if(m_map == nullptr) return;
 
    if(DRAW_ENTITY_GRID)
    {
@@ -448,7 +448,7 @@ void EntityGrid::drawBackground(int y) const
             }
             case TileState::ACTOR:
             {
-               if(m_collisionMap[y][x].entity == NULL)
+               if(m_collisionMap[y][x].entity == nullptr)
                {
                   glColor3f(0.5f, 0.0f, 0.0f);
                }
@@ -526,6 +526,6 @@ void EntityGrid::deleteCollisionMap()
       }
       
       delete [] m_collisionMap;
-      m_collisionMap = NULL;
+      m_collisionMap = nullptr;
    }
 }

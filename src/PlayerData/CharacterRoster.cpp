@@ -20,8 +20,8 @@ const char* CharacterRoster::PARTY_ELEMENT = "Party";
 
 CharacterRoster::CharacterRoster(const Metadata& metadata) :
    m_metadata(metadata),
-   m_messagePipe(NULL),
-   m_partyLeader(NULL)
+   m_messagePipe(nullptr),
+   m_partyLeader(nullptr)
 {
 }
 
@@ -32,7 +32,7 @@ CharacterRoster::~CharacterRoster()
 
 void CharacterRoster::signalRosterUpdate()
 {
-   if(m_messagePipe != NULL)
+   if(m_messagePipe != nullptr)
    {
       m_messagePipe->sendMessage(RosterUpdateMessage());
    }
@@ -59,7 +59,7 @@ void CharacterRoster::deleteCharacterList()
 
 void CharacterRoster::clear()
 {
-   m_partyLeader = NULL;
+   m_partyLeader = nullptr;
    m_party.clear();
 
    deleteCharacterList();
@@ -68,7 +68,7 @@ void CharacterRoster::clear()
 
 Character* CharacterRoster::loadNewCharacter(const std::string& id)
 {
-   if(getCharacter(id) == NULL)
+   if(getCharacter(id) == nullptr)
    {
       m_allCharacters[id] = new Character(m_metadata, id);
       signalRosterUpdate();
@@ -85,7 +85,7 @@ Character* CharacterRoster::getPartyLeader() const
 Character* CharacterRoster::getCharacter(const std::string& id) const
 {
    std::map<std::string, Character*>::const_iterator iter = m_allCharacters.find(id);
-   return iter != m_allCharacters.end() ? iter->second : NULL;
+   return iter != m_allCharacters.end() ? iter->second : nullptr;
 }
 
 const std::vector<Character*>& CharacterRoster::getParty() const
@@ -95,12 +95,12 @@ const std::vector<Character*>& CharacterRoster::getParty() const
 
 void CharacterRoster::addToParty(Character* character)
 {
-   if(character == NULL)
+   if(character == nullptr)
    {
       return;
    }
 
-   if(m_partyLeader == NULL)
+   if(m_partyLeader == nullptr)
    {
       m_partyLeader = character;
    }
@@ -140,7 +140,7 @@ void CharacterRoster::load(const Json::Value& charactersElement)
          m_party.push_back(currCharacter);
       }
 
-      if(m_partyLeader == NULL && m_party.size() > 0)
+      if(m_partyLeader == nullptr && m_party.size() > 0)
       {
          /**
           * \todo Persist the party leader in the save data and remove
@@ -174,7 +174,7 @@ void CharacterRoster::removeFromParty(Character* character)
    if(m_party.size() == 1)
    {
       std::remove(m_party.begin(), m_party.end(), character);
-      m_partyLeader = NULL;
+      m_partyLeader = nullptr;
    }
    else if(m_party.size() > 1 && m_partyLeader == character)
    {

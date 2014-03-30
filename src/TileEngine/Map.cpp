@@ -61,7 +61,7 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
    m_bounds = shapes::Rectangle(shapes::Point2D::ORIGIN, shapes::Size(width, height));
    
    const TiXmlElement* layerElement = root->FirstChildElement("layer");
-   while(layerElement != NULL)
+   while(layerElement != nullptr)
    {
       const std::string layerName(layerElement->Attribute("name"));
       if(layerName == "background")
@@ -84,7 +84,7 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
    bool hasTriggersLayer = false;
 
    const TiXmlElement* objectGroupElement = root->FirstChildElement("objectgroup");
-   while(objectGroupElement != NULL)
+   while(objectGroupElement != nullptr)
    {
       std::string objectGroupName = objectGroupElement->Attribute("name");
       if(objectGroupName == "collision" && !hasCollisionLayer)
@@ -142,14 +142,14 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
    initializePassibilityMatrix();
 
    DEBUG("Loading collision layer.");
-   if(collisionGroupElement != NULL)
+   if(collisionGroupElement != nullptr)
    {
       shapes::Point2D topLeft;
       int width;
       int height;
 
       const TiXmlElement* objectElement = collisionGroupElement->FirstChildElement("object");
-      while(objectElement != NULL)
+      while(objectElement != nullptr)
       {
          objectElement->Attribute("x", &topLeft.x);
          objectElement->Attribute("y", &topLeft.y);
@@ -177,12 +177,12 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
 void Map::parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement)
 {
    DEBUG("Loading entrance layer.");
-   if(entrancesGroupElement != NULL)
+   if(entrancesGroupElement != nullptr)
    {
       shapes::Point2D entrance;
 
       const TiXmlElement* objectElement = entrancesGroupElement->FirstChildElement("object");
-      while(objectElement != NULL)
+      while(objectElement != nullptr)
       {
          objectElement->Attribute("x", &entrance.x);
          objectElement->Attribute("y", &entrance.y);
@@ -190,7 +190,7 @@ void Map::parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement)
 
          const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
          const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
-         while(propertyElement != NULL)
+         while(propertyElement != nullptr)
          {
             if(std::string(propertyElement->Attribute("name")) == "entrance")
             {
@@ -217,14 +217,14 @@ void Map::parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement)
 void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
 {
    DEBUG("Loading exit layer.");
-   if(exitsGroupElement != NULL)
+   if(exitsGroupElement != nullptr)
    {
       shapes::Point2D topLeft;
       int width;
       int height;
       
       const TiXmlElement* objectElement = exitsGroupElement->FirstChildElement("object");
-      while(objectElement != NULL)
+      while(objectElement != nullptr)
       {
          objectElement->Attribute("x", &topLeft.x);
          objectElement->Attribute("y", &topLeft.y);
@@ -234,7 +234,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
          
          const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
          const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
-         while(propertyElement != NULL)
+         while(propertyElement != nullptr)
          {
             if(std::string(propertyElement->Attribute("name")) == "exit")
             {
@@ -262,14 +262,14 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
 void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
 {
    DEBUG("Loading exit layer.");
-   if(triggersGroupElement != NULL)
+   if(triggersGroupElement != nullptr)
    {
       shapes::Point2D topLeft;
       int width;
       int height;
       
       const TiXmlElement* objectElement = triggersGroupElement->FirstChildElement("object");
-      while(objectElement != NULL)
+      while(objectElement != nullptr)
       {
          objectElement->Attribute("x", &topLeft.x);
          objectElement->Attribute("y", &topLeft.y);
@@ -279,7 +279,7 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
          
          const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
          const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
-         while(propertyElement != NULL)
+         while(propertyElement != nullptr)
          {
             if(std::string(propertyElement->Attribute("name")) == "trigger")
             {

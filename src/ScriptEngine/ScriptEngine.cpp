@@ -53,7 +53,7 @@ ScriptEngine::ScriptEngine(ExecutionStack& executionStack) :
 {
    m_luaVM = luaL_newstate();
 
-   if(m_luaVM == NULL)
+   if(m_luaVM == nullptr)
    {
       // An error occurred
       T_T("Unable to initialize Lua state machine");
@@ -109,7 +109,7 @@ void ScriptEngine::registerEnums()
 void ScriptEngine::setTileEngine(TileEngine* engine)
 {
    m_tileEngine = engine;
-   if(m_tileEngine != NULL)
+   if(m_tileEngine != nullptr)
    {
       luaW_push(m_luaVM, m_tileEngine);
       lua_setglobal(m_luaVM, "map");
@@ -130,7 +130,7 @@ void ScriptEngine::setTileEngine(TileEngine* engine)
 void ScriptEngine::setPlayerData(PlayerData* playerData)
 {
    m_playerData = playerData;
-   if(m_playerData != NULL)
+   if(m_playerData != nullptr)
    {
       luaW_push(m_luaVM, m_playerData->getRootQuest());
       lua_setglobal(m_luaVM, "quests");
@@ -156,7 +156,7 @@ void ScriptEngine::setPlayerData(PlayerData* playerData)
 int ScriptEngine::narrate(lua_State* luaStack)
 {
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
-   if (scheduler == NULL)
+   if (scheduler == nullptr)
    {
       return 0;
    }
@@ -191,7 +191,7 @@ int ScriptEngine::narrate(lua_State* luaStack)
 int ScriptEngine::say(lua_State* luaStack)
 {
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
-   if (scheduler == NULL)
+   if (scheduler == nullptr)
    {
       return 0;
    }
@@ -226,7 +226,7 @@ int ScriptEngine::say(lua_State* luaStack)
 int ScriptEngine::playSound(lua_State* luaStack)
 {
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
-   if (scheduler == NULL)
+   if (scheduler == nullptr)
    {
       return 0;
    }
@@ -291,14 +291,14 @@ int ScriptEngine::stopMusic(lua_State* luaStack)
 
 int ScriptEngine::isMusicPlaying(lua_State* luaStack)
 {
-   lua_pushboolean(luaStack, Music::isPlaying());
+   lua_pushboolean(luaStack, Music::isMusicPlaying());
    return 1;
 }
 
 int ScriptEngine::delay(lua_State* luaStack)
 {
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
-   if (scheduler == NULL)
+   if (scheduler == nullptr)
    {
       return 0;
    }

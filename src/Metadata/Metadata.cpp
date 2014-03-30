@@ -100,7 +100,7 @@ Item* Metadata::getItem(UsableId key) const
       return itemIterator->second;
    }
 
-   return NULL;
+   return nullptr;
 }
 
 Skill* Metadata::getSkill(UsableId key) const
@@ -111,5 +111,5 @@ Skill* Metadata::getSkill(UsableId key) const
       return skillIterator->second;
    }
 
-   return NULL;
+   return nullptr;
 }

@@ -39,7 +39,7 @@ void Settings::initialize()
 }
 
 Settings::Settings(bool isSnapshot) :
-   m_settingsSnapshot(isSnapshot ? NULL : new Settings(true)),
+   m_settingsSnapshot(isSnapshot ? nullptr : new Settings(true)),
    m_musicEnabled(true),
    m_soundEnabled(true),
    m_fullScreenEnabled(false),
@@ -73,7 +73,7 @@ Settings& Settings::operator=(const Settings& other)
 
 Settings::~Settings()
 {
-   if(m_settingsSnapshot != NULL)
+   if(m_settingsSnapshot != nullptr)
    {
       delete m_settingsSnapshot;
    }

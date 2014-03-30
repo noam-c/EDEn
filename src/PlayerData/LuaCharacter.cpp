@@ -12,7 +12,7 @@
 static int CharacterL_GetName(lua_State* luaVM)
 {
    const Character* character = luaW_check<Character>(luaVM, 1);
-   if(character == NULL)
+   if(character == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -25,10 +25,10 @@ static int CharacterL_GetName(lua_State* luaVM)
 static luaL_reg characterMetatable[] =
 {
    { "getName", CharacterL_GetName },
-   { NULL, NULL }
+   { nullptr, nullptr }
 };
 
 void luaopen_Character(lua_State* luaVM)
 {
-   luaW_register<Character>(luaVM, "Character", NULL, characterMetatable, NULL, NULL);
+   luaW_register<Character>(luaVM, "Character", nullptr, characterMetatable, nullptr, nullptr);
 }

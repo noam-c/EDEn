@@ -27,9 +27,9 @@ bool DialogueController::DialogueCoroutine::resume(long timePassed)
 DialogueController::DialogueController(Rocket::Core::Context& context, Scheduler& scheduler, ScriptEngine& engine) :
    m_scriptEngine(engine),
    m_context(context),
-   m_mainDialogue(NULL),
+   m_mainDialogue(nullptr),
    m_fastMode(false),
-   m_currLine(NULL)
+   m_currLine(nullptr)
 {
    initMainDialogue();
    clearDialogue();
@@ -39,7 +39,7 @@ DialogueController::DialogueController(Rocket::Core::Context& context, Scheduler
 
 DialogueController::~DialogueController()
 {
-   if(m_dialogueBoxDocument != NULL)
+   if(m_dialogueBoxDocument != nullptr)
    {
       m_dialogueBoxDocument->Close();
    }
@@ -48,7 +48,7 @@ DialogueController::~DialogueController()
 void DialogueController::initMainDialogue()
 {
    m_dialogueBoxDocument = m_context.LoadDocument("data/gui/dialogueBox.rml");
-   if(m_dialogueBoxDocument != NULL)
+   if(m_dialogueBoxDocument != nullptr)
    {
       m_mainDialogue = m_dialogueBoxDocument->GetElementById("textArea");
    }
@@ -57,7 +57,7 @@ void DialogueController::initMainDialogue()
 void DialogueController::addLine(LineType type, const std::string& speech, Task* task)
 {
    Line* nextLine = new Line(type, speech, task);
-   if(m_currLine == NULL)
+   if(m_currLine == nullptr)
    {
       m_currLine = nextLine;
       setDialogue(type);
@@ -135,7 +135,7 @@ bool DialogueController::dialogueComplete() const
 
 bool DialogueController::hasDialogue() const
 {
-   return m_currLine != NULL;
+   return m_currLine != nullptr;
 }
 
 void DialogueController::clearDialogue()
@@ -149,7 +149,7 @@ void DialogueController::clearDialogue()
       // clearing out the completed line.
       m_currLine->task->signal();
       delete m_currLine;
-      m_currLine = NULL;
+      m_currLine = nullptr;
    }
 
    m_mainDialogue->SetInnerRML("");
@@ -178,7 +178,7 @@ bool DialogueController::nextLine()
    clearDialogue();
    if(m_lineQueue.empty())
    {
-      m_currLine = NULL;
+      m_currLine = nullptr;
       m_mainDialogue->GetOwnerDocument()->Hide();
    }
    else

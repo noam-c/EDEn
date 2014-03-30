@@ -75,7 +75,7 @@ class Sound : public Resource
        *
        * @param task A task to signal when the sound completes. (optional)
        */
-      void play(Task* task = NULL);
+      void play(Task* task = nullptr);
 
       /**
        * Stop this sound if it is currently playing.

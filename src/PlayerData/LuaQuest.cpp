@@ -14,7 +14,7 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
 static int QuestL_AddQuest(lua_State* luaVM)
 {
    Quest* parentQuest = luaW_check<Quest>(luaVM, 1);
-   if(parentQuest == NULL)
+   if(parentQuest == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -43,16 +43,16 @@ static int QuestL_AddQuest(lua_State* luaVM)
       completed = false;
    }
 
-   Quest* newQuest = new Quest(name, description, completed, optional);
+   std::shared_ptr<Quest> newQuest(new Quest(name, description, completed, optional));
    parentQuest->addQuest(newQuest);
-   luaW_push<Quest>(luaVM, newQuest);
+   luaW_push<Quest>(luaVM, newQuest.get());
    return 1;
 }
 
 static int QuestL_GetQuest(lua_State* luaVM)
 {
    Quest* parentQuest = luaW_check<Quest>(luaVM, 1);
-   if(parentQuest == NULL)
+   if(parentQuest == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -63,15 +63,23 @@ static int QuestL_GetQuest(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   Quest* questToGet = parentQuest->getQuest(questPath);
-   luaW_push<Quest>(luaVM, questToGet);
+   auto questToGet = parentQuest->getQuest(questPath).lock();
+   if(questToGet)
+   {
+      luaW_push<Quest>(luaVM, questToGet.get());
+   }
+   else
+   {
+      lua_pushnil(luaVM);
+   }
+
    return 1;
 }
 
 static int QuestL_IsStarted(lua_State* luaVM)
 {
    Quest* parentQuest = luaW_check<Quest>(luaVM, 1);
-   if(parentQuest == NULL)
+   if(parentQuest == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -85,11 +93,11 @@ static int QuestL_IsStarted(lua_State* luaVM)
    Quest* quest = luaW_to<Quest>(luaVM, 1);
    if(questPath.empty())
    {
-      lua_pushboolean(luaVM, quest != NULL);
+      lua_pushboolean(luaVM, quest != nullptr);
    }
    else
    {
-      lua_pushboolean(luaVM, quest != NULL && quest->isStarted(questPath));
+      lua_pushboolean(luaVM, quest != nullptr && quest->isStarted(questPath));
    }
 
    return 1;
@@ -98,7 +106,7 @@ static int QuestL_IsStarted(lua_State* luaVM)
 static int QuestL_IsComplete(lua_State* luaVM)
 {
    Quest* parentQuest = luaW_check<Quest>(luaVM, 1);
-   if(parentQuest == NULL)
+   if(parentQuest == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -112,11 +120,11 @@ static int QuestL_IsComplete(lua_State* luaVM)
    Quest* quest = luaW_to<Quest>(luaVM, 1);
    if(questPath.empty())
    {
-      lua_pushboolean(luaVM, quest != NULL && quest->isCompleted());
+      lua_pushboolean(luaVM, quest != nullptr && quest->isCompleted());
    }
    else
    {
-      lua_pushboolean(luaVM, quest != NULL && quest->isCompleted(questPath));
+      lua_pushboolean(luaVM, quest != nullptr && quest->isCompleted(questPath));
    }
 
    return 1;
@@ -125,7 +133,7 @@ static int QuestL_IsComplete(lua_State* luaVM)
 static int QuestL_Complete(lua_State* luaVM)
 {
    Quest* quest = luaW_check<Quest>(luaVM, 1);
-   if(quest == NULL)
+   if(quest == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -141,10 +149,10 @@ static luaL_reg questMetatable[] =
    { "isStarted", QuestL_IsStarted },
    { "isComplete", QuestL_IsComplete },
    { "complete", QuestL_Complete },
-   { NULL, NULL }
+   { nullptr, nullptr }
 };
 
 void luaopen_Quest(lua_State* luaVM)
 {
-   luaW_register<Quest>(luaVM, "Quest", NULL, questMetatable, NULL, NULL);
+   luaW_register<Quest>(luaVM, "Quest", nullptr, questMetatable, nullptr, nullptr);
 }

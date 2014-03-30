@@ -159,7 +159,7 @@ class GameState
       virtual void drawFrame();
 
       /**
-       * @return the state's coroutine scheduler, or NULL if none exists.
+       * @return the state's coroutine scheduler, or nullptr if none exists.
        */
       virtual Scheduler* getScheduler() const;
 

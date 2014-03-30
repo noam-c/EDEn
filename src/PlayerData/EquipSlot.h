@@ -26,7 +26,7 @@ typedef class Usable Item;
  */
 struct EquipSlot
 {
-   /** The currently equipped item (NULL if nothing is equipped). */
+   /** The currently equipped item (nullptr if nothing is equipped). */
    const Item* equipped;
 
    /** The list of accepted types */

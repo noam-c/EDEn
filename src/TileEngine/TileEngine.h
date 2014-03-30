@@ -271,7 +271,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * @param size The size of the new NPC
        * @param direction The direction that the new NPC will face at first
        *
-       * @return The created NPC (or NULL if it could not be placed in the map).
+       * @return The created NPC (or nullptr if it could not be placed in the map).
        */
       NPC* addNPC(const std::string& npcName, const std::string& spritesheetName,
                   const shapes::Point2D& npcLocation, const shapes::Size& size,

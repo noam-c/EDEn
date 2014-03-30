@@ -31,7 +31,7 @@ std::string ResourceLoader::getPath(ResourceKey name, ResourceType type)
 Resource* ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
 {
    // Construct a new resource instance based on the resource type
-   Resource* newResource = NULL;
+   Resource* newResource = nullptr;
    switch(type)
    {
       case MUSIC:
@@ -95,7 +95,7 @@ void ResourceLoader::tryInitialize(Resource* resource, ResourceKey name, Resourc
 
 Resource* ResourceLoader::getResource(ResourceKey name, ResourceType type)
 {
-   Resource* resource = NULL;
+   Resource* resource = nullptr;
 
    if(resources.find(name) == resources.end())
    {

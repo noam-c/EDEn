@@ -26,7 +26,7 @@ bool ScriptUtilities::isString(lua_State* luaStack, int index)
 
 std::string ScriptUtilities::retrieveString(lua_State* luaStack, int index)
 {
-   return std::string(lua_tolstring(luaStack, index, NULL));
+   return std::string(lua_tolstring(luaStack, index, nullptr));
 }
 
 bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, int& value)

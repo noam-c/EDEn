@@ -199,7 +199,7 @@ void TileEngine::followWithCamera(const Actor* target)
 
 void TileEngine::releaseCamera()
 {
-   m_cameraTarget = NULL;
+   m_cameraTarget = nullptr;
 }
 
 int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed)
@@ -207,7 +207,7 @@ int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D
    if(speed > 0)
    {
       CameraSlider* slider = new CameraSlider(m_camera, origin, destination, speed);
-      m_cameraTarget = NULL;
+      m_cameraTarget = nullptr;
       m_scheduler->start(slider);
       return m_scheduler->join(slider);
    }
@@ -217,7 +217,7 @@ int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D
 
 shapes::Point2D TileEngine::getCurrentCameraLocation() const
 {
-   if(m_cameraTarget != NULL)
+   if(m_cameraTarget != nullptr)
    {
       return m_cameraTarget->getLocation();
    }
@@ -229,7 +229,7 @@ shapes::Point2D TileEngine::getCurrentCameraLocation() const
 
 void TileEngine::recalculateMapOffsets()
 {
-   const shapes::Size mapPixelBounds = m_entityGrid.getMapData() == NULL ?
+   const shapes::Size mapPixelBounds = m_entityGrid.getMapData() == nullptr ?
          shapes::Size() :
          m_entityGrid.getMapBounds().getSize() * TILE_SIZE;
 
@@ -253,7 +253,7 @@ void TileEngine::toggleDebugConsole()
 
 NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size, const MovementDirection direction)
 {
-   NPC* npcToAdd = NULL;
+   NPC* npcToAdd = nullptr;
    
    if(m_entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
@@ -279,7 +279,7 @@ NPC* TileEngine::getNPC(const std::string& npcName) const
       return npcIterator->second;
    }
 
-   return NULL;
+   return nullptr;
 }
 
 void TileEngine::addTriggerListener(const std::string& triggerName, MapTriggerCallback* callback)
@@ -343,7 +343,7 @@ void TileEngine::draw()
    GraphicsUtil::getInstance()->clearBuffer();
 
    m_camera.apply();
-      if(m_entityGrid.getMapData() == NULL)
+      if(m_entityGrid.getMapData() == nullptr)
       {
          // Draw all the sprites
          std::vector<Actor*>::iterator nextActorToDraw;
@@ -362,7 +362,7 @@ void TileEngine::draw()
          for(int row = 0; row < mapHeight; ++row)
          {
             // Start by drawing a row of the background layers, if the map exists
-            if(m_entityGrid.getMapData() != NULL)
+            if(m_entityGrid.getMapData() != nullptr)
             {
                m_entityGrid.drawBackground(row);
             }
@@ -379,7 +379,7 @@ void TileEngine::draw()
             }
 
             // Draw a row of the foreground layers, if the map exists
-            if(m_entityGrid.getMapData() != NULL)
+            if(m_entityGrid.getMapData() != nullptr)
             {
                m_entityGrid.drawForeground(row);
             }
@@ -401,7 +401,7 @@ bool TileEngine::step(long timePassed)
 
    stepNPCs(timePassed);
 
-   if(m_cameraTarget != NULL &&
+   if(m_cameraTarget != nullptr &&
       (m_cameraTarget != m_playerActor || m_playerActor->isActive()))
    {
       m_camera.setFocalPoint(m_cameraTarget->getLocation());
@@ -540,7 +540,7 @@ void TileEngine::handleInputEvents(bool& finishState)
 void TileEngine::action()
 {
    NPC* npcToActivate = static_cast<NPC*>(m_entityGrid.getAdjacentActor(m_playerActor));
-   if(npcToActivate != NULL)
+   if(npcToActivate != nullptr)
    {
       npcToActivate->activate();
    }

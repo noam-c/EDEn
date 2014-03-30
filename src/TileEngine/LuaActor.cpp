@@ -12,7 +12,7 @@
 static int ActorL_Move(lua_State* luaVM)
 {
    Actor* actor = luaW_check<Actor>(luaVM, 1);
-   if (actor == NULL)
+   if (actor == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -38,7 +38,7 @@ static int ActorL_Move(lua_State* luaVM)
 static int ActorL_SetSprite(lua_State* luaVM)
 {
    Actor* actor = luaW_check<Actor>(luaVM, 1);
-   if (actor == NULL)
+   if (actor == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -55,7 +55,7 @@ static int ActorL_SetSprite(lua_State* luaVM)
 static int ActorL_SetAnimation(lua_State* luaVM)
 {
    Actor* actor = luaW_check<Actor>(luaVM, 1);
-   if (actor == NULL)
+   if (actor == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -74,7 +74,7 @@ static int ActorL_SetAnimation(lua_State* luaVM)
 static int ActorL_SetSpritesheet(lua_State* luaVM)
 {
    Actor* actor = luaW_check<Actor>(luaVM, 1);
-   if (actor == NULL)
+   if (actor == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -93,7 +93,7 @@ static int ActorL_SetSpritesheet(lua_State* luaVM)
 static int ActorL_LookAt(lua_State* luaVM)
 {
    Actor* actor = luaW_check<Actor>(luaVM, 1);
-   if (actor == NULL)
+   if (actor == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -116,10 +116,10 @@ static luaL_reg actorMetatable[] =
    { "setAnimation", ActorL_SetAnimation },
    { "setSpritesheet", ActorL_SetSpritesheet },
    { "lookAt", ActorL_LookAt },
-   { NULL, NULL }
+   { nullptr, nullptr }
 };
 
 void luaopen_Actor(lua_State* luaVM)
 {
-   luaW_register<Actor>(luaVM, "Actor", NULL, actorMetatable, NULL, NULL);
+   luaW_register<Actor>(luaVM, "Actor", nullptr, actorMetatable, nullptr, nullptr);
 }

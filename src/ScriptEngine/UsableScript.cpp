@@ -123,7 +123,7 @@ bool UsableScript::callFunction(UsableFunction function, Character* usingCharact
       lua_gettable(m_luaStack, -2);
 
       int numArgs = 0;
-      if(usingCharacter != NULL)
+      if(usingCharacter != nullptr)
       {
          luaW_push(m_luaStack, usingCharacter);
          numArgs = 1;

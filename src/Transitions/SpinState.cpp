@@ -18,7 +18,7 @@ const float PI = 3.14159265f;
 const int debugFlag = DEBUG_GRAPHICS;
 
 SpinState::SpinState(GameContext& gameContext, GameState* oldState, long transitionLength) :
-   TransitionState(gameContext, "SpinState", oldState, NULL, transitionLength)
+   TransitionState(gameContext, "SpinState", oldState, nullptr, transitionLength)
 {
 }
 

@@ -39,13 +39,13 @@ DataMenu::DataMenu(GameContext& gameContext, MenuShell* menuShell) :
 void DataMenu::initialize()
 {
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/datapane.rml");
-   if(m_paneDocument != NULL)
+   if(m_paneDocument != nullptr)
    {
       m_bindings.bindAction(m_paneDocument, "saveGameGrid", "click", &DataMenu::saveGameClicked);
    }
 
    m_confirmSaveDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/dataconfirmsave.rml");
-   if(m_confirmSaveDocument != NULL)
+   if(m_confirmSaveDocument != nullptr)
    {
       m_bindings.bindAction(m_confirmSaveDocument, "confirm", "click", &DataMenu::confirmClicked);
       m_bindings.bindAction(m_confirmSaveDocument, "cancel", "click", &DataMenu::cancelClicked);
@@ -67,7 +67,7 @@ void DataMenu::initialize()
 
 DataMenu::~DataMenu()
 {
-   if(m_confirmSaveDocument != NULL)
+   if(m_confirmSaveDocument != nullptr)
    {
       m_confirmSaveDocument->Close();
       m_confirmSaveDocument->RemoveReference();
@@ -86,7 +86,7 @@ void DataMenu::sidebarClicked(int optionIndex)
 void DataMenu::showConfirmDialog(int index)
 {
    m_slotToSave = index;
-   if (m_confirmSaveDocument != NULL)
+   if (m_confirmSaveDocument != nullptr)
    {
       m_confirmSaveDocument->Show(Rocket::Core::ElementDocument::MODAL);
    }
@@ -95,7 +95,7 @@ void DataMenu::showConfirmDialog(int index)
 void DataMenu::hideConfirmDialog()
 {
    m_slotToSave = -1;
-   if(m_confirmSaveDocument != NULL)
+   if(m_confirmSaveDocument != nullptr)
    {
       // Need to call Show without focus flags first, to release modal focus :(
       m_confirmSaveDocument->Show();
@@ -120,16 +120,16 @@ void DataMenu::saveGameClicked(Rocket::Core::Event* event)
    Rocket::Core::Element* target = event->GetTargetElement();
 
    // Move up the DOM to the datagridrow item holding this element
-   while(target->GetParentNode() != NULL && target->GetTagName() != "datagridrow")
+   while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
    {
       target = target->GetParentNode();
    }
 
-   if(target != NULL)
+   if(target != nullptr)
    {
       // If we found a row element, cast it and get its index
       Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
-      if(rowElement != NULL)
+      if(rowElement != nullptr)
       {
          int saveGameIndex = rowElement->GetParentRelativeIndex();
          showConfirmDialog(saveGameIndex);
@@ -165,7 +165,7 @@ void DataMenu::refreshSaveGames()
    
    /** \todo Extract HARDCODED path into a constant. */
    dp = opendir("data/savegames");
-   if (dp == NULL)
+   if (dp == nullptr)
    {
       T_T("Failed to open data/savegames for save game listing.");
    }

@@ -9,6 +9,7 @@
 
 #include <queue>
 #include <string>
+#include <memory>
 
 #include "MovementDirection.h"
 #include "Size.h"
@@ -33,7 +34,7 @@ class Actor
    const std::string m_name;
    
    /** A queue of orders for the actor to perform */
-   std::queue<Order*> m_orders;
+   std::queue<std::unique_ptr<Order>> m_orders;
 
    /** The current location of the actor (in pixels) */
    shapes::Point2D m_pixelLoc;
@@ -49,7 +50,7 @@ class Actor
    
    protected:
       /** The Actor's associated sprite, which is drawn on screen. */
-      Sprite* m_sprite;
+      std::unique_ptr<Sprite> m_sprite;
       
       /** The grid of actors which this Actor interacts with. */
       EntityGrid& m_entityGrid;

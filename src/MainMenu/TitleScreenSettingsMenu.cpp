@@ -26,20 +26,20 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
 
    m_titleSettingsDocument = m_rocketContext->LoadDocument("data/gui/titleOptionsMenu.rml");
 
-   if(m_titleSettingsDocument != NULL)
+   if(m_titleSettingsDocument != nullptr)
    {
       Rocket::Core::Element* optionsForm = m_titleSettingsDocument->GetElementById("optionsForm");
       
-      if(optionsForm != NULL)
+      if(optionsForm != nullptr)
       {
          m_musicEnabledCheckbox = optionsForm->GetElementById("musicEnabled");
-         if(m_musicEnabledCheckbox != NULL)
+         if(m_musicEnabledCheckbox != nullptr)
          {
             m_bindings.bindAction(m_musicEnabledCheckbox, "change", &TitleScreenSettingsMenu::onMusicEnabledChange);
          }
          
          m_soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
-         if(m_soundEnabledCheckbox != NULL)
+         if(m_soundEnabledCheckbox != nullptr)
          {
             m_bindings.bindAction(m_soundEnabledCheckbox, "change", &TitleScreenSettingsMenu::onSoundEnabledChange);
          }
@@ -63,7 +63,7 @@ TitleScreenSettingsMenu::~TitleScreenSettingsMenu()
 
 void TitleScreenSettingsMenu::loadSettings()
 {
-   if(m_musicEnabledCheckbox != NULL)
+   if(m_musicEnabledCheckbox != nullptr)
    {
       if(Settings::getCurrentSettings().isMusicEnabled())
       {
@@ -75,7 +75,7 @@ void TitleScreenSettingsMenu::loadSettings()
       }
    }
    
-   if(m_soundEnabledCheckbox != NULL)
+   if(m_soundEnabledCheckbox != nullptr)
    {
       if(Settings::getCurrentSettings().isSoundEnabled())
       {
@@ -95,7 +95,7 @@ void TitleScreenSettingsMenu::revertSettings()
 
 bool TitleScreenSettingsMenu::getCheckboxValue(Rocket::Core::Event* event)
 {
-   return event->GetCurrentElement()->GetAttribute("checked") != NULL;
+   return event->GetCurrentElement()->GetAttribute("checked") != nullptr;
 }
 
 void TitleScreenSettingsMenu::onMusicEnabledChange(Rocket::Core::Event* event)
@@ -115,16 +115,16 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
       bool settingsUpdateSuccess = true;
       if(GraphicsUtil::getInstance()->isVideoModeRefreshRequired())
       {
-         std::string* errorMsg = NULL;
+         std::string* errorMsg = nullptr;
          settingsUpdateSuccess = GraphicsUtil::getInstance()->refreshVideoMode(errorMsg);
          if(!settingsUpdateSuccess)
          {
             DEBUG("Failed to refresh video mode:");
-            if(errorMsg != NULL)
+            if(errorMsg != nullptr)
             {
                DEBUG("%s", errorMsg->c_str());
                delete errorMsg;
-               errorMsg = NULL;
+               errorMsg = nullptr;
             }
             else
             {
@@ -134,11 +134,11 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
             Settings::getCurrentSettings().revertVideoChanges();
             if(!GraphicsUtil::getInstance()->refreshVideoMode(errorMsg))
             {
-               if(errorMsg != NULL)
+               if(errorMsg != nullptr)
                {
                   DEBUG("%s", errorMsg->c_str());
                   delete errorMsg;
-                  errorMsg = NULL;
+                  errorMsg = nullptr;
                }
                
                T_T("Failed to revert video mode!");

@@ -9,6 +9,7 @@
 
 #include "Resource.h"
 #include "SDL_mixer.h"
+#include <memory>
 
 /**
  * This Resource represents a song, and provides an interface for playing,
@@ -19,24 +20,22 @@
 class Music : public Resource
 {
    /** The current music that is playing. */
-   static Music* currentMusic;
+   static std::shared_ptr<Music> currentMusic;
 
    /**
-    * @param music The music to check.
-    *
-    * @return true iff the music specified is the music currently playing
+    * @return true iff this music is the music currently playing
     */
-   static inline bool isPlaying(Music* music);
+   inline bool isCurrentlyPlayingMusic() const;
 
    /**
     * Sets the currently playing music.
     *
     * @param music The music to play.
     */
-   static inline void setPlayingMusic(Music* music);
+   inline void setCurrentlyPlayingMusic();
 
    /** The SDL music object for this music resource */
-   Mix_Music* m_music;
+   std::unique_ptr<Mix_Music, void(*)(Mix_Music*)> m_music;
 
    /**
     * Loads the music resource with the specified file name and path.
@@ -61,7 +60,7 @@ class Music : public Resource
       /**
        * @return true iff there is music currently being played
        */
-      static bool isPlaying();
+      static bool isMusicPlaying();
 
       /**
        * Fades out the currently playing song.

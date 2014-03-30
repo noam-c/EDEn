@@ -22,8 +22,8 @@ const int debugFlag = DEBUG_GRAPHICS;
 
 void GraphicsUtil::initialize()
 {
-   m_window = NULL;
-   m_openGLContext = NULL;
+   m_window = nullptr;
+   m_openGLContext = nullptr;
    const Settings::Resolution& resolution = Settings::getCurrentSettings().getResolution();
    m_fullScreenEnabled = Settings::getCurrentSettings().isFullScreenEnabled();
    m_width = resolution.getWidth();
@@ -66,17 +66,17 @@ void GraphicsUtil::initSDL()
    // On exit, run the SDL cleanup
    atexit (SDL_Quit);
 
-   std::string* errorMsg = NULL;
+   std::string* errorMsg = nullptr;
    if(!initSDLVideoMode(errorMsg))
    {
       DEBUG("Couldn't set %dx%dx%d video mode: %s\n", m_width, m_height, m_bitsPerPixel, errorMsg->c_str());
       exit(1);
    }
 
-   if(errorMsg != NULL)
+   if(errorMsg != nullptr)
    {
       delete errorMsg;
-      errorMsg = NULL;
+      errorMsg = nullptr;
    }
 }
 
@@ -89,7 +89,7 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
       windowFlags |= SDL_WINDOW_FULLSCREEN;
    }
 
-   if(m_window != NULL)
+   if(m_window != nullptr)
    {
       SDL_DestroyWindow(m_window);
    }
@@ -102,13 +102,13 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
       m_height,
       static_cast<SDL_WindowFlags>(windowFlags));
 
-   if(m_window == NULL)
+   if(m_window == nullptr)
    {
       errorMsg = new std::string(SDL_GetError());
       return false;
    }
 
-   if(m_openGLContext != NULL)
+   if(m_openGLContext != nullptr)
    {
       SDL_GL_MakeCurrent(m_window, m_openGLContext);
    }
@@ -156,7 +156,7 @@ void GraphicsUtil::initRocket()
    struct dirent *entry;
    DIR *dp;
    dp = opendir(fontLocation.c_str());
-   if (dp == NULL)
+   if (dp == nullptr)
    {
       T_T("Failed to open data/fonts for font loading.");
    }
@@ -311,12 +311,12 @@ void GraphicsUtil::finish()
    // Destroy SDL audio and video stuff
    Mix_CloseAudio();
 
-   if(m_openGLContext != NULL)
+   if(m_openGLContext != nullptr)
    {
       SDL_GL_DeleteContext(m_openGLContext);
    }
 
-   if(m_window != NULL)
+   if(m_window != nullptr)
    {
       SDL_DestroyWindow(m_window);
    }

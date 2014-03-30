@@ -21,7 +21,7 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
    const TiXmlElement* propertiesElement = layerData->FirstChildElement("properties");
 
    const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
-   while(propertyElement != NULL)
+   while(propertyElement != nullptr)
    {
       if(std::string(propertyElement->Attribute("name")) == "tilesetName")
       {
@@ -38,7 +38,7 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
       propertyElement = propertyElement->NextSiblingElement("property");
    }
 
-   if(m_tileset == NULL)
+   if(m_tileset == nullptr)
    {
       T_T("Layer doesn't contain a tileset.");
    }

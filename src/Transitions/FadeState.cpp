@@ -14,7 +14,7 @@
 const int debugFlag = DEBUG_TRANSITIONS;
 
 FadeState::FadeState(GameContext& gameContext, GameState* oldState, long transitionLength) :
-   TransitionState(gameContext, "FadeState", oldState, NULL, transitionLength)
+   TransitionState(gameContext, "FadeState", oldState, nullptr, transitionLength)
 {
 }
 

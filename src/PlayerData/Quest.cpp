@@ -31,10 +31,6 @@ Quest::Quest(const Json::Value& questJson)
 
 Quest::~Quest()
 {
-   for(QuestLog::iterator i  = m_subquests.begin(); i != m_subquests.end(); ++i)
-   {
-      delete i->second;
-   }
 }
 
 void Quest::load(const Json::Value& questTree)
@@ -48,10 +44,10 @@ void Quest::load(const Json::Value& questTree)
    m_completed = questTree[Quest::COMPLETED_ATTRIBUTE].asBool();
    m_optional = questTree[Quest::OPTIONAL_ATTRIBUTE].asBool();
 
-   const Json::Value& subquestNode = questTree[Quest::QUEST_ELEMENT];
-   for(Json::Value::iterator iter = subquestNode.begin(); iter != subquestNode.end(); ++iter)
+   const Json::Value& subquestListNode = questTree[Quest::QUEST_ELEMENT];
+   for(const auto& subquestNode : subquestListNode)
    {
-      Quest* subquest = new Quest(*iter);
+      std::shared_ptr<Quest> subquest(new Quest(subquestNode));
       m_subquests[subquest->getName()] = subquest;
    }
 }
@@ -81,20 +77,20 @@ Json::Value Quest::serialize() const
    return questNode;
 }
 
-void Quest::addQuest(Quest* quest)
+void Quest::addQuest(std::shared_ptr<Quest> quest)
 {
    DEBUG("Adding quest %s to quest %s.", quest->m_name.c_str(), m_name.c_str());
-   m_subquests[quest->m_name] = quest;
+   m_subquests.insert(std::make_pair(quest->m_name, quest));
 }
 
-Quest* Quest::getQuest(const std::string& questPath) const
+const std::weak_ptr<Quest> Quest::getQuest(const std::string& questPath) const
 {
    DEBUG("In quest %s, looking for subquest: %s", m_name.c_str(), questPath.c_str());
    std::string::size_type endOfRootQuest = questPath.find_first_of("/");
    if(endOfRootQuest == std::string::npos)
    {
       // Base case: the quest to find is a direct subquest (or doesn't exist at all)
-      std::map<std::string, Quest*>::const_iterator subquestIter = m_subquests.find(questPath);
+      const auto& subquestIter = m_subquests.find(questPath);
       if(subquestIter != m_subquests.end())
       {
          DEBUG("Found quest %s in quest %s", questPath.c_str(), m_name.c_str());
@@ -103,14 +99,14 @@ Quest* Quest::getQuest(const std::string& questPath) const
 
       // The quest does not exist
       DEBUG("Failed to find subquest: %s", questPath.c_str());
-      return NULL;
+      return std::weak_ptr<Quest>();
    }
 
    // Recursive case: Need to go down the quest tree using the specified path
    std::string rootQuestName = questPath.substr(0, endOfRootQuest);
    std::string relativeQuestPath = questPath.substr(endOfRootQuest + 1);
    
-   std::map<std::string, Quest*>::const_iterator subquestIter = m_subquests.find(rootQuestName);
+   const auto& subquestIter = m_subquests.find(rootQuestName);
    if(subquestIter != m_subquests.end())
    {
       return subquestIter->second->getQuest(relativeQuestPath);
@@ -118,7 +114,7 @@ Quest* Quest::getQuest(const std::string& questPath) const
 
    // The quest tree to descend wasn't found; this quest does not exist
    DEBUG("Failed to find subquest: %s", rootQuestName.c_str());
-   return NULL;
+   return std::weak_ptr<Quest>();
 }
 
 void Quest::complete()
@@ -134,13 +130,13 @@ bool Quest::isCompleted() const
 
 bool Quest::isStarted(const std::string& questPath) const
 {
-   return getQuest(questPath)!= NULL;
+   return !getQuest(questPath).expired();
 }
 
 bool Quest::isCompleted(const std::string& questPath) const
 {
-   Quest* subquest = getQuest(questPath);
-   return subquest != NULL && subquest->isCompleted();
+   const auto& subquest = getQuest(questPath).lock();
+   return subquest && subquest->isCompleted();
 }
 
 std::string Quest::getName() const

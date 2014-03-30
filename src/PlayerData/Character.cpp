@@ -93,10 +93,6 @@ Character::Character(const Metadata& metadata, const Json::Value& charToLoad) :
 
 Character::~Character()
 {
-   for(std::vector<Aspect*>::const_iterator iter = m_archetypeAspects.begin(); iter != m_archetypeAspects.end(); ++iter)
-   {
-      delete *iter;
-   }
 }
 
 void Character::parseArchetypeData(const Metadata& metadata, const Json::Value& archetypeData)
@@ -118,13 +114,12 @@ void Character::parsePortraitData(const Json::Value& portraitDataContainer)
 
 void Character::parseAspects(const Json::Value& aspectsDataContainer)
 {
-   const Json::Value& aspectsData = aspectsDataContainer[Character::ASPECTS_ELEMENT];
-   if(aspectsData.isArray())
+   const Json::Value& aspectsListNode = aspectsDataContainer[Character::ASPECTS_ELEMENT];
+   if(aspectsListNode.isArray())
    {
-      for(Json::Value::iterator aspectIter = aspectsData.begin(); aspectIter != aspectsData.end(); ++aspectIter)
+      for(const auto& aspectNode : aspectsListNode)
       {
-         Aspect* aspect = Aspect::loadAspect((*aspectIter).asString());
-         m_archetypeAspects.push_back(aspect);
+         m_archetypeAspects.push_back(Aspect::loadAspect((aspectNode).asString()));
       }
    }
 }
@@ -179,9 +174,9 @@ Json::Value Character::serialize() const
 
    Json::Value aspectsData(Json::arrayValue);
 
-   for(std::vector<Aspect*>::const_iterator iter = m_archetypeAspects.begin(); iter != m_archetypeAspects.end(); ++iter)
+   for(const auto& archetypeAspect : m_archetypeAspects)
    {
-      aspectsData.append((*iter)->getId());
+      aspectsData.append(archetypeAspect->getId());
    }
 
    characterNode[Character::ASPECTS_ELEMENT] = aspectsData;
@@ -213,7 +208,7 @@ Json::Value Character::serialize() const
 
 int Character::getStatAttribute(const std::string& attributeName) const
 {
-   const Aspect* currentAspect = m_archetypeAspects[m_selectedAspect];
+   const auto& currentAspect = m_archetypeAspects[m_selectedAspect];
    std::map<std::string, int>::const_iterator baseStatIterator = m_baseStats.find(attributeName);
    int baseStat = baseStatIterator != m_baseStats.end() ?
       baseStatIterator->second : 0;
@@ -278,7 +273,7 @@ void Character::refreshAvailableSkills()
       }
    }
    
-   const Aspect* currentAspect = m_archetypeAspects[m_selectedAspect];
+   const auto& currentAspect = m_archetypeAspects[m_selectedAspect];
    std::vector<UsableId> aspectSkills = currentAspect->getAvailableSkills(adeptSkills);
 
    m_availableSkills.resize(adeptSkills.size() + aspectSkills.size());
@@ -327,6 +322,6 @@ bool Character::equip(EquipSlot& slot, const Item* newEquipment)
 
 bool Character::unequip(EquipSlot& slot)
 {
-   slot.equipped = NULL;
+   slot.equipped = nullptr;
    return true;
 }

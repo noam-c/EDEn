@@ -12,7 +12,7 @@
 const int debugFlag = DEBUG_EXEC_STACK;
 
 ExecutionStack::ExecutionStack() :
-   m_nextState(NULL)
+   m_nextState(nullptr)
 {
 }
 
@@ -35,7 +35,7 @@ void ExecutionStack::popState()
    if(m_nextState)
    {
       pushState(m_nextState);
-      m_nextState = NULL;
+      m_nextState = nullptr;
    }
 }
 
@@ -47,12 +47,12 @@ GameState* ExecutionStack::getCurrentState() const
 Scheduler* ExecutionStack::getCurrentScheduler() const
 {
    GameState* currentState = getCurrentState();
-   if(currentState != NULL)
+   if(currentState != nullptr)
    {
       return currentState->getScheduler();
    }
    
-   return NULL;
+   return nullptr;
 }
 
 

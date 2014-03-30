@@ -59,7 +59,7 @@ class ExecutionStack
        * @param newState the new state of the game
        * @param transitionState an optional transition state used to introduce the new state visually
        */
-      void pushState(GameState* newState, GameState* transitionState = NULL);
+      void pushState(GameState* newState, GameState* transitionState = nullptr);
       
       /**
        * @return The currently executing game state.

@@ -12,7 +12,7 @@
 static int PlayerCharacterL_Show(lua_State* luaVM)
 {
    PlayerCharacter* playerCharacter = luaW_check<PlayerCharacter>(luaVM, 1);
-   if (playerCharacter == NULL)
+   if (playerCharacter == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -37,7 +37,7 @@ static int PlayerCharacterL_Show(lua_State* luaVM)
 static int PlayerCharacterL_Remove(lua_State* luaVM)
 {
    PlayerCharacter* playerCharacter = luaW_check<PlayerCharacter>(luaVM, 1);
-   if (playerCharacter == NULL)
+   if (playerCharacter == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -50,7 +50,7 @@ static int PlayerCharacterL_Remove(lua_State* luaVM)
 static int PlayerCharacterL_SetLocation(lua_State* luaVM)
 {
    PlayerCharacter* playerCharacter = luaW_check<PlayerCharacter>(luaVM, 1);
-   if (playerCharacter == NULL)
+   if (playerCharacter == nullptr)
    {
       return lua_error(luaVM);
    }
@@ -77,11 +77,11 @@ static luaL_reg playerCharacterMetatable[] =
    { "show", PlayerCharacterL_Show },
    { "remove", PlayerCharacterL_Remove },
    { "setLocation", PlayerCharacterL_SetLocation },
-   { NULL, NULL }
+   { nullptr, nullptr }
 };
 
 void luaopen_PlayerCharacter(lua_State* luaVM)
 {
-   luaW_register<PlayerCharacter>(luaVM, "PlayerCharacter", NULL, playerCharacterMetatable, NULL, NULL);
+   luaW_register<PlayerCharacter>(luaVM, "PlayerCharacter", nullptr, playerCharacterMetatable, nullptr, nullptr);
    luaW_extend<PlayerCharacter, Actor>(luaVM);
 }

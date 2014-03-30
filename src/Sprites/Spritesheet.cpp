@@ -32,7 +32,7 @@ const std::string Spritesheet::UNTITLED_LINE = "untitled";
 
 Spritesheet::Spritesheet(ResourceKey name) :
    Resource(name),
-   m_texture(NULL),
+   m_texture(nullptr),
    m_numFrames(0)
 {
 }
@@ -46,7 +46,7 @@ Spritesheet::~Spritesheet()
       delete iter->second;
    }
 
-   if(m_texture != NULL)
+   if(m_texture != nullptr)
    {
       delete m_texture;
    }
@@ -233,7 +233,7 @@ Animation* Spritesheet::getAnimation(const std::string& animationName) const
       return new Animation(animationName, *(animFrames->second));
    }
 
-   return NULL;
+   return nullptr;
 }
 
 

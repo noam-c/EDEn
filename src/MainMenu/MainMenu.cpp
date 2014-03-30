@@ -41,7 +41,7 @@ MainMenu::MainMenu(GameContext& gameContext) :
 
    m_titleDocument = m_rocketContext->LoadDocument("data/gui/title.rml");
 
-   if(m_titleDocument != NULL)
+   if(m_titleDocument != nullptr)
    {
       m_titleDocument->Show();
       m_bindings.bindAction(m_titleDocument, "newGameAction", "click", &MainMenu::NewGameAction);
@@ -97,7 +97,7 @@ void MainMenu::waitForInputEvent(bool& finishState)
          {
             case SDLK_ESCAPE:
             {
-               QuitAction(NULL);
+               QuitAction(nullptr);
                return;
             }
             default:
@@ -110,7 +110,7 @@ void MainMenu::waitForInputEvent(bool& finishState)
       }
       case SDL_QUIT:
       {
-          QuitAction(NULL);
+          QuitAction(nullptr);
           return;
       }
       default:
@@ -137,13 +137,13 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
    }
 
    Rocket::Core::Element* list = m_titleDocument->GetElementById("menu");
-   if(list == NULL)
+   if(list == nullptr)
    {
       return;
    }
 
    Rocket::Core::Element* child = list->GetFirstChild();
-   while(child != NULL)
+   while(child != nullptr)
    {
       if(child->IsClassSet("selected"))
       {
@@ -153,7 +153,7 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
       child = child->GetNextSibling();
    }
    
-   if(child == NULL)
+   if(child == nullptr)
    {
       return;
    }
@@ -165,7 +165,7 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
    else if(key == Rocket::Core::Input::KI_UP)
    {
       Rocket::Core::Element* previousSibling = child->GetPreviousSibling();
-      if(previousSibling != NULL)
+      if(previousSibling != nullptr)
       {
          child->SetClass("selected", false /*activate*/);
          previousSibling->SetClass("selected", true /*activate*/);
@@ -174,7 +174,7 @@ void MainMenu::listKeyDown(Rocket::Core::Event* event)
    else if(key == Rocket::Core::Input::KI_DOWN)
    {
       Rocket::Core::Element* nextSibling = child->GetNextSibling();
-      if(nextSibling != NULL)
+      if(nextSibling != nullptr)
       {
          child->SetClass("selected", false /*activate*/);
          nextSibling->SetClass("selected", true /*activate*/);

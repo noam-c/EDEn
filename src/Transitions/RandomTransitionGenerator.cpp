@@ -18,7 +18,7 @@ const int NUM_TRANSITIONS = 3;
 GameState* RandomTransitionGenerator::create(GameContext& gameContext, GameState* oldState, GameState* newState, long transitionLength)
 {
   int randomNumber = rand() % NUM_TRANSITIONS;
-  GameState* transition = NULL;
+  GameState* transition = nullptr;
   switch(randomNumber)
   {
     case 0: transition = new FadeState(gameContext, oldState, transitionLength); break;

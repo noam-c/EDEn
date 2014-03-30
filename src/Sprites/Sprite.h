@@ -32,7 +32,7 @@ class Sprite
    /** The index of the current static frame within the sheet. -1 if an animation is used instead. */
    int m_frameIndex;
    
-   /** The animation structure to use to animate this sprite. NULL if a static frame is used instead. */
+   /** The animation structure to use to animate this sprite. nullptr if a static frame is used instead. */
    Animation* m_animation;
    
    /** The name of the current frame/animation being used. */

@@ -33,7 +33,7 @@ void Region::load(const std::string& path)
    std::vector<std::string> files;
    
    dp = opendir(path.c_str());
-   if (dp == NULL)
+   if (dp == nullptr)
    {
       T_T("opendir");
    }

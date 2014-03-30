@@ -51,7 +51,7 @@ HomeMenu::~HomeMenu()
 void HomeMenu::initialize()
 {
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");
-   if(m_paneDocument != NULL)
+   if(m_paneDocument != nullptr)
    {
       m_bindings.bindAction(m_paneDocument, "characterGrid", "click", &HomeMenu::characterClicked);
    }
@@ -71,16 +71,16 @@ void HomeMenu::characterClicked(Rocket::Core::Event* event)
    Rocket::Core::Element* target = event->GetTargetElement();
 
    // Move up the DOM to the datagridrow item holding this element
-   while(target->GetParentNode() != NULL && target->GetTagName() != "datagridrow")
+   while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
    {
       target = target->GetParentNode();
    }
 
-   if(target != NULL)
+   if(target != nullptr)
    {
       // If we found a row element, cast it and get its index
       Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
-      if(rowElement != NULL)
+      if(rowElement != nullptr)
       {
          DEBUG("Character click registered.");
          int characterIndex = rowElement->GetParentRelativeIndex();
@@ -110,7 +110,7 @@ void HomeMenu::sidebarClicked(int optionIndex)
 
 void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, MenuShell* menuShell)
 {
-   CharacterDependentMenu* newState = NULL;
+   CharacterDependentMenu* newState = nullptr;
    switch(optionIndex)
    {
       case 3:
@@ -121,7 +121,7 @@ void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, M
          break;
    }
    
-   if(newState != NULL)
+   if(newState != nullptr)
    {
       newState->setCharacter(characterIndex);
       getExecutionStack()->pushState(newState);
@@ -130,7 +130,7 @@ void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, M
 
 void HomeMenu::pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShell)
 {
-   MenuState* newState = NULL;
+   MenuState* newState = nullptr;
    switch(optionIndex)
    {
       case 0:
@@ -145,7 +145,7 @@ void HomeMenu::pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShel
          break;
    }
    
-   if(newState != NULL)
+   if(newState != nullptr)
    {
       DEBUG("Pushing new menu state.");
       getExecutionStack()->pushState(newState);

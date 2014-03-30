@@ -81,7 +81,7 @@ class Usable
        */
       const std::string& getIconPath() const;
 
-      virtual bool use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter = NULL);
+      virtual bool use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter = nullptr);
 };
 
 #endif
