@@ -256,51 +256,22 @@ class Pathfinder::AStarPoint : public shapes::Point2D
       }
 
       /**
-       * A comparator used to sort A* nodes in a priority queue.
-       * Given two A* nodes, determines which A* node is currently the lowest cost to use.
+       * Comparison operation between two A* nodes. The lowest cost node is the one
+       * with the lowest total estimated cost (F cost). In the case of a tie, the
+       * highest G cost wins since it is not as deep in the search tree.
        *
-       * @author Noam Chitayat
-       */
-      struct IsLowerPriority
-      {
-         /**
-          * Comparison operation between two A* nodes. The lowest cost node is the one
-          * with the lowest total estimated cost (F cost). In the case of a tie, the
-          * highest G cost wins since it is not as deep in the search tree.
-          *
-          * @param lhs An A* node to compare.
-          * @param rhs Another A* node to compare.
-          *
-          * @return true iff lhs has a lower expected cost than rhs.
-          */
-         bool operator()(const AStarPoint* lhs, const AStarPoint* rhs) const
-         {
-            // We consider lhs to have a lower priority if it has a higher total f() cost.
-            // In case of a tie, this point will have lower priority if it has a lower g() cost,
-            // indicating that it is not as deep in the search tree.
-            return lhs->fCost > rhs->fCost || (lhs->fCost == rhs->fCost && lhs->gCost < rhs->gCost);
-         }
-      };
-
-      /**
-       * Equality operation.
-       * Used to determine equality between a coordinate pair and an A* node representing a coordinate.
+       * @param lhs An A* node to compare.
+       * @param rhs Another A* node to compare.
        *
-       * @author Noam Chitayat
+       * @return true iff lhs has a lower expected cost than rhs.
        */
-      struct ArePointsEqual
+      static bool isLowerPriority(const AStarPoint* lhs, const AStarPoint* rhs)
       {
-         /** The coordinates to compare to. */
-         const shapes::Point2D& point;
-         
-         /**
-          * @return true iff this A* node represents the same location as point.
-          */
-         bool operator()(const AStarPoint* other) const
-         {
-            return point == *other;
-         }
-      };
+         // We consider lhs to have a lower priority if it has a higher total f() cost.
+         // In case of a tie, this point will have lower priority if it has a lower g() cost,
+         // indicating that it is not as deep in the search tree.
+         return lhs->fCost > rhs->fCost || (lhs->fCost == rhs->fCost && lhs->gCost < rhs->gCost);
+      }
 };
 
 Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const
@@ -321,7 +292,7 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
    const shapes::Point2D srcTile(src.x / m_movementTileSize, src.y / m_movementTileSize);
    
    openSet.push_back(new AStarPoint(nullptr, srcTile.x, srcTile.y, 0, 0));
-   std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());         
+   std::push_heap(openSet.begin(), openSet.end(), AStarPoint::isLowerPriority);
 
    const int sourceTileNum = pixelsToTileNum(src);
    const int destinationTileNum = pixelsToTileNum(dst);
@@ -334,7 +305,7 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
    {
       // Get the lowest-cost point in the open set, and remove it from the open set
       const AStarPoint* cheapestPoint = openSet.front();
-      std::pop_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+      std::pop_heap(openSet.begin(), openSet.end(), AStarPoint::isLowerPriority);
       openSet.pop_back();
       closedSet.push_back(cheapestPoint);
 
@@ -378,16 +349,16 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
 
 void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalMovement) const
 {
-   for(std::vector<shapes::Point2D>::const_iterator iter = adjacentNodes.begin(); iter != adjacentNodes.end(); ++iter)
+   for(auto& adjacentNode : adjacentNodes)
    {
-      int adjacentTileNum = coordsToTileNum(*iter);
+      int adjacentTileNum = coordsToTileNum(adjacentNode);
       float tileGCost = evaluatedPoint->getGCost() + traversalCost;
       float tileHCost = m_distanceMatrix[adjacentTileNum][destinationTileNum];
       if(!discovered[adjacentTileNum])
       {
          discovered[adjacentTileNum] = true;
-         const int x = iter->x;
-         const int y = iter->y;
+         const int x = adjacentNode.x;
+         const int y = adjacentNode.y;
          
          bool freeTile = entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(x, y) * m_movementTileSize, size), entityState);
 
@@ -399,21 +370,27 @@ void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileS
 
          if(freeTile)
          {
-            DEBUG("Pushing point %d,%d onto open set with g()=%f and f()=%f.", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
-            openSet.push_back(new AStarPoint(evaluatedPoint, iter->x, iter->y, tileGCost, tileHCost));
-            std::push_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+            DEBUG("Pushing point %d,%d onto open set with g()=%f and f()=%f.", x, y, tileGCost, tileGCost + tileHCost);
+            openSet.push_back(new AStarPoint(evaluatedPoint, x, y, tileGCost, tileHCost));
+            std::push_heap(openSet.begin(), openSet.end(), AStarPoint::isLowerPriority);
          }
       }
       else
       {
-         AStarPoint::ArePointsEqual equality = { *iter };
-         std::vector<AStarPoint*>::const_iterator tileInOpenSet = std::find_if(openSet.begin(), openSet.end(), equality);
+         const auto& tileInOpenSet = std::find_if(
+                                      openSet.begin(),
+                                      openSet.end(),
+                                      [&](const AStarPoint* point)
+                                      {
+                                         return *point == adjacentNode;
+                                      });
+
          if(tileInOpenSet != openSet.end() && (*tileInOpenSet)->getGCost() > tileGCost)
          {
-            DEBUG("Altering cost of discovered point %d, %d to g()=%f and f()=%f", iter->x, iter->y, tileGCost, tileGCost + tileHCost);
+            DEBUG("Altering cost of discovered point %d, %d to g()=%f and f()=%f", adjacentNode.x, adjacentNode.y, tileGCost, tileGCost + tileHCost);
             (*tileInOpenSet)->setGCost(tileGCost);
             (*tileInOpenSet)->setParent(evaluatedPoint);
-            std::make_heap(openSet.begin(), openSet.end(), AStarPoint::IsLowerPriority());
+            std::make_heap(openSet.begin(), openSet.end(), AStarPoint::isLowerPriority);
          }
       }
    }

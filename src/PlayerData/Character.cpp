@@ -274,10 +274,7 @@ void Character::refreshAvailableSkills()
    }
    
    const auto& currentAspect = m_archetypeAspects[m_selectedAspect];
-   std::vector<UsableId> aspectSkills = currentAspect->getAvailableSkills(adeptSkills);
-
-   m_availableSkills.resize(adeptSkills.size() + aspectSkills.size());
-   std::merge(adeptSkills.begin(), adeptSkills.end(), aspectSkills.begin(), aspectSkills.end(), m_availableSkills.begin());
+   m_availableSkills = currentAspect->getAvailableSkills(adeptSkills);
 }
 
 bool Character::hasSkill(UsableId skillId) const

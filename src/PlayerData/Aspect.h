@@ -91,34 +91,6 @@ class Aspect
    /** A directed graph of skills, where each skill is connected to its prerequisites */
    typedef std::vector<SkillNode> SkillGraph;
    
-   /**
-    * A comparator used to match a SkillNode to a UsableId.
-    *
-    * @author Noam Chitayat
-    */
-   struct CompareUsableId
-   {
-      /**
-       * Comparison operation between a SkillNode and a UsableId.
-       *
-       * @param value An ID to compare against the node's ID.
-       * @param node A Skill node to check.
-       *
-       * @return true iff the SkillNode's ID is less than value.
-       */
-      bool operator()(const UsableId value, const Aspect::SkillNode& node) const;
-
-      /**
-       * Comparison operation between a SkillNode and a UsableId.
-       *
-       * @param node A Skill node to check.
-       * @param value An ID to compare against the node's ID.
-       *
-       * @return true iff the SkillNode's ID is less than value.
-       */
-      bool operator()(const Aspect::SkillNode& node, const UsableId value) const;
-};
-
    /** The skill tree for the Aspect's skills and prerequisites */
    SkillGraph m_skillTree;
    

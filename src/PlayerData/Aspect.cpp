@@ -107,19 +107,20 @@ void Aspect::parseSkillTree(const Json::Value& aspectToLoad)
    }
 }
 
-bool Aspect::CompareUsableId::operator()(const UsableId value, const Aspect::SkillNode& node) const
-{
-   return node.first < value;
-}
-
-bool Aspect::CompareUsableId::operator()(const Aspect::SkillNode& node, const UsableId value) const
-{
-   return node.first < value;
-}
-
 void Aspect::validateSkillTree() const
 {
-   const int numSkills = m_skillTree.size();
+   if(!std::is_sorted(
+       m_skillTree.begin(),
+       m_skillTree.end(),
+       [](SkillNode left, SkillNode right)
+       {
+          return left.first < right.first;
+       }))
+   {
+      T_T("Expected skill tree to be sorted by Skill ID");
+   }
+
+      const int numSkills = m_skillTree.size();
 
    // Validate that there aren't any duplicates
    for(int i = 1; i < numSkills; ++i)
@@ -169,13 +170,15 @@ void Aspect::validateSkillTree() const
          
          // Push all of this node's prerequisites into the breadth-first search queue
          PrerequisiteList prereqs = m_skillTree[currentNode].second;
-         for(PrerequisiteList::const_iterator iter = prereqs.begin(); iter != prereqs.end(); ++iter)
+         for(const auto& prereq : prereqs)
          {
-            const UsableId& prereq = *iter;
-            
             // Use std::lower_bound in order to search using
             // binary search instead of linear search
-            SkillGraph::const_iterator skillNodeIter = std::lower_bound(m_skillTree.begin(), m_skillTree.end(), prereq, Aspect::CompareUsableId());
+            const auto& skillNodeIter =
+            std::lower_bound(m_skillTree.begin(), m_skillTree.end(), prereq, [](const SkillNode& node, const UsableId& value) {
+               return node.first < value;
+            });
+
             if((skillNodeIter == m_skillTree.end() || skillNodeIter->first != prereq))
             {
                T_T("One of the skills in this aspect's tree has a prerequisite that isn't in the tree.")
@@ -197,7 +200,7 @@ std::string Aspect::getId() const
 
 int Aspect::getAspectBonus(const std::string& stat, unsigned int level) const
 {
-   std::map<std::string, StatBonusCalculation>::const_iterator iter = m_statBonusCalculations.find(stat);
+   auto iter = m_statBonusCalculations.find(stat);
    if (iter != m_statBonusCalculations.end())
    {
       return iter->second.getBonusForLevel(level);
@@ -209,18 +212,20 @@ int Aspect::getAspectBonus(const std::string& stat, unsigned int level) const
 std::vector<UsableId> Aspect::getAvailableSkills(const std::vector<UsableId>& adeptSkills) const
 {
    std::vector<UsableId> availableSkills;
-   for(SkillGraph::const_iterator iter = m_skillTree.begin(); iter != m_skillTree.end(); ++iter)
+   for(const auto& skillNode : m_skillTree)
    {
-      bool skillAlreadyAdept = std::binary_search(adeptSkills.begin(), adeptSkills.end(), iter->first);
+      bool skillAlreadyAdept = std::binary_search(adeptSkills.begin(), adeptSkills.end(), skillNode.first);
       if(skillAlreadyAdept)
       {
-         continue;
+         availableSkills.push_back(skillNode.first);
       }
-
-      PrerequisiteList prerequisites = iter->second;
-      if(std::includes(adeptSkills.begin(), adeptSkills.end(), prerequisites.begin(), prerequisites.end()))
+      else
       {
-         availableSkills.push_back(iter->first);
+         PrerequisiteList prerequisites = skillNode.second;
+         if(std::includes(adeptSkills.begin(), adeptSkills.end(), prerequisites.begin(), prerequisites.end()))
+         {
+            availableSkills.push_back(skillNode.first);
+         }
       }
    }
    
