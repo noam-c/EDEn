@@ -34,7 +34,7 @@ DialogueController::DialogueController(Rocket::Core::Context& context, Scheduler
    initMainDialogue();
    clearDialogue();
 
-   scheduler.start(new DialogueCoroutine(*this));
+   scheduler.start(std::make_shared<DialogueCoroutine>(*this));
 }
 
 DialogueController::~DialogueController()

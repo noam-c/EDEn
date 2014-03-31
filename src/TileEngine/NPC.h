@@ -8,6 +8,7 @@
 #define NPC_H
 
 #include "Actor.h"
+#include <memory>
 
 class NPCScript;
 class Scheduler;
@@ -38,7 +39,7 @@ class ScriptEngine;
 class NPC : public Actor
 {
    /** The NPC's coroutine of execution */
-   NPCScript* m_coroutine;
+   std::shared_ptr<NPCScript> m_coroutine;
 
    public:
       /**

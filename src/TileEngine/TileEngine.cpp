@@ -206,7 +206,7 @@ int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D
 {
    if(speed > 0)
    {
-      CameraSlider* slider = new CameraSlider(m_camera, origin, destination, speed);
+      auto slider = std::make_shared<CameraSlider>(m_camera, origin, destination, speed);
       m_cameraTarget = nullptr;
       m_scheduler->start(slider);
       return m_scheduler->join(slider);

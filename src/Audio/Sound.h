@@ -22,7 +22,7 @@ class Task;
 class Sound : public Resource
 {
    /** The map of currently playing Sound resources based on channel. */
-   static std::map<int, std::shared_ptr<Sound>> playingList;
+   static std::map<int, std::weak_ptr<Sound>> playingList;
 
    /**
     * A callback used when a channel is released and its sound is done playing.

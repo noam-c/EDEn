@@ -38,10 +38,6 @@ Usable::Usable(Json::Value& node) :
 
 Usable::~Usable()
 {
-   if(m_usableScript != nullptr)
-   {
-      delete m_usableScript;
-   }
 }
 
 UsableId Usable::getId() const
@@ -61,13 +57,13 @@ const std::string& Usable::getIconPath() const
 
 void Usable::loadScript(ScriptEngine& scriptEngine)
 {
-   if(m_usableScript == nullptr)
+   if(!m_usableScript)
    {
-      m_usableScript = createScript(scriptEngine);
+      m_usableScript = std::move(createScript(scriptEngine));
    }
 }
 
-UsableScript* Usable::createScript(ScriptEngine& scriptEngine)
+std::shared_ptr<UsableScript> Usable::createScript(ScriptEngine& scriptEngine)
 {
    return scriptEngine.createItemScript(*this);
 }

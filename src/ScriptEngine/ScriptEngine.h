@@ -7,6 +7,7 @@
 #ifndef SCRIPT_ENGINE_H
 #define SCRIPT_ENGINE_H
 
+#include <memory>
 #include <stack>
 #include <string>
 #include "Singleton.h"
@@ -79,7 +80,7 @@ class ScriptEngine
     * @param script The script to run.
     * @param scheduler The scheduler that will manage the new script coroutine.
     */
-   int runScript(Script* script, Scheduler& scheduler);
+   int runScript(const std::shared_ptr<Script>& script, Scheduler& scheduler);
 
    public:
       /** 
@@ -96,21 +97,21 @@ class ScriptEngine
        * @param regionName The name of the region this NPC is found in.
        * @param mapName The name of the map this NPC is found in.
        */
-      NPCScript* createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName);
+      std::shared_ptr<NPCScript> createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName);
 
       /**
        * Get a specified item's script.
        *
        * @param item The item to load the script for.
        */
-      UsableScript* createItemScript(const Item& item) const;
+      std::shared_ptr<UsableScript> createItemScript(const Item& item) const;
 
       /**
        * Get a specified skill's script.
        *
        * @param skill The skill to load the script for.
        */
-      UsableScript* createSkillScript(const Skill& skill) const;
+      std::shared_ptr<UsableScript> createSkillScript(const Skill& skill) const;
 
       /**
        * Run a specified map script.

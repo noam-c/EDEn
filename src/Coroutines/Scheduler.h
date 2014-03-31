@@ -12,7 +12,7 @@
 #include <map>
 #include <memory>
 #include <set>
-#include <queue>
+#include <deque>
 
 class Task;
 class Coroutine;
@@ -30,22 +30,22 @@ class Coroutine;
 class Scheduler
 {
    /** A list of coroutines. */
-   typedef std::set<Coroutine*> CoroutineList;
+   typedef std::set<std::shared_ptr<Coroutine>> CoroutineList;
 
    /** A queue of coroutines. */
-   typedef std::queue<Coroutine*> CoroutineQueue;
+   typedef std::deque<std::shared_ptr<Coroutine>> CoroutineQueue;
 
    /** A list of blocked coroutines, indexed by the TaskId on which they are waiting */
-   typedef std::map<TaskId, Coroutine*> BlockList;
+   typedef std::map<TaskId, std::shared_ptr<Coroutine>> BlockList;
 
    /** A list of joining/waiting coroutines, indexed by the Coroutine on which they are waiting */
-   typedef std::map<Coroutine*, Coroutine*> JoinList;
+   typedef std::map<std::shared_ptr<Coroutine>, std::shared_ptr<Coroutine>> JoinList;
 
    /** A list of Tasks, indexed by their Task IDs */
    typedef std::map<TaskId, std::shared_ptr<Task>> TaskMap;
 
    /** A queue of Tasks */
-   typedef std::queue<std::shared_ptr<Task>> TaskQueue;
+   typedef std::deque<std::shared_ptr<Task>> TaskQueue;
 
    /** The list of currently blocked coroutines in this scheduler */
    BlockList m_blockedCoroutines;
@@ -72,7 +72,7 @@ class Scheduler
    TaskQueue m_tasksToDelete;
 
    /** The currently running coroutine */
-   Coroutine* m_runningCoroutine;
+   std::shared_ptr<Coroutine> m_runningCoroutine;
 
    /** The next available unique task identifier. */
    TaskId m_nextId;
@@ -83,7 +83,7 @@ class Scheduler
     *
     * @param coroutine The coroutine that has completed execution
     */
-   void coroutineDone(Coroutine* coroutine);
+   void coroutineDone(const std::shared_ptr<Coroutine>& coroutine);
 
    public:
       /**
@@ -111,7 +111,7 @@ class Scheduler
        *
        * @param coroutine The coroutine to start.
        */
-      void start(Coroutine* coroutine);
+      void start(const std::shared_ptr<Coroutine>& coroutine);
 
       /**
        *  Create and return a new task.
@@ -136,17 +136,17 @@ class Scheduler
        *
        * @return a yield code from the Coroutine being blocked
        */
-      int join(Coroutine* runningCoroutine);
+      int join(const std::shared_ptr<Coroutine>& runningCoroutine);
 
       /**
        * Signal that a Coroutine has been finished and destroy the Coroutine.
        */
-      void finished(Coroutine* coroutine);
+      void finished(const std::shared_ptr<Coroutine>& coroutine);
 
       /**
        * Print the contents of the finished coroutine list to debug output.
        */
-      void printFinishedQueue();
+      void printFinishedQueue() const;
 
       /**
        * A scheduler run resumes each Coroutine in order and allows them to execute

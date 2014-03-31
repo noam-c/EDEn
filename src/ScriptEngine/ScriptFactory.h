@@ -7,6 +7,7 @@
 #ifndef SCRIPT_FACTORY_H
 #define SCRIPT_FACTORY_H
 
+#include <memory>
 #include <string>
 
 class Script;
@@ -66,7 +67,7 @@ class ScriptFactory
     * @param name The name of the script to be loaded.
     * @param type The ScriptType of the script to be loaded.
     */
-   static Script* createScript(lua_State* luaVM, const std::string& name, ScriptType type);
+   static std::shared_ptr<Script> createScript(lua_State* luaVM, const std::string& name, ScriptType type);
 
    /**
     * Get the path to a certain resource based on its name and type.
@@ -87,7 +88,7 @@ class ScriptFactory
        *
        * @return The NPC script associated with the NPC requested
        */
-      static NPCScript* createNPCCoroutine(lua_State* luaVM, NPC* npc, const std::string& regionName, const std::string& mapName);
+      static std::shared_ptr<NPCScript> createNPCCoroutine(lua_State* luaVM, NPC* npc, const std::string& regionName, const std::string& mapName);
 
       /**
        * @param luaVM The Lua VM to be used to load the script
@@ -95,7 +96,7 @@ class ScriptFactory
        *
        * @return The item script given by the specified item ID
        */
-      static UsableScript* getItemScript(lua_State* luaVM, const Item& item);
+      static std::shared_ptr<UsableScript> getItemScript(lua_State* luaVM, const Item& item);
 
       /**
        * @param luaVM The Lua VM to be used to load the script
@@ -103,7 +104,7 @@ class ScriptFactory
        *
        * @return The skill script given by the specified item ID
        */
-      static UsableScript* getSkillScript(lua_State* luaVM, const Skill& skill);
+      static std::shared_ptr<UsableScript> getSkillScript(lua_State* luaVM, const Skill& skill);
 
       /**
        * @param luaVM The Lua VM to be used to load the script
@@ -112,7 +113,7 @@ class ScriptFactory
        *
        * @return The map script given by the specified region-map pairing
        */
-      static Script* getMapScript(lua_State* luaVM, const std::string& regionName, const std::string& mapName);
+      static std::shared_ptr<Script> getMapScript(lua_State* luaVM, const std::string& regionName, const std::string& mapName);
 
       /**
        * @param luaVM The Lua VM to be used to load the script
@@ -120,7 +121,7 @@ class ScriptFactory
        *
        * @return The chapter script given by the specified chapter name
        */
-      static Script* getChapterScript(lua_State* luaVM, const std::string& name);
+      static std::shared_ptr<Script> getChapterScript(lua_State* luaVM, const std::string& name);
 };
 
 #endif

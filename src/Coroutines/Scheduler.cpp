@@ -19,50 +19,6 @@ Scheduler::Scheduler() :
 
 Scheduler::~Scheduler()
 {
-   // Delete all the blocked coroutines.
-   BlockList::iterator blockListIter;
-   for(blockListIter = m_blockedCoroutines.begin(); blockListIter != m_blockedCoroutines.end(); ++blockListIter)
-   {
-      Coroutine* coroutineToDelete = blockListIter->second;
-      if(coroutineToDelete != nullptr)
-      {
-         delete coroutineToDelete;
-      }
-   }
-
-   // Delete all the coroutines waiting on a join.
-   JoinList::iterator joinListIter;
-   for(joinListIter = m_joiningCoroutines.begin(); joinListIter != m_joiningCoroutines.end(); ++joinListIter)
-   {
-      Coroutine* coroutineToDelete = joinListIter->second;
-      if(coroutineToDelete != nullptr)
-      {
-         delete coroutineToDelete;
-      }
-   }
-
-   // Delete all the unstarted coroutines.
-   CoroutineList::iterator unstartedListIter;
-   for(unstartedListIter = m_unstartedCoroutines.begin(); unstartedListIter != m_unstartedCoroutines.end(); ++unstartedListIter)
-   {
-      Coroutine* coroutineToDelete = *unstartedListIter;
-      if(coroutineToDelete != nullptr)
-      {
-         delete coroutineToDelete;
-      }
-   }
-
-   // Delete all the ready coroutines.
-   CoroutineList::iterator readyListIter;
-   for(readyListIter = m_readyCoroutines.begin(); readyListIter != m_readyCoroutines.end(); ++readyListIter)
-   {
-      Coroutine* coroutineToDelete = *readyListIter;
-      if(coroutineToDelete != nullptr)
-      {
-         delete coroutineToDelete;
-      }
-   }
-
    // Since active tasks may be signalled by global functions (such as SDL callbacks),
    // do not delete them. However, deactivate them so that they don't try to signal this
    // (now deleted) scheduler.
@@ -75,40 +31,21 @@ Scheduler::~Scheduler()
          taskToDeactivate->signalSchedulerDestroyed();
       }
    }
-
-   // Delete all the finished coroutines.
-   while(!m_finishedCoroutines.empty())
-   {
-      delete m_finishedCoroutines.front();
-      m_finishedCoroutines.pop();
-   }
-
-   // Delete all the coroutines waiting to be destroyed.
-   while(!m_coroutinesToDelete.empty())
-   {
-      delete m_coroutinesToDelete.front();
-      m_coroutinesToDelete.pop();
-   }
-
-   m_tasksToDelete = {};
 }
 
-void Scheduler::printFinishedQueue()
+void Scheduler::printFinishedQueue() const
 {
    DEBUG("Finished Coroutine List:");
    DEBUG("---");
    const int queueSize = m_finishedCoroutines.size();
-   for(int i = 0; i < queueSize; ++i)
+   for(const auto& coroutine : m_finishedCoroutines)
    {
-      Coroutine* t = m_finishedCoroutines.front();
-      DEBUG("\t%d at address 0x%x", t->getId(), t);
-      m_finishedCoroutines.pop();
-      m_finishedCoroutines.push(t);
+      DEBUG("\t%d at address 0x%x", coroutine->getId(), coroutine.get());
    }
    DEBUG("---");
 }
 
-void Scheduler::start(Coroutine* coroutine)
+void Scheduler::start(const std::shared_ptr<Coroutine>& coroutine)
 {
    DEBUG("Starting coroutine %d...", coroutine->getId());
 
@@ -135,7 +72,7 @@ int Scheduler::block(const std::shared_ptr<Task>& pendingTask)
    {
       // If the coroutine is in the ready list, push it into the finished coroutine list
       DEBUG("Putting coroutine %d in the finish list", m_runningCoroutine->getId());
-      m_finishedCoroutines.push(m_runningCoroutine);
+      m_finishedCoroutines.push_back(m_runningCoroutine);
       printFinishedQueue();
 
       // Add the coroutine to the blocked list
@@ -167,7 +104,7 @@ void Scheduler::completeTask(TaskId finishedTaskId)
    BlockList::iterator resumingCoroutineIterator = m_blockedCoroutines.find(finishedTaskId);
    if(resumingCoroutineIterator != m_blockedCoroutines.end())
    {
-      Coroutine* resumingCoroutine = resumingCoroutineIterator->second;
+      auto& resumingCoroutine = resumingCoroutineIterator->second;
       DEBUG("Putting coroutine %d on resume list...", resumingCoroutine->getId());
 
       // Put the resumed coroutine onto the unstarted stack
@@ -182,12 +119,12 @@ void Scheduler::completeTask(TaskId finishedTaskId)
    {
       // Once the task has been found in the active task list,
       // remove it and then place it in the finished task list
-      m_tasksToDelete.push(finishedTaskIterator->second);
+      m_tasksToDelete.push_back(finishedTaskIterator->second);
       m_activeTasks.erase(finishedTaskIterator);
    }
 }
 
-int Scheduler::join(Coroutine* coroutine)
+int Scheduler::join(const std::shared_ptr<Coroutine>& coroutine)
 {
    DEBUG("Joining coroutine %d on coroutine %d...", m_runningCoroutine->getId(), coroutine->getId());
 
@@ -196,7 +133,7 @@ int Scheduler::join(Coroutine* coroutine)
    {
       // If the coroutine is in the ready list, push it into the finished coroutine list
       DEBUG("Putting coroutine %d in the finish list", m_runningCoroutine->getId());
-      m_finishedCoroutines.push(m_runningCoroutine);
+      m_finishedCoroutines.push_back(m_runningCoroutine);
       printFinishedQueue();
 
       // Add the coroutine to the joining list
@@ -211,11 +148,11 @@ int Scheduler::join(Coroutine* coroutine)
    return m_runningCoroutine->yield();
 }
 
-void Scheduler::coroutineDone(Coroutine* coroutine)
+void Scheduler::coroutineDone(const std::shared_ptr<Coroutine>& coroutine)
 {
    // A coroutine has completed execution,
    // so check if anyone is waiting for it to finish
-   Coroutine* resumingCoroutine = m_joiningCoroutines[coroutine];
+   auto& resumingCoroutine = m_joiningCoroutines[coroutine];
 
    if(resumingCoroutine)
    {
@@ -228,15 +165,14 @@ void Scheduler::coroutineDone(Coroutine* coroutine)
    }
 }
 
-void Scheduler::finished(Coroutine* coroutine)
+void Scheduler::finished(const std::shared_ptr<Coroutine>& coroutine)
 {
    // Check for any joins on this coroutine, then push it onto the finished
    // coroutine list
    coroutineDone(coroutine);
    DEBUG("Putting coroutine %d in the finish list", coroutine->getId());
    printFinishedQueue();
-   m_finishedCoroutines.push(coroutine);
-   m_coroutinesToDelete.push(coroutine);
+   m_finishedCoroutines.push_back(coroutine);
 }
 
 void Scheduler::runCoroutines(long timePassed)
@@ -280,23 +216,12 @@ void Scheduler::runCoroutines(long timePassed)
 
    // If there are any finished/blocked coroutines,
    // remove them from the ready coroutine list
-   while(!m_finishedCoroutines.empty())
+   for(auto& coroutine : m_finishedCoroutines)
    {
-      Coroutine* coroutine = m_finishedCoroutines.front();
       DEBUG("Removing coroutine %d from ready list...", coroutine->getId());
-
       m_readyCoroutines.erase(coroutine);
-      m_finishedCoroutines.pop();
    }
-
-   // If there are any coroutines that are done and need deleting, delete them
-   while(!m_coroutinesToDelete.empty())
-   {
-      Coroutine* coroutine = m_coroutinesToDelete.front();
-      DEBUG("Deleting coroutine %d", coroutine->getId());
-      delete coroutine;
-      m_coroutinesToDelete.pop();
-   }
-
-   m_tasksToDelete = {};
+   
+   m_finishedCoroutines.clear();
+   m_tasksToDelete.clear();
 }

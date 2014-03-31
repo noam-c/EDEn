@@ -20,8 +20,6 @@
 #include "ScriptFactory.h"
 #include "ScriptUtilities.h"
 
-#include <memory>
-
 #include "LuaPlayerCharacter.h"
 #include "LuaActor.h"
 #include "LuaTileEngine.h"
@@ -314,7 +312,7 @@ int ScriptEngine::delay(lua_State* luaStack)
 
    DEBUG("Waiting %d milliseconds", millisecondsToWait);
    
-   Timer* waitTimer = new Timer(millisecondsToWait);
+   auto waitTimer = std::make_shared<Timer>(millisecondsToWait);
    scheduler->start(waitTimer);
    
    return scheduler->join(waitTimer);
@@ -362,34 +360,34 @@ int ScriptEngine::setRegion(lua_State* luaStack)
    return m_tileEngine->setRegion(regionName);
 }
 
-NPCScript* ScriptEngine::createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName)
+std::shared_ptr<NPCScript> ScriptEngine::createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName)
 {
    return ScriptFactory::createNPCCoroutine(m_luaVM, npc, regionName, mapName);
 }
 
-UsableScript* ScriptEngine::createItemScript(const Item& item) const
+std::shared_ptr<UsableScript> ScriptEngine::createItemScript(const Item& item) const
 {
    return ScriptFactory::getItemScript(m_luaVM, item);
 }
 
-UsableScript* ScriptEngine::createSkillScript(const Skill& skill) const
+std::shared_ptr<UsableScript> ScriptEngine::createSkillScript(const Skill& skill) const
 {
    return ScriptFactory::getSkillScript(m_luaVM, skill);
 }
 
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)
 {
-   Script* mapScript = ScriptFactory::getMapScript(m_luaVM, regionName, mapName);
+   auto mapScript = ScriptFactory::getMapScript(m_luaVM, regionName, mapName);
    return runScript(mapScript, scheduler);
 }
 
 int ScriptEngine::runChapterScript(const std::string& chapterName, Scheduler& scheduler)
 {
-   Script* chapterScript = ScriptFactory::getChapterScript(m_luaVM, chapterName);
+   auto chapterScript = ScriptFactory::getChapterScript(m_luaVM, chapterName);
    return runScript(chapterScript, scheduler);
 }
 
-int ScriptEngine::runScript(Script* script, Scheduler& scheduler)
+int ScriptEngine::runScript(const std::shared_ptr<Script>& script, Scheduler& scheduler)
 {
    scheduler.start(script);
 
@@ -404,7 +402,7 @@ int ScriptEngine::runScript(Script* script, Scheduler& scheduler)
 int ScriptEngine::runScriptString(const std::string& scriptString)
 {
    DEBUG("Running script string: %s", scriptString.c_str());
-   StringScript* newScript = new StringScript(m_luaVM, scriptString);
+   auto newScript = std::make_shared<StringScript>(m_luaVM, scriptString);
 
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
    scheduler->start(newScript);

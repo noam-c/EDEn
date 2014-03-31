@@ -20,6 +20,7 @@ Music::Music(ResourceKey name) :
 
 Music::~Music()
 {
+   DEBUG("Deleting song: %s", getResourceName().c_str());
 }
 
 void Music::load(const std::string& path)

@@ -12,18 +12,17 @@
 
 const int debugFlag = DEBUG_AUDIO;
 
-std::map<int, std::shared_ptr<Sound>> Sound::playingList;
+std::map<int, std::weak_ptr<Sound>> Sound::playingList;
 
 void Sound::channelFinished(int channel)
 {
    DEBUG("Channel %d finished playing.", channel);
-   std::shared_ptr<Sound> finishedSound = Sound::playingList[channel];
-
+   auto finishedSound = Sound::playingList[channel].lock();
    if(finishedSound)
    {
       finishedSound->finished();
    }
-   
+
    Sound::playingList[channel].reset();
 }
 
@@ -76,9 +75,13 @@ void Sound::play(const std::shared_ptr<Task>& task)
 
 void Sound::stop()
 {
-   if(m_playingChannel >= 0 && this == Sound::playingList[m_playingChannel].get())
+   if(m_playingChannel >= 0)
    {
-      Mix_HaltChannel(m_playingChannel);
+      auto soundInChannel = Sound::playingList[m_playingChannel].lock();
+      if(soundInChannel && this == soundInChannel.get())
+      {
+         Mix_HaltChannel(m_playingChannel);
+      }
    }
 }
 

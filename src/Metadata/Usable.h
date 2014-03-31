@@ -7,6 +7,7 @@
 #ifndef USABLE_H
 #define USABLE_H
 
+#include <memory>
 #include <string>
 #include "UsableId.h"
 
@@ -46,12 +47,12 @@ class Usable
    const std::string m_iconPath;
 
    /** The script that dictates what the usable does when used. */
-   UsableScript* m_usableScript;
+   std::shared_ptr<UsableScript> m_usableScript;
 
    void loadScript(ScriptEngine& scriptEngine);
 
    protected:
-      virtual UsableScript* createScript(ScriptEngine& scriptEngine);
+      virtual std::shared_ptr<UsableScript> createScript(ScriptEngine& scriptEngine);
 
    public:
       /**

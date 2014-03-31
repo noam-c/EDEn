@@ -16,7 +16,7 @@ class Skill : public Usable
    unsigned int m_masteryThreshold;
 
    protected:
-      UsableScript* createScript(ScriptEngine& scriptEngine);
+      std::shared_ptr<UsableScript> createScript(ScriptEngine& scriptEngine);
 
    public:
       /**

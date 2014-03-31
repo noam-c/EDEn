@@ -17,7 +17,7 @@ Skill::Skill(Json::Value& skillNode) :
 {
 }
 
-UsableScript* Skill::createScript(ScriptEngine& scriptEngine)
+std::shared_ptr<UsableScript> Skill::createScript(ScriptEngine& scriptEngine)
 {
    return scriptEngine.createSkillScript(*this);
 }
