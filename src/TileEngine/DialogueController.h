@@ -93,6 +93,9 @@ class DialogueController
 
       /** A queue of upcoming close script brackets ('>' characters) */
       std::queue<int> m_closeScriptBrackets;
+      
+      /** The task ID waiting on this particular line of dialogue */
+      std::shared_ptr<Task> task;
 
       public:
          /** The type of line (how it should be displayed) */
@@ -100,9 +103,6 @@ class DialogueController
    
          /** The dialogue itself. */
          std::string dialogue;
-
-         /** The task ID waiting on this particular line of dialogue */
-         std::shared_ptr<Task> task;
    
          /**
           *  Constructor. Initializes values and indexes the locations of
@@ -110,6 +110,8 @@ class DialogueController
           */
          Line(LineType type, const std::string& dialogue, const std::shared_ptr<Task>& task);
 
+         ~Line();
+      
          /**
           *  Gets the next embdedded script bracket pair.
           *
@@ -126,7 +128,7 @@ class DialogueController
    };
 
    /** The queue to hold all the pending dialogue sequences. */
-   std::queue<Line*> m_lineQueue;
+   std::queue<std::unique_ptr<Line>> m_lineQueue;
 
    /** The script engine to call when embedded instructions are found */
    ScriptEngine& m_scriptEngine;
@@ -156,9 +158,6 @@ class DialogueController
     */
    bool m_fastMode;
 
-   /** The current line of dialogue */
-   Line* m_currLine;
-
    /**
     * Initialize the main dialogue box.
     */
@@ -175,12 +174,9 @@ class DialogueController
    void advanceDialogue();
 
    /**
-    * Set the current line to be a narration or speech;
-    * alter the dialogue box accordingly.
-    *
-    * @param type The type of line that will be shown.
+    * Update the dialogue box to reflect the current line of dialogue.
     */
-   void setDialogue(LineType type);
+   void updateDialogueBox();
 
    /**
     * Enqueue a line of speech in the dialogue box.
