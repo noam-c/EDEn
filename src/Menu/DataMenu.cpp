@@ -22,7 +22,6 @@ const int debugFlag = DEBUG_MENU;
 
 DataMenu::DataMenu(GameContext& gameContext) :
    MenuState(gameContext, "DataMenu"),
-   m_bindings(this),
    m_dataViewModel(*this)
 {
    initialize();
@@ -30,7 +29,6 @@ DataMenu::DataMenu(GameContext& gameContext) :
 
 DataMenu::DataMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "DataMenu", menuShell),
-   m_bindings(this),
    m_dataViewModel(*this)
 {
    initialize();
@@ -41,14 +39,14 @@ void DataMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/datapane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "saveGameGrid", "click", &DataMenu::saveGameClicked);
+      m_bindings.bindAction(m_paneDocument, "saveGameGrid", "click", [this](Rocket::Core::Event* event) { saveGameClicked(event); });
    }
 
    m_confirmSaveDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/dataconfirmsave.rml");
    if(m_confirmSaveDocument != nullptr)
    {
-      m_bindings.bindAction(m_confirmSaveDocument, "confirm", "click", &DataMenu::confirmClicked);
-      m_bindings.bindAction(m_confirmSaveDocument, "cancel", "click", &DataMenu::cancelClicked);
+      m_bindings.bindAction(m_confirmSaveDocument, "confirm", "click", [this](Rocket::Core::Event* event) { confirmClicked(event); });
+      m_bindings.bindAction(m_confirmSaveDocument, "cancel", "click", [this](Rocket::Core::Event* event) { cancelClicked(event); });
    }
 
    m_slotToSave = -1;
@@ -145,20 +143,9 @@ void DataMenu::saveToSlot(int slotIndex)
    m_dataViewModel.refresh(slotIndex);
 }
 
-void DataMenu::clearSaveGameList()
-{
-   std::vector<std::pair<std::string, PlayerDataSummary*> >::iterator iter;
-   for(iter = m_saveGames.begin(); iter != m_saveGames.end(); ++iter)
-   {
-      delete iter->second;
-   }
-   
-   m_saveGames.clear();
-}
-
 void DataMenu::refreshSaveGames()
 {
-   clearSaveGameList();
+   m_saveGames.clear();
    
    struct dirent *entry;
    DIR *dp;
@@ -175,13 +162,13 @@ void DataMenu::refreshSaveGames()
       std::string filename(entry->d_name);
       if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".edd")
       {
-         PlayerDataSummary* saveGameData = new PlayerDataSummary(getMetadata());
+         auto saveGameData = std::unique_ptr<PlayerDataSummary>(new PlayerDataSummary(getMetadata()));
          
          /** \todo Extract HARDCODED path into a constant. */
          std::string path = "data/savegames/" + filename;
          saveGameData->load(path);
          
-         m_saveGames.push_back(std::make_pair(path, saveGameData));
+         m_saveGames.push_back(std::make_pair(path, std::move(saveGameData)));
       }
    }
    

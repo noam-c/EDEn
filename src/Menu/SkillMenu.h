@@ -34,7 +34,7 @@ class Sound;
 class SkillMenu: public CharacterDependentMenu
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<SkillMenu> m_bindings;
+   EdenRocketBindings m_bindings;
    
    Character* m_selectedCharacter;
 

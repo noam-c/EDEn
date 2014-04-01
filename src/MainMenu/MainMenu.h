@@ -34,7 +34,7 @@ class Sound;
 class MainMenu: public GameState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<MainMenu> m_bindings;
+   EdenRocketBindings m_bindings;
 
    /** The coroutine scheduler for the main menu's GUI scripts */
    Scheduler* m_scheduler;

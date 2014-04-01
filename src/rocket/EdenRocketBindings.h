@@ -8,6 +8,8 @@
 #define EDEN_ROCKET_BINDINGS_H
 
 #include "RocketListener.h"
+#include <functional>
+#include <memory>
 #include <vector>
 
 /**
@@ -19,38 +21,22 @@
  *
  * @author Noam Chitayat
  */
-template<typename T> class EdenRocketBindings
+class EdenRocketBindings
 {
-   /** The view model instance containing the event handler functions to call. */
-   T* m_instance;
-
    /** The listeners created by the view model. */
-   std::vector<RocketListener<T>* > m_listeners;
-
-   /**
-    * Private default constructor.
-    */
-   EdenRocketBindings() {};
+   std::vector<std::unique_ptr<RocketListener>> m_listeners;
 
    public:
       /**
        * Constructor.
-       *
-       * @param instance The view model that is constructing and
-       *                 managing this EdenRocketBindings instance.
        */
-      EdenRocketBindings(T* instance) : m_instance(instance) {}
+      EdenRocketBindings() {}
 
       /**
        * Destructor.
        */
       ~EdenRocketBindings()
       {
-         typename std::vector<RocketListener<T>* >::iterator iter;
-         for(iter = m_listeners.begin(); iter != m_listeners.end(); ++iter)
-         {
-            delete *iter;
-         }
       }
 
       /**
@@ -64,12 +50,12 @@ template<typename T> class EdenRocketBindings
        * @param capture (Optional) True iff the event should be captured during the
        *                capturing phase instead of the bubbling phase.
        */
-      void bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, void (T::*handler)(Rocket::Core::Event*), bool capture = false)
+      void bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, std::function<void(Rocket::Core::Event*)> handler, bool capture = false)
       {
          Rocket::Core::Element* element = document->GetElementById(id);
          if(element != nullptr)
          {
-            bindAction(element, eventType, handler);
+            bindAction(element, eventType, handler, capture);
          }
       }
 
@@ -82,10 +68,9 @@ template<typename T> class EdenRocketBindings
        * @param capture (Optional) True iff the event should be captured during the
        *                capturing phase instead of the bubbling phase.
        */
-      void bindAction(Rocket::Core::Element* element, const char* eventType, void (T::*handler)(Rocket::Core::Event*), bool capture = false)
+      void bindAction(Rocket::Core::Element* element, const char* eventType, std::function<void(Rocket::Core::Event*)> handler, bool capture = false)
       {
-         RocketListener<T>* listener = new RocketListener<T>(element, eventType, capture, std::bind1st(std::mem_fun(handler), m_instance));
-         m_listeners.push_back(listener);
+         m_listeners.emplace_back(new RocketListener(element, eventType, capture, handler));
       }
 };
 

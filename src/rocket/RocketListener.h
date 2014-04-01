@@ -4,16 +4,15 @@
 #include <Rocket/Core.h>
 #include <functional>
 
-template<typename Handler> class RocketListener : public Rocket::Core::EventListener
+class RocketListener : public Rocket::Core::EventListener
 {
    Rocket::Core::Element* m_element;
    Rocket::Core::String m_eventType;
    bool m_capture;
-   typedef std::binder1st<std::mem_fun1_t<void, Handler, Rocket::Core::Event*> > ProcessFunctionType;
-   ProcessFunctionType m_processFunction;
+   std::function<void(Rocket::Core::Event*)> m_processFunction;
 
    public:
-      RocketListener(Rocket::Core::Element* element, Rocket::Core::String eventType, bool capture, ProcessFunctionType processFunction)
+      RocketListener(Rocket::Core::Element* element, Rocket::Core::String eventType, bool capture, std::function<void(Rocket::Core::Event*)> processFunction)
          : m_element(element), m_eventType(eventType), m_capture(capture), m_processFunction(processFunction)
       {
          m_element->AddEventListener(eventType, this, capture);

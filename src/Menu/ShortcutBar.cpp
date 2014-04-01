@@ -20,7 +20,6 @@
 const int debugFlag = DEBUG_MENU;
 
 ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType, Rocket::Core::Context& rocketContext) :
-   m_bindings(this),
    m_rocketContext(rocketContext),
    m_metadata(metadata),
    m_playerData(playerData),
@@ -35,8 +34,8 @@ ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, con
       m_shortcutContainer = m_shortcutBarDocument->GetElementById("shortcutContainer");
       if (m_shortcutContainer != nullptr)
       {
-         m_bindings.bindAction(m_shortcutContainer, "dragdrop", &ShortcutBar::usableDropped);
-         m_bindings.bindAction(m_shortcutContainer, "click", &ShortcutBar::shortcutClicked);
+         m_bindings.bindAction(m_shortcutContainer, "dragdrop", [this](Rocket::Core::Event* event) { usableDropped(event); });
+         m_bindings.bindAction(m_shortcutContainer, "click", [this](Rocket::Core::Event* event) { shortcutClicked(event); });
       }
 
       refresh();

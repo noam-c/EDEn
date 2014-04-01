@@ -23,7 +23,6 @@ const int debugFlag = DEBUG_MENU;
 
 SkillMenu::SkillMenu(GameContext& gameContext) :
    CharacterDependentMenu(gameContext, "SkillMenu"),
-   m_bindings(this),
    m_selectedCharacter(nullptr),
    m_skillViewModel(*this, getMetadata())
 {
@@ -32,7 +31,6 @@ SkillMenu::SkillMenu(GameContext& gameContext) :
 
 SkillMenu::SkillMenu(GameContext& gameContext, MenuShell* menuShell) :
    CharacterDependentMenu(gameContext, "SkillMenu", menuShell),
-   m_bindings(this),
    m_skillViewModel(*this, getMetadata())
 {
    initialize();
@@ -43,8 +41,8 @@ void SkillMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/skillpane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "skillGrid", "click", &SkillMenu::skillClicked);
-      m_bindings.bindAction(m_paneDocument, "skillGrid", "dragstart", &SkillMenu::dragStarted);
+      m_bindings.bindAction(m_paneDocument, "skillGrid", "click", [this](Rocket::Core::Event* event) { skillClicked(event); });
+      m_bindings.bindAction(m_paneDocument, "skillGrid", "dragstart", [this](Rocket::Core::Event* event) { dragStarted(event); });
    }
 }
 

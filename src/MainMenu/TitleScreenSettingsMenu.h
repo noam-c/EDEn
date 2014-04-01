@@ -33,7 +33,7 @@ class Scheduler;
 class TitleScreenSettingsMenu: public GameState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<TitleScreenSettingsMenu> m_bindings;
+   EdenRocketBindings m_bindings;
 
    /** The coroutine scheduler for the main menu's GUI scripts */
    Scheduler* m_scheduler;

@@ -21,7 +21,6 @@ const int debugFlag = DEBUG_MENU;
 
 ItemMenu::ItemMenu(GameContext& gameContext) :
    MenuState(gameContext, "ItemMenu"),
-   m_bindings(this),
    m_itemViewModel(getMetadata(), getCurrentPlayerData())
 {
    initialize();
@@ -29,7 +28,6 @@ ItemMenu::ItemMenu(GameContext& gameContext) :
 
 ItemMenu::ItemMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "ItemMenu", menuShell),
-   m_bindings(this),
    m_itemViewModel(getMetadata(), getCurrentPlayerData())
 {
    initialize();
@@ -40,8 +38,8 @@ void ItemMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/itempane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "itemGrid", "click", &ItemMenu::itemClicked);
-      m_bindings.bindAction(m_paneDocument, "itemGrid", "dragstart", &ItemMenu::dragStarted);
+      m_bindings.bindAction(m_paneDocument, "itemGrid", "click", [this](Rocket::Core::Event* event) { itemClicked(event); });
+      m_bindings.bindAction(m_paneDocument, "itemGrid", "dragstart", [this](Rocket::Core::Event* event) { dragStarted(event); });
    }
 }
 

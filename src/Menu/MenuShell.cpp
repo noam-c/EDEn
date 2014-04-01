@@ -17,7 +17,6 @@ const int debugFlag = DEBUG_MENU;
 MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
    m_rocketContext(rocketContext),
    m_shortcutBar(nullptr),
-   m_bindings(this),
    m_currentState(nullptr)
 {
    m_scheduler = new Scheduler();
@@ -37,7 +36,7 @@ MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
    {
       m_shellDocument->Show();
       m_sidebarElement = m_shellDocument->GetElementById("sidebar");
-      m_bindings.bindAction(m_sidebarElement, "click", &MenuShell::sidebarClicked);
+      m_bindings.bindAction(m_sidebarElement, "click", [this](Rocket::Core::Event* event) { sidebarClicked(event); });
    }
 }
 

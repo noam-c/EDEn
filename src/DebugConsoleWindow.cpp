@@ -13,7 +13,6 @@
 const int debugFlag = DEBUG_ROCKET;
 
 DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
-   m_bindings(this),
    m_context(context)
 {
    m_context.AddReference();
@@ -30,7 +29,7 @@ DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
       m_commandElement = dynamic_cast<Rocket::Controls::ElementFormControlInput*>(m_consoleDocument->GetElementById("commandPrompt"));
       if(m_commandElement != nullptr)
       {
-         m_bindings.bindAction(m_commandElement, "keydown", &DebugConsoleWindow::onKeyPress);
+         m_bindings.bindAction(m_commandElement, "keydown", [this](Rocket::Core::Event* event) { onKeyPress(event); });
       }
       else
       {

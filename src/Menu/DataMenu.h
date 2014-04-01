@@ -11,6 +11,8 @@
 #include "EdenRocketBindings.h"
 #include "DataViewModel.h"
 
+#include <memory>
+
 namespace Rocket
 {
    namespace Core
@@ -22,7 +24,7 @@ namespace Rocket
 };
 
 class Sound;
-typedef std::vector<std::pair<std::string, PlayerDataSummary*> > SaveGameList;
+typedef std::vector<std::pair<std::string, std::unique_ptr<PlayerDataSummary>> > SaveGameList;
 
 /**
  * The home menu is the first menu state of the menu.
@@ -34,7 +36,7 @@ typedef std::vector<std::pair<std::string, PlayerDataSummary*> > SaveGameList;
 class DataMenu: public MenuState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<DataMenu> m_bindings;
+   EdenRocketBindings m_bindings;
 
    /** The list of savegame files and their respective data. */
    SaveGameList m_saveGames;
@@ -83,13 +85,6 @@ class DataMenu: public MenuState
     * @param event The Rocket GUI event that indicates which slot was clicked.
     */
    void saveGameClicked(Rocket::Core::Event* event);
-   
-   
-   /**
-    * Clears the list of savegames.
-    * Used during destruction or refresh.
-    */
-   void clearSaveGameList();
    
    /**
     * Refreshes the list of save games.

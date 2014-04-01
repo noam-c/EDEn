@@ -31,7 +31,7 @@ class ScriptEngine;
 class ShortcutBar
 {
    /** The event binding collection for the debug window */
-   EdenRocketBindings<ShortcutBar> m_bindings;
+   EdenRocketBindings m_bindings;
 
    /** The Rocket context that holds this console window */
    Rocket::Core::Context& m_rocketContext;

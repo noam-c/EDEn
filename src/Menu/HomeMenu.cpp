@@ -28,7 +28,6 @@ const int debugFlag = DEBUG_MENU;
 
 HomeMenu::HomeMenu(GameContext& gameContext) :
    MenuState(gameContext, "HomeMenu"),
-   m_bindings(this),
    m_homeViewModel(getCurrentPlayerData()),
    m_selectedDestinationMenu(-1)
 {
@@ -37,7 +36,6 @@ HomeMenu::HomeMenu(GameContext& gameContext) :
 
 HomeMenu::HomeMenu(GameContext& gameContext, MenuShell* menuShell) :
    MenuState(gameContext, "HomeMenu", menuShell),
-   m_bindings(this),
    m_homeViewModel(getCurrentPlayerData()),
    m_selectedDestinationMenu(-1)
 {
@@ -53,7 +51,7 @@ void HomeMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "characterGrid", "click", &HomeMenu::characterClicked);
+      m_bindings.bindAction(m_paneDocument, "characterGrid", "click", [this](Rocket::Core::Event* event) { characterClicked(event); });
    }
 
    m_sidebarOptions.push_back("Items");

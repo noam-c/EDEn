@@ -29,8 +29,7 @@ enum MainMenuActions
 };
 
 MainMenu::MainMenu(GameContext& gameContext) :
-   GameState(gameContext, GameState::TITLE, "MainMenu"),
-   m_bindings(this)
+   GameState(gameContext, GameState::TITLE, "MainMenu")
 {
    m_scheduler = new Scheduler();
 
@@ -44,14 +43,14 @@ MainMenu::MainMenu(GameContext& gameContext) :
    if(m_titleDocument != nullptr)
    {
       m_titleDocument->Show();
-      m_bindings.bindAction(m_titleDocument, "newGameAction", "click", &MainMenu::NewGameAction);
-      m_bindings.bindAction(m_titleDocument, "menuPrototypeAction", "click", &MainMenu::MenuPrototypeAction);
-      m_bindings.bindAction(m_titleDocument, "loadGameAction", "click", &MainMenu::LoadGameAction);
-      m_bindings.bindAction(m_titleDocument, "optionsAction", "click", &MainMenu::OptionsAction);
-      m_bindings.bindAction(m_titleDocument, "aboutAction", "click", &MainMenu::AboutAction);
-      m_bindings.bindAction(m_titleDocument, "quitGameAction", "click", &MainMenu::QuitAction);
+      m_bindings.bindAction(m_titleDocument, "newGameAction", "click", [this](Rocket::Core::Event* event) { NewGameAction(event); });
+      m_bindings.bindAction(m_titleDocument, "menuPrototypeAction", "click", [this](Rocket::Core::Event* event) { MenuPrototypeAction(event); });
+      m_bindings.bindAction(m_titleDocument, "loadGameAction", "click", [this](Rocket::Core::Event* event) { LoadGameAction(event); });
+      m_bindings.bindAction(m_titleDocument, "optionsAction", "click", [this](Rocket::Core::Event* event) { OptionsAction(event); });
+      m_bindings.bindAction(m_titleDocument, "aboutAction", "click", [this](Rocket::Core::Event* event) { AboutAction(event); });
+      m_bindings.bindAction(m_titleDocument, "quitGameAction", "click", [this](Rocket::Core::Event* event) { QuitAction(event); });
 
-      m_bindings.bindAction(m_titleDocument, "keydown", &MainMenu::listKeyDown);
+      m_bindings.bindAction(m_titleDocument, "keydown", [this](Rocket::Core::Event* event) { listKeyDown(event); });
    }
 }
 

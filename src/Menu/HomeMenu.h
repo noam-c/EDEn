@@ -36,7 +36,7 @@ class Sound;
 class HomeMenu: public MenuState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<HomeMenu> m_bindings;
+   EdenRocketBindings m_bindings;
 
    /** The view model */
    HomeViewModel m_homeViewModel;

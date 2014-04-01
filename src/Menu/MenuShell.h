@@ -63,7 +63,7 @@ class MenuShell
    const ShortcutBar* m_shortcutBar;
 
    /** The event binding collection for the sidebar */
-   EdenRocketBindings<MenuShell> m_bindings;
+   EdenRocketBindings m_bindings;
 
    /** The currently active menu state */
    MenuState* m_currentState;

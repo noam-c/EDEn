@@ -33,7 +33,7 @@ class Sound;
 class ItemMenu: public MenuState
 {
    /** The event binding collection for this GUI */
-   EdenRocketBindings<ItemMenu> m_bindings;
+   EdenRocketBindings m_bindings;
 
    /** The view model that exposes the inventory to the GUI */
    ItemViewModel m_itemViewModel;

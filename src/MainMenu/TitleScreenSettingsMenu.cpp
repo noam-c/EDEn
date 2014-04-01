@@ -19,8 +19,7 @@
 const int debugFlag = DEBUG_SETTINGS | DEBUG_TITLE;
 
 TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
-   GameState(gameContext, GameState::TITLE, "TitleScreenSettingsMenu"),
-   m_bindings(this)
+   GameState(gameContext, GameState::TITLE, "TitleScreenSettingsMenu")
 {
    m_scheduler = new Scheduler();
 
@@ -35,16 +34,16 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
          m_musicEnabledCheckbox = optionsForm->GetElementById("musicEnabled");
          if(m_musicEnabledCheckbox != nullptr)
          {
-            m_bindings.bindAction(m_musicEnabledCheckbox, "change", &TitleScreenSettingsMenu::onMusicEnabledChange);
+            m_bindings.bindAction(m_musicEnabledCheckbox, "change", [this](Rocket::Core::Event* event) { onMusicEnabledChange(event); });
          }
          
          m_soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
          if(m_soundEnabledCheckbox != nullptr)
          {
-            m_bindings.bindAction(m_soundEnabledCheckbox, "change", &TitleScreenSettingsMenu::onSoundEnabledChange);
+            m_bindings.bindAction(m_soundEnabledCheckbox, "change", [this](Rocket::Core::Event* event) { onSoundEnabledChange(event); });
          }
          
-         m_bindings.bindAction(optionsForm, "submit", &TitleScreenSettingsMenu::onSubmit);
+         m_bindings.bindAction(optionsForm, "submit", [this](Rocket::Core::Event* event) { onSubmit(event); });
 
          loadSettings();
       }

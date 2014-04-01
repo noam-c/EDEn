@@ -28,7 +28,7 @@ void DataViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   PlayerDataSummary* saveGameData = m_dataMenu.getSaveGames()[row_index].second;
+   const auto& saveGameData = m_dataMenu.getSaveGames()[row_index].second;
    const std::vector<Character*> characters = saveGameData->getRoster()->getParty();
 
    if (table == "saveGames")
