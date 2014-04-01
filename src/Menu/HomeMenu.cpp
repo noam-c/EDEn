@@ -34,7 +34,7 @@ HomeMenu::HomeMenu(GameContext& gameContext) :
    initialize();
 }
 
-HomeMenu::HomeMenu(GameContext& gameContext, MenuShell* menuShell) :
+HomeMenu::HomeMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell) :
    MenuState(gameContext, "HomeMenu", menuShell),
    m_homeViewModel(getCurrentPlayerData()),
    m_selectedDestinationMenu(-1)
@@ -106,7 +106,7 @@ void HomeMenu::sidebarClicked(int optionIndex)
    }
 }
 
-void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, MenuShell* menuShell)
+void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, std::shared_ptr<MenuShell> menuShell)
 {
    CharacterDependentMenu* newState = nullptr;
    switch(optionIndex)
@@ -126,7 +126,7 @@ void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, M
    }
 }
 
-void HomeMenu::pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShell)
+void HomeMenu::pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<MenuShell> menuShell)
 {
    MenuState* newState = nullptr;
    switch(optionIndex)
@@ -150,7 +150,7 @@ void HomeMenu::pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShel
    }
 }
 
-void HomeMenu::selectCharacter(int slotIndex, MenuShell* menuShell)
+void HomeMenu::selectCharacter(int slotIndex, std::shared_ptr<MenuShell> menuShell)
 {
    DEBUG("Character selected at slot %d", slotIndex);
    

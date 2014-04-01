@@ -10,6 +10,7 @@
 #include "GameState.h"
 #include "MenuShellOption.h"
 
+#include <memory>
 #include <vector>
 
 namespace Rocket
@@ -57,7 +58,7 @@ class MenuState : public GameState
 
    protected:
       /** The shell that holds the common menu controls */
-      MenuShell* m_menuShell;
+      std::shared_ptr<MenuShell> m_menuShell;
 
       ShortcutBar* m_shortcutBar;
 
@@ -110,7 +111,7 @@ class MenuState : public GameState
        * @param stateName The unique name of the state.
        * @param shell The shell for the menu.
        */
-      MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* shell);
+      MenuState(GameContext& gameContext, const std::string& stateName, std::shared_ptr<MenuShell> shell);
 
       /**
        * Destructor.

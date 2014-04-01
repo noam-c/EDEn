@@ -26,7 +26,7 @@ ItemMenu::ItemMenu(GameContext& gameContext) :
    initialize();
 }
 
-ItemMenu::ItemMenu(GameContext& gameContext, MenuShell* menuShell) :
+ItemMenu::ItemMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell) :
    MenuState(gameContext, "ItemMenu", menuShell),
    m_itemViewModel(getMetadata(), getCurrentPlayerData())
 {

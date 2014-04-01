@@ -16,16 +16,14 @@
 const int debugFlag = DEBUG_MENU;
 
 MenuState::MenuState(GameContext& gameContext, const std::string& stateName) :
-   GameState(gameContext, GameState::MENU, stateName),
-   m_internalMenuShell(true)
+   GameState(gameContext, GameState::MENU, stateName)
 {
-   m_menuShell = new MenuShell(m_rocketContext);
+   m_menuShell = std::make_shared<MenuShell>(m_rocketContext);
    m_menuShell->initializeShortcutBar(getCurrentPlayerData(), getScriptEngine(), getMetadata(), getStateType());
 }
 
-MenuState::MenuState(GameContext& gameContext, const std::string& stateName, MenuShell* menuShell) :
+MenuState::MenuState(GameContext& gameContext, const std::string& stateName, std::shared_ptr<MenuShell> menuShell) :
    GameState(gameContext, GameState::MENU, stateName, menuShell->getRocketContext()),
-   m_internalMenuShell(false),
    m_menuShell(menuShell),
    m_shortcutBar(nullptr)
 {
@@ -33,11 +31,6 @@ MenuState::MenuState(GameContext& gameContext, const std::string& stateName, Men
 
 MenuState::~MenuState()
 {
-   if(m_internalMenuShell)
-   {
-      delete m_menuShell;
-   }
-   
    if(m_paneDocument != nullptr)
    {
       m_paneDocument->Close();

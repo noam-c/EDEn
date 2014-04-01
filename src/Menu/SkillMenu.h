@@ -65,7 +65,7 @@ class SkillMenu: public CharacterDependentMenu
        * @param gameContext The context containing the current player data and execution stack.
        * @param menuShell The shell for the menu.
        */
-      SkillMenu(GameContext& gameContext, MenuShell* menuShell);
+      SkillMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell);
 
       /**
        * Destructor.

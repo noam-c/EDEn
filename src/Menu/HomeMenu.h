@@ -43,8 +43,8 @@ class HomeMenu: public MenuState
 
    int m_selectedDestinationMenu;
    
-   void pushCharacterIndependentMenu(int optionIndex, MenuShell* menuShell);
-   void pushCharacterDependentMenu(int optionIndex, int characterIndex, MenuShell* menuShell);
+   void pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<MenuShell> menuShell);
+   void pushCharacterDependentMenu(int optionIndex, int characterIndex, std::shared_ptr<MenuShell> menuShell);
    
    /**
     * Initializes the home menu pane and populates the sidebar.
@@ -62,7 +62,7 @@ class HomeMenu: public MenuState
     * @param slotIndex The character slot that was selected.
     * @param menuShell The menu shell shared between the menus.
     */
-   void selectCharacter(int slotIndex, MenuShell* menuShell);
+   void selectCharacter(int slotIndex, std::shared_ptr<MenuShell> menuShell);
 
    public:
       /**
@@ -78,7 +78,7 @@ class HomeMenu: public MenuState
        * @param gameContext The context containing the current player data and execution stack.
        * @param menuShell The shell for the menu
        */
-      HomeMenu(GameContext& gameContext, MenuShell* menuShell);
+      HomeMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell);
 
       /**
        * Destructor.

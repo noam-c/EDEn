@@ -27,7 +27,7 @@ DataMenu::DataMenu(GameContext& gameContext) :
    initialize();
 }
 
-DataMenu::DataMenu(GameContext& gameContext, MenuShell* menuShell) :
+DataMenu::DataMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell) :
    MenuState(gameContext, "DataMenu", menuShell),
    m_dataViewModel(*this)
 {

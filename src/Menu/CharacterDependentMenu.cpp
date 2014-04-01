@@ -7,7 +7,7 @@ CharacterDependentMenu::CharacterDependentMenu(GameContext& gameContext, const s
 {
 }
 
-CharacterDependentMenu::CharacterDependentMenu(GameContext& gameContext, const std::string& stateName, MenuShell* menuShell) :
+CharacterDependentMenu::CharacterDependentMenu(GameContext& gameContext, const std::string& stateName, std::shared_ptr<MenuShell> menuShell) :
    MenuState(gameContext, stateName, menuShell)
 {
 }
