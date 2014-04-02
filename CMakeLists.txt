@@ -177,6 +177,7 @@ SET(SOURCES
   src/PlayerData/Messages/RosterUpdateMessage.cpp
   src/ResourceLoader/Resource.cpp
   src/ResourceLoader/ResourceLoader.cpp
+  src/rocket/EdenRocketBindings.cpp
   src/rocket/EdenRocketRenderInterface.cpp
   src/rocket/EdenRocketSystemInterface.cpp
   src/rocket/RocketScriptHandler.cpp
