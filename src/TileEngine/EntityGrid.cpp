@@ -36,7 +36,6 @@ const float EntityGrid::INFINITY = std::numeric_limits<float>::infinity();
 EntityGrid::EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe) :
    m_tileEngine(tileEngine),
    m_messagePipe(messagePipe),
-   m_map(nullptr),
    m_collisionMap(nullptr)
 {
    messagePipe.registerListener(this);
@@ -56,17 +55,30 @@ shapes::Rectangle EntityGrid::getCollisionMapEdges(const shapes::Rectangle& area
    return shapes::Rectangle(collisionMapTopLeft / MOVEMENT_TILE_SIZE, collisionMapBottomRight / MOVEMENT_TILE_SIZE);
 }
 
-const Map* EntityGrid::getMapData() const
+const shapes::Point2D& EntityGrid::getMapEntrance(const std::string& exitedMapName) const
 {
-   return m_map;
+   std::shared_ptr<const Map> map(m_map.lock());
+   if(!map)
+   {
+      T_T("Requested map entry point when map does not exist.");
+   }
+   
+   return map->getMapEntrance(exitedMapName);
 }
 
-void EntityGrid::setMapData(const Map* map)
+bool EntityGrid::hasMapData() const
+{
+   return !m_map.expired();
+}
+
+void EntityGrid::setMapData(std::weak_ptr<const Map> mapData)
 {
    DEBUG("Resetting entity grid...");
    clearMap();
-   m_map = map;
-   if(m_map == nullptr) return;
+   m_map = mapData;
+
+   std::shared_ptr<const Map> map(m_map.lock());
+   if(!map) return;
 
    const int collisionTileRatio = TileEngine::TILE_SIZE / MOVEMENT_TILE_SIZE;
    m_collisionMapBounds = shapes::Rectangle(shapes::Point2D::ORIGIN, map->getBounds().getSize() * collisionTileRatio);
@@ -93,22 +105,24 @@ void EntityGrid::setMapData(const Map* map)
 
 const std::string& EntityGrid::getMapName() const
 {
-   if(!m_map)
+   std::shared_ptr<const Map> map(m_map.lock());
+   if(!map)
    {
       T_T("Requested map name when map does not exist.");
    }
    
-   return m_map->getName();
+   return map->getName();
 }
 
 const shapes::Rectangle& EntityGrid::getMapBounds() const
 {
-   if(!m_map)
+   std::shared_ptr<const Map> map(m_map.lock());
+   if(!map)
    {
       T_T("Requested map bounds when map does not exist.");
    }
 
-   return m_map->getBounds();
+   return map->getBounds();
 }
 
 bool EntityGrid::withinMap(const shapes::Point2D& point) const
@@ -119,7 +133,11 @@ bool EntityGrid::withinMap(const shapes::Point2D& point) const
 
 void EntityGrid::step(long timePassed)
 {
-   if(m_map) m_map->step(timePassed);
+   std::shared_ptr<const Map> map(m_map.lock());
+   if(map)
+   {
+      map->step(timePassed);
+   }
 }
 
 EntityGrid::Path EntityGrid::findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst)
@@ -425,7 +443,11 @@ void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
 
 void EntityGrid::drawBackground(int y) const
 {
-   if(m_map == nullptr) return;
+   std::shared_ptr<const Map> map(m_map.lock());
+   if(!map)
+   {
+      return;
+   }
 
    if(DRAW_ENTITY_GRID)
    {
@@ -477,18 +499,28 @@ void EntityGrid::drawBackground(int y) const
    }
    else
    {
-      m_map->drawBackground(y);
+      map->drawBackground(y);
    }
 }
 
 void EntityGrid::drawForeground(int y) const
 {
-   m_map->drawForeground(y);
+   std::shared_ptr<const Map> map(m_map.lock());
+   if(map)
+   {
+      map->drawForeground(y);
+   }
 }
 
 void EntityGrid::receive(const ActorMoveMessage& message)
 {
-   const std::vector<MapExit>& mapExits = m_map->getMapExits();
+   std::shared_ptr<const Map> map(m_map.lock());
+   if(!map)
+   {
+      return;
+   }
+
+   const std::vector<MapExit>& mapExits = map->getMapExits();
    for(std::vector<MapExit>::const_iterator iter = mapExits.begin(); iter != mapExits.end(); ++iter)
    {
       if(message.movingActor == m_tileEngine.getPlayerCharacter()
@@ -500,7 +532,7 @@ void EntityGrid::receive(const ActorMoveMessage& message)
       }
    }
 
-   const std::vector<TriggerZone>& triggerZones = m_map->getTriggerZones();
+   const std::vector<TriggerZone>& triggerZones = map->getTriggerZones();
    for(std::vector<TriggerZone>::const_iterator iter = triggerZones.begin(); iter != triggerZones.end(); ++iter)
    {
       if(!iter->getBounds().contains(message.oldLocation)

@@ -11,6 +11,7 @@
 #include "FrameSequence.h"
 #include "Size.h"
 #include <map>
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -54,7 +55,7 @@ class Spritesheet : public Resource
    static const std::string UNTITLED_LINE;
 
    /** The spritesheet texture */
-   Texture* m_texture;
+   std::unique_ptr<Texture> m_texture;
 
    /** Spritesheet size (in pixels) */
    shapes::Size m_size;
@@ -72,7 +73,7 @@ class Spritesheet : public Resource
    int m_numAnimations;
 
    /** The mapping of animation names to their frame lists. */
-   std::map<std::string, const FrameSequence*> m_animationList;
+   std::map<std::string, std::unique_ptr<const FrameSequence>> m_animationList;
 
    /**
     * Loads the spritesheet image into an OpenGL texture, and loads the
@@ -134,7 +135,7 @@ class Spritesheet : public Resource
        * @return An animation structure that can outputs a frame index for the
        *         amount of time that has passed.
        */
-      Animation* getAnimation(const std::string& animationName) const;
+      std::unique_ptr<Animation> getAnimation(const std::string& animationName) const;
 
       /**
        * Implementation of method in Resource class.

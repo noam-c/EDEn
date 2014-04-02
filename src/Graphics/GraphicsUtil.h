@@ -14,6 +14,8 @@
 #include "EdenRocketRenderInterface.h"
 #include "EdenRocketSystemInterface.h"
 
+#include <memory>
+
 class Settings;
 
 struct SDL_Window;
@@ -86,7 +88,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
     *
     * @return true iff setting the video mode was successful.
     */
-   bool initSDLVideoMode(std::string*& errorMsg);
+   bool initSDLVideoMode(std::unique_ptr<std::string>& errorMsg);
 
    /**
     * Initializes the Rocket library to render RML pages as GUI elements.
@@ -114,7 +116,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
    public:
    
       bool isVideoModeRefreshRequired() const;
-      bool refreshVideoMode(std::string*& errorMsg);
+      bool refreshVideoMode(std::unique_ptr<std::string>& errorMsg);
    
       /**
        * @return The extension manager for this graphical context.

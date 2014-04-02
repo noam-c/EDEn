@@ -28,7 +28,7 @@ class Tileset : public Resource
    std::vector<bool> m_passibility;
 
    /** The tile texture */
-   Texture* m_texture;
+   std::unique_ptr<Texture> m_texture;
 
    void load(const std::string& path);
 

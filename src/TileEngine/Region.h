@@ -8,8 +8,9 @@
 #define REGION_H
 
 #include "Resource.h"
-#include <string>
 #include <map>
+#include <memory>
+#include <string>
 
 class Map;
 
@@ -31,7 +32,7 @@ class Region : public Resource
    std::string m_name;
 
    /** The list of maps in this region, keyed by map names. */
-   std::map<std::string, Map*> m_areas;
+   std::map<std::string, std::shared_ptr<Map>> m_areas;
 
    /**
     * Loads this region from the specified directory.
@@ -57,14 +58,14 @@ class Region : public Resource
       std::string getName() const;
 
       /** @return the starting map (first map loaded) for this Region. */
-      Map* getStartingMap();
+      std::weak_ptr<Map> getStartingMap();
 
       /**
        * @param name The name of the Map to retrieve.
        *
        * @return the Map with the specified name.
        */
-      Map* getMap(const std::string& name);
+      std::weak_ptr<Map> getMap(const std::string& name);
 };
 
 #endif

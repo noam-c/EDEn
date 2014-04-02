@@ -27,11 +27,7 @@ Sprite::~Sprite()
 
 void Sprite::clearCurrentFrame()
 {
-   if(m_animation != nullptr)
-   {
-      delete m_animation;
-      m_animation = nullptr;
-   }
+   m_animation.reset();
 
    // Default to frame 0 for now.
    m_frameIndex = 0;
@@ -106,14 +102,14 @@ void Sprite::setAnimation(const std::string& animationName, MovementDirection di
 {
    if(m_animation != nullptr && animationName == m_currName && direction == m_currDirection) return;
 
-   Animation* animation;
+   std::unique_ptr<Animation> animation(nullptr);
 
    if(direction == NONE || (animation = m_sheet->getAnimation(animationName + toDirectionString(direction))) == nullptr)
    {
       animation = m_sheet->getAnimation(animationName);
    }
 
-   if(animation == nullptr)
+   if(!animation)
    {
       DEBUG("Failed to find animation.");
    }
@@ -121,7 +117,7 @@ void Sprite::setAnimation(const std::string& animationName, MovementDirection di
    clearCurrentFrame();
    m_currName = animationName;
    m_currDirection = direction;
-   m_animation = animation;
+   m_animation = std::move(animation);
 }
 
 void Sprite::step(long timePassed)

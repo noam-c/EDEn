@@ -24,10 +24,6 @@ Tileset::Tileset(ResourceKey name) :
 
 Tileset::~Tileset()
 {
-   if(m_texture != nullptr)
-   {
-      delete m_texture;
-   }
 }
 
 void Tileset::load(const std::string& path)
@@ -66,7 +62,7 @@ void Tileset::load(const std::string& path)
    std::string imagePath = imageElement->Attribute("source");
    DEBUG("Loading tileset image \"%s\"...", imagePath.c_str());
 
-   m_texture = new Texture(std::string("data/tilesets/") + imagePath);
+   m_texture.reset(new Texture(std::string("data/tilesets/") + imagePath));
    m_size = m_texture->getSize() / TileEngine::TILE_SIZE;
 
    // \todo When Tiled makes it easier, the tileset data needs to hold the default

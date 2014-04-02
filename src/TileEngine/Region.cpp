@@ -20,10 +20,6 @@ Region::Region(const ResourceKey& name) :
 
 Region::~Region()
 {
-   for(auto pair : m_areas)
-   {
-      delete (pair.second);
-   }
 }
 
 void Region::load(const std::string& path)
@@ -54,7 +50,7 @@ void Region::load(const std::string& path)
       std::string mapFile(std::string(path) + *iter);
       try
       {
-         Map* nextMap = new Map(iter->substr(0, iter->length() - 4), mapFile);
+         auto nextMap = std::make_shared<Map>(iter->substr(0, iter->length() - 4), mapFile);
          m_areas[nextMap->getName()] = nextMap;
       }
       catch(Exception& e)
@@ -69,12 +65,12 @@ std::string Region::getName() const
    return m_name;
 }
 
-Map* Region::getStartingMap()
+std::weak_ptr<Map> Region::getStartingMap()
 {
    return m_areas.begin()->second;
 }
 
-Map* Region::getMap(const std::string& name)
+std::weak_ptr<Map> Region::getMap(const std::string& name)
 {
    return m_areas[name];
 }

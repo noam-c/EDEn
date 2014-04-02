@@ -114,16 +114,14 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
       bool settingsUpdateSuccess = true;
       if(GraphicsUtil::getInstance()->isVideoModeRefreshRequired())
       {
-         std::string* errorMsg = nullptr;
+         std::unique_ptr<std::string> errorMsg(nullptr);
          settingsUpdateSuccess = GraphicsUtil::getInstance()->refreshVideoMode(errorMsg);
          if(!settingsUpdateSuccess)
          {
             DEBUG("Failed to refresh video mode:");
-            if(errorMsg != nullptr)
+            if(errorMsg)
             {
                DEBUG("%s", errorMsg->c_str());
-               delete errorMsg;
-               errorMsg = nullptr;
             }
             else
             {
@@ -133,11 +131,9 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
             Settings::getCurrentSettings().revertVideoChanges();
             if(!GraphicsUtil::getInstance()->refreshVideoMode(errorMsg))
             {
-               if(errorMsg != nullptr)
+               if(errorMsg)
                {
                   DEBUG("%s", errorMsg->c_str());
-                  delete errorMsg;
-                  errorMsg = nullptr;
                }
                
                T_T("Failed to revert video mode!");

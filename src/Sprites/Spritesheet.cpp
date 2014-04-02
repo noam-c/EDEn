@@ -39,17 +39,6 @@ Spritesheet::Spritesheet(ResourceKey name) :
 
 Spritesheet::~Spritesheet()
 {
-   // Delete the frame lists for the animations
-   std::map<std::string, const FrameSequence*>::iterator iter;
-   for(iter = m_animationList.begin(); iter != m_animationList.end(); ++iter)
-   {
-      delete iter->second;
-   }
-
-   if(m_texture != nullptr)
-   {
-      delete m_texture;
-   }
 }
 
 void Spritesheet::load(const std::string& path)
@@ -59,7 +48,7 @@ void Spritesheet::load(const std::string& path)
    imgPath += IMG_EXTENSION;
 
    DEBUG("Loading spritesheet image \"%s\"...", imgPath.c_str());
-   m_texture = new Texture(imgPath);
+   m_texture = std::unique_ptr<Texture>(new Texture(imgPath));
    m_size = m_texture->getSize();
 
    // Load in the spritesheet data file, which tells the engine where
@@ -177,7 +166,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
       }
       
       // Get the frames of the animation
-      FrameSequence* frameSequence = new FrameSequence();
+      auto frameSequence = std::unique_ptr<FrameSequence>(new FrameSequence());
 
       Json::Value& frameArray = currAnimation["frames"];
       int sequenceLength = frameArray.size();
@@ -210,7 +199,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
       }
 
       // Bind the animation name to the next available animation index
-      m_animationList[animationName] = frameSequence;
+      m_animationList[animationName] = std::move(frameSequence);
    }
 }
 
@@ -225,12 +214,12 @@ int Spritesheet::getFrameIndex(const std::string& frameName) const
    return -1;
 }
 
-Animation* Spritesheet::getAnimation(const std::string& animationName) const
+std::unique_ptr<Animation> Spritesheet::getAnimation(const std::string& animationName) const
 {
-   std::map<std::string, const FrameSequence*>::const_iterator animFrames = m_animationList.find(animationName);
+   const auto& animFrames = m_animationList.find(animationName);
    if(animFrames != m_animationList.end())
    {
-      return new Animation(animationName, *(animFrames->second));
+      return std::unique_ptr<Animation>(new Animation(animationName, *(animFrames->second)));
    }
 
    return nullptr;

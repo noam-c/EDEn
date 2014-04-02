@@ -66,21 +66,15 @@ void GraphicsUtil::initSDL()
    // On exit, run the SDL cleanup
    atexit (SDL_Quit);
 
-   std::string* errorMsg = nullptr;
+   std::unique_ptr<std::string> errorMsg(nullptr);
    if(!initSDLVideoMode(errorMsg))
    {
-      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", m_width, m_height, m_bitsPerPixel, errorMsg->c_str());
+      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", m_width, m_height, m_bitsPerPixel, errorMsg ? errorMsg->c_str() : "");
       exit(1);
-   }
-
-   if(errorMsg != nullptr)
-   {
-      delete errorMsg;
-      errorMsg = nullptr;
    }
 }
 
-bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
+bool GraphicsUtil::initSDLVideoMode(std::unique_ptr<std::string>& errorMsg)
 {
    // Set video mode based on user's choice of resolution
    unsigned int windowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
@@ -104,7 +98,7 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
 
    if(m_window == nullptr)
    {
-      errorMsg = new std::string(SDL_GetError());
+      errorMsg.reset(new std::string(SDL_GetError()));
       return false;
    }
 
@@ -117,7 +111,7 @@ bool GraphicsUtil::initSDLVideoMode(std::string*& errorMsg)
       m_openGLContext = SDL_GL_CreateContext(m_window);
       if(!m_openGLContext)
       {
-         errorMsg = new std::string(SDL_GetError());
+         errorMsg.reset(new std::string(SDL_GetError()));
          return false;
       }
    }
@@ -206,7 +200,7 @@ bool GraphicsUtil::isVideoModeRefreshRequired() const
       currentSettingsResolution.getBitsPerPixel() != m_bitsPerPixel;
 }
 
-bool GraphicsUtil::refreshVideoMode(std::string*& errorMsg)
+bool GraphicsUtil::refreshVideoMode(std::unique_ptr<std::string>& errorMsg)
 {
    const Settings& currentSettings = Settings::getCurrentSettings();
    const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();

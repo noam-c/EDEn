@@ -64,7 +64,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
    messaging::MessagePipe& m_messagePipe;
 
    /** The map on which the grid is overlaid. */
-   const Map* m_map;
+   std::weak_ptr<const Map> m_map;
 
    /** The pathfinding component used to navigate in this map. */
    Pathfinder m_pathfinder;
@@ -154,24 +154,34 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * Destructor.
        */
       ~EntityGrid();
-      
+   
       /**
-       * @return The map data that the EntityGrid is operating on.
+       * Gets the entry point when entering this map from another specified map.
+       *
+       * @param exitedMapName The name of the map that the player is coming from.
+       *
+       * @return The entry point to the map from the given map.
        */
-      const Map* getMapData() const;
-      
+      const shapes::Point2D& getMapEntrance(const std::string& exitedMapName) const;
+   
+      /**
+       * @return True iff the EntityGrid is operating on defined and valid map data.
+       */
+      bool hasMapData() const;
+   
+      /**
+       * @return The name of the map.
+       * @throws
+       */
+      const std::string& getMapName() const;
+
       /**
        * Sets a new map to operate on. Initializes the collision map and
        * runs computations on it to inform heuristics for best path calculations.
        *
        * @param map The new map to operate on.
        */
-      void setMapData(const Map* map);
-   
-      /**
-       * @return The name of the map.
-       */
-      const std::string& getMapName() const;
+      void setMapData(std::weak_ptr<const Map> map);
       
       /**
        * @return The bounds of the map.

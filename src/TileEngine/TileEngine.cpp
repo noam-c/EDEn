@@ -126,7 +126,7 @@ void TileEngine::receive(const MapExitMessage& message)
       std::string enteredMap = message.mapExit.getNextMap();
       DEBUG("Exit signal received: Exiting %s and entering %s", exitedMap.c_str(), enteredMap.c_str());
       setMap(enteredMap);
-      const shapes::Point2D& entryPoint = m_entityGrid.getMapData()->getMapEntrance(exitedMap);
+      const shapes::Point2D& entryPoint = m_entityGrid.getMapEntrance(exitedMap);
       m_playerActor->addToMap(entryPoint);
       followWithCamera(m_playerActor);
    }
@@ -229,9 +229,9 @@ shapes::Point2D TileEngine::getCurrentCameraLocation() const
 
 void TileEngine::recalculateMapOffsets()
 {
-   const shapes::Size mapPixelBounds = m_entityGrid.getMapData() == nullptr ?
-         shapes::Size() :
-         m_entityGrid.getMapBounds().getSize() * TILE_SIZE;
+   const shapes::Size mapPixelBounds = m_entityGrid.hasMapData() ?
+      m_entityGrid.getMapBounds().getSize() * TILE_SIZE :
+      shapes::Size();
 
    const int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - m_shortcutBar.getHeight();
    const shapes::Size screenSize(GraphicsUtil::getInstance()->getWidth(), totalUsableHeight);
@@ -343,7 +343,7 @@ void TileEngine::draw()
    GraphicsUtil::getInstance()->clearBuffer();
 
    m_camera.apply();
-      if(m_entityGrid.getMapData() == nullptr)
+      if(!m_entityGrid.hasMapData())
       {
          // Draw all the sprites
          std::vector<Actor*>::iterator nextActorToDraw;
@@ -362,7 +362,7 @@ void TileEngine::draw()
          for(int row = 0; row < mapHeight; ++row)
          {
             // Start by drawing a row of the background layers, if the map exists
-            if(m_entityGrid.getMapData() != nullptr)
+            if(m_entityGrid.hasMapData())
             {
                m_entityGrid.drawBackground(row);
             }
@@ -379,7 +379,7 @@ void TileEngine::draw()
             }
 
             // Draw a row of the foreground layers, if the map exists
-            if(m_entityGrid.getMapData() != nullptr)
+            if(m_entityGrid.hasMapData())
             {
                m_entityGrid.drawForeground(row);
             }

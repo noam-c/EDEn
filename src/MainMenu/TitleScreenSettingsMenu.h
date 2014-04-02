@@ -10,6 +10,8 @@
 #include "GameState.h"
 #include "EdenRocketBindings.h"
 
+#include <memory>
+
 namespace Rocket
 {
    namespace Core

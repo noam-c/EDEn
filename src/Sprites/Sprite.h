@@ -34,7 +34,7 @@ class Sprite
    int m_frameIndex;
    
    /** The animation structure to use to animate this sprite. nullptr if a static frame is used instead. */
-   Animation* m_animation;
+   std::unique_ptr<Animation> m_animation;
    
    /** The name of the current frame/animation being used. */
    std::string m_currName;
