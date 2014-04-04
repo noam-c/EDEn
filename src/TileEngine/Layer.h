@@ -10,6 +10,8 @@
 #include <memory>
 #include <string>
 
+#include "Grid.h"
+
 namespace shapes
 {
    struct Rectangle;
@@ -27,7 +29,7 @@ class Layer
    std::shared_ptr<Tileset> m_tileset;
 
    /** The tiles of the map (as numbers referring to points in the Tileset) */
-   int** m_tileMap;
+   Grid<int> m_tileMap;
 
    /** The bounds (in tiles) of the map containing this layer. */
    const shapes::Rectangle& m_bounds;

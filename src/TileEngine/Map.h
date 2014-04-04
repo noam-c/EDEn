@@ -14,6 +14,7 @@
 #include <map>
 #include <vector>
 
+#include "Grid.h"
 #include "Rectangle.h"
 
 class Point2D;
@@ -45,8 +46,8 @@ class Map
    /** Foreground layers, which are drawn in front of the sprite layer (in front of NPCs, player, etc.) */
    std::vector<Layer*> m_foregroundLayers;
 
-   /** The passibility of the map */
-   bool** m_passibilityMap;
+   /** The passibility of the map. Typed as int to avoid vector<bool> specialization. */
+   Grid<int> m_passibilityMap;
 
    /** The list of the map's trigger zones */
    std::vector<TriggerZone> m_triggerZones;
@@ -59,11 +60,6 @@ class Map
 
    /** The bounds (in tiles) of this map */
    shapes::Rectangle m_bounds;
-
-   /**
-    * @return true iff the tile at this location of the map is passible
-    */
-   bool isPassible(int x, int y) const;
 
    /**
     * Parse the map layer that holds collision data.
@@ -140,9 +136,9 @@ class Map
       const std::vector<MapExit>& getMapExits() const;
 
       /**
-       * @return The passibility of the map 
+       * @return true iff the tile at this location of the map is passible
        */
-      bool** getPassibilityMatrix() const;
+      bool isPassible(int x, int y) const;
 
       /**
        * Perform logic for the obstacles on the map.

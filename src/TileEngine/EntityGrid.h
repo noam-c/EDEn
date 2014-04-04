@@ -11,6 +11,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include "Grid.h"
 #include "MovementDirection.h"
 #include "Pathfinder.h"
 #include "Rectangle.h"
@@ -70,15 +71,10 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
    Pathfinder m_pathfinder;
    
    /** The map of entities and states for each of the tiles. */
-   TileState** m_collisionMap;
+   Grid<TileState> m_collisionMap;
 
    /** The bounds of the pathfinder map. */
    shapes::Rectangle m_collisionMapBounds;
-   
-   /**
-    * Clean up the grid data and listeners.
-    */
-   void clearMap();
 
    /**
     * Clean up the map of tile states.

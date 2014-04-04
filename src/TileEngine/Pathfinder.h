@@ -10,6 +10,7 @@
 #include <list>
 #include <vector>
 
+#include "Grid.h"
 #include "Rectangle.h"
 
 class Actor;
@@ -40,16 +41,16 @@ class Pathfinder
    static const float INFINITY;
 
    /** The Roy-Floyd-Warshall distance matrix. This 2D array holds best-path distances between all tiles. */
-   float** m_distanceMatrix;
+   Grid<float> m_distanceMatrix;
 
    /** The Roy-Floyd-Warshall successor matrix. This 2D array holds the best tile to move to, given a source and a destination. */
-   int** m_successorMatrix;
+   Grid<int> m_successorMatrix;
    
    /** The size (in pixels) of each tile. */
    int m_movementTileSize;
    
    /** The grid to compute paths on. */
-   TileState** m_collisionGrid;
+   Grid<TileState> m_collisionGrid;
    
    /** The bounds (in tiles) of the grid. */
    shapes::Rectangle m_collisionGridBounds;
@@ -109,7 +110,7 @@ class Pathfinder
        * @param tileSize The size (in pixels) of each tile.
        * @param gridBounds The bounds of the grid.
        */
-      void initialize(TileState** grid, int tileSize, const shapes::Rectangle& gridBounds);
+      void initialize(Grid<TileState> grid, int tileSize, const shapes::Rectangle& gridBounds);
 
       /**
        * Destructor.

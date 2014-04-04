@@ -40,14 +40,11 @@ int Pathfinder::pixelsToTileNum(const shapes::Point2D& pixelLocation) const
    return coordsToTileNum(pixelLocation / m_movementTileSize);
 }
 
-Pathfinder::Pathfinder() :
-   m_distanceMatrix(nullptr),
-   m_successorMatrix(nullptr),
-   m_collisionGrid(nullptr)
+Pathfinder::Pathfinder()
 {
 }
 
-void Pathfinder::initialize(TileState** grid, int tileSize, const shapes::Rectangle& gridBounds)
+void Pathfinder::initialize(Grid<TileState> grid, int tileSize, const shapes::Rectangle& gridBounds)
 {
    DEBUG("Resetting pathfinder...");
    deleteRoyFloydWarshallMatrices();
@@ -66,16 +63,11 @@ Pathfinder::~Pathfinder()
 void Pathfinder::initRoyFloydWarshallMatrices()
 {
    const unsigned int NUM_TILES = m_collisionGridBounds.getArea();
+   const auto matrixSize = shapes::Size(NUM_TILES, NUM_TILES);
    
-   m_distanceMatrix = new float*[NUM_TILES];
-   m_successorMatrix = new int*[NUM_TILES];
-
-   for(unsigned int i = 0; i < NUM_TILES; ++i)
-   {
-      m_distanceMatrix[i] = new float[NUM_TILES];
-      m_successorMatrix[i] = new int[NUM_TILES];
-   }
-
+   m_distanceMatrix.resize(matrixSize);
+   m_successorMatrix.resize(matrixSize);
+   
    shapes::Point2D aTile;
    shapes::Point2D bTile;
 
@@ -86,8 +78,8 @@ void Pathfinder::initRoyFloydWarshallMatrices()
       {
          if(a == b)
          {
-            m_distanceMatrix[a][b] = 0;
-            m_successorMatrix[a][b] = -1;
+            m_distanceMatrix(a, b) = 0;
+            m_successorMatrix(a, b) = -1;
          }
          else
          {
@@ -98,30 +90,30 @@ void Pathfinder::initRoyFloydWarshallMatrices()
             
             bool adjacent = xAdjacent && yAdjacent;
             bool diagonallyAdjacent = aTile.x != bTile.x && aTile.y != bTile.y;
-            bool aTileIsObstacle = m_collisionGrid[aTile.y][aTile.x].entityType == TileState::OBSTACLE;
-            bool bTileIsObstacle = m_collisionGrid[bTile.y][bTile.x].entityType == TileState::OBSTACLE;
+            bool aTileIsObstacle = m_collisionGrid(aTile.x, aTile.y).entityType == TileState::OBSTACLE;
+            bool bTileIsObstacle = m_collisionGrid(bTile.x, bTile.y).entityType == TileState::OBSTACLE;
 
-            m_distanceMatrix[a][b] = INFINITY;
-            m_successorMatrix[a][b] = -1;
+            m_distanceMatrix(a, b) = INFINITY;
+            m_successorMatrix(a, b) = -1;
 
             if(adjacent && !aTileIsObstacle && !bTileIsObstacle)
             {
                if(diagonallyAdjacent)
                {
                   bool diagonalTraversalBlocked =
-                        m_collisionGrid[bTile.y][aTile.x].entityType == TileState::OBSTACLE ||
-                        m_collisionGrid[aTile.y][bTile.x].entityType == TileState::OBSTACLE;
+                        m_collisionGrid(aTile.x, bTile.y).entityType == TileState::OBSTACLE ||
+                        m_collisionGrid(bTile.x, aTile.y).entityType == TileState::OBSTACLE;
 
                   if(!diagonalTraversalBlocked)
                   {
-                     m_successorMatrix[a][b] = b;
-                     m_distanceMatrix[a][b] = ROOT_2;
+                     m_successorMatrix(a, b) = b;
+                     m_distanceMatrix(a, b) = ROOT_2;
                   }
                }
                else
                {
-                  m_successorMatrix[a][b] = b;
-                  m_distanceMatrix[a][b] = 1;
+                  m_successorMatrix(a, b) = b;
+                  m_distanceMatrix(a, b) = 1;
                }
             }
          }
@@ -134,11 +126,11 @@ void Pathfinder::initRoyFloydWarshallMatrices()
       {
          for(unsigned int b = 0; b < NUM_TILES; ++b)
          {
-            float distance = m_distanceMatrix[a][i] + m_distanceMatrix[i][b];
-            if(distance < m_distanceMatrix[a][b])
+            float distance = m_distanceMatrix(a, i) + m_distanceMatrix(i, b);
+            if(distance < m_distanceMatrix(a, b))
             {
-               m_distanceMatrix[a][b] = distance;
-               m_successorMatrix[a][b] = m_successorMatrix[a][i];
+               m_distanceMatrix(a, b) = distance;
+               m_successorMatrix(a, b) = m_successorMatrix(a, i);
             }
          }
       }
@@ -276,9 +268,9 @@ class Pathfinder::AStarPoint : public shapes::Point2D
 
 Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const
 {
-   if(m_collisionGrid == nullptr) return Path();
+   if(m_collisionGrid.empty()) return Path();
 
-   const TileState& entityState = m_collisionGrid[src.y / m_movementTileSize][src.x / m_movementTileSize];
+   const TileState& entityState = m_collisionGrid(src.x / m_movementTileSize, src.y / m_movementTileSize);
 
    if(!entityGrid.canOccupyArea(shapes::Rectangle(dst, size), entityState)) return Path();
 
@@ -353,7 +345,7 @@ void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileS
    {
       int adjacentTileNum = coordsToTileNum(adjacentNode);
       float tileGCost = evaluatedPoint->getGCost() + traversalCost;
-      float tileHCost = m_distanceMatrix[adjacentTileNum][destinationTileNum];
+      float tileHCost = m_distanceMatrix(adjacentTileNum, destinationTileNum);
       if(!discovered[adjacentTileNum])
       {
          discovered[adjacentTileNum] = true;
@@ -405,7 +397,7 @@ Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shape
 
    for(;;)
    {
-      int nextTile = m_successorMatrix[srcTileNum][dstTileNum];
+      int nextTile = m_successorMatrix(srcTileNum, dstTileNum);
       if(nextTile == -1)
       {
          break;
@@ -420,26 +412,6 @@ Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shape
 
 void Pathfinder::deleteRoyFloydWarshallMatrices()
 {
-   const unsigned int NUM_TILES = m_collisionGridBounds.getArea();
-   if(m_distanceMatrix)
-   {
-      for(unsigned int i = 0; i < NUM_TILES; ++i)
-      {
-         delete [] m_distanceMatrix[i];
-      }
-
-      delete [] m_distanceMatrix;
-      m_distanceMatrix = nullptr;
-   }
-
-   if(m_successorMatrix)
-   {
-      for(unsigned int i = 0; i < NUM_TILES; ++i)
-      {
-         delete [] m_successorMatrix[i];
-      }
-
-      delete [] m_successorMatrix;
-      m_successorMatrix = nullptr;
-   }
+   m_distanceMatrix.clear();
+   m_successorMatrix.clear();
 }

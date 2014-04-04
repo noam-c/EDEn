@@ -46,9 +46,6 @@ class GameContext;
  */
 class MenuState : public GameState
 {
-   /** True iff the menu shell was created internally, rather than passed in. */
-   bool m_internalMenuShell;
-
    /**
     * Wait for and handle the input event.
     *

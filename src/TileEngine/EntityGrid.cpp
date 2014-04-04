@@ -35,15 +35,13 @@ const float EntityGrid::INFINITY = std::numeric_limits<float>::infinity();
 
 EntityGrid::EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe) :
    m_tileEngine(tileEngine),
-   m_messagePipe(messagePipe),
-   m_collisionMap(nullptr)
+   m_messagePipe(messagePipe)
 {
    messagePipe.registerListener(this);
 }
 
 EntityGrid::~EntityGrid()
 {
-   clearMap();
    m_messagePipe.unregisterListener(this);
 }
 
@@ -74,28 +72,27 @@ bool EntityGrid::hasMapData() const
 void EntityGrid::setMapData(std::weak_ptr<const Map> mapData)
 {
    DEBUG("Resetting entity grid...");
-   clearMap();
+   m_collisionMap.clear();
    m_map = mapData;
 
    std::shared_ptr<const Map> map(m_map.lock());
    if(!map) return;
 
    const int collisionTileRatio = TileEngine::TILE_SIZE / MOVEMENT_TILE_SIZE;
-   m_collisionMapBounds = shapes::Rectangle(shapes::Point2D::ORIGIN, map->getBounds().getSize() * collisionTileRatio);
 
-   const unsigned int collisionMapHeight = m_collisionMapBounds.getHeight();
-   const unsigned int collisionMapWidth = m_collisionMapBounds.getWidth();
+   auto collisionMapSize = map->getBounds().getSize() * collisionTileRatio;
+   m_collisionMapBounds = shapes::Rectangle(shapes::Point2D::ORIGIN, collisionMapSize);
+
+   const unsigned int collisionMapHeight = collisionMapSize.height;
+   const unsigned int collisionMapWidth = collisionMapSize.width;
    
-   bool** passibilityMap = map->getPassibilityMatrix();
-   m_collisionMap = new TileState*[collisionMapHeight];
-   for(unsigned int y = 0; y < collisionMapHeight; ++y)
+   m_collisionMap.resize(collisionMapSize);
+   for(unsigned int x = 0; x < collisionMapWidth; ++x)
    {
-      TileState* row = m_collisionMap[y] = new TileState[collisionMapWidth];
-      for(unsigned int x = 0; x < collisionMapWidth; ++x)
+      for(unsigned int y = 0; y < collisionMapHeight; ++y)
       {
-         bool passible = passibilityMap[y / collisionTileRatio][x / collisionTileRatio];
-         row[x].entityType = passible ? TileState::FREE : TileState::OBSTACLE;
-         row[x].entity = nullptr;
+         bool passible = map->isPassible(x / collisionTileRatio, y / collisionTileRatio);
+         m_collisionMap(x, y).entityType = passible ? TileState::FREE : TileState::OBSTACLE;
       }
    }
 
@@ -180,7 +177,7 @@ void EntityGrid::removeActor(Actor* actor)
 
 Actor* EntityGrid::getAdjacentActor(Actor* actor) const
 {
-   if(m_collisionMap == nullptr)
+   if(m_collisionMap.empty())
    {
       return nullptr;
    }
@@ -241,7 +238,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
    {
       for(int rectX = rectLeft; rectX <= rectRight; ++rectX)
       {
-         const TileState& collisionTile = m_collisionMap[rectY][rectX];
+         const TileState& collisionTile = m_collisionMap(rectX, rectY);
          if(collisionTile.entityType == TileState::ACTOR && collisionTile.entity != actor)
          {
             return static_cast<Actor*>(collisionTile.entity);
@@ -254,7 +251,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
 
 bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) const
 {
-   if(m_collisionMap == nullptr || state.entityType == TileState::FREE)
+   if(m_collisionMap.empty() || state.entityType == TileState::FREE)
    {
       return false;
    }
@@ -272,7 +269,7 @@ bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) c
       {
          // We cannot occupy the point if it is reserved by an entity other than the entity attempting to occupy it.
          // For instance, we cannot occupy a tile already occupied by an obstacle or a different character.
-         const TileState& collisionTile = m_collisionMap[collisionMapY][collisionMapX];
+         const TileState& collisionTile = m_collisionMap(collisionMapX, collisionMapY);
          if(collisionTile.entityType != TileState::FREE)
          {
             if(collisionTile.entityType != state.entityType || collisionTile.entity != state.entity)
@@ -317,7 +314,7 @@ void EntityGrid::freeArea(const shapes::Point2D& previousLocation, const shapes:
 
 bool EntityGrid::isAreaFree(const shapes::Rectangle& area) const
 {
-   if(m_collisionMap == nullptr) return false;
+   if(m_collisionMap.empty()) return false;
 
    shapes::Rectangle areaRect = getCollisionMapEdges(area);
 
@@ -326,7 +323,7 @@ bool EntityGrid::isAreaFree(const shapes::Rectangle& area) const
       for(int collisionMapX = areaRect.left; collisionMapX < areaRect.right; ++collisionMapX)
       {
          // We cannot occupy the point if it is reserved by an obstacle or a character.
-         const TileState& collisionTile = m_collisionMap[collisionMapY][collisionMapX];
+         const TileState& collisionTile = m_collisionMap(collisionMapX, collisionMapY);
          if(collisionTile.entityType != TileState::FREE)
          {
             return false;
@@ -430,13 +427,13 @@ void EntityGrid::endMovement(Actor* actor, const shapes::Point2D& src, const sha
 
 void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
 {
-   if(m_collisionMap == nullptr) return;
+   if(m_collisionMap.empty()) return;
 
    for(int collisionMapY = area.top; collisionMapY <= area.bottom; ++collisionMapY)
    {
       for(int collisionMapX = area.left; collisionMapX <= area.right; ++collisionMapX)
       {
-         m_collisionMap[collisionMapY][collisionMapX] = state;
+         m_collisionMap(collisionMapX, collisionMapY) = state;
       }
    }
 }
@@ -461,7 +458,7 @@ void EntityGrid::drawBackground(int y) const
          glDisable(GL_TEXTURE_2D);
          glBegin(GL_QUADS);
 
-         switch(m_collisionMap[y][x].entityType)
+         switch(m_collisionMap(x, y).entityType)
          {
             case TileState::FREE:
             {
@@ -470,7 +467,7 @@ void EntityGrid::drawBackground(int y) const
             }
             case TileState::ACTOR:
             {
-               if(m_collisionMap[y][x].entity == nullptr)
+               if(m_collisionMap(x, y).entity == nullptr)
                {
                   glColor3f(0.5f, 0.0f, 0.0f);
                }
@@ -543,21 +540,3 @@ void EntityGrid::receive(const ActorMoveMessage& message)
    }
 }
 
-void EntityGrid::clearMap()
-{
-   deleteCollisionMap();
-}
-
-void EntityGrid::deleteCollisionMap()
-{
-   if(m_collisionMap)
-   {
-      for(unsigned int i = 0; i < m_collisionMapBounds.getHeight(); ++i)
-      {
-         delete [] m_collisionMap[i];
-      }
-      
-      delete [] m_collisionMap;
-      m_collisionMap = nullptr;
-   }
-}

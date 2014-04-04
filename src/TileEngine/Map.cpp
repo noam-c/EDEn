@@ -13,6 +13,7 @@
 #include "ResourceLoader.h"
 #include "TileEngine.h"
 #include "Rectangle.h"
+#include "Size.h"
 #include "Point2D.h"
 #include <sstream>
 
@@ -127,14 +128,6 @@ Map::~Map()
    {
       delete *iter;
    }
-
-   const unsigned int height = m_bounds.getHeight();
-   for(unsigned int i = 0; i < height; ++i)
-   {
-      delete [] m_passibilityMap[i];
-   }
-
-   delete [] m_passibilityMap;
 }
 
 void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
@@ -164,7 +157,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
             {
                for(int x = rect.left; x < rect.right; ++x)
                {
-                  m_passibilityMap[y][x] = false;
+                  m_passibilityMap(x, y) = 0;
                }  
             }
          }
@@ -306,21 +299,21 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
 
 bool Map::isPassible(int x, int y) const
 {
-    return m_passibilityMap[y][x];
+    return m_passibilityMap(x, y) == 1;
 }
 
 void Map::initializePassibilityMatrix()
 {
-   const unsigned int width = m_bounds.getWidth();
-   const unsigned int height = m_bounds.getHeight();
+   const auto& size = m_bounds.getSize();
+   const auto& width = size.width;
+   const auto& height = size.height;
 
-   m_passibilityMap = new bool*[height];
-   for(unsigned int y = 0; y < height; ++y)
+   m_passibilityMap.resize(size);
+   for(unsigned int x = 0; x < width; ++x)
    {
-      m_passibilityMap[y] = new bool[width];
-      for(unsigned int x = 0; x < width; ++x)
+      for(unsigned int y = 0; y < height; ++y)
       {
-         m_passibilityMap[y][x] = true;
+         m_passibilityMap(x, y) = 1;
       }
    }
 }
@@ -355,11 +348,6 @@ const shapes::Point2D& Map::getMapEntrance(const std::string& previousMap) const
    }
 
    return result->second;
-}
-
-bool** Map::getPassibilityMatrix() const
-{
-   return m_passibilityMap;
 }
 
 void Map::step(long timePassed) const

@@ -47,18 +47,18 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
    const TiXmlText* layerDataElement = layerData->FirstChildElement("data")->FirstChild()->ToText();
    std::stringstream layerStream(layerDataElement->Value());
 
-   const unsigned int width = bounds.getWidth();
-   const unsigned int height = bounds.getHeight();
+   const auto& size = bounds.getSize();
+   const auto& width = size.width;
+   const auto& height = size.height;
 
-   m_tileMap = new int*[height];
+   m_tileMap.resize(size);
    for(unsigned int y = 0; y < height; ++y)
    {
-      m_tileMap[y] = new int[width];
       if (y < m_heightOffset || y >= height - m_heightOffset)
       {
          for(unsigned int x = 0; x < width; ++x)
          {
-            m_tileMap[y][x] = -1;
+            m_tileMap(x, y) = -1;
          }
       }
    }
@@ -69,20 +69,13 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
       {
          std::string entry;
          std::getline(layerStream, entry, ',');
-         m_tileMap[y + m_heightOffset][x] = atoi(entry.c_str()) - 1;
+         m_tileMap(x, y + m_heightOffset) = atoi(entry.c_str()) - 1;
       }
    }
 }
 
 Layer::~Layer()
 {
-   const unsigned int height = m_bounds.getHeight();
-   for(unsigned int i = 0; i < height; ++i)
-   {
-      delete [] m_tileMap[i];
-   }
-
-   delete [] m_tileMap;
 }
 
 void Layer::draw(int row, bool isForeground) const
@@ -90,7 +83,7 @@ void Layer::draw(int row, bool isForeground) const
    const unsigned int width = m_bounds.getWidth();
    for(unsigned int column = 0; column < width; ++column)
    {
-      const int tileNum = m_tileMap[row][column];
+      const int tileNum = m_tileMap(column, row);
       if(tileNum != -1)
       {
          m_tileset->draw(column, row - m_heightOffset, tileNum, isForeground);

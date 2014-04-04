@@ -18,6 +18,7 @@ SET(HEADERS
   src/ExecutionStack.h
   src/GameContext.h
   src/GameState.h
+  src/Grid.h
   src/Graphics/GraphicsUtil.h
   src/Graphics/OpenGLExtensions.h
   src/Graphics/ScreenTexture.h
