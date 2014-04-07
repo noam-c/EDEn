@@ -42,7 +42,7 @@ struct MapTriggerCallback
     *
     * @param actor The Actor that stepped into the map trigger zone.
     */
-   int callback(Actor* actor);
+   int operator()(Actor* actor);
 };
 
 #endif

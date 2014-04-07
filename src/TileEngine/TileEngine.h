@@ -48,7 +48,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
    
    messaging::MessagePipe m_messagePipe;
    
-   std::vector<std::pair<std::string, MapTriggerCallback*> > m_triggerScripts;
+   std::vector<std::pair<std::string, std::unique_ptr<MapTriggerCallback>>> m_triggerScripts;
 
    /** The debug console window to be used for diagnostics. */
    DebugConsoleWindow m_consoleWindow;
@@ -113,11 +113,6 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
     * Handles activation of NPCs when the player presses the action key.
     */
    void action();
-   
-   /**
-    * Clears all the listeners bound to the map.
-    */
-   void clearMapListeners();
    
    /**
     * Clears all the NPCs on the map.
@@ -292,7 +287,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * @param triggerName The name of the trigger to listen for.
        * @param callback The script callback to execute when an Actor sets off the specified trigger.
        */
-      void addTriggerListener(const std::string& triggerName, MapTriggerCallback* callback);
+      void addTriggerListener(const std::string& triggerName, std::unique_ptr<MapTriggerCallback> callback);
    
       /**
        * @return The player character in the tile engine.

@@ -97,9 +97,8 @@ static int TileEngineL_AddTriggerListener(lua_State* luaVM)
    
    lua_pushstring(luaVM, "handler");
    lua_rawget(luaVM, 2);
-   MapTriggerCallback* callback = new MapTriggerCallback(luaVM);
    
-   tileEngine->addTriggerListener(triggerName, callback);
+   tileEngine->addTriggerListener(triggerName, std::unique_ptr<MapTriggerCallback>(new MapTriggerCallback(luaVM)));
    
    return 0;
 }

@@ -67,12 +67,12 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
       const std::string layerName(layerElement->Attribute("name"));
       if(layerName == "background")
       {
-         m_backgroundLayers.push_back(new Layer(layerElement, m_bounds));
+         m_backgroundLayers.push_back(std::unique_ptr<Layer>(new Layer(layerElement, m_bounds)));
          DEBUG("Background layer added.");
       }
       else if(layerName == "foreground")
       {
-         m_foregroundLayers.push_back(new Layer(layerElement, m_bounds));
+         m_foregroundLayers.push_back(std::unique_ptr<Layer>(new Layer(layerElement, m_bounds)));
          DEBUG("Foreground layer added.");
       }
       
@@ -118,16 +118,6 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
 
 Map::~Map()
 {
-   std::vector<Layer*>::const_iterator iter;
-   for(iter = m_backgroundLayers.begin(); iter != m_backgroundLayers.end(); ++iter)
-   {
-      delete *iter;
-   }
-
-   for(iter = m_foregroundLayers.begin(); iter != m_foregroundLayers.end(); ++iter)
-   {
-      delete *iter;
-   }
 }
 
 void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
@@ -375,10 +365,9 @@ void Map::drawBackground(int row) const
    else
    {
       bool firstLayer = true;
-      std::vector<Layer*>::const_iterator iter;
-      for(iter = m_backgroundLayers.begin(); iter != m_backgroundLayers.end(); ++iter)
+      for(const auto& layer : m_backgroundLayers)
       {
-         (*iter)->draw(row, !firstLayer);
+         layer->draw(row, !firstLayer);
          firstLayer = false;
       }
    }
@@ -388,10 +377,9 @@ void Map::drawForeground(int row) const
 {
    if(!DRAW_PASSIBILITY)
    {
-      std::vector<Layer*>::const_iterator iter;
-      for(iter = m_foregroundLayers.begin(); iter != m_foregroundLayers.end(); ++iter)
+      for(const auto& layer : m_foregroundLayers)
       {
-         (*iter)->draw(row, true);
+         layer->draw(row, true);
       }
    }
 }

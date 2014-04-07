@@ -19,11 +19,6 @@ Settings& Settings::getCurrentSettings()
    return Settings::currentSettings;
 }
 
-void Settings::setCurrentSettings(const Settings& other)
-{
-   Settings::currentSettings = other;
-}
-
 void Settings::initialize()
 {
    std::ifstream inputFile(Settings::DEFAULT_SETTINGS_PATH.c_str());
@@ -39,7 +34,7 @@ void Settings::initialize()
 }
 
 Settings::Settings(bool isSnapshot) :
-   m_settingsSnapshot(isSnapshot ? nullptr : new Settings(true)),
+   m_settingsSnapshot(isSnapshot ? nullptr : std::unique_ptr<Settings>(new Settings(true))),
    m_musicEnabled(true),
    m_soundEnabled(true),
    m_fullScreenEnabled(false),
@@ -48,17 +43,7 @@ Settings::Settings(bool isSnapshot) :
    
 }
 
-Settings::Settings(const Settings& other) :
-   m_settingsSnapshot(other.m_settingsSnapshot),
-   m_musicEnabled(other.m_musicEnabled),
-   m_soundEnabled(other.m_soundEnabled),
-   m_fullScreenEnabled(other.m_fullScreenEnabled),
-   m_resolution(other.m_resolution)
-{
-   
-}
-
-Settings& Settings::operator=(const Settings& other)
+void Settings::setSettings(const Settings& other)
 {
    if(this != &other)
    {
@@ -67,16 +52,10 @@ Settings& Settings::operator=(const Settings& other)
       m_fullScreenEnabled = other.m_fullScreenEnabled;
       m_resolution = other.m_resolution;
    }
-   
-   return *this;
 }
 
 Settings::~Settings()
 {
-   if(m_settingsSnapshot != nullptr)
-   {
-      delete m_settingsSnapshot;
-   }
 }
 
 void Settings::createNewSettingsFile()
@@ -110,7 +89,10 @@ void Settings::save(std::ostream& output)
    
    output << jsonRoot;
 
-   *m_settingsSnapshot = *this;
+   if(m_settingsSnapshot)
+   {
+      m_settingsSnapshot->setSettings(*this);
+   }
 }
 
 void Settings::load(std::istream& input)
@@ -140,7 +122,10 @@ void Settings::load(std::istream& input)
    
    m_resolution = Settings::Resolution(resolutionWidth, resolutionHeight, resolutionBitsPerPixel);
 
-   *m_settingsSnapshot = *this;
+   if(m_settingsSnapshot)
+   {
+      m_settingsSnapshot->setSettings(*this);
+   }
 }
 
 void Settings::revertVideoChanges()
@@ -151,7 +136,7 @@ void Settings::revertVideoChanges()
 
 void Settings::revertChanges()
 {
-   *this = *m_settingsSnapshot;
+   setSettings(*m_settingsSnapshot);
 }
 
 bool Settings::isMusicEnabled() const

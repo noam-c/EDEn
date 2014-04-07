@@ -12,6 +12,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <memory>
 #include <vector>
 
 #include "Grid.h"
@@ -41,10 +42,10 @@ class Map
    std::string m_name;
 
    /** Background layers, which are drawn behind the sprite layer (behind NPCs, player, etc.) */
-   std::vector<Layer*> m_backgroundLayers;
+   std::vector<std::unique_ptr<Layer>> m_backgroundLayers;
 
    /** Foreground layers, which are drawn in front of the sprite layer (in front of NPCs, player, etc.) */
-   std::vector<Layer*> m_foregroundLayers;
+   std::vector<std::unique_ptr<Layer>> m_foregroundLayers;
 
    /** The passibility of the map. Typed as int to avoid vector<bool> specialization. */
    Grid<int> m_passibilityMap;

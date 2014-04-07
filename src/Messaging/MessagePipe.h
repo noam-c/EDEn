@@ -9,11 +9,12 @@
 
 #include <set>
 #include <map>
+#include <memory>
+#include <typeindex>
+#include <typeinfo>
 
 #include "Listener.h"
 #include "DebugUtils.h"
-#include <typeinfo>
-#include <typeindex>
 
 namespace messaging
 {
@@ -28,32 +29,32 @@ namespace messaging
          public:
             void registerListener(Listener<T>* listener)
             {
-               m_listeners.insert(listener);
+               m_listeners.insert(std::move(listener));
             }
             
             void unregisterListener(Listener<T>* listener)
             {
-               m_listeners.erase(listener);
+               m_listeners.erase(std::move(listener));
             }
 
             void send(const T& message) const
             {
                typename std::set<Listener<T>*>::const_iterator iter;
-               for(auto listener: m_listeners)
+               for(auto& listener : m_listeners)
                {
                   listener->receive(message);
                }
             }
       };
 
-      std::map<std::type_index, ListenerListBase*> listenerLists;
+      std::map<std::type_index, std::unique_ptr<ListenerListBase>> listenerLists;
       
       template<typename T> ListenerList<T>* getListenerList() const
       {
          auto listenerListIter = listenerLists.find(std::type_index(typeid(T)));
          if(listenerListIter != listenerLists.end())
          {
-            return static_cast<ListenerList<T>*>(listenerListIter->second);
+            return static_cast<ListenerList<T>*>(listenerListIter->second.get());
          }
          
          return nullptr;
@@ -62,13 +63,14 @@ namespace messaging
       template<typename T> ListenerList<T>* getOrCreateListenerList() {
          auto listenerList = getListenerList<T>();
          
-         if(listenerList == nullptr)
+         if(listenerList)
          {
-            listenerList = new ListenerList<T>();
-            listenerLists.insert(std::make_pair(std::type_index(typeid(T)), listenerList));
+            return listenerList;
          }
 
-         return listenerList;
+         auto newListenerList = new ListenerList<T>();
+         listenerLists.insert(std::make_pair(std::type_index(typeid(T)), std::unique_ptr<ListenerList<T>>(newListenerList)));
+         return newListenerList;
       }
       
       public:
@@ -85,7 +87,7 @@ namespace messaging
          template<typename T> void sendMessage(const T& message) const
          {
             auto listenerList = getListenerList<T>();
-            if(listenerList != nullptr)
+            if(listenerList)
             {
                listenerList->send(message);
             }

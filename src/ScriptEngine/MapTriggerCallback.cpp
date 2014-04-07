@@ -27,7 +27,7 @@ MapTriggerCallback::~MapTriggerCallback()
    lua_unref(m_luaVM, m_registryIndex);
 }
 
-int MapTriggerCallback::callback(Actor* actor)
+int MapTriggerCallback::operator()(Actor* actor)
 {
    if(m_registryIndex != LUA_NOREF)
    {

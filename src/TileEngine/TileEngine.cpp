@@ -60,7 +60,6 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
 
 TileEngine::~TileEngine()
 {
-   clearMapListeners();
    clearNPCs();
    m_messagePipe.unregisterListener<MapTriggerMessage>(this);
    m_messagePipe.unregisterListener<MapExitMessage>(this);
@@ -81,18 +80,6 @@ void TileEngine::loadPlayerData(const std::string& path)
 void TileEngine::startChapter(const std::string& chapterName)
 {
    getScriptEngine().runChapterScript(chapterName, *m_scheduler);
-}
-
-void TileEngine::clearMapListeners()
-{
-   std::vector<std::pair<std::string, MapTriggerCallback*> >::iterator iter;
-
-   for(iter = m_triggerScripts.begin(); iter != m_triggerScripts.end(); ++iter)
-   {
-      delete iter->second;
-   }
-   
-   m_triggerScripts.clear();
 }
 
 void TileEngine::clearNPCs()
@@ -134,16 +121,17 @@ void TileEngine::receive(const MapExitMessage& message)
 
 void TileEngine::receive(const MapTriggerMessage& message)
 {
-   for(std::vector<std::pair<std::string, MapTriggerCallback*> >::iterator iter = m_triggerScripts.begin(); iter != m_triggerScripts.end(); ++iter)
+   for(auto& triggerIter : m_triggerScripts)
    {
-      if(iter->first == message.triggerZone.getName())
+      if(triggerIter.first == message.triggerZone.getName())
       {
-         Actor* triggeringActor =
+         auto triggeringActor =
             message.triggeringActor == m_playerActor ?
             static_cast<Actor*>(m_playerActor) :
             getNPC(message.triggeringActor->getName());
          
-         iter->second->callback(triggeringActor);
+         auto& triggerCallback = *triggerIter.second;
+         triggerCallback(triggeringActor);
       }
    }
 }
@@ -169,7 +157,7 @@ int TileEngine::setRegion(const std::string& regionName, const std::string& mapN
 
 int TileEngine::setMap(std::string mapName)
 {
-   clearMapListeners();
+   m_triggerScripts.clear();
    clearNPCs();
    m_playerActor->removeFromMap();
 
@@ -282,9 +270,9 @@ NPC* TileEngine::getNPC(const std::string& npcName) const
    return nullptr;
 }
 
-void TileEngine::addTriggerListener(const std::string& triggerName, MapTriggerCallback* callback)
+void TileEngine::addTriggerListener(const std::string& triggerName, std::unique_ptr<MapTriggerCallback> callback)
 {
-   m_triggerScripts.push_back(std::pair<std::string, MapTriggerCallback*>(triggerName, callback));
+   m_triggerScripts.push_back(std::make_pair(triggerName, std::move(callback)));
 }
 
 PlayerCharacter* TileEngine::getPlayerCharacter() const

@@ -9,6 +9,7 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 
 /**
  * A static class that manages the game settings and options.
@@ -19,7 +20,7 @@ class Settings
 {
    const static std::string DEFAULT_SETTINGS_PATH;
    
-   Settings* m_settingsSnapshot;
+   std::unique_ptr<Settings> m_settingsSnapshot;
    static Settings currentSettings;
    
    /** True iff music should be played in the game. */
@@ -83,14 +84,13 @@ class Settings
       Resolution m_resolution;
 
    public:
-      Settings(const Settings& other);
-      Settings& operator=(const Settings& other);
       ~Settings();
 
       static void initialize();
 
       static Settings& getCurrentSettings();
-      static void setCurrentSettings(const Settings& other);
+
+      void setSettings(const Settings& other);
 
       /**
        * @return true iff the user has enabled music for the game.
