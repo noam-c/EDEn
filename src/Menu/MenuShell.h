@@ -15,7 +15,7 @@
  * \todo Change this include to forward declarations when enums
  * can be forward declared in the product.
  */
-#include "GameState.h"
+#include "GameStateType.h"
 
 namespace Rocket
 {
@@ -98,7 +98,7 @@ class MenuShell
        */
       ~MenuShell();
    
-      void initializeShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType);
+      void initializeShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameStateType stateType);
 
       /**
        * @return The Rocket context managing the shell GUI.

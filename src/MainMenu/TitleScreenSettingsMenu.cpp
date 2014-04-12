@@ -19,7 +19,7 @@
 const int debugFlag = DEBUG_SETTINGS | DEBUG_TITLE;
 
 TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
-   GameState(gameContext, GameState::TITLE, "TitleScreenSettingsMenu")
+   GameState(gameContext, GameStateType::TITLE, "TitleScreenSettingsMenu")
 {
    m_scheduler = new Scheduler();
 

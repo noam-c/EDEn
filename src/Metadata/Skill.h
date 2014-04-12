@@ -29,7 +29,7 @@ class Skill : public Usable
       unsigned int getAdeptitudeThreshold();
       unsigned int getMasteryThreshold();
 
-      bool use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter);
+      bool use(ScriptEngine& scriptEngine, GameStateType gameStateType, Character* usingCharacter);
 };
 
 #endif

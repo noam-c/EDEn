@@ -68,17 +68,17 @@ std::shared_ptr<UsableScript> Usable::createScript(ScriptEngine& scriptEngine)
    return scriptEngine.createItemScript(*this);
 }
 
-bool Usable::use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter)
+bool Usable::use(ScriptEngine& scriptEngine, GameStateType gameStateType, Character* usingCharacter)
 {
    loadScript(scriptEngine);
 
    switch(gameStateType)
    {
-      case GameState::MENU:
+      case GameStateType::MENU:
          return m_usableScript->onMenuUse(usingCharacter);
-      case GameState::FIELD:
+      case GameStateType::FIELD:
          return m_usableScript->onFieldUse(usingCharacter);
-      case GameState::BATTLE:
+      case GameStateType::BATTLE:
          return m_usableScript->onBattleUse(usingCharacter);
       default:
          // Fall through to return below.

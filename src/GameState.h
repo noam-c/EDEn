@@ -8,6 +8,7 @@
 #define GAME_STATE_H
 
 #include <string>
+#include "GameStateType.h"
 
 class ExecutionStack;
 class GameContext;
@@ -43,17 +44,6 @@ union SDL_Event;
 class GameState
 {
    friend class ExecutionStack;
-
-   public:
-      enum GameStateType
-      {
-         UNKNOWN,
-         TITLE,
-         FIELD,
-         MENU,
-         BATTLE,
-         TRANSITION,
-      };
 
    private:
       /** The maximum amount of milliseconds allowed to pass between frames. */

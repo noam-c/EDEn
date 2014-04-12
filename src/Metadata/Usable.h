@@ -15,7 +15,7 @@
  * \todo Change this include to forward declarations when enums
  * can be forward declared in the product.
  */
-#include "GameState.h"
+#include "GameStateType.h"
 
 namespace Json
 {
@@ -82,7 +82,7 @@ class Usable
        */
       const std::string& getIconPath() const;
 
-      virtual bool use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter = nullptr);
+      virtual bool use(ScriptEngine& scriptEngine, GameStateType gameStateType, Character* usingCharacter = nullptr);
 };
 
 #endif

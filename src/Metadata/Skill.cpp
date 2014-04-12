@@ -22,7 +22,7 @@ std::shared_ptr<UsableScript> Skill::createScript(ScriptEngine& scriptEngine)
    return scriptEngine.createSkillScript(*this);
 }
 
-bool Skill::use(ScriptEngine& scriptEngine, GameState::GameStateType gameStateType, Character* usingCharacter)
+bool Skill::use(ScriptEngine& scriptEngine, GameStateType gameStateType, Character* usingCharacter)
 {
    if(usingCharacter != nullptr && usingCharacter->hasSkill(getId()))
    {

@@ -39,7 +39,7 @@ const int debugFlag = DEBUG_TILE_ENG;
 const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName, const std::string& playerDataPath) :
-   GameState(gameContext, GameState::FIELD, "TileEngine"),
+   GameState(gameContext, GameStateType::FIELD, "TileEngine"),
    m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
    m_shortcutBar(getCurrentPlayerData(), getScriptEngine(), getMetadata(), getStateType(), *m_rocketContext)

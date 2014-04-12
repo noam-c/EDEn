@@ -19,7 +19,7 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType, Rocket::Core::Context& rocketContext) :
+ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext) :
    m_rocketContext(rocketContext),
    m_metadata(metadata),
    m_playerData(playerData),

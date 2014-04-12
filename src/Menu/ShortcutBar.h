@@ -13,7 +13,7 @@
  * \todo Change this include to forward declarations when enums
  * can be forward declared in the product.
  */
-#include "GameState.h"
+#include "GameStateType.h"
 
 namespace Rocket
 {
@@ -46,7 +46,7 @@ class ShortcutBar
    ScriptEngine& m_scriptEngine;
    
    /** The type of game state driving the shortcuts. */
-   const GameState::GameStateType m_stateType;
+   const GameStateType m_stateType;
 
    /** The Rocket document representing the shortcut bar GUI */
    Rocket::Core::ElementDocument* m_shortcutBarDocument;
@@ -62,7 +62,7 @@ class ShortcutBar
        *
        * @param rocketContext The Rocket context to which this console window should attach.
        */
-      ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameState::GameStateType stateType, Rocket::Core::Context& rocketContext);
+      ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext);
 
       /**
        * Destructor.

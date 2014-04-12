@@ -29,7 +29,7 @@ enum MainMenuActions
 };
 
 MainMenu::MainMenu(GameContext& gameContext) :
-   GameState(gameContext, GameState::TITLE, "MainMenu")
+   GameState(gameContext, GameStateType::TITLE, "MainMenu")
 {
    m_scheduler = new Scheduler();
 

@@ -107,7 +107,7 @@ Scheduler* GameState::getScheduler() const
    return nullptr;
 }
 
-GameState::GameStateType GameState::getStateType() const
+GameStateType GameState::getStateType() const
 {
    return m_stateType;
 }
