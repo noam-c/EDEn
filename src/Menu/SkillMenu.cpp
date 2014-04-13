@@ -41,8 +41,8 @@ void SkillMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/skillpane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "skillGrid", "click", [this](Rocket::Core::Event* event) { skillClicked(event); });
-      m_bindings.bindAction(m_paneDocument, "skillGrid", "dragstart", [this](Rocket::Core::Event* event) { dragStarted(event); });
+      m_bindings.bindAction(m_paneDocument, "skillGrid", "click", [this](Rocket::Core::Event& event) { skillClicked(event); });
+      m_bindings.bindAction(m_paneDocument, "skillGrid", "dragstart", [this](Rocket::Core::Event& event) { dragStarted(event); });
    }
 }
 
@@ -61,12 +61,12 @@ void SkillMenu::setCharacter(int characterIndex)
    m_skillViewModel.refresh();
 }
 
-void SkillMenu::dragStarted(Rocket::Core::Event* event)
+void SkillMenu::dragStarted(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event->GetParameter< void* >("drag_element", nullptr));
+   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event.GetParameter< void* >("drag_element", nullptr));
    if (dragElement != nullptr)
    {
-      Rocket::Core::Element* target = event->GetTargetElement();
+      Rocket::Core::Element* target = event.GetTargetElement();
 
       // Move up the DOM to the datagridrow skill holding this element
       while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
@@ -95,9 +95,9 @@ void SkillMenu::dragStarted(Rocket::Core::Event* event)
    }
 }
 
-void SkillMenu::skillClicked(Rocket::Core::Event* event)
+void SkillMenu::skillClicked(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* target = event->GetTargetElement();
+   Rocket::Core::Element* target = event.GetTargetElement();
 
    // Move up the DOM to the datagridrow skill holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")

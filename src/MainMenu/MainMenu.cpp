@@ -43,14 +43,14 @@ MainMenu::MainMenu(GameContext& gameContext) :
    if(m_titleDocument != nullptr)
    {
       m_titleDocument->Show();
-      m_bindings.bindAction(m_titleDocument, "newGameAction", "click", [this](Rocket::Core::Event* event) { NewGameAction(event); });
-      m_bindings.bindAction(m_titleDocument, "menuPrototypeAction", "click", [this](Rocket::Core::Event* event) { MenuPrototypeAction(event); });
-      m_bindings.bindAction(m_titleDocument, "loadGameAction", "click", [this](Rocket::Core::Event* event) { LoadGameAction(event); });
-      m_bindings.bindAction(m_titleDocument, "optionsAction", "click", [this](Rocket::Core::Event* event) { OptionsAction(event); });
-      m_bindings.bindAction(m_titleDocument, "aboutAction", "click", [this](Rocket::Core::Event* event) { AboutAction(event); });
-      m_bindings.bindAction(m_titleDocument, "quitGameAction", "click", [this](Rocket::Core::Event* event) { QuitAction(event); });
+      m_bindings.bindAction(m_titleDocument, "newGameAction", "click", [this](Rocket::Core::Event& event) { NewGameAction(); });
+      m_bindings.bindAction(m_titleDocument, "menuPrototypeAction", "click", [this](Rocket::Core::Event& event) { MenuPrototypeAction(); });
+      m_bindings.bindAction(m_titleDocument, "loadGameAction", "click", [this](Rocket::Core::Event& event) { LoadGameAction(); });
+      m_bindings.bindAction(m_titleDocument, "optionsAction", "click", [this](Rocket::Core::Event& event) { OptionsAction(); });
+      m_bindings.bindAction(m_titleDocument, "aboutAction", "click", [this](Rocket::Core::Event& event) { AboutAction(); });
+      m_bindings.bindAction(m_titleDocument, "quitGameAction", "click", [this](Rocket::Core::Event& event) { QuitAction(); });
 
-      m_bindings.bindAction(m_titleDocument, "keydown", [this](Rocket::Core::Event* event) { listKeyDown(event); });
+      m_bindings.bindAction(m_titleDocument, "keydown", [this](Rocket::Core::Event& event) { listKeyDown(event); });
    }
 }
 
@@ -96,7 +96,7 @@ void MainMenu::waitForInputEvent(bool& finishState)
          {
             case SDLK_ESCAPE:
             {
-               QuitAction(nullptr);
+               QuitAction();
                return;
             }
             default:
@@ -109,7 +109,7 @@ void MainMenu::waitForInputEvent(bool& finishState)
       }
       case SDL_QUIT:
       {
-          QuitAction(nullptr);
+          QuitAction();
           return;
       }
       default:
@@ -121,9 +121,9 @@ void MainMenu::waitForInputEvent(bool& finishState)
    handleEvent(event);
 }
 
-void MainMenu::listKeyDown(Rocket::Core::Event* event)
+void MainMenu::listKeyDown(Rocket::Core::Event& event)
 {
-   Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event->GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
+   Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
 
    switch(key)
    {

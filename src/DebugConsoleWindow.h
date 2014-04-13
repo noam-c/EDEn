@@ -54,14 +54,14 @@ class DebugConsoleWindow
        *
        * @param event The focus event.
        */
-      void onFocus(Rocket::Core::Event* event);
+      void onFocus(Rocket::Core::Event& event);
 
       /**
        * Consumes the key input used to submit commands (currently the Enter key).
        *
        * @param event The keyboard GUI event to consume.
        */
-      void onKeyPress(Rocket::Core::Event* event);
+      void onKeyPress(Rocket::Core::Event& event);
 
       /**
        * @return true iff the debug window is currently visible.

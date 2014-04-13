@@ -69,8 +69,8 @@ class ShortcutBar
        */
       ~ShortcutBar();
 
-      void shortcutClicked(Rocket::Core::Event* event);
-      void usableDropped(Rocket::Core::Event* event);
+      void shortcutClicked(Rocket::Core::Event& event);
+      void usableDropped(Rocket::Core::Event& event);
 
       /**
        * Refresh the shortcut bar UI.

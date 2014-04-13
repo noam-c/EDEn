@@ -36,7 +36,7 @@ MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
    {
       m_shellDocument->Show();
       m_sidebarElement = m_shellDocument->GetElementById("sidebar");
-      m_bindings.bindAction(m_sidebarElement, "click", [this](Rocket::Core::Event* event) { sidebarClicked(event); });
+      m_bindings.bindAction(m_sidebarElement, "click", [this](Rocket::Core::Event& event) { sidebarClicked(event); });
    }
 }
 
@@ -104,9 +104,9 @@ void MenuShell::changeMenuState(MenuState* newState)
    refresh();
 }
 
-void MenuShell::sidebarClicked(Rocket::Core::Event* event)
+void MenuShell::sidebarClicked(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* target = event->GetTargetElement();
+   Rocket::Core::Element* target = event.GetTargetElement();
    if(target->GetParentNode() == m_sidebarElement)
    {
       int childIndex = 0;

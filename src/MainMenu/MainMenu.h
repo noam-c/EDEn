@@ -64,15 +64,15 @@ class MainMenu: public GameState
     *
     * @param event The user input event.
     */
-   void listKeyDown(Rocket::Core::Event* event);
+   void listKeyDown(Rocket::Core::Event& event);
 
    //Actions for the list ops - see documentation in MainMenuActions.cpp
-   void NewGameAction(Rocket::Core::Event* event);
-   void MenuPrototypeAction(Rocket::Core::Event* event);
-   void LoadGameAction(Rocket::Core::Event* event);
-   void OptionsAction(Rocket::Core::Event* event);
-   void AboutAction(Rocket::Core::Event* event);
-   void QuitAction(Rocket::Core::Event* event);
+   void NewGameAction();
+   void MenuPrototypeAction();
+   void LoadGameAction();
+   void OptionsAction();
+   void AboutAction();
+   void QuitAction();
 
    protected:
       /**

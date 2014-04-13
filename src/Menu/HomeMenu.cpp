@@ -51,7 +51,7 @@ void HomeMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "characterGrid", "click", [this](Rocket::Core::Event* event) { characterClicked(event); });
+      m_bindings.bindAction(m_paneDocument, "characterGrid", "click", [this](Rocket::Core::Event& event) { characterClicked(event); });
    }
 
    m_sidebarOptions.push_back("Items");
@@ -64,9 +64,9 @@ void HomeMenu::initialize()
    m_sidebarOptions.push_back("Data");
 }
 
-void HomeMenu::characterClicked(Rocket::Core::Event* event)
+void HomeMenu::characterClicked(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* target = event->GetTargetElement();
+   Rocket::Core::Element* target = event.GetTargetElement();
 
    // Move up the DOM to the datagridrow item holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")

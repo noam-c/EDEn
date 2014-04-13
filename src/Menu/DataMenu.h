@@ -69,14 +69,14 @@ class DataMenu: public MenuState
     *
     * @param event The Rocket GUI event being sent by the user input.
     */
-   void confirmClicked(Rocket::Core::Event* event);
+   void confirmClicked(Rocket::Core::Event& event);
 
    /**
     * Event handler for the "No"/"Cancel" button being clicked.
     *
     * @param event The Rocket GUI event being sent by the user input.
     */
-   void cancelClicked(Rocket::Core::Event* event);
+   void cancelClicked(Rocket::Core::Event& event);
 
    /**
     * Event handler for a savegame being clicked.
@@ -84,7 +84,7 @@ class DataMenu: public MenuState
     *
     * @param event The Rocket GUI event that indicates which slot was clicked.
     */
-   void saveGameClicked(Rocket::Core::Event* event);
+   void saveGameClicked(Rocket::Core::Event& event);
    
    /**
     * Refreshes the list of save games.

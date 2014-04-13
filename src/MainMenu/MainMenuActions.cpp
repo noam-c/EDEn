@@ -28,7 +28,7 @@
  * [this will eventually change to a chapter selection list, with the fade
  * and pushed state (field or battle) changing based on the chapter].
  */
-void MainMenu::NewGameAction(Rocket::Core::Event* event)
+void MainMenu::NewGameAction()
 {
    TileEngine* tileEngine = new TileEngine(m_gameContext, CHAP1);
    getExecutionStack()->pushState(tileEngine, new FadeState(m_gameContext, this));
@@ -40,7 +40,7 @@ void MainMenu::NewGameAction(Rocket::Core::Event* event)
  * 'Menu Prototype' was selected. Push a Menu state.
  * \todo This will eventually be removed entirely, as it is only a programmer convenience right now.
  */
-void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
+void MainMenu::MenuPrototypeAction()
 {
    getCurrentPlayerData().load(SAVE_GAME);
    getExecutionStack()->pushState(new HomeMenu(m_gameContext));
@@ -49,7 +49,7 @@ void MainMenu::MenuPrototypeAction(Rocket::Core::Event* event)
 /**
  * 'Load Game' was selected. (TODO)
  */
-void MainMenu::LoadGameAction(Rocket::Core::Event* event)
+void MainMenu::LoadGameAction()
 {
 }
 
@@ -57,7 +57,7 @@ void MainMenu::LoadGameAction(Rocket::Core::Event* event)
  * 'Options' was selected.
  * Load up the options menu interface.
  */
-void MainMenu::OptionsAction(Rocket::Core::Event* event)
+void MainMenu::OptionsAction()
 {
    TitleScreenSettingsMenu* titleScreenSettingsMenuState = new TitleScreenSettingsMenu(m_gameContext);
    getExecutionStack()->pushState(
@@ -68,14 +68,14 @@ void MainMenu::OptionsAction(Rocket::Core::Event* event)
 /**
  * 'About' was selected. (TODO)
  */
-void MainMenu::AboutAction(Rocket::Core::Event* event)
+void MainMenu::AboutAction()
 {
 }
 
 /**
  * 'Quit Game' was selected. Signal state logic termination, fade to black.
  */
-void MainMenu::QuitAction(Rocket::Core::Event* event)
+void MainMenu::QuitAction()
 {
    m_finished = true;
    m_chooseSound->play();

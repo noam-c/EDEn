@@ -29,7 +29,7 @@ DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
       m_commandElement = dynamic_cast<Rocket::Controls::ElementFormControlInput*>(m_consoleDocument->GetElementById("commandPrompt"));
       if(m_commandElement != nullptr)
       {
-         m_bindings.bindAction(m_commandElement, "keydown", [this](Rocket::Core::Event* event) { onKeyPress(event); });
+         m_bindings.bindAction(m_commandElement, "keydown", [this](Rocket::Core::Event& event) { onKeyPress(event); });
       }
       else
       {
@@ -49,14 +49,14 @@ DebugConsoleWindow::~DebugConsoleWindow()
    m_context.RemoveReference();
 }
 
-void DebugConsoleWindow::onFocus(Rocket::Core::Event* event)
+void DebugConsoleWindow::onFocus(Rocket::Core::Event& event)
 {
    m_commandElement->Focus();
 }
 
-void DebugConsoleWindow::onKeyPress(Rocket::Core::Event* event)
+void DebugConsoleWindow::onKeyPress(Rocket::Core::Event& event)
 {
-   Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event->GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
+   Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
 
    if(key == Rocket::Core::Input::KI_RETURN)
    {

@@ -34,16 +34,16 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
          m_musicEnabledCheckbox = optionsForm->GetElementById("musicEnabled");
          if(m_musicEnabledCheckbox != nullptr)
          {
-            m_bindings.bindAction(m_musicEnabledCheckbox, "change", [this](Rocket::Core::Event* event) { onMusicEnabledChange(event); });
+            m_bindings.bindAction(m_musicEnabledCheckbox, "change", [this](Rocket::Core::Event& event) { onMusicEnabledChange(event); });
          }
          
          m_soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
          if(m_soundEnabledCheckbox != nullptr)
          {
-            m_bindings.bindAction(m_soundEnabledCheckbox, "change", [this](Rocket::Core::Event* event) { onSoundEnabledChange(event); });
+            m_bindings.bindAction(m_soundEnabledCheckbox, "change", [this](Rocket::Core::Event& event) { onSoundEnabledChange(event); });
          }
          
-         m_bindings.bindAction(optionsForm, "submit", [this](Rocket::Core::Event* event) { onSubmit(event); });
+         m_bindings.bindAction(optionsForm, "submit", [this](Rocket::Core::Event& event) { onSubmit(event); });
 
          loadSettings();
       }
@@ -92,24 +92,24 @@ void TitleScreenSettingsMenu::revertSettings()
    Settings::getCurrentSettings().revertChanges();
 }
 
-bool TitleScreenSettingsMenu::getCheckboxValue(Rocket::Core::Event* event)
+bool TitleScreenSettingsMenu::getCheckboxValue(Rocket::Core::Event& event)
 {
-   return event->GetCurrentElement()->GetAttribute("checked") != nullptr;
+   return event.GetCurrentElement()->GetAttribute("checked") != nullptr;
 }
 
-void TitleScreenSettingsMenu::onMusicEnabledChange(Rocket::Core::Event* event)
+void TitleScreenSettingsMenu::onMusicEnabledChange(Rocket::Core::Event& event)
 {
    Settings::getCurrentSettings().setMusicEnabled(TitleScreenSettingsMenu::getCheckboxValue(event));
 }
 
-void TitleScreenSettingsMenu::onSoundEnabledChange(Rocket::Core::Event* event)
+void TitleScreenSettingsMenu::onSoundEnabledChange(Rocket::Core::Event& event)
 {
    Settings::getCurrentSettings().setSoundEnabled(TitleScreenSettingsMenu::getCheckboxValue(event));
 }
 
-void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event* event)
+void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event& event)
 {
-   if(event->GetParameter<Rocket::Core::String>("submit", "cancel") == "apply")
+   if(event.GetParameter<Rocket::Core::String>("submit", "cancel") == "apply")
    {
       bool settingsUpdateSuccess = true;
       if(GraphicsUtil::getInstance()->isVideoModeRefreshRequired())

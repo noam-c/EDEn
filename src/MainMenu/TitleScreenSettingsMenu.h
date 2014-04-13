@@ -59,15 +59,15 @@ class TitleScreenSettingsMenu: public GameState
     */
    void waitForInputEvent(bool& finishState);
 
-   static bool getCheckboxValue(Rocket::Core::Event* event);
+   static bool getCheckboxValue(Rocket::Core::Event& event);
    void loadSettings();
    void saveSettings();
    void revertSettings();
 
-   void onMusicEnabledChange(Rocket::Core::Event* event);
-   void onSoundEnabledChange(Rocket::Core::Event* event);
-   void onFullScreenEnabledChange(Rocket::Core::Event* event);
-   void onSubmit(Rocket::Core::Event* event);
+   void onMusicEnabledChange(Rocket::Core::Event& event);
+   void onSoundEnabledChange(Rocket::Core::Event& event);
+   void onFullScreenEnabledChange(Rocket::Core::Event& event);
+   void onSubmit(Rocket::Core::Event& event);
 
    protected:
       /**

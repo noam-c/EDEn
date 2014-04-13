@@ -83,7 +83,7 @@ class MenuShell
     *
     * @param event The click event that occurred in the sidebar.
     */
-   void sidebarClicked(Rocket::Core::Event* event);
+   void sidebarClicked(Rocket::Core::Event& event);
 
    public:
       /**

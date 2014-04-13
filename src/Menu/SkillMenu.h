@@ -46,8 +46,8 @@ class SkillMenu: public CharacterDependentMenu
     */
    void initialize();
    
-   void skillClicked(Rocket::Core::Event* event);
-   void dragStarted(Rocket::Core::Event* event);
+   void skillClicked(Rocket::Core::Event& event);
+   void dragStarted(Rocket::Core::Event& event);
    
    void useSkill(int rowIndex);
 

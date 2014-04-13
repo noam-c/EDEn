@@ -48,7 +48,7 @@ class EdenRocketBindings
        * @param capture (Optional) True iff the event should be captured during the
        *                capturing phase instead of the bubbling phase.
        */
-      void bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, std::function<void(Rocket::Core::Event*)> handler, bool capture = false);
+      void bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, std::function<void(Rocket::Core::Event&)> handler, bool capture = false);
 
       /**
        * Binds a listener for the specified event to the specified DOM element.
@@ -59,7 +59,7 @@ class EdenRocketBindings
        * @param capture (Optional) True iff the event should be captured during the
        *                capturing phase instead of the bubbling phase.
        */
-      void bindAction(Rocket::Core::Element* element, const char* eventType, std::function<void(Rocket::Core::Event*)> handler, bool capture = false);
+      void bindAction(Rocket::Core::Element* element, const char* eventType, std::function<void(Rocket::Core::Event&)> handler, bool capture = false);
 };
 
 #endif

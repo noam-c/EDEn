@@ -14,7 +14,7 @@ EdenRocketBindings::~EdenRocketBindings()
 {
 }
 
-void EdenRocketBindings::bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, std::function<void(Rocket::Core::Event*)> handler, bool capture)
+void EdenRocketBindings::bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, std::function<void(Rocket::Core::Event&)> handler, bool capture)
 {
    Rocket::Core::Element* element = document->GetElementById(id);
    if(element != nullptr)
@@ -23,7 +23,7 @@ void EdenRocketBindings::bindAction(Rocket::Core::ElementDocument* document, con
    }
 }
 
-void EdenRocketBindings::bindAction(Rocket::Core::Element* element, const char* eventType, std::function<void(Rocket::Core::Event*)> handler, bool capture)
+void EdenRocketBindings::bindAction(Rocket::Core::Element* element, const char* eventType, std::function<void(Rocket::Core::Event&)> handler, bool capture)
 {
    m_listeners.emplace_back(new RocketListener(element, eventType, capture, handler));
 }

@@ -38,8 +38,8 @@ void ItemMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/itempane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "itemGrid", "click", [this](Rocket::Core::Event* event) { itemClicked(event); });
-      m_bindings.bindAction(m_paneDocument, "itemGrid", "dragstart", [this](Rocket::Core::Event* event) { dragStarted(event); });
+      m_bindings.bindAction(m_paneDocument, "itemGrid", "click", [this](Rocket::Core::Event& event) { itemClicked(event); });
+      m_bindings.bindAction(m_paneDocument, "itemGrid", "dragstart", [this](Rocket::Core::Event& event) { dragStarted(event); });
    }
 }
 
@@ -47,12 +47,12 @@ ItemMenu::~ItemMenu()
 {
 }
 
-void ItemMenu::dragStarted(Rocket::Core::Event* event)
+void ItemMenu::dragStarted(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event->GetParameter< void* >("drag_element", nullptr));
+   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event.GetParameter< void* >("drag_element", nullptr));
    if (dragElement != nullptr)
    {
-      Rocket::Core::Element* target = event->GetTargetElement();
+      Rocket::Core::Element* target = event.GetTargetElement();
 
       // Move up the DOM to the datagridrow item holding this element
       while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
@@ -75,9 +75,9 @@ void ItemMenu::dragStarted(Rocket::Core::Event* event)
    }
 }
 
-void ItemMenu::itemClicked(Rocket::Core::Event* event)
+void ItemMenu::itemClicked(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* target = event->GetTargetElement();
+   Rocket::Core::Element* target = event.GetTargetElement();
 
    // Move up the DOM to the datagridrow item holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")

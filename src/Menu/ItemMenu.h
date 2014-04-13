@@ -43,9 +43,9 @@ class ItemMenu: public MenuState
     */
    void initialize();
    
-   void itemClicked(Rocket::Core::Event* event);
+   void itemClicked(Rocket::Core::Event& event);
    void useItem(int rowIndex);
-   void dragStarted(Rocket::Core::Event* event);
+   void dragStarted(Rocket::Core::Event& event);
 
    public:
       /**

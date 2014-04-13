@@ -34,8 +34,8 @@ ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, con
       m_shortcutContainer = m_shortcutBarDocument->GetElementById("shortcutContainer");
       if (m_shortcutContainer != nullptr)
       {
-         m_bindings.bindAction(m_shortcutContainer, "dragdrop", [this](Rocket::Core::Event* event) { usableDropped(event); });
-         m_bindings.bindAction(m_shortcutContainer, "click", [this](Rocket::Core::Event* event) { shortcutClicked(event); });
+         m_bindings.bindAction(m_shortcutContainer, "dragdrop", [this](Rocket::Core::Event& event) { usableDropped(event); });
+         m_bindings.bindAction(m_shortcutContainer, "click", [this](Rocket::Core::Event& event) { shortcutClicked(event); });
       }
 
       refresh();
@@ -55,9 +55,9 @@ ShortcutBar::~ShortcutBar()
    m_rocketContext.RemoveReference();
 }
 
-void ShortcutBar::shortcutClicked(Rocket::Core::Event* event)
+void ShortcutBar::shortcutClicked(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* shortcutElement = event->GetTargetElement();
+   Rocket::Core::Element* shortcutElement = event.GetTargetElement();
 
    while(shortcutElement != nullptr && shortcutElement->GetParentNode() != m_shortcutContainer)
    {
@@ -111,9 +111,9 @@ bool ShortcutBar::invokeShortcut(int shortcutIndex)
    return false;
 }
 
-void ShortcutBar::usableDropped(Rocket::Core::Event* event)
+void ShortcutBar::usableDropped(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event->GetParameter< void* >("drag_element", nullptr));
+   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event.GetParameter< void* >("drag_element", nullptr));
    if (dragElement != nullptr)
    {
       const bool isItem = dragElement->HasAttribute("itemId");
@@ -132,7 +132,7 @@ void ShortcutBar::usableDropped(Rocket::Core::Event* event)
 
       if(usableId > 0)
       {
-         Rocket::Core::Element* dropElement = event->GetTargetElement();
+         Rocket::Core::Element* dropElement = event.GetTargetElement();
 
          // Only drops on direct children of the shortcut container count as
          // shortcut drops

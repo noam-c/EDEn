@@ -39,14 +39,14 @@ void DataMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/datapane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "saveGameGrid", "click", [this](Rocket::Core::Event* event) { saveGameClicked(event); });
+      m_bindings.bindAction(m_paneDocument, "saveGameGrid", "click", [this](Rocket::Core::Event& event) { saveGameClicked(event); });
    }
 
    m_confirmSaveDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/dataconfirmsave.rml");
    if(m_confirmSaveDocument != nullptr)
    {
-      m_bindings.bindAction(m_confirmSaveDocument, "confirm", "click", [this](Rocket::Core::Event* event) { confirmClicked(event); });
-      m_bindings.bindAction(m_confirmSaveDocument, "cancel", "click", [this](Rocket::Core::Event* event) { cancelClicked(event); });
+      m_bindings.bindAction(m_confirmSaveDocument, "confirm", "click", [this](Rocket::Core::Event& event) { confirmClicked(event); });
+      m_bindings.bindAction(m_confirmSaveDocument, "cancel", "click", [this](Rocket::Core::Event& event) { cancelClicked(event); });
    }
 
    m_slotToSave = -1;
@@ -102,20 +102,20 @@ void DataMenu::hideConfirmDialog()
    }
 }
 
-void DataMenu::confirmClicked(Rocket::Core::Event* event)
+void DataMenu::confirmClicked(Rocket::Core::Event& event)
 {
    saveToSlot(m_slotToSave);
    hideConfirmDialog();
 }
 
-void DataMenu::cancelClicked(Rocket::Core::Event* event)
+void DataMenu::cancelClicked(Rocket::Core::Event& event)
 {
    hideConfirmDialog();
 }
 
-void DataMenu::saveGameClicked(Rocket::Core::Event* event)
+void DataMenu::saveGameClicked(Rocket::Core::Event& event)
 {
-   Rocket::Core::Element* target = event->GetTargetElement();
+   Rocket::Core::Element* target = event.GetTargetElement();
 
    // Move up the DOM to the datagridrow item holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
