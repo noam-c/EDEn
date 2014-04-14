@@ -19,7 +19,7 @@ MenuState::MenuState(GameContext& gameContext, const std::string& stateName) :
    GameState(gameContext, GameStateType::MENU, stateName)
 {
    m_menuShell = std::make_shared<MenuShell>(m_rocketContext);
-   m_menuShell->initializeShortcutBar(getCurrentPlayerData(), getScriptEngine(), getMetadata(), getStateType());
+   m_menuShell->initializeShortcutBar(getCurrentPlayerData(), getMetadata(), getStateType());
 }
 
 MenuState::MenuState(GameContext& gameContext, const std::string& stateName, std::shared_ptr<MenuShell> menuShell) :

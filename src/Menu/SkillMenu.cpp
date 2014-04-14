@@ -53,7 +53,7 @@ SkillMenu::~SkillMenu()
 void SkillMenu::setCharacter(int characterIndex)
 {
    CharacterRoster* roster = getCurrentPlayerData().getRoster();
-   
+
    m_selectedCharacter = roster != nullptr && roster->getParty().size() > characterIndex ?
       roster->getParty()[characterIndex] :
       nullptr;
@@ -123,19 +123,10 @@ void SkillMenu::useSkill(int rowIndex)
    {
       return;
    }
-   
+
    const SkillList& skillList = m_selectedCharacter->getSkillList();
-   const UsableId skillId = skillList[rowIndex];
-   Skill* skill = getMetadata().getSkill(skillId);
-   if(skill == nullptr)
-   {
-      DEBUG("Tried to use bad skill with ID: %d.", skillId);
-   }
-   else
-   {
-      skill->use(getScriptEngine(), getStateType(), m_selectedCharacter);
-      m_skillViewModel.refresh(rowIndex);
-   }
+   getMetadata().useSkill(skillList[rowIndex], getStateType(), m_selectedCharacter);
+   m_skillViewModel.refresh(rowIndex);
 }
 
 Character* SkillMenu::getSelectedCharacter() const

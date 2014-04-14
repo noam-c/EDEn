@@ -51,11 +51,11 @@ MenuShell::~MenuShell()
    m_rocketContext->RemoveReference();
 }
 
-void MenuShell::initializeShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameStateType stateType)
+void MenuShell::initializeShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType)
 {
    if(m_shortcutBar == nullptr)
    {
-      m_shortcutBar = new ShortcutBar(playerData, scriptEngine, metadata, stateType, *m_rocketContext);
+      m_shortcutBar = new ShortcutBar(playerData, metadata, stateType, *m_rocketContext);
    }
 }
 

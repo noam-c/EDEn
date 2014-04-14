@@ -97,8 +97,8 @@ class MenuShell
        * Destructor.
        */
       ~MenuShell();
-   
-      void initializeShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameStateType stateType);
+
+      void initializeShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType);
 
       /**
        * @return The Rocket context managing the shell GUI.

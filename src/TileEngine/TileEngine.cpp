@@ -42,7 +42,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    GameState(gameContext, GameStateType::FIELD, "TileEngine"),
    m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
-   m_shortcutBar(getCurrentPlayerData(), getScriptEngine(), getMetadata(), getStateType(), *m_rocketContext)
+   m_shortcutBar(getCurrentPlayerData(), getMetadata(), getStateType(), *m_rocketContext)
 {
    m_scheduler = new Scheduler();
 
@@ -242,7 +242,7 @@ void TileEngine::toggleDebugConsole()
 NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size, const MovementDirection direction)
 {
    NPC* npcToAdd = nullptr;
-   
+
    if(m_entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
       npcToAdd = new NPC(getScriptEngine(), *m_scheduler, npcName, direction,

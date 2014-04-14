@@ -6,7 +6,7 @@
 
 GameContext::GameContext(ScriptEngine& scriptEngine) :
    m_scriptEngine(scriptEngine),
-   m_metadata(*this),
+   m_metadata(m_scriptEngine),
    m_playerData(m_metadata)
 {
    Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(m_scriptEngine));
@@ -17,7 +17,7 @@ GameContext::~GameContext()
 {
 }
 
-const Metadata& GameContext::getMetadata() const
+Metadata& GameContext::getMetadata()
 {
    return m_metadata;
 }

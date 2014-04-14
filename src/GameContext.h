@@ -17,7 +17,7 @@ class GameContext
    PlayerData m_playerData;
 
    ScriptEngine& getScriptEngine();
-   const Metadata& getMetadata() const;
+   Metadata& getMetadata();
    PlayerData& getCurrentPlayerData();
 
    public:

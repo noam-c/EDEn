@@ -37,14 +37,11 @@ class ShortcutBar
    Rocket::Core::Context& m_rocketContext;
 
    /** The item and skill metadata */
-   const Metadata& m_metadata;
-   
+   Metadata& m_metadata;
+
    /** The player data providing the shortcuts. */
    PlayerData& m_playerData;
-   
-   /** The script engine to use to run a shortcut's script. */
-   ScriptEngine& m_scriptEngine;
-   
+
    /** The type of game state driving the shortcuts. */
    const GameStateType m_stateType;
 
@@ -62,7 +59,7 @@ class ShortcutBar
        *
        * @param rocketContext The Rocket context to which this console window should attach.
        */
-      ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext);
+      ShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext);
 
       /**
        * Destructor.

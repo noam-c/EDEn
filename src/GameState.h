@@ -54,16 +54,16 @@ class GameState
 
       /** The type of the current game state. */
       GameStateType m_stateType;
-   
+
       ExecutionStack* m_executionStack;
-   
+
       void setExecutionStack(ExecutionStack* executionStack);
 
    protected:
       ExecutionStack* getExecutionStack() const;
       PlayerData& getCurrentPlayerData() const;
       ScriptEngine& getScriptEngine() const;
-      const Metadata& getMetadata() const;
+      Metadata& getMetadata() const;
 
       /** The game context responsible for the game's data and settings. */
       GameContext& m_gameContext;

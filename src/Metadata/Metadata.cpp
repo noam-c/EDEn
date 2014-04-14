@@ -16,7 +16,8 @@ const int debugFlag = DEBUG_PLAYER;
 const char* ITEM_DATA_PATH = "data/metadata/items.edb";
 const char* SKILL_DATA_PATH = "data/metadata/skills.edb";
 
-Metadata::Metadata(GameContext& gameContext)
+Metadata::Metadata(ScriptEngine& scriptEngine) :
+   m_scriptEngine(scriptEngine)
 {
    loadItemMetadata();
    loadSkillMetadata();
@@ -24,15 +25,6 @@ Metadata::Metadata(GameContext& gameContext)
 
 Metadata::~Metadata()
 {
-   for(std::map<UsableId, Item*>::iterator iter = m_items.begin(); iter != m_items.end(); ++iter)
-   {
-      delete iter->second;
-   }
-
-   for(std::map<UsableId, Skill*>::iterator iter = m_skills.begin(); iter != m_skills.end(); ++iter)
-   {
-      delete iter->second;
-   }
 }
 
 Json::Value Metadata::loadMetadataTable(const char* filePath)
@@ -71,7 +63,7 @@ void Metadata::loadItemMetadata()
    for(int i = 0; i < numItems; ++i)
    {
       int id = itemList[i]["id"].asInt();
-      m_items[id] = new Item(itemList[i]);
+      m_items.emplace(std::make_pair(id, Item(itemList[i])));
       DEBUG("Loaded item ID %d", id);
    } 
 
@@ -85,31 +77,56 @@ void Metadata::loadSkillMetadata()
    for(int i = 0; i < numSkills; ++i)
    {
       int id = skillList[i]["id"].asInt();
-      m_skills[id] = new Skill(skillList[i]);
+      m_skills.emplace(std::make_pair(id, Skill(skillList[i])));
       DEBUG("Loaded skill ID %d", id);
    }
 
    DEBUG("Skill data loaded.");
 }
 
-Item* Metadata::getItem(UsableId key) const
+const Item* Metadata::getItem(UsableId key) const
 {
-   std::map<UsableId, Item*>::const_iterator itemIterator = m_items.find(key);
+   const auto& itemIterator = m_items.find(key);
    if(itemIterator != m_items.end())
    {
-      return itemIterator->second;
+      return &(itemIterator->second);
    }
 
    return nullptr;
 }
 
-Skill* Metadata::getSkill(UsableId key) const
+const Skill* Metadata::getSkill(UsableId key) const
 {
-   std::map<UsableId, Skill*>::const_iterator skillIterator = m_skills.find(key);
+   const auto& skillIterator = m_skills.find(key);
    if(skillIterator != m_skills.end())
    {
-      return skillIterator->second;
+      return &(skillIterator->second);
    }
 
    return nullptr;
+}
+
+bool Metadata::useItem(UsableId key, const GameStateType stateType)
+{
+   const auto& itemIterator = m_items.find(key);
+   if(itemIterator != m_items.end())
+   {
+      itemIterator->second.use(m_scriptEngine, stateType);
+      return true;
+   }
+
+   DEBUG("Attempted to use item %d that does not exist", key);
+   return false;
+}
+
+bool Metadata::useSkill(UsableId key, const GameStateType stateType, Character* usingCharacter)
+{
+   const auto& skillIterator = m_skills.find(key);
+   if(skillIterator != m_skills.end())
+   {
+      skillIterator->second.use(m_scriptEngine, stateType, usingCharacter);
+   }
+
+   DEBUG("Attempted to use skill %d that does not exist", key);
+   return false;
 }

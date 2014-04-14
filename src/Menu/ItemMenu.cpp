@@ -101,14 +101,6 @@ void ItemMenu::useItem(int itemIndex)
 {
    const ItemList& itemList = getCurrentPlayerData().getInventory()->getItemList();
    const UsableId usableId = itemList[itemIndex].first;
-   Item* item = getMetadata().getItem(usableId);
-   if(item == nullptr)
-   {
-      DEBUG("Tried to use bad item with ID: %d.", usableId);
-   }
-   else
-   {
-      item->use(getScriptEngine(), getStateType());
-      m_itemViewModel.refresh(itemIndex);
-   }
+   getMetadata().useItem(usableId, getStateType());
+   m_itemViewModel.refresh(itemIndex);
 }

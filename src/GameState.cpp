@@ -55,7 +55,7 @@ PlayerData& GameState::getCurrentPlayerData() const
    return m_gameContext.getCurrentPlayerData();
 }
 
-const Metadata& GameState::getMetadata() const
+Metadata& GameState::getMetadata() const
 {
    return m_gameContext.getMetadata();
 }

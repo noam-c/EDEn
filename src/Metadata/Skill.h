@@ -25,9 +25,9 @@ class Skill : public Usable
        * @param skillNode The JSON node containing the skill metadata to load.
        */
       Skill(Json::Value& skillNode);
-   
-      unsigned int getAdeptitudeThreshold();
-      unsigned int getMasteryThreshold();
+
+      unsigned int getAdeptitudeThreshold() const;
+      unsigned int getMasteryThreshold() const;
 
       bool use(ScriptEngine& scriptEngine, GameStateType gameStateType, Character* usingCharacter);
 };

@@ -32,12 +32,12 @@ bool Skill::use(ScriptEngine& scriptEngine, GameStateType gameStateType, Charact
    return false;
 }
 
-unsigned int Skill::getAdeptitudeThreshold()
+unsigned int Skill::getAdeptitudeThreshold() const
 {
    return m_masteryThreshold / 2;
 }
 
-unsigned int Skill::getMasteryThreshold()
+unsigned int Skill::getMasteryThreshold() const
 {
    return m_masteryThreshold;
 }

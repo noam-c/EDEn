@@ -19,11 +19,10 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-ShortcutBar::ShortcutBar(PlayerData& playerData, ScriptEngine& scriptEngine, const Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext) :
+ShortcutBar::ShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext) :
    m_rocketContext(rocketContext),
    m_metadata(metadata),
    m_playerData(playerData),
-   m_scriptEngine(scriptEngine),
    m_stateType(stateType)
 {
    m_rocketContext.AddReference();
@@ -91,23 +90,18 @@ bool ShortcutBar::invokeShortcut(int shortcutIndex)
    const Shortcut& shortcut = m_playerData.getShortcut(shortcutIndex);
    if(shortcut.usableType == Shortcut::ITEM)
    {
-      Item* item = m_metadata.getItem(shortcut.usableId);
-      if(item != nullptr)
-      {
-         return item->use(m_scriptEngine, m_stateType);
-      }
+      return m_metadata.useItem(shortcut.usableId, m_stateType);
    }
    else if(shortcut.usableType == Shortcut::SKILL)
    {
-      Skill* skill = m_metadata.getSkill(shortcut.usableId);
       CharacterRoster* roster = m_playerData.getRoster();
       Character* usingCharacter = roster != nullptr ? roster->getCharacter(shortcut.characterId) : nullptr;
-      if(skill != nullptr && usingCharacter != nullptr)
+      if(usingCharacter != nullptr)
       {
-         return skill->use(m_scriptEngine, m_stateType, usingCharacter);
+         return m_metadata.useSkill(shortcut.usableId, m_stateType, usingCharacter);
       }
    }
-   
+
    return false;
 }
 
@@ -201,10 +195,10 @@ void ShortcutBar::refresh()
    {
       const Shortcut& shortcut = m_playerData.getShortcut(i);
       const Usable* usable =
-            shortcut.usableType == Shortcut::ITEM ?
-            static_cast<Usable*>(m_metadata.getItem(shortcut.usableId)) :
-            static_cast<Usable*>(m_metadata.getSkill(shortcut.usableId));
-
+         shortcut.usableType == Shortcut::ITEM ?
+            static_cast<const Usable*>(m_metadata.getItem(shortcut.usableId)) :
+            static_cast<const Usable*>(m_metadata.getSkill(shortcut.usableId));
+      
       Rocket::Core::Element* shortcutElement = m_shortcutBarDocument->CreateElement("div");
       Rocket::Core::ElementAttributes shortcutElementAttributes;
       shortcutElementAttributes.Set("class", "shortcut");
@@ -213,12 +207,12 @@ void ShortcutBar::refresh()
       {
          if (shortcut.usableType == Shortcut::ITEM)
          {
-            DEBUG("Adding shortcut for item %d", usable->getId());
+            DEBUG("Adding shortcut for item %d", shortcut.usableId);
             shortcutElementAttributes.Set("itemId", static_cast<int>(shortcut.usableId));
          }
          else
          {
-            DEBUG("Adding shortcut for skill %d", usable->getId());
+            DEBUG("Adding shortcut for skill %d", shortcut.usableId);
             shortcutElementAttributes.Set("skillId", static_cast<int>(shortcut.usableId));
             shortcutElementAttributes.Set("characterId", shortcut.characterId.c_str());
          }
