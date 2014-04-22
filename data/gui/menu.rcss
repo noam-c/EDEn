@@ -1,7 +1,7 @@
 body
 {
    font-family: Lunchtime Doubly So;
-   font-size: 16pt;
+   font-size: 16px;
    height: 100%;
    width: 100%;
 }

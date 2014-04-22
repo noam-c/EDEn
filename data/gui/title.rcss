@@ -1,7 +1,7 @@
 body
 {
    font-family: FairydustB;
-   font-size: 24pt;
+   font-size: 24px;
    background-decorator: image;
    background-image-src: ../images/splash.jpg;
    height: 100%;
@@ -13,7 +13,7 @@ body
 .title
 {
    margin-top: 20px;
-   font-size: 48pt;
+   font-size: 48px;
 }
 
 #menu
