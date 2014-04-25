@@ -78,7 +78,7 @@ class MenuState : public GameState
       /**
        * @return The scheduler used to manage the menu's coroutines
        */
-      Scheduler* getScheduler() const;
+      Scheduler* getScheduler();
 
       /**
        * Draws the menu.

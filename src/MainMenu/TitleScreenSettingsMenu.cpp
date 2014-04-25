@@ -11,7 +11,6 @@
 
 #include "ResourceLoader.h"
 #include "GraphicsUtil.h"
-#include "Scheduler.h"
 #include "Settings.h"
 
 #include "DebugUtils.h"
@@ -21,8 +20,6 @@ const int debugFlag = DEBUG_SETTINGS | DEBUG_TITLE;
 TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
    GameState(gameContext, GameStateType::TITLE, "TitleScreenSettingsMenu")
 {
-   m_scheduler = new Scheduler();
-
    m_titleSettingsDocument = m_rocketContext->LoadDocument("data/gui/titleOptionsMenu.rml");
 
    if(m_titleSettingsDocument != nullptr)
@@ -56,8 +53,6 @@ TitleScreenSettingsMenu::~TitleScreenSettingsMenu()
 {
    m_titleSettingsDocument->Close();
    m_titleSettingsDocument->RemoveReference();
-
-   delete m_scheduler;
 }
 
 void TitleScreenSettingsMenu::loadSettings()
@@ -166,7 +161,7 @@ bool TitleScreenSettingsMenu::step(long timePassed)
       return false;
    }
 
-   m_scheduler->runCoroutines(timePassed);
+   m_scheduler.runCoroutines(timePassed);
    bool done = false;
 
    waitForInputEvent(done);
@@ -223,7 +218,7 @@ void TitleScreenSettingsMenu::draw()
 {
 }
 
-Scheduler* TitleScreenSettingsMenu::getScheduler() const
+Scheduler* TitleScreenSettingsMenu::getScheduler()
 {
-   return m_scheduler;
+   return &m_scheduler;
 }

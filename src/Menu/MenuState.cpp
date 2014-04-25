@@ -112,7 +112,7 @@ void MenuState::waitForInputEvent(bool& finishState)
    handleEvent(event);
 }
 
-Scheduler* MenuState::getScheduler() const
+Scheduler* MenuState::getScheduler()
 {
    return m_menuShell->getScheduler();
 }

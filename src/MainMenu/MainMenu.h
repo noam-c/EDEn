@@ -9,6 +9,7 @@
 
 #include "GameState.h"
 #include "EdenRocketBindings.h"
+#include "Scheduler.h"
 
 #include <memory>
 
@@ -37,7 +38,7 @@ class MainMenu: public GameState
    EdenRocketBindings m_bindings;
 
    /** The coroutine scheduler for the main menu's GUI scripts */
-   Scheduler* m_scheduler;
+   Scheduler m_scheduler;
 
    /** Main menu music */
    std::shared_ptr<Music> m_music;
@@ -92,7 +93,7 @@ class MainMenu: public GameState
       /**
        * @return the main menu's script scheduler
        */
-      Scheduler* getScheduler() const;
+      Scheduler* getScheduler();
 
    public:
       /**

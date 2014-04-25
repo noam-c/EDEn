@@ -151,7 +151,7 @@ class GameState
       /**
        * @return the state's coroutine scheduler, or nullptr if none exists.
        */
-      virtual Scheduler* getScheduler() const;
+      virtual Scheduler* getScheduler();
 
       /**
        * @return the type of this game state.

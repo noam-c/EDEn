@@ -9,6 +9,7 @@
 
 #include "GameState.h"
 #include "EdenRocketBindings.h"
+#include "Scheduler.h"
 
 #include <memory>
 
@@ -24,7 +25,6 @@ namespace Rocket
 class Music;
 class Sound;
 class Settings;
-class Scheduler;
 
 /**
  * Provides the title screen settings menu, allowing the user to
@@ -38,7 +38,7 @@ class TitleScreenSettingsMenu: public GameState
    EdenRocketBindings m_bindings;
 
    /** The coroutine scheduler for the main menu's GUI scripts */
-   Scheduler* m_scheduler;
+   Scheduler m_scheduler;
 
    /** The title screen RML document */
    Rocket::Core::ElementDocument* m_titleSettingsDocument;
@@ -87,7 +87,7 @@ class TitleScreenSettingsMenu: public GameState
       /**
        * @return the title screen settings menu's script scheduler
        */
-      Scheduler* getScheduler() const;
+      Scheduler* getScheduler();
 
    public:
       /**

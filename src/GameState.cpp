@@ -102,7 +102,7 @@ void GameState::drawFrame()
    GraphicsUtil::getInstance()->flipScreen();
 }
 
-Scheduler* GameState::getScheduler() const
+Scheduler* GameState::getScheduler()
 {
    return nullptr;
 }

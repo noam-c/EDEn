@@ -16,6 +16,7 @@
 #include "PlayerData.h"
 #include "ShortcutBar.h"
 #include "Point2D.h"
+#include "Scheduler.h"
 
 #include <map>
 #include <memory>
@@ -63,7 +64,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
    DialogueController* m_dialogue;
 
    /** The coroutine scheduler used by the tile engine. */
-   Scheduler* m_scheduler;
+   Scheduler m_scheduler;
 
    /** The actor representing the player character on the map */
    PlayerCharacter* m_playerActor;
@@ -174,7 +175,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
       /**
        * @return The tile engine's coroutine scheduler.
        */
-      Scheduler* getScheduler() const;
+      Scheduler* getScheduler();
 
       /**
        * @return The name of the currently loaded map.

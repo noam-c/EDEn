@@ -7,7 +7,6 @@
 #include "MenuShell.h"
 #include "GraphicsUtil.h"
 #include "MenuState.h"
-#include "Scheduler.h"
 #include "ShortcutBar.h"
 #include <Rocket/Core.h>
 
@@ -19,7 +18,6 @@ MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
    m_shortcutBar(nullptr),
    m_currentState(nullptr)
 {
-   m_scheduler = new Scheduler();
 
    m_rocketContext->AddReference();
    m_shellDocument = m_rocketContext->LoadDocument("data/gui/menushell.rml");
@@ -64,9 +62,9 @@ Rocket::Core::Context* MenuShell::getRocketContext() const
    return m_rocketContext;
 }
 
-Scheduler* MenuShell::getScheduler() const
+Scheduler* MenuShell::getScheduler()
 {
-   return m_scheduler;
+   return &m_scheduler;
 }
 
 Rocket::Core::ElementDocument* MenuShell::getShellDocument() const

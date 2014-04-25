@@ -10,7 +10,6 @@
 #include <Rocket/Core.h>
 
 #include "ResourceLoader.h"
-#include "Scheduler.h"
 #include "Music.h"
 #include "Sound.h"
 
@@ -31,8 +30,6 @@ enum MainMenuActions
 MainMenu::MainMenu(GameContext& gameContext) :
    GameState(gameContext, GameStateType::TITLE, "MainMenu")
 {
-   m_scheduler = new Scheduler();
-
    m_chooseSound = ResourceLoader::getSound("choose");
    m_reselectSound = ResourceLoader::getSound("reselect");
 
@@ -58,15 +55,13 @@ MainMenu::~MainMenu()
 {
    m_titleDocument->Close();
    m_titleDocument->RemoveReference();
-
-   delete m_scheduler;
 }
 
 bool MainMenu::step(long timePassed)
 {
    if(m_finished) return false;
 
-   m_scheduler->runCoroutines(timePassed);
+   m_scheduler.runCoroutines(timePassed);
    bool done = false;
 
    m_music->play();
@@ -185,7 +180,7 @@ void MainMenu::draw()
 {
 }
 
-Scheduler* MainMenu::getScheduler() const
+Scheduler* MainMenu::getScheduler()
 {
-   return m_scheduler;
+   return &m_scheduler;
 }

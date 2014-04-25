@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include "EdenRocketBindings.h"
+#include "Scheduler.h"
 
 /**
  * \todo Change this include to forward declarations when enums
@@ -31,7 +32,6 @@ namespace Rocket
 class MenuState;
 class Metadata;
 class PlayerData;
-class Scheduler;
 class ScriptEngine;
 class ShortcutBar;
 
@@ -69,7 +69,7 @@ class MenuShell
    MenuState* m_currentState;
 
    /** The menu's script scheduler */
-   Scheduler* m_scheduler;
+   Scheduler m_scheduler;
 
    /**
     * Refreshes the menu shell GUI components.
@@ -108,7 +108,7 @@ class MenuShell
       /**
        * @return The scheduler used to manage the menu coroutines.
        */
-      Scheduler* getScheduler() const;
+      Scheduler* getScheduler();
 
       /**
        * @return The RML document managing the shell GUI.

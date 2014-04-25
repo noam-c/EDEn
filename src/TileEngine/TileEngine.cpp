@@ -15,7 +15,6 @@
 #include "NPC.h"
 #include "PlayerCharacter.h"
 #include "PlayerData.h"
-#include "Scheduler.h"
 #include "GraphicsUtil.h"
 #include "ResourceLoader.h"
 #include "Region.h"
@@ -44,8 +43,6 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    m_entityGrid(*this, m_messagePipe),
    m_shortcutBar(getCurrentPlayerData(), getMetadata(), getStateType(), *m_rocketContext)
 {
-   m_scheduler = new Scheduler();
-
    m_messagePipe.registerListener<MapExitMessage>(this);
    m_messagePipe.registerListener<MapTriggerMessage>(this);
 
@@ -53,7 +50,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    m_playerActor = new PlayerCharacter(m_messagePipe, m_entityGrid, getCurrentPlayerData());
    m_cameraTarget = m_playerActor;
    getScriptEngine().setTileEngine(this);
-   m_dialogue = new DialogueController(*m_rocketContext, *m_scheduler, getScriptEngine());
+   m_dialogue = new DialogueController(*m_rocketContext, m_scheduler, getScriptEngine());
 
    startChapter(chapterName);
 }
@@ -65,7 +62,6 @@ TileEngine::~TileEngine()
    m_messagePipe.unregisterListener<MapExitMessage>(this);
    delete m_dialogue;
    delete m_playerActor;
-   delete m_scheduler;
 }
 
 void TileEngine::loadPlayerData(const std::string& path)
@@ -79,7 +75,7 @@ void TileEngine::loadPlayerData(const std::string& path)
 
 void TileEngine::startChapter(const std::string& chapterName)
 {
-   getScriptEngine().runChapterScript(chapterName, *m_scheduler);
+   getScriptEngine().runChapterScript(chapterName, m_scheduler);
 }
 
 void TileEngine::clearNPCs()
@@ -94,9 +90,9 @@ void TileEngine::clearNPCs()
    m_npcList.clear();
 }
 
-Scheduler* TileEngine::getScheduler() const
+Scheduler* TileEngine::getScheduler()
 {
-   return m_scheduler;
+   return &m_scheduler;
 }
 
 std::string TileEngine::getMapName() const
@@ -177,7 +173,7 @@ int TileEngine::setMap(std::string mapName)
    DEBUG("Map set to: %s", mapName.c_str());
 
    recalculateMapOffsets();
-   return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, *m_scheduler);
+   return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, m_scheduler);
 }
 
 void TileEngine::followWithCamera(const Actor* target)
@@ -196,8 +192,8 @@ int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D
    {
       auto slider = std::make_shared<CameraSlider>(m_camera, origin, destination, speed);
       m_cameraTarget = nullptr;
-      m_scheduler->start(slider);
-      return m_scheduler->join(slider);
+      m_scheduler.start(slider);
+      return m_scheduler.join(slider);
    }
 
    return 0;
@@ -245,7 +241,7 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
 
    if(m_entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
-      npcToAdd = new NPC(getScriptEngine(), *m_scheduler, npcName, direction,
+      npcToAdd = new NPC(getScriptEngine(), m_scheduler, npcName, direction,
                                  spritesheetName, m_messagePipe, m_entityGrid,
                                  m_currRegion->getName(), npcLocation, size);
       m_npcList[npcName] = npcToAdd;
@@ -380,7 +376,7 @@ void TileEngine::draw()
 bool TileEngine::step(long timePassed)
 {
    bool done = false;
-   m_scheduler->runCoroutines(timePassed);
+   m_scheduler.runCoroutines(timePassed);
 
    handleInputEvents(done);
 
