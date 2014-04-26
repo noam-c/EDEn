@@ -7,6 +7,7 @@
 #ifndef DIALOGUE_CONTROLLER_H
 #define DIALOGUE_CONTROLLER_H
 
+#include <memory>
 #include <queue>
 #include <string>
 

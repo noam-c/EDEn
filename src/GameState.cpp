@@ -8,6 +8,8 @@
 #include "GraphicsUtil.h"
 #include "GameContext.h"
 
+#include <algorithm>
+
 #include <SDL.h>
 
 #include <Rocket/Core.h>

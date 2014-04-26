@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "DebugUtils.h"
 #include <math.h>
+#include <algorithm>
 
 const int debugFlag = DEBUG_TILE_ENG;
 

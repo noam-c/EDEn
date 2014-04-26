@@ -10,6 +10,7 @@
 #include <limits>
 #include <string>
 #include <list>
+#include <memory>
 #include <vector>
 #include "Grid.h"
 #include "MovementDirection.h"

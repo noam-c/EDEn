@@ -9,6 +9,7 @@
 
 #include <string>
 #include <map>
+#include <memory>
 #include "EquipData.h"
 #include "SkillList.h"
 
