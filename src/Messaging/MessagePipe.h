@@ -39,7 +39,6 @@ namespace messaging
 
             void send(const T& message) const
             {
-               typename std::set<Listener<T>*>::const_iterator iter;
                for(auto& listener : m_listeners)
                {
                   listener->receive(message);
@@ -69,7 +68,7 @@ namespace messaging
          }
 
          auto newListenerList = new ListenerList<T>();
-         listenerLists.insert(std::make_pair(std::type_index(typeid(T)), std::unique_ptr<ListenerList<T>>(newListenerList)));
+         listenerLists.emplace(std::type_index(typeid(T)), std::unique_ptr<ListenerList<T>>(newListenerList));
          return newListenerList;
       }
       

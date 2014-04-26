@@ -75,11 +75,11 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
          {
             if(rowSkill == nullptr)
             {
-               row.push_back(Rocket::Core::String(13, "Unknown %d", skillId));
+               row.emplace_back(13, "Unknown %d", skillId);
             }
             else
             {
-               row.push_back(rowSkill->getName().c_str());
+               row.emplace_back(rowSkill->getName().c_str());
             }
          }
          else if (columns[i] == "icon")
@@ -90,7 +90,7 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
             }
             else
             {
-               row.push_back(rowSkill->getIconPath().c_str());
+               row.emplace_back(rowSkill->getIconPath().c_str());
             }
          }
       }

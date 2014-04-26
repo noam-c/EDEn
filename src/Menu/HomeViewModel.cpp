@@ -37,27 +37,27 @@ void HomeViewModel::GetRow(Rocket::Core::StringList& row,
       {
          if (columns[i] == "name")
          {
-            row.push_back(character->getName().c_str());
+            row.emplace_back(character->getName().c_str());
          }
          else if (columns[i] == "portrait")
          {
-            row.push_back(character->getPortraitPath().c_str());
+            row.emplace_back(character->getPortraitPath().c_str());
          }
          else if (columns[i] == "HP")
          {
             std::ostringstream hpStringStream;
 
             hpStringStream << "HP: " << character->getHP() << '/' << character->getMaxHP();
-            Rocket::Core::String hpString(hpStringStream.str().c_str());
-            row.push_back(hpString);
+            std::string hpString = hpStringStream.str();
+            row.emplace_back(hpString.c_str());
          }
          else if (columns[i] == "SP")
          {
             std::ostringstream spStringStream;
 
             spStringStream << "SP: " << character->getSP() << '/' << character->getMaxSP();
-            Rocket::Core::String spString(spStringStream.str().c_str());
-            row.push_back(spString);
+            std::string spString = spStringStream.str();
+            row.emplace_back(spString.c_str());
          }
       }
    }

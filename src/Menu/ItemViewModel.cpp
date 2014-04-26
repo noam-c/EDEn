@@ -52,16 +52,16 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
          {
             if(rowItem == nullptr)
             {
-               row.push_back(Rocket::Core::String(13, "Unknown %d", usableId));
+               row.emplace_back(13, "Unknown %d", usableId);
             }
             else
             {
-               row.push_back(rowItem->getName().c_str());
+               row.emplace_back(rowItem->getName().c_str());
             }
          }
          else if (columns[i] == "quantity")
          {
-            row.push_back(Rocket::Core::String(5, "%d", itemQuantity));
+            row.emplace_back(5, "%d", itemQuantity);
          }
          else if (columns[i] == "icon")
          {
@@ -71,7 +71,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
             }
             else
             {
-               row.push_back(rowItem->getIconPath().c_str());
+               row.emplace_back(rowItem->getIconPath().c_str());
             }
          }
       }

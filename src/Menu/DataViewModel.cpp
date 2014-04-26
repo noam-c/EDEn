@@ -39,7 +39,7 @@ void DataViewModel::GetRow(Rocket::Core::StringList& row,
          {
             if(characters.size() >= 1)
             {
-               row.push_back(characters[0]->getPortraitPath().c_str());
+               row.emplace_back(characters[0]->getPortraitPath().c_str());
             }
             else
             {
@@ -50,7 +50,7 @@ void DataViewModel::GetRow(Rocket::Core::StringList& row,
          {
             if(characters.size() >= 2)
             {
-               row.push_back(characters[1]->getPortraitPath().c_str());
+               row.emplace_back(characters[1]->getPortraitPath().c_str());
             }
             else
             {
@@ -61,7 +61,7 @@ void DataViewModel::GetRow(Rocket::Core::StringList& row,
          {
             if(characters.size() >= 3)
             {
-               row.push_back(characters[2]->getPortraitPath().c_str());
+               row.emplace_back(characters[2]->getPortraitPath().c_str());
             }
             else
             {
@@ -72,7 +72,7 @@ void DataViewModel::GetRow(Rocket::Core::StringList& row,
          {
             if(characters.size() >= 4)
             {
-               row.push_back(characters[4]->getPortraitPath().c_str());
+               row.emplace_back(characters[4]->getPortraitPath().c_str());
             }
             else
             {

@@ -9,6 +9,8 @@
 #include "Skill.h"
 #include "json.h"
 #include <fstream>
+#include <tuple>
+#include <utility>
 
 #include "DebugUtils.h"
 
@@ -63,7 +65,7 @@ void Metadata::loadItemMetadata()
    for(int i = 0; i < numItems; ++i)
    {
       int id = itemList[i]["id"].asInt();
-      m_items.emplace(std::make_pair(id, Item(itemList[i])));
+      m_items.emplace(id, itemList[i]);
       DEBUG("Loaded item ID %d", id);
    } 
 
@@ -77,7 +79,7 @@ void Metadata::loadSkillMetadata()
    for(int i = 0; i < numSkills; ++i)
    {
       int id = skillList[i]["id"].asInt();
-      m_skills.emplace(std::make_pair(id, Skill(skillList[i])));
+      m_skills.emplace(id, skillList[i]);
       DEBUG("Loaded skill ID %d", id);
    }
 
@@ -125,6 +127,7 @@ bool Metadata::useSkill(UsableId key, const GameStateType stateType, Character* 
    if(skillIterator != m_skills.end())
    {
       skillIterator->second.use(m_scriptEngine, stateType, usingCharacter);
+      return true;
    }
 
    DEBUG("Attempted to use skill %d that does not exist", key);

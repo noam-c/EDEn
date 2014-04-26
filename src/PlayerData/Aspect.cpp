@@ -71,8 +71,7 @@ void Aspect::parseStatBonuses(const Json::Value& aspectToLoad)
    const Json::Value& statBonuses = aspectToLoad[Aspect::STATS_ELEMENT];
    for(Json::Value::const_iterator iter = statBonuses.begin(); iter != statBonuses.end(); ++iter)
    {
-      std::pair<std::string, StatBonusCalculation> statCalculation(iter.key().asString(), *iter);
-      m_statBonusCalculations.insert(statCalculation);
+      m_statBonusCalculations.emplace(iter.key().asString(), *iter);
    }
 }
 

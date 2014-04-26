@@ -268,7 +268,7 @@ NPC* TileEngine::getNPC(const std::string& npcName) const
 
 void TileEngine::addTriggerListener(const std::string& triggerName, std::unique_ptr<MapTriggerCallback> callback)
 {
-   m_triggerScripts.push_back(std::make_pair(triggerName, std::move(callback)));
+   m_triggerScripts.emplace_back(triggerName, std::move(callback));
 }
 
 PlayerCharacter* TileEngine::getPlayerCharacter() const

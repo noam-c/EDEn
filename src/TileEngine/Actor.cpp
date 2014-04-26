@@ -94,7 +94,7 @@ void Actor::move(const shapes::Point2D& dst)
    if(m_entityGrid.withinMap(dst))
    {
       DEBUG("Sending move order to %s: %d,%d", m_name.c_str(), dst.x, dst.y);
-      m_orders.push(std::unique_ptr<Order>(new MoveOrder(*this, dst, m_entityGrid)));
+      m_orders.emplace(new MoveOrder(*this, dst, m_entityGrid));
    }
    else
    {
@@ -104,7 +104,7 @@ void Actor::move(const shapes::Point2D& dst)
 
 void Actor::stand(MovementDirection direction)
 {
-   m_orders.push(std::unique_ptr<Order>(new StandOrder(*this, direction)));
+   m_orders.emplace(new StandOrder(*this, direction));
 }
 
 void Actor::faceActor(Actor* other)

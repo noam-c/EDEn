@@ -55,8 +55,7 @@ void DialogueController::initMainDialogue()
 
 void DialogueController::addLine(LineType type, const std::string& speech, const std::shared_ptr<Task>& task)
 {
-   std::unique_ptr<Line> nextLine(new Line(type, speech, task));
-   m_lineQueue.push(std::move(nextLine));
+   m_lineQueue.emplace(new Line(type, speech, task));
    updateDialogueBox();
 }
 

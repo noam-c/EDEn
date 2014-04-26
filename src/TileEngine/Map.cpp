@@ -67,12 +67,12 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
       const std::string layerName(layerElement->Attribute("name"));
       if(layerName == "background")
       {
-         m_backgroundLayers.push_back(std::unique_ptr<Layer>(new Layer(layerElement, m_bounds)));
+         m_backgroundLayers.emplace_back(new Layer(layerElement, m_bounds));
          DEBUG("Background layer added.");
       }
       else if(layerName == "foreground")
       {
-         m_foregroundLayers.push_back(std::unique_ptr<Layer>(new Layer(layerElement, m_bounds)));
+         m_foregroundLayers.emplace_back(new Layer(layerElement, m_bounds));
          DEBUG("Foreground layer added.");
       }
       
@@ -234,7 +234,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
          
          if(rect.getWidth() > 0 && rect.getHeight() > 0 && !nextMap.empty())
          {
-            m_mapExits.push_back(MapExit(nextMap, rect));
+            m_mapExits.emplace_back(nextMap, rect);
          }
          
          objectElement = objectElement->NextSiblingElement("object");
@@ -279,7 +279,7 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
          
          if(rect.getWidth() > 0 && rect.getHeight() > 0)
          {
-            m_triggerZones.push_back(TriggerZone(name, rect));
+            m_triggerZones.emplace_back(name, rect);
          }
          
          objectElement = objectElement->NextSiblingElement("object");

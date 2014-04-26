@@ -168,7 +168,7 @@ void DataMenu::refreshSaveGames()
          std::string path = "data/savegames/" + filename;
          saveGameData->load(path);
          
-         m_saveGames.push_back(std::make_pair(path, std::move(saveGameData)));
+         m_saveGames.emplace_back(path, std::move(saveGameData));
       }
    }
    

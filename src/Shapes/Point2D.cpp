@@ -41,22 +41,22 @@ namespace shapes
    
       if(point.x > bounds.left && point.y > bounds.top)
       {
-         diagonalPoints.push_back(Point2D(point.x - 1, point.y - 1));
+         diagonalPoints.emplace_back(point.x - 1, point.y - 1);
       }
    
       if(point.x > bounds.left && point.y < bounds.bottom - 1)
       {
-         diagonalPoints.push_back(Point2D(point.x - 1, point.y + 1));
+         diagonalPoints.emplace_back(point.x - 1, point.y + 1);
       }
    
       if(point.x < bounds.right - 1 && point.y > bounds.top)
       {
-         diagonalPoints.push_back(Point2D(point.x + 1, point.y - 1));
+         diagonalPoints.emplace_back(point.x + 1, point.y - 1);
       }
    
       if(point.x < bounds.right - 1 && point.y < bounds.bottom - 1)
       {
-         diagonalPoints.push_back(Point2D(point.x + 1, point.y + 1));
+         diagonalPoints.emplace_back(point.x + 1, point.y + 1);
       }
    
       return diagonalPoints;
@@ -68,22 +68,22 @@ namespace shapes
    
       if(point.x > bounds.left)
       {
-         lateralPoints.push_back(Point2D(point.x - 1, point.y));
+         lateralPoints.emplace_back(point.x - 1, point.y);
       }
    
       if(point.x < bounds.right - 1)
       {
-         lateralPoints.push_back(Point2D(point.x + 1, point.y));
+         lateralPoints.emplace_back(point.x + 1, point.y);
       }
    
       if(point.y > bounds.top)
       {
-         lateralPoints.push_back(Point2D(point.x, point.y - 1));
+         lateralPoints.emplace_back(point.x, point.y - 1);
       }
    
       if(point.y < bounds.bottom - 1)
       {
-         lateralPoints.push_back(Point2D(point.x, point.y + 1));
+         lateralPoints.emplace_back(point.x, point.y + 1);
       }
    
       return lateralPoints;

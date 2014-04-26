@@ -129,8 +129,7 @@ void Character::parseBaseStats(const Json::Value& baseStatsDataContainer)
    const Json::Value& baseStatsData = baseStatsDataContainer[Character::BASE_STATS_ELEMENT];
    for(Json::Value::const_iterator baseStatNameIter = baseStatsData.begin(); baseStatNameIter != baseStatsData.end(); ++baseStatNameIter)
    {
-      const std::pair<std::string, int> baseStat(baseStatNameIter.key().asString(), (*baseStatNameIter).asInt());
-      m_baseStats.insert(baseStat);
+      m_baseStats.emplace(baseStatNameIter.key().asString(), (*baseStatNameIter).asInt());
    }
 }
 
