@@ -25,5 +25,5 @@ void EdenRocketBindings::bindAction(Rocket::Core::ElementDocument* document, con
 
 void EdenRocketBindings::bindAction(Rocket::Core::Element* element, const char* eventType, std::function<void(Rocket::Core::Event&)> handler, bool capture)
 {
-   m_listeners.emplace_back(new RocketListener(element, eventType, capture, handler));
+   m_listeners.emplace_back(element, eventType, capture, handler);
 }

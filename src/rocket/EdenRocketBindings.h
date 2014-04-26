@@ -24,7 +24,7 @@
 class EdenRocketBindings
 {
    /** The listeners created by the view model. */
-   std::vector<std::unique_ptr<RocketListener>> m_listeners;
+   std::vector<RocketListener> m_listeners;
 
    public:
       /**

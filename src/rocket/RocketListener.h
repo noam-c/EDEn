@@ -12,21 +12,15 @@ class RocketListener : public Rocket::Core::EventListener
    std::function<void(Rocket::Core::Event&)> m_processFunction;
 
    public:
-      RocketListener(Rocket::Core::Element* element, Rocket::Core::String eventType, bool capture, std::function<void(Rocket::Core::Event&)> processFunction)
-         : m_element(element), m_eventType(eventType), m_capture(capture), m_processFunction(processFunction)
-      {
-         m_element->AddEventListener(eventType, this, capture);
-      }
+      RocketListener(Rocket::Core::Element* element, Rocket::Core::String eventType, bool capture, std::function<void(Rocket::Core::Event&)> processFunction);
+      
+      RocketListener(const RocketListener& listener);
 
-      ~RocketListener()
-      {
-         m_element->RemoveEventListener(m_eventType, this, m_capture);
-      }
+      RocketListener(RocketListener&& listener);
+      
+      ~RocketListener();
 
-      void ProcessEvent(Rocket::Core::Event& event)
-      {
-         m_processFunction(event);
-      }
+      void ProcessEvent(Rocket::Core::Event& event);
 };
 
 #endif

@@ -185,6 +185,7 @@ SET(SOURCES
   src/rocket/RocketScriptHandler.cpp
   src/rocket/RocketScriptHandlerFactory.cpp
   src/rocket/RocketContextRegistry.cpp
+  src/rocket/RocketListener.cpp
   src/rocket/RocketSDLInputMapping.cpp
   src/Shapes/Size.cpp
   src/Shapes/Point2D.cpp
