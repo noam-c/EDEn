@@ -42,7 +42,7 @@ class ScriptEngine
    /**
     * The tile engine to execute commands on
     */
-   TileEngine* m_tileEngine;
+   std::weak_ptr<TileEngine> m_tileEngine;
    
    /**
     * The player data to execute commands on
@@ -149,7 +149,7 @@ class ScriptEngine
        *
        * @param engine The tile engine to set.
        */
-      void setTileEngine(TileEngine* engine);
+      void setTileEngine(std::shared_ptr<TileEngine> engine);
 
       /**
        * Set the player data to send commands to.

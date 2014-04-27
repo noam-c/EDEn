@@ -106,15 +106,15 @@ void ScriptEngine::registerEnums()
    lua_setglobal(m_luaVM, "Direction");
 }
 
-void ScriptEngine::setTileEngine(TileEngine* engine)
+void ScriptEngine::setTileEngine(std::shared_ptr<TileEngine> engine)
 {
    m_tileEngine = engine;
-   if(m_tileEngine != nullptr)
+   if(engine)
    {
-      luaW_push(m_luaVM, m_tileEngine);
+      luaW_push(m_luaVM, engine.get());
       lua_setglobal(m_luaVM, "map");
 
-      luaW_push(m_luaVM, m_tileEngine->getPlayerCharacter());
+      luaW_push(m_luaVM, engine->getPlayerCharacter());
       lua_setglobal(m_luaVM, "playerSprite");
    }
    else
@@ -160,6 +160,13 @@ int ScriptEngine::narrate(lua_State* luaStack)
    {
       return 0;
    }
+   
+   auto tileEngine = m_tileEngine.lock();
+   if(!tileEngine)
+   {
+      DEBUG("Missing tile engine. Cannot add dialogue.");
+      return lua_error(luaStack);
+   }
 
    std::string text;
    if(!ScriptUtilities::getParameter(luaStack, 1, 1, "text", text))
@@ -183,7 +190,7 @@ int ScriptEngine::narrate(lua_State* luaStack)
    }
 
    DEBUG("Narrating text: %s", text.c_str());
-   m_tileEngine->dialogueNarrate(text, task);
+   tileEngine->dialogueNarrate(text, task);
 
    return callResult;
 }
@@ -195,6 +202,14 @@ int ScriptEngine::say(lua_State* luaStack)
    {
       return 0;
    }
+
+   auto tileEngine = m_tileEngine.lock();
+   if(!tileEngine)
+   {
+      DEBUG("Missing tile engine. Cannot add dialogue.");
+      return lua_error(luaStack);
+   }
+   
 
    std::string text;
    if(!ScriptUtilities::getParameter(luaStack, 1, 1, "text", text))
@@ -218,7 +233,7 @@ int ScriptEngine::say(lua_State* luaStack)
    }
 
    DEBUG("Saying text: %s", text.c_str());
-   m_tileEngine->dialogueSay(text, task);
+   tileEngine->dialogueSay(text, task);
 
    return callResult;
 }
@@ -348,6 +363,13 @@ int ScriptEngine::generateRandom(lua_State* luaStack)
 
 int ScriptEngine::setRegion(lua_State* luaStack)
 {
+   auto tileEngine = m_tileEngine.lock();
+   if(!tileEngine)
+   {
+      DEBUG("Missing tile engine. Cannot set region.");
+      return lua_error(luaStack);
+   }
+
    std::string regionName;
    if(!ScriptUtilities::getParameter(luaStack, 1, 1, "name", regionName))
    {
@@ -357,7 +379,7 @@ int ScriptEngine::setRegion(lua_State* luaStack)
 
    DEBUG("Setting region: %s", regionName.c_str());
 
-   return m_tileEngine->setRegion(regionName);
+   return tileEngine->setRegion(regionName);
 }
 
 std::shared_ptr<NPCScript> ScriptEngine::createNPCCoroutine(NPC* npc, const std::string& regionName, const std::string& mapName)

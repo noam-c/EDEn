@@ -7,6 +7,8 @@
 #ifndef BLEND_STATE_H
 #define BLEND_STATE_H
 
+#include <memory>
+
 #include "TransitionState.h"
 
 /**
@@ -33,7 +35,7 @@ class BlendState : public TransitionState
        * @param newState The state that is being transitioned to.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      BlendState(GameContext& gameContext, GameState* oldState, GameState* newState, long transitionLength = 1000);
+      BlendState(GameContext& gameContext, std::shared_ptr<GameState> oldState, std::shared_ptr<GameState> newState, long transitionLength = 1000);
 
       /**
        * Destructor.

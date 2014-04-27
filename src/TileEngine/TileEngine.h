@@ -43,7 +43,7 @@ struct MapTriggerMessage;
  *
  * @author Noam Chitayat
  */
-class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, public messaging::Listener<MapTriggerMessage>
+class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, public messaging::Listener<MapTriggerMessage>, public std::enable_shared_from_this<TileEngine>
 {
    /** The current region that the player is in. */
    std::shared_ptr<Region> m_currRegion;
@@ -136,6 +136,11 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * Rebinds the TileEngine's message pipe to the player data.
        */
       void activate();
+      /**
+       * Deactivation of state.
+       * Unbinds the TileEngine's message pipe from the player data.
+       */
+      void deactivate();
 
       /**
        * Logic step.

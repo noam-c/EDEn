@@ -15,15 +15,15 @@
 
 const int NUM_TRANSITIONS = 3;
 
-GameState* RandomTransitionGenerator::create(GameContext& gameContext, GameState* oldState, GameState* newState, long transitionLength)
+std::shared_ptr<GameState> RandomTransitionGenerator::create(GameContext& gameContext, std::shared_ptr<GameState> oldState, std::shared_ptr<GameState> newState, long transitionLength)
 {
   int randomNumber = rand() % NUM_TRANSITIONS;
-  GameState* transition = nullptr;
+  std::shared_ptr<GameState> transition;
   switch(randomNumber)
   {
-    case 0: transition = new FadeState(gameContext, oldState, transitionLength); break;
-    case 1: transition = new SpinState(gameContext, oldState, transitionLength); break;
-    case 2: transition = new BlendState(gameContext, oldState, newState, transitionLength); break;
+     case 0: transition = std::make_shared<FadeState>(gameContext, oldState, transitionLength); break;
+     case 1: transition = std::make_shared<SpinState>(gameContext, oldState, transitionLength); break;
+     case 2: transition = std::make_shared<BlendState>(gameContext, oldState, newState, transitionLength); break;
   }
 
   return transition;

@@ -37,7 +37,7 @@ int main (int argc, char *argv[])
       GameContext gameContext(scriptEngine);
 
       DEBUG("Pushing Main Menu state.");
-      executionStack.pushState(new MainMenu(gameContext));
+      executionStack.pushState(std::make_shared<MainMenu>(gameContext));
 
       DEBUG("Beginning game execution.");
       executionStack.execute();

@@ -13,7 +13,7 @@
 const int debugFlag = DEBUG_TRANSITIONS;
 
 TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName,
-      GameState* oldState, GameState* newState, long transitionLength) :
+      std::shared_ptr<GameState> oldState, std::shared_ptr<GameState> newState, long transitionLength) :
       GameState(gameContext, GameStateType::TRANSITION, stateName),
       m_totalTime(0),
       m_transitionLength(transitionLength),
@@ -42,7 +42,7 @@ TransitionState::~TransitionState()
 {
 }
 
-bool TransitionState::captureStateToTexture(GameState* state, ScreenTexture& screenTexture)
+bool TransitionState::captureStateToTexture(std::shared_ptr<GameState> state, ScreenTexture& screenTexture)
 {
    state->activate();
    screenTexture.startCapture();

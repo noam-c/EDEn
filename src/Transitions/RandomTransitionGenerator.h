@@ -7,6 +7,8 @@
 #ifndef RANDOM_TRANSITION_GENERATOR_H
 #define RANDOM_TRANSITION_GENERATOR_H
 
+#include <memory>
+
 class GameContext;
 class GameState;
 
@@ -28,7 +30,7 @@ class RandomTransitionGenerator
       *
       * @return a newly generated instance of the randomly selected transition state.
       */
-     static GameState* create(GameContext& gameContext, GameState* oldState, GameState* newState, long transitionLength = 1000);
+      static std::shared_ptr<GameState> create(GameContext& gameContext, std::shared_ptr<GameState> oldState, std::shared_ptr<GameState> newState, long transitionLength = 1000);
 };
 
 #endif

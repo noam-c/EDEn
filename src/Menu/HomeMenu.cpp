@@ -108,18 +108,18 @@ void HomeMenu::sidebarClicked(int optionIndex)
 
 void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, std::shared_ptr<MenuShell> menuShell)
 {
-   CharacterDependentMenu* newState = nullptr;
+   std::shared_ptr<CharacterDependentMenu> newState;
    switch(optionIndex)
    {
       case 3:
-         newState = new SkillMenu(m_gameContext, menuShell);
+         newState = std::make_shared<SkillMenu>(m_gameContext, menuShell);
          DEBUG("Skill menu constructed");
          break;
       default:
          break;
    }
    
-   if(newState != nullptr)
+   if(newState)
    {
       newState->setCharacter(characterIndex);
       getExecutionStack()->pushState(newState);
@@ -128,22 +128,22 @@ void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, s
 
 void HomeMenu::pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<MenuShell> menuShell)
 {
-   MenuState* newState = nullptr;
+   std::shared_ptr<MenuState> newState;
    switch(optionIndex)
    {
       case 0:
-         newState = new ItemMenu(m_gameContext, menuShell);
+         newState = std::make_shared<ItemMenu>(m_gameContext, menuShell);
          DEBUG("Item menu constructed.");
          break;
       case 7:
-         newState = new DataMenu(m_gameContext, menuShell);
+         newState = std::make_shared<DataMenu>(m_gameContext, menuShell);
          DEBUG("Data menu constructed.");
          break;
       default:
          break;
    }
    
-   if(newState != nullptr)
+   if(newState)
    {
       DEBUG("Pushing new menu state.");
       getExecutionStack()->pushState(newState);

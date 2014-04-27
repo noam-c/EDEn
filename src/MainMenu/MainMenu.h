@@ -32,7 +32,7 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class MainMenu: public GameState
+class MainMenu: public GameState, public std::enable_shared_from_this<MainMenu>
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;

@@ -50,7 +50,6 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
 
    loadPlayerData(playerDataPath);
    m_cameraTarget = &m_playerActor;
-   getScriptEngine().setTileEngine(this);
 
    startChapter(chapterName);
 }
@@ -287,6 +286,16 @@ void TileEngine::activate()
    m_shortcutBar.refresh();
    recalculateMapOffsets();
    getCurrentPlayerData().bindMessagePipe(&m_messagePipe);
+   getScriptEngine().setTileEngine(shared_from_this());
+}
+
+void TileEngine::deactivate()
+{
+   getScriptEngine().setTileEngine(nullptr);
+   getCurrentPlayerData().unbindMessagePipe();
+   GameState::deactivate();
+   m_shortcutBar.refresh();
+   recalculateMapOffsets();
 }
 
 void TileEngine::stepNPCs(long timePassed)
@@ -467,13 +476,8 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   if(!m_consoleWindow.isVisible())
                   {
-                     // Unbind the message pipe in preparation for the new state.
-                     // The Tile Engine message pipe will be rebound when the Tile Engine state
-                     // is activated again.
-                     getCurrentPlayerData().unbindMessagePipe();
-
-                     HomeMenu* menu = new HomeMenu(m_gameContext);
-                     getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, this, menu));
+                     auto menu = std::make_shared<HomeMenu>(m_gameContext);
+                     getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, shared_from_this(), menu));
                      return;
                   }
                }

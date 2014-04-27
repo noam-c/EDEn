@@ -30,8 +30,8 @@
  */
 void MainMenu::NewGameAction()
 {
-   TileEngine* tileEngine = new TileEngine(m_gameContext, CHAP1);
-   getExecutionStack()->pushState(tileEngine, new FadeState(m_gameContext, this));
+   auto tileEngine = std::make_shared<TileEngine>(m_gameContext, CHAP1);
+   getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, shared_from_this()));
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
 }
@@ -43,7 +43,7 @@ void MainMenu::NewGameAction()
 void MainMenu::MenuPrototypeAction()
 {
    getCurrentPlayerData().load(SAVE_GAME);
-   getExecutionStack()->pushState(new HomeMenu(m_gameContext));
+   getExecutionStack()->pushState(std::make_shared<HomeMenu>(m_gameContext));
 }
 
 /**
@@ -59,10 +59,10 @@ void MainMenu::LoadGameAction()
  */
 void MainMenu::OptionsAction()
 {
-   TitleScreenSettingsMenu* titleScreenSettingsMenuState = new TitleScreenSettingsMenu(m_gameContext);
+   auto titleScreenSettingsMenuState = std::make_shared<TitleScreenSettingsMenu>(m_gameContext);
    getExecutionStack()->pushState(
       titleScreenSettingsMenuState,
-      new BlendState(m_gameContext, this, titleScreenSettingsMenuState, 500));
+      std::make_shared<BlendState>(m_gameContext, shared_from_this(), titleScreenSettingsMenuState, 500));
 }
 
 /**

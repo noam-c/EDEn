@@ -1,6 +1,8 @@
 #ifndef SPIN_STATE_H
 #define SPIN_STATE_H
 
+#include <memory>
+
 #include "TransitionState.h"
 
 /**
@@ -24,7 +26,7 @@ class SpinState : public TransitionState
        * @param oldState The state that is being faded out.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      SpinState(GameContext& gameContext, GameState* oldState, long transitionLength = 1000);
+      SpinState(GameContext& gameContext, std::shared_ptr<GameState> oldState, long transitionLength = 1000);
 
       /**
        * Destructor.

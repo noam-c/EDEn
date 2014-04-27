@@ -7,6 +7,8 @@
 #ifndef TRANSITION_STATE_H
 #define TRANSITION_STATE_H
 
+#include <memory>
+
 #include "GameState.h"
 #include "ScreenTexture.h"
 
@@ -46,7 +48,7 @@ class TransitionState : public GameState
        * @param state The game state to capture
        * @param screenTexture The texture to capture the drawn state to.
        */
-      bool captureStateToTexture(GameState* state, ScreenTexture& screenTexture);
+      bool captureStateToTexture(std::shared_ptr<GameState> state, ScreenTexture& screenTexture);
 
    public:
       /**
@@ -58,7 +60,7 @@ class TransitionState : public GameState
        * @param newState The new state that the transition will be moving to.
        * @param transitionLength An optional length (in milliseconds) for the transition.
        */
-      TransitionState(GameContext& gameContext, const std::string& stateName, GameState* oldState, GameState* newState, long transitionLength = 1000);
+      TransitionState(GameContext& gameContext, const std::string& stateName, std::shared_ptr<GameState> oldState, std::shared_ptr<GameState> newState, long transitionLength = 1000);
 
       /**
        * Destructor.
