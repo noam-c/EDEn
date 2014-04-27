@@ -7,6 +7,7 @@
 #ifndef MENU_SHELL_H
 #define MENU_SHELL_H
 
+#include <memory>
 #include <vector>
 #include <string>
 #include "EdenRocketBindings.h"
@@ -60,7 +61,7 @@ class MenuShell
    /**
     * The shortcut bar containing the player's set of shortcuts.
     */
-   const ShortcutBar* m_shortcutBar;
+   std::unique_ptr<const ShortcutBar> m_shortcutBar;
 
    /** The event binding collection for the sidebar */
    EdenRocketBindings m_bindings;

@@ -15,7 +15,6 @@ const int debugFlag = DEBUG_MENU;
 
 MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
    m_rocketContext(rocketContext),
-   m_shortcutBar(nullptr),
    m_currentState(nullptr)
 {
 
@@ -40,20 +39,15 @@ MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
 
 MenuShell::~MenuShell()
 {
-   if(m_shortcutBar != nullptr)
-   {
-      delete m_shortcutBar;
-   }
-   
    m_shellDocument->RemoveReference();
    m_rocketContext->RemoveReference();
 }
 
 void MenuShell::initializeShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType)
 {
-   if(m_shortcutBar == nullptr)
+   if(!m_shortcutBar)
    {
-      m_shortcutBar = new ShortcutBar(playerData, metadata, stateType, *m_rocketContext);
+      m_shortcutBar = std::unique_ptr<const ShortcutBar>(new ShortcutBar(playerData, metadata, stateType, *m_rocketContext));
    }
 }
 
