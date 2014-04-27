@@ -27,12 +27,11 @@ CharacterRoster::CharacterRoster(const Metadata& metadata) :
 
 CharacterRoster::~CharacterRoster()
 {
-   deleteCharacterList();
 }
 
 void CharacterRoster::signalRosterUpdate()
 {
-   if(m_messagePipe != nullptr)
+   if(m_messagePipe)
    {
       m_messagePipe->sendMessage(RosterUpdateMessage());
    }
@@ -43,32 +42,19 @@ void CharacterRoster::bindMessagePipe(const messaging::MessagePipe* pipe)
    m_messagePipe = pipe;
 }
 
-void CharacterRoster::deleteCharacterList()
-{
-   DEBUG("Destroying character roster...");
-
-   for(std::map<std::string, Character*>::iterator iter = m_allCharacters.begin(); iter != m_allCharacters.end(); ++iter)
-   {
-      DEBUG("Destroying character %s", (iter->first).c_str());
-      delete iter->second;
-      DEBUG("Character %s destroyed", (iter->first).c_str());
-   }
-
-   DEBUG("Character roster destroyed.");
-}
-
 void CharacterRoster::clear()
 {
    m_partyLeader = nullptr;
    m_party.clear();
-
-   deleteCharacterList();
    m_allCharacters.clear();
 }
 
 Character* CharacterRoster::loadNewCharacter(const std::string& id)
 {
-   auto insertionResult = m_allCharacters.emplace(id, new Character(m_metadata, id));
+   auto insertionResult = m_allCharacters.emplace(
+                             std::piecewise_construct,
+                             std::forward_as_tuple(id),
+                             std::forward_as_tuple(m_metadata, id));
 
    auto characterIterator = insertionResult.first;
    bool success = insertionResult.second;
@@ -77,7 +63,7 @@ Character* CharacterRoster::loadNewCharacter(const std::string& id)
       signalRosterUpdate();
    }
 
-   return characterIterator->second;
+   return &characterIterator->second;
 }
 
 Character* CharacterRoster::getPartyLeader() const
@@ -85,10 +71,15 @@ Character* CharacterRoster::getPartyLeader() const
    return m_partyLeader;
 }
 
-Character* CharacterRoster::getCharacter(const std::string& id) const
+Character* CharacterRoster::getCharacter(const std::string& id)
 {
-   std::map<std::string, Character*>::const_iterator iter = m_allCharacters.find(id);
-   return iter != m_allCharacters.end() ? iter->second : nullptr;
+   const auto& iter = m_allCharacters.find(id);
+   return iter != m_allCharacters.end() ? &iter->second : nullptr;
+}
+
+bool CharacterRoster::characterExists(const std::string& id) const
+{
+   return m_allCharacters.find(id) != m_allCharacters.end();
 }
 
 const std::vector<Character*>& CharacterRoster::getParty() const
@@ -113,7 +104,6 @@ void CharacterRoster::addToParty(Character* character)
       m_party.push_back(character);
    }
 
-   m_allCharacters.emplace(character->getId(), character);
    signalRosterUpdate();
 }
 
@@ -132,11 +122,13 @@ void CharacterRoster::load(const Json::Value& charactersElement)
       {
          Json::Value characterNode = partyElement[i];
          DEBUG("Adding character %d...", i);
-         Character* currCharacter = new Character(m_metadata, characterNode);
+         std::string characterId = characterNode[Character::ID_ATTRIBUTE].asString();
+         auto result = m_allCharacters.emplace(std::piecewise_construct,
+                                 std::forward_as_tuple(characterId),
+                                 std::forward_as_tuple(m_metadata, characterId, characterNode));
 
-         std::string characterId = currCharacter->getId();
-         m_allCharacters[characterId] = currCharacter;
-         m_party.push_back(currCharacter);
+         auto& currCharacter = result.first->second;
+         m_party.push_back(&currCharacter);
       }
 
       if(m_partyLeader == nullptr && m_party.size() > 0)
@@ -158,9 +150,8 @@ Json::Value CharacterRoster::serialize() const
 {
    Json::Value charactersNode(Json::objectValue);
    Json::Value partyNode(Json::arrayValue);
-   for(std::vector<Character*>::const_iterator iter = m_party.begin(); iter != m_party.end(); ++iter)
+   for(const auto& character : m_party)
    {
-      const Character* character = *iter;
       partyNode.append(character->serialize());
    }
 

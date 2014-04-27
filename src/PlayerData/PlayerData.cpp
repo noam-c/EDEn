@@ -66,7 +66,7 @@ void PlayerData::bindMessagePipe(const messaging::MessagePipe* messagePipe)
    m_roster.bindMessagePipe(messagePipe);
 }
 
-void PlayerData::clearMessagePipe()
+void PlayerData::unbindMessagePipe()
 {
    bindMessagePipe(nullptr);
 }
@@ -88,19 +88,19 @@ void PlayerData::load(const std::string& path)
 
    Json::Value jsonRoot;
    input >> jsonRoot;
-   
+
    if(jsonRoot.isNull())
    {
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse save data.");
    }
-   
+
    parseCharactersAndParty(jsonRoot);
    parseQuestLog(jsonRoot);
    parseInventory(jsonRoot);
    parseShortcuts(jsonRoot);
    parseLocation(jsonRoot);
-   
+
    m_filePath = path;
 }
 
@@ -223,7 +223,7 @@ void PlayerData::save(const std::string& path)
 
    Json::StyledStreamWriter writer("   ");
    writer.write(output, playerDataNode);
-   
+
    m_filePath = path;
 }
 
@@ -261,7 +261,7 @@ void PlayerData::setShortcut(int index, UsableId itemId)
 
 void PlayerData::setShortcut(int index, UsableId skillId, const std::string& characterId)
 {
-   if(!characterId.empty() && m_roster.getCharacter(characterId) != nullptr)
+   if(!characterId.empty() && m_roster.characterExists(characterId))
    {
       Shortcut shortcut(skillId, characterId);
       setShortcut(index, shortcut);

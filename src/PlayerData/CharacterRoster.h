@@ -43,10 +43,9 @@ class CharacterRoster
     * This includes characters in the party, but also includes characters encountered by the player,
     * but currently inaccessible for play.
     */
-   std::map<std::string, Character*> m_allCharacters;
+   std::map<std::string, Character> m_allCharacters;
 
    void signalRosterUpdate();
-   void deleteCharacterList();
    void clear();
 
    public:
@@ -79,7 +78,8 @@ class CharacterRoster
 
       Character* loadNewCharacter(const std::string& id);
       Character* getPartyLeader() const;
-      Character* getCharacter(const std::string& id) const;
+      Character* getCharacter(const std::string& id);
+      bool characterExists(const std::string& id) const;
       const std::vector<Character*>& getParty() const;
       void addToParty(Character* character);
       void removeFromParty(Character* character);

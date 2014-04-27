@@ -8,7 +8,6 @@
 #include "json.h"
 #include <fstream>
 #include <algorithm>
-#include "Aspect.h"
 #include "Metadata.h"
 #include "Skill.h"
 
@@ -74,10 +73,10 @@ Character::Character(const Metadata& metadata, const std::string& id, int level)
    m_sp = getMaxSP();
 }
 
-Character::Character(const Metadata& metadata, const Json::Value& charToLoad) :
-   m_metadata(metadata)
+Character::Character(const Metadata& metadata, const std::string& id, const Json::Value& charToLoad) :
+   m_metadata(metadata),
+   m_id(id)
 {
-   m_id = charToLoad[Character::ID_ATTRIBUTE].asString();
    m_selectedAspect = charToLoad.get(Character::ASPECT_ATTRIBUTE, 0).asInt();
    m_level = std::max(charToLoad[Character::LEVEL_ATTRIBUTE].asInt(), 1);
 
@@ -101,7 +100,7 @@ void Character::parseArchetypeData(const Metadata& metadata, const Json::Value& 
    m_spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
    parseAspects(archetypeData);
-   
+
    parseBaseStats(archetypeData);
    m_equipment.load(metadata, archetypeData[Character::EQUIPMENT_ELEMENT]);
 }
@@ -150,14 +149,14 @@ void Character::parseSkills(const Json::Value& skillsDataContainer)
       DEBUG("Adding skill ID: %d", skillId);
       m_skillUsage.insert(skillUsage);
    }
-   
+
    refreshAvailableSkills();
 }
 
 Json::Value Character::serialize() const
 {
    Json::Value characterNode(Json::objectValue);
-   
+
    if(!m_archetype.empty())
    {
       characterNode[Character::ARCHETYPE_ATTRIBUTE] = m_archetype;
@@ -181,7 +180,7 @@ Json::Value Character::serialize() const
    }
 
    characterNode[Character::ASPECTS_ELEMENT] = aspectsData;
-   
+
    Json::Value baseStatsNode(Json::objectValue);
    for(std::map<std::string, int>::const_iterator iter = m_baseStats.begin(); iter != m_baseStats.end(); ++iter)
    {
@@ -189,7 +188,7 @@ Json::Value Character::serialize() const
    }
 
    characterNode[Character::BASE_STATS_ELEMENT] = baseStatsNode;
-   
+
    characterNode[Character::HP_ATTRIBUTE] = m_hp;
    characterNode[Character::SP_ATTRIBUTE] = m_sp;
 
@@ -203,7 +202,7 @@ Json::Value Character::serialize() const
    characterNode[Character::SKILLS_ELEMENT] = skillsNode;
 
    m_equipment.serialize(characterNode[Character::EQUIPMENT_ELEMENT]);
-   
+
    return characterNode;
 }
 
@@ -265,15 +264,16 @@ const SkillList& Character::getSkillList() const
 void Character::refreshAvailableSkills()
 {
    std::vector<UsableId> adeptSkills;
-   for(SkillUsage::const_iterator iter = m_skillUsage.begin(); iter != m_skillUsage.end(); ++iter)
+   for(const auto& iter : m_skillUsage)
    {
-      if(iter->second >= m_metadata.getSkill(iter->first)->getAdeptitudeThreshold())
+      const auto& skill = m_metadata.getSkill(iter.first);
+      if(skill && iter.second >= skill->getAdeptitudeThreshold())
       {
-         std::vector<UsableId>::iterator insertionPoint = std::lower_bound(adeptSkills.begin(), adeptSkills.end(), iter->first);
-         adeptSkills.insert(insertionPoint, iter->first);
+         const auto& insertionPoint = std::lower_bound(adeptSkills.begin(), adeptSkills.end(), iter.first);
+         adeptSkills.insert(insertionPoint, iter.first);
       }
    }
-   
+
    const auto& currentAspect = m_archetypeAspects[m_selectedAspect];
    m_availableSkills = currentAspect->getAvailableSkills(adeptSkills);
 }

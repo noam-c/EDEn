@@ -87,16 +87,16 @@ class PlayerData
 
    /** The location of the last save point used. */
    SaveLocation m_saveLocation;
-   
+
    void parseCharactersAndParty(Json::Value& rootElement);
    void serializeCharactersAndParty(Json::Value& outputJson) const;
-    
+
    void parseQuestLog(Json::Value& rootElement);
    void serializeQuestLog(Json::Value& outputJson) const;
-    
+
    void parseInventory(Json::Value& rootElement);
    void serializeInventory(Json::Value& outputJson) const;
-    
+
    void parseShortcuts(Json::Value& rootElement);
    void serializeShortcuts(Json::Value& outputJson) const;
 
@@ -108,7 +108,7 @@ class PlayerData
    public:
       static const int PARTY_SIZE = 4;
       static const int SHORTCUT_BAR_SIZE = 10;
-   
+
       /**
        * Constructor.
        */
@@ -131,11 +131,11 @@ class PlayerData
        * @param messagePipe The message pipe used to send messages about updates to the player data.
        */
       void bindMessagePipe(const messaging::MessagePipe* messagePipe);
-   
+
       /**
-       * Clears the current message pipe.
+       * Unbinds the current message pipe.
        */
-      void clearMessagePipe();
+      void unbindMessagePipe();
 
       /**
        * @return The file path that this player data was last associated with (saved to or loaded from).
@@ -165,7 +165,7 @@ class PlayerData
       const Inventory* getInventory() const;
       CharacterRoster* getRoster();
       Inventory* getInventory();
-   
+
       bool changeEquipment(Character* character, EquipSlot* slot, const Item* newEquipment);
 
       Quest* getRootQuest();

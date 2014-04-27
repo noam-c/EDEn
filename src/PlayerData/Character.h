@@ -12,13 +12,13 @@
 #include <memory>
 #include "EquipData.h"
 #include "SkillList.h"
+#include "Aspect.h"
 
 namespace Json
 {
    class Value;
 };
 
-class Aspect;
 class CharacterArchetype;
 class Metadata;
 
@@ -30,7 +30,6 @@ class Metadata;
  */
 class Character
 {
-   static const char* ID_ATTRIBUTE;
    static const char* ARCHETYPE_ATTRIBUTE;
    static const char* NAME_ATTRIBUTE;
 
@@ -39,7 +38,7 @@ class Character
    static const char* SKILLS_ELEMENT;
    static const char* EQUIPMENT_ELEMENT;
    static const char* ASPECTS_ELEMENT;
-   
+
    static const char* SPRITESHEET_ATTRIBUTE;
    static const char* PORTRAIT_ELEMENT;
    static const char* PORTRAIT_PATH_ATTRIBUTE;
@@ -54,25 +53,25 @@ class Character
 
    /** Represents a set of skills and the amount of times the Character has successfully used them. */
    typedef std::map<UsableId, unsigned int> SkillUsage;
-   
+
    /** The metadata containing skill information. */
    const Metadata& m_metadata;
-   
+
    /** The character's ID for data lookups. */
    std::string m_id;
-   
+
    /** The name of the character. */
    std::string m_name;
 
    /** The archetype that was loaded for this character (empty if the default archetype was used). */
    std::string m_archetype;
-   
+
    /** The currently available Aspects for this character. */
    std::vector<std::unique_ptr<Aspect>> m_archetypeAspects;
-   
+
    /** The currently chosen Aspect for this character. */
    unsigned int m_selectedAspect;
-   
+
    /** The path to the character portrait (used in dialogue and menus). */
    std::string m_portraitPath;
 
@@ -81,7 +80,7 @@ class Character
 
    /** Character status attributes */
    std::map<std::string, int> m_baseStats;
-   
+
    /** Current level of the character. */
    unsigned int m_level;
 
@@ -93,13 +92,13 @@ class Character
   
    /** The equipment worn by this Character. */
    EquipData m_equipment;
-   
+
    /** The skills known by this Character. */
    SkillList m_availableSkills;
-   
+
    /** The skills that the Character has used. */
    SkillUsage m_skillUsage;
- 
+
    /**
     * Loads the archetype for the character, which provides character
     * information and base stats/equipment.
@@ -116,28 +115,28 @@ class Character
     * @param archetypeData The archetype data to load.
     */
    void parseArchetypeData(const Metadata& metadata, const Json::Value& archetypeData);
-   
+
    /**
     * Parse the portrait path from the character node.
     *
     * @param portraitDataContainer The JSON node containing the portrait data to load.
     */
    void parsePortraitData(const Json::Value& portraitDataContainer);
-   
+
    /**
     * Parse the aspect data from the aspect array.
     *
     * @param aspectsDataContainer The JSON node containing the list of aspects to load.
     */
    void parseAspects(const Json::Value& aspectsDataContainer);
-   
+
    /**
     * Parse the base stats from the given node.
     *
     * @param baseStatsDataContainer The JSON node containing the base stats to load.
     */
    void parseBaseStats(const Json::Value& baseStatsDataContainer);
-   
+
    /**
     * Parse the current stats from the given node.
     *
@@ -151,10 +150,12 @@ class Character
     * @param skillsDataContainer The JSON node containing the stats to load.
     */
    void parseSkills(const Json::Value& skillsDataContainer);
-   
+
    void refreshAvailableSkills();
 
    public:
+      static const char* ID_ATTRIBUTE;
+
       /**
        * Constructor used to create a new character.
        * Initializes the entire character using the base archetype data.
@@ -169,8 +170,8 @@ class Character
        *
        * @param charToLoad The JSON node containing the character's data.
        */
-      Character(const Metadata& metadata, const Json::Value& charToLoad);
-   
+      Character(const Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
+
       /**
        * Destructor.
        */
@@ -182,12 +183,11 @@ class Character
        * @return A JSON object containing this character's serialized data.
        */
       Json::Value serialize() const;
-   
+
       /**
        * @return The ID of the character.
        */
       std::string getId() const;
-
 
       /**
        * @return The name of the character.
@@ -222,7 +222,7 @@ class Character
        * @return The character's equipment information.
        */
       EquipData& getEquipment();
-      
+
       /**
        * @return The list of the character's skills.
        */
@@ -247,7 +247,7 @@ class Character
        * @param newEquipment The new piece of equipment to put into the slot.
        */
       bool equip(EquipSlot& slot, const Item* newEquipment);
-      
+
       /**
        * Removes a piece equipment, and changes the character's stat bonuses accordingly.
        *

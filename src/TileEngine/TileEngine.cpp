@@ -57,8 +57,7 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
 
 TileEngine::~TileEngine()
 {
-   m_messagePipe.unregisterListener<MapTriggerMessage>(this);
-   m_messagePipe.unregisterListener<MapExitMessage>(this);
+   getCurrentPlayerData().unbindMessagePipe();
 }
 
 void TileEngine::loadPlayerData(const std::string& path)
@@ -468,10 +467,10 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   if(!m_consoleWindow.isVisible())
                   {
-                     // Clear the message pipe in preparation for the new state.
+                     // Unbind the message pipe in preparation for the new state.
                      // The Tile Engine message pipe will be rebound when the Tile Engine state
                      // is activated again.
-                     getCurrentPlayerData().clearMessagePipe();
+                     getCurrentPlayerData().unbindMessagePipe();
 
                      HomeMenu* menu = new HomeMenu(m_gameContext);
                      getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, this, menu));
