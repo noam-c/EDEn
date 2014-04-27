@@ -25,7 +25,7 @@ class Actor::Order
    
    public:
       virtual bool perform(long timePassed) = 0;
-      virtual void draw() {}
+      virtual void draw() const {}
       virtual ~Order() {}
 };
 
@@ -106,7 +106,7 @@ class Actor::MoveOrder : public Actor::Order
        */
       ~MoveOrder();
       bool perform(long timePassed);
-      void draw();
+      void draw() const;
 };
 
 #endif

@@ -112,7 +112,7 @@ class Actor
        * This function draws the actor in its current location with its current
        * sprite animation frame.
        */
-      virtual void draw();
+      virtual void draw() const;
 
       /**
        * @return true iff the NPC is not chewing on any instructions

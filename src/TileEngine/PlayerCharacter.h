@@ -86,7 +86,7 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
       /**
        * Draws the player character at the playerLocation coordinates.
        */
-      void draw();
+      void draw() const;
 
       /**
        * Handle an update to the character roster by keeping the

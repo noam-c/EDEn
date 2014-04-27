@@ -65,7 +65,9 @@ void Metadata::loadItemMetadata()
    for(int i = 0; i < numItems; ++i)
    {
       int id = itemList[i]["id"].asInt();
-      m_items.emplace(id, itemList[i]);
+      m_items.emplace(std::piecewise_construct,
+                      std::forward_as_tuple(id),
+                      std::forward_as_tuple(itemList[i]));
       DEBUG("Loaded item ID %d", id);
    } 
 
@@ -79,7 +81,9 @@ void Metadata::loadSkillMetadata()
    for(int i = 0; i < numSkills; ++i)
    {
       int id = skillList[i]["id"].asInt();
-      m_skills.emplace(id, skillList[i]);
+      m_skills.emplace(std::piecewise_construct,
+                       std::forward_as_tuple(id),
+                       std::forward_as_tuple(skillList[i]));
       DEBUG("Loaded skill ID %d", id);
    }
 

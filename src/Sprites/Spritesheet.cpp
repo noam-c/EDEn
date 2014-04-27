@@ -199,7 +199,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
       }
 
       // Bind the animation name to the next available animation index
-      m_animationList[animationName] = std::move(frameSequence);
+      m_animationList.emplace(animationName, std::move(frameSequence));
    }
 }
 

@@ -153,7 +153,7 @@ void PlayerCharacter::step(long timePassed)
    Actor::step(timePassed);
 }
 
-void PlayerCharacter::draw()
+void PlayerCharacter::draw() const
 {
    if(m_active)
    {

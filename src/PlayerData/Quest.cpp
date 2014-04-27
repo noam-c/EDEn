@@ -80,7 +80,9 @@ Json::Value Quest::serialize() const
 void Quest::addQuest(const std::shared_ptr<Quest>& quest)
 {
    DEBUG("Adding quest %s to quest %s.", quest->m_name.c_str(), m_name.c_str());
-   m_subquests.emplace(quest->m_name, quest);
+   m_subquests.emplace(std::piecewise_construct,
+                       std::forward_as_tuple(quest->m_name),
+                       std::forward_as_tuple(quest));
 }
 
 const std::weak_ptr<Quest> Quest::getQuest(const std::string& questPath) const

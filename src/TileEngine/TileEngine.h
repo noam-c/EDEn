@@ -16,7 +16,9 @@
 #include "PlayerData.h"
 #include "ShortcutBar.h"
 #include "Point2D.h"
+#include "PlayerCharacter.h"
 #include "Scheduler.h"
+#include "DialogueController.h"
 
 #include <map>
 #include <memory>
@@ -24,7 +26,6 @@
 
 class NPC;
 class ScriptEngine;
-class PlayerCharacter;
 class Region;
 class DialogueController;
 class Task;
@@ -60,17 +61,17 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
    /** The window containing the player's shortcuts. */
    ShortcutBar m_shortcutBar;
 
-   /** Controller for dialogue and narrations. */
-   DialogueController* m_dialogue;
-
    /** The coroutine scheduler used by the tile engine. */
    Scheduler m_scheduler;
 
+   /** Controller for dialogue and narrations. */
+   DialogueController m_dialogue;
+   
    /** The actor representing the player character on the map */
-   PlayerCharacter* m_playerActor;
+   PlayerCharacter m_playerActor;
 
    /** A list of all NPCs in the map, identified by their names. */
-   std::map<std::string, NPC*> m_npcList;
+   std::map<std::string, NPC> m_npcList;
 
    /** The camera displaying the appropriate subset of the map. */
    Camera m_camera;
@@ -114,11 +115,6 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
     * Handles activation of NPCs when the player presses the action key.
     */
    void action();
-   
-   /**
-    * Clears all the NPCs on the map.
-    */
-   void clearNPCs();
 
    /**
     * Updates all NPCs on the map.
@@ -132,7 +128,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
     *
     * @return a vector of all the active actors.
     */
-   std::vector<Actor*> collectActors() const;
+   std::vector<const Actor*> collectActors() const;
 
    protected:
       /**
@@ -238,7 +234,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        *
        * @param target The actor to follow with the camera
        */
-      void followWithCamera(const Actor* target);
+      void followWithCamera(const Actor& target);
 
       /**
        * Order the camera to stop following its target, if it has one.
@@ -279,7 +275,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        *
        * @return The NPC in the current map with the specified name.
        */
-      NPC* getNPC(const std::string& npcName) const;
+      NPC* getNPC(const std::string& npcName);
 
       /**
        * Adds a listener for a specific trigger zone on the Map, which will
@@ -291,9 +287,14 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
       void addTriggerListener(const std::string& triggerName, std::unique_ptr<MapTriggerCallback> callback);
    
       /**
+       * @return Whether or not the given actor is the player character.
+       */
+      bool isPlayerCharacter(const Actor* const actor) const;
+
+      /**
        * @return The player character in the tile engine.
        */
-      PlayerCharacter* getPlayerCharacter() const;
+      PlayerCharacter* getPlayerCharacter();
 };
 
 #endif

@@ -68,13 +68,16 @@ void CharacterRoster::clear()
 
 Character* CharacterRoster::loadNewCharacter(const std::string& id)
 {
-   if(getCharacter(id) == nullptr)
+   auto insertionResult = m_allCharacters.emplace(id, new Character(m_metadata, id));
+
+   auto characterIterator = insertionResult.first;
+   bool success = insertionResult.second;
+   if(success)
    {
-      m_allCharacters[id] = new Character(m_metadata, id);
       signalRosterUpdate();
    }
 
-   return m_allCharacters[id];
+   return characterIterator->second;
 }
 
 Character* CharacterRoster::getPartyLeader() const
@@ -110,11 +113,7 @@ void CharacterRoster::addToParty(Character* character)
       m_party.push_back(character);
    }
 
-   if(m_allCharacters.find(character->getId()) == m_allCharacters.end())
-   {
-      m_allCharacters[character->getId()] = character;
-   }
-
+   m_allCharacters.emplace(character->getId(), character);
    signalRosterUpdate();
 }
 

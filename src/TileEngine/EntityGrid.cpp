@@ -520,9 +520,9 @@ void EntityGrid::receive(const ActorMoveMessage& message)
    const std::vector<MapExit>& mapExits = map->getMapExits();
    for(std::vector<MapExit>::const_iterator iter = mapExits.begin(); iter != mapExits.end(); ++iter)
    {
-      if(message.movingActor == m_tileEngine.getPlayerCharacter()
-            && !iter->getBounds().contains(message.oldLocation)
-            && iter->getBounds().contains(message.newLocation))
+      if(m_tileEngine.isPlayerCharacter(message.movingActor) &&
+            !iter->getBounds().contains(message.oldLocation) &&
+            iter->getBounds().contains(message.newLocation))
       {
          m_messagePipe.sendMessage(MapExitMessage(*iter));
          return;

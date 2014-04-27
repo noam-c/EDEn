@@ -204,7 +204,7 @@ bool Actor::MoveOrder::perform(long timePassed)
    return false;
 }
 
-void Actor::MoveOrder::draw()
+void Actor::MoveOrder::draw() const
 {
    if(DRAW_PATH)
    {

@@ -71,7 +71,7 @@ void Actor::step(long timePassed)
    }
 }
 
-void Actor::draw()
+void Actor::draw() const
 {
    if(m_sprite)
    {

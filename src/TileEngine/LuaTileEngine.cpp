@@ -136,7 +136,7 @@ static int TileEngineL_FollowWithCamera(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   tileEngine->followWithCamera(target);
+   tileEngine->followWithCamera(*target);
    return 0;
 }
 

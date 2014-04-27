@@ -9,11 +9,12 @@
 #include "stdlib.h"
 #include <Rocket/Core.h>
 #include <algorithm>
+#include <utility>
+#include <tuple>
 #include <SDL.h>
 
 #include "ScriptEngine.h"
 #include "NPC.h"
-#include "PlayerCharacter.h"
 #include "PlayerData.h"
 #include "GraphicsUtil.h"
 #include "ResourceLoader.h"
@@ -25,7 +26,6 @@
 #include "TriggerZone.h"
 #include "Pathfinder.h"
 #include "Rectangle.h"
-#include "DialogueController.h"
 #include "ExecutionStack.h"
 #include "CameraSlider.h"
 #include "RandomTransitionGenerator.h"
@@ -41,27 +41,24 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
    GameState(gameContext, GameStateType::FIELD, "TileEngine"),
    m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
-   m_shortcutBar(getCurrentPlayerData(), getMetadata(), getStateType(), *m_rocketContext)
+   m_shortcutBar(getCurrentPlayerData(), getMetadata(), getStateType(), *m_rocketContext),
+   m_dialogue(*m_rocketContext, m_scheduler, getScriptEngine()),
+   m_playerActor(m_messagePipe, m_entityGrid, getCurrentPlayerData())
 {
    m_messagePipe.registerListener<MapExitMessage>(this);
    m_messagePipe.registerListener<MapTriggerMessage>(this);
 
    loadPlayerData(playerDataPath);
-   m_playerActor = new PlayerCharacter(m_messagePipe, m_entityGrid, getCurrentPlayerData());
-   m_cameraTarget = m_playerActor;
+   m_cameraTarget = &m_playerActor;
    getScriptEngine().setTileEngine(this);
-   m_dialogue = new DialogueController(*m_rocketContext, m_scheduler, getScriptEngine());
 
    startChapter(chapterName);
 }
 
 TileEngine::~TileEngine()
 {
-   clearNPCs();
    m_messagePipe.unregisterListener<MapTriggerMessage>(this);
    m_messagePipe.unregisterListener<MapExitMessage>(this);
-   delete m_dialogue;
-   delete m_playerActor;
 }
 
 void TileEngine::loadPlayerData(const std::string& path)
@@ -78,18 +75,6 @@ void TileEngine::startChapter(const std::string& chapterName)
    getScriptEngine().runChapterScript(chapterName, m_scheduler);
 }
 
-void TileEngine::clearNPCs()
-{
-   std::map<std::string, NPC*>::iterator iter;
-
-   for(iter = m_npcList.begin(); iter != m_npcList.end(); ++iter)
-   {
-      delete iter->second;
-   }
-
-   m_npcList.clear();
-}
-
 Scheduler* TileEngine::getScheduler()
 {
    return &m_scheduler;
@@ -102,15 +87,15 @@ std::string TileEngine::getMapName() const
 
 void TileEngine::receive(const MapExitMessage& message)
 {
-   if(m_playerActor->isActive())
+   if(m_playerActor.isActive())
    {
-      m_playerActor->removeFromMap();
+      m_playerActor.removeFromMap();
       std::string exitedMap = m_entityGrid.getMapName();
       std::string enteredMap = message.mapExit.getNextMap();
       DEBUG("Exit signal received: Exiting %s and entering %s", exitedMap.c_str(), enteredMap.c_str());
       setMap(enteredMap);
       const shapes::Point2D& entryPoint = m_entityGrid.getMapEntrance(exitedMap);
-      m_playerActor->addToMap(entryPoint);
+      m_playerActor.addToMap(entryPoint);
       followWithCamera(m_playerActor);
    }
 }
@@ -121,25 +106,29 @@ void TileEngine::receive(const MapTriggerMessage& message)
    {
       if(triggerIter.first == message.triggerZone.getName())
       {
-         auto triggeringActor =
-            message.triggeringActor == m_playerActor ?
-            static_cast<Actor*>(m_playerActor) :
-            getNPC(message.triggeringActor->getName());
-         
+         auto triggeringActor = message.triggeringActor;
          auto& triggerCallback = *triggerIter.second;
-         triggerCallback(triggeringActor);
+
+         if(isPlayerCharacter(triggeringActor))
+         {
+            triggerCallback(&m_playerActor);
+         }
+         else if(triggeringActor)
+         {
+            triggerCallback(getNPC(triggeringActor->getName()));
+         }
       }
    }
 }
 
 void TileEngine::dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task)
 {
-   m_dialogue->narrate(narration, task);
+   m_dialogue.narrate(narration, task);
 }
 
 void TileEngine::dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task)
 {
-   m_dialogue->say(speech, task);
+   m_dialogue.say(speech, task);
 }
 
 int TileEngine::setRegion(const std::string& regionName, const std::string& mapName)
@@ -154,8 +143,8 @@ int TileEngine::setRegion(const std::string& regionName, const std::string& mapN
 int TileEngine::setMap(std::string mapName)
 {
    m_triggerScripts.clear();
-   clearNPCs();
-   m_playerActor->removeFromMap();
+   m_npcList.clear();
+   m_playerActor.removeFromMap();
 
    DEBUG("Setting map...");
    if(!mapName.empty())
@@ -176,9 +165,9 @@ int TileEngine::setMap(std::string mapName)
    return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, m_scheduler);
 }
 
-void TileEngine::followWithCamera(const Actor* target)
+void TileEngine::followWithCamera(const Actor& target)
 {
-   m_cameraTarget = target;
+   m_cameraTarget = &target;
 }
 
 void TileEngine::releaseCamera()
@@ -241,11 +230,23 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
 
    if(m_entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
    {
-      npcToAdd = new NPC(getScriptEngine(), m_scheduler, npcName, direction,
-                                 spritesheetName, m_messagePipe, m_entityGrid,
-                                 m_currRegion->getName(), npcLocation, size);
-      m_npcList[npcName] = npcToAdd;
-      m_entityGrid.addActor(npcToAdd, npcLocation);
+      auto insertResult = m_npcList.emplace(
+                          std::piecewise_construct,
+                          std::forward_as_tuple(npcName),
+                          std::forward_as_tuple(
+                              getScriptEngine(), m_scheduler, npcName, direction,
+                              spritesheetName, m_messagePipe, m_entityGrid,
+                              m_currRegion->getName(), npcLocation, size));
+
+      if(insertResult.second)
+      {
+         npcToAdd = &insertResult.first->second;
+         m_entityGrid.addActor(npcToAdd, npcLocation);
+      }
+      else
+      {
+         DEBUG("Failed to insert NPC into list of NPCs");
+      }
    }
    else
    {
@@ -255,12 +256,12 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
    return npcToAdd;
 }
 
-NPC* TileEngine::getNPC(const std::string& npcName) const
+NPC* TileEngine::getNPC(const std::string& npcName)
 {
-   std::map<std::string, NPC*>::const_iterator npcIterator = m_npcList.find(npcName);
+   const auto& npcIterator = m_npcList.find(npcName);
    if(npcIterator != m_npcList.end())
    {
-      return npcIterator->second;
+      return &npcIterator->second;
    }
 
    return nullptr;
@@ -271,9 +272,14 @@ void TileEngine::addTriggerListener(const std::string& triggerName, std::unique_
    m_triggerScripts.emplace_back(triggerName, std::move(callback));
 }
 
-PlayerCharacter* TileEngine::getPlayerCharacter() const
+bool TileEngine::isPlayerCharacter(const Actor* const actor) const
 {
-   return m_playerActor;
+   return &m_playerActor == actor;
+}
+
+PlayerCharacter* TileEngine::getPlayerCharacter()
+{
+   return &m_playerActor;
 }
 
 void TileEngine::activate()
@@ -286,43 +292,33 @@ void TileEngine::activate()
 
 void TileEngine::stepNPCs(long timePassed)
 {
-   std::map<std::string, NPC*>::iterator iter;
-
-   for(iter = m_npcList.begin(); iter != m_npcList.end(); ++iter)
+   for(auto& iter : m_npcList)
    {
-      NPC* currNPC = iter->second;
-      currNPC->step(timePassed);
+      iter.second.step(timePassed);
    }
 }
 
-std::vector<Actor*> TileEngine::collectActors() const
+std::vector<const Actor*> TileEngine::collectActors() const
 {
-   std::vector<Actor*> actors;
-   std::map<std::string, NPC*>::const_iterator iter;
-
-   for(iter = m_npcList.begin(); iter != m_npcList.end(); ++iter)
+   std::vector<const Actor*> actors;
+   actors.reserve(m_npcList.size() + 1);
+   for(auto& iter : m_npcList)
    {
-      NPC* currNPC = iter->second;
-      actors.push_back(currNPC);
+      actors.push_back(&(iter.second));
    }
 
-   if(m_playerActor->isActive())
+   if(m_playerActor.isActive())
    {
-      actors.push_back(m_playerActor);
+      actors.push_back(&m_playerActor);
    }
 
    return actors;
 }
 
-static bool higherOnMap(const Actor* lhs, const Actor* rhs)
-{
-   return lhs->getLocation().y + lhs->getSize().height < rhs->getLocation().y + rhs->getSize().height;
-}
-
 void TileEngine::draw()
 {
    // Collect the drawable actors and sort them by their y-location (in tiles)
-   std::vector<Actor*> actors = collectActors();
+   auto actors = collectActors();
 
    GraphicsUtil::getInstance()->clearBuffer();
 
@@ -330,17 +326,21 @@ void TileEngine::draw()
       if(!m_entityGrid.hasMapData())
       {
          // Draw all the sprites
-         std::vector<Actor*>::iterator nextActorToDraw;
-         for(nextActorToDraw = actors.begin(); nextActorToDraw != actors.end(); ++nextActorToDraw)
+         for(const auto& nextActorToDraw : actors)
          {
-            (*nextActorToDraw)->draw();
+            nextActorToDraw->draw();
          }
       }
       else
       {
-         std::sort(actors.begin(), actors.end(), higherOnMap);
-
-         std::vector<Actor*>::iterator nextActorToDraw = actors.begin();
+         std::sort(
+            actors.begin(),
+            actors.end(),
+            [](const Actor* lhs, const Actor* rhs)
+            {
+               return lhs->getLocation().y + lhs->getSize().height < rhs->getLocation().y + rhs->getSize().height;
+            }
+         );
 
          const unsigned int mapHeight = m_entityGrid.getMapBounds().getHeight();
          for(int row = 0; row < mapHeight; ++row)
@@ -352,6 +352,8 @@ void TileEngine::draw()
             }
          }
 
+         auto nextActorToDraw = actors.begin();
+         
          for(int row = 0; row < mapHeight; ++row)
          {
             // Draw all the sprites on the row
@@ -380,13 +382,13 @@ bool TileEngine::step(long timePassed)
 
    handleInputEvents(done);
 
-   m_playerActor->step(timePassed);
+   m_playerActor.step(timePassed);
    m_entityGrid.step(timePassed);
 
    stepNPCs(timePassed);
 
-   if(m_cameraTarget != nullptr &&
-      (m_cameraTarget != m_playerActor || m_playerActor->isActive()))
+   if(m_cameraTarget &&
+      (isPlayerCharacter(m_cameraTarget) || m_playerActor.isActive()))
    {
       m_camera.setFocalPoint(m_cameraTarget->getLocation());
    }
@@ -425,9 +427,9 @@ void TileEngine::handleInputEvents(bool& finishState)
             {
                const shapes::Point2D pointWithinScene = m_camera.getPointWithinScene(mouseClickLocation);
                
-               if(m_entityGrid.isAreaFree(shapes::Rectangle(pointWithinScene, m_playerActor->getSize())))
+               if(m_entityGrid.isAreaFree(shapes::Rectangle(pointWithinScene, m_playerActor.getSize())))
                {
-                  m_playerActor->move(pointWithinScene);
+                  m_playerActor.move(pointWithinScene);
                }
             }
             break;
@@ -440,10 +442,10 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   if(!m_consoleWindow.isVisible())
                   {
-                     if(m_dialogue->hasDialogue())
+                     if(m_dialogue.hasDialogue())
                      {
-                        m_dialogue->setFastModeEnabled(true);
-                        m_dialogue->nextLine();
+                        m_dialogue.setFastModeEnabled(true);
+                        m_dialogue.nextLine();
                      }
                      else
                      {
@@ -491,9 +493,9 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   case SDLK_SPACE:
                   {
-                     if(m_dialogue->hasDialogue())
+                     if(m_dialogue.hasDialogue())
                      {
-                        m_dialogue->setFastModeEnabled(false);
+                        m_dialogue.setFastModeEnabled(false);
                      }
                      return;
                   }
@@ -523,8 +525,8 @@ void TileEngine::handleInputEvents(bool& finishState)
 
 void TileEngine::action()
 {
-   NPC* npcToActivate = static_cast<NPC*>(m_entityGrid.getAdjacentActor(m_playerActor));
-   if(npcToActivate != nullptr)
+   auto npcToActivate = static_cast<NPC*>(m_entityGrid.getAdjacentActor(&m_playerActor));
+   if(npcToActivate)
    {
       npcToActivate->activate();
    }

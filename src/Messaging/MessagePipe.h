@@ -10,8 +10,10 @@
 #include <set>
 #include <map>
 #include <memory>
+#include <tuple>
 #include <typeindex>
 #include <typeinfo>
+#include <utility>
 
 #include "Listener.h"
 #include "DebugUtils.h"
@@ -68,7 +70,9 @@ namespace messaging
          }
 
          auto newListenerList = new ListenerList<T>();
-         listenerLists.emplace(std::type_index(typeid(T)), std::unique_ptr<ListenerList<T>>(newListenerList));
+         listenerLists.emplace(std::piecewise_construct,
+                               std::forward_as_tuple(std::type_index(typeid(T))),
+                               std::forward_as_tuple(newListenerList));
          return newListenerList;
       }
       

@@ -8,6 +8,8 @@
 #include "Task.h"
 #include "Coroutine.h"
 #include "DebugUtils.h"
+#include <tuple>
+#include <utility>
 
 const int debugFlag = DEBUG_SCHEDULER;
 
@@ -37,7 +39,6 @@ void Scheduler::printFinishedQueue() const
 {
    DEBUG("Finished Coroutine List:");
    DEBUG("---");
-   const int queueSize = m_finishedCoroutines.size();
    for(const auto& coroutine : m_finishedCoroutines)
    {
       DEBUG("\t%d at address 0x%x", coroutine->getId(), coroutine.get());
@@ -90,8 +91,9 @@ int Scheduler::block(const std::shared_ptr<Task>& pendingTask)
 std::shared_ptr<Task> Scheduler::createNewTask()
 {
    TaskId taskId = m_nextId;
-   std::shared_ptr<Task> nextTask(new Task(taskId, *this));
-   m_activeTasks[taskId] = nextTask;
+   auto nextTask = m_activeTasks.emplace(std::piecewise_construct,
+                                         std::forward_as_tuple(taskId),
+                                         std::forward_as_tuple(new Task(taskId, *this))).first->second;
    m_nextId++;
 
    return nextTask;
@@ -111,7 +113,7 @@ void Scheduler::completeTask(TaskId finishedTaskId)
       m_unstartedCoroutines.insert(resumingCoroutine);
 
       // Remove the coroutine from the block list
-      m_blockedCoroutines[finishedTaskId] = nullptr;
+      m_blockedCoroutines.erase(finishedTaskId);
    }
 
    TaskMap::iterator finishedTaskIterator = m_activeTasks.find(finishedTaskId);
@@ -161,7 +163,7 @@ void Scheduler::coroutineDone(const std::shared_ptr<Coroutine>& coroutine)
       m_unstartedCoroutines.insert(resumingCoroutine);
 
       // Clear the joining coroutine out of the joining list
-      m_joiningCoroutines[coroutine] = nullptr;
+      m_joiningCoroutines.erase(coroutine);
    }
 }
 
