@@ -257,12 +257,12 @@ class Pathfinder::AStarPoint : public shapes::Point2D
        *
        * @return true iff lhs has a lower expected cost than rhs.
        */
-      static bool isLowerPriority(const AStarPoint* lhs, const AStarPoint* rhs)
+      static bool isLowerPriority(const AStarPoint& lhs, const AStarPoint& rhs)
       {
          // We consider lhs to have a lower priority if it has a higher total f() cost.
          // In case of a tie, this point will have lower priority if it has a lower g() cost,
          // indicating that it is not as deep in the search tree.
-         return lhs->fCost > rhs->fCost || (lhs->fCost == rhs->fCost && lhs->gCost < rhs->gCost);
+         return lhs.fCost > rhs.fCost || (lhs.fCost == rhs.fCost && lhs.gCost < rhs.gCost);
       }
 };
 
@@ -276,14 +276,14 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
 
    shapes::Point2D destinationPoint(dst.x / m_movementTileSize, dst.y / m_movementTileSize);
 
-   std::vector<AStarPoint*> openSet;
-   std::vector<const AStarPoint*> closedSet;
+   std::vector<AStarPoint> openSet;
+   std::vector<AStarPoint> closedSet;
    
    const int NUM_TILES = m_collisionGridBounds.getArea();
    std::vector<bool> discovered(NUM_TILES, false);
    const shapes::Point2D srcTile(src.x / m_movementTileSize, src.y / m_movementTileSize);
    
-   openSet.push_back(new AStarPoint(nullptr, srcTile.x, srcTile.y, 0, 0));
+   openSet.emplace_back(AStarPoint(nullptr, srcTile.x, srcTile.y, 0, 0));
    std::push_heap(openSet.begin(), openSet.end(), AStarPoint::isLowerPriority);
 
    const int sourceTileNum = pixelsToTileNum(src);
@@ -296,15 +296,15 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
    while(!openSet.empty())
    {
       // Get the lowest-cost point in the open set, and remove it from the open set
-      const AStarPoint* cheapestPoint = openSet.front();
+      const AStarPoint& cheapestPoint = openSet.front();
       std::pop_heap(openSet.begin(), openSet.end(), AStarPoint::isLowerPriority);
       openSet.pop_back();
-      closedSet.push_back(cheapestPoint);
+      closedSet.emplace_back(cheapestPoint);
 
-      if(*cheapestPoint == destinationPoint)
+      if(cheapestPoint == destinationPoint)
       {
-         DEBUG("Found goal point %d,%d", cheapestPoint->x, cheapestPoint->y);
-         const AStarPoint* curr = cheapestPoint;
+         DEBUG("Found goal point %d,%d", cheapestPoint.x, cheapestPoint.y);
+         const AStarPoint* curr = &cheapestPoint;
          while(curr != nullptr)
          {
             path.push_front(shapes::Point2D(curr->x * m_movementTileSize, curr->y * m_movementTileSize));
@@ -313,38 +313,28 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
          break;
       }
       
-      DEBUG("Evaluating point %d,%d", cheapestPoint->x, cheapestPoint->y);
+      DEBUG("Evaluating point %d,%d", cheapestPoint.x, cheapestPoint.y);
 
       // Evaluate all the existing laterally adjacent points,
       // adding 1 as the cost of reaching the point from our current cheapest point.
-      const std::vector<shapes::Point2D> lateralPoints = shapes::Point2D::getLaterallyAdjacentPoints(*cheapestPoint, m_collisionGridBounds);
+      const std::vector<shapes::Point2D> lateralPoints = shapes::Point2D::getLaterallyAdjacentPoints(cheapestPoint, m_collisionGridBounds);
       evaluateAdjacentNodes(entityGrid, entityState, lateralPoints, cheapestPoint, 1.0f, destinationTileNum, openSet, discovered, size);
 
       // Evaluate all the existing diagonally adjacent points,
       // adding the square root of 2 as the cost of reaching the point from our current cheapest point.
-      const std::vector<shapes::Point2D> diagonalPoints = shapes::Point2D::getDiagonallyAdjacentPoints(*cheapestPoint, m_collisionGridBounds);
+      const std::vector<shapes::Point2D> diagonalPoints = shapes::Point2D::getDiagonallyAdjacentPoints(cheapestPoint, m_collisionGridBounds);
       evaluateAdjacentNodes(entityGrid, entityState, diagonalPoints, cheapestPoint, ROOT_2, destinationTileNum, openSet, discovered, size, true);
-   }
-   
-   for(std::vector<AStarPoint*>::const_iterator iter = openSet.begin(); iter != openSet.end(); ++iter)
-   {
-      delete *iter;
-   }
-   
-   for(std::vector<const AStarPoint*>::const_iterator iter = closedSet.begin(); iter != closedSet.end(); ++iter)
-   {
-      delete *iter;
    }
    
    return path;
 }
 
-void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalMovement) const
+void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint& evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalMovement) const
 {
    for(auto& adjacentNode : adjacentNodes)
    {
       int adjacentTileNum = coordsToTileNum(adjacentNode);
-      float tileGCost = evaluatedPoint->getGCost() + traversalCost;
+      float tileGCost = evaluatedPoint.getGCost() + traversalCost;
       float tileHCost = m_distanceMatrix(adjacentTileNum, destinationTileNum);
       if(!discovered[adjacentTileNum])
       {
@@ -356,14 +346,14 @@ void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileS
 
          if(diagonalMovement)
          {
-            freeTile = freeTile && entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(evaluatedPoint->x, y), size), entityState)
-            && entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(x, evaluatedPoint->y), size), entityState);
+            freeTile = freeTile && entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(evaluatedPoint.x, y), size), entityState)
+            && entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(x, evaluatedPoint.y), size), entityState);
          }
 
          if(freeTile)
          {
             DEBUG("Pushing point %d,%d onto open set with g()=%f and f()=%f.", x, y, tileGCost, tileGCost + tileHCost);
-            openSet.push_back(new AStarPoint(evaluatedPoint, x, y, tileGCost, tileHCost));
+            openSet.emplace_back(AStarPoint(&evaluatedPoint, x, y, tileGCost, tileHCost));
             std::push_heap(openSet.begin(), openSet.end(), AStarPoint::isLowerPriority);
          }
       }
@@ -372,16 +362,16 @@ void Pathfinder::evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileS
          const auto& tileInOpenSet = std::find_if(
                                       openSet.begin(),
                                       openSet.end(),
-                                      [&](const AStarPoint* point)
+                                      [&](const AStarPoint& point)
                                       {
-                                         return *point == adjacentNode;
+                                         return point == adjacentNode;
                                       });
 
-         if(tileInOpenSet != openSet.end() && (*tileInOpenSet)->getGCost() > tileGCost)
+         if(tileInOpenSet != openSet.end() && tileInOpenSet->getGCost() > tileGCost)
          {
             DEBUG("Altering cost of discovered point %d, %d to g()=%f and f()=%f", adjacentNode.x, adjacentNode.y, tileGCost, tileGCost + tileHCost);
-            (*tileInOpenSet)->setGCost(tileGCost);
-            (*tileInOpenSet)->setParent(evaluatedPoint);
+            tileInOpenSet->setGCost(tileGCost);
+            tileInOpenSet->setParent(&evaluatedPoint);
             std::make_heap(openSet.begin(), openSet.end(), AStarPoint::isLowerPriority);
          }
       }

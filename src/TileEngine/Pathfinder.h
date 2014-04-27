@@ -194,7 +194,7 @@ class Pathfinder
        * @param size The entity Size.
        * @param diagonalNodes Whether or not the nodes being evaluated are diagonal from the evaluated point.
        */
-      void evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint* evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint*>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalNodes = false) const;
+      void evaluateAdjacentNodes(const EntityGrid& entityGrid, const TileState& entityState, const std::vector<shapes::Point2D>& adjacentNodes, const AStarPoint& evaluatedPoint, float traversalCost, int destinationTileNum, std::vector<AStarPoint>& openSet, std::vector<bool>& discovered, const shapes::Size& size, bool diagonalNodes = false) const;
 };
 
 #endif
