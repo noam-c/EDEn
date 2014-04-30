@@ -139,7 +139,3 @@ void Camera::reset()
       m_cameraApplied = false;
    }
 }
-
-Camera::~Camera()
-{
-}

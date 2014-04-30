@@ -84,8 +84,6 @@ class Settings
       Resolution m_resolution;
 
    public:
-      ~Settings();
-
       static void initialize();
 
       static Settings& getCurrentSettings();

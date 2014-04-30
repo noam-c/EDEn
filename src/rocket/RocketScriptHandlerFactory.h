@@ -12,7 +12,6 @@ class RocketScriptHandlerFactory : public Rocket::Core::EventListenerInstancer
 
    public:
       RocketScriptHandlerFactory(ScriptEngine& scriptEngine);
-      virtual ~RocketScriptHandlerFactory();
 
       virtual Rocket::Core::EventListener* InstanceEventListener(
             const Rocket::Core::String& value, Rocket::Core::Element* element);

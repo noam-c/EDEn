@@ -65,7 +65,7 @@ class Usable
       /**
        * Destructor.
        */
-      virtual ~Usable();
+      virtual ~Usable() = default;
 
       /**
        * @return The unique identifier of this usable.

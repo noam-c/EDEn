@@ -25,10 +25,6 @@ CharacterRoster::CharacterRoster(const Metadata& metadata) :
 {
 }
 
-CharacterRoster::~CharacterRoster()
-{
-}
-
 void CharacterRoster::signalRosterUpdate()
 {
    if(m_messagePipe)

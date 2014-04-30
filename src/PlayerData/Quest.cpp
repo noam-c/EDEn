@@ -29,10 +29,6 @@ Quest::Quest(const Json::Value& questJson)
    load(questJson);
 }
 
-Quest::~Quest()
-{
-}
-
 void Quest::load(const Json::Value& questTree)
 {
    m_subquests.clear();

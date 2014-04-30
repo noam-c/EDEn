@@ -22,10 +22,6 @@ Tileset::Tileset(ResourceKey name) :
 {
 }
 
-Tileset::~Tileset()
-{
-}
-
 void Tileset::load(const std::string& path)
 {
    DEBUG("Loading tileset file %s", path.c_str());

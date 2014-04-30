@@ -21,10 +21,6 @@ HomeViewModel::HomeViewModel(PlayerData& playerData) :
 {
 }
 
-HomeViewModel::~HomeViewModel()
-{
-}
-
 void HomeViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)

@@ -36,10 +36,6 @@ Usable::Usable(Json::Value& node) :
 {
 }
 
-Usable::~Usable()
-{
-}
-
 UsableId Usable::getId() const
 {
    return m_id;

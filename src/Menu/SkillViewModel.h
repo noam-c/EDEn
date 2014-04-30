@@ -37,11 +37,6 @@ class SkillViewModel : public Rocket::Controls::DataSource
        */
       SkillViewModel(SkillMenu& skillMenu, const Metadata& metadata);
 
-      /**
-       * Destructor.
-       */
-      ~SkillViewModel();
-
       void setCharacter(Character* character);
 
       UsableId getSkillId(int rowIndex) const;

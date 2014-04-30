@@ -83,7 +83,7 @@ class HomeMenu: public MenuState
       /**
        * Destructor.
        */
-      ~HomeMenu();
+      ~HomeMenu() = default;
 
       /**
        * Handles sidebar option click events by navigating to the

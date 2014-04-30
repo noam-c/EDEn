@@ -13,10 +13,6 @@ Coroutine::Coroutine() :
 {
 }
 
-Coroutine::~Coroutine()
-{
-}
-
 int Coroutine::getId() const
 {
    return m_coroutineId;

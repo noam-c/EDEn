@@ -42,10 +42,6 @@ HomeMenu::HomeMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShel
    initialize();
 }
 
-HomeMenu::~HomeMenu()
-{
-}
-
 void HomeMenu::initialize()
 {
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");

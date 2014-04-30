@@ -43,10 +43,6 @@ void ItemMenu::initialize()
    }
 }
 
-ItemMenu::~ItemMenu()
-{
-}
-
 void ItemMenu::dragStarted(Rocket::Core::Event& event)
 {
    Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event.GetParameter< void* >("drag_element", nullptr));

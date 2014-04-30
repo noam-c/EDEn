@@ -13,10 +13,6 @@ GameContext::GameContext(ScriptEngine& scriptEngine) :
    m_scriptEngine.setPlayerData(&m_playerData);
 }
 
-GameContext::~GameContext()
-{
-}
-
 Metadata& GameContext::getMetadata()
 {
    return m_metadata;

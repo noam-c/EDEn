@@ -21,10 +21,6 @@ PlayerDataSummary::PlayerDataSummary(const Metadata& metadata) :
 {
 }
 
-PlayerDataSummary::~PlayerDataSummary()
-{
-}
-
 PlayerDataSummary& PlayerDataSummary::operator=(const PlayerData& playerData)
 {
    /**

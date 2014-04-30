@@ -79,7 +79,7 @@ class Actor
       virtual ~Actor() = 0;
 
       /**
-       * Clears the queue of actor orders.
+       * Clear the Actor's current set of orders.
        */
       void flushOrders();
 

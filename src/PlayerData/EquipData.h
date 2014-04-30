@@ -55,11 +55,6 @@ class EquipData
    
    public:
       /**
-       * Constructor for an empty set of equipment.
-       */
-      EquipData();
-
-      /**
        * Load equipment and slot data for this equipment set.
        *
        * @param equipmentNode The JSON node containing the data for this equipment set.
@@ -72,11 +67,6 @@ class EquipData
        * @param outputJson The JSON node to serialize the equipment into.
        */
       void serialize(Json::Value& outputJson) const;
-   
-      /**
-       * Destructor.
-       */
-      ~EquipData();
 
       /**
        * @return The list of equipment slots on the character.

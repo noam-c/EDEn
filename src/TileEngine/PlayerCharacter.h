@@ -53,7 +53,7 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
       /**
        * Destructor.
        */
-      ~PlayerCharacter();
+      ~PlayerCharacter() = default;
 
       /**
        * @return true iff the player character is an active entity on the map.

@@ -11,6 +11,8 @@
 #include <string>
 #include "GameStateType.h"
 #include "UsableId.h"
+#include "Item.h"
+#include "Skill.h"
 
 namespace Json
 {
@@ -55,11 +57,6 @@ class Metadata
        * @param scriptEngine The script engine to use when invoking items and skills.
        */
       Metadata(ScriptEngine& scriptEngine);
-
-      /**
-       * Destructor. Clean up the item metadata map.
-       */
-      ~Metadata();
 
       /**
        * @param key The ID of the item metadata to be retrieved.

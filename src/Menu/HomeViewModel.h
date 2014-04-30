@@ -36,11 +36,6 @@ class HomeViewModel : public Rocket::Controls::DataSource
       HomeViewModel(PlayerData& playerData);
 
       /**
-       * Destructor.
-       */
-      ~HomeViewModel();
-
-      /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.
        *
        * @param row The list to populate with values from the desired row.

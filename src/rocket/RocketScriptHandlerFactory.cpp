@@ -6,10 +6,6 @@ RocketScriptHandlerFactory::RocketScriptHandlerFactory(ScriptEngine& scriptEngin
 {
 }
 
-RocketScriptHandlerFactory::~RocketScriptHandlerFactory()
-{
-}
-
 Rocket::Core::EventListener* RocketScriptHandlerFactory::InstanceEventListener(
       const Rocket::Core::String& value, Rocket::Core::Element* element)
 {

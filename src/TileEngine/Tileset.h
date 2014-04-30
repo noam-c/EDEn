@@ -9,9 +9,8 @@
 
 #include "Resource.h"
 #include "Size.h"
+#include "Texture.h"
 #include <vector>
-
-class Texture;
 
 /**
  * This resource holds a tileset image texture and associated data
@@ -40,11 +39,6 @@ class Tileset : public Resource
        * @param name The name of this tileset Resource.
        */
       Tileset(ResourceKey name);
-
-      /**
-       * Destructor.
-       */
-      ~Tileset();
 
       /**
        * Draws the specified tile to the coordinates specified

@@ -35,7 +35,7 @@ class Coroutine
       /**
        * Destructor.
        */
-      virtual ~Coroutine();
+      virtual ~Coroutine() = default;
    
       /**
        * @return the numeric identifier for this Coroutine.

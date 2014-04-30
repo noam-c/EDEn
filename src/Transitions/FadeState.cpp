@@ -18,10 +18,6 @@ FadeState::FadeState(GameContext& gameContext, std::shared_ptr<GameState> oldSta
 {
 }
 
-FadeState::~FadeState()
-{
-}
-
 void FadeState::draw()
 {
    const float width = static_cast<float>(GraphicsUtil::getInstance()->getWidth());

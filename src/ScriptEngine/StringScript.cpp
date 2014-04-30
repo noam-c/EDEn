@@ -21,7 +21,3 @@ StringScript::StringScript(lua_State* luaVM, const std::string& scriptString) :
    m_luaStack = lua_newthread(luaVM);
    luaL_loadstring(m_luaStack, scriptString.c_str());
 }
-
-StringScript::~StringScript()
-{
-}

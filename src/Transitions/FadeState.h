@@ -37,7 +37,7 @@ class FadeState : public TransitionState
       /**
        * Destructor.
        */
-      ~FadeState();
+      ~FadeState() = default;
 };
 
 #endif

@@ -46,10 +46,6 @@ void SkillMenu::initialize()
    }
 }
 
-SkillMenu::~SkillMenu()
-{
-}
-
 void SkillMenu::setCharacter(int characterIndex)
 {
    CharacterRoster* roster = getCurrentPlayerData().getRoster();

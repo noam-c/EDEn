@@ -173,11 +173,6 @@ class Character
       Character(const Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
 
       /**
-       * Destructor.
-       */
-      ~Character();
-
-      /**
        * Serialize the character data into JSON output.
        *
        * @return A JSON object containing this character's serialized data.

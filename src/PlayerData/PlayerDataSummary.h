@@ -53,7 +53,7 @@ class PlayerDataSummary
       /**
        * Destructor.
        */
-      ~PlayerDataSummary();
+      ~PlayerDataSummary() = default;
 
       /**
        * Assignment operator.

@@ -31,7 +31,7 @@ class FileScript : public Script
       /**
        * Destructor.
        */
-      ~FileScript();
+      ~FileScript() = default;
 };
 
 #endif

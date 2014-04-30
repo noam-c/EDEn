@@ -15,10 +15,6 @@ Exception::Exception(const std::string& function,
 {
 }
 
-Exception::~Exception() throw()
-{
-}
-
 std::string Exception::getFullMessage() const
 {
    std::stringstream err;

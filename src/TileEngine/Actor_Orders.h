@@ -26,7 +26,7 @@ class Actor::Order
    public:
       virtual bool perform(long timePassed) = 0;
       virtual void draw() const {}
-      virtual ~Order() {}
+      virtual ~Order() = default;
 };
 
 /**

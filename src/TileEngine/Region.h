@@ -49,11 +49,6 @@ class Region : public Resource
        */
       Region(const ResourceKey& name);
 
-      /**
-       * Destructor.
-       */
-      ~Region();
-
       /** @return the name of the region. */
       std::string getName() const;
 

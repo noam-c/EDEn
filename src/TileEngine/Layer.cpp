@@ -74,10 +74,6 @@ Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
    }
 }
 
-Layer::~Layer()
-{
-}
-
 void Layer::draw(int row, bool isForeground) const
 {
    const unsigned int width = m_bounds.getWidth();

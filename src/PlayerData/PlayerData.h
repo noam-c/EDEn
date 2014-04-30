@@ -13,6 +13,7 @@
 #include "CharacterRoster.h"
 #include "Inventory.h"
 #include "Quest.h"
+#include "Shortcut.h"
 #include "UsableId.h"
 
 class Character;
@@ -44,8 +45,6 @@ struct SaveLocation
 };
 
 struct Shortcut;
-
-typedef std::vector<Shortcut> ShortcutList;
 
 /**
  * A model representing the player's game data, which includes
@@ -83,7 +82,7 @@ class PlayerData
    std::string m_currChapter;
 
    /** The player's shortcut list. */
-   ShortcutList m_shortcutList;
+   std::vector<Shortcut> m_shortcutList;
 
    /** The location of the last save point used. */
    SaveLocation m_saveLocation;
@@ -117,7 +116,7 @@ class PlayerData
       /**
        * Destructor.
        */
-      ~PlayerData();
+      ~PlayerData() = default;
 
       /**
        * Assignment operator.

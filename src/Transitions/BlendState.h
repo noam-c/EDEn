@@ -40,7 +40,7 @@ class BlendState : public TransitionState
       /**
        * Destructor.
        */
-      ~BlendState();
+      ~BlendState() = default;
 };
 
 #endif

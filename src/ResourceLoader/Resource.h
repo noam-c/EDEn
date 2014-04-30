@@ -78,9 +78,9 @@ class Resource : public std::enable_shared_from_this<Resource>
       std::string getResourceName() const;
 
       /**
-       * Abstract destructor (forces all Resources to have destructors).
+       * Destructor.
        */
-      virtual ~Resource() = 0;
+      virtual ~Resource() = default;
 };
 
 #endif

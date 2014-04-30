@@ -98,12 +98,6 @@ class Quest
        * @param questJson The JSON data to load from.
        */
       Quest(const Json::Value& questJson);
-   
-      /**
-       * Destructor.
-       * Recursively cleans up all subquests.
-       */
-      ~Quest();
 
       /**
        * Deserializes JSON data into the Quest.

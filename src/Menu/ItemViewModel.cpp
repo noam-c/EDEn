@@ -26,10 +26,6 @@ ItemViewModel::ItemViewModel(const Metadata& metadata, PlayerData& playerData) :
 {
 }
 
-ItemViewModel::~ItemViewModel()
-{
-}
-
 UsableId ItemViewModel::getItemId(int rowIndex) const
 {
    const ItemList& itemList = m_playerData.getInventory()->getItemList();

@@ -24,9 +24,7 @@ Script::Script(const std::string& name) :
 {
 }
 
-Script::~Script()
-{
-}
+Script::~Script() = default;
 
 bool Script::runScript(int numArgs)
 {

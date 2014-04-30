@@ -67,11 +67,6 @@ class SkillMenu: public CharacterDependentMenu
        */
       SkillMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell);
 
-      /**
-       * Destructor.
-       */
-      ~SkillMenu();
-
       Character* getSelectedCharacter() const;
       void setCharacter(int characterIndex);
 };

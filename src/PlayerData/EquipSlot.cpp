@@ -71,7 +71,3 @@ void EquipSlot::serialize(Json::Value& slotNode) const
       slotNode["enabled"] = false;
    }
 }
-
-EquipSlot::~EquipSlot()
-{
-}

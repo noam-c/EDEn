@@ -7,10 +7,6 @@ RocketScriptHandler::RocketScriptHandler(ScriptEngine& scriptEngine, Rocket::Cor
 {
 }
 
-RocketScriptHandler::~RocketScriptHandler()
-{
-}
-
 void RocketScriptHandler::ProcessEvent(Rocket::Core::Event& event)
 {
    m_scriptEngine.runScriptString(m_scriptString);

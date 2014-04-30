@@ -27,7 +27,3 @@ std::string Resource::getResourceName() const
 {
    return std::string(m_name);
 }
-
-Resource::~Resource()
-{
-}

@@ -9,7 +9,7 @@
 
 struct RosterUpdateMessage
 {
-   RosterUpdateMessage();
+   RosterUpdateMessage() = default;
 };
 
 #endif

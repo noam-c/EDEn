@@ -35,10 +35,6 @@ PlayerData::PlayerData(const Metadata& metadata) :
 {
 }
 
-PlayerData::~PlayerData()
-{
-}
-
 PlayerData& PlayerData::operator=(const PlayerData& playerData)
 {
    if(&playerData != this)
@@ -158,9 +154,9 @@ void PlayerData::parseShortcuts(Json::Value& rootElement)
 void PlayerData::serializeShortcuts(Json::Value& outputJson) const
 {
    Json::Value shortcutNode(Json::arrayValue);
-   for(ShortcutList::const_iterator iter = m_shortcutList.begin(); iter != m_shortcutList.end(); ++iter)
+   for(const auto& shortcut : m_shortcutList)
    {
-      shortcutNode.append(iter->serialize());
+      shortcutNode.append(shortcut.serialize());
    }
 
    int remainingShortcutSlotCount = PlayerData::SHORTCUT_BAR_SIZE - shortcutNode.size();

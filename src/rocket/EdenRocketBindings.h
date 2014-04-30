@@ -28,16 +28,6 @@ class EdenRocketBindings
 
    public:
       /**
-       * Constructor.
-       */
-      EdenRocketBindings();
-
-      /**
-       * Destructor.
-       */
-      ~EdenRocketBindings();
-
-      /**
        * Binds a listener for the specified event to a DOM element
        * (specified by id) in the document.
        *

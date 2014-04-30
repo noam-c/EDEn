@@ -13,8 +13,6 @@ class RocketScriptHandler : public Rocket::Core::EventListener
    public:
       RocketScriptHandler(ScriptEngine& scriptEngine, Rocket::Core::String scriptString);
 
-      virtual ~RocketScriptHandler();
-
       virtual void ProcessEvent(Rocket::Core::Event& event);
 
       virtual void OnDetach(Rocket::Core::Element* element);

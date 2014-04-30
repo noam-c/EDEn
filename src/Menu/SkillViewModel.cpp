@@ -27,10 +27,6 @@ SkillViewModel::SkillViewModel(SkillMenu& skillMenu, const Metadata& metadata) :
 {
 }
 
-SkillViewModel::~SkillViewModel()
-{
-}
-
 UsableId SkillViewModel::getSkillId(int rowIndex) const
 {
    Character* selectedCharacter = m_skillMenu.getSelectedCharacter();

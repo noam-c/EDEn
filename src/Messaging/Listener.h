@@ -22,7 +22,7 @@ namespace messaging
          /**
           * Destructor.
           */
-         virtual ~Listener() {}
+         virtual ~Listener() = default;
    };
 };
 

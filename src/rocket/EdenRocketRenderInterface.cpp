@@ -29,10 +29,6 @@ const int debugFlag = DEBUG_ROCKET;
 
 #define GL_CLAMP_TO_EDGE 0x812F
 
-EdenRocketRenderInterface::EdenRocketRenderInterface()
-{
-}
-
 void EdenRocketRenderInterface::RenderGeometry(
       Rocket::Core::Vertex* vertices,
       int numVertices, int* indices, int numIndices,

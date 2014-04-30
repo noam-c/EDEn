@@ -32,11 +32,6 @@ class EdenRocketRenderInterface : public Rocket::Core::RenderInterface
 {
    public:
       /**
-       * Constructor.
-       */
-      EdenRocketRenderInterface();
-
-      /**
        * Called by Rocket when it wants to render geometry that it does not wish to optimise.
        */
       virtual void RenderGeometry(Rocket::Core::Vertex* vertices, int numVertices, int* indices, int numIndices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation);

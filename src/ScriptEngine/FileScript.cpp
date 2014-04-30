@@ -25,7 +25,3 @@ FileScript::FileScript(lua_State* luaVM, const std::string& scriptPath) :
    DEBUG("Script ID %d loading file %s", getId(), scriptPath.c_str());
    luaL_loadfile(m_luaStack, scriptPath.c_str());
 }
-
-FileScript::~FileScript()
-{
-}

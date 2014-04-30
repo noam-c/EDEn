@@ -22,7 +22,6 @@ class GameContext
 
    public:
       GameContext(ScriptEngine& scriptEngine);
-      ~GameContext();
 };
 
 #endif

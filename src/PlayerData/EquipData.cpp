@@ -12,10 +12,6 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_PLAYER;
 
-EquipData::EquipData()
-{
-}
-
 void EquipData::load(const Metadata& metadata, const Json::Value& equipment)
 {
    if(equipment.isNull())
@@ -61,10 +57,6 @@ void EquipData::serialize(Json::Value& outputJson) const
    {
       m_accessories[i].serialize(accessoriesNode[i]);
    }
-}
-
-EquipData::~EquipData()
-{
 }
 
 std::vector<EquipSlot*> EquipData::getSlots()

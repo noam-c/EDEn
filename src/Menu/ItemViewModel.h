@@ -35,11 +35,6 @@ class ItemViewModel : public Rocket::Controls::DataSource
        */
       ItemViewModel(const Metadata& metadata, PlayerData& playerData);
 
-      /**
-       * Destructor.
-       */
-      ~ItemViewModel();
-
       UsableId getItemId(int rowIndex) const;
 
       /**

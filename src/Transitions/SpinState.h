@@ -31,7 +31,7 @@ class SpinState : public TransitionState
       /**
        * Destructor.
        */
-      ~SpinState();
+      ~SpinState() = default;
 };
 
 #endif

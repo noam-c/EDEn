@@ -47,11 +47,6 @@ class Layer
       Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds);
 
       /**
-       * Destructor.
-       */
-      ~Layer();
-
-      /**
        * Draws a row of the layer to screen.
        *
        * @param row The row to draw from the layer.

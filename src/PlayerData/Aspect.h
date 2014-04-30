@@ -64,11 +64,6 @@ class Aspect
          StatBonusCalculation(const Json::Value& statBonusNode);
 
          /**
-          * Destructor.
-          */
-         ~StatBonusCalculation();
-
-         /**
           * @param level The level to which the stat bonus should scale.
           *
           * @return The calculated stat bonus proportional to the given level.
@@ -132,11 +127,6 @@ class Aspect
        * @return The requested Aspect or nullptr if it is not found.
        */
       static std::unique_ptr<Aspect> loadAspect(const std::string& aspectId);
-
-      /**
-       * Destructor.
-       */
-      ~Aspect();
 
       /**
        * @return the ID of this aspect.

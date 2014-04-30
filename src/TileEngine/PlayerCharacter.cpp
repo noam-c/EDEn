@@ -32,10 +32,6 @@ PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid
    messagePipe.registerListener(this);
 }
 
-PlayerCharacter::~PlayerCharacter()
-{
-}
-
 bool PlayerCharacter::isActive() const
 {
     return m_active;

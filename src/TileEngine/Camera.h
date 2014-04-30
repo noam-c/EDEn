@@ -124,11 +124,6 @@ class Camera
        *       to the scene, then this is a no-op.
        */
       void reset();
-
-      /**
-       * Destructor.
-       */
-      ~Camera();
 };
 
 #endif

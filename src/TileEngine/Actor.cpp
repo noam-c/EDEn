@@ -31,10 +31,7 @@ Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, Entit
 {
 }
 
-Actor::~Actor()
-{
-   flushOrders();
-}
+Actor::~Actor() = default;
 
 void Actor::flushOrders()
 {

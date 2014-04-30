@@ -18,10 +18,6 @@ BlendState::BlendState(GameContext& gameContext, std::shared_ptr<GameState> oldS
 {
 }
 
-BlendState::~BlendState()
-{
-}
-
 void BlendState::draw()
 {
    const float width = static_cast<float>(GraphicsUtil::getInstance()->getWidth());

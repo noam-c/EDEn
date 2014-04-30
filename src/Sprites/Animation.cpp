@@ -18,10 +18,6 @@ Animation::Animation(const std::string& name, const FrameSequence& frameSequence
    m_timeToNextAnimation(MILLISECONDS_PER_FRAME)
 {}
 
-Animation::~Animation()
-{
-}
-
 void Animation::update(long timePassed)
 {
    m_timeToNextAnimation -= timePassed;

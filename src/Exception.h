@@ -26,9 +26,9 @@
 class Exception : public std::exception
 {  
    /**
-    * Making the default constructor private to force people to throw detailed exceptions.
+    * Deleting the default constructor to force people to throw detailed exceptions.
     */
-   Exception();
+   Exception() = delete;
    
    /**
     * The name of the function from which this Exception was thrown.
@@ -79,7 +79,7 @@ class Exception : public std::exception
       /**
        * Destructor.
        */
-      virtual ~Exception() throw();
+      virtual ~Exception() = default;
 };
 
 #endif

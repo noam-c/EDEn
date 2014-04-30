@@ -22,10 +22,6 @@ SpinState::SpinState(GameContext& gameContext, std::shared_ptr<GameState> oldSta
 {
 }
 
-SpinState::~SpinState()
-{
-}
-
 void SpinState::draw()
 {
    const float width = static_cast<float>(GraphicsUtil::getInstance()->getWidth());

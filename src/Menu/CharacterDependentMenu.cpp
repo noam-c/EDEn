@@ -11,7 +11,3 @@ CharacterDependentMenu::CharacterDependentMenu(GameContext& gameContext, const s
    MenuState(gameContext, stateName, menuShell)
 {
 }
-
-CharacterDependentMenu::~CharacterDependentMenu()
-{
-}

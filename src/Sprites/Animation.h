@@ -40,11 +40,6 @@ public:
     * @param frameSequence The sequence of frames in a given animation.
     */
    Animation(const std::string& name, const FrameSequence& frameSequence);
-   
-   /**
-    * Destructor.
-    */
-   ~Animation();
 
    /**
     * Updates the animation based on the time that has passed since the

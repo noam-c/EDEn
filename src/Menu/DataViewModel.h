@@ -35,11 +35,6 @@ class DataViewModel : public Rocket::Controls::DataSource
       DataViewModel(DataMenu& dataMenu);
 
       /**
-       * Destructor.
-       */
-      ~DataViewModel();
-
-      /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.
        *
        * @param row The list to populate with values from the desired row.

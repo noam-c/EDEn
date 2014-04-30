@@ -31,7 +31,7 @@ class StringScript : public Script
       /**
        * Destructor.
        */
-      ~StringScript();
+      ~StringScript() = default;
 };
 
 #endif

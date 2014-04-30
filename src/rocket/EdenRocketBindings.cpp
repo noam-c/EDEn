@@ -6,14 +6,6 @@
 
 #include "EdenRocketBindings.h"
 
-EdenRocketBindings::EdenRocketBindings()
-{
-}
-
-EdenRocketBindings::~EdenRocketBindings()
-{
-}
-
 void EdenRocketBindings::bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, std::function<void(Rocket::Core::Event&)> handler, bool capture)
 {
    Rocket::Core::Element* element = document->GetElementById(id);

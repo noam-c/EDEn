@@ -66,7 +66,7 @@ class ItemMenu: public MenuState
       /**
        * Destructor.
        */
-      ~ItemMenu();
+      ~ItemMenu() = default;
 };
 
 #endif

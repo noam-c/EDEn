@@ -47,7 +47,6 @@ Pathfinder::Pathfinder()
 void Pathfinder::initialize(Grid<TileState> grid, int tileSize, const shapes::Rectangle& gridBounds)
 {
    DEBUG("Resetting pathfinder...");
-   deleteRoyFloydWarshallMatrices();
    m_movementTileSize = tileSize;
    m_collisionGrid = grid;
    m_collisionGridBounds = gridBounds;
@@ -55,17 +54,14 @@ void Pathfinder::initialize(Grid<TileState> grid, int tileSize, const shapes::Re
    DEBUG("Pathfinder reinitialized.");
 }
 
-Pathfinder::~Pathfinder()
-{
-   deleteRoyFloydWarshallMatrices();
-}
-
 void Pathfinder::initRoyFloydWarshallMatrices()
 {
    const unsigned int NUM_TILES = m_collisionGridBounds.getArea();
    const auto matrixSize = shapes::Size(NUM_TILES, NUM_TILES);
    
+   m_distanceMatrix.clear();
    m_distanceMatrix.resize(matrixSize);
+   m_successorMatrix.clear();
    m_successorMatrix.resize(matrixSize);
    
    shapes::Point2D aTile;
@@ -398,10 +394,4 @@ Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shape
    }
 
    return path;
-}
-
-void Pathfinder::deleteRoyFloydWarshallMatrices()
-{
-   m_distanceMatrix.clear();
-   m_successorMatrix.clear();
 }

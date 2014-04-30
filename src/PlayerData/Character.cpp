@@ -90,10 +90,6 @@ Character::Character(const Metadata& metadata, const std::string& id, const Json
    m_sp = std::min(m_sp, getMaxSP());
 }
 
-Character::~Character()
-{
-}
-
 void Character::parseArchetypeData(const Metadata& metadata, const Json::Value& archetypeData)
 {
    m_name = archetypeData[Character::NAME_ATTRIBUTE].asString();

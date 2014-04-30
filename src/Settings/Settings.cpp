@@ -54,10 +54,6 @@ void Settings::setSettings(const Settings& other)
    }
 }
 
-Settings::~Settings()
-{
-}
-
 void Settings::createNewSettingsFile()
 {
    save();

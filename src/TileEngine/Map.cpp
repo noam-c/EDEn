@@ -6,16 +6,10 @@
 
 #include "Map.h"
 #include "Tileset.h"
-#include "TriggerZone.h"
-#include "MapExit.h"
-#include "Layer.h"
 #include "Pathfinder.h"
 #include "ResourceLoader.h"
 #include "TileEngine.h"
-#include "Rectangle.h"
 #include "Size.h"
-#include "Point2D.h"
-#include <sstream>
 
 #include "DebugUtils.h"
 
@@ -23,10 +17,6 @@ const int debugFlag = DEBUG_RES_LOAD | DEBUG_ENTITY_GRID;
 
 // Define as 1 to have the game draw the map's passibility matrix
 #define DRAW_PASSIBILITY 0
-
-Map::Map()
-{
-}
 
 Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
 {
@@ -114,10 +104,6 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
    }
    
    DEBUG("Map loaded.");
-}
-
-Map::~Map()
-{
 }
 
 void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)

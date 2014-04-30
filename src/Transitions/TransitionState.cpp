@@ -38,9 +38,7 @@ TransitionState::TransitionState(GameContext& gameContext, const std::string& st
    activate();
 }
 
-TransitionState::~TransitionState()
-{
-}
+TransitionState::~TransitionState() = default;
 
 bool TransitionState::captureStateToTexture(std::shared_ptr<GameState> state, ScreenTexture& screenTexture)
 {

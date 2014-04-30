@@ -20,10 +20,6 @@ DataViewModel::DataViewModel(DataMenu& dataMenu) :
 {
 }
 
-DataViewModel::~DataViewModel()
-{
-}
-
 void DataViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)

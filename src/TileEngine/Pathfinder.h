@@ -113,11 +113,6 @@ class Pathfinder
       void initialize(Grid<TileState> grid, int tileSize, const shapes::Rectangle& gridBounds);
 
       /**
-       * Destructor.
-       */
-      ~Pathfinder();
-
-      /**
        * Finds an ideal path from the source coordinates to the destination.
        *
        * @param src The coordinates of the source (in pixels).

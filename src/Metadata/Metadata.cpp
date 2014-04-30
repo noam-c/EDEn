@@ -5,8 +5,6 @@
  */
 
 #include "Metadata.h"
-#include "Item.h"
-#include "Skill.h"
 #include "json.h"
 #include <fstream>
 #include <tuple>
@@ -23,10 +21,6 @@ Metadata::Metadata(ScriptEngine& scriptEngine) :
 {
    loadItemMetadata();
    loadSkillMetadata();
-}
-
-Metadata::~Metadata()
-{
 }
 
 Json::Value Metadata::loadMetadataTable(const char* filePath)

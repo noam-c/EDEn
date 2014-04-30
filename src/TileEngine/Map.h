@@ -17,11 +17,10 @@
 
 #include "Grid.h"
 #include "Rectangle.h"
-
-class Point2D;
-class MapExit;
-class Layer;
-class TriggerZone;
+#include "Layer.h"
+#include "TriggerZone.h"
+#include "Point2D.h"
+#include "MapExit.h"
 
 /**
  * A map is a subset of a Region consisting of a single rectangular set of tiles
@@ -33,11 +32,6 @@ class TriggerZone;
  */
 class Map
 {
-   /**
-    * The delimiter for map data read from file.
-    */
-   static const char MAP_DELIM = ':';
-
    /** The name of this map */
    std::string m_name;
 
@@ -87,10 +81,7 @@ class Map
     */
    void initializePassibilityMatrix();
 
-   /**
-    * Default constructor.
-    */
-   Map();
+   Map() = delete;
 
    public:
 
@@ -103,11 +94,6 @@ class Map
        * @param filePath The path to the map file to load.
        */
       Map(const std::string& name, const std::string& filePath);
-
-      /**
-       * Destructor.
-       */
-      ~Map();
 
       /**
        * @return The name of this map.

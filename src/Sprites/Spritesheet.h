@@ -9,6 +9,7 @@
 
 #include "Resource.h"
 #include "FrameSequence.h"
+#include "Rectangle.h"
 #include "Size.h"
 #include <map>
 #include <memory>
@@ -23,7 +24,6 @@ namespace Json
 namespace shapes
 {
    struct Point2D;
-   struct Rectangle;
 };
 
 struct SpriteFrame;
@@ -104,11 +104,6 @@ class Spritesheet : public Resource
        * @param name The name of the spritesheet Resource.
        */
       Spritesheet(ResourceKey name);
-
-      /**
-       * Destructor.
-       */
-      ~Spritesheet();
 
       /**
        * Draws a given frame at a specified location.

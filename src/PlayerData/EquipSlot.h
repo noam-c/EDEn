@@ -43,11 +43,6 @@ struct EquipSlot
     * Constructor.
     */
    EquipSlot();
-
-   /**
-    * Destructor.
-    */
-   ~EquipSlot();
    
    /**
     * Load in slot information from a savegame.

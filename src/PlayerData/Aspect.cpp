@@ -20,10 +20,6 @@ Aspect::StatBonusCalculation::StatBonusCalculation(const Json::Value& statBonusN
 {
 }
 
-Aspect::StatBonusCalculation::~StatBonusCalculation()
-{
-}
-
 int Aspect::StatBonusCalculation::getBonusForLevel(unsigned int level) const
 {
    // ceil instead of round because we <3 players
@@ -60,10 +56,6 @@ Aspect::Aspect(const Json::Value& aspectToLoad)
    
    parseStatBonuses(aspectToLoad);
    parseSkillTree(aspectToLoad);
-}
-
-Aspect::~Aspect()
-{
 }
 
 void Aspect::parseStatBonuses(const Json::Value& aspectToLoad)

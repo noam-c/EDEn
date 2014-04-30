@@ -37,10 +37,6 @@ Spritesheet::Spritesheet(ResourceKey name) :
 {
 }
 
-Spritesheet::~Spritesheet()
-{
-}
-
 void Spritesheet::load(const std::string& path)
 {
    // Load the image itself into a texture using GraphicsUtil

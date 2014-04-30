@@ -7,6 +7,7 @@
 #ifndef CHARACTER_ROSTER_H
 #define CHARACTER_ROSTER_H
 
+#include "Character.h"
 #include <map>
 #include <vector>
 
@@ -20,7 +21,6 @@ namespace messaging
    class MessagePipe;
 };
 
-class Character;
 class Metadata;
 
 class CharacterRoster
@@ -53,11 +53,6 @@ class CharacterRoster
        * Constructor.
        */
       CharacterRoster(const Metadata& metadata);
-
-      /**
-       * Destructor.
-       */
-      ~CharacterRoster();
 
       /**
        * Binds a new message pipe to send player data updates to. This overwrites the previously set
