@@ -30,7 +30,8 @@
  */
 void MainMenu::NewGameAction()
 {
-   auto tileEngine = std::make_shared<TileEngine>(m_gameContext, CHAP1);
+   auto tileEngine = std::make_shared<TileEngine>(m_gameContext);
+   tileEngine->setChapterToInitialize(CHAP1);
    getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, shared_from_this()));
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
@@ -51,6 +52,11 @@ void MainMenu::MenuPrototypeAction()
  */
 void MainMenu::LoadGameAction()
 {
+   getCurrentPlayerData().load(SAVE_GAME);
+   auto tileEngine = std::make_shared<TileEngine>(m_gameContext);
+   getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, shared_from_this()));
+   m_chooseSound->play();
+   Music::fadeOutMusic(1000);
 }
 
 /**

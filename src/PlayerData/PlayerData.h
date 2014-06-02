@@ -15,6 +15,7 @@
 #include "Quest.h"
 #include "Shortcut.h"
 #include "UsableId.h"
+#include "Point2D.h"
 
 class Character;
 typedef class Usable Item;
@@ -38,10 +39,20 @@ namespace messaging
  */
 struct SaveLocation
 {
+   static const char* CHAPTER_ATTRIBUTE;
+   static const char* REGION_ATTRIBUTE;
+   static const char* MAP_ATTRIBUTE;
+   static const char* X_ATTRIBUTE;
+   static const char* Y_ATTRIBUTE;
+
+   bool valid;
+
+   std::string chapter;
    std::string region;
    std::string map;
-   int x;
-   int y;
+   shapes::Point2D coords;
+   
+   Json::Value serialize() const;
 };
 
 struct Shortcut;
@@ -57,14 +68,9 @@ class PlayerData
    static const char* CHARACTER_LIST_ELEMENT;
    static const char* CHARACTER_ELEMENT;
 
-   static const char* SHORTCUTS_ELEMENT;
-
    static const char* SAVE_LOCATION_ELEMENT;
-   static const char* CHAPTER_ATTRIBUTE;
-   static const char* REGION_ATTRIBUTE;
-   static const char* MAP_ATTRIBUTE;
-   static const char* X_ATTRIBUTE;
-   static const char* Y_ATTRIBUTE;
+   
+   static const char* SHORTCUTS_ELEMENT;
 
    /** The file from which this player data was last saved/loaded. */
    std::string m_filePath;
@@ -77,9 +83,6 @@ class PlayerData
 
    /** The top-level quest for the game. Contains all the quests that the player can complete. */
    Quest m_rootQuest;
-
-   /** The current chapter being played (if the game was saved in the middle of a chapter). */
-   std::string m_currChapter;
 
    /** The player's shortcut list. */
    std::vector<Shortcut> m_shortcutList;
@@ -160,6 +163,7 @@ class PlayerData
       void setShortcut(int index, UsableId itemId, const std::string& characterId);
       void clearShortcut(int index);
 
+      const SaveLocation& getSaveLocation() const;
       const CharacterRoster* getRoster() const;
       const Inventory* getInventory() const;
       CharacterRoster* getRoster();

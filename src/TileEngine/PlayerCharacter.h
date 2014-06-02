@@ -39,6 +39,8 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
   
    /** Total distance for the character to move. */
    float m_cumulativeDistanceCovered;
+   
+   void refreshLeaderSprite();
 
    public:
       /**

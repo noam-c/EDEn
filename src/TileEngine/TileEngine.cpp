@@ -37,8 +37,9 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 const int TileEngine::TILE_SIZE = 32;
 
-TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName, const std::string& playerDataPath) :
+TileEngine::TileEngine(GameContext& gameContext) :
    GameState(gameContext, GameStateType::FIELD, "TileEngine"),
+   m_initialized(false),
    m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
    m_shortcutBar(getCurrentPlayerData(), getMetadata(), getStateType(), *m_rocketContext),
@@ -47,11 +48,8 @@ TileEngine::TileEngine(GameContext& gameContext, const std::string& chapterName,
 {
    m_messagePipe.registerListener<MapExitMessage>(this);
    m_messagePipe.registerListener<MapTriggerMessage>(this);
-
-   loadPlayerData(playerDataPath);
+   
    m_cameraTarget = &m_playerActor;
-
-   startChapter(chapterName);
 }
 
 TileEngine::~TileEngine()
@@ -59,13 +57,9 @@ TileEngine::~TileEngine()
    getCurrentPlayerData().unbindMessagePipe();
 }
 
-void TileEngine::loadPlayerData(const std::string& path)
+void TileEngine::setChapterToInitialize(const std::string& chapterName)
 {
-   if(!path.empty())
-   {
-      getCurrentPlayerData().load(path);
-      m_shortcutBar.refresh();
-   }
+   m_chapterToInitialize = chapterName;
 }
 
 void TileEngine::startChapter(const std::string& chapterName)
@@ -143,7 +137,7 @@ int TileEngine::setMap(std::string mapName)
    m_triggerScripts.clear();
    m_npcList.clear();
    m_playerActor.removeFromMap();
-
+   
    DEBUG("Setting map...");
    if(!mapName.empty())
    {
@@ -156,9 +150,9 @@ int TileEngine::setMap(std::string mapName)
       m_entityGrid.setMapData(m_currRegion->getStartingMap());
       mapName = m_entityGrid.getMapName();
    }
-
+   
    DEBUG("Map set to: %s", mapName.c_str());
-
+   
    recalculateMapOffsets();
    return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, m_scheduler);
 }
@@ -287,6 +281,29 @@ void TileEngine::activate()
    recalculateMapOffsets();
    getCurrentPlayerData().bindMessagePipe(&m_messagePipe);
    getScriptEngine().setTileEngine(shared_from_this());
+   
+   if(!m_initialized)
+   {
+      if(!m_chapterToInitialize.empty())
+      {
+         startChapter(m_chapterToInitialize);
+      }
+      else
+      {
+         const SaveLocation& saveLocation = getCurrentPlayerData().getSaveLocation();
+         
+         if(!saveLocation.valid)
+         {
+            T_T("Invalid save data. Expected valid chapter name or save point data.");
+         }
+         
+         setRegion(saveLocation.region, saveLocation.map);
+         m_playerActor.addToMap(saveLocation.coords);
+         followWithCamera(m_playerActor);
+      }
+      
+      m_initialized = true;
+   }
 }
 
 void TileEngine::deactivate()

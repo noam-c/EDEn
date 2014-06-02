@@ -30,6 +30,7 @@ PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid
    m_cumulativeDistanceCovered(0)
 {
    messagePipe.registerListener(this);
+   refreshLeaderSprite();
 }
 
 bool PlayerCharacter::isActive() const
@@ -157,7 +158,7 @@ void PlayerCharacter::draw() const
    }
 }
 
-void PlayerCharacter::receive(const RosterUpdateMessage& message)
+void PlayerCharacter::refreshLeaderSprite()
 {
    const Character* leader = m_roster.getPartyLeader();
    if (leader != nullptr)
@@ -172,4 +173,9 @@ void PlayerCharacter::receive(const RosterUpdateMessage& message)
       DEBUG("Unable to add player character to map; no characters in the party.");
       removeFromMap();
    }
+}
+
+void PlayerCharacter::receive(const RosterUpdateMessage& message)
+{
+   refreshLeaderSprite();
 }

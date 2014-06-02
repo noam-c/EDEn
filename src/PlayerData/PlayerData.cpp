@@ -21,12 +21,32 @@ const char* PlayerData::CHARACTER_ELEMENT = "Character";
 
 const char* PlayerData::SHORTCUTS_ELEMENT = "Shortcuts";
 
-const char* PlayerData::SAVE_LOCATION_ELEMENT = "CurrentLocation";
-const char* PlayerData::CHAPTER_ATTRIBUTE = "chapter";
-const char* PlayerData::REGION_ATTRIBUTE = "region";
-const char* PlayerData::MAP_ATTRIBUTE = "map";
-const char* PlayerData::X_ATTRIBUTE = "x";
-const char* PlayerData::Y_ATTRIBUTE = "y";
+const char* PlayerData::SAVE_LOCATION_ELEMENT = "Location";
+
+const char* SaveLocation::CHAPTER_ATTRIBUTE = "chapter";
+const char* SaveLocation::REGION_ATTRIBUTE = "region";
+const char* SaveLocation::MAP_ATTRIBUTE = "map";
+const char* SaveLocation::X_ATTRIBUTE = "x";
+const char* SaveLocation::Y_ATTRIBUTE = "y";
+
+Json::Value SaveLocation::serialize() const
+{
+   Json::Value location(Json::nullValue);
+   
+   if(valid)
+   {
+      DEBUG("Serializing current location data...");
+      
+      // Set the current chapter and location
+      location[SaveLocation::CHAPTER_ATTRIBUTE] = chapter;
+      location[SaveLocation::REGION_ATTRIBUTE] = region;
+      location[SaveLocation::MAP_ATTRIBUTE] = map;
+      location[SaveLocation::X_ATTRIBUTE] = coords.x;
+      location[SaveLocation::Y_ATTRIBUTE] = coords.y;
+   }
+   
+   return location;
+}
 
 PlayerData::PlayerData(const Metadata& metadata) :
    m_roster(metadata),
@@ -49,7 +69,6 @@ PlayerData& PlayerData::operator=(const PlayerData& playerData)
       m_rootQuest.load(playerData.m_rootQuest.serialize());
 
       m_inventory = playerData.m_inventory;
-      m_currChapter = playerData.m_currChapter;
       m_shortcutList = playerData.m_shortcutList;
       m_saveLocation = playerData.m_saveLocation;
    }
@@ -175,29 +194,31 @@ void PlayerData::serializeShortcuts(Json::Value& outputJson) const
 void PlayerData::parseLocation(Json::Value& rootElement)
 {
    Json::Value& location = rootElement[PlayerData::SAVE_LOCATION_ELEMENT];
+   m_saveLocation.valid = false;
+
+   DEBUG("Loading current location data...");
+
    if(!location.isNull())
    {
-      DEBUG("Loading current location data...");
-      m_currChapter = location[PlayerData::CHAPTER_ATTRIBUTE].asString();
-      
+      m_saveLocation.valid = true;
+
       // Set the current chapter and location
-      SaveLocation savePoint;
-      savePoint.region = location[PlayerData::REGION_ATTRIBUTE].asString();
-      savePoint.map = location[PlayerData::MAP_ATTRIBUTE].asString();
-      savePoint.x = location[PlayerData::X_ATTRIBUTE].asInt();
-      savePoint.y = location[PlayerData::Y_ATTRIBUTE].asInt();
+      m_saveLocation.chapter = location[SaveLocation::CHAPTER_ATTRIBUTE].asString();
+      m_saveLocation.region = location[SaveLocation::REGION_ATTRIBUTE].asString();
+      m_saveLocation.map = location[SaveLocation::MAP_ATTRIBUTE].asString();
+
+      auto x = location[SaveLocation::X_ATTRIBUTE].asInt();
+      auto y = location[SaveLocation::Y_ATTRIBUTE].asInt();
+
+      m_saveLocation.coords = shapes::Point2D(x,y);
    }
-   else
-   {
-      // Check which chapters are available for play based on the quest log
-   }
+
+   /** \todo Calculate which chapters are available for play based on the quest log */
 }
 
 void PlayerData::serializeLocation(Json::Value& outputJson) const
 {
-   /**
-    * \todo Determine format for current location and then correctly serialize
-    */
+   outputJson[PlayerData::SAVE_LOCATION_ELEMENT] = m_saveLocation.serialize();
 }
 
 void PlayerData::save(const std::string& path)
@@ -221,6 +242,11 @@ void PlayerData::save(const std::string& path)
    writer.write(output, playerDataNode);
 
    m_filePath = path;
+}
+
+const SaveLocation& PlayerData::getSaveLocation() const
+{
+   return m_saveLocation;
 }
 
 const CharacterRoster* PlayerData::getRoster() const

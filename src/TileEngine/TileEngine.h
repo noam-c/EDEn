@@ -51,6 +51,10 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
    messaging::MessagePipe m_messagePipe;
    
    std::vector<std::pair<std::string, std::unique_ptr<MapTriggerCallback>>> m_triggerScripts;
+   
+   bool m_initialized;
+   
+   std::string m_chapterToInitialize;
 
    /** The debug console window to be used for diagnostics. */
    DebugConsoleWindow m_consoleWindow;
@@ -78,13 +82,6 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
 
    /** An optional Actor target for the camera to follow. */
    const Actor* m_cameraTarget;
-
-   /**
-    * Loads new player data.
-    *
-    * @param path The path to the player data file.
-    */
-   void loadPlayerData(const std::string& path);
    
    /**
     * Loads a chapter script.
@@ -166,13 +163,15 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * @param chapterName The name of the chapter to load after construction
        * @param playerDataPath The path to the player's data.
        */
-      TileEngine(GameContext& gameContext, const std::string& chapterName, const std::string& playerDataPath = "");
+      TileEngine(GameContext& gameContext);
 
       /**
        * Destructor.
        */
       ~TileEngine();
 
+      void setChapterToInitialize(const std::string& chapterName);
+   
       /**
        * @return The tile engine's coroutine scheduler.
        */

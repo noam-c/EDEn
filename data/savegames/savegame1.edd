@@ -1,5 +1,13 @@
 
 {
+   "Location" :
+   {
+      "x" : 480,
+      "y" : 480,
+      "region" : "sereia",
+      "map" : "outside",
+      "chapter" : "chapter1"
+   },
    "Characters" : 
    {
       "Party" : 
