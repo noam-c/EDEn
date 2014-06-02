@@ -15,7 +15,6 @@ const int debugFlag = DEBUG_SPRITE;
 Sprite::Sprite(const std::shared_ptr<Spritesheet>& sheet) :
    m_sheet(sheet),
    m_frameIndex(0),
-   m_animation(nullptr),
    m_currDirection(NONE)
 {
 }
@@ -78,7 +77,7 @@ std::string Sprite::toDirectionString(MovementDirection direction)
 
 void Sprite::setFrame(const std::string& frameName, MovementDirection direction)
 {
-   if(m_animation == nullptr && frameName == m_currName && direction == m_currDirection) return;
+   if(!m_animation && frameName == m_currName && direction == m_currDirection) return;
 
    int frameIndex;
    

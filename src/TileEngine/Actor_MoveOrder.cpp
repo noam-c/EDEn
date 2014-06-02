@@ -213,10 +213,9 @@ void Actor::MoveOrder::draw() const
       glDisable(GL_TEXTURE_2D);
       glColor3f(1.0f, 0.0f, 0.0f);
       glBegin(GL_LINE_STRIP);
-      for(EntityGrid::Path::const_iterator iter = m_path.begin(); iter != m_path.end(); ++iter)
+      for(const auto& node : m_path)
       {
-         shapes::Point2D point(iter->x + TileEngine::TILE_SIZE / 2, iter->y + TileEngine::TILE_SIZE / 2);
-         glVertex3d(point.x, point.y, 0);
+         glVertex3d(node.x + TileEngine::TILE_SIZE / 2, node.y + TileEngine::TILE_SIZE / 2, 0);
       }
       glEnd();
 

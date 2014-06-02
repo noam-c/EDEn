@@ -518,24 +518,24 @@ void EntityGrid::receive(const ActorMoveMessage& message)
    }
 
    const std::vector<MapExit>& mapExits = map->getMapExits();
-   for(std::vector<MapExit>::const_iterator iter = mapExits.begin(); iter != mapExits.end(); ++iter)
+   for(const auto& mapExit : mapExits)
    {
       if(m_tileEngine.isPlayerCharacter(message.movingActor) &&
-            !iter->getBounds().contains(message.oldLocation) &&
-            iter->getBounds().contains(message.newLocation))
+            !mapExit.getBounds().contains(message.oldLocation) &&
+            mapExit.getBounds().contains(message.newLocation))
       {
-         m_messagePipe.sendMessage(MapExitMessage(*iter));
+         m_messagePipe.sendMessage(MapExitMessage(mapExit));
          return;
       }
    }
 
    const std::vector<TriggerZone>& triggerZones = map->getTriggerZones();
-   for(std::vector<TriggerZone>::const_iterator iter = triggerZones.begin(); iter != triggerZones.end(); ++iter)
+   for(const auto& triggerZone : triggerZones)
    {
-      if(!iter->getBounds().contains(message.oldLocation)
-            && iter->getBounds().contains(message.newLocation))
+      if(!triggerZone.getBounds().contains(message.oldLocation)
+            && triggerZone.getBounds().contains(message.newLocation))
       {
-         m_messagePipe.sendMessage(MapTriggerMessage(*iter, message.movingActor));
+         m_messagePipe.sendMessage(MapTriggerMessage(triggerZone, message.movingActor));
       }
    }
 }

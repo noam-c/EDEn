@@ -164,7 +164,7 @@ void CharacterRoster::removeFromParty(Character* character)
    }
    else if(m_party.size() > 1 && m_partyLeader == character)
    {
-      std::vector<Character*>::iterator iter = std::find(m_party.begin(), m_party.end(), character);
+      auto iter = std::find(m_party.begin(), m_party.end(), character);
       m_partyLeader = *(iter + 1 != m_party.end() ? iter + 1 : m_party.begin());
       m_party.erase(iter);
    }

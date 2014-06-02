@@ -41,12 +41,12 @@ void Region::load(const std::string& path)
    
    closedir(dp);
    
-   for(std::vector<std::string>::iterator iter = files.begin(); iter != files.end(); ++iter)
+   for(const auto& filename : files)
    {
-      std::string mapFile(std::string(path) + *iter);
+      std::string mapFile(std::string(path) + filename);
       try
       {
-         auto nextMap = std::make_shared<Map>(iter->substr(0, iter->length() - 4), mapFile);
+         auto nextMap = std::make_shared<Map>(filename.substr(0, filename.length() - 4), mapFile);
          m_areas[nextMap->getName()] = nextMap;
       }
       catch(Exception& e)

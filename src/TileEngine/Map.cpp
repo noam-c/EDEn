@@ -316,7 +316,7 @@ const std::vector<MapExit>& Map::getMapExits() const
 
 const shapes::Point2D& Map::getMapEntrance(const std::string& previousMap) const
 {
-   std::map<std::string, shapes::Point2D>::const_iterator result = m_mapEntrances.find(previousMap);
+   const auto& result = m_mapEntrances.find(previousMap);
 
    if(result == m_mapEntrances.end())
    {

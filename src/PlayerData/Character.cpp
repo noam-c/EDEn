@@ -178,9 +178,9 @@ Json::Value Character::serialize() const
    characterNode[Character::ASPECTS_ELEMENT] = aspectsData;
 
    Json::Value baseStatsNode(Json::objectValue);
-   for(std::map<std::string, int>::const_iterator iter = m_baseStats.begin(); iter != m_baseStats.end(); ++iter)
+   for(const auto& iter : m_baseStats)
    {
-      baseStatsNode[iter->first] = iter->second;
+      baseStatsNode[iter.first] = iter.second;
    }
 
    characterNode[Character::BASE_STATS_ELEMENT] = baseStatsNode;
@@ -190,9 +190,9 @@ Json::Value Character::serialize() const
 
    Json::Value skillsNode(Json::arrayValue);
 
-   for(SkillUsage::const_iterator iter = m_skillUsage.begin(); iter != m_skillUsage.end(); ++iter)
+   for(const auto& iter : m_skillUsage)
    {
-      skillsNode[iter->first] = iter->second;
+      skillsNode[iter.first] = iter.second;
    }
 
    characterNode[Character::SKILLS_ELEMENT] = skillsNode;
@@ -205,7 +205,7 @@ Json::Value Character::serialize() const
 int Character::getStatAttribute(const std::string& attributeName) const
 {
    const auto& currentAspect = m_archetypeAspects[m_selectedAspect];
-   std::map<std::string, int>::const_iterator baseStatIterator = m_baseStats.find(attributeName);
+   const auto& baseStatIterator = m_baseStats.find(attributeName);
    int baseStat = baseStatIterator != m_baseStats.end() ?
       baseStatIterator->second : 0;
 
@@ -276,9 +276,8 @@ void Character::refreshAvailableSkills()
 
 bool Character::hasSkill(UsableId skillId) const
 {
-   SkillList availableSkills = m_availableSkills;
-   SkillList::const_iterator skillIter = std::find(availableSkills.begin(), availableSkills.end(), skillId);
-   return skillIter != availableSkills.end();
+   const auto& skillIter = std::find(m_availableSkills.begin(), m_availableSkills.end(), skillId);
+   return skillIter != m_availableSkills.end();
 }
 
 bool Character::incrementSkillUsage(UsableId skillId)

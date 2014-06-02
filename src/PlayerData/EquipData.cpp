@@ -71,9 +71,9 @@ std::vector<EquipSlot*> EquipData::getSlots()
    slots.push_back(&m_garment);
    slots.push_back(&m_feet);
    
-   for(std::vector<EquipSlot>::iterator iter = m_accessories.begin(); iter != m_accessories.end(); ++iter)
+   for(auto& accessory : m_accessories)
    {
-      slots.push_back(&(*iter));
+      slots.push_back(&accessory);
    }
    
    return slots;

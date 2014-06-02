@@ -179,7 +179,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
          std::string frameName = frameArray[i].asString();
 
          // Ensure that the frame exists in the frame list and grab the associated frame index
-         std::map<std::string, int>::const_iterator frameIndexIter = m_frameIndices.find(frameName);
+         const auto& frameIndexIter = m_frameIndices.find(frameName);
          if(frameIndexIter == m_frameIndices.end())
          {
             DEBUG("Found invalid frame name '%s' in animation %s", frameName.c_str(), animationName.c_str());
@@ -201,7 +201,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
 
 int Spritesheet::getFrameIndex(const std::string& frameName) const
 {
-   std::map<std::string, int>::const_iterator frameIndex = m_frameIndices.find(frameName);
+   const auto& frameIndex = m_frameIndices.find(frameName);
    if(frameIndex != m_frameIndices.end() && frameIndex->second < m_numFrames)
    {
       return frameIndex->second;

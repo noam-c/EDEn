@@ -62,9 +62,9 @@ Json::Value Quest::serialize() const
    questNode[Quest::OPTIONAL_ATTRIBUTE] = m_optional;
    
    Json::Value subquestsNode(Json::arrayValue);
-   for(QuestLog::const_iterator iter  = m_subquests.begin(); iter != m_subquests.end(); ++iter)
+   for(const auto& subquestIter : m_subquests)
    {
-      Json::Value subquestNode = iter->second->serialize();
+      Json::Value subquestNode = subquestIter.second->serialize();
       subquestsNode.append(subquestNode);
    }
    

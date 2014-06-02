@@ -230,8 +230,8 @@ void RocketSDLInputMapping::handleSDLEvent(Rocket::Core::Context* context, const
       case SDL_KEYUP:
       case SDL_KEYDOWN:
       {
-         std::map<SDL_Keycode, Rocket::Core::Input::KeyIdentifier>::const_iterator keyMapResult = RocketSDLInputMapping::keyMap.find(event.key.keysym.sym);
-         Rocket::Core::Input::KeyIdentifier keyMapping = keyMapResult != RocketSDLInputMapping::keyMap.end() ? keyMapResult->second : Rocket::Core::Input::KI_UNKNOWN;
+         const auto& keyMapResult = RocketSDLInputMapping::keyMap.find(event.key.keysym.sym);
+         const auto& keyMapping = keyMapResult != RocketSDLInputMapping::keyMap.end() ? keyMapResult->second : Rocket::Core::Input::KI_UNKNOWN;
 
          if(event.type == SDL_KEYUP)
          {

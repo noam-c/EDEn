@@ -214,9 +214,9 @@ bool GraphicsUtil::refreshVideoMode(std::unique_ptr<std::string>& errorMsg)
    if(success)
    {
       const std::vector<Rocket::Core::Context*>& activeContexts = m_rocketContextRegistry.getActiveContexts();
-      for(std::vector<Rocket::Core::Context*>::const_iterator iter = activeContexts.begin(); iter != activeContexts.end(); ++iter)
+      for(auto& context : activeContexts)
       {
-         (*iter)->SetDimensions(Rocket::Core::Vector2i(m_width, m_height));
+         context->SetDimensions(Rocket::Core::Vector2i(m_width, m_height));
       }
    }
    

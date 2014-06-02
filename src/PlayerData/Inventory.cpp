@@ -53,10 +53,10 @@ void Inventory::load(const Json::Value& inventoryJson)
 Json::Value Inventory::serialize() const
 {
    Json::Value inventoryNode(Json::arrayValue);
-   for(ItemList::const_iterator iter = m_items.begin(); iter != m_items.end(); ++iter)
+   for(const auto& iter : m_items)
    {
-      int itemNumber = iter->first;
-      int itemQuantity = iter->second;
+      int itemNumber = iter.first;
+      int itemQuantity = iter.second;
       
       if(itemQuantity > 0)
       {
@@ -73,35 +73,27 @@ Json::Value Inventory::serialize() const
 
 ItemList::const_iterator Inventory::findItem(UsableId itemId) const
 {
-   ItemList::const_iterator itemIter;
-   for(itemIter = m_items.begin(); itemIter != m_items.end(); ++itemIter)
-   {
-      if(itemIter->first == itemId)
-      {
-         break;
-      }
-   }
-
-   return itemIter;
+   return std::find_if(
+         m_items.begin(),
+         m_items.end(),
+         [itemId](const std::pair<UsableId, int>& iter) {
+            return iter.first == itemId;
+         });
 }
 
 ItemList::iterator Inventory::findItem(int itemId)
 {
-   ItemList::iterator itemIter;
-   for(itemIter = m_items.begin(); itemIter != m_items.end(); ++itemIter)
-   {
-      if(itemIter->first == itemId)
-      {
-         break;
-      }
-   }
-   
-   return itemIter;
+   return std::find_if(
+         m_items.begin(),
+         m_items.end(),
+         [itemId](const std::pair<UsableId, int>& iter) {
+            return iter.first == itemId;
+         });
 }
 
 int Inventory::getItemQuantity(int itemId) const
 {
-   ItemList::const_iterator itemIter = findItem(itemId);
+   const auto& itemIter = findItem(itemId);
    if(itemIter != m_items.end())
    {
       return itemIter->second;

@@ -24,7 +24,6 @@ Scheduler::~Scheduler()
    // Since active tasks may be signalled by global functions (such as SDL callbacks),
    // do not delete them. However, deactivate them so that they don't try to signal this
    // (now deleted) scheduler.
-   TaskMap::iterator taskMapIter;
    for(auto& taskIter : m_activeTasks)
    {
       auto& taskToDeactivate = taskIter.second;

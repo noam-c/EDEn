@@ -76,12 +76,11 @@ void MenuShell::refresh()
    if(sidebarEnabled)
    {
       m_sidebarElement->SetClass("noSidebar", false);
-      std::vector<MenuShellOption>::iterator iter;
-      for(iter = sidebarOptions.begin(); iter != sidebarOptions.end(); ++iter)
+      for(const auto& sidebarOption : sidebarOptions)
       {
          Rocket::Core::Element* element = m_shellDocument->CreateElement("div");
          element->SetClass("sidebarOption", true);
-         element->AppendChild(m_shellDocument->CreateTextNode(iter->c_str()));
+         element->AppendChild(m_shellDocument->CreateTextNode(sidebarOption.c_str()));
          m_sidebarElement->AppendChild(element);
       }
    }
