@@ -20,13 +20,19 @@ class FileScript : public Script
    public:
       /**
        * Constructor.
-       * Creates a new Lua coroutine by forking the main VM, and then
-       * loads the specified script file onto the new coroutine's stack.
+       * Creates a new Lua coroutine by forking the main VM.
        *
        * @param luaVM The main Lua stack to fork a coroutine from.
        * @param scriptPath The path to a script that should be run on this coroutine.
        */
       FileScript(lua_State* luaVM, const std::string& scriptPath);
+
+      /**
+       * Loads the specified script file onto the new coroutine's stack.
+       *
+       * @return true iff loading of the specified script was successful.
+       */
+      bool initialize();
 
       /**
        * Destructor.

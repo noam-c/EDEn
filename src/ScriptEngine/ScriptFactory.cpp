@@ -15,6 +15,9 @@
 #include "NPCScript.h"
 #include "NPC.h"
 
+#include "DebugUtils.h"
+const int debugFlag = DEBUG_SCRIPT_ENG;
+
 const std::string ScriptFactory::EXTENSION = ".lua";
 const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scripts/maps/", "data/scripts/npcs/", "data/scripts/items/", "data/scripts/skills/" };
 
@@ -25,7 +28,13 @@ std::string ScriptFactory::getPath(const std::string& name, ScriptType type)
 
 std::shared_ptr<Script> ScriptFactory::createScript(lua_State* luaVM, const std::string& name, ScriptType type)
 {
-   return std::make_shared<FileScript>(luaVM, ScriptFactory::getPath(name, type));
+   auto fileScript = std::make_shared<FileScript>(luaVM, ScriptFactory::getPath(name, type));
+   if(fileScript->initialize())
+   {
+      return fileScript;
+   }
+   
+   return nullptr;
 }
 
 std::shared_ptr<NPCScript> ScriptFactory::createNPCCoroutine(lua_State* luaVM, NPC* npc, const std::string& regionName, const std::string& mapName)

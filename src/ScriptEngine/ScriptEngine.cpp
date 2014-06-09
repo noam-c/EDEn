@@ -400,13 +400,23 @@ std::shared_ptr<UsableScript> ScriptEngine::createSkillScript(const Skill& skill
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)
 {
    auto mapScript = ScriptFactory::getMapScript(m_luaVM, regionName, mapName);
-   return runScript(mapScript, scheduler);
+   if(mapScript)
+   {
+      return runScript(mapScript, scheduler);
+   }
+
+   return 0;
 }
 
 int ScriptEngine::runChapterScript(const std::string& chapterName, Scheduler& scheduler)
 {
    auto chapterScript = ScriptFactory::getChapterScript(m_luaVM, chapterName);
-   return runScript(chapterScript, scheduler);
+   if(chapterScript)
+   {
+      return runScript(chapterScript, scheduler);
+   }
+   
+   return 0;
 }
 
 int ScriptEngine::runScript(const std::shared_ptr<Script>& script, Scheduler& scheduler)

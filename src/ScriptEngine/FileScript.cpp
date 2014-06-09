@@ -22,6 +22,20 @@ FileScript::FileScript(lua_State* luaVM, const std::string& scriptPath) :
    Script(scriptPath)
 {
    m_luaStack = lua_newthread(luaVM);
-   DEBUG("Script ID %d loading file %s", getId(), scriptPath.c_str());
-   luaL_loadfile(m_luaStack, scriptPath.c_str());
+}
+
+bool FileScript::initialize()
+{
+   DEBUG("Script ID %d loading file %s", getId(), m_scriptName.c_str());
+   
+   int result = luaL_loadfile(m_luaStack, m_scriptName.c_str());
+   if(result != 0)
+   {
+      const char* errorString = luaL_checkstring(m_luaStack, 1);
+      DEBUG("%s", errorString);
+      
+      return false;
+   }
+   
+   return true;
 }
