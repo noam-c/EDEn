@@ -113,6 +113,7 @@ SET(HEADERS
   src/TileEngine/PlayerCharacter.h
   src/TileEngine/LuaPlayerCharacter.h
   src/TileEngine/Region.h
+  src/TileEngine/RoyFloydWarshallMatrices.h
   src/TileEngine/TileEngine.h
   src/TileEngine/LuaTileEngine.h
   src/TileEngine/Tileset.h
@@ -221,6 +222,7 @@ SET(SOURCES
   src/TileEngine/LuaPlayerCharacter.cpp
   src/TileEngine/Pathfinder.cpp
   src/TileEngine/Region.cpp
+  src/TileEngine/RoyFloydWarshallMatrices.cpp
   src/TileEngine/TileEngine.cpp
   src/TileEngine/LuaTileEngine.cpp
   src/TileEngine/Tileset.cpp

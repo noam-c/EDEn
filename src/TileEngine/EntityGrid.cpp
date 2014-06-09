@@ -137,9 +137,9 @@ void EntityGrid::step(long timePassed)
    }
 }
 
-EntityGrid::Path EntityGrid::findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst)
+EntityGrid::Path EntityGrid::findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size)
 {
-   return m_pathfinder.findBestPath(src, dst);
+   return m_pathfinder.findBestPath(*this, src, dst, size);
 }
 
 EntityGrid::Path EntityGrid::findReroutedPath(const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size)
@@ -263,7 +263,7 @@ bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) c
       return false;
    }
    
-   for(int collisionMapY = areaRect.top; collisionMapY <=  areaRect.bottom; ++collisionMapY)
+   for(int collisionMapY = areaRect.top; collisionMapY <= areaRect.bottom; ++collisionMapY)
    {
       for(int collisionMapX = areaRect.left; collisionMapX <= areaRect.right; ++collisionMapX)
       {

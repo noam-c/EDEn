@@ -38,9 +38,9 @@ template<typename T> class Grid
        *
        * @param size The initial size of the Grid.
        */
-      Grid(const shapes::Size& size)
+      Grid(const shapes::Size& size, const T& defaultValue = T())
       {
-         resize(size);
+         resize(size, defaultValue);
       }
 
       /**
@@ -96,10 +96,10 @@ template<typename T> class Grid
        *
        * @param size The new size for the Grid.
        */
-      void resize(const shapes::Size& size)
+      void resize(const shapes::Size& size, const T& defaultValue = T())
       {
          m_width = size.width;
-         m_grid.resize(size.width * size.height);
+         m_grid.resize(size.width * size.height, defaultValue);
       }
 };
 

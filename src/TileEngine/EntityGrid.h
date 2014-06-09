@@ -205,7 +205,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        *
        * @return The ideal best path from the source point to the destination point.
        */
-      Path findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst);
+      Path findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size);
       
       /**
        * Finds the shortest path from the source coordinates to the destination
