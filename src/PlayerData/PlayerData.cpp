@@ -23,7 +23,6 @@ const char* PlayerData::SHORTCUTS_ELEMENT = "Shortcuts";
 
 const char* PlayerData::SAVE_LOCATION_ELEMENT = "Location";
 
-const char* SaveLocation::CHAPTER_ATTRIBUTE = "chapter";
 const char* SaveLocation::REGION_ATTRIBUTE = "region";
 const char* SaveLocation::MAP_ATTRIBUTE = "map";
 const char* SaveLocation::X_ATTRIBUTE = "x";
@@ -38,7 +37,6 @@ Json::Value SaveLocation::serialize() const
       DEBUG("Serializing current location data...");
       
       // Set the current chapter and location
-      location[SaveLocation::CHAPTER_ATTRIBUTE] = chapter;
       location[SaveLocation::REGION_ATTRIBUTE] = region;
       location[SaveLocation::MAP_ATTRIBUTE] = map;
       location[SaveLocation::X_ATTRIBUTE] = coords.x;
@@ -202,8 +200,7 @@ void PlayerData::parseLocation(Json::Value& rootElement)
    {
       m_saveLocation.valid = true;
 
-      // Set the current chapter and location
-      m_saveLocation.chapter = location[SaveLocation::CHAPTER_ATTRIBUTE].asString();
+      // Set the current location
       m_saveLocation.region = location[SaveLocation::REGION_ATTRIBUTE].asString();
       m_saveLocation.map = location[SaveLocation::MAP_ATTRIBUTE].asString();
 

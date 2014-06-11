@@ -30,6 +30,7 @@
 #include "CameraSlider.h"
 #include "RandomTransitionGenerator.h"
 #include "HomeMenu.h"
+#include "DataMenu.h"
 #include "MapTriggerCallback.h"
 
 #include "DebugUtils.h"
@@ -177,6 +178,18 @@ int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D
       return m_scheduler.join(slider);
    }
 
+   return 0;
+}
+
+int TileEngine::openSaveMenu()
+{
+   SaveLocation location;
+   location.region = m_currRegion->getName();
+   location.map = m_entityGrid.getMapName();
+   location.coords = m_playerActor.getLocation();
+
+   auto saveMenu = std::make_shared<DataMenu>(m_gameContext);
+   getExecutionStack()->pushState(saveMenu);
    return 0;
 }
 

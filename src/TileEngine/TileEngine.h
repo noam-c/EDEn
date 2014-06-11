@@ -255,6 +255,13 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
       int slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed);
 
       /**
+       * Open the save menu.
+       *
+       * @return 0 or the yield code for the save menu's completion.
+       */
+      int openSaveMenu();
+
+      /**
        * Get the current location that the camera will reveal.
        */
       shapes::Point2D getCurrentCameraLocation() const;

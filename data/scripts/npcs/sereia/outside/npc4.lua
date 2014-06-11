@@ -1,4 +1,5 @@
-function idle(me)
-   delay{1000}
-   me:move{map:tilesToPixels{random{0,9}}, map:tilesToPixels{random{0,9}}}
+function activate(me)
+   me:lookAt{playerSprite}
+   say{'You can save your game now.', waitForFinish=true}
+   map:openSaveMenu{}
 end

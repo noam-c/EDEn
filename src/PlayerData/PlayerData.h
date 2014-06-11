@@ -39,7 +39,6 @@ namespace messaging
  */
 struct SaveLocation
 {
-   static const char* CHAPTER_ATTRIBUTE;
    static const char* REGION_ATTRIBUTE;
    static const char* MAP_ATTRIBUTE;
    static const char* X_ATTRIBUTE;
@@ -47,7 +46,6 @@ struct SaveLocation
 
    bool valid;
 
-   std::string chapter;
    std::string region;
    std::string map;
    shapes::Point2D coords;

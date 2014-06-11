@@ -203,6 +203,17 @@ static int TileEngineL_SlideCamera(lua_State* luaVM)
    return tileEngine->slideCamera(origin, destination, speed);
 }
 
+static int TileEngineL_OpenSaveMenu(lua_State* luaVM)
+{
+   TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
+   if (tileEngine == nullptr)
+   {
+      return lua_error(luaVM);
+   }
+
+   return tileEngine->openSaveMenu();
+}
+
 static int TileEngineL_TilesToPixels(lua_State* luaVM)
 {
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
@@ -229,6 +240,7 @@ static luaL_reg tileEngineMetatable[] =
    { "lockCameraToTarget", TileEngineL_FollowWithCamera },
    { "unlockCamera", TileEngineL_ReleaseCamera },
    { "slideCamera", TileEngineL_SlideCamera },
+   { "openSaveMenu", TileEngineL_OpenSaveMenu },
    { "tilesToPixels", TileEngineL_TilesToPixels },
    { nullptr, nullptr }
 };
