@@ -51,12 +51,6 @@ void GameState::setExecutionStack(ExecutionStack* executionStack)
    m_executionStack = executionStack;
 }
 
-
-PlayerData& GameState::getCurrentPlayerData() const
-{
-   return m_gameContext.getCurrentPlayerData();
-}
-
 Metadata& GameState::getMetadata() const
 {
    return m_gameContext.getMetadata();

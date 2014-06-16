@@ -20,15 +20,8 @@
 
 const int debugFlag = DEBUG_MENU;
 
-DataMenu::DataMenu(GameContext& gameContext) :
-   MenuState(gameContext, "DataMenu"),
-   m_dataViewModel(*this)
-{
-   initialize();
-}
-
-DataMenu::DataMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell) :
-   MenuState(gameContext, "DataMenu", menuShell),
+DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData) :
+   MenuState(gameContext, playerData, "DataMenu"),
    m_dataViewModel(*this)
 {
    initialize();
@@ -50,15 +43,6 @@ void DataMenu::initialize()
    }
 
    m_slotToSave = -1;
-
-   m_sidebarOptions.push_back("Items");
-   m_sidebarOptions.push_back("Equip");
-   m_sidebarOptions.push_back("Status");
-   m_sidebarOptions.push_back("Skills");
-   m_sidebarOptions.push_back("Formation");
-   m_sidebarOptions.push_back("Party Change");
-   m_sidebarOptions.push_back("Options");
-   m_sidebarOptions.push_back("Data");
    
    refreshSaveGames();
 }
@@ -137,9 +121,8 @@ void DataMenu::saveGameClicked(Rocket::Core::Event& event)
 
 void DataMenu::saveToSlot(int slotIndex)
 {
-   PlayerData& currentData = getCurrentPlayerData();
-   currentData.save(m_saveGames[slotIndex].first);
-   *(m_saveGames[slotIndex].second) = currentData;
+   m_playerData.save(m_saveGames[slotIndex].first);
+   *(m_saveGames[slotIndex].second) = m_playerData;
    m_dataViewModel.refresh(slotIndex);
 }
 

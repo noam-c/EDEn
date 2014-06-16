@@ -127,18 +127,18 @@ void ScriptEngine::setTileEngine(std::shared_ptr<TileEngine> engine)
    }
 }
 
-void ScriptEngine::setPlayerData(PlayerData* playerData)
+void ScriptEngine::setPlayerData(std::shared_ptr<PlayerData> playerData)
 {
    m_playerData = playerData;
-   if(m_playerData != nullptr)
+   if(playerData)
    {
-      luaW_push(m_luaVM, m_playerData->getRootQuest());
+      luaW_push(m_luaVM, playerData->getRootQuest());
       lua_setglobal(m_luaVM, "quests");
 
-      luaW_push(m_luaVM, m_playerData->getInventory());
+      luaW_push(m_luaVM, playerData->getInventory());
       lua_setglobal(m_luaVM, "inventory");
 
-      luaW_push(m_luaVM, m_playerData->getRoster());
+      luaW_push(m_luaVM, playerData->getRoster());
       lua_setglobal(m_luaVM, "roster");
    }
    else

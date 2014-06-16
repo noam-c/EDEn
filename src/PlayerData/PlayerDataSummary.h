@@ -34,9 +34,6 @@ class PlayerDataSummary
    static const char* CHARACTER_LIST_ELEMENT;
    static const char* CHARACTER_ELEMENT;
 
-   /** The file from which this player data was last saved/loaded. */
-   std::string m_filePath;
-
    /** The roster of characters in the player's party or encountered by the player. */
    CharacterRoster m_roster;
    
@@ -59,11 +56,6 @@ class PlayerDataSummary
        * Assignment operator.
        */
       PlayerDataSummary& operator=(const PlayerData& playerData);
-
-      /**
-       * @return The file path that this player data was last associated with (saved to or loaded from).
-       */
-      const std::string& getFilePath() const;
 
       /**
        * Load the player data from a file.

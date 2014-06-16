@@ -48,6 +48,8 @@ class MainMenu: public GameState, public std::enable_shared_from_this<MainMenu>
 
    /** Sound for picking an option */
    std::shared_ptr<Sound> m_chooseSound;
+   
+   std::shared_ptr<PlayerData> m_menuPrototypePlayerData;
 
    /** The title screen RML document */
    Rocket::Core::ElementDocument* m_titleDocument;

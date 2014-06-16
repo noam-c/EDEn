@@ -70,9 +70,6 @@ class PlayerData
    
    static const char* SHORTCUTS_ELEMENT;
 
-   /** The file from which this player data was last saved/loaded. */
-   std::string m_filePath;
-
    /** All the items that are in the player's item bag. Includes usables, keys, and unused equipment. */
    Inventory m_inventory;
 
@@ -115,16 +112,6 @@ class PlayerData
       PlayerData(const Metadata& metadata);
 
       /**
-       * Destructor.
-       */
-      ~PlayerData() = default;
-
-      /**
-       * Assignment operator.
-       */
-      PlayerData& operator=(const PlayerData& playerData);
-
-      /**
        * Binds a new message pipe to send player data updates to. This overwrites the previously set
        * message pipe, if it exists.
        *
@@ -138,23 +125,18 @@ class PlayerData
       void unbindMessagePipe();
 
       /**
-       * @return The file path that this player data was last associated with (saved to or loaded from).
-       */
-      const std::string& getFilePath() const;
-
-      /**
        * Load the player data from a file.
        *
        * @param path The path to load the player data from.
        */
-      void load(const std::string& path);
+      static std::shared_ptr<PlayerData> load(const std::string& path, const Metadata& metadata);
 
       /**
        * Save the player data to a file and set a new default file path.
        *
        * @param path The path to save the player data to.
        */
-      void save(const std::string& path);
+      void save(const std::string& path) const;
 
       const Shortcut& getShortcut(int index) const;
       void setShortcut(int index, UsableId itemId);

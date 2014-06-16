@@ -21,16 +21,16 @@
 
 const int debugFlag = DEBUG_MENU;
 
-SkillMenu::SkillMenu(GameContext& gameContext) :
-   CharacterDependentMenu(gameContext, "SkillMenu"),
+SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData) :
+   CharacterDependentMenu(gameContext, playerData, "SkillMenu"),
    m_selectedCharacter(nullptr),
    m_skillViewModel(*this, getMetadata())
 {
    initialize();
 }
 
-SkillMenu::SkillMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell) :
-   CharacterDependentMenu(gameContext, "SkillMenu", menuShell),
+SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell) :
+   CharacterDependentMenu(gameContext, playerData, "SkillMenu", menuShell),
    m_skillViewModel(*this, getMetadata())
 {
    initialize();
@@ -48,7 +48,7 @@ void SkillMenu::initialize()
 
 void SkillMenu::setCharacter(int characterIndex)
 {
-   CharacterRoster* roster = getCurrentPlayerData().getRoster();
+   CharacterRoster* roster = m_playerData.getRoster();
 
    m_selectedCharacter = roster != nullptr && roster->getParty().size() > characterIndex ?
       roster->getParty()[characterIndex] :

@@ -70,7 +70,7 @@ class HomeMenu: public MenuState
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      HomeMenu(GameContext& gameContext);
+      HomeMenu(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
@@ -78,7 +78,7 @@ class HomeMenu: public MenuState
        * @param gameContext The context containing the current player data and execution stack.
        * @param menuShell The shell for the menu
        */
-      HomeMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell);
+      HomeMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell);
 
       /**
        * Destructor.

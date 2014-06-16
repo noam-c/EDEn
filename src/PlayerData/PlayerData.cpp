@@ -53,27 +53,6 @@ PlayerData::PlayerData(const Metadata& metadata) :
 {
 }
 
-PlayerData& PlayerData::operator=(const PlayerData& playerData)
-{
-   if(&playerData != this)
-   {
-      /**
-       * \todo Once the project moves to C++11, we can use STL smart pointers
-       * to manage the members of these objects. After that, these serializations and reloads
-       * can be replaced with proper assignment operators without bloating the code to
-       * copy objects on the heap.
-       */
-      m_roster.load(playerData.m_roster.serialize());
-      m_rootQuest.load(playerData.m_rootQuest.serialize());
-
-      m_inventory = playerData.m_inventory;
-      m_shortcutList = playerData.m_shortcutList;
-      m_saveLocation = playerData.m_saveLocation;
-   }
-
-   return *this;
-}
-
 void PlayerData::bindMessagePipe(const messaging::MessagePipe* messagePipe)
 {
    m_roster.bindMessagePipe(messagePipe);
@@ -84,12 +63,7 @@ void PlayerData::unbindMessagePipe()
    bindMessagePipe(nullptr);
 }
 
-const std::string& PlayerData::getFilePath() const
-{
-   return m_filePath;
-}
-
-void PlayerData::load(const std::string& path)
+std::shared_ptr<PlayerData> PlayerData::load(const std::string& path, const Metadata& metadata)
 {
    DEBUG("Loading save file %s", path.c_str());
 
@@ -107,14 +81,16 @@ void PlayerData::load(const std::string& path)
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse save data.");
    }
+   
+   auto playerData = std::make_shared<PlayerData>(metadata);
 
-   parseCharactersAndParty(jsonRoot);
-   parseQuestLog(jsonRoot);
-   parseInventory(jsonRoot);
-   parseShortcuts(jsonRoot);
-   parseLocation(jsonRoot);
-
-   m_filePath = path;
+   playerData->parseCharactersAndParty(jsonRoot);
+   playerData->parseQuestLog(jsonRoot);
+   playerData->parseInventory(jsonRoot);
+   playerData->parseShortcuts(jsonRoot);
+   playerData->parseLocation(jsonRoot);
+   
+   return playerData;
 }
 
 void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
@@ -218,7 +194,7 @@ void PlayerData::serializeLocation(Json::Value& outputJson) const
    outputJson[PlayerData::SAVE_LOCATION_ELEMENT] = m_saveLocation.serialize();
 }
 
-void PlayerData::save(const std::string& path)
+void PlayerData::save(const std::string& path) const
 {
    Json::Value playerDataNode(Json::objectValue);
    serializeCharactersAndParty(playerDataNode);
@@ -237,8 +213,6 @@ void PlayerData::save(const std::string& path)
 
    Json::StyledStreamWriter writer("   ");
    writer.write(output, playerDataNode);
-
-   m_filePath = path;
 }
 
 const SaveLocation& PlayerData::getSaveLocation() const

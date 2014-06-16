@@ -109,15 +109,7 @@ class DataMenu: public MenuState
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      DataMenu(GameContext& gameContext);
-
-      /**
-       * Constructor. Initializes the menu GUI.
-       *
-       * @param gameContext The context containing the current player data and execution stack.
-       * @param menuShell The shell for the menu
-       */
-      DataMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell);
+      DataMenu(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Destructor.

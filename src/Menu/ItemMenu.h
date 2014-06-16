@@ -53,7 +53,7 @@ class ItemMenu: public MenuState
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      ItemMenu(GameContext& gameContext);
+      ItemMenu(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
@@ -61,7 +61,7 @@ class ItemMenu: public MenuState
        * @param gameContext The context containing the current player data and execution stack.
        * @param menuShell The shell for the menu.
        */
-      ItemMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell);
+      ItemMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell);
 
       /**
        * Destructor.

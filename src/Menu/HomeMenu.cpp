@@ -26,17 +26,17 @@
 
 const int debugFlag = DEBUG_MENU;
 
-HomeMenu::HomeMenu(GameContext& gameContext) :
-   MenuState(gameContext, "HomeMenu"),
-   m_homeViewModel(getCurrentPlayerData()),
+HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData) :
+   MenuState(gameContext, playerData, "HomeMenu"),
+   m_homeViewModel(playerData),
    m_selectedDestinationMenu(-1)
 {
    initialize();
 }
 
-HomeMenu::HomeMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell) :
-   MenuState(gameContext, "HomeMenu", menuShell),
-   m_homeViewModel(getCurrentPlayerData()),
+HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell) :
+   MenuState(gameContext, playerData, "HomeMenu", menuShell),
+   m_homeViewModel(playerData),
    m_selectedDestinationMenu(-1)
 {
    initialize();
@@ -57,7 +57,6 @@ void HomeMenu::initialize()
    m_sidebarOptions.push_back("Formation");
    m_sidebarOptions.push_back("Party Change");
    m_sidebarOptions.push_back("Options");
-   m_sidebarOptions.push_back("Data");
 }
 
 void HomeMenu::characterClicked(Rocket::Core::Event& event)
@@ -108,7 +107,7 @@ void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, s
    switch(optionIndex)
    {
       case 3:
-         newState = std::make_shared<SkillMenu>(m_gameContext, menuShell);
+         newState = std::make_shared<SkillMenu>(m_gameContext, m_playerData, menuShell);
          DEBUG("Skill menu constructed");
          break;
       default:
@@ -128,12 +127,8 @@ void HomeMenu::pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<Men
    switch(optionIndex)
    {
       case 0:
-         newState = std::make_shared<ItemMenu>(m_gameContext, menuShell);
+         newState = std::make_shared<ItemMenu>(m_gameContext, m_playerData, menuShell);
          DEBUG("Item menu constructed.");
-         break;
-      case 7:
-         newState = std::make_shared<DataMenu>(m_gameContext, menuShell);
-         DEBUG("Data menu constructed.");
          break;
       default:
          break;

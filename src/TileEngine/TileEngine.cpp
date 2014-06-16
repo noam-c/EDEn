@@ -38,14 +38,15 @@ const int debugFlag = DEBUG_TILE_ENG;
 
 const int TileEngine::TILE_SIZE = 32;
 
-TileEngine::TileEngine(GameContext& gameContext) :
+TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData) :
    GameState(gameContext, GameStateType::FIELD, "TileEngine"),
+   m_playerData(playerData),
    m_initialized(false),
    m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
-   m_shortcutBar(getCurrentPlayerData(), getMetadata(), getStateType(), *m_rocketContext),
+   m_shortcutBar(*playerData, getMetadata(), getStateType(), *m_rocketContext),
    m_dialogue(*m_rocketContext, m_scheduler, getScriptEngine()),
-   m_playerActor(m_messagePipe, m_entityGrid, getCurrentPlayerData())
+   m_playerActor(m_messagePipe, m_entityGrid, *playerData)
 {
    m_messagePipe.registerListener<MapExitMessage>(this);
    m_messagePipe.registerListener<MapTriggerMessage>(this);
@@ -55,7 +56,7 @@ TileEngine::TileEngine(GameContext& gameContext) :
 
 TileEngine::~TileEngine()
 {
-   getCurrentPlayerData().unbindMessagePipe();
+   m_playerData->unbindMessagePipe();
 }
 
 void TileEngine::setChapterToInitialize(const std::string& chapterName)
@@ -188,7 +189,7 @@ int TileEngine::openSaveMenu()
    location.map = m_entityGrid.getMapName();
    location.coords = m_playerActor.getLocation();
 
-   auto saveMenu = std::make_shared<DataMenu>(m_gameContext);
+   auto saveMenu = std::make_shared<DataMenu>(m_gameContext, *m_playerData);
    getExecutionStack()->pushState(saveMenu);
    return 0;
 }
@@ -292,8 +293,9 @@ void TileEngine::activate()
    GameState::activate();
    m_shortcutBar.refresh();
    recalculateMapOffsets();
-   getCurrentPlayerData().bindMessagePipe(&m_messagePipe);
+   m_playerData->bindMessagePipe(&m_messagePipe);
    getScriptEngine().setTileEngine(shared_from_this());
+   getScriptEngine().setPlayerData(m_playerData);
    
    if(!m_initialized)
    {
@@ -303,7 +305,7 @@ void TileEngine::activate()
       }
       else
       {
-         const SaveLocation& saveLocation = getCurrentPlayerData().getSaveLocation();
+         const SaveLocation& saveLocation = m_playerData->getSaveLocation();
          
          if(!saveLocation.valid)
          {
@@ -321,8 +323,9 @@ void TileEngine::activate()
 
 void TileEngine::deactivate()
 {
+   getScriptEngine().setPlayerData(nullptr);
    getScriptEngine().setTileEngine(nullptr);
-   getCurrentPlayerData().unbindMessagePipe();
+   m_playerData->unbindMessagePipe();
    GameState::deactivate();
    m_shortcutBar.refresh();
    recalculateMapOffsets();
@@ -506,7 +509,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   if(!m_consoleWindow.isVisible())
                   {
-                     auto menu = std::make_shared<HomeMenu>(m_gameContext);
+                     auto menu = std::make_shared<HomeMenu>(m_gameContext, *m_playerData);
                      getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, shared_from_this(), menu));
                      return;
                   }

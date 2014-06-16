@@ -45,6 +45,9 @@ struct MapTriggerMessage;
  */
 class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, public messaging::Listener<MapTriggerMessage>, public std::enable_shared_from_this<TileEngine>
 {
+   /** The currently loaded player data. */
+   std::shared_ptr<PlayerData> m_playerData;
+
    /** The current region that the player is in. */
    std::shared_ptr<Region> m_currRegion;
    
@@ -159,11 +162,10 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
       /**
        * Constructor.
        *
-       * @param gameContext The context containing the current player data and execution stack.
-       * @param chapterName The name of the chapter to load after construction
-       * @param playerDataPath The path to the player's data.
+       * @param gameContext The context containing the execution stack.
+       * @param playerData The currently loaded player data.
        */
-      TileEngine(GameContext& gameContext);
+      TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData);
 
       /**
        * Destructor.

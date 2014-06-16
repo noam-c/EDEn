@@ -54,6 +54,9 @@ class MenuState : public GameState
    void waitForInputEvent(bool& finishState);
 
    protected:
+      /** The player data backing the menu state. */
+      PlayerData& m_playerData;
+
       /** The shell that holds the common menu controls */
       std::shared_ptr<MenuShell> m_menuShell;
 
@@ -99,7 +102,7 @@ class MenuState : public GameState
        * @param gameContext The context containing the current player data and execution stack.
        * @param stateName The unique name of the state.
        */
-      MenuState(GameContext& gameContext, const std::string& stateName);
+      MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName);
 
       /**
        * Constructor.
@@ -108,7 +111,7 @@ class MenuState : public GameState
        * @param stateName The unique name of the state.
        * @param shell The shell for the menu.
        */
-      MenuState(GameContext& gameContext, const std::string& stateName, std::shared_ptr<MenuShell> shell);
+      MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName, std::shared_ptr<MenuShell> shell);
 
       /**
        * Destructor.

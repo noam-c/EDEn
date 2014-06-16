@@ -34,11 +34,6 @@ PlayerDataSummary& PlayerDataSummary::operator=(const PlayerData& playerData)
    return *this;
 }
 
-const std::string& PlayerDataSummary::getFilePath() const
-{
-   return m_filePath;
-}
-
 void PlayerDataSummary::load(const std::string& path)
 {
    DEBUG("Loading save file %s", path.c_str());
@@ -59,8 +54,6 @@ void PlayerDataSummary::load(const std::string& path)
    }
    
    parseCharactersAndParty(jsonRoot);
-   
-   m_filePath = path;
 }
 
 void PlayerDataSummary::parseCharactersAndParty(Json::Value& rootElement)

@@ -15,15 +15,17 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-MenuState::MenuState(GameContext& gameContext, const std::string& stateName) :
-   GameState(gameContext, GameStateType::MENU, stateName)
+MenuState::MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName) :
+   GameState(gameContext, GameStateType::MENU, stateName),
+   m_playerData(playerData)
 {
    m_menuShell = std::make_shared<MenuShell>(m_rocketContext);
-   m_menuShell->initializeShortcutBar(getCurrentPlayerData(), getMetadata(), getStateType());
+   m_menuShell->initializeShortcutBar(playerData, getMetadata(), getStateType());
 }
 
-MenuState::MenuState(GameContext& gameContext, const std::string& stateName, std::shared_ptr<MenuShell> menuShell) :
+MenuState::MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName, std::shared_ptr<MenuShell> menuShell) :
    GameState(gameContext, GameStateType::MENU, stateName, menuShell->getRocketContext()),
+   m_playerData(playerData),
    m_menuShell(menuShell),
    m_shortcutBar(nullptr)
 {

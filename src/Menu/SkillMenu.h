@@ -57,7 +57,7 @@ class SkillMenu: public CharacterDependentMenu
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      SkillMenu(GameContext& gameContext);
+      SkillMenu(GameContext& gameContext, PlayerData& playerData);
 
       /**
        * Constructor. Initializes the menu GUI.
@@ -65,7 +65,7 @@ class SkillMenu: public CharacterDependentMenu
        * @param gameContext The context containing the current player data and execution stack.
        * @param menuShell The shell for the menu.
        */
-      SkillMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell);
+      SkillMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell);
 
       Character* getSelectedCharacter() const;
       void setCharacter(int characterIndex);

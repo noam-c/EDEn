@@ -19,16 +19,16 @@
 
 const int debugFlag = DEBUG_MENU;
 
-ItemMenu::ItemMenu(GameContext& gameContext) :
-   MenuState(gameContext, "ItemMenu"),
-   m_itemViewModel(getMetadata(), getCurrentPlayerData())
+ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData) :
+   MenuState(gameContext, playerData, "ItemMenu"),
+   m_itemViewModel(getMetadata(), playerData)
 {
    initialize();
 }
 
-ItemMenu::ItemMenu(GameContext& gameContext, std::shared_ptr<MenuShell> menuShell) :
-   MenuState(gameContext, "ItemMenu", menuShell),
-   m_itemViewModel(getMetadata(), getCurrentPlayerData())
+ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell) :
+   MenuState(gameContext, playerData, "ItemMenu", menuShell),
+   m_itemViewModel(getMetadata(), playerData)
 {
    initialize();
 }
@@ -95,7 +95,7 @@ void ItemMenu::itemClicked(Rocket::Core::Event& event)
 
 void ItemMenu::useItem(int itemIndex)
 {
-   const ItemList& itemList = getCurrentPlayerData().getInventory()->getItemList();
+   const ItemList& itemList = m_playerData.getInventory()->getItemList();
    const UsableId usableId = itemList[itemIndex].first;
    getMetadata().useItem(usableId, getStateType());
    m_itemViewModel.refresh(itemIndex);

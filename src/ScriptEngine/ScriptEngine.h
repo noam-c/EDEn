@@ -47,7 +47,7 @@ class ScriptEngine
    /**
     * The player data to execute commands on
     */
-   PlayerData* m_playerData;
+   std::weak_ptr<PlayerData> m_playerData;
 
    /**
     * The stack managing the current game state.
@@ -156,7 +156,7 @@ class ScriptEngine
        *
        * @param playerData The player data that the scripts will reference
        */
-      void setPlayerData(PlayerData* playerData);
+      void setPlayerData(std::shared_ptr<PlayerData> playerData);
 
       /**
        * Calls a specified function on a specified Lua coroutine.

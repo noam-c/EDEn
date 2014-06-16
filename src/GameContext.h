@@ -14,11 +14,9 @@ class GameContext
    friend class GameState;
    ScriptEngine& m_scriptEngine;
    Metadata m_metadata;
-   PlayerData m_playerData;
 
    ScriptEngine& getScriptEngine();
    Metadata& getMetadata();
-   PlayerData& getCurrentPlayerData();
 
    public:
       GameContext(ScriptEngine& scriptEngine);

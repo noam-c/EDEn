@@ -62,7 +62,6 @@ class GameState
 
    protected:
       ExecutionStack* getExecutionStack() const;
-      PlayerData& getCurrentPlayerData() const;
       ScriptEngine& getScriptEngine() const;
       Metadata& getMetadata() const;
 
