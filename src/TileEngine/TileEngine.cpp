@@ -54,14 +54,21 @@ TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> pla
    m_cameraTarget = &m_playerActor;
 }
 
+TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const std::string& chapterName) :
+   TileEngine(gameContext, playerData)
+{
+   m_chapterToInitialize = chapterName;
+}
+
+TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const SaveLocation& saveLocation) :
+   TileEngine(gameContext, playerData)
+{
+   m_saveLocationToInitialize = saveLocation;
+}
+
 TileEngine::~TileEngine()
 {
    m_playerData->unbindMessagePipe();
-}
-
-void TileEngine::setChapterToInitialize(const std::string& chapterName)
-{
-   m_chapterToInitialize = chapterName;
 }
 
 void TileEngine::startChapter(const std::string& chapterName)
@@ -188,8 +195,9 @@ int TileEngine::openSaveMenu()
    location.region = m_currRegion->getName();
    location.map = m_entityGrid.getMapName();
    location.coords = m_playerActor.getLocation();
+   location.direction = m_playerActor.getDirection();
 
-   auto saveMenu = std::make_shared<DataMenu>(m_gameContext, *m_playerData);
+   auto saveMenu = std::make_shared<DataMenu>(m_gameContext, *m_playerData, location);
    getExecutionStack()->pushState(saveMenu);
    return 0;
 }
@@ -305,15 +313,14 @@ void TileEngine::activate()
       }
       else
       {
-         const SaveLocation& saveLocation = m_playerData->getSaveLocation();
-         
-         if(!saveLocation.valid)
+         if(!m_saveLocationToInitialize.isValid())
          {
             T_T("Invalid save data. Expected valid chapter name or save point data.");
          }
-         
-         setRegion(saveLocation.region, saveLocation.map);
-         m_playerActor.addToMap(saveLocation.coords);
+
+         setRegion(m_saveLocationToInitialize.region, m_saveLocationToInitialize.map);
+         m_playerActor.addToMap(m_saveLocationToInitialize.coords);
+         m_playerActor.setDirection(m_saveLocationToInitialize.direction);
          followWithCamera(m_playerActor);
       }
       

@@ -10,6 +10,7 @@
 #include "MenuState.h"
 #include "EdenRocketBindings.h"
 #include "DataViewModel.h"
+#include "PlayerData.h"
 
 #include <memory>
 
@@ -35,6 +36,9 @@ typedef std::vector<std::pair<std::string, std::unique_ptr<PlayerDataSummary>> >
  */
 class DataMenu: public MenuState
 {
+   /** The location of the player in the game world. */
+   const SaveLocation m_saveLocation;
+
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
 
@@ -107,9 +111,11 @@ class DataMenu: public MenuState
       /**
        * Constructor. Initializes the menu GUI.
        *
-       * @param gameContext The context containing the current player data and execution stack.
+       * @param gameContext The context containing the execution stack.
+       * @param playerData The current player data to save.
+       * @param saveLocation The location of the player.
        */
-      DataMenu(GameContext& gameContext, PlayerData& playerData);
+      DataMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation& saveLocation);
 
       /**
        * Destructor.
@@ -117,13 +123,8 @@ class DataMenu: public MenuState
       ~DataMenu();
 
       /**
-       * Handles a sidebar click for the data menu.
-       * \todo Finish implementation of this method.
-       *
-       * @param optionIndex The index of the sidebar option that was clicked.
+       * @return a read-only reference to the list of save games.
        */
-      void sidebarClicked(int optionIndex);
-   
       const SaveGameList& getSaveGames() const;
 };
 

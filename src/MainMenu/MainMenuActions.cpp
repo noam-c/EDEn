@@ -31,8 +31,7 @@
 void MainMenu::NewGameAction()
 {
    auto playerData = std::make_shared<PlayerData>(getMetadata());
-   auto tileEngine = std::make_shared<TileEngine>(m_gameContext, playerData);
-   tileEngine->setChapterToInitialize(CHAP1);
+   auto tileEngine = std::make_shared<TileEngine>(m_gameContext, playerData, CHAP1);
    getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, shared_from_this()));
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
@@ -49,7 +48,8 @@ void MainMenu::MenuPrototypeAction()
    // takes a reference to PlayerData rather than a pointer.
    // MainMenu will manage the lifetime for now, but after the menu
    // is in good shape, this code will be removed anyway.
-   m_menuPrototypePlayerData = PlayerData::load(SAVE_GAME, getMetadata());
+   auto loadResult = PlayerData::load(SAVE_GAME, getMetadata());
+   m_menuPrototypePlayerData = std::get<0>(loadResult);
    getExecutionStack()->pushState(std::make_shared<HomeMenu>(m_gameContext, *m_menuPrototypePlayerData));
 }
 
@@ -58,8 +58,8 @@ void MainMenu::MenuPrototypeAction()
  */
 void MainMenu::LoadGameAction()
 {
-   auto playerData = PlayerData::load(SAVE_GAME, getMetadata());
-   auto tileEngine = std::make_shared<TileEngine>(m_gameContext, playerData);
+   auto loadResult = PlayerData::load(SAVE_GAME, getMetadata());
+   auto tileEngine = std::make_shared<TileEngine>(m_gameContext, std::get<0>(loadResult), std::get<1>(loadResult));
    getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, shared_from_this()));
    m_chooseSound->play();
    Music::fadeOutMusic(1000);

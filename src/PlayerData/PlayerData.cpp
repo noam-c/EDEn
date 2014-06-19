@@ -27,23 +27,27 @@ const char* SaveLocation::REGION_ATTRIBUTE = "region";
 const char* SaveLocation::MAP_ATTRIBUTE = "map";
 const char* SaveLocation::X_ATTRIBUTE = "x";
 const char* SaveLocation::Y_ATTRIBUTE = "y";
+const char* SaveLocation::DIRECTION_ATTRIBUTE = "direction";
 
 Json::Value SaveLocation::serialize() const
 {
-   Json::Value location(Json::nullValue);
+   Json::Value locationNode(Json::nullValue);
    
-   if(valid)
-   {
-      DEBUG("Serializing current location data...");
-      
-      // Set the current chapter and location
-      location[SaveLocation::REGION_ATTRIBUTE] = region;
-      location[SaveLocation::MAP_ATTRIBUTE] = map;
-      location[SaveLocation::X_ATTRIBUTE] = coords.x;
-      location[SaveLocation::Y_ATTRIBUTE] = coords.y;
-   }
+   DEBUG("Serializing current location data...");
    
-   return location;
+   // Set the current chapter and location
+   locationNode[SaveLocation::REGION_ATTRIBUTE] = region;
+   locationNode[SaveLocation::MAP_ATTRIBUTE] = map;
+   locationNode[SaveLocation::X_ATTRIBUTE] = coords.x;
+   locationNode[SaveLocation::Y_ATTRIBUTE] = coords.y;
+   locationNode[SaveLocation::DIRECTION_ATTRIBUTE] = direction;
+   
+   return locationNode;
+}
+
+bool SaveLocation::isValid() const
+{
+   return !region.empty() && !map.empty();
 }
 
 PlayerData::PlayerData(const Metadata& metadata) :
@@ -63,7 +67,7 @@ void PlayerData::unbindMessagePipe()
    bindMessagePipe(nullptr);
 }
 
-std::shared_ptr<PlayerData> PlayerData::load(const std::string& path, const Metadata& metadata)
+std::tuple<std::shared_ptr<PlayerData>, SaveLocation> PlayerData::load(const std::string& path, const Metadata& metadata)
 {
    DEBUG("Loading save file %s", path.c_str());
 
@@ -88,9 +92,9 @@ std::shared_ptr<PlayerData> PlayerData::load(const std::string& path, const Meta
    playerData->parseQuestLog(jsonRoot);
    playerData->parseInventory(jsonRoot);
    playerData->parseShortcuts(jsonRoot);
-   playerData->parseLocation(jsonRoot);
+   SaveLocation location = PlayerData::parseLocation(jsonRoot);
    
-   return playerData;
+   return std::make_tuple(playerData, location);
 }
 
 void PlayerData::parseCharactersAndParty(Json::Value& rootElement)
@@ -110,6 +114,8 @@ void PlayerData::parseQuestLog(Json::Value& rootElement)
    DEBUG("Loading quest log...");
    Json::Value& questLog = rootElement[Quest::QUEST_ELEMENT];
    m_rootQuest.load(questLog);
+
+   /** \todo Calculate which chapters are available for play based on the quest log */
 }
 
 void PlayerData::serializeQuestLog(Json::Value& outputJson) const
@@ -165,43 +171,47 @@ void PlayerData::serializeShortcuts(Json::Value& outputJson) const
    outputJson[PlayerData::SHORTCUTS_ELEMENT] = shortcutNode;
 }
 
-void PlayerData::parseLocation(Json::Value& rootElement)
+SaveLocation PlayerData::parseLocation(Json::Value& rootElement)
 {
-   Json::Value& location = rootElement[PlayerData::SAVE_LOCATION_ELEMENT];
-   m_saveLocation.valid = false;
+   Json::Value& locationNode = rootElement[PlayerData::SAVE_LOCATION_ELEMENT];
+   SaveLocation saveLocation;
 
    DEBUG("Loading current location data...");
 
-   if(!location.isNull())
+   if(!locationNode.isNull())
    {
-      m_saveLocation.valid = true;
-
       // Set the current location
-      m_saveLocation.region = location[SaveLocation::REGION_ATTRIBUTE].asString();
-      m_saveLocation.map = location[SaveLocation::MAP_ATTRIBUTE].asString();
+      saveLocation.region = locationNode[SaveLocation::REGION_ATTRIBUTE].asString();
+      saveLocation.map = locationNode[SaveLocation::MAP_ATTRIBUTE].asString();
 
-      auto x = location[SaveLocation::X_ATTRIBUTE].asInt();
-      auto y = location[SaveLocation::Y_ATTRIBUTE].asInt();
+      auto x = locationNode[SaveLocation::X_ATTRIBUTE].asInt();
+      auto y = locationNode[SaveLocation::Y_ATTRIBUTE].asInt();
+      MovementDirection direction = static_cast<MovementDirection>(locationNode[SaveLocation::DIRECTION_ATTRIBUTE].asUInt());
+      if(direction > NUM_DIRECTIONS)
+      {
+         direction = DOWN;
+      }
 
-      m_saveLocation.coords = shapes::Point2D(x,y);
+      saveLocation.coords = shapes::Point2D(x,y);
+      saveLocation.direction = direction;
    }
 
-   /** \todo Calculate which chapters are available for play based on the quest log */
+   return saveLocation;
 }
 
-void PlayerData::serializeLocation(Json::Value& outputJson) const
+void PlayerData::serializeLocation(const SaveLocation& location, Json::Value& outputJson)
 {
-   outputJson[PlayerData::SAVE_LOCATION_ELEMENT] = m_saveLocation.serialize();
+   outputJson[PlayerData::SAVE_LOCATION_ELEMENT] = location.serialize();
 }
 
-void PlayerData::save(const std::string& path) const
+void PlayerData::save(const SaveLocation& location, const std::string& path) const
 {
    Json::Value playerDataNode(Json::objectValue);
    serializeCharactersAndParty(playerDataNode);
    serializeInventory(playerDataNode);
    serializeQuestLog(playerDataNode);
    serializeShortcuts(playerDataNode);
-   serializeLocation(playerDataNode);
+   PlayerData::serializeLocation(location, playerDataNode);
 
    DEBUG("Saving to file %s", path.c_str());
 
@@ -213,11 +223,6 @@ void PlayerData::save(const std::string& path) const
 
    Json::StyledStreamWriter writer("   ");
    writer.write(output, playerDataNode);
-}
-
-const SaveLocation& PlayerData::getSaveLocation() const
-{
-   return m_saveLocation;
 }
 
 const CharacterRoster* PlayerData::getRoster() const

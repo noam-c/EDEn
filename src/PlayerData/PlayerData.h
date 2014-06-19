@@ -16,6 +16,7 @@
 #include "Shortcut.h"
 #include "UsableId.h"
 #include "Point2D.h"
+#include "MovementDirection.h"
 
 class Character;
 typedef class Usable Item;
@@ -43,14 +44,15 @@ struct SaveLocation
    static const char* MAP_ATTRIBUTE;
    static const char* X_ATTRIBUTE;
    static const char* Y_ATTRIBUTE;
-
-   bool valid;
+   static const char* DIRECTION_ATTRIBUTE;
 
    std::string region;
    std::string map;
    shapes::Point2D coords;
-   
+   MovementDirection direction;
+
    Json::Value serialize() const;
+   bool isValid() const;
 };
 
 struct Shortcut;
@@ -82,9 +84,6 @@ class PlayerData
    /** The player's shortcut list. */
    std::vector<Shortcut> m_shortcutList;
 
-   /** The location of the last save point used. */
-   SaveLocation m_saveLocation;
-
    void parseCharactersAndParty(Json::Value& rootElement);
    void serializeCharactersAndParty(Json::Value& outputJson) const;
 
@@ -97,8 +96,8 @@ class PlayerData
    void parseShortcuts(Json::Value& rootElement);
    void serializeShortcuts(Json::Value& outputJson) const;
 
-   void parseLocation(Json::Value& rootElement);
-   void serializeLocation(Json::Value& outputJson) const;
+   static SaveLocation parseLocation(Json::Value& rootElement);
+   static void serializeLocation(const SaveLocation& location, Json::Value& outputJson);
 
    void setShortcut(int index, Shortcut& shortcut);
 
@@ -129,21 +128,20 @@ class PlayerData
        *
        * @param path The path to load the player data from.
        */
-      static std::shared_ptr<PlayerData> load(const std::string& path, const Metadata& metadata);
+      static std::tuple<std::shared_ptr<PlayerData>, SaveLocation> load(const std::string& path, const Metadata& metadata);
 
       /**
        * Save the player data to a file and set a new default file path.
        *
        * @param path The path to save the player data to.
        */
-      void save(const std::string& path) const;
+      void save(const SaveLocation& location, const std::string& path) const;
 
       const Shortcut& getShortcut(int index) const;
       void setShortcut(int index, UsableId itemId);
       void setShortcut(int index, UsableId itemId, const std::string& characterId);
       void clearShortcut(int index);
 
-      const SaveLocation& getSaveLocation() const;
       const CharacterRoster* getRoster() const;
       const Inventory* getInventory() const;
       CharacterRoster* getRoster();

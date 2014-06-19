@@ -50,14 +50,20 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
 
    /** The current region that the player is in. */
    std::shared_ptr<Region> m_currRegion;
-   
+
+   /** The message pipe used for sending and receiving TileEngine events. */
    messaging::MessagePipe m_messagePipe;
    
    std::vector<std::pair<std::string, std::unique_ptr<MapTriggerCallback>>> m_triggerScripts;
    
+   /** True iff the TileEngine has already been initialized. */
    bool m_initialized;
-   
+
+   /** The chapter to start, if the game is starting from a new chapter. */
    std::string m_chapterToInitialize;
+   
+   /** The location of the player, if the game is starting from a chapter in progress. */
+   SaveLocation m_saveLocationToInitialize;
 
    /** The debug console window to be used for diagnostics. */
    DebugConsoleWindow m_consoleWindow;
@@ -129,6 +135,14 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
     * @return a vector of all the active actors.
     */
    std::vector<const Actor*> collectActors() const;
+   
+   /**
+    * Constructor.
+    *
+    * @param gameContext The context containing the execution stack.
+    * @param playerData The currently loaded player data.
+    */
+   TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData);
 
    protected:
       /**
@@ -164,16 +178,24 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        *
        * @param gameContext The context containing the execution stack.
        * @param playerData The currently loaded player data.
+       * @param chapterName The chapter to begin on activation.
        */
-      TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData);
+      TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const std::string& chapterName);
+
+      /**
+       * Constructor.
+       *
+       * @param gameContext The context containing the execution stack.
+       * @param playerData The currently loaded player data.
+       * @param saveLocation The saved location to return to on activation.
+       */
+      TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const SaveLocation& saveLocation);
 
       /**
        * Destructor.
        */
       ~TileEngine();
 
-      void setChapterToInitialize(const std::string& chapterName);
-   
       /**
        * @return The tile engine's coroutine scheduler.
        */

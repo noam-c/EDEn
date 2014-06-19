@@ -20,8 +20,9 @@
 
 const int debugFlag = DEBUG_MENU;
 
-DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData) :
+DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation& saveLocation) :
    MenuState(gameContext, playerData, "DataMenu"),
+   m_saveLocation(saveLocation),
    m_dataViewModel(*this)
 {
    initialize();
@@ -53,15 +54,6 @@ DataMenu::~DataMenu()
    {
       m_confirmSaveDocument->Close();
       m_confirmSaveDocument->RemoveReference();
-   }
-}
-
-void DataMenu::sidebarClicked(int optionIndex)
-{
-   switch(optionIndex)
-   {
-      default:
-         break;
    }
 }
 
@@ -121,7 +113,7 @@ void DataMenu::saveGameClicked(Rocket::Core::Event& event)
 
 void DataMenu::saveToSlot(int slotIndex)
 {
-   m_playerData.save(m_saveGames[slotIndex].first);
+   m_playerData.save(m_saveLocation, m_saveGames[slotIndex].first);
    *(m_saveGames[slotIndex].second) = m_playerData;
    m_dataViewModel.refresh(slotIndex);
 }
