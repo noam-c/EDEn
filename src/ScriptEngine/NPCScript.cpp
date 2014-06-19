@@ -142,18 +142,14 @@ bool NPCScript::resume(long timePassed)
       m_activated = false;
       callFunction(ACTIVATE);
    }
-
-   if(m_running)
+   else if(m_running)
    {
       DEBUG("NPC Coroutine %d resuming running script.", getId());
       runScript();
    }
-   else
+   else if(m_npc->isIdle())
    {
-      if(m_npc->isIdle())
-      {
-         callFunction(IDLE);
-      }
+      callFunction(IDLE);
    }
 
    return false;
