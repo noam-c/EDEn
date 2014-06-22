@@ -17,6 +17,7 @@
 #include "FadeState.h"
 #include "BlendState.h"
 #include "HomeMenu.h"
+#include "SaveMenu.h"
 #include "PlayerData.h"
 
 #define CHAP1 "chapter1"
@@ -58,9 +59,8 @@ void MainMenu::MenuPrototypeAction()
  */
 void MainMenu::LoadGameAction()
 {
-   auto loadResult = PlayerData::load(SAVE_GAME, getMetadata());
-   auto tileEngine = std::make_shared<TileEngine>(m_gameContext, std::get<0>(loadResult), std::get<1>(loadResult));
-   getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, shared_from_this()));
+   auto loadGameMenu = std::make_shared<SaveMenu>(m_gameContext);
+   getExecutionStack()->pushState(loadGameMenu);
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
 }

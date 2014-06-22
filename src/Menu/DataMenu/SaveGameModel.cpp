@@ -24,13 +24,6 @@ SaveGameModel::SaveGameModel(SaveMenu& saveMenu, const Metadata& metadata) :
    refreshSaveGames();
 }
 
-void SaveGameModel::saveToSlot(const PlayerData& playerData, const SaveLocation& saveLocation, int slotIndex)
-{
-   playerData.save(saveLocation, m_saveGames[slotIndex].first);
-   *(m_saveGames[slotIndex].second) = playerData;
-   m_saveMenu.refresh(slotIndex);
-}
-
 void SaveGameModel::refreshSaveGames()
 {
    m_saveGames.clear();
@@ -61,6 +54,18 @@ void SaveGameModel::refreshSaveGames()
    }
    
    closedir(dp);
+}
+
+void SaveGameModel::saveToSlot(const PlayerData& playerData, const SaveLocation& saveLocation, size_t index)
+{
+   playerData.save(saveLocation, m_saveGames[index].first);
+   *(m_saveGames[index].second) = playerData;
+   m_saveMenu.refresh(index);
+}
+
+std::tuple<std::shared_ptr<PlayerData>, SaveLocation> SaveGameModel::loadSaveGame(size_t index) const
+{
+   return PlayerData::load(m_saveGames[index].first, m_metadata);
 }
 
 const std::unique_ptr<PlayerDataSummary>& SaveGameModel::getSaveGame(size_t index) const

@@ -28,9 +28,9 @@ namespace Rocket
 typedef std::vector<std::pair<std::string, std::unique_ptr<PlayerDataSummary>> > SaveGameList;
 
 /**
- * Provides the title screen functionality, including the game logo, backdrop,
- * and options for the user.
- * This state is the first that the user must interact with.
+ * Provides the save/load menu functionality by exposing the
+ * available savegames to the player and allowing them
+ * to choose one to either save over or load from.
  *
  * @author Noam Chitayat
  */
@@ -42,16 +42,14 @@ class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
    /** The coroutine scheduler for the main menu's GUI scripts */
    Scheduler m_scheduler;
    
-   /** The title screen RML document */
-   Rocket::Core::ElementDocument* m_titleDocument;
+   /** The backing save-game data for this menu. */
+   SaveGameModel m_model;
    
    /** The location of the player in the game world. */
    const SaveLocation m_saveLocation;
    
-   SaveGameModel m_model;
-   
    /** The current player data. */
-   PlayerData& m_playerData;
+   std::weak_ptr<PlayerData> m_playerData;
    
    /** The list of savegame files and their respective data. */
    SaveGameList m_saveGames;
@@ -59,18 +57,21 @@ class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
    /** The view model that exposes the savegames to the GUI */
    SaveGameViewModel m_saveGameViewModel;
    
+   /** The menu RML document */
+   Rocket::Core::ElementDocument* m_menuDocument;
+   
    /** The RML document for the Confirm Save window in the data menu */
-   Rocket::Core::ElementDocument* m_confirmSaveDocument;
+   Rocket::Core::ElementDocument* m_confirmDocument;
    
    /** The slot to save to after the user confirms the save. */
-   int m_slotToSave;
+   int m_selectedSlot;
    
    /**
     * Poll and handle the next input event.
     *
-    * @param finishState Returned as true if the input event quit out of the main menu.
+    * @return true iff the input event quit out of the main menu.
     */
-   void waitForInputEvent(bool& finishState);
+   bool waitForInputEvent();
    
    /**
     * Callback for Rocket event when a key is pressed
@@ -99,8 +100,15 @@ class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
     *
     * @param event The Rocket GUI event being sent by the user input.
     */
-   void confirmClicked(Rocket::Core::Event& event);
-   
+   void confirmSaveClicked(Rocket::Core::Event& event);
+
+   /**
+    * Event handler for the "Yes"/"Confirm" button being clicked.
+    *
+    * @param event The Rocket GUI event being sent by the user input.
+    */
+   void confirmLoadClicked(Rocket::Core::Event& event);
+
    /**
     * Event handler for the "No"/"Cancel" button being clicked.
     *
@@ -129,44 +137,64 @@ class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
    void saveToSlot(int slotIndex);
    
    /**
-    * Initializes the data menu pane and populates the sidebar.
+    * Initializes the menu interface.
     */
-   void initialize();
-   
-protected:
+   void initializeMenu();
+
    /**
-    * Waits a millisecond between draws (no rush on a title screen)
+    * Initializes the confirmation dialog.
     */
-   void draw();
+   void initializeConfirmDialog(bool loadMode);
    
-   /**
-    * Perform logic for the title screen.
-    * NOTE: this method will spin infinitely until user input is received.
-    * Since the screen is static, there is no need to refresh without input.
-    *
-    * @return true iff the title screen is not finished running (no quit event)
-    */
-   bool step(long timePassed);
-   
-   /**
-    * @return the main menu's script scheduler
-    */
-   Scheduler* getScheduler();
+   protected:
+      void activate();
+
+      /**
+       * Waits a millisecond between draws (no rush on a title screen)
+       */
+      void draw();
+      
+      /**
+       * Perform logic for the title screen.
+       * NOTE: this method will spin infinitely until user input is received.
+       * Since the screen is static, there is no need to refresh without input.
+       *
+       * @return true iff the title screen is not finished running (no quit event)
+       */
+      bool step(long timePassed);
+      
+      /**
+       * @return the main menu's script scheduler
+       */
+      Scheduler* getScheduler();
    
    public:
       /**
        * Constructor.
-       * Initializes the title screen widgets, font, image and sounds.
+       * Initializes the save game menu.
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      SaveMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation saveLocation);
+      SaveMenu(GameContext& gameContext);
       
+      /**
+       * Constructor.
+       * Initializes the save game menu.
+       *
+       * @param gameContext The context containing the current player data and execution stack.
+       */
+      SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerData, const SaveLocation saveLocation);
+   
       /**
        * Destructor.
        */
       ~SaveMenu();
-      
+   
+      /**
+       * Refresh the menu after the backing data has changed.
+       *
+       * @param slotIndex The index of the entry that has changed.
+       */
       void refresh(int slotIndex);
 };
 

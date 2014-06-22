@@ -54,8 +54,15 @@ class SaveGameModel
        *
        * @param slotIndex The slot at which the game will be saved.
        */
-      void saveToSlot(const PlayerData& playerData, const SaveLocation& saveLocation, int slotIndex);
-      
+      void saveToSlot(const PlayerData& playerData, const SaveLocation& saveLocation, size_t index);
+   
+      /**
+       * Loads player data from the given save slot.
+       *
+       * @param slotIndex The slot at which the game will be saved.
+       */
+      std::tuple<std::shared_ptr<PlayerData>, SaveLocation> loadSaveGame(size_t index) const;
+   
       /**
        * @return a read-only reference to a save game.
        */

@@ -16,45 +16,93 @@
 #include "dirent.h"
 
 #include "ExecutionStack.h"
+#include "TileEngine.h"
+#include "FadeState.h"
 #include "DebugUtils.h"
 
 const int debugFlag = DEBUG_MENU;
 
-SaveMenu::SaveMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation saveLocation) :
-   GameState(gameContext, GameStateType::MENU, "SaveMenu"),
-   m_saveLocation(saveLocation),
+SaveMenu::SaveMenu(GameContext& gameContext) :
+   GameState(gameContext, GameStateType::MENU, "LoadMenu"),
    m_model(*this, getMetadata()),
-   m_playerData(playerData),
-   m_saveGameViewModel(m_model)
+   m_saveLocation(SaveLocation()),
+   m_saveGameViewModel(m_model),
+   m_selectedSlot(-1)
 {
-   m_titleDocument = m_rocketContext->LoadDocument("data/gui/datapane.rml");
-   
-   if(m_titleDocument != nullptr)
-   {
-      m_titleDocument->Show();
-      m_bindings.bindAction(m_titleDocument, "keydown", [this](Rocket::Core::Event& event) { listKeyDown(event); });
-      m_bindings.bindAction(m_titleDocument, "saveGameGrid", "click", [this](Rocket::Core::Event& event) { saveGameClicked(event); });
-   }
-   
-   m_confirmSaveDocument = m_rocketContext->LoadDocument("data/gui/dataconfirmsave.rml");
-   if(m_confirmSaveDocument != nullptr)
-   {
-      m_bindings.bindAction(m_confirmSaveDocument, "confirm", "click", [this](Rocket::Core::Event& event) { confirmClicked(event); });
-      m_bindings.bindAction(m_confirmSaveDocument, "cancel", "click", [this](Rocket::Core::Event& event) { cancelClicked(event); });
-   }
-   
-   m_slotToSave = -1;
+   initializeMenu();
+   initializeConfirmDialog(true /*loadMode*/);
+}
+
+SaveMenu::SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerData, const SaveLocation saveLocation) :
+   GameState(gameContext, GameStateType::MENU, "SaveMenu"),
+   m_model(*this, getMetadata()),
+   m_saveLocation(saveLocation),
+   m_playerData(playerData),
+   m_saveGameViewModel(m_model),
+   m_selectedSlot(-1)
+{
+   initializeMenu();
+   initializeConfirmDialog(false /*loadMode*/);
 }
 
 SaveMenu::~SaveMenu()
 {
-   m_titleDocument->Close();
-   m_titleDocument->RemoveReference();
+   m_menuDocument->Close();
+   m_menuDocument->RemoveReference();
    
-   if(m_confirmSaveDocument != nullptr)
+   if(m_confirmDocument != nullptr)
    {
-      m_confirmSaveDocument->Close();
-      m_confirmSaveDocument->RemoveReference();
+      m_confirmDocument->Close();
+      m_confirmDocument->RemoveReference();
+   }
+}
+
+void SaveMenu::initializeMenu()
+{
+   m_menuDocument = m_rocketContext->LoadDocument("data/gui/datapane.rml");
+   
+   if(m_menuDocument != nullptr)
+   {
+      m_menuDocument->Show();
+      m_bindings.bindAction(m_menuDocument, "keydown", [this](Rocket::Core::Event& event) { listKeyDown(event); });
+      m_bindings.bindAction(m_menuDocument, "saveGameGrid", "click", [this](Rocket::Core::Event& event) { saveGameClicked(event); });
+   }
+}
+
+void SaveMenu::initializeConfirmDialog(bool loadMode)
+{
+   auto documentPath = loadMode ?
+      "data/gui/dataconfirmload.rml" :
+      "data/gui/dataconfirmsave.rml";
+
+   m_confirmDocument = m_rocketContext->LoadDocument(documentPath);
+   if(m_confirmDocument != nullptr)
+   {
+      std::function<void(Rocket::Core::Event&)> confirmAction;
+      if(loadMode)
+      {
+         confirmAction = [this](Rocket::Core::Event& event) { confirmLoadClicked(event); };
+      }
+      else
+      {
+         confirmAction = [this](Rocket::Core::Event& event) { confirmSaveClicked(event); };
+      }
+
+      m_bindings.bindAction(m_confirmDocument, "confirm", "click", confirmAction);
+      m_bindings.bindAction(m_confirmDocument, "cancel", "click", [this](Rocket::Core::Event& event) { cancelClicked(event); });
+   }
+}
+
+void SaveMenu::activate()
+{
+   // By default, GameState resets the
+   // finish flag of a state when it is
+   // reactivated. In this case, we actually
+   // want to stay finished, since Load Game should
+   // not be resumed after a game is loaded.
+   if(!m_finished)
+   {
+      GameState::activate();
    }
 }
 
@@ -63,9 +111,7 @@ bool SaveMenu::step(long timePassed)
    if(m_finished) return false;
    
    m_scheduler.runCoroutines(timePassed);
-   bool done = false;
-   
-   waitForInputEvent(done);
+   bool done = waitForInputEvent();
    
    /* The menu shouldn't run too fast */
    SDL_Delay (1);
@@ -73,7 +119,7 @@ bool SaveMenu::step(long timePassed)
    return !done;
 }
 
-void SaveMenu::waitForInputEvent(bool& finishState)
+bool SaveMenu::waitForInputEvent()
 {
    SDL_Delay (1);
    
@@ -90,8 +136,7 @@ void SaveMenu::waitForInputEvent(bool& finishState)
          {
             case SDLK_ESCAPE:
             {
-               finishState = true;
-               return;
+               return true;
             }
             default:
             {
@@ -103,8 +148,7 @@ void SaveMenu::waitForInputEvent(bool& finishState)
       }
       case SDL_QUIT:
       {
-         finishState = true;
-         return;
+         return true;
       }
       default:
       {
@@ -113,6 +157,7 @@ void SaveMenu::waitForInputEvent(bool& finishState)
    }
    
    handleEvent(event);
+   return false;
 }
 
 void SaveMenu::listKeyDown(Rocket::Core::Event& event)
@@ -129,7 +174,7 @@ void SaveMenu::listKeyDown(Rocket::Core::Event& event)
          return;
    }
    
-   Rocket::Core::Element* list = m_titleDocument->GetElementById("menu");
+   Rocket::Core::Element* list = m_menuDocument->GetElementById("menu");
    if(list == nullptr)
    {
       return;
@@ -186,29 +231,42 @@ Scheduler* SaveMenu::getScheduler()
 
 void SaveMenu::showConfirmDialog(int index)
 {
-   m_slotToSave = index;
-   if (m_confirmSaveDocument != nullptr)
+   m_selectedSlot = index;
+   if (m_confirmDocument != nullptr)
    {
-      m_confirmSaveDocument->Show(Rocket::Core::ElementDocument::MODAL);
+      m_confirmDocument->Show(Rocket::Core::ElementDocument::MODAL);
    }
 }
 
 void SaveMenu::hideConfirmDialog()
 {
-   m_slotToSave = -1;
-   if(m_confirmSaveDocument != nullptr)
+   m_selectedSlot = -1;
+   if(m_confirmDocument != nullptr)
    {
       // Need to call Show without focus flags first, to release modal focus :(
-      m_confirmSaveDocument->Show();
+      m_confirmDocument->Show();
       
-      m_confirmSaveDocument->Hide();
+      m_confirmDocument->Hide();
    }
 }
 
-void SaveMenu::confirmClicked(Rocket::Core::Event& event)
+void SaveMenu::confirmSaveClicked(Rocket::Core::Event& event)
 {
-   m_model.saveToSlot(m_playerData, m_saveLocation, m_slotToSave);
+   auto playerData = m_playerData.lock();
+   if(playerData)
+   {
+      m_model.saveToSlot(*playerData, m_saveLocation, m_selectedSlot);
+      hideConfirmDialog();
+   }
+}
+
+void SaveMenu::confirmLoadClicked(Rocket::Core::Event& event)
+{
+   auto loadResult = m_model.loadSaveGame(m_selectedSlot);
    hideConfirmDialog();
+   auto tileEngine = std::make_shared<TileEngine>(m_gameContext, std::get<0>(loadResult), std::get<1>(loadResult));
+   getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, shared_from_this()));
+   m_finished = true;
 }
 
 void SaveMenu::cancelClicked(Rocket::Core::Event& event)

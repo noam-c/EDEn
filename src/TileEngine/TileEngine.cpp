@@ -197,7 +197,7 @@ int TileEngine::openSaveMenu()
    location.coords = m_playerActor.getLocation();
    location.direction = m_playerActor.getDirection();
 
-   auto saveMenu = std::make_shared<SaveMenu>(m_gameContext, *m_playerData, location);
+   auto saveMenu = std::make_shared<SaveMenu>(m_gameContext, m_playerData, location);
    getExecutionStack()->pushState(saveMenu);
    return 0;
 }

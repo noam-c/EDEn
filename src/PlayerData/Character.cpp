@@ -140,7 +140,7 @@ void Character::parseSkills(const Json::Value& skillsDataContainer)
 
    for(Json::Value::const_iterator baseStatNameIter = skillListJson.begin(); baseStatNameIter != skillListJson.end(); ++baseStatNameIter)
    {
-      UsableId skillId = atoi(baseStatNameIter.key().asCString());
+      UsableId skillId = std::stoi(baseStatNameIter.key().asCString());
       const std::pair<UsableId, unsigned int> skillUsage(skillId, (*baseStatNameIter).asUInt());
       DEBUG("Adding skill ID: %d", skillId);
       m_skillUsage.insert(skillUsage);
@@ -188,11 +188,11 @@ Json::Value Character::serialize() const
    characterNode[Character::HP_ATTRIBUTE] = m_hp;
    characterNode[Character::SP_ATTRIBUTE] = m_sp;
 
-   Json::Value skillsNode(Json::arrayValue);
+   Json::Value skillsNode(Json::objectValue);
 
    for(const auto& iter : m_skillUsage)
    {
-      skillsNode[iter.first] = iter.second;
+      skillsNode[std::to_string(iter.first)] = iter.second;
    }
 
    characterNode[Character::SKILLS_ELEMENT] = skillsNode;
