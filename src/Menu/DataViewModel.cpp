@@ -9,12 +9,12 @@
 #include "PlayerDataSummary.h"
 #include "CharacterRoster.h"
 #include "Character.h"
-#include "DataMenu.h"
+#include "SaveMenu.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-DataViewModel::DataViewModel(DataMenu& dataMenu) :
+DataViewModel::DataViewModel(SaveMenu& dataMenu) :
       Rocket::Controls::DataSource("dataViewModel"),
       m_dataMenu(dataMenu)
 {

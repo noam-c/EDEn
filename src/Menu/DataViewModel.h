@@ -10,7 +10,7 @@
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
-class DataMenu;
+class SaveMenu;
 class PlayerData;
 class PlayerDataSummary;
 
@@ -23,7 +23,7 @@ class PlayerDataSummary;
  */
 class DataViewModel : public Rocket::Controls::DataSource
 {
-   const DataMenu& m_dataMenu;
+   const SaveMenu& m_dataMenu;
 
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
@@ -32,7 +32,7 @@ class DataViewModel : public Rocket::Controls::DataSource
       /**
        * Constructor.
        */
-      DataViewModel(DataMenu& dataMenu);
+      DataViewModel(SaveMenu& dataMenu);
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

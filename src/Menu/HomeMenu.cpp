@@ -8,7 +8,6 @@
 #include "MenuShell.h"
 
 #include "CharacterDependentMenu.h"
-#include "DataMenu.h"
 #include "ItemMenu.h"
 #include "SkillMenu.h"
 

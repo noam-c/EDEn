@@ -36,8 +36,8 @@ SET(HEADERS
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
   src/MainMenu/TitleScreenSettingsMenu.h
+  src/Menu/DataMenu/SaveMenu.h
   src/Menu/CharacterDependentMenu.h
-  src/Menu/DataMenu.h
   src/Menu/DataViewModel.h
   src/Menu/HomeMenu.h
   src/Menu/HomeViewModel.h
@@ -150,8 +150,8 @@ SET(SOURCES
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
   src/MainMenu/TitleScreenSettingsMenu.cpp
+  src/Menu/DataMenu/SaveMenu.cpp
   src/Menu/CharacterDependentMenu.cpp
-  src/Menu/DataMenu.cpp
   src/Menu/DataViewModel.cpp
   src/Menu/HomeMenu.cpp
   src/Menu/HomeViewModel.cpp
@@ -260,6 +260,7 @@ SOURCE_GROUP(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 SOURCE_GROUP(Metadata REGULAR_EXPRESSION src/Metadata/.*)
 SOURCE_GROUP(Graphics REGULAR_EXPRESSION src/Graphics/.*)
 SOURCE_GROUP(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
+SOURCE_GROUP("Menu//DataMenu" REGULAR_EXPRESSION src/Menu/DataMenu/.*)
 SOURCE_GROUP(Menu REGULAR_EXPRESSION src/Menu/.*)
 SOURCE_GROUP(MenuControls REGULAR_EXPRESSION src/MenuControls/.*)
 SOURCE_GROUP(Messaging REGULAR_EXPRESSION src/Messaging/.*)
@@ -289,6 +290,7 @@ INCLUDE_DIRECTORIES(
   src/Graphics
   src/MainMenu
   src/Menu
+  src/Menu/DataMenu
   src/MenuControls
   src/Messaging
   src/PlayerData

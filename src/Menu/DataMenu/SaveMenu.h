@@ -4,13 +4,14 @@
  *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
  */
 
-#ifndef DATA_MENU_H
-#define DATA_MENU_H
+#ifndef SAVE_LOAD_MENU_H
+#define SAVE_LOAD_MENU_H
 
-#include "MenuState.h"
+#include "GameState.h"
 #include "EdenRocketBindings.h"
 #include "DataViewModel.h"
 #include "PlayerData.h"
+#include "Scheduler.h"
 
 #include <memory>
 
@@ -18,42 +19,64 @@ namespace Rocket
 {
    namespace Core
    {
-      class Context;
-      class Element;
+      class ElementDocument;
       class Event;
    };
 };
 
-class Sound;
 typedef std::vector<std::pair<std::string, std::unique_ptr<PlayerDataSummary>> > SaveGameList;
 
 /**
- * The home menu is the first menu state of the menu.
- * It serves to summarize important information for the player and allows the player to select
- * a character to perform further actions on.
+ * Provides the title screen functionality, including the game logo, backdrop,
+ * and options for the user.
+ * This state is the first that the user must interact with.
  *
  * @author Noam Chitayat
  */
-class DataMenu: public MenuState
+class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
 {
-   /** The location of the player in the game world. */
-   const SaveLocation m_saveLocation;
-
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
-
+   
+   /** The coroutine scheduler for the main menu's GUI scripts */
+   Scheduler m_scheduler;
+   
+   /** The title screen RML document */
+   Rocket::Core::ElementDocument* m_titleDocument;
+   
+   /** The location of the player in the game world. */
+   const SaveLocation m_saveLocation;
+   
+   /** The current player data. */
+   PlayerData& m_playerData;
+   
    /** The list of savegame files and their respective data. */
    SaveGameList m_saveGames;
    
    /** The view model that exposes the savegames to the GUI */
    DataViewModel m_dataViewModel;
-
+   
    /** The RML document for the Confirm Save window in the data menu */
    Rocket::Core::ElementDocument* m_confirmSaveDocument;
-
+   
    /** The slot to save to after the user confirms the save. */
    int m_slotToSave;
-
+   
+   /**
+    * Poll and handle the next input event.
+    *
+    * @param finishState Returned as true if the input event quit out of the main menu.
+    */
+   void waitForInputEvent(bool& finishState);
+   
+   /**
+    * Callback for Rocket event when a key is pressed
+    * while the list of menu options has focus.
+    *
+    * @param event The user input event.
+    */
+   void listKeyDown(Rocket::Core::Event& event);
+   
    /**
     * Displays the confirmation dialog to ensure that the user wants
     * to save at this location.
@@ -61,27 +84,27 @@ class DataMenu: public MenuState
     * @param index The index of the data to save.
     */
    void showConfirmDialog(int index);
-
+   
    /**
     * Hides the confirmation dialog if it is visible, and
     * resets the save slot.
     */
    void hideConfirmDialog();
-
+   
    /**
     * Event handler for the "Yes"/"Confirm" button being clicked.
     *
     * @param event The Rocket GUI event being sent by the user input.
     */
    void confirmClicked(Rocket::Core::Event& event);
-
+   
    /**
     * Event handler for the "No"/"Cancel" button being clicked.
     *
     * @param event The Rocket GUI event being sent by the user input.
     */
    void cancelClicked(Rocket::Core::Event& event);
-
+   
    /**
     * Event handler for a savegame being clicked.
     * Begins the saving process using the clicked slot.
@@ -101,31 +124,50 @@ class DataMenu: public MenuState
     * @param slotIndex The slot at which the game will be saved.
     */
    void saveToSlot(int slotIndex);
-
+   
    /**
     * Initializes the data menu pane and populates the sidebar.
     */
    void initialize();
-
-   public:
-      /**
-       * Constructor. Initializes the menu GUI.
-       *
-       * @param gameContext The context containing the execution stack.
-       * @param playerData The current player data to save.
-       * @param saveLocation The location of the player.
-       */
-      DataMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation& saveLocation);
-
-      /**
-       * Destructor.
-       */
-      ~DataMenu();
-
-      /**
-       * @return a read-only reference to the list of save games.
-       */
-      const SaveGameList& getSaveGames() const;
+   
+protected:
+   /**
+    * Waits a millisecond between draws (no rush on a title screen)
+    */
+   void draw();
+   
+   /**
+    * Perform logic for the title screen.
+    * NOTE: this method will spin infinitely until user input is received.
+    * Since the screen is static, there is no need to refresh without input.
+    *
+    * @return true iff the title screen is not finished running (no quit event)
+    */
+   bool step(long timePassed);
+   
+   /**
+    * @return the main menu's script scheduler
+    */
+   Scheduler* getScheduler();
+   
+public:
+   /**
+    * Constructor.
+    * Initializes the title screen widgets, font, image and sounds.
+    *
+    * @param gameContext The context containing the current player data and execution stack.
+    */
+   SaveMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation saveLocation);
+   
+   /**
+    * Destructor.
+    */
+   ~SaveMenu();
+   
+   /**
+    * @return a read-only reference to the list of save games.
+    */
+   const SaveGameList& getSaveGames() const;
 };
 
 #endif

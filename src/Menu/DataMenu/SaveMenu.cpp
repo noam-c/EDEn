@@ -4,9 +4,9 @@
  *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
  */
 
-#include "DataMenu.h"
-#include "MenuShell.h"
+#include "SaveMenu.h"
 
+#include <SDL.h>
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
 
@@ -20,36 +20,38 @@
 
 const int debugFlag = DEBUG_MENU;
 
-DataMenu::DataMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation& saveLocation) :
-   MenuState(gameContext, playerData, "DataMenu"),
-   m_saveLocation(saveLocation),
-   m_dataViewModel(*this)
+SaveMenu::SaveMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation saveLocation) :
+GameState(gameContext, GameStateType::MENU, "SaveMenu"),
+m_saveLocation(saveLocation),
+m_playerData(playerData),
+m_dataViewModel(*this)
 {
-   initialize();
-}
-
-void DataMenu::initialize()
-{
-   m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/datapane.rml");
-   if(m_paneDocument != nullptr)
+   m_titleDocument = m_rocketContext->LoadDocument("data/gui/datapane.rml");
+   
+   if(m_titleDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "saveGameGrid", "click", [this](Rocket::Core::Event& event) { saveGameClicked(event); });
+      m_titleDocument->Show();
+      m_bindings.bindAction(m_titleDocument, "keydown", [this](Rocket::Core::Event& event) { listKeyDown(event); });
+      m_bindings.bindAction(m_titleDocument, "saveGameGrid", "click", [this](Rocket::Core::Event& event) { saveGameClicked(event); });
    }
-
-   m_confirmSaveDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/dataconfirmsave.rml");
+   
+   m_confirmSaveDocument = m_rocketContext->LoadDocument("data/gui/dataconfirmsave.rml");
    if(m_confirmSaveDocument != nullptr)
    {
       m_bindings.bindAction(m_confirmSaveDocument, "confirm", "click", [this](Rocket::Core::Event& event) { confirmClicked(event); });
       m_bindings.bindAction(m_confirmSaveDocument, "cancel", "click", [this](Rocket::Core::Event& event) { cancelClicked(event); });
    }
-
+   
    m_slotToSave = -1;
    
    refreshSaveGames();
 }
 
-DataMenu::~DataMenu()
+SaveMenu::~SaveMenu()
 {
+   m_titleDocument->Close();
+   m_titleDocument->RemoveReference();
+   
    if(m_confirmSaveDocument != nullptr)
    {
       m_confirmSaveDocument->Close();
@@ -57,7 +59,133 @@ DataMenu::~DataMenu()
    }
 }
 
-void DataMenu::showConfirmDialog(int index)
+bool SaveMenu::step(long timePassed)
+{
+   if(m_finished) return false;
+   
+   m_scheduler.runCoroutines(timePassed);
+   bool done = false;
+   
+   waitForInputEvent(done);
+   
+   /* The menu shouldn't run too fast */
+   SDL_Delay (1);
+   
+   return !done;
+}
+
+void SaveMenu::waitForInputEvent(bool& finishState)
+{
+   SDL_Delay (1);
+   
+   SDL_Event event;
+   
+   /* Check for events */
+   SDL_PollEvent(&event);
+   
+   switch (event.type)
+   {
+      case SDL_KEYDOWN:
+      {
+         switch(event.key.keysym.sym)
+         {
+            case SDLK_ESCAPE:
+            {
+               finishState = true;
+               return;
+            }
+            default:
+            {
+               break;
+            }
+         }
+         
+         break;
+      }
+      case SDL_QUIT:
+      {
+         finishState = true;
+         return;
+      }
+      default:
+      {
+         break;
+      }
+   }
+   
+   handleEvent(event);
+}
+
+void SaveMenu::listKeyDown(Rocket::Core::Event& event)
+{
+   Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
+   
+   switch(key)
+   {
+      case Rocket::Core::Input::KI_UP:
+      case Rocket::Core::Input::KI_DOWN:
+      case Rocket::Core::Input::KI_RETURN:
+         break;
+      default:
+         return;
+   }
+   
+   Rocket::Core::Element* list = m_titleDocument->GetElementById("menu");
+   if(list == nullptr)
+   {
+      return;
+   }
+   
+   Rocket::Core::Element* child = list->GetFirstChild();
+   while(child != nullptr)
+   {
+      if(child->IsClassSet("selected"))
+      {
+         break;
+      }
+      
+      child = child->GetNextSibling();
+   }
+   
+   if(child == nullptr)
+   {
+      return;
+   }
+   
+   if(key == Rocket::Core::Input::KI_RETURN)
+   {
+      child->Click();
+   }
+   else if(key == Rocket::Core::Input::KI_UP)
+   {
+      Rocket::Core::Element* previousSibling = child->GetPreviousSibling();
+      if(previousSibling != nullptr)
+      {
+         child->SetClass("selected", false /*activate*/);
+         previousSibling->SetClass("selected", true /*activate*/);
+      }
+   }
+   else if(key == Rocket::Core::Input::KI_DOWN)
+   {
+      Rocket::Core::Element* nextSibling = child->GetNextSibling();
+      if(nextSibling != nullptr)
+      {
+         child->SetClass("selected", false /*activate*/);
+         nextSibling->SetClass("selected", true /*activate*/);
+      }
+   }
+}
+
+void SaveMenu::draw()
+{
+}
+
+Scheduler* SaveMenu::getScheduler()
+{
+   return &m_scheduler;
+}
+
+void SaveMenu::showConfirmDialog(int index)
 {
    m_slotToSave = index;
    if (m_confirmSaveDocument != nullptr)
@@ -66,39 +194,39 @@ void DataMenu::showConfirmDialog(int index)
    }
 }
 
-void DataMenu::hideConfirmDialog()
+void SaveMenu::hideConfirmDialog()
 {
    m_slotToSave = -1;
    if(m_confirmSaveDocument != nullptr)
    {
       // Need to call Show without focus flags first, to release modal focus :(
       m_confirmSaveDocument->Show();
-
+      
       m_confirmSaveDocument->Hide();
    }
 }
 
-void DataMenu::confirmClicked(Rocket::Core::Event& event)
+void SaveMenu::confirmClicked(Rocket::Core::Event& event)
 {
    saveToSlot(m_slotToSave);
    hideConfirmDialog();
 }
 
-void DataMenu::cancelClicked(Rocket::Core::Event& event)
+void SaveMenu::cancelClicked(Rocket::Core::Event& event)
 {
    hideConfirmDialog();
 }
 
-void DataMenu::saveGameClicked(Rocket::Core::Event& event)
+void SaveMenu::saveGameClicked(Rocket::Core::Event& event)
 {
    Rocket::Core::Element* target = event.GetTargetElement();
-
+   
    // Move up the DOM to the datagridrow item holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
    {
       target = target->GetParentNode();
    }
-
+   
    if(target != nullptr)
    {
       // If we found a row element, cast it and get its index
@@ -111,14 +239,14 @@ void DataMenu::saveGameClicked(Rocket::Core::Event& event)
    }
 }
 
-void DataMenu::saveToSlot(int slotIndex)
+void SaveMenu::saveToSlot(int slotIndex)
 {
    m_playerData.save(m_saveLocation, m_saveGames[slotIndex].first);
    *(m_saveGames[slotIndex].second) = m_playerData;
    m_dataViewModel.refresh(slotIndex);
 }
 
-void DataMenu::refreshSaveGames()
+void SaveMenu::refreshSaveGames()
 {
    m_saveGames.clear();
    
@@ -150,7 +278,7 @@ void DataMenu::refreshSaveGames()
    closedir(dp);
 }
 
-const SaveGameList& DataMenu::getSaveGames() const
+const SaveGameList& SaveMenu::getSaveGames() const
 {
    return m_saveGames;
 }

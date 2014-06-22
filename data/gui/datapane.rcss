@@ -64,3 +64,10 @@
 {
    background-color: #777777;
 }
+
+.datagridimage
+{
+   width: 100px;
+   height: 100px;
+}
+
