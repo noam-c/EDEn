@@ -4,13 +4,13 @@
  *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
  */
 
-#ifndef DATA_VIEW_MODEL_H
-#define DATA_VIEW_MODEL_H
+#ifndef SAVE_GAME_VIEW_MODEL_H
+#define SAVE_GAME_VIEW_MODEL_H
 
 #include <Rocket/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
-class SaveMenu;
+class SaveGameModel;
 class PlayerData;
 class PlayerDataSummary;
 
@@ -21,9 +21,9 @@ class PlayerDataSummary;
  *
  * @author Noam Chitayat
  */
-class DataViewModel : public Rocket::Controls::DataSource
+class SaveGameViewModel : public Rocket::Controls::DataSource
 {
-   const SaveMenu& m_dataMenu;
+   const SaveGameModel& m_model;
 
    /** The formatter to use when exposing images to the GUI. */
    const ImageFormatter m_imageFormatter;
@@ -32,7 +32,7 @@ class DataViewModel : public Rocket::Controls::DataSource
       /**
        * Constructor.
        */
-      DataViewModel(SaveMenu& dataMenu);
+      SaveGameViewModel(SaveGameModel& model);
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

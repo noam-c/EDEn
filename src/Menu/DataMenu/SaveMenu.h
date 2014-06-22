@@ -9,8 +9,8 @@
 
 #include "GameState.h"
 #include "EdenRocketBindings.h"
-#include "DataViewModel.h"
 #include "SaveGameModel.h"
+#include "SaveGameViewModel.h"
 #include "PlayerData.h"
 #include "Scheduler.h"
 
@@ -57,7 +57,7 @@ class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
    SaveGameList m_saveGames;
    
    /** The view model that exposes the savegames to the GUI */
-   DataViewModel m_dataViewModel;
+   SaveGameViewModel m_saveGameViewModel;
    
    /** The RML document for the Confirm Save window in the data menu */
    Rocket::Core::ElementDocument* m_confirmSaveDocument;

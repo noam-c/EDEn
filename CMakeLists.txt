@@ -37,9 +37,9 @@ SET(HEADERS
   src/MainMenu/MainMenu.h
   src/MainMenu/TitleScreenSettingsMenu.h
   src/Menu/DataMenu/SaveGameModel.h
+  src/Menu/DataMenu/SaveGameViewModel.h
   src/Menu/DataMenu/SaveMenu.h
   src/Menu/CharacterDependentMenu.h
-  src/Menu/DataViewModel.h
   src/Menu/HomeMenu.h
   src/Menu/HomeViewModel.h
   src/Menu/ImageFormatter.h
@@ -152,9 +152,9 @@ SET(SOURCES
   src/MainMenu/MainMenuActions.cpp
   src/MainMenu/TitleScreenSettingsMenu.cpp
   src/Menu/DataMenu/SaveGameModel.cpp
+  src/Menu/DataMenu/SaveGameViewModel.cpp
   src/Menu/DataMenu/SaveMenu.cpp
   src/Menu/CharacterDependentMenu.cpp
-  src/Menu/DataViewModel.cpp
   src/Menu/HomeMenu.cpp
   src/Menu/HomeViewModel.cpp
   src/Menu/ImageFormatter.cpp

@@ -4,7 +4,7 @@
  *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
  */
 
-#include "DataViewModel.h"
+#include "SaveGameViewModel.h"
 #include "PlayerData.h"
 #include "PlayerDataSummary.h"
 #include "CharacterRoster.h"
@@ -14,17 +14,17 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_MENU;
 
-DataViewModel::DataViewModel(SaveMenu& dataMenu) :
+SaveGameViewModel::SaveGameViewModel(SaveGameModel& model) :
       Rocket::Controls::DataSource("dataViewModel"),
-      m_dataMenu(dataMenu)
+      m_model(model)
 {
 }
 
-void DataViewModel::GetRow(Rocket::Core::StringList& row,
+void SaveGameViewModel::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   const auto& saveGameData = m_dataMenu.getSaveGames()[row_index].second;
+   const auto& saveGameData = m_model.getSaveGame(row_index);
    const std::vector<Character*> characters = saveGameData->getRoster()->getParty();
 
    if (table == "saveGames")
@@ -79,17 +79,17 @@ void DataViewModel::GetRow(Rocket::Core::StringList& row,
    }
 }
 
-int DataViewModel::GetNumRows(const Rocket::Core::String& table)
+int SaveGameViewModel::GetNumRows(const Rocket::Core::String& table)
 {
    if (table == "saveGames")
    {
-      return m_dataMenu.getSaveGames().size();
+      return m_model.getNumSaveGames();
    }
 
    return 0;
 }
 
-void DataViewModel::refresh(int rowIndex)
+void SaveGameViewModel::refresh(int rowIndex)
 {
    NotifyRowChange("saveGames", rowIndex, 1);
 }

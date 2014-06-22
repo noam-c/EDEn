@@ -25,7 +25,7 @@ SaveMenu::SaveMenu(GameContext& gameContext, PlayerData& playerData, const SaveL
    m_saveLocation(saveLocation),
    m_model(*this, getMetadata()),
    m_playerData(playerData),
-   m_dataViewModel(m_model)
+   m_saveGameViewModel(m_model)
 {
    m_titleDocument = m_rocketContext->LoadDocument("data/gui/datapane.rml");
    
@@ -240,5 +240,5 @@ void SaveMenu::saveGameClicked(Rocket::Core::Event& event)
 
 void SaveMenu::refresh(int slotIndex)
 {
-   m_dataViewModel.refresh(slotIndex);
+   m_saveGameViewModel.refresh(slotIndex);
 }
