@@ -10,6 +10,7 @@
 #include "GameState.h"
 #include "EdenRocketBindings.h"
 #include "DataViewModel.h"
+#include "SaveGameModel.h"
 #include "PlayerData.h"
 #include "Scheduler.h"
 
@@ -46,6 +47,8 @@ class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
    
    /** The location of the player in the game world. */
    const SaveLocation m_saveLocation;
+   
+   SaveGameModel m_model;
    
    /** The current player data. */
    PlayerData& m_playerData;
@@ -150,24 +153,21 @@ protected:
     */
    Scheduler* getScheduler();
    
-public:
-   /**
-    * Constructor.
-    * Initializes the title screen widgets, font, image and sounds.
-    *
-    * @param gameContext The context containing the current player data and execution stack.
-    */
-   SaveMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation saveLocation);
-   
-   /**
-    * Destructor.
-    */
-   ~SaveMenu();
-   
-   /**
-    * @return a read-only reference to the list of save games.
-    */
-   const SaveGameList& getSaveGames() const;
+   public:
+      /**
+       * Constructor.
+       * Initializes the title screen widgets, font, image and sounds.
+       *
+       * @param gameContext The context containing the current player data and execution stack.
+       */
+      SaveMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation saveLocation);
+      
+      /**
+       * Destructor.
+       */
+      ~SaveMenu();
+      
+      void refresh(int slotIndex);
 };
 
 #endif

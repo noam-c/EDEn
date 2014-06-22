@@ -36,6 +36,7 @@ SET(HEADERS
   src/LuaWrapper/LuaWrapper.hpp
   src/MainMenu/MainMenu.h
   src/MainMenu/TitleScreenSettingsMenu.h
+  src/Menu/DataMenu/SaveGameModel.h
   src/Menu/DataMenu/SaveMenu.h
   src/Menu/CharacterDependentMenu.h
   src/Menu/DataViewModel.h
@@ -150,6 +151,7 @@ SET(SOURCES
   src/MainMenu/MainMenu.cpp
   src/MainMenu/MainMenuActions.cpp
   src/MainMenu/TitleScreenSettingsMenu.cpp
+  src/Menu/DataMenu/SaveGameModel.cpp
   src/Menu/DataMenu/SaveMenu.cpp
   src/Menu/CharacterDependentMenu.cpp
   src/Menu/DataViewModel.cpp

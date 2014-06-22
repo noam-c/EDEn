@@ -21,10 +21,11 @@
 const int debugFlag = DEBUG_MENU;
 
 SaveMenu::SaveMenu(GameContext& gameContext, PlayerData& playerData, const SaveLocation saveLocation) :
-GameState(gameContext, GameStateType::MENU, "SaveMenu"),
-m_saveLocation(saveLocation),
-m_playerData(playerData),
-m_dataViewModel(*this)
+   GameState(gameContext, GameStateType::MENU, "SaveMenu"),
+   m_saveLocation(saveLocation),
+   m_model(*this, getMetadata()),
+   m_playerData(playerData),
+   m_dataViewModel(m_model)
 {
    m_titleDocument = m_rocketContext->LoadDocument("data/gui/datapane.rml");
    
@@ -43,8 +44,6 @@ m_dataViewModel(*this)
    }
    
    m_slotToSave = -1;
-   
-   refreshSaveGames();
 }
 
 SaveMenu::~SaveMenu()
@@ -208,7 +207,7 @@ void SaveMenu::hideConfirmDialog()
 
 void SaveMenu::confirmClicked(Rocket::Core::Event& event)
 {
-   saveToSlot(m_slotToSave);
+   m_model.saveToSlot(m_playerData, m_saveLocation, m_slotToSave);
    hideConfirmDialog();
 }
 
@@ -239,46 +238,7 @@ void SaveMenu::saveGameClicked(Rocket::Core::Event& event)
    }
 }
 
-void SaveMenu::saveToSlot(int slotIndex)
+void SaveMenu::refresh(int slotIndex)
 {
-   m_playerData.save(m_saveLocation, m_saveGames[slotIndex].first);
-   *(m_saveGames[slotIndex].second) = m_playerData;
    m_dataViewModel.refresh(slotIndex);
-}
-
-void SaveMenu::refreshSaveGames()
-{
-   m_saveGames.clear();
-   
-   struct dirent *entry;
-   DIR *dp;
-   
-   /** \todo Extract HARDCODED path into a constant. */
-   dp = opendir("data/savegames");
-   if (dp == nullptr)
-   {
-      T_T("Failed to open data/savegames for save game listing.");
-   }
-   
-   while((entry = readdir(dp)))
-   {
-      std::string filename(entry->d_name);
-      if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".edd")
-      {
-         auto saveGameData = std::unique_ptr<PlayerDataSummary>(new PlayerDataSummary(getMetadata()));
-         
-         /** \todo Extract HARDCODED path into a constant. */
-         std::string path = "data/savegames/" + filename;
-         saveGameData->load(path);
-         
-         m_saveGames.emplace_back(path, std::move(saveGameData));
-      }
-   }
-   
-   closedir(dp);
-}
-
-const SaveGameList& SaveMenu::getSaveGames() const
-{
-   return m_saveGames;
 }
