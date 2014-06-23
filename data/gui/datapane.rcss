@@ -1,7 +1,15 @@
+body
+{
+   background-decorator: image;
+   background-image-src: ../images/menubg.jpg;
+   height: 100%;
+   padding: 3px;
+}
+
 #saveGameGrid datagridheader
 {
-	height: 0px;
-	visibility: hidden;
+   height: 0px;
+   visibility: hidden;
 }
 
 #saveGameGrid datagridrow
