@@ -22,7 +22,7 @@ static int CharacterL_GetName(lua_State* luaVM)
    return 1;
 }
 
-static luaL_reg characterMetatable[] =
+static luaL_Reg characterMetatable[] =
 {
    { "getName", CharacterL_GetName },
    { nullptr, nullptr }

@@ -359,7 +359,7 @@ IF(WIN32)
       debug rocketControls_d
       optimized rocketCore
       optimized rocketControls
-      lua5.1
+      lua52
       SDL2_image
       SDL2_mixer
       SDL2
@@ -371,16 +371,16 @@ ELSE()
    INCLUDE(FindSDL2)
    INCLUDE(FindSDL2_image)
    INCLUDE(FindSDL2_mixer)
-   INCLUDE(FindLua51)
+   INCLUDE(FindLua)
    INCLUDE(FindLibRocket)
    INCLUDE(FindLibRocketControls)
    INCLUDE(FindLibRocketDebug)
    
    SET(INCL_HEADERS
       ${LUA_INCLUDE_DIR}
-      ${ROCKET_INCLUDE_DIR}
-      ${ROCKET_CONTROLS_INCLUDE_DIR}
-      ${ROCKET_DEBUGGER_INCLUDE_DIR}
+      ${LIBROCKET_INCLUDE_DIRS}
+      ${LIBROCKET_CONTROLS_INCLUDE_DIRS}
+      ${LIBROCKET_DEBUGGER_INCLUDE_DIRS}
       ${SDL2_INCLUDE_DIR}
       ${SDL2_IMAGE_INCLUDE_DIRS}
       ${SDL2_MIXER_INCLUDE_DIRS}

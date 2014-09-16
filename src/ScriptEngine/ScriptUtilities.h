@@ -23,7 +23,6 @@ extern "C"
 class ScriptUtilities
 {
    static bool isBoolean(lua_State* luaStack, int index);
-   static bool isNumber(lua_State* luaStack, int index);
 
    static bool isString(lua_State* luaStack, int index);
    static std::string retrieveString(lua_State* luaStack, int index);
@@ -34,6 +33,7 @@ class ScriptUtilities
    template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool (*checkType)(lua_State*, int), T (*retrieve)(lua_State*, int), T& result);
 
    public:
+      template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T (*retrieve)(lua_State*, int, int*), T& result);
       template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T*& value);
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, int& value);
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, long& value);
@@ -71,6 +71,35 @@ template<typename T> bool ScriptUtilities::getParameter(lua_State* luaStack, int
       lua_pop(luaStack, 1);
    }
 
+   return foundParameter;
+}
+
+template<typename T> bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T (*retrieve)(lua_State*, int, int*), T& result)
+{
+   bool foundParameter = false;
+   if(!parameterName.empty())
+   {
+      lua_pushstring(luaStack, parameterName.c_str());
+      lua_rawget(luaStack, tableIndex);
+
+      int success;
+      result = retrieve(luaStack, -1, &success);
+      foundParameter = (success == 1);
+      
+      lua_pop(luaStack, 1);
+   }
+   
+   if(!foundParameter && parameterIndex > 0)
+   {
+      lua_rawgeti(luaStack, tableIndex, parameterIndex);
+      
+      int success;
+      result = retrieve(luaStack, -1, &success);
+      foundParameter = (success == 1);
+      
+      lua_pop(luaStack, 1);
+   }
+   
    return foundParameter;
 }
 

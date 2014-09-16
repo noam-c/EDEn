@@ -78,7 +78,7 @@ static int InventoryL_RemoveItem(lua_State* luaVM)
    return 1;
 }
 
-static luaL_reg inventoryMetatable[] =
+static luaL_Reg inventoryMetatable[] =
 {
    { "getItemCount", InventoryL_GetItemCount },
    { "addItem", InventoryL_AddItem },

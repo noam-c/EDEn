@@ -18,20 +18,20 @@ extern "C"
 
 MapTriggerCallback::MapTriggerCallback(lua_State* luaVM) :
    m_luaVM(luaVM),
-   m_registryIndex(lua_ref(luaVM, true))
+   m_registryIndex(luaL_ref(luaVM, LUA_REGISTRYINDEX))
 {
 }
 
 MapTriggerCallback::~MapTriggerCallback()
 {
-   lua_unref(m_luaVM, m_registryIndex);
+   luaL_unref(m_luaVM, LUA_REGISTRYINDEX, m_registryIndex);
 }
 
 int MapTriggerCallback::operator()(Actor* actor)
 {
    if(m_registryIndex != LUA_NOREF)
    {
-      lua_getref(m_luaVM, m_registryIndex);
+      lua_rawgeti(m_luaVM, LUA_REGISTRYINDEX, m_registryIndex);
       luaW_push<Actor>(m_luaVM, actor);
       return lua_pcall(m_luaVM, 1, 0, 0);
    }

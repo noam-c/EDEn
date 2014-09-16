@@ -72,7 +72,7 @@ static int PlayerCharacterL_SetLocation(lua_State* luaVM)
    return 0;
 }
 
-static luaL_reg playerCharacterMetatable[] =
+static luaL_Reg playerCharacterMetatable[] =
 {
    { "show", PlayerCharacterL_Show },
    { "remove", PlayerCharacterL_Remove },

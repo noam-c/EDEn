@@ -232,7 +232,7 @@ static int TileEngineL_TilesToPixels(lua_State* luaVM)
    return 1;
 }
 
-static luaL_reg tileEngineMetatable[] =
+static luaL_Reg tileEngineMetatable[] =
 {
    { "addNPC", TileEngineL_AddNPC },
    { "addTriggerListener", TileEngineL_AddTriggerListener },

@@ -181,18 +181,16 @@ int ScriptEngine::narrate(lua_State* luaStack)
       waitForFinish = false;
    }
 
-   int callResult = 0;
-
-   auto task = scheduler->createNewTask();
-   if(waitForFinish)
-   {
-      callResult = scheduler->block(task);
-   }
-
    DEBUG("Narrating text: %s", text.c_str());
+   auto task = scheduler->createNewTask();
    tileEngine->dialogueNarrate(text, task);
 
-   return callResult;
+   if(waitForFinish)
+   {
+      return scheduler->block(task);
+   }
+
+   return 0;
 }
 
 int ScriptEngine::say(lua_State* luaStack)
@@ -224,18 +222,16 @@ int ScriptEngine::say(lua_State* luaStack)
       waitForFinish = false;
    }
 
-   int callResult = 0;
-
    auto task = scheduler->createNewTask();
-   if(waitForFinish)
-   {
-      callResult = scheduler->block(task);
-   }
-
    DEBUG("Saying text: %s", text.c_str());
    tileEngine->dialogueSay(text, task);
+   
+   if(waitForFinish)
+   {
+      return scheduler->block(task);
+   }
 
-   return callResult;
+   return 0;
 }
 
 int ScriptEngine::playSound(lua_State* luaStack)
@@ -459,8 +455,8 @@ void ScriptEngine::callFunction(lua_State* coroutine, const char* funcName)
 {
    // push the function onto the stack and then resume the coroutine from the
    // start of the function 
-   lua_getfield(coroutine, LUA_GLOBALSINDEX, funcName);
-   lua_resume(coroutine, 0);
+   lua_getglobal(coroutine, funcName);
+   lua_resume(coroutine, nullptr, 0);
 }
 
 std::string ScriptEngine::getScriptPath(const std::string& scriptName)

@@ -38,7 +38,7 @@ bool Script::runScript(int numArgs)
    DEBUG("Resuming script with name %s, coroutine ID %d...", m_scriptName.c_str(), m_coroutineId);
    DEBUG("Lua Coroutine Address: 0x%x", m_luaStack);
 
-   int returnCode = lua_resume(m_luaStack, numArgs);
+   int returnCode = lua_resume(m_luaStack, nullptr, numArgs);
    switch(returnCode)
    {
       case 0:

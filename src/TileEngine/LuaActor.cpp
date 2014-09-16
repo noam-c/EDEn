@@ -109,7 +109,7 @@ static int ActorL_LookAt(lua_State* luaVM)
    return 0;
 }
 
-static luaL_reg actorMetatable[] =
+static luaL_Reg actorMetatable[] =
 {
    { "move", ActorL_Move },
    { "setSprite", ActorL_SetSprite },

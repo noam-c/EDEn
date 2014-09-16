@@ -14,11 +14,6 @@ bool ScriptUtilities::isBoolean(lua_State* luaStack, int index)
    return lua_type(luaStack, index) == LUA_TBOOLEAN;
 }
 
-bool ScriptUtilities::isNumber(lua_State* luaStack, int index)
-{
-   return lua_type(luaStack, index) == LUA_TNUMBER;
-}
-
 bool ScriptUtilities::isString(lua_State* luaStack, int index)
 {
    return lua_type(luaStack, index) == LUA_TSTRING;
@@ -32,7 +27,7 @@ std::string ScriptUtilities::retrieveString(lua_State* luaStack, int index)
 bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, int& value)
 {
    lua_Integer luaIntegerResult;
-   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, ScriptUtilities::isNumber, lua_tointeger, luaIntegerResult);
+   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, lua_tointegerx, luaIntegerResult);
 
    if (foundParameter)
    {
@@ -46,7 +41,7 @@ bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int para
 bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, long& value)
 {
    lua_Integer luaIntegerResult;
-   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, ScriptUtilities::isNumber, lua_tointeger, luaIntegerResult);
+   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, lua_tointegerx, luaIntegerResult);
 
    if (foundParameter)
    {
@@ -60,7 +55,7 @@ bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int para
 bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, float& value)
 {
    lua_Number luaNumericResult;
-   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, ScriptUtilities::isNumber, lua_tonumber, luaNumericResult);
+   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, lua_tonumberx, luaNumericResult);
 
    if (foundParameter)
    {
@@ -74,7 +69,7 @@ bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int para
 bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, double& value)
 {
    lua_Number luaNumericResult;
-   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, ScriptUtilities::isNumber, lua_tonumber, luaNumericResult);
+   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, lua_tonumberx, luaNumericResult);
 
    if (foundParameter)
    {

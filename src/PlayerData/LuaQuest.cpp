@@ -142,7 +142,7 @@ static int QuestL_Complete(lua_State* luaVM)
    return 0;
 }
 
-static luaL_reg questMetatable[] =
+static luaL_Reg questMetatable[] =
 {
    { "add", QuestL_AddQuest },
    { "get", QuestL_GetQuest },
