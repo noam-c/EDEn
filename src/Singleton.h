@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef SINGLETON_H
@@ -44,7 +44,7 @@ template<class C> class Singleton
        * the new object.
        */
       virtual void initialize() = 0;
-       
+
       /**
        * Uninitializes the singleton of class C.
        * This method is run before the destructor of C, and should be
@@ -64,7 +64,7 @@ template<class C> class Singleton
             Singleton<C>::instance = new C();
             Singleton<C>::instance->initialize();
          }
-      
+
          return static_cast<C*>(instance);
       }
 

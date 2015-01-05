@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef EQUIP_DATA_H
@@ -52,7 +52,7 @@ class EquipData
 
    /** The accessories equipped by the character. Characters can equip multiple accessories. */
    std::vector<EquipSlot> m_accessories;
-   
+
    public:
       /**
        * Load equipment and slot data for this equipment set.

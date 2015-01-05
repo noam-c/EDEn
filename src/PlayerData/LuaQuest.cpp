@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "LuaQuest.h"
@@ -83,13 +83,13 @@ static int QuestL_IsStarted(lua_State* luaVM)
    {
       return lua_error(luaVM);
    }
-   
+
    std::string questPath;
    if(!ScriptUtilities::getParameter(luaVM, 2, 1, "path", questPath))
    {
       questPath = "";
    }
-   
+
    Quest* quest = luaW_to<Quest>(luaVM, 1);
    if(questPath.empty())
    {
@@ -110,13 +110,13 @@ static int QuestL_IsComplete(lua_State* luaVM)
    {
       return lua_error(luaVM);
    }
-   
+
    std::string questPath;
    if(!ScriptUtilities::getParameter(luaVM, 2, 1, "path", questPath))
    {
       questPath = "";
    }
-   
+
    Quest* quest = luaW_to<Quest>(luaVM, 1);
    if(questPath.empty())
    {

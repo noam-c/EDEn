@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef NPC_H
@@ -25,7 +25,7 @@ class ScriptEngine;
  *
  * How NPCs work:
  * NPCs contain NPCScripts, which are separate coroutines that manage the
- * script state of an NPC's AI behaviour. An NPCScript runs based on whether 
+ * script state of an NPC's AI behaviour. An NPCScript runs based on whether
  * or not the script is currently in the middle of a run or if the NPC itself
  * currently has instructions to work on.
  * If the script is not running and the NPC is idle, the NPCCoroutine runs the
@@ -46,7 +46,7 @@ class NPC : public Actor
        * Constructor for the NPC.
        * Initializes the NPC's coroutine and loads the associated script.
        * Loads a sprite for the NPC based on a given Spritesheet.
-       * 
+       *
        * @param engine The scripting engine that provides the NPC's coroutine.
        * @param scheduler The scheduler that owns the NPC's coroutine
        * @param name The name of the NPC (must also be the name of its script).
@@ -76,12 +76,12 @@ class NPC : public Actor
       /**
        * The NPC has been activated by the player, which usually indicates that
        * the user wishes to have their character speak to the NPC. The NPC needs
-       * to stop what it's doing and run an "activate" function, in the Lua 
+       * to stop what it's doing and run an "activate" function, in the Lua
        * script to do things like speak, trigger battles, give items to the
-       * player, etc.  
+       * player, etc.
        */
       void activate();
-   
+
       /**
        * Destructor.
        */

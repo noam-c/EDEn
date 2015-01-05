@@ -24,19 +24,19 @@ struct TileState;
  * @author Noam Chitayat
  */
 class RoyFloydWarshallMatrices
-{  
+{
    /** The square root of 2. */
    static const float ROOT_2;
 
    /** The width of the grid. */
    int m_width;
-   
+
    /** The Roy-Floyd-Warshall distance matrix. This 2D array holds best-path distances between all tiles. */
    Grid<float> m_distanceMatrix;
-   
+
    /** The Roy-Floyd-Warshall successor matrix. This 2D array holds the best tile to move to, given a source and a destination. */
    Grid<int> m_successorMatrix;
-   
+
    /**
     * @param tileNum The matrix index of the tile.
     * @param width The width of the grid.

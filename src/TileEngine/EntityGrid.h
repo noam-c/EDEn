@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef ENTITY_GRID_H
@@ -49,7 +49,7 @@ struct TileState;
 class EntityGrid : messaging::Listener<ActorMoveMessage>
 {
    friend class Pathfinder;
-   
+
    /** The size of a movement tile (used to control pathfinding granularity) */
    static const int MOVEMENT_TILE_SIZE;
 
@@ -58,7 +58,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
 
    /** Floating-point notation for infinity. */
    static const float INFINITY;
-   
+
    /** The tile engine that moderates this grid. */
    const TileEngine& m_tileEngine;
 
@@ -70,7 +70,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
 
    /** The pathfinding component used to navigate in this map. */
    Pathfinder m_pathfinder;
-   
+
    /** The map of entities and states for each of the tiles. */
    Grid<TileState> m_collisionMap;
 
@@ -81,7 +81,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
     * Clean up the map of tile states.
     */
    void deleteCollisionMap();
-   
+
    /**
     * @param area The pixel-coordinate rectangle to determine boundaries for.
     *
@@ -98,9 +98,9 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
     * @return true if the area can be successfully occupied, false if there was something else in the area.
     */
    bool canOccupyArea(const shapes::Rectangle& area, TileState state) const;
-   
+
    /**
-    * If an area is available, occupy it and set the tiles within it to the new state. 
+    * If an area is available, occupy it and set the tiles within it to the new state.
     * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
     *
     * @param area The rectangular region to occupy (in pixels)
@@ -111,14 +111,14 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
    bool occupyArea(const shapes::Rectangle& area, TileState state);
 
    /**
-    * Free the tiles belonging to a given entity within a specified area. 
+    * Free the tiles belonging to a given entity within a specified area.
     *
     * @param areaToFree The rectangular region to free (in pixels)
     */
    void freeArea(const shapes::Rectangle& areaToFree);
-   
+
    /**
-    * Free the tiles belonging to a given entity within a specified area. 
+    * Free the tiles belonging to a given entity within a specified area.
     *
     * @param previousLocation The coordinates of the top-left corner of the area to free (in pixels)
     * @param currentLocation The coordinates of the top-left corner of the area to keep in the current state (in pixels)
@@ -128,7 +128,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
    void freeArea(const shapes::Point2D& previousLocation, const shapes::Point2D& currentLocation, const shapes::Size& size, TileState state);
 
    /**
-    * Helper function to unconditionally set the tiles in an area to a given state. 
+    * Helper function to unconditionally set the tiles in an area to a given state.
     *
     * @param area The rectangular area to set (with edge coordinates in tiles)
     * @param state The new state of the area (entity and type)
@@ -151,7 +151,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * Destructor.
        */
       ~EntityGrid();
-   
+
       /**
        * Gets the entry point when entering this map from another specified map.
        *
@@ -160,12 +160,12 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @return The entry point to the map from the given map.
        */
       const shapes::Point2D& getMapEntrance(const std::string& exitedMapName) const;
-   
+
       /**
        * @return True iff the EntityGrid is operating on defined and valid map data.
        */
       bool hasMapData() const;
-   
+
       /**
        * @return The name of the map.
        * @throws
@@ -179,7 +179,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @param map The new map to operate on.
        */
       void setMapData(std::weak_ptr<const Map> map);
-      
+
       /**
        * @return The bounds of the map.
        */
@@ -196,7 +196,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * Process logic for the map and its obstacles.
        */
       void step(long timePassed);
-   
+
       /**
        * Finds an ideal path from the source coordinates to the destination.
        *
@@ -206,7 +206,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @return The ideal best path from the source point to the destination point.
        */
       Path findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size);
-      
+
       /**
        * Finds the shortest path from the source coordinates to the destination
        * around all obstacles and entities.
@@ -218,7 +218,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @return The shortest unobstructed path from the source point to the destination point.
        */
       Path findReroutedPath(const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size);
-      
+
       /**
        * Checks an area for obstacles or entities.
        *
@@ -227,7 +227,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @return true iff a given area is entirely free of obstacles and entities.
        */
       bool isAreaFree(const shapes::Rectangle& area) const;
-   
+
       /**
        * Add an obstacle and occupy the tiles under it.
        * NOTE: This is an all-or-nothing operation, which means that if there is anything blocking the area from being occupied, the entire area will be unmodified. If the area can be occupied, it will be occupied completely.
@@ -286,7 +286,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @return true iff the actor moved to a new location
        */
       bool moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance);
-   
+
       /**
        * Request permission from the EntityGrid to move an Actor from the source to the given destination.
        * NOTE: After the actor has completed this movement, endMovement MUST be called in order to notify the EntityGrid to perform the appropriate clean-up.
@@ -297,7 +297,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @return true iff the actor can move from the source to the destination.
        */
       bool beginMovement(Actor* actor, const shapes::Point2D& dst);
-      
+
       /**
        * Notifies the EntityGrid that the actor failed to complete movement from the source to the given destination and occupies some area between the source and destination.
        *
@@ -306,7 +306,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @param dst The coordinates of the original destination (in pixels).
        */
       void abortMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst);
-      
+
       /**
        * Notifies the EntityGrid that the actor moved successfully from the source to the given destination and no longer occupies the source coordinates.
        *
@@ -315,7 +315,7 @@ class EntityGrid : messaging::Listener<ActorMoveMessage>
        * @param dst The coordinates of the destination (in pixels).
        */
       void endMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst);
-   
+
       /**
        * Draw a row of the background layers of the map.
        *

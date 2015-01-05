@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Region.h"
@@ -23,13 +23,13 @@ void Region::load(const std::string& path)
    struct dirent *entry;
    DIR *dp;
    std::vector<std::string> files;
-   
+
    dp = opendir(path.c_str());
    if (dp == nullptr)
    {
       T_T("opendir");
    }
-   
+
    while((entry = readdir(dp)))
    {
       std::string filename(entry->d_name);
@@ -38,9 +38,9 @@ void Region::load(const std::string& path)
          files.push_back(filename);
       }
    }
-   
+
    closedir(dp);
-   
+
    for(const auto& filename : files)
    {
       std::string mapFile(std::string(path) + filename);

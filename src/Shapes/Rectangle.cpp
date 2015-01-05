@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Rectangle.h"
@@ -38,7 +38,7 @@ namespace shapes
    {
       return getWidth() * getHeight();
    }
-   
+
    bool Rectangle::intersects(const Rectangle& other) const
    {
       return !(other.left > right
@@ -47,7 +47,7 @@ namespace shapes
                 || other.bottom < top
                 );
    }
-   
+
    bool Rectangle::contains(const Rectangle& other) const
    {
       return !(other.left < left
@@ -55,7 +55,7 @@ namespace shapes
                || other.top < top
                || other.bottom >= bottom);
    }
-   
+
    bool Rectangle::contains(const Point2D& point) const
    {
       return !(point.x < left
@@ -63,12 +63,12 @@ namespace shapes
                || point.y < top
                || point.y >= bottom);
    }
-   
+
    Size Rectangle::getSize() const
    {
       return Size(getWidth(), getHeight());
    }
-   
+
    unsigned int Rectangle::getWidth() const
    {
       return right - left;

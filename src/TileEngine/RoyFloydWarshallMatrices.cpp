@@ -32,12 +32,12 @@ std::tuple<bool, shapes::Point2D> RoyFloydWarshallMatrices::getSuccessor(shapes:
    int dstTileNum = RoyFloydWarshallMatrices::coordsToTileNum(dst, m_width);
 
    int successorTileNum = m_successorMatrix(srcTileNum, dstTileNum);
-   
+
    if(successorTileNum >= 0)
    {
       return std::make_tuple(true, tileNumToCoords(successorTileNum, m_width));
    }
-   
+
    return std::make_tuple(false, shapes::Point2D::ORIGIN);
 }
 
@@ -51,25 +51,25 @@ float RoyFloydWarshallMatrices::getDistance(shapes::Point2D src, shapes::Point2D
 RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const shapes::Rectangle* gridBounds)
 {
    RoyFloydWarshallMatrices matrices;
-   
+
    if(!grid || !gridBounds)
    {
       T_T("Call made to calculateRoyFloydWarshallMatrices with null grid or null bounds.");
    }
-   
+
    auto& distanceMatrix = matrices.m_distanceMatrix;
    auto& successorMatrix = matrices.m_successorMatrix;
-   
+
    matrices.m_width = gridBounds->getWidth();
    const unsigned int NUM_TILES = gridBounds->getArea();
    const auto matrixSize = shapes::Size(NUM_TILES, NUM_TILES);
-   
+
    distanceMatrix.resize(matrixSize);
    successorMatrix.resize(matrixSize);
-   
+
    shapes::Point2D aTile;
    shapes::Point2D bTile;
-   
+
    for(unsigned int a = 0; a < NUM_TILES; ++a)
    {
       aTile = tileNumToCoords(a, matrices.m_width);
@@ -83,18 +83,18 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
          else
          {
             bTile = tileNumToCoords(b, matrices.m_width);
-            
+
             bool xAdjacent = aTile.x - 1 <= bTile.x && bTile.x <= aTile.x + 1;
             bool yAdjacent = aTile.y - 1 <= bTile.y && bTile.y <= aTile.y + 1;
-            
+
             bool adjacent = xAdjacent && yAdjacent;
             bool diagonallyAdjacent = aTile.x != bTile.x && aTile.y != bTile.y;
             bool aTileIsObstacle = (*grid)(aTile.x, aTile.y).entityType == TileState::OBSTACLE;
             bool bTileIsObstacle = (*grid)(bTile.x, bTile.y).entityType == TileState::OBSTACLE;
-            
+
             distanceMatrix(a, b) = std::numeric_limits<float>::infinity();
             successorMatrix(a, b) = -1;
-            
+
             if(adjacent && !aTileIsObstacle && !bTileIsObstacle)
             {
                if(diagonallyAdjacent)
@@ -102,7 +102,7 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
                   bool diagonalTraversalBlocked =
                   (*grid)(aTile.x, bTile.y).entityType == TileState::OBSTACLE ||
                   (*grid)(bTile.x, aTile.y).entityType == TileState::OBSTACLE;
-                  
+
                   if(!diagonalTraversalBlocked)
                   {
                      successorMatrix(a, b) = b;
@@ -118,7 +118,7 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
          }
       }
    }
-   
+
    for(unsigned int i = 0; i < NUM_TILES; ++i)
    {
       for(unsigned int a = 0; a < NUM_TILES; ++a)
@@ -134,6 +134,6 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
          }
       }
    }
-   
+
    return matrices;
 }

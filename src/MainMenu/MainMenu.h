@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef MAIN_MENU_H
@@ -26,7 +26,7 @@ class Music;
 class Sound;
 
 /**
- * Provides the title screen functionality, including the game logo, backdrop, 
+ * Provides the title screen functionality, including the game logo, backdrop,
  * and options for the user.
  * This state is the first that the user must interact with.
  *
@@ -48,7 +48,7 @@ class MainMenu: public GameState, public std::enable_shared_from_this<MainMenu>
 
    /** Sound for picking an option */
    std::shared_ptr<Sound> m_chooseSound;
-   
+
    std::shared_ptr<PlayerData> m_menuPrototypePlayerData;
 
    /** The title screen RML document */
@@ -105,7 +105,7 @@ class MainMenu: public GameState, public std::enable_shared_from_this<MainMenu>
        * @param gameContext The context containing the current player data and execution stack.
        */
       MainMenu(GameContext& gameContext);
-   
+
       /**
        * Destructor.
        */

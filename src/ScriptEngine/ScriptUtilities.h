@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef SCRIPT_UTILITIES_H
@@ -85,21 +85,21 @@ template<typename T> bool ScriptUtilities::getParameter(lua_State* luaStack, int
       int success;
       result = retrieve(luaStack, -1, &success);
       foundParameter = (success == 1);
-      
+
       lua_pop(luaStack, 1);
    }
-   
+
    if(!foundParameter && parameterIndex > 0)
    {
       lua_rawgeti(luaStack, tableIndex, parameterIndex);
-      
+
       int success;
       result = retrieve(luaStack, -1, &success);
       foundParameter = (success == 1);
-      
+
       lua_pop(luaStack, 1);
    }
-   
+
    return foundParameter;
 }
 

@@ -101,7 +101,7 @@ SET(HEADERS
   src/Sprites/Sprite.h
   src/Sprites/Spritesheet.h
   src/TileEngine/Actor.h
-  src/TileEngine/Actor_Orders.h 
+  src/TileEngine/Actor_Orders.h
   src/TileEngine/LuaActor.h
   src/TileEngine/Camera.h
   src/TileEngine/CameraSlider.h
@@ -135,7 +135,7 @@ SET(HEADERS
   src/utils/IntegerSequence.h
 )
 
-SET(SOURCES 
+SET(SOURCES
   src/tinyxml/tinystr.cpp
   src/tinyxml/tinyxml.cpp
   src/tinyxml/tinyxmlerror.cpp
@@ -369,7 +369,7 @@ IF(WIN32)
       SDL2
       opengl32
       glu32
-   )  
+   )
 ELSE()
    INCLUDE(FindOpenGL)
    INCLUDE(FindSDL2)
@@ -379,7 +379,7 @@ ELSE()
    INCLUDE(FindLibRocket)
    INCLUDE(FindLibRocketControls)
    INCLUDE(FindLibRocketDebug)
-   
+
    SET(INCL_HEADERS
       ${LUA_INCLUDE_DIR}
       ${LIBROCKET_INCLUDE_DIRS}
@@ -390,9 +390,9 @@ ELSE()
       ${SDL2_MIXER_INCLUDE_DIRS}
       ${OPENGL_INCLUDE_DIR}
    )
-   
+
    INCLUDE_DIRECTORIES(BEFORE SYSTEM ${INCL_HEADERS})
-   
+
    TARGET_LINK_LIBRARIES(eden ${LIBROCKET_LIBRARY} ${LIBROCKET_CONTROLS_LIBRARY} ${LIBROCKET_DEBUGGER_LIBRARY} ${LUA_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARIES} ${SDL2_LIBRARY} ${OPENGL_LIBRARIES})
 ENDIF()
 

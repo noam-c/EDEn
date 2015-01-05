@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "PlayerDataSummary.h"
@@ -46,13 +46,13 @@ void PlayerDataSummary::load(const std::string& path)
 
    Json::Value jsonRoot;
    input >> jsonRoot;
-   
+
    if(jsonRoot.isNull())
    {
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse save data.");
    }
-   
+
    parseCharactersAndParty(jsonRoot);
 }
 

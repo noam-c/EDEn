@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Quest.h"
@@ -36,7 +36,7 @@ void Quest::load(const Json::Value& questTree)
    m_name = questTree[Quest::NAME_ATTRIBUTE].asString();
    const Json::Value& descriptionElement = questTree[Quest::DESCRIPTION_ELEMENT];
    m_description = descriptionElement.isString() ? descriptionElement.asString() : "";
-   
+
    m_completed = questTree[Quest::COMPLETED_ATTRIBUTE].asBool();
    m_optional = questTree[Quest::OPTIONAL_ATTRIBUTE].asBool();
 
@@ -52,24 +52,24 @@ Json::Value Quest::serialize() const
 {
    Json::Value questNode(Json::objectValue);
    questNode[Quest::NAME_ATTRIBUTE] = m_name;
-   
+
    if(!m_description.empty())
    {
       questNode[Quest::DESCRIPTION_ELEMENT] = m_description;
    }
-   
+
    questNode[Quest::COMPLETED_ATTRIBUTE] = m_completed;
    questNode[Quest::OPTIONAL_ATTRIBUTE] = m_optional;
-   
+
    Json::Value subquestsNode(Json::arrayValue);
    for(const auto& subquestIter : m_subquests)
    {
       Json::Value subquestNode = subquestIter.second->serialize();
       subquestsNode.append(subquestNode);
    }
-   
+
    questNode[Quest::QUEST_ELEMENT] = subquestsNode;
-   
+
    return questNode;
 }
 
@@ -103,7 +103,7 @@ const std::weak_ptr<Quest> Quest::getQuest(const std::string& questPath) const
    // Recursive case: Need to go down the quest tree using the specified path
    std::string rootQuestName = questPath.substr(0, endOfRootQuest);
    std::string relativeQuestPath = questPath.substr(endOfRootQuest + 1);
-   
+
    const auto& subquestIter = m_subquests.find(rootQuestName);
    if(subquestIter != m_subquests.end())
    {

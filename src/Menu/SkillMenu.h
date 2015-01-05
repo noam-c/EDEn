@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef SKILL_MENU_H
@@ -35,7 +35,7 @@ class SkillMenu: public CharacterDependentMenu
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
-   
+
    Character* m_selectedCharacter;
 
    /** The view model that exposes the inventory to the GUI */
@@ -45,10 +45,10 @@ class SkillMenu: public CharacterDependentMenu
     * Initializes the skill menu pane and populates the sidebar.
     */
    void initialize();
-   
+
    void skillClicked(Rocket::Core::Event& event);
    void dragStarted(Rocket::Core::Event& event);
-   
+
    void useSkill(int rowIndex);
 
    public:

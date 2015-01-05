@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef RESOURCE_H
@@ -38,7 +38,7 @@ class Resource : public std::enable_shared_from_this<Resource>
     * False iff the resource is currently in an uninitialized stub/zombie state.
     */
    bool m_initialized;
-   
+
    /**
     * The name of the resource.
     */

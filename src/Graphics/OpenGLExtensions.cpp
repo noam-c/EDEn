@@ -1,13 +1,13 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "OpenGLExtensions.h"
 #include "SDL.h"
 
-OpenGLExtensions::OpenGLExtensions() : 
+OpenGLExtensions::OpenGLExtensions() :
    m_glBindFramebufferEXT(nullptr),
    m_glDeleteFramebuffersEXT(nullptr),
    m_glGenFramebuffersEXT(nullptr),

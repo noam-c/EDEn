@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Map.h"
@@ -21,36 +21,36 @@ const int debugFlag = DEBUG_RES_LOAD | DEBUG_ENTITY_GRID;
 Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
 {
    DEBUG("Loading map file %s", filePath.c_str());
-   
+
    std::ifstream input(filePath.c_str());
    if(!input)
    {
       T_T("Failed to open map file for reading.");
    }
-   
+
    TiXmlDocument xmlDoc;
    input >> xmlDoc;
-   
+
    if(xmlDoc.Error())
    {
       DEBUG("Error occurred in map XML parsing: %s", xmlDoc.ErrorDesc());
       T_T("Failed to parse map data.");
    }
-   
+
    const TiXmlElement* root = xmlDoc.RootElement();
    if(strcmp(root->Value(), "map") != 0)
    {
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse map data.");
    }
-   
+
    int width;
    int height;
    root->Attribute("width", &width);
    root->Attribute("height", &height);
-   
+
    m_bounds = shapes::Rectangle(shapes::Point2D::ORIGIN, shapes::Size(width, height));
-   
+
    const TiXmlElement* layerElement = root->FirstChildElement("layer");
    while(layerElement != nullptr)
    {
@@ -65,7 +65,7 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
          m_foregroundLayers.emplace_back(new Layer(layerElement, m_bounds));
          DEBUG("Foreground layer added.");
       }
-      
+
       layerElement = layerElement->NextSiblingElement("layer");
    }
 
@@ -98,11 +98,11 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
          parseMapTriggersGroup(objectGroupElement);
          hasTriggersLayer = true;
       }
-      
-      
+
+
       objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
    }
-   
+
    DEBUG("Map loaded.");
 }
 
@@ -124,7 +124,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
          objectElement->Attribute("y", &topLeft.y);
          objectElement->Attribute("width", &width);
          objectElement->Attribute("height", &height);
-         
+
          shapes::Rectangle rect(topLeft / TileEngine::TILE_SIZE, shapes::Size(width, height) / TileEngine::TILE_SIZE);
          DEBUG("Found collision object at %d,%d with width %d and height %d.", rect.left, rect.top, rect.getWidth(), rect.getHeight());
          if(rect.getWidth() > 0 && rect.getHeight() > 0)
@@ -134,7 +134,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
                for(int x = rect.left; x < rect.right; ++x)
                {
                   m_passibilityMap(x, y) = 0;
-               }  
+               }
             }
          }
 
@@ -191,7 +191,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
       shapes::Point2D topLeft;
       int width;
       int height;
-      
+
       const TiXmlElement* objectElement = exitsGroupElement->FirstChildElement("object");
       while(objectElement != nullptr)
       {
@@ -200,7 +200,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
          objectElement->Attribute("width", &width);
          objectElement->Attribute("height", &height);
          std::string nextMap;
-         
+
          const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
          const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
          while(propertyElement != nullptr)
@@ -210,19 +210,19 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
                nextMap = propertyElement->Attribute("value");
                break;
             }
-            
+
             propertyElement = propertyElement->NextSiblingElement("property");
          }
-         
+
          shapes::Rectangle rect(topLeft, shapes::Size(width, height));
          DEBUG("Found exit %s at %d,%d with width %d and height %d.",
                nextMap.c_str(), topLeft.x, topLeft.y, rect.getWidth(), rect.getHeight());
-         
+
          if(rect.getWidth() > 0 && rect.getHeight() > 0 && !nextMap.empty())
          {
             m_mapExits.emplace_back(nextMap, rect);
          }
-         
+
          objectElement = objectElement->NextSiblingElement("object");
       }
    }
@@ -236,7 +236,7 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
       shapes::Point2D topLeft;
       int width;
       int height;
-      
+
       const TiXmlElement* objectElement = triggersGroupElement->FirstChildElement("object");
       while(objectElement != nullptr)
       {
@@ -245,7 +245,7 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
          objectElement->Attribute("width", &width);
          objectElement->Attribute("height", &height);
          std::string name;
-         
+
          const TiXmlElement* propertiesElement = objectElement->FirstChildElement("properties");
          const TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
          while(propertyElement != nullptr)
@@ -255,19 +255,19 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
                name = propertyElement->Attribute("value");
                break;
             }
-            
+
             propertyElement = propertyElement->NextSiblingElement("property");
          }
-         
+
          shapes::Rectangle rect(topLeft, shapes::Size(width, height));
          DEBUG("Found trigger %s at %d,%d with width %d and height %d.",
                name.c_str(), topLeft.x, topLeft.y, rect.getWidth(), rect.getHeight());
-         
+
          if(rect.getWidth() > 0 && rect.getHeight() > 0)
          {
             m_triggerZones.emplace_back(name, rect);
          }
-         
+
          objectElement = objectElement->NextSiblingElement("object");
       }
    }

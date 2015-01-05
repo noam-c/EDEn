@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "ExecutionStack.h"
@@ -50,7 +50,7 @@ Scheduler* ExecutionStack::getCurrentScheduler() const
    {
       return currentState->getScheduler();
    }
-   
+
    return nullptr;
 }
 
@@ -61,7 +61,7 @@ void ExecutionStack::pushState(std::shared_ptr<GameState> newState, std::shared_
    {
       m_stateStack.top()->deactivate();
    }
-   
+
    newState->setExecutionStack(this);
 
    if(transitionState)

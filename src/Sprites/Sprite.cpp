@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Sprite.h"
@@ -80,12 +80,12 @@ void Sprite::setFrame(const std::string& frameName, MovementDirection direction)
    if(!m_animation && frameName == m_currName && direction == m_currDirection) return;
 
    int frameIndex;
-   
+
    if(direction == NONE || (frameIndex = m_sheet->getFrameIndex(frameName + toDirectionString(direction))) < 0)
    {
       frameIndex = m_sheet->getFrameIndex(frameName);
    }
-   
+
    if(frameIndex < 0)
    {
       //DEBUG("Failed to find sprite frame.");

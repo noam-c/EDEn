@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef MAP_TRIGGER_CALLBACK_H
@@ -21,7 +21,7 @@ struct MapTriggerCallback
 {
    /** The Lua VM on which to run the callback function. */
    lua_State* m_luaVM;
-   
+
    /** The registry index where the callback function is stored. */
    int m_registryIndex;
 
@@ -31,12 +31,12 @@ struct MapTriggerCallback
     * @param luaVM A Lua VM with the callback function on top of its stack.
     */
    MapTriggerCallback(lua_State* luaVM);
-   
+
    /**
     * Cleans up the script callback function.
     */
    ~MapTriggerCallback();
-   
+
    /**
     * Executes the callback, supplying the Actor that triggered it.
     *

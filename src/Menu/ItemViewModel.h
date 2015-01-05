@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef ITEM_VIEW_MODEL_H
@@ -53,7 +53,7 @@ class ItemViewModel : public Rocket::Controls::DataSource
        * @return The number of rows in the specified table.
        */
       int GetNumRows(const Rocket::Core::String& table);
-   
+
       void refresh(int rowIndex);
 };
 

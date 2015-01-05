@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef CAMERA_H
@@ -44,7 +44,7 @@ class Camera
     * @return The offset to translate the camera with to make the focal point visible.
     */
    shapes::Point2D calculateCameraFocalOffset() const;
-   
+
    public:
       /**
        * Constructor.
@@ -66,10 +66,10 @@ class Camera
        *
        * @param point The point to translate (in viewport coordinates).
        *
-       * @return The given point translated into scene coordinates. 
+       * @return The given point translated into scene coordinates.
        */
       shapes::Point2D getPointWithinScene(const shapes::Point2D& point) const;
-   
+
       /**
        * @param point The point to clamp.
        *

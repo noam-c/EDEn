@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Inventory.h"
@@ -57,17 +57,17 @@ Json::Value Inventory::serialize() const
    {
       int itemNumber = iter.first;
       int itemQuantity = iter.second;
-      
+
       if(itemQuantity > 0)
       {
          Json::Value itemEntry(Json::objectValue);
          itemEntry[Inventory::ITEM_NUM_ATTRIBUTE] = itemNumber;
          itemEntry[Inventory::ITEM_QUANTITY_ATTRIBUTE] = itemQuantity;
-         
+
          inventoryNode.append(itemEntry);
       }
    }
-   
+
    return inventoryNode;
 }
 
@@ -108,7 +108,7 @@ bool Inventory::addItem(int itemId, int quantity)
    {
       return false;
    }
-   
+
    ItemList::iterator itemIter = findItem(itemId);
    if(itemIter == m_items.end())
    {
@@ -118,7 +118,7 @@ bool Inventory::addItem(int itemId, int quantity)
    {
       itemIter->second += quantity;
    }
-   
+
    return true;
 }
 
@@ -128,7 +128,7 @@ bool Inventory::removeItem(int itemId, int quantity)
    {
       return false;
    }
-   
+
    for(ItemList::iterator iter = m_items.begin(); iter != m_items.end(); ++iter)
    {
       int& existingQuantity = iter->second;
@@ -143,14 +143,14 @@ bool Inventory::removeItem(int itemId, int quantity)
             {
                m_items.erase(iter);
             }
-            
+
             return true;
          }
-         
+
          break;
       }
    }
-   
+
    // If the item is not in inventory, return false.
    return false;
 }

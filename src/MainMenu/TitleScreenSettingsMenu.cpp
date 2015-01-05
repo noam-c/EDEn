@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "TitleScreenSettingsMenu.h"
@@ -25,7 +25,7 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
    if(m_titleSettingsDocument != nullptr)
    {
       Rocket::Core::Element* optionsForm = m_titleSettingsDocument->GetElementById("optionsForm");
-      
+
       if(optionsForm != nullptr)
       {
          m_musicEnabledCheckbox = optionsForm->GetElementById("musicEnabled");
@@ -33,13 +33,13 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
          {
             m_bindings.bindAction(m_musicEnabledCheckbox, "change", [this](Rocket::Core::Event& event) { onMusicEnabledChange(event); });
          }
-         
+
          m_soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
          if(m_soundEnabledCheckbox != nullptr)
          {
             m_bindings.bindAction(m_soundEnabledCheckbox, "change", [this](Rocket::Core::Event& event) { onSoundEnabledChange(event); });
          }
-         
+
          m_bindings.bindAction(optionsForm, "submit", [this](Rocket::Core::Event& event) { onSubmit(event); });
 
          loadSettings();
@@ -68,7 +68,7 @@ void TitleScreenSettingsMenu::loadSettings()
          m_musicEnabledCheckbox->RemoveAttribute("checked");
       }
    }
-   
+
    if(m_soundEnabledCheckbox != nullptr)
    {
       if(Settings::getCurrentSettings().isSoundEnabled())
@@ -122,7 +122,7 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event& event)
             {
                DEBUG("No error message supplied.");
             }
-            
+
             Settings::getCurrentSettings().revertVideoChanges();
             if(!GraphicsUtil::getInstance()->refreshVideoMode(errorMsg))
             {
@@ -130,7 +130,7 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event& event)
                {
                   DEBUG("%s", errorMsg->c_str());
                }
-               
+
                T_T("Failed to revert video mode!");
             }
          }

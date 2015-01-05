@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "EquipData.h"
@@ -48,9 +48,9 @@ void EquipData::serialize(Json::Value& outputJson) const
    m_secondaryOffhand.serialize(outputJson["Off2"]);
    m_garment.serialize(outputJson["Garment"]);
    m_feet.serialize(outputJson["Feet"]);
-   
+
    int numAccessories = m_accessories.size();
-   
+
    Json::Value accessoriesNode(Json::arrayValue);
    accessoriesNode.resize(numAccessories);
    for(int i = 0; i < numAccessories; ++i)
@@ -70,11 +70,11 @@ std::vector<EquipSlot*> EquipData::getSlots()
    slots.push_back(&m_secondaryOffhand);
    slots.push_back(&m_garment);
    slots.push_back(&m_feet);
-   
+
    for(auto& accessory : m_accessories)
    {
       slots.push_back(&accessory);
    }
-   
+
    return slots;
 }

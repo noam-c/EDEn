@@ -30,22 +30,22 @@ std::unique_ptr<Aspect> Aspect::loadAspect(const std::string& aspectId)
 {
    const std::string path = std::string("data/aspects/") + aspectId + ".eda";
    DEBUG("Loading aspect %s in file %s", aspectId.c_str(), path.c_str());
-   
+
    std::ifstream input(path.c_str());
    if(!input)
    {
       T_T("Failed to open aspect file for reading.");
    }
-   
+
    Json::Value jsonRoot;
    input >> jsonRoot;
-   
+
    if(jsonRoot.isNull())
    {
       DEBUG("No root element was found.");
       T_T("Failed to parse aspect data.");
    }
-   
+
    return std::unique_ptr<Aspect>(new Aspect(jsonRoot));
 }
 
@@ -53,7 +53,7 @@ Aspect::Aspect(const Json::Value& aspectToLoad)
 {
    m_id = aspectToLoad[Aspect::ID_ATTRIBUTE].asString();
    m_name = aspectToLoad[Aspect::NAME_ATTRIBUTE].asString();
-   
+
    parseStatBonuses(aspectToLoad);
    parseSkillTree(aspectToLoad);
 }
@@ -78,9 +78,9 @@ void Aspect::parseSkillTree(const Json::Value& aspectToLoad)
       {
          UsableId skillId = (*iter)[Aspect::ID_ATTRIBUTE].asUInt();
          const Json::Value& prereqsNode = (*iter)[Aspect::PREREQUISITES_ELEMENT];
-         
+
          PrerequisiteList prereqs;
-         
+
          if(prereqsNode.isArray())
          {
             for(Json::Value::const_iterator iter = prereqsNode.begin(); iter != prereqsNode.end(); ++iter)
@@ -123,7 +123,7 @@ void Aspect::validateSkillTree() const
          T_T("Skill tree for aspect has a duplicated skill");
       }
    }
-   
+
    // Validate that there aren't any prerequisite cycles
    // by using graph coloring
    int currentColor = 0;
@@ -145,7 +145,7 @@ void Aspect::validateSkillTree() const
       {
          int currentNode = bfsQueue.front();
          bfsQueue.pop();
-         
+
          if(traversedColor[currentNode] >= 0)
          {
             if(traversedColor[currentNode] == currentColor)
@@ -160,7 +160,7 @@ void Aspect::validateSkillTree() const
             // Color the node with the current color
             traversedColor[currentNode] = currentColor;
          }
-         
+
          // Push all of this node's prerequisites into the breadth-first search queue
          PrerequisiteList prereqs = m_skillTree[currentNode].second;
          for(const auto& prereq : prereqs)
@@ -176,7 +176,7 @@ void Aspect::validateSkillTree() const
             {
                T_T("One of the skills in this aspect's tree has a prerequisite that isn't in the tree.")
             }
-            
+
             int indexOfPrereq = (skillNodeIter - m_skillTree.begin());
             bfsQueue.push(indexOfPrereq);
          }
@@ -198,7 +198,7 @@ int Aspect::getAspectBonus(const std::string& stat, unsigned int level) const
    {
       return iter->second.getBonusForLevel(level);
    }
-   
+
    return 0;
 }
 
@@ -221,6 +221,6 @@ std::vector<UsableId> Aspect::getAvailableSkills(const std::vector<UsableId>& ad
          }
       }
    }
-   
+
    return availableSkills;
 }

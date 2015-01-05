@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef USABLE_H
@@ -39,7 +39,7 @@ class Usable
 
    /** The unique identifier of this usable. */
    const UsableId m_id;
-   
+
    /** The name of this usable. */
    const std::string m_name;
 
@@ -61,7 +61,7 @@ class Usable
        * @param usableNode The JSON node containing the usable metadata to load.
        */
       Usable(Json::Value& usableNode);
-   
+
       /**
        * Destructor.
        */
@@ -71,7 +71,7 @@ class Usable
        * @return The unique identifier of this usable.
        */
       UsableId getId() const;
-      
+
       /**
        * @return The name of this usable.
        */

@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "EquipSlot.h"
@@ -21,13 +21,13 @@ void EquipSlot::load(const Metadata& metadata, const Json::Value& inputJson)
    {
       return;
    }
-   
+
    const Json::Value& equippedIdNode = inputJson["equipped"];
    if(equippedIdNode.isInt())
    {
       equipped = metadata.getItem(equippedIdNode.asInt());
    }
-   
+
    const Json::Value& acceptedTypesNode = inputJson["types"];
    int numAcceptedTypes = acceptedTypesNode.size();
    if(numAcceptedTypes > 0)
@@ -38,7 +38,7 @@ void EquipSlot::load(const Metadata& metadata, const Json::Value& inputJson)
          acceptedTypes[i] = acceptedTypesNode[i].asInt();
       }
    }
-   
+
    const Json::Value& enabledNode = inputJson["enabled"];
    if(enabledNode.isBool())
    {
@@ -52,7 +52,7 @@ void EquipSlot::serialize(Json::Value& slotNode) const
    {
       slotNode["equipped"] = equipped->getId();
    }
-   
+
    int numAcceptedTypes = acceptedTypes.size();
    if(numAcceptedTypes > 0)
    {
@@ -62,10 +62,10 @@ void EquipSlot::serialize(Json::Value& slotNode) const
       {
          acceptedTypesNode[i] = acceptedTypes[i];
       }
-      
+
       slotNode["types"] = acceptedTypesNode;
    }
-   
+
    if(!enabled)
    {
       slotNode["enabled"] = false;

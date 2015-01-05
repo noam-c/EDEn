@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "MainMenu.h"
@@ -146,7 +146,7 @@ void MainMenu::listKeyDown(Rocket::Core::Event& event)
 
       child = child->GetNextSibling();
    }
-   
+
    if(child == nullptr)
    {
       return;

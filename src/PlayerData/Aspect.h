@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef ASPECT_H
@@ -70,35 +70,35 @@ class Aspect
           */
          int getBonusForLevel(unsigned int level) const;
    };
-   
+
    /** The unique ID of the aspect. */
    std::string m_id;
-   
+
    /** The displayed name of the aspect. */
    std::string m_name;
-   
+
    /** A list of prerequisite skills. */
    typedef std::vector<UsableId> PrerequisiteList;
-   
+
    /** A node containing a skill ID and its prerequisites. */
    typedef std::pair<UsableId, PrerequisiteList> SkillNode;
-   
+
    /** A directed graph of skills, where each skill is connected to its prerequisites */
    typedef std::vector<SkillNode> SkillGraph;
-   
+
    /** The skill tree for the Aspect's skills and prerequisites */
    SkillGraph m_skillTree;
-   
+
    /** The set of stat attribute bonuses granted by the Aspect. */
    std::map<std::string, StatBonusCalculation> m_statBonusCalculations;
-   
+
    /**
     * Constructor.
     *
     * @param aspectToLoad The JSON node representing the Aspect.
     */
    Aspect(const Json::Value& aspectToLoad);
-   
+
    /**
     * Loads the stat bonuses for the aspect.
     *
@@ -117,7 +117,7 @@ class Aspect
     * Validates that the Aspect's skill tree is well-formed
     */
    void validateSkillTree() const;
-   
+
    public:
       /**
        * Loads the aspect data using the given ID.
@@ -142,7 +142,7 @@ class Aspect
        * @return The bonus granted to the attribute, proportional to the given level.
        */
       int getAspectBonus(const std::string& stat, unsigned int level) const;
-   
+
       std::vector<UsableId> getAvailableSkills(const std::vector<UsableId>& adeptSkills) const;
 };
 

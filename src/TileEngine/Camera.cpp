@@ -75,23 +75,23 @@ shapes::Point2D Camera::calculateCameraFocalOffset() const
          // center the focal point horizontally
          cameraFocalOffset.x = m_focalPoint.x - (m_viewportSize.width / 2);
          cameraFocalOffset.x = std::max(cameraFocalOffset.x, 0);
-         
+
          const signed int rightCameraBoundary = static_cast<signed int>(m_sceneSize.width - m_viewportSize.width);
          cameraFocalOffset.x = -std::min(cameraFocalOffset.x, rightCameraBoundary);
       }
-      
+
       if(m_offset.y == 0)
       {
          // Offset the camera's focal point by half the screen height to
          // center the focal point vertically
          cameraFocalOffset.y = m_focalPoint.y - (m_viewportSize.height / 2);
          cameraFocalOffset.y = std::max(cameraFocalOffset.y, 0);
-         
+
          const signed int bottomCameraBoundary = static_cast<signed int>(m_sceneSize.height - m_viewportSize.height);
          cameraFocalOffset.y = -std::min(cameraFocalOffset.y, bottomCameraBoundary);
       }
    }
-   
+
    return cameraFocalOffset;
 }
 

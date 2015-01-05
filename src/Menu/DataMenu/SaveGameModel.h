@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef SAVE_GAME_MODEL_H
@@ -32,37 +32,37 @@ class SaveGameModel
 
    /** The list of savegame files and their respective data. */
    std::vector<std::pair<std::string, std::unique_ptr<PlayerDataSummary>>> m_saveGames;
-   
+
    /**
     * Refreshes the list of save games.
     */
    void refreshSaveGames();
-   
+
    /**
     * Initializes the data menu pane and populates the sidebar.
     */
    void initialize();
-   
+
    public:
       /**
        * Constructor.
        */
       SaveGameModel(SaveMenu& saveMenu, const Metadata& metadata);
-      
+
       /**
        * Saves the given player data to the given save slot.
        *
        * @param slotIndex The slot at which the game will be saved.
        */
       void saveToSlot(const PlayerData& playerData, const SaveLocation& saveLocation, size_t index);
-   
+
       /**
        * Loads player data from the given save slot.
        *
        * @param slotIndex The slot at which the game will be saved.
        */
       std::tuple<std::shared_ptr<PlayerData>, SaveLocation> loadSaveGame(size_t index) const;
-   
+
       /**
        * @return a read-only reference to a save game.
        */

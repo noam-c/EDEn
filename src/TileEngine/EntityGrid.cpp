@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "EntityGrid.h"
@@ -60,7 +60,7 @@ const shapes::Point2D& EntityGrid::getMapEntrance(const std::string& exitedMapNa
    {
       T_T("Requested map entry point when map does not exist.");
    }
-   
+
    return map->getMapEntrance(exitedMapName);
 }
 
@@ -85,7 +85,7 @@ void EntityGrid::setMapData(std::weak_ptr<const Map> mapData)
 
    const unsigned int collisionMapHeight = collisionMapSize.height;
    const unsigned int collisionMapWidth = collisionMapSize.width;
-   
+
    m_collisionMap.resize(collisionMapSize);
    for(unsigned int x = 0; x < collisionMapWidth; ++x)
    {
@@ -107,7 +107,7 @@ const std::string& EntityGrid::getMapName() const
    {
       T_T("Requested map name when map does not exist.");
    }
-   
+
    return map->getName();
 }
 
@@ -181,7 +181,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
    {
       return nullptr;
    }
-   
+
    shapes::Point2D adjacentLocation = actor->getLocation();
    const shapes::Size& actorSize = actor->getSize();
    const MovementDirection direction = actor->getDirection();
@@ -204,9 +204,9 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
       default:
       {
          break;
-      }   
+      }
    }
-   
+
    switch(direction)
    {
       case UP_RIGHT:
@@ -233,7 +233,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
    int rectRight = std::min(m_collisionMapBounds.getWidth(), (adjacentLocation.x + actorSize.width - 1)/MOVEMENT_TILE_SIZE);
    int rectTop = std::max(0, adjacentLocation.y/MOVEMENT_TILE_SIZE);
    int rectBottom = std::min(m_collisionMapBounds.getHeight(), (adjacentLocation.y + actorSize.height - 1)/MOVEMENT_TILE_SIZE);
-   
+
    for(int rectY = rectTop; rectY <= rectBottom; ++rectY)
    {
       for(int rectX = rectLeft; rectX <= rectRight; ++rectX)
@@ -245,7 +245,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
          }
       }
    }
-   
+
    return nullptr;
 }
 
@@ -255,14 +255,14 @@ bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) c
    {
       return false;
    }
-   
+
    shapes::Rectangle areaRect = getCollisionMapEdges(area);
-   
+
    if(!m_collisionMapBounds.contains(areaRect))
    {
       return false;
    }
-   
+
    for(int collisionMapY = areaRect.top; collisionMapY <= areaRect.bottom; ++collisionMapY)
    {
       for(int collisionMapX = areaRect.left; collisionMapX <= areaRect.right; ++collisionMapX)
@@ -275,7 +275,7 @@ bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) c
             if(collisionTile.entityType != state.entityType || collisionTile.entity != state.entity)
             {
                return false;
-            } 
+            }
          }
       }
    }
@@ -300,7 +300,7 @@ bool EntityGrid::occupyArea(const shapes::Rectangle& area, TileState state)
 void EntityGrid::freeArea(const shapes::Rectangle& areaToFree)
 {
    shapes::Rectangle rectToFree = getCollisionMapEdges(areaToFree);
-   
+
    setArea(rectToFree, TileState(TileState::FREE));
 }
 
@@ -330,7 +330,7 @@ bool EntityGrid::isAreaFree(const shapes::Rectangle& area) const
          }
       }
    }
-   
+
    return true;
 }
 
@@ -343,16 +343,16 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
 
    const shapes::Point2D& source = actor->getLocation();
    const shapes::Size& actorSize = actor->getSize();
-   
+
    const shapes::Size mapPixelSize = shapes::Size(m_collisionMapBounds.getWidth(), m_collisionMapBounds.getHeight()) * MOVEMENT_TILE_SIZE;
-   
+
    shapes::Point2D lastAvailablePoint = source;
-   
+
    while(distance > 0)
    {
       int distanceTraversed = std::min(distance, MOVEMENT_TILE_SIZE / 2);
       distance -= distanceTraversed;
-      
+
       // Get the next point for movement, and clamp it to the map Size
       shapes::Point2D nextPoint;
       nextPoint.x = lastAvailablePoint.x + xDirection * distanceTraversed;

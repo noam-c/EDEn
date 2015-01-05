@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "ShortcutBar.h"
@@ -198,7 +198,7 @@ void ShortcutBar::refresh()
          shortcut.usableType == Shortcut::ITEM ?
             static_cast<const Usable*>(m_metadata.getItem(shortcut.usableId)) :
             static_cast<const Usable*>(m_metadata.getSkill(shortcut.usableId));
-      
+
       Rocket::Core::Element* shortcutElement = m_shortcutBarDocument->CreateElement("div");
       Rocket::Core::ElementAttributes shortcutElementAttributes;
       shortcutElementAttributes.Set("class", "shortcut");

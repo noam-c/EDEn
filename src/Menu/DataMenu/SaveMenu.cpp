@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "SaveMenu.h"
@@ -49,7 +49,7 @@ SaveMenu::~SaveMenu()
 {
    m_menuDocument->Close();
    m_menuDocument->RemoveReference();
-   
+
    if(m_confirmDocument != nullptr)
    {
       m_confirmDocument->Close();
@@ -60,7 +60,7 @@ SaveMenu::~SaveMenu()
 void SaveMenu::initializeMenu()
 {
    m_menuDocument = m_rocketContext->LoadDocument("data/gui/datapane.rml");
-   
+
    if(m_menuDocument != nullptr)
    {
       m_menuDocument->Show();
@@ -109,25 +109,25 @@ void SaveMenu::activate()
 bool SaveMenu::step(long timePassed)
 {
    if(m_finished) return false;
-   
+
    m_scheduler.runCoroutines(timePassed);
    bool done = waitForInputEvent();
-   
+
    /* The menu shouldn't run too fast */
    SDL_Delay (1);
-   
+
    return !done;
 }
 
 bool SaveMenu::waitForInputEvent()
 {
    SDL_Delay (1);
-   
+
    SDL_Event event;
-   
+
    /* Check for events */
    SDL_PollEvent(&event);
-   
+
    switch (event.type)
    {
       case SDL_KEYDOWN:
@@ -143,7 +143,7 @@ bool SaveMenu::waitForInputEvent()
                break;
             }
          }
-         
+
          break;
       }
       case SDL_QUIT:
@@ -155,7 +155,7 @@ bool SaveMenu::waitForInputEvent()
          break;
       }
    }
-   
+
    handleEvent(event);
    return false;
 }
@@ -163,7 +163,7 @@ bool SaveMenu::waitForInputEvent()
 void SaveMenu::listKeyDown(Rocket::Core::Event& event)
 {
    Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
-   
+
    switch(key)
    {
       case Rocket::Core::Input::KI_UP:
@@ -173,13 +173,13 @@ void SaveMenu::listKeyDown(Rocket::Core::Event& event)
       default:
          return;
    }
-   
+
    Rocket::Core::Element* list = m_menuDocument->GetElementById("menu");
    if(list == nullptr)
    {
       return;
    }
-   
+
    Rocket::Core::Element* child = list->GetFirstChild();
    while(child != nullptr)
    {
@@ -187,15 +187,15 @@ void SaveMenu::listKeyDown(Rocket::Core::Event& event)
       {
          break;
       }
-      
+
       child = child->GetNextSibling();
    }
-   
+
    if(child == nullptr)
    {
       return;
    }
-   
+
    if(key == Rocket::Core::Input::KI_RETURN)
    {
       child->Click();
@@ -245,7 +245,7 @@ void SaveMenu::hideConfirmDialog()
    {
       // Need to call Show without focus flags first, to release modal focus :(
       m_confirmDocument->Show();
-      
+
       m_confirmDocument->Hide();
    }
 }
@@ -277,13 +277,13 @@ void SaveMenu::cancelClicked(Rocket::Core::Event& event)
 void SaveMenu::saveGameClicked(Rocket::Core::Event& event)
 {
    Rocket::Core::Element* target = event.GetTargetElement();
-   
+
    // Move up the DOM to the datagridrow item holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
    {
       target = target->GetParentNode();
    }
-   
+
    if(target != nullptr)
    {
       // If we found a row element, cast it and get its index

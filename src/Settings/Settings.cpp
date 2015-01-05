@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Settings.h"
@@ -22,7 +22,7 @@ Settings& Settings::getCurrentSettings()
 void Settings::initialize()
 {
    std::ifstream inputFile(Settings::DEFAULT_SETTINGS_PATH.c_str());
-   
+
    if(inputFile)
    {
       Settings::currentSettings.load(inputFile);
@@ -40,7 +40,7 @@ Settings::Settings(bool isSnapshot) :
    m_fullScreenEnabled(false),
    m_resolution(1024, 768, 32)
 {
-   
+
 }
 
 void Settings::setSettings(const Settings& other)
@@ -71,18 +71,18 @@ void Settings::save(std::ostream& output)
    {
       T_T("Failed to write settings data.");
    }
-   
+
    Json::Value jsonRoot;
-   
+
    jsonRoot["musicEnabled"] = m_musicEnabled;
    jsonRoot["soundEnabled"] = m_soundEnabled;
    jsonRoot["fullScreenEnabled"] = m_fullScreenEnabled;
-   
+
    Json::Value& resolutionSettings = jsonRoot["resolution"] = Json::Value(Json::objectValue);
    resolutionSettings["bitsPerPixel"] = m_resolution.getBitsPerPixel();
    resolutionSettings["height"] = m_resolution.getHeight();
    resolutionSettings["width"] = m_resolution.getWidth();
-   
+
    output << jsonRoot;
 
    if(m_settingsSnapshot)
@@ -97,16 +97,16 @@ void Settings::load(std::istream& input)
    {
       T_T("Failed to read settings data.");
    }
-   
+
    Json::Value jsonRoot;
    input >> jsonRoot;
-   
+
    if(jsonRoot.isNull())
    {
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse settings.");
    }
-   
+
    m_musicEnabled = jsonRoot.get("musicEnabled", true).asBool();
    m_soundEnabled = jsonRoot.get("soundEnabled", true).asBool();
    m_fullScreenEnabled = jsonRoot.get("fullScreenEnabled", true).asBool();
@@ -115,7 +115,7 @@ void Settings::load(std::istream& input)
    unsigned int resolutionBitsPerPixel = resolutionSettings.get("bitsPerPixel", 32).asUInt();
    unsigned int resolutionHeight = resolutionSettings.get("height", 768).asUInt();
    unsigned int resolutionWidth = resolutionSettings.get("width", 1024).asUInt();
-   
+
    m_resolution = Settings::Resolution(resolutionWidth, resolutionHeight, resolutionBitsPerPixel);
 
    if(m_settingsSnapshot)

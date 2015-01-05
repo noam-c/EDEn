@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Scheduler.h"
@@ -201,7 +201,7 @@ void Scheduler::runCoroutines(long timePassed)
       {
          // Run/resume the coroutine
          bool scriptIsFinished = m_runningCoroutine->resume(timePassed);
-   
+
          if(scriptIsFinished)
          {
             finished(m_runningCoroutine);
@@ -227,7 +227,7 @@ void Scheduler::runCoroutines(long timePassed)
       DEBUG("Removing coroutine %d from ready list...", coroutine->getId());
       m_readyCoroutines.erase(coroutine);
    }
-   
+
    m_finishedCoroutines.clear();
    m_tasksToDelete.clear();
 }

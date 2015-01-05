@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "LuaWrapper.hpp"
@@ -35,6 +35,6 @@ int MapTriggerCallback::operator()(Actor* actor)
       luaW_push<Actor>(m_luaVM, actor);
       return lua_pcall(m_luaVM, 1, 0, 0);
    }
-   
+
    return lua_error(m_luaVM);
 }

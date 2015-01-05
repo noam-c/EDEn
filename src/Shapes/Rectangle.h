@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef RECTANGLE_H
@@ -30,7 +30,7 @@ namespace shapes
 
       /** The X-location of the right edge of the rectangle. */
       int right;
-      
+
       /**
        * Default constructor.
        * Creates a rectangle at origin with no size.

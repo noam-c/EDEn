@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef MESSAGE_PIPE_H
@@ -23,17 +23,17 @@ namespace messaging
    class MessagePipe
    {
       class ListenerListBase {};
-      
+
       template<typename T> class ListenerList : public ListenerListBase
       {
          std::set<Listener<T>*> m_listeners;
-         
+
          public:
             void registerListener(Listener<T>* listener)
             {
                m_listeners.insert(std::move(listener));
             }
-            
+
             void unregisterListener(Listener<T>* listener)
             {
                m_listeners.erase(std::move(listener));
@@ -49,7 +49,7 @@ namespace messaging
       };
 
       std::map<std::type_index, std::unique_ptr<ListenerListBase>> listenerLists;
-      
+
       template<typename T> ListenerList<T>* getListenerList() const
       {
          auto listenerListIter = listenerLists.find(std::type_index(typeid(T)));
@@ -57,13 +57,13 @@ namespace messaging
          {
             return static_cast<ListenerList<T>*>(listenerListIter->second.get());
          }
-         
+
          return nullptr;
       }
-      
+
       template<typename T> ListenerList<T>* getOrCreateListenerList() {
          auto listenerList = getListenerList<T>();
-         
+
          if(listenerList)
          {
             return listenerList;
@@ -75,7 +75,7 @@ namespace messaging
                                std::forward_as_tuple(newListenerList));
          return newListenerList;
       }
-      
+
       public:
          template<typename T> void registerListener(Listener<T>* listener)
          {

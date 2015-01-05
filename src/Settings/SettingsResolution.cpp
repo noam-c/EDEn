@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Settings.h"
@@ -28,7 +28,7 @@ Settings::Resolution& Settings::Resolution::operator=(const Settings::Resolution
       width = other.width;
       bitsPerPixel = other.bitsPerPixel;
    }
-   
+
    return *this;
 }
 

@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef TILE_STATE_H
@@ -20,20 +20,20 @@ struct TileState
    {
       /** No entity is on the tile */
       FREE,
-      
+
       /** A character is on the tile */
       ACTOR,
-      
+
       /** An obstacle (or impassable terrain) is on the tile */
       OBSTACLE,
    };
-   
+
    /** The type of entity in the tile. */
    EntityType entityType;
-   
+
    /** The entity in the tile. */
    void* entity;
-   
+
    /**
     * Constructor.
     *

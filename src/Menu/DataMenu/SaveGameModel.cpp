@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "SaveGameModel.h"
@@ -27,32 +27,32 @@ SaveGameModel::SaveGameModel(SaveMenu& saveMenu, const Metadata& metadata) :
 void SaveGameModel::refreshSaveGames()
 {
    m_saveGames.clear();
-   
+
    struct dirent *entry;
    DIR *dp;
-   
+
    /** \todo Extract HARDCODED path into a constant. */
    dp = opendir("data/savegames");
    if (dp == nullptr)
    {
       T_T("Failed to open data/savegames for save game listing.");
    }
-   
+
    while((entry = readdir(dp)))
    {
       std::string filename(entry->d_name);
       if(filename.length() > 4 && filename.substr(filename.length() - 4, 4) == ".edd")
       {
          auto saveGameData = std::unique_ptr<PlayerDataSummary>(new PlayerDataSummary(m_metadata));
-         
+
          /** \todo Extract HARDCODED path into a constant. */
          std::string path = "data/savegames/" + filename;
          saveGameData->load(path);
-         
+
          m_saveGames.emplace_back(path, std::move(saveGameData));
       }
    }
-   
+
    closedir(dp);
 }
 

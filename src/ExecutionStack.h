@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef EXECUTION_STACK_H
@@ -16,7 +16,7 @@ class Scheduler;
 
 /**
  * The heart of the game's execution.
- * Holds different states of the game (Title Screen, Tile Engine, etc.) 
+ * Holds different states of the game (Title Screen, Tile Engine, etc.)
  * and allows for easy change of state.
  * Main functionality is calling advanceFrame and drawFrame, and destroying finished states in the execute() function.
  *
@@ -50,7 +50,7 @@ class ExecutionStack
        * Destructor.
        */
       ~ExecutionStack();
-       
+
       /**
        * Pushes (and activates) a new game state.
        * After this method call, newState is responsible
@@ -61,12 +61,12 @@ class ExecutionStack
        * @param transitionState an optional transition state used to introduce the new state visually
        */
       void pushState(std::shared_ptr<GameState> newState, std::shared_ptr<GameState> transitionState = nullptr);
-      
+
       /**
        * @return The currently executing game state.
        */
       std::shared_ptr<GameState> getCurrentState() const;
-      
+
       /**
        * @return The currently executing game state's scheduler.
        */

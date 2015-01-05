@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef ANIMATION_H
@@ -21,16 +21,16 @@ class Animation
 {
    /** The name of this animation. */
    const std::string& m_name;
-   
+
    /** The sequence of frames in this animation. */
    const FrameSequence& m_frameSequence;
-   
+
    /** The current frame that we are at in the list. */
    FrameSequence::const_iterator m_curr;
-   
+
    /** The time left until the Animation needs to move to the next frame. */
    long m_timeToNextAnimation;
-   
+
 public:
    /**
     * Constructor.
@@ -48,13 +48,13 @@ public:
     * @param timePassed The amount of time that has passed.
     */
    void update(long timePassed);
-   
+
    /**
     * @return The current node index (the index for the frame this animation
     *         is currently on).
     */
    int getIndex() const;
-   
+
    /**
     * @return The name of the animation.
     */

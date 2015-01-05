@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef PATHFINDER_H
@@ -41,13 +41,13 @@ class Pathfinder
 
    /** The future for the asynchronous calculation of the grid's RFW matrices. */
    std::shared_future<RoyFloydWarshallMatrices> m_royFloydWarshallCalculation;
-   
+
    /** The size (in pixels) of each tile. */
    int m_movementTileSize;
-   
+
    /** The grid to compute paths on. */
    const Grid<TileState>* m_collisionGrid;
-   
+
    /** The bounds (in tiles) of the grid. */
    const shapes::Rectangle* m_collisionGridBounds;
 
@@ -56,12 +56,12 @@ class Pathfinder
     * to initialize the distance matrix and the successor matrix.
     */
    void initRoyFloydWarshallMatrices();
-   
+
    /**
     * @return true iff the Roy-Floyd-Warshall algorithm has completed execution for the map.
     */
    bool isRoyFloydWarshallCalculationReady() const;
-   
+
    public:
       /** A set of waypoints to move through in order to go from one point to another. */
       typedef std::list<shapes::Point2D> Path;
@@ -70,7 +70,7 @@ class Pathfinder
        * Constructor.
        */
       Pathfinder();
-      
+
       /**
        * Initializes the pathfinder for the given entity grid.
        *
@@ -89,7 +89,7 @@ class Pathfinder
        * @return The ideal best path from the source point to the destination point.
        */
       Path findBestPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const;
-      
+
       /**
        * Finds the shortest path from the source coordinates to the destination
        * around all obstacles and entities.
@@ -119,7 +119,7 @@ class Pathfinder
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
        *
-       * @return The best path computed by the Roy-Floyd-Warshall algorithm. 
+       * @return The best path computed by the Roy-Floyd-Warshall algorithm.
        */
       Path findRFWPath(const shapes::Point2D& src, const shapes::Point2D& dst, const RoyFloydWarshallMatrices& rfwMatrices) const;
 
@@ -158,7 +158,7 @@ class Pathfinder
        * A node used in A* search.
        */
       class AStarNode;
-      
+
       /**
        * Evaluate the neighbours of the evaluated node for A* search expansion.
        * Alters costs in the open set if cheaper paths are found,

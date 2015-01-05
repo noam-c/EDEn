@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Music.h"
@@ -78,13 +78,13 @@ void Music::play()
       // so we're done here.
       return;
    }
-   
+
    if(Mix_PlayMusic(m_music.get(), 0) < 0)
    {
       DEBUG("There was a problem playing the music: %s", Mix_GetError());
       Music::currentMusic.reset();
       return;
    }
-   
+
    Music::currentMusic = std::static_pointer_cast<Music>(shared_from_this());
 }

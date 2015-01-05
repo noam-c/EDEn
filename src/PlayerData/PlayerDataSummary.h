@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef PLAYER_DATA_SUMMARY_H
@@ -36,12 +36,12 @@ class PlayerDataSummary
 
    /** The roster of characters in the player's party or encountered by the player. */
    CharacterRoster m_roster;
-   
+
    void parseCharactersAndParty(Json::Value& rootElement);
 
    public:
       static const int PARTY_SIZE = 4;
-   
+
       /**
        * Constructor.
        */

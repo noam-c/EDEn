@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef ITEM_MENU_H
@@ -42,7 +42,7 @@ class ItemMenu: public MenuState
     * Initializes the item menu pane and populates the sidebar.
     */
    void initialize();
-   
+
    void itemClicked(Rocket::Core::Event& event);
    void useItem(int rowIndex);
    void dragStarted(Rocket::Core::Event& event);

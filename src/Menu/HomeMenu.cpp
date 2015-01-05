@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "HomeMenu.h"
@@ -112,7 +112,7 @@ void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, s
       default:
          break;
    }
-   
+
    if(newState)
    {
       newState->setCharacter(characterIndex);
@@ -132,7 +132,7 @@ void HomeMenu::pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<Men
       default:
          break;
    }
-   
+
    if(newState)
    {
       DEBUG("Pushing new menu state.");
@@ -143,7 +143,7 @@ void HomeMenu::pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<Men
 void HomeMenu::selectCharacter(int slotIndex, std::shared_ptr<MenuShell> menuShell)
 {
    DEBUG("Character selected at slot %d", slotIndex);
-   
+
    /**
     * \todo Add default destination menu here for when a player clicks
     *       on a character before clicking on a sidebar action.
@@ -153,6 +153,6 @@ void HomeMenu::selectCharacter(int slotIndex, std::shared_ptr<MenuShell> menuShe
       pushCharacterDependentMenu(m_selectedDestinationMenu, slotIndex, menuShell);
       DEBUG("Character-dependent menu state pushed onto stack.");
    }
-   
+
    m_selectedDestinationMenu = -1;
 }

@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef SPRITE_H
@@ -32,16 +32,16 @@ class Sprite
 
    /** The index of the current static frame within the sheet. -1 if an animation is used instead. */
    int m_frameIndex;
-   
+
    /** The animation structure to use to animate this sprite. nullptr if a static frame is used instead. */
    std::unique_ptr<Animation> m_animation;
-   
+
    /** The name of the current frame/animation being used. */
    std::string m_currName;
-   
+
    /** The direction that the current frame/animation is facing. */
    MovementDirection m_currDirection;
-   
+
    /**
     * @param direction A direction to convert to a string.
     *
@@ -74,7 +74,7 @@ class Sprite
        * @param sheet The new Spritesheet to use.
        */
       void setSheet(const std::shared_ptr<Spritesheet>& sheet);
-   
+
       /**
        * Set a static frame to draw for this sprite.
        *

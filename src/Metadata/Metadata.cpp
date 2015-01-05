@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Metadata.h"
@@ -63,7 +63,7 @@ void Metadata::loadItemMetadata()
                       std::forward_as_tuple(id),
                       std::forward_as_tuple(itemList[i]));
       DEBUG("Loaded item ID %d", id);
-   } 
+   }
 
    DEBUG("Item data loaded.");
 }

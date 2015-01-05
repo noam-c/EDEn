@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Actor.h"
@@ -25,7 +25,7 @@ Actor::MoveOrder::MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, con
    m_task(task),
    m_entityGrid(entityGrid),
    m_cumulativeDistanceCovered(0)
-{	
+{
 }
 
 Actor::MoveOrder::~MoveOrder()

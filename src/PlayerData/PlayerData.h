@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef PLAYER_DATA_H
@@ -69,7 +69,7 @@ class PlayerData
    static const char* CHARACTER_ELEMENT;
 
    static const char* SAVE_LOCATION_ELEMENT;
-   
+
    static const char* SHORTCUTS_ELEMENT;
 
    /** All the items that are in the player's item bag. Includes usables, keys, and unused equipment. */

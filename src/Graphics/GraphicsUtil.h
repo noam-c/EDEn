@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef GRAPHICS_UTIL_H
@@ -56,18 +56,18 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
 
    /** The registry used to track all the contexts for resolution changes. */
    RocketContextRegistry m_rocketContextRegistry;
-   
+
    bool m_fullScreenEnabled;
-   
+
    /** The screen width */
    unsigned int m_width;
-   
+
    /** The screen height */
    unsigned int m_height;
-   
+
    /** The bit depth of the screen buffer */
    unsigned int m_bitsPerPixel;
-   
+
    /** The x-offset to draw at (in pixels). */
    int m_currentXOffset;
 
@@ -80,7 +80,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
     * Initializes an OpenGL viewport and projection
     */
    void initSDL();
-   
+
    /**
     * Initializes SDL video mode.
     *
@@ -96,13 +96,13 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
    void initRocket();
 
    protected:
-      /** 
+      /**
        * Constructor.
        * Initializes SDL and OpenGL.
        * Initialize Rocket GUI library.
        */
       virtual void initialize();
-   
+
       /**
        * Singleton destructor.
        * Cleans up the following:
@@ -114,10 +114,10 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       virtual void finish();
 
    public:
-   
+
       bool isVideoModeRefreshRequired() const;
       bool refreshVideoMode(std::unique_ptr<std::string>& errorMsg);
-   
+
       /**
        * @return The extension manager for this graphical context.
        */
@@ -145,7 +145,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * Flush any enqueued GL commands and then flip the screen buffer
        */
       void flipScreen();
-   
+
       /**
        * Sets a camera offset to begin drawing at. Note that this offset is
        * absolute; the offset is from the origin, rather than from the current
@@ -161,7 +161,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        */
       void resetAbsoluteOffset();
 
-      /** 
+      /**
        *  Graphical effect: Fade to a specific colour in a specified time period
        *
        *  @param red   The amount of red   (0.0f <= red <= 1.0f)
@@ -170,7 +170,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        *  @param delay The amount of time taken for the fade (in milliseconds)
        */
       void FadeToColor(float red, float green, float blue, int delay);
-   
+
       /**
        * Clear the color buffers and reset the model matrix
        * \todo Come up with a better name for this (though that suggestion indicates that this method may not be good design).

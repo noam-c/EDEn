@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef CHARACTER_H
@@ -89,7 +89,7 @@ class Character
 
    /** Current stamina of the character. */
    int m_sp;
-  
+
    /** The equipment worn by this Character. */
    EquipData m_equipment;
 

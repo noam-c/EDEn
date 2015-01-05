@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "GraphicsUtil.h"
@@ -118,18 +118,18 @@ bool GraphicsUtil::initSDLVideoMode(std::unique_ptr<std::string>& errorMsg)
 
    // Enable Texture Mapping
    glEnable(GL_TEXTURE_2D);
-   
+
    // Sprites drawn to screen replace whatever is behind them (tiles, background)
    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-   
+
    // Set up the viewport and reset the projection matrix
    glViewport(0, 0, m_width, m_height);
    glMatrixMode(GL_PROJECTION);
    glLoadIdentity();
-   
+
    // Set the clear color to black
    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-   
+
    // Create a 2D orthogonal perspective (better for 2D games)
    glOrtho(0.0f, (float)m_width, (float)m_height, 0.0f, -1, 1);
 
@@ -192,7 +192,7 @@ bool GraphicsUtil::isVideoModeRefreshRequired() const
 {
    const Settings& currentSettings = Settings::getCurrentSettings();
    const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();
-   
+
    return
       currentSettings.isFullScreenEnabled() != m_fullScreenEnabled ||
       currentSettingsResolution.getWidth() != m_width ||
@@ -219,7 +219,7 @@ bool GraphicsUtil::refreshVideoMode(std::unique_ptr<std::string>& errorMsg)
          context->SetDimensions(Rocket::Core::Vector2i(m_width, m_height));
       }
    }
-   
+
    return success;
 }
 
@@ -282,7 +282,7 @@ void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
       glEnd();
 
       GraphicsUtil::getInstance()->flipScreen();
- 
+
       long timePassed = SDL_GetTicks() - time;
       alpha = ((timePassed*1.0f)/delay);
 

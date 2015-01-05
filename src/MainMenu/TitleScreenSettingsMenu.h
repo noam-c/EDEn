@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef TITLE_SCREEN_SETTINGS_MENU_H
@@ -42,16 +42,16 @@ class TitleScreenSettingsMenu: public GameState
 
    /** The title screen RML document */
    Rocket::Core::ElementDocument* m_titleSettingsDocument;
-   
+
    /** The music checkbox */
    Rocket::Core::Element* m_musicEnabledCheckbox;
-   
+
    /** The sound checkbox */
    Rocket::Core::Element* m_soundEnabledCheckbox;
-   
+
    /** The fullscreen checkbox */
    Rocket::Core::Element* m_fullScreenEnabledCheckbox;
-   
+
    /**
     * Poll and handle the next input event.
     *
@@ -97,7 +97,7 @@ class TitleScreenSettingsMenu: public GameState
        * @param gameContext The context containing the current player data and execution stack.
        */
       TitleScreenSettingsMenu(GameContext& gameContext);
-   
+
       /**
        * Destructor.
        */

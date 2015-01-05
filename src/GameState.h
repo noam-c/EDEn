@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef GAME_STATE_H
@@ -31,7 +31,7 @@ union SDL_Event;
 /**
  * This class abstractly represents a potential state for the game to enter
  * States can include "Title Screen", "Battle", "Field" and more.
- * Each GameState has a step function to perform state logic and a 
+ * Each GameState has a step function to perform state logic and a
  * draw function to perform graphics work
  *
  * Game states are pushed onto the ExecutionStack, which executes the most
@@ -67,7 +67,7 @@ class GameState
 
       /** The game context responsible for the game's data and settings. */
       GameContext& m_gameContext;
-      
+
       /** The Rocket context for any GUI created by the state. */
       Rocket::Core::Context* m_rocketContext;
 

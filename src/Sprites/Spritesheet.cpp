@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Spritesheet.h"
@@ -58,17 +58,17 @@ void Spritesheet::load(const std::string& path)
    {
       T_T(std::string("Error opening file: ") + dataPath);
    }
-   
+
    // Read in the JSON data in the file
    Json::Value jsonRoot;
    input >> jsonRoot;
-   
+
    if(jsonRoot.isNull())
    {
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse spritesheet data.");
    }
-   
+
    parseFrames(jsonRoot);
    parseAnimations(jsonRoot);
 
@@ -80,7 +80,7 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
    // Get the frames array in the spritesheet data
    Json::Value& framesElement = rootElement["frames"];
    m_numFrames = framesElement.size();
-   
+
    // This spritesheet is well-formed only if the "frames" element is a non-empty array
    // (i.e. there are frames in the spritesheet)
    if(!framesElement.isArray() || m_numFrames <= 0)
@@ -94,7 +94,7 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
    for(int i = 0; i < m_numFrames; ++i)
    {
       Json::Value& currFrame = framesElement[i];
-      
+
       // Get the current frame name
       std::string frameName = currFrame["name"].asString();
       if(frameName == UNTITLED_LINE)
@@ -102,7 +102,7 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
          // Skip untitled frames.
          continue;
       }
-      
+
       // Make sure this frame name has not already been used in this file
       if(m_frameIndices.find(frameName) != m_frameIndices.end())
       {
@@ -141,7 +141,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
       DEBUG("No animations found in spritesheet.");
       return;
    }
-   
+
    for(int i = 0; i < numAnimations; ++i)
    {
       Json::Value& currAnimation = animsElement[i];
@@ -153,14 +153,14 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
          // Skip untitled animations
          continue;
       }
-      
+
       // Make sure this animation name has not already been used in this file
       if(m_animationList.find(animationName) != m_animationList.end())
       {
          DEBUG("Duplicated animation name %s in spritesheet.", animationName.c_str());
          T_T("Parse error reading spritesheet.");
       }
-      
+
       // Get the frames of the animation
       auto frameSequence = std::unique_ptr<FrameSequence>(new FrameSequence());
 
@@ -185,7 +185,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
             DEBUG("Found invalid frame name '%s' in animation %s", frameName.c_str(), animationName.c_str());
             T_T("Parse error reading spritesheet.");
          }
-         
+
          int frameIndex = frameIndexIter->second;
 
          DEBUG("Animation %s: Adding node with index %d", animationName.c_str(), frameIndex);
@@ -250,7 +250,7 @@ void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
    float frameBottom = frame.bottom / float(m_size.height);
    float frameLeft = frame.left / float(m_size.width);
    float frameRight = frame.right / float(m_size.width);
-   
+
    float destLeft = float(point.x);
    float destBottom = float(point.y);
    float destRight = destLeft + frameWidth;

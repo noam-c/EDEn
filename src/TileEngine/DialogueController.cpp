@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "DialogueController.h"
@@ -74,7 +74,7 @@ void DialogueController::updateDialogueBox()
    if(!m_lineQueue.empty())
    {
       m_mainDialogue->GetOwnerDocument()->Show();
-      
+
       bool isSpeech = m_lineQueue.front()->type == SAY;
       m_dialogueBoxDocument->SetClass("speech", isSpeech);
       m_dialogueBoxDocument->SetClass("narration", !isSpeech);
@@ -127,7 +127,7 @@ void DialogueController::advanceDialogue()
    }
 
    m_dialogueBoxDocument->SetClass("dialogueComplete", dialogueComplete());
-   
+
    // Display the necessary piece of text in the text box
    dialogue = dialogue.substr(0, m_charsToShow);
    m_mainDialogue->SetInnerRML(dialogue.c_str());
@@ -174,7 +174,7 @@ bool DialogueController::nextLine()
       return false;
    }
 
-   // If the dialogue is finished, clear the dialogue box and 
+   // If the dialogue is finished, clear the dialogue box and
    // move on to the next line
    clearDialogue();
    updateDialogueBox();
@@ -243,7 +243,7 @@ DialogueController::Line::Line(LineType type, const std::string& dialogue, const
          closeIndex = nextCloseIndex;
          m_openScriptBrackets.push(openIndex);
          m_closeScriptBrackets.push(closeIndex);
-         DEBUG("Found embedded script starting at %d, ending at %d", openIndex, closeIndex); 
+         DEBUG("Found embedded script starting at %d, ending at %d", openIndex, closeIndex);
       }
    }
 }

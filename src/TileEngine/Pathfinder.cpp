@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "Pathfinder.h"
@@ -42,7 +42,7 @@ bool Pathfinder::isRoyFloydWarshallCalculationReady() const
    }
 
    std::future_status futureStatus = m_royFloydWarshallCalculation.wait_for(std::chrono::seconds(0));
-   
+
    return futureStatus == std::future_status::ready;
 }
 
@@ -61,55 +61,55 @@ Pathfinder::Path Pathfinder::findReroutedPath(const EntityGrid& entityGrid, cons
 std::vector<shapes::Point2D> Pathfinder::getAdjacentPoints(const shapes::Point2D& point, const shapes::Rectangle& bounds)
 {
    std::vector<shapes::Point2D> points;
-   
+
    if(point.x > bounds.left)
    {
       // Left point
       points.emplace_back(point.x - 1, point.y);
    }
-   
+
    if(point.x < bounds.right - 1)
    {
       // Right point
       points.emplace_back(point.x + 1, point.y);
    }
-   
+
    if(point.y > bounds.top)
    {
       // Upper point
       points.emplace_back(point.x, point.y - 1);
    }
-   
+
    if(point.y < bounds.bottom - 1)
    {
       // Lower point
       points.emplace_back(point.x, point.y + 1);
    }
-   
+
    if(point.x > bounds.left && point.y > bounds.top)
    {
       // Upper-left point
       points.emplace_back(point.x - 1, point.y - 1);
    }
-   
+
    if(point.x > bounds.left && point.y < bounds.bottom - 1)
    {
       // Lower-left point
       points.emplace_back(point.x - 1, point.y + 1);
    }
-   
+
    if(point.x < bounds.right - 1 && point.y > bounds.top)
    {
       // Upper-right point
       points.emplace_back(point.x + 1, point.y - 1);
    }
-   
+
    if(point.x < bounds.right - 1 && point.y < bounds.bottom - 1)
    {
       // Lower-right point
       points.emplace_back(point.x + 1, point.y + 1);
    }
-   
+
    return points;
 }
 
@@ -122,23 +122,23 @@ std::vector<shapes::Point2D> Pathfinder::getAdjacentPoints(const shapes::Point2D
 class Pathfinder::AStarNode
 {
 private:
-   
+
    /** The actual distance cost from the origin node to this node. */
    float gCost;
-   
+
    /** The heuristic distance cost from this node to the destination node. */
    float hCost;
-   
+
    /** The total expected cost of traveling through this node from the origin to the destination. */
    float fCost;
-   
+
 public:
    /** The point that this node represents. */
    shapes::Point2D point;
-   
+
    /** The predecessor of this node (the previous node on the shortest discovered path to this node). */
    std::shared_ptr<AStarNode const> parent;
-   
+
    /**
     * Constructor.
     *
@@ -148,7 +148,7 @@ public:
     * @param parent The predecessor of this node on a path from the origin.
     */
    AStarNode(shapes::Point2D point, float gCost, float hCost, const std::shared_ptr<AStarNode> parent = std::shared_ptr<AStarNode>()) : gCost(gCost), hCost(hCost), fCost(gCost + hCost), point(point), parent(parent) {}
-   
+
    /**
     * Sets a new actual travel cost from the origin to this node.
     *
@@ -159,7 +159,7 @@ public:
       gCost = newCost;
       fCost = gCost + hCost;
    }
-   
+
    /**
     * Sets a new actual heuristic cost from this node to the destination.
     *
@@ -170,7 +170,7 @@ public:
       hCost = newCost;
       fCost = gCost + hCost;
    }
-   
+
    /**
     * @return The actual distance cost required to travel from the origin to this node.
     */
@@ -178,7 +178,7 @@ public:
    {
       return gCost;
    }
-   
+
    /**
     * @return The estimated distance cost required to travel from this node to the destination.
     */
@@ -186,7 +186,7 @@ public:
    {
       return hCost;
    }
-   
+
    /**
     * @return The total expected distance cost required to use this node to travel between the origin and destination.
     */
@@ -194,7 +194,7 @@ public:
    {
       return fCost;
    }
-   
+
    /**
     * Comparison operation between two A* nodes. The lowest cost node is the one
     * with the lowest total estimated cost (F cost). In the case of a tie, the
@@ -226,9 +226,9 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
    const shapes::Point2D destinationTile = dst / m_movementTileSize;
 
    std::vector<std::shared_ptr<AStarNode>> openSet;
-   
+
    Grid<int> discovered(m_collisionGridBounds->getSize(), 0);
-   
+
    openSet.push_back(std::make_shared<AStarNode>(sourceTile, 0, 0));
    std::push_heap(openSet.begin(), openSet.end(), AStarNode::isLowerPriority);
 
@@ -239,7 +239,7 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
    discovered(sourceTile.x, sourceTile.y) = 1;
 
    Path path;
-      
+
    while(!openSet.empty())
    {
       // Get the lowest-cost point in the open set, and remove it from the open set
@@ -258,12 +258,12 @@ Pathfinder::Path Pathfinder::findAStarPath(const EntityGrid& entityGrid, const s
          }
          break;
       }
-      
+
       DEBUG("Evaluating point %d,%d", cheapestNode->point.x, cheapestNode->point.y);
 
       evaluateAdjacentNodes(entityState, size, cheapestNode, destinationTile, entityGrid, rfwMatrices, openSet, discovered);
    }
-   
+
    return path;
 }
 
@@ -345,7 +345,7 @@ Pathfinder::Path Pathfinder::findRFWPath(const shapes::Point2D& src, const shape
       {
          break;
       }
-      
+
       DEBUG("Pushing back tile %d,%d onto path", sourceTile.x, sourceTile.y);
       path.push_back(sourceTile * m_movementTileSize);
       sourceTile = std::get<1>(nextTile);

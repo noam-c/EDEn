@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef EQUIP_SLOT_H
@@ -19,7 +19,7 @@ class Metadata;
 typedef class Usable Item;
 
 /**
- * An equipment slot. Can have an item equipped in it, and can have restrictions on the 
+ * An equipment slot. Can have an item equipped in it, and can have restrictions on the
  * accepted equipment types.
  *
  * @author Noam Chitayat
@@ -31,26 +31,26 @@ struct EquipSlot
 
    /** The list of accepted types */
    std::vector<int> acceptedTypes;
-   
-   /** 
+
+   /**
     * True iff the slot can be used. False if it is unusable due to another piece of equipment.
     * The best example would be the free hand slot, if the main weapon is 2-handed. You can't use the free hand
     * in that case.
     */
    bool enabled;
-   
+
    /**
     * Constructor.
     */
    EquipSlot();
-   
+
    /**
     * Load in slot information from a savegame.
     *
     * @param inputJson The JSON node containing the slot information.
     */
    void load(const Metadata& metadata, const Json::Value& inputJson);
-   
+
    /**
     * Serialize the slot information into a JSON node.
     *

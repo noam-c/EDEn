@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "NPCScript.h"
@@ -136,7 +136,7 @@ bool NPCScript::callFunction(NPCFunction function)
 bool NPCScript::resume(long timePassed)
 {
    if(m_finished) return true;
-   
+
    if(m_activated)
    {
       m_activated = false;

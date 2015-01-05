@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef SCRIPT_FACTORY_H
@@ -49,12 +49,12 @@ class ScriptFactory
       SKILL_SCRIPT,
    };
 
-   /** 
+   /**
     *  The file extension used for scripts.
     */
    static const std::string EXTENSION;
 
-   /** 
+   /**
     * A list of paths to various kinds of scripts, in the same order as the
     * ScriptType enum.
     */

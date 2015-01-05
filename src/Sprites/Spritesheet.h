@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef SPRITESHEET_H
@@ -77,21 +77,21 @@ class Spritesheet : public Resource
 
    /**
     * Loads the spritesheet image into an OpenGL texture, and loads the
-    * associated data (frames and animations). 
+    * associated data (frames and animations).
     *
     * @param path The path to the spritesheet image and data.
     */
    void load(const std::string& path);
 
    /**
-    * Loads the sprite frames from the spritesheet data. 
+    * Loads the sprite frames from the spritesheet data.
     *
     * @param rootElement The element containing the sprite frames.
     */
    void parseFrames(Json::Value& rootElement);
-   
+
    /**
-    * Loads the sprite animations from the spritesheet data. 
+    * Loads the sprite animations from the spritesheet data.
     *
     * @param rootElement The element containing the sprite frames.
     */

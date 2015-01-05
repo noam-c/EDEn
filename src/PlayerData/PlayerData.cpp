@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "PlayerData.h"
@@ -32,16 +32,16 @@ const char* SaveLocation::DIRECTION_ATTRIBUTE = "direction";
 Json::Value SaveLocation::serialize() const
 {
    Json::Value locationNode(Json::nullValue);
-   
+
    DEBUG("Serializing current location data...");
-   
+
    // Set the current chapter and location
    locationNode[SaveLocation::REGION_ATTRIBUTE] = region;
    locationNode[SaveLocation::MAP_ATTRIBUTE] = map;
    locationNode[SaveLocation::X_ATTRIBUTE] = coords.x;
    locationNode[SaveLocation::Y_ATTRIBUTE] = coords.y;
    locationNode[SaveLocation::DIRECTION_ATTRIBUTE] = direction;
-   
+
    return locationNode;
 }
 
@@ -85,7 +85,7 @@ std::tuple<std::shared_ptr<PlayerData>, SaveLocation> PlayerData::load(const std
       DEBUG("Unexpected root element name.");
       T_T("Failed to parse save data.");
    }
-   
+
    auto playerData = std::make_shared<PlayerData>(metadata);
 
    playerData->parseCharactersAndParty(jsonRoot);
@@ -93,7 +93,7 @@ std::tuple<std::shared_ptr<PlayerData>, SaveLocation> PlayerData::load(const std
    playerData->parseInventory(jsonRoot);
    playerData->parseShortcuts(jsonRoot);
    SaveLocation location = PlayerData::parseLocation(jsonRoot);
-   
+
    return std::make_tuple(playerData, location);
 }
 

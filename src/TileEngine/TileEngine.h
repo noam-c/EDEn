@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef TILE_ENGINE_H
@@ -53,15 +53,15 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
 
    /** The message pipe used for sending and receiving TileEngine events. */
    messaging::MessagePipe m_messagePipe;
-   
+
    std::vector<std::pair<std::string, std::unique_ptr<MapTriggerCallback>>> m_triggerScripts;
-   
+
    /** True iff the TileEngine has already been initialized. */
    bool m_initialized;
 
    /** The chapter to start, if the game is starting from a new chapter. */
    std::string m_chapterToInitialize;
-   
+
    /** The location of the player, if the game is starting from a chapter in progress. */
    SaveLocation m_saveLocationToInitialize;
 
@@ -79,7 +79,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
 
    /** Controller for dialogue and narrations. */
    DialogueController m_dialogue;
-   
+
    /** The actor representing the player character on the map */
    PlayerCharacter m_playerActor;
 
@@ -91,14 +91,14 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
 
    /** An optional Actor target for the camera to follow. */
    const Actor* m_cameraTarget;
-   
+
    /**
     * Loads a chapter script.
     *
     * @param chapterName The name of the chapter.
     */
    void startChapter(const std::string& chapterName);
-   
+
    /**
     * Toggles the debug console on or off.
     */
@@ -125,7 +125,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
    /**
     * Updates all NPCs on the map.
     *
-    * @param timePassed the amount of time that has passed since the last frame. 
+    * @param timePassed the amount of time that has passed since the last frame.
     */
    void stepNPCs(long timePassed);
 
@@ -135,7 +135,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
     * @return a vector of all the active actors.
     */
    std::vector<const Actor*> collectActors() const;
-   
+
    /**
     * Constructor.
     *
@@ -159,7 +159,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
       /**
        * Logic step.
        * Sends time passed to all controllers so that they can update accordingly.
-       * Takes user input if there is any. 
+       * Takes user input if there is any.
        */
       bool step(long timePassed);
 
@@ -212,14 +212,14 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * @param message The map exit message.
        */
       void receive(const MapExitMessage& message);
-      
+
       /**
        * Handler for map trigger entry.
        *
        * @param message The map trigger message.
        */
       void receive(const MapTriggerMessage& message);
-      
+
       /**
        * Send a line of dialogue to the DialogueController as a narration.
        *
@@ -235,7 +235,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * @param task The ticket of this speech instruction
        */
       void dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task);
-      
+
       /**
        * Set a new location for the gameplay to take place in.
        *
@@ -320,7 +320,7 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        * @param callback The script callback to execute when an Actor sets off the specified trigger.
        */
       void addTriggerListener(const std::string& triggerName, std::unique_ptr<MapTriggerCallback> callback);
-   
+
       /**
        * @return Whether or not the given actor is the player character.
        */

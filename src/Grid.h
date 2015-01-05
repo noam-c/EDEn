@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef GRID_H
@@ -18,10 +18,10 @@ template<typename T> class Grid
 {
    /** The array representing the 2D grid. */
    std::vector<T> m_grid;
-   
+
    /** The width of the grid (used for proper 2D grid indexing). */
    unsigned int m_width;
-   
+
    public:
       /**
        * Construct an empty, zero-length grid.
@@ -63,7 +63,7 @@ template<typename T> class Grid
       {
          return m_grid[y * m_width + x];
       }
-   
+
       /**
        * @param x The x-coordinate of the cell to retrieve.
        * @param y The y-coordinate of the cell to retrieve.
@@ -81,7 +81,7 @@ template<typename T> class Grid
       bool empty() const {
          return m_grid.empty();
       }
-   
+
       /**
        * Clears out the contents of the Grid.
        */

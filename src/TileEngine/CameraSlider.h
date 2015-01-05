@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef CAMERA_SLIDER_H
@@ -27,7 +27,7 @@ class CameraSlider : public Coroutine
 
    /** The amount of time that has passed since the slide began. */
    long m_totalTimePassed;
-   
+
    /** The speed of the camera slide on the x-axis. */
    double m_xSpeed;
 

@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef PLAYER_CHARACTER_H
@@ -30,16 +30,16 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
 
    /** The standing prefix used to load standing sprites. */
    static const std::string STANDING_PREFIX;
-   
+
    /** The character roster that the character represents. */
    const CharacterRoster& m_roster;
 
    /** True iff the player entity is active on the map. */
    bool m_active;
-  
+
    /** Total distance for the character to move. */
    float m_cumulativeDistanceCovered;
-   
+
    void refreshLeaderSprite();
 
    public:
@@ -71,20 +71,20 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
        * Deactivates the player entity.
        */
       void removeFromMap();
-   
+
       /**
        * This function enqueues a movement instruction.
        *
        * @param dst The coordinates (in pixels) for the actor to move to
        */
       virtual void move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task);
-      
+
       /**
        * Takes player input and determines the character's direction and speed,
        * as well as updating the location based on the speed.
        */
       void step(long timePassed);
-   
+
       /**
        * Draws the player character at the playerLocation coordinates.
        */

@@ -5,7 +5,7 @@ RocketListener::RocketListener(Rocket::Core::Element* element, Rocket::Core::Str
 {
    m_element->AddEventListener(m_eventType, this, m_capture);
 }
-   
+
 RocketListener::RocketListener(const RocketListener& listener) : RocketListener::RocketListener(listener.m_element, listener.m_eventType, listener.m_capture, listener.m_processFunction)
 {
 }
@@ -13,7 +13,7 @@ RocketListener::RocketListener(const RocketListener& listener) : RocketListener:
 RocketListener::RocketListener(RocketListener&& listener) : RocketListener::RocketListener(listener.m_element, listener.m_eventType, listener.m_capture, listener.m_processFunction)
 {
 }
-   
+
 RocketListener::~RocketListener()
 {
    m_element->RemoveEventListener(m_eventType, this, m_capture);

@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef HOME_MENU_H
@@ -42,10 +42,10 @@ class HomeMenu: public MenuState
    HomeViewModel m_homeViewModel;
 
    int m_selectedDestinationMenu;
-   
+
    void pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<MenuShell> menuShell);
    void pushCharacterDependentMenu(int optionIndex, int characterIndex, std::shared_ptr<MenuShell> menuShell);
-   
+
    /**
     * Initializes the home menu pane and populates the sidebar.
     */
@@ -55,7 +55,7 @@ class HomeMenu: public MenuState
     * @param event The click event that occurred in the party list.
     */
    void characterClicked(Rocket::Core::Event& event);
-   
+
    /**
     * Signals to the view model that a character was selected in the menu.
     *

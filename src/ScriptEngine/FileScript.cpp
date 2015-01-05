@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "FileScript.h"
@@ -27,15 +27,15 @@ FileScript::FileScript(lua_State* luaVM, const std::string& scriptPath) :
 bool FileScript::initialize()
 {
    DEBUG("Script ID %d loading file %s", getId(), m_scriptName.c_str());
-   
+
    int result = luaL_loadfile(m_luaStack, m_scriptName.c_str());
    if(result != 0)
    {
       const char* errorString = luaL_checkstring(m_luaStack, 1);
       DEBUG("%s", errorString);
-      
+
       return false;
    }
-   
+
    return true;
 }

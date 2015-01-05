@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef POINT_2D_H
@@ -12,7 +12,7 @@
 namespace shapes
 {
    struct Rectangle;
-   
+
    /**
     * A point in 2D space.
     *
@@ -39,17 +39,17 @@ namespace shapes
        * @param y The y-coordinate for the point.
        */
       Point2D(int x, int y);
-   
+
       /**
        * Equality operator.
        */
       bool operator==(const Point2D& rhs) const;
-   
+
       /**
        * Inequality operator.
        */
       bool operator!=(const Point2D& rhs) const;
-   
+
       /**
        * Multiplication operator.
        */

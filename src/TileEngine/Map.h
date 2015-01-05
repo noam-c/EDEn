@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef MAP_H
@@ -65,12 +65,12 @@ class Map
     * Parse the map layer that holds map entrance data.
     */
    void parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement);
-   
+
    /**
     * Parse the map layer that holds map exit data.
     */
    void parseMapExitsGroup(const TiXmlElement* exitsGroupElement);
-   
+
    /**
     * Parse the map layer that holds map trigger zone data.
     */
@@ -104,7 +104,7 @@ class Map
        * @return The bounds of the map (in tiles).
        */
       const shapes::Rectangle& getBounds() const;
-      
+
       /**
        * @return The list of trigger zones for this map
        */

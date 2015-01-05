@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef REGION_H
@@ -20,7 +20,7 @@ class Map;
  * as a cohesive unit that is loaded all at once to allow seamless transitioning
  * between locations in the same area, such as different houses in a town,
  * or different levels of a single dungeon.
- * A Region contains a series of Maps keyed by their names. 
+ * A Region contains a series of Maps keyed by their names.
  * The first map loaded from file becomes the starting map, and the player
  * character begins there when entering a region unless otherwise specified.
  *

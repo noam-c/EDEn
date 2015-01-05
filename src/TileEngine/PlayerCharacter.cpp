@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #include "PlayerCharacter.h"
@@ -89,7 +89,7 @@ void PlayerCharacter::step(long timePassed)
    {
       // Positive velocity in the y-axis
       direction = DOWN;
-      yDirection = 1;      
+      yDirection = 1;
    }
    else if(keystate[SDL_SCANCODE_UP] && !keystate[SDL_SCANCODE_DOWN])
    {

@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef QUEST_H
@@ -52,22 +52,22 @@ class Quest
     */
    typedef std::map<std::string, std::shared_ptr<Quest>> QuestLog;
 
-   
+
    /**
     * The name of the quest.
     */
    std::string m_name;
-   
+
    /**
     * An optional description of the quest.
     */
    std::string m_description;
-   
+
    /**
     * True iff the quest is considered optional (i.e. a sidequest)
     */
    bool m_optional;
-   
+
    /**
     * True iff the quest has been completed.
     */
@@ -78,7 +78,7 @@ class Quest
     */
    QuestLog m_subquests;
 
-   
+
    public:
       static const char* QUEST_ELEMENT;
 
@@ -105,7 +105,7 @@ class Quest
        * @param questJson The JSON data to load from.
        */
       void load(const Json::Value& questJson);
-   
+
       /**
        * Serializes the quest and its subquests into JSON.
        *
@@ -117,7 +117,7 @@ class Quest
        * Add a subquest to this quest's log.
        */
       void addQuest(const std::shared_ptr<Quest>& quest);
-   
+
       /**
        * Recursively searches for the subquest on the path specified.
        *
@@ -125,24 +125,24 @@ class Quest
        * @return The quest at the path specified by questPath, or nullptr if it could not be found.
        */
       const std::weak_ptr<Quest> getQuest(const std::string& questPath) const;
-   
+
       /**
        * @param questPath A "/"-delimited path from the quest to the requested subquest.
        * @return true iff the quest at the path specified by questPath has been started.
        */
       bool isStarted(const std::string& questPath) const;
-      
+
       /**
        * @return true iff the quest has been completed.
        */
       bool isCompleted() const;
-   
+
       /**
        * @param questPath A "/"-delimited path from the quest to the requested subquest.
        * @return true iff the quest at the path specified by questPath has been completed.
        */
       bool isCompleted(const std::string& questPath) const;
-   
+
       /**
        * Completes the quest.
        */
@@ -152,7 +152,7 @@ class Quest
        * @return The name of the quest.
        */
       std::string getName() const;
-   
+
       /**
        * @return The description of the quest.
        */

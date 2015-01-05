@@ -22,7 +22,7 @@
 #=============================================================================
 # Copyright 2005-2009 Kitware, Inc.
 # Copyright 2012 Benjamin Eikel
-# Copyright 2013 Noam Chitayat
+# Copyright 2013-2015 Noam Chitayat
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file CMakeCopyright.md for details.

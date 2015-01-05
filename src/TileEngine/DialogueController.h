@@ -1,7 +1,7 @@
 /*
  *  This file is covered by the Ruby license. See LICENSE.txt for more details.
  *
- *  Copyright (C) 2007-2013 Noam Chitayat. All rights reserved.
+ *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
 #ifndef DIALOGUE_CONTROLLER_H
@@ -31,7 +31,7 @@ namespace Rocket
  * character speech, thought, or narration of any kind.
  * When there is dialogue, it appears letter by letter at a predetermined
  * pace. Ideally, this pace would be chosen/changed by the user, but it is
- * HARDCODED for now until an options menu is implemented. 
+ * HARDCODED for now until an options menu is implemented.
  *
  * If there is already text in the main dialogue box that is not finished,
  * any new text is enqueued in preparation.
@@ -41,17 +41,17 @@ namespace Rocket
  * @author Noam Chitayat
  */
 class DialogueController
-{  
+{
    /** The HARDCODED time-per-letter speed */
    static const int MILLISECONDS_PER_LETTER = 100;
-   
+
    /** Abstract the implementation of the dialogue boxes */
    typedef Rocket::Core::Element DialogueBox;
 
    class DialogueCoroutine : public Coroutine
    {
       DialogueController& m_dialogueController;
-      
+
       public:
          /**
           * Constructor.
@@ -59,7 +59,7 @@ class DialogueController
           * @param dialogueController The dialogue controller that this coroutine should control.
           */
          DialogueCoroutine(DialogueController& dialogueController);
-         
+
          /**
           * Resumes the associated dialogue controller.
           *
@@ -94,17 +94,17 @@ class DialogueController
 
       /** A queue of upcoming close script brackets ('>' characters) */
       std::queue<int> m_closeScriptBrackets;
-      
+
       /** The task ID waiting on this particular line of dialogue */
       std::shared_ptr<Task> task;
 
       public:
          /** The type of line (how it should be displayed) */
          LineType type;
-   
+
          /** The dialogue itself. */
          std::string dialogue;
-   
+
          /**
           *  Constructor. Initializes values and indexes the locations of
           *  embedded scripts in the line of dialogue for later use.
@@ -112,7 +112,7 @@ class DialogueController
          Line(LineType type, const std::string& dialogue, const std::shared_ptr<Task>& task);
 
          ~Line();
-      
+
          /**
           *  Gets the next embdedded script bracket pair.
           *
@@ -139,12 +139,12 @@ class DialogueController
 
    /** The RML document holding the main dialogue box */
    Rocket::Core::ElementDocument* m_dialogueBoxDocument;
-   
+
    /** Main dialogue box for speech or narration */
    DialogueBox* m_mainDialogue;
 
-   /** 
-    * How much time since a letter was added to the screen's dialogue box 
+   /**
+    * How much time since a letter was added to the screen's dialogue box
     * from the current line.
     */
    int m_dialogueTime;
@@ -184,7 +184,7 @@ class DialogueController
     * If there is already a line being spoken, append the new speech.
     *
     * @param type The type of line that will be enqueued.
-    * @param speech The speech to enqueue in the dialogue controller. 
+    * @param speech The speech to enqueue in the dialogue controller.
     * @param task The ticket to be signalled when the line is finished
     */
    void addLine(LineType type, const std::string& speech, const std::shared_ptr<Task>& task);
@@ -224,7 +224,7 @@ class DialogueController
        * @return true iff the controller was able to respond to the nextLine request
        */
       bool nextLine();
-      
+
       /**
        * @return true iff there is currently a line of dialogue being shown.
        */
@@ -237,7 +237,7 @@ class DialogueController
        * @param task The ticket of this speech instruction
        */
       void say(const std::string& speech, const std::shared_ptr<Task>& task);
-   
+
       /**
        * Enqueue a line of speech narrated or thought by a character.
        *
