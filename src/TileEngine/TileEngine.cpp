@@ -493,7 +493,11 @@ void TileEngine::handleInputEvents(bool& finishState)
                      if(m_dialogue.hasDialogue())
                      {
                         m_dialogue.setFastModeEnabled(true);
-                        m_dialogue.nextLine();
+                        
+                        if (!event.key.repeat)
+                        {
+                           m_dialogue.nextLine();
+                        }
                      }
                      else
                      {
