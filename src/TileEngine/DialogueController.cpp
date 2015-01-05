@@ -252,7 +252,7 @@ DialogueController::Line::~Line()
 {
    if(task)
    {
-      task->signal();
+      task->complete();
    }
 }
 

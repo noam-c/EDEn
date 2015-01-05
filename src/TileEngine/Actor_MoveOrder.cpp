@@ -17,11 +17,12 @@ const int debugFlag = DEBUG_ACTOR;
 // Define as 1 to draw the NPC's projected path to the screen
 #define DRAW_PATH 0
 
-Actor::MoveOrder::MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid) :
+Actor::MoveOrder::MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const shapes::Point2D& destination, EntityGrid& entityGrid) :
    Order(actor),
    m_pathInitialized(false),
    m_movementBegun(false),
    m_dst(destination),
+   m_task(task),
    m_entityGrid(entityGrid),
    m_cumulativeDistanceCovered(0)
 {	
@@ -52,7 +53,7 @@ void Actor::MoveOrder::updateNextWaypoint(shapes::Point2D location, MovementDire
 {
    m_lastWaypoint = location;
    m_nextWaypoint = m_path.front();
-   
+
    // Set the direction based on where the next tile is relative to the current location.
    // For now, when the Actor must move diagonally, it will always face up or down
    if(location.y < m_nextWaypoint.y)
@@ -137,9 +138,14 @@ bool Actor::MoveOrder::perform(long timePassed)
             return false;
          }
 
+         if(m_task)
+         {
+            m_task->complete();
+         }
+
          return true;
       }
-      
+
       if(!m_movementBegun)
       {
          m_movementBegun = m_entityGrid.beginMovement(&m_actor, m_path.front());
@@ -155,9 +161,9 @@ bool Actor::MoveOrder::perform(long timePassed)
          updateNextWaypoint(location, newDirection);
          updateDirection(newDirection, true);
       }
-      
+
       const long stepDistance = std::max(abs(location.x - m_nextWaypoint.x), abs(location.y - m_nextWaypoint.y));
-      
+
       if (distanceCovered < stepDistance)
       {
          // The Actor will not be able to make it to the next waypoint in this frame
@@ -172,7 +178,7 @@ bool Actor::MoveOrder::perform(long timePassed)
             location.x -= distanceCovered;
             if(location.x < m_nextWaypoint.x) location.x = m_nextWaypoint.x;
          }
-         
+
          if(location.y < m_nextWaypoint.y)
          {
             location.y += distanceCovered;
@@ -183,15 +189,15 @@ bool Actor::MoveOrder::perform(long timePassed)
             location.y -= distanceCovered;
             if(location.y < m_nextWaypoint.y) location.y = m_nextWaypoint.y;
          }
-         
+
          // Movement for this frame is finished
          m_actor.setLocation(location);
          return false;
       }
-      
+
       // The Actor can reach the next waypoint in this frame
       distanceCovered -= stepDistance;
-      
+
       DEBUG("Reached waypoint %d,%d", m_nextWaypoint.x, m_nextWaypoint.y);
       m_entityGrid.endMovement(&m_actor, m_lastWaypoint, m_nextWaypoint);
       m_movementBegun = false;

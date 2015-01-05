@@ -55,12 +55,14 @@ class Script : public Coroutine
       bool resume(long timePassed);
 
       /**
-       * Yield the coroutine
+       * Yield the script execution
+       *
+       * @param The number of results to be returned to the script when execution resumes.
        *
        * @return The Lua yield code (LUA_YIELD) so that the resumer of the coroutine
        *         can regain control and handle the yield.
        */
-      int yield();
+      int yield(int numResults);
 
       /**
        * Destructor. Made abstract in order to make Scripts abstract.

@@ -15,6 +15,8 @@ extern "C"
    #include <lauxlib.h>
 }
 
+#include "LuaWrapper.hpp"
+
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
@@ -26,11 +28,53 @@ Script::Script(const std::string& name) :
 
 Script::~Script() = default;
 
+/**
+ * Operation to push all result parameters onto a given Lua coroutine's stack.
+ * Used to push an arbitrary bag of return values or function parameters
+ * onto a stack prior to resumption of the Lua coroutine.
+ *
+ * @author Noam Chitayat
+ */
+class PushOnLuaStackOp : public ICoroutineResultOp
+{
+   lua_State* m_luaVM;
+
+   public:
+      PushOnLuaStackOp(lua_State* luaVM) :
+         m_luaVM(luaVM)
+      {
+      }
+
+      void operator()(bool arg)
+      {
+         DEBUG("Pushing boolean: %d", arg);
+         lua_pushboolean(m_luaVM, arg);
+      }
+
+      void operator()(int arg)
+      {
+         DEBUG("Pushing number: %d", arg);
+         lua_pushnumber(m_luaVM, arg);
+      }
+};
+
 bool Script::runScript(int numArgs)
 {
    if(!m_luaStack)
    {
       T_T("Attempting to run an uninitialized script!");
+   }
+
+   if (m_running)
+   {
+      std::unique_ptr<ICoroutineResults> args = retrieveResults();
+
+      if (args)
+      {
+         PushOnLuaStackOp op(m_luaStack);
+         args->forEach(op);
+         numArgs = args->getSize();
+      }
    }
 
    m_running = true;
@@ -41,7 +85,7 @@ bool Script::runScript(int numArgs)
    int returnCode = lua_resume(m_luaStack, nullptr, numArgs);
    switch(returnCode)
    {
-      case 0:
+      case LUA_OK:
       {
          DEBUG("Script %d finished.", m_coroutineId);
          m_running = false;
@@ -65,11 +109,10 @@ bool Script::runScript(int numArgs)
 
 bool Script::resume(long /*timePassed*/)
 {
-   bool result = runScript();
-   return result;
+   return runScript();
 }
 
-int Script::yield()
+int Script::yield(int numResults)
 {
-   return lua_yield(m_luaStack, 0);
+   return lua_yield(m_luaStack, numResults);
 }

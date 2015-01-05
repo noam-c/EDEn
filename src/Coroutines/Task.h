@@ -7,9 +7,11 @@
 #ifndef TASK_H
 #define TASK_H
 
-#include "TaskId.h"
+#include <utility>
 
-class Scheduler;
+#include "Coroutine.h"
+#include "Scheduler.h"
+#include "TaskId.h"
 
 /**
  * A Task is a ticket container for engine instructions that occur across
@@ -27,7 +29,7 @@ class Task
 
    /** The unique identifier for this task */
    const TaskId m_id;
-   
+
    /** The scheduler to signal when this task is finished */
    Scheduler& m_scheduler;
 
@@ -46,12 +48,27 @@ class Task
     */
    void signalSchedulerDestroyed();
 
+   static std::unique_ptr<ICoroutineResults> makeResultsObject();
+
+   template<typename ... Results> static std::unique_ptr<ICoroutineResults> makeResultsObject(Results&& ... results)
+   {
+      return std::unique_ptr<ICoroutineResults>(new CoroutineResults<Results ...>(std::forward<Results>(results)...));
+   }
+
    public:
       /**
-       *  Signals the scheduler that the Task has finished, and destroys
-       *  this object. (Yes, this method triggers a self-destruct)
+       * Signals the scheduler that the Task has finished, and destroys
+       * this object.
+       *
+       * @param results The set of result values to pass to waiting coroutines.
        */
-      void signal();
+      template<typename ... Results> void complete(Results&& ... results)
+      {
+         if(!m_schedulerDestroyed)
+         {
+            m_scheduler.completeTask(m_id, Task::makeResultsObject(std::forward<Results>(results)...));
+         }
+      }
 
       /**
        * Destructor.

@@ -74,7 +74,7 @@ void Actor::draw() const
    {
       m_sprite->draw(shapes::Point2D(m_pixelLoc.x, m_pixelLoc.y + TileEngine::TILE_SIZE));
    }
-   
+
    if(!m_orders.empty())
    {
       m_orders.front()->draw();
@@ -86,12 +86,12 @@ bool Actor::isIdle() const
    return m_orders.empty();
 }
 
-void Actor::move(const shapes::Point2D& dst)
+void Actor::move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task)
 {
    if(m_entityGrid.withinMap(dst))
    {
       DEBUG("Sending move order to %s: %d,%d", m_name.c_str(), dst.x, dst.y);
-      m_orders.emplace(new MoveOrder(*this, dst, m_entityGrid));
+      m_orders.emplace(new MoveOrder(*this, task, dst, m_entityGrid));
    }
    else
    {
@@ -112,7 +112,7 @@ void Actor::faceActor(Actor* other)
 
    int xDiff = currentLocation.x - otherLocation.x;
    int yDiff = currentLocation.y - otherLocation.y;
-   
+
    if(abs(xDiff) > abs(yDiff))
    {
       if(xDiff < 0)
@@ -122,7 +122,7 @@ void Actor::faceActor(Actor* other)
       else if(xDiff > 0)
       {
          directionToOther = LEFT;
-      }  
+      }
    }
    else
    {
@@ -135,7 +135,7 @@ void Actor::faceActor(Actor* other)
          directionToOther = UP;
       }
    }
-   
+
    stand(directionToOther);
 }
 

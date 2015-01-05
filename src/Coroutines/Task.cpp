@@ -14,22 +14,21 @@ Task::Task(TaskId taskId, Scheduler& scheduler) :
    m_schedulerDestroyed(false),
    m_id(taskId),
    m_scheduler(scheduler)
-{}
+{
+   DEBUG("Creating task %d", m_id);
+}
 
 Task::~Task()
 {
    DEBUG("Deleting task %d", m_id);
 }
 
+std::unique_ptr<ICoroutineResults> Task::makeResultsObject()
+{
+   return nullptr;
+}
+
 void Task::signalSchedulerDestroyed()
 {
    m_schedulerDestroyed = true;
-}
-
-void Task::signal()
-{
-   if(!m_schedulerDestroyed)
-   {
-      m_scheduler.completeTask(m_id);
-   }
 }

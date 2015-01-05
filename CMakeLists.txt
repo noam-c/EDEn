@@ -8,6 +8,7 @@ SET(HEADERS
   src/Audio/Music.h
   src/Audio/Sound.h
   src/Coroutines/Coroutine.h
+  src/Coroutines/CoroutineResults.h
   src/Coroutines/Scheduler.h
   src/Coroutines/Task.h
   src/Coroutines/TaskId.h
@@ -131,6 +132,7 @@ SET(HEADERS
   src/Transitions/RandomTransitionGenerator.h
   src/Transitions/BlendState.h
   src/TODOLIST.h
+  src/utils/IntegerSequence.h
 )
 
 SET(SOURCES 
@@ -275,6 +277,7 @@ SOURCE_GROUP(Transitions REGULAR_EXPRESSION src/Transitions/.*)
 SOURCE_GROUP(json REGULAR_EXPRESSION src/json/.*)
 SOURCE_GROUP(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
 SOURCE_GROUP(tinyxml REGULAR_EXPRESSION src/tinyxml/.*)
+SOURCE_GROUP(utils REGULAR_EXPRESSION src/utils/.*)
 
 IF(NOT ${CMAKE_GENERATOR} STREQUAL "Xcode")
    SOURCE_GROUP("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
@@ -306,6 +309,7 @@ INCLUDE_DIRECTORIES(
   src/json
   src/LuaWrapper
   src/tinyxml
+  src/utils
 )
 
 ADD_DEFINITIONS(

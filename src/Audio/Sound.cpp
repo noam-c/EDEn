@@ -57,7 +57,7 @@ void Sound::play(const std::shared_ptr<Task>& task)
    {
       if(task)
       {
-         task->signal();
+         task->complete();
       }
 
       return;
@@ -90,7 +90,7 @@ void Sound::finished()
    DEBUG("Sound finished.");
    if(m_playTask)
    {
-      m_playTask->signal();
+      m_playTask->complete();
       m_playTask.reset();
    }
 

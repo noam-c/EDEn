@@ -6,6 +6,7 @@
 
 #include "LuaActor.h"
 #include "ScriptUtilities.h"
+#include "ScriptEngine.h"
 #include "Actor.h"
 #include "Point2D.h"
 
@@ -29,10 +30,24 @@ static int ActorL_Move(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   const shapes::Point2D destination(x, y);
-   actor->move(destination);
+   auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
+   auto task = scriptEngine->createTask();
 
-   return 0;
+   const shapes::Point2D destination(x, y);
+   actor->move(destination, task);
+
+   int callResult = 0;
+
+   bool waitForFinish;
+   if(ScriptUtilities::getParameter(luaVM, 2, 3, "waitForFinish", waitForFinish))
+   {
+      if(waitForFinish)
+      {
+         callResult = scriptEngine->waitUntilFinished(task, 1);
+      }
+   }
+
+   return callResult;
 }
 
 static int ActorL_SetSprite(lua_State* luaVM)
@@ -48,7 +63,7 @@ static int ActorL_SetSprite(lua_State* luaVM)
    {
       return lua_error(luaVM);
    }
-   
+
    return 0;
 }
 
@@ -67,7 +82,7 @@ static int ActorL_SetAnimation(lua_State* luaVM)
    }
 
    actor->setAnimation(animationName);
-   
+
    return 0;
 }
 

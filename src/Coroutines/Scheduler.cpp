@@ -63,7 +63,7 @@ bool Scheduler::hasRunningCoroutine() const
    return m_runningCoroutine != nullptr;
 }
 
-int Scheduler::block(const std::shared_ptr<Task>& pendingTask)
+int Scheduler::block(const std::shared_ptr<Task>& pendingTask, int numResults)
 {
    DEBUG("Blocking coroutine %d on task %d...", m_runningCoroutine->getId(), pendingTask->m_id);
 
@@ -84,7 +84,7 @@ int Scheduler::block(const std::shared_ptr<Task>& pendingTask)
    }
 
    DEBUG("Yielding: %d", m_runningCoroutine->getId());
-   return m_runningCoroutine->yield();
+   return m_runningCoroutine->yield(numResults);
 }
 
 std::shared_ptr<Task> Scheduler::createNewTask()
@@ -98,7 +98,7 @@ std::shared_ptr<Task> Scheduler::createNewTask()
    return nextTask;
 }
 
-void Scheduler::completeTask(TaskId finishedTaskId)
+void Scheduler::completeTask(TaskId finishedTaskId, std::unique_ptr<ICoroutineResults>&& taskResult)
 {
    DEBUG("Task %d finished.", finishedTaskId);
 
@@ -107,6 +107,11 @@ void Scheduler::completeTask(TaskId finishedTaskId)
    {
       auto& resumingCoroutine = resumingCoroutineIterator->second;
       DEBUG("Putting coroutine %d on resume list...", resumingCoroutine->getId());
+
+      if (taskResult)
+      {
+         resumingCoroutine->setResults(std::move(taskResult));
+      }
 
       // Put the resumed coroutine onto the unstarted stack
       m_unstartedCoroutines.insert(resumingCoroutine);
@@ -125,7 +130,7 @@ void Scheduler::completeTask(TaskId finishedTaskId)
    }
 }
 
-int Scheduler::join(const std::shared_ptr<Coroutine>& coroutine)
+int Scheduler::join(const std::shared_ptr<Coroutine>& coroutine, int numResults)
 {
    DEBUG("Joining coroutine %d on coroutine %d...", m_runningCoroutine->getId(), coroutine->getId());
 
@@ -146,7 +151,7 @@ int Scheduler::join(const std::shared_ptr<Coroutine>& coroutine)
    }
 
    DEBUG("Yielding: %d", m_runningCoroutine->getId());
-   return m_runningCoroutine->yield();
+   return m_runningCoroutine->yield(numResults);
 }
 
 void Scheduler::coroutineDone(const std::shared_ptr<Coroutine>& coroutine)

@@ -10,6 +10,7 @@
 #include <memory>
 #include <stack>
 #include <string>
+#include <tuple>
 #include "Singleton.h"
 #include "Task.h"
 
@@ -28,8 +29,6 @@ class UsableScript;
 
 struct lua_State;
 
-#define SCRIPT_ENG_LUA_NAME ","
-
 /**
  * The ScriptEngine encapsulates the use of the Lua interpreter to run scripts,
  * create Lua coroutines, and bind the game functionality to the Lua scripts
@@ -43,7 +42,7 @@ class ScriptEngine
     * The tile engine to execute commands on
     */
    std::weak_ptr<TileEngine> m_tileEngine;
-   
+
    /**
     * The player data to execute commands on
     */
@@ -83,12 +82,17 @@ class ScriptEngine
    int runScript(const std::shared_ptr<Script>& script, Scheduler& scheduler);
 
    public:
-      /** 
+      /**
        * Constructor. Initializes a Lua VM and initializes members as needed.
        *
        * @param executionStack The stack containing the current game state.
        */
       ScriptEngine(ExecutionStack& executionStack);
+   
+      /**
+       * Destructor. Closes the Lua VM and triggers destruction of Lua objects allocated on it.
+       */
+      ~ScriptEngine();
 
       /**
        * Get a specified NPC script.
@@ -129,14 +133,14 @@ class ScriptEngine
        * @param scheduler The scheduler that will manage the new script coroutine.
        */
       int runChapterScript(const std::string& chapterName, Scheduler& scheduler);
-      
+
       /**
        * Run a string of script with the specified name.
        *
        * @param scriptString The name of the script to run.
        */
       int runScriptString(const std::string& scriptString);
-      
+
       /**
        * Call a script function object.
        *
@@ -172,11 +176,28 @@ class ScriptEngine
        */
       void callFunction(lua_State* coroutine, const char* funcName);
 
-      /** 
-       * Destructor. Cleans up used memory and closes the Lua VM,
-       * disposing of any memory used by the Lua scripts.
+      /**
+       * @param luaVM The Lua environment to retrieve the engine from.
+       *
+       * @return the <code>ScriptEngine</code> instance that spawned this VM.
        */
-      ~ScriptEngine();
+      static ScriptEngine* getScriptEngineForVM(lua_State* luaVM);
+
+      /**
+       * @return a new Task from the Scheduler to associate with a job or coroutine.
+       */
+      std::shared_ptr<Task> createTask();
+
+      /**
+       * Block the currently executing script until completion of the
+       * pending task.
+       *
+       * @param pendingTask The task to wait on.
+       * @param numResults The number of results expected when the Task completes.
+       *
+       * @return The yield value from the script.
+       */
+      int waitUntilFinished(const std::shared_ptr<Task>& pendingTask, int numResults);
 
       /////////////////////////////////////////////////////////
       /////////// Functions supplied to Lua scripts ///////////

@@ -19,73 +19,67 @@ extern "C"
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_SCRIPT_ENG;
 
-#define REGISTER(luaName, function) DEBUG("Registering function: %s", luaName); \
-                                    lua_register(m_luaVM, luaName, function)
-
-static ScriptEngine* getEngine(lua_State* luaVM)
-{
-   lua_getglobal(luaVM, SCRIPT_ENG_LUA_NAME);
-   ScriptEngine* engine = static_cast<ScriptEngine*>(lua_touserdata(luaVM, lua_gettop(luaVM)));
-   lua_pop(luaVM, 1);
-   return engine;
-}
-
 static int luaNarrate(lua_State* luaVM)
 {
-   return getEngine(luaVM)->narrate(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->narrate(luaVM);
 }
 
 static int luaSay(lua_State* luaVM)
 {
-   return getEngine(luaVM)->say(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->say(luaVM);
 }
 
 static int luaSetRegion(lua_State* luaVM)
 {
-   return getEngine(luaVM)->setRegion(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->setRegion(luaVM);
 }
 
 static int luaPlaySound(lua_State* luaVM)
 {
-   return getEngine(luaVM)->playSound(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->playSound(luaVM);
 }
 
 static int luaPlayMusic(lua_State* luaVM)
 {
-   return getEngine(luaVM)->playMusic(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->playMusic(luaVM);
 }
 
 static int luaStopMusic(lua_State* luaVM)
 {
-   return getEngine(luaVM)->stopMusic(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->stopMusic(luaVM);
 }
 
 static int luaIsMusicPlaying(lua_State* luaVM)
 {
-   return getEngine(luaVM)->isMusicPlaying(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->isMusicPlaying(luaVM);
 }
 
 static int luaDelay(lua_State* luaVM)
 {
-   return getEngine(luaVM)->delay(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->delay(luaVM);
 }
 
 static int luaRandom(lua_State* luaVM)
 {
-   return getEngine(luaVM)->generateRandom(luaVM);
+   return ScriptEngine::getScriptEngineForVM(luaVM)->generateRandom(luaVM);
+}
+
+static inline void registerFunction(lua_State* luaVM, const char* luaName, lua_CFunction function) {
+   DEBUG("Registering function: %s", luaName);
+   lua_register(luaVM, luaName, function);
 }
 
 void ScriptEngine::registerFunctions()
 {
-   REGISTER("narrate", luaNarrate);
-   REGISTER("say", luaSay);
-   REGISTER("playSound", luaPlaySound);
-   REGISTER("playMusic", luaPlayMusic);
-   REGISTER("stopMusic", luaStopMusic);
-   REGISTER("isMusicPlaying", luaIsMusicPlaying);
-   REGISTER("delay", luaDelay);
-   REGISTER("random", luaRandom);
+   registerFunction(m_luaVM, "narrate", luaNarrate);
+   registerFunction(m_luaVM, "say", luaSay);
+   registerFunction(m_luaVM, "playSound", luaPlaySound);
+   registerFunction(m_luaVM, "playMusic", luaPlayMusic);
+   registerFunction(m_luaVM, "stopMusic", luaStopMusic);
+   registerFunction(m_luaVM, "isMusicPlaying", luaIsMusicPlaying);
+   registerFunction(m_luaVM, "delay", luaDelay);
+   registerFunction(m_luaVM, "random", luaRandom);
 
    // Tile Engine functions
-   REGISTER("setRegion", luaSetRegion);
+   registerFunction(m_luaVM, "setRegion", luaSetRegion);
 }

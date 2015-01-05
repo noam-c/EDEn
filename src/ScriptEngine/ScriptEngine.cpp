@@ -48,6 +48,8 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
   lua_pushnumber(m_luaVM, value); \
   lua_settable(m_luaVM, -3);
 
+const char* SCRIPT_ENG_LUA_NAME = ",";
+
 ScriptEngine::ScriptEngine(ExecutionStack& executionStack) :
    m_executionStack(executionStack)
 {
@@ -71,7 +73,7 @@ ScriptEngine::ScriptEngine(ExecutionStack& executionStack) :
    // (thus eliminating the need for a global ScriptEngine instance or singleton)
    lua_pushlightuserdata(m_luaVM, this);
    lua_setglobal(m_luaVM, SCRIPT_ENG_LUA_NAME);
-   
+
    luaopen_TileEngine(m_luaVM);
    luaopen_Actor(m_luaVM);
    luaopen_PlayerCharacter(m_luaVM);
@@ -160,7 +162,7 @@ int ScriptEngine::narrate(lua_State* luaStack)
    {
       return 0;
    }
-   
+
    auto tileEngine = m_tileEngine.lock();
    if(!tileEngine)
    {
@@ -187,7 +189,7 @@ int ScriptEngine::narrate(lua_State* luaStack)
 
    if(waitForFinish)
    {
-      return scheduler->block(task);
+      return waitUntilFinished(task, 0);
    }
 
    return 0;
@@ -207,7 +209,7 @@ int ScriptEngine::say(lua_State* luaStack)
       DEBUG("Missing tile engine. Cannot add dialogue.");
       return lua_error(luaStack);
    }
-   
+
 
    std::string text;
    if(!ScriptUtilities::getParameter(luaStack, 1, 1, "text", text))
@@ -225,10 +227,10 @@ int ScriptEngine::say(lua_State* luaStack)
    auto task = scheduler->createNewTask();
    DEBUG("Saying text: %s", text.c_str());
    tileEngine->dialogueSay(text, task);
-   
+
    if(waitForFinish)
    {
-      return scheduler->block(task);
+      return waitUntilFinished(task, 0);
    }
 
    return 0;
@@ -264,7 +266,7 @@ int ScriptEngine::playSound(lua_State* luaStack)
 
    if(waitForFinish)
    {
-      return scheduler->block(task);
+      return waitUntilFinished(task, 0);
    }
 
    return 0;
@@ -322,10 +324,10 @@ int ScriptEngine::delay(lua_State* luaStack)
    }
 
    DEBUG("Waiting %d milliseconds", millisecondsToWait);
-   
+
    auto waitTimer = std::make_shared<Timer>(millisecondsToWait);
    scheduler->start(waitTimer);
-   
+
    return scheduler->join(waitTimer);
 }
 
@@ -350,7 +352,7 @@ int ScriptEngine::generateRandom(lua_State* luaStack)
       DEBUG("Cannot generate random number: Maximum value is smaller than minimum value.");
       return lua_error(luaStack);
    }
-   
+
    /** \todo Random number generation is currently unseeded. Use a good seed. */
    lua_pushnumber(luaStack, (rand() % (maxValue - minValue)) + minValue);
 
@@ -411,7 +413,7 @@ int ScriptEngine::runChapterScript(const std::string& chapterName, Scheduler& sc
    {
       return runScript(chapterScript, scheduler);
    }
-   
+
    return 0;
 }
 
@@ -434,12 +436,12 @@ int ScriptEngine::runScriptString(const std::string& scriptString)
 
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
    scheduler->start(newScript);
-   
+
    if(scheduler->hasRunningCoroutine())
    {
       return scheduler->join(newScript);
    }
-   
+
    return 0;
 }
 
@@ -447,14 +449,34 @@ int ScriptEngine::runScriptFunction(void* scriptFunction)
 {
    lua_pushlightuserdata(m_luaVM, scriptFunction);
    lua_pcall(m_luaVM, 0, 0, 0);
-   
+
    return 0;
+}
+
+ScriptEngine* ScriptEngine::getScriptEngineForVM(lua_State* luaVM)
+{
+   lua_getglobal(luaVM, SCRIPT_ENG_LUA_NAME);
+   ScriptEngine* engine = static_cast<ScriptEngine*>(lua_touserdata(luaVM, lua_gettop(luaVM)));
+   lua_pop(luaVM, 1);
+   return engine;
+}
+
+std::shared_ptr<Task> ScriptEngine::createTask()
+{
+   auto scheduler = m_executionStack.getCurrentScheduler();
+   return scheduler->createNewTask();
+}
+
+int ScriptEngine::waitUntilFinished(const std::shared_ptr<Task>& pendingTask, int numResults)
+{
+   auto scheduler = m_executionStack.getCurrentScheduler();
+   return scheduler->block(pendingTask, numResults);
 }
 
 void ScriptEngine::callFunction(lua_State* coroutine, const char* funcName)
 {
    // push the function onto the stack and then resume the coroutine from the
-   // start of the function 
+   // start of the function
    lua_getglobal(coroutine, funcName);
    lua_resume(coroutine, nullptr, 0);
 }

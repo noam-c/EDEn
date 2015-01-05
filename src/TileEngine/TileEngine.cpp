@@ -50,7 +50,7 @@ TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> pla
 {
    m_messagePipe.registerListener<MapExitMessage>(this);
    m_messagePipe.registerListener<MapTriggerMessage>(this);
-   
+
    m_cameraTarget = &m_playerActor;
 }
 
@@ -146,7 +146,7 @@ int TileEngine::setMap(std::string mapName)
    m_triggerScripts.clear();
    m_npcList.clear();
    m_playerActor.removeFromMap();
-   
+
    DEBUG("Setting map...");
    if(!mapName.empty())
    {
@@ -159,9 +159,9 @@ int TileEngine::setMap(std::string mapName)
       m_entityGrid.setMapData(m_currRegion->getStartingMap());
       mapName = m_entityGrid.getMapName();
    }
-   
+
    DEBUG("Map set to: %s", mapName.c_str());
-   
+
    recalculateMapOffsets();
    return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, m_scheduler);
 }
@@ -304,7 +304,7 @@ void TileEngine::activate()
    m_playerData->bindMessagePipe(&m_messagePipe);
    getScriptEngine().setTileEngine(shared_from_this());
    getScriptEngine().setPlayerData(m_playerData);
-   
+
    if(!m_initialized)
    {
       if(!m_chapterToInitialize.empty())
@@ -323,7 +323,7 @@ void TileEngine::activate()
          m_playerActor.setDirection(m_saveLocationToInitialize.direction);
          followWithCamera(m_playerActor);
       }
-      
+
       m_initialized = true;
    }
 }
@@ -401,7 +401,7 @@ void TileEngine::draw()
          }
 
          auto nextActorToDraw = actors.begin();
-         
+
          for(int row = 0; row < mapHeight; ++row)
          {
             // Draw all the sprites on the row
@@ -474,10 +474,10 @@ void TileEngine::handleInputEvents(bool& finishState)
             if(m_camera.isPointWithinViewport(mouseClickLocation))
             {
                const shapes::Point2D pointWithinScene = m_camera.getPointWithinScene(mouseClickLocation);
-               
+
                if(m_entityGrid.isAreaFree(shapes::Rectangle(pointWithinScene, m_playerActor.getSize())))
                {
-                  m_playerActor.move(pointWithinScene);
+                  m_playerActor.move(pointWithinScene, nullptr);
                }
             }
             break;

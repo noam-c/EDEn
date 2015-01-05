@@ -22,7 +22,7 @@ class Actor::Order
    protected:
       Actor& m_actor;
       Order(Actor& actor) : m_actor(actor) {}
-   
+
    public:
       virtual bool perform(long timePassed) = 0;
       virtual void draw() const {}
@@ -73,6 +73,8 @@ class Actor::MoveOrder : public Actor::Order
    /** The next node that the Actor will move to. */
    shapes::Point2D m_nextWaypoint;
 
+   std::shared_ptr<Task> m_task;
+
    /** The grid that the Actor is moving along. */
    EntityGrid& m_entityGrid;
 
@@ -99,7 +101,7 @@ class Actor::MoveOrder : public Actor::Order
        * @param destination The point that the Actor will move to.
        * @param entityGrid The grid that the Actor is moving on.
        */
-      MoveOrder(Actor& actor, const shapes::Point2D& destination, EntityGrid& entityGrid);
+      MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const shapes::Point2D& destination, EntityGrid& entityGrid);
 
       /**
        * Destructor.

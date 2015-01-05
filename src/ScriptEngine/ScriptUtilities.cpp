@@ -11,7 +11,7 @@ const int debugFlag = DEBUG_SCRIPT_ENG;
 
 bool ScriptUtilities::isBoolean(lua_State* luaStack, int index)
 {
-   return lua_type(luaStack, index) == LUA_TBOOLEAN;
+   return lua_isboolean(luaStack, index);
 }
 
 bool ScriptUtilities::isString(lua_State* luaStack, int index)

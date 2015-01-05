@@ -16,6 +16,7 @@
 
 class Task;
 class Coroutine;
+class ICoroutineResults;
 
 /**
  * A scheduler for scheduling, resuming and blocking a set of Coroutines.
@@ -104,7 +105,7 @@ class Scheduler
        *
        * @return a yield code from the Coroutine being blocked
        */
-      int block(const std::shared_ptr<Task>& task);
+      int block(const std::shared_ptr<Task>& task, int numResults = 0);
 
       /**
        * Add a Coroutine to the scheduler by enqueuing it to be started on the next run.
@@ -126,7 +127,7 @@ class Scheduler
        *
        * @param finishedTaskId The ID of the instruction that has been finished.
        */
-      void completeTask(TaskId finishedTaskId);
+      void completeTask(TaskId finishedTaskId, std::unique_ptr<ICoroutineResults>&& taskResult);
 
       /**
        * Block a Coroutine and make it wait until another Coroutine has finished
@@ -136,7 +137,7 @@ class Scheduler
        *
        * @return a yield code from the Coroutine being blocked
        */
-      int join(const std::shared_ptr<Coroutine>& runningCoroutine);
+      int join(const std::shared_ptr<Coroutine>& runningCoroutine, int numResults = 0);
 
       /**
        * Signal that a Coroutine has been finished and destroy the Coroutine.

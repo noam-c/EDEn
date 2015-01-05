@@ -70,10 +70,10 @@ void PlayerCharacter::removeFromMap()
    }
 }
 
-void PlayerCharacter::move(const shapes::Point2D& dst)
+void PlayerCharacter::move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task)
 {
    flushOrders();
-   Actor::move(dst);
+   Actor::move(dst, task);
 }
 
 void PlayerCharacter::step(long timePassed)
