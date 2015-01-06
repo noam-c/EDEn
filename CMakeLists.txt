@@ -119,6 +119,7 @@ SET(HEADERS
   src/TileEngine/TileState.h
   src/TileEngine/TriggerZone.h
   src/TileEngine/Messages/ActorMoveMessage.h
+  src/TileEngine/Messages/DebugCommandMessage.h
   src/TileEngine/Messages/MapExitMessage.h
   src/TileEngine/Messages/MapTriggerMessage.h
   src/tinyxml/tinystr.h
@@ -236,6 +237,7 @@ SET(SOURCES
   src/TileEngine/TileState.cpp
   src/TileEngine/TriggerZone.cpp
   src/TileEngine/Messages/ActorMoveMessage.cpp
+  src/TileEngine/Messages/DebugCommandMessage.cpp
   src/TileEngine/Messages/MapExitMessage.cpp
   src/TileEngine/Messages/MapTriggerMessage.cpp
   src/Transitions/TransitionState.cpp

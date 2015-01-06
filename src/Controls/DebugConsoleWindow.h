@@ -8,8 +8,7 @@
 #define DEBUG_CONSOLE_WINDOW_H
 
 #include "EdenRocketBindings.h"
-
-const int DEBUG_CONSOLE_EVENT = 10;
+#include "MessagePipe.h"
 
 namespace Rocket
 {
@@ -26,6 +25,9 @@ namespace Rocket
  */
 class DebugConsoleWindow
 {
+   /** The message pipe used for trigger events. */
+   messaging::MessagePipe& m_messagePipe;
+
    /** The event binding collection for the debug window */
    EdenRocketBindings m_bindings;
 
@@ -47,7 +49,7 @@ class DebugConsoleWindow
        *
        * @param context The Rocket context to which this console window should attach.
        */
-      DebugConsoleWindow(Rocket::Core::Context& context);
+      DebugConsoleWindow(messaging::MessagePipe& messagePipe, Rocket::Core::Context& context);
 
       /**
        * Ensures that focus always lands on the textbox.
@@ -63,6 +65,13 @@ class DebugConsoleWindow
        */
       void onKeyPress(Rocket::Core::Event& event);
 
+      /**
+       * Consumes the text change in the command prompt.
+       *
+       * @param event The text change event to consume.
+       */
+      void onTextChange(Rocket::Core::Event& event);
+      
       /**
        * @return true iff the debug window is currently visible.
        */

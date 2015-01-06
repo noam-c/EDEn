@@ -4,15 +4,16 @@
  *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
-#include "DebugConsoleWindow.h"
-#include <SDL.h>
-#include <string>
 #include <Rocket/Controls.h>
+
+#include "DebugConsoleWindow.h"
+#include "DebugCommandMessage.h"
 
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_ROCKET;
 
-DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
+DebugConsoleWindow::DebugConsoleWindow(messaging::MessagePipe& messagePipe, Rocket::Core::Context& context) :
+   m_messagePipe(messagePipe),
    m_context(context)
 {
    m_context.AddReference();
@@ -30,6 +31,7 @@ DebugConsoleWindow::DebugConsoleWindow(Rocket::Core::Context& context) :
       if(m_commandElement != nullptr)
       {
          m_bindings.bindAction(m_commandElement, "keydown", [this](Rocket::Core::Event& event) { onKeyPress(event); });
+         m_bindings.bindAction(m_commandElement, "change", [this](Rocket::Core::Event& event) { onTextChange(event); });
       }
       else
       {
@@ -54,6 +56,12 @@ void DebugConsoleWindow::onFocus(Rocket::Core::Event& event)
    m_commandElement->Focus();
 }
 
+void DebugConsoleWindow::onTextChange(Rocket::Core::Event& event)
+{
+   Rocket::Core::String value = m_commandElement->GetValue();
+   m_commandElement->SetValue(value.Replace("`", ""));
+}
+
 void DebugConsoleWindow::onKeyPress(Rocket::Core::Event& event)
 {
    Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
@@ -74,15 +82,7 @@ void DebugConsoleWindow::onKeyPress(Rocket::Core::Event& event)
 
          m_commandElement->SetValue("");
 
-         SDL_Event event;
-         event.type = SDL_USEREVENT;
-         event.user.code = DEBUG_CONSOLE_EVENT;
-
-         // Create a copy of the string that was entered into the debug console and embed it in the SDL event
-         event.user.data1 = new std::string(text.CString());
-         event.user.data2 = nullptr;
-
-         SDL_PushEvent(&event);
+         m_messagePipe.sendMessage(DebugCommandMessage(text.CString()));
       }
    }
 }
@@ -100,4 +100,5 @@ void DebugConsoleWindow::show()
 void DebugConsoleWindow::hide()
 {
    m_consoleDocument->Hide();
+   m_commandElement->SetValue("");
 }

@@ -16,6 +16,11 @@ namespace Rocket
    };
 };
 
+namespace messaging
+{
+   class MessagePipe;
+};
+
 class TileEngineOverlay
 {
    /** The debug console window to be used for diagnostics. */
@@ -30,7 +35,7 @@ class TileEngineOverlay
        *
        * @param rocketContext The Rocket context to which this console window should attach.
        */
-      TileEngineOverlay(PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext);
+      TileEngineOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext);
    
       void refresh();
 

@@ -13,6 +13,7 @@
 #include <tuple>
 #include <SDL.h>
 
+#include "DebugCommandMessage.h"
 #include "ScriptEngine.h"
 #include "NPC.h"
 #include "PlayerData.h"
@@ -43,10 +44,11 @@ TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> pla
    m_playerData(playerData),
    m_initialized(false),
    m_entityGrid(*this, m_messagePipe),
-   m_overlay(*playerData, getMetadata(), getStateType(), *m_rocketContext),
+   m_overlay(m_messagePipe, *playerData, getMetadata(), getStateType(), *m_rocketContext),
    m_dialogue(*m_rocketContext, m_scheduler, getScriptEngine()),
    m_playerActor(m_messagePipe, m_entityGrid, *playerData)
 {
+   m_messagePipe.registerListener<DebugCommandMessage>(this);
    m_messagePipe.registerListener<MapExitMessage>(this);
    m_messagePipe.registerListener<MapTriggerMessage>(this);
 
@@ -83,6 +85,11 @@ Scheduler* TileEngine::getScheduler()
 std::string TileEngine::getMapName() const
 {
    return m_entityGrid.getMapName();
+}
+
+void TileEngine::receive(const DebugCommandMessage& message)
+{
+   getScriptEngine().runScriptString(message.command);
 }
 
 void TileEngine::receive(const MapExitMessage& message)
@@ -438,22 +445,6 @@ void TileEngine::handleInputEvents(bool& finishState)
    {
       switch (event.type)
       {
-         case SDL_USEREVENT:
-         {
-            switch(event.user.code)
-            {
-               case DEBUG_CONSOLE_EVENT:
-               {
-                  std::string* script = (std::string*)event.user.data1;
-                  getScriptEngine().runScriptString(*script);
-
-                  // This assumes that, once the debug event is consumed here, it is not used anymore
-                  delete script;
-                  break;
-               }
-            }
-            break;
-         }
          case SDL_MOUSEBUTTONDOWN:
          {
             const shapes::Point2D mouseClickLocation(event.button.x, event.button.y);

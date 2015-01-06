@@ -1,7 +1,7 @@
 #include "TileEngineOverlay.h"
 
-TileEngineOverlay::TileEngineOverlay(PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext) :
-   m_consoleWindow(rocketContext),
+TileEngineOverlay::TileEngineOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext) :
+   m_consoleWindow(messagePipe, rocketContext),
    m_shortcutBar(playerData, metadata, stateType, rocketContext)
 {
 }

@@ -29,6 +29,7 @@ class Region;
 class DialogueController;
 class Task;
 
+struct DebugCommandMessage;
 struct MapExitMessage;
 struct MapTriggerCallback;
 struct MapTriggerMessage;
@@ -42,7 +43,12 @@ struct MapTriggerMessage;
  *
  * @author Noam Chitayat
  */
-class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, public messaging::Listener<MapTriggerMessage>, public std::enable_shared_from_this<TileEngine>
+class TileEngine:
+   public GameState,
+   public messaging::Listener<DebugCommandMessage>,
+   public messaging::Listener<MapExitMessage>,
+   public messaging::Listener<MapTriggerMessage>,
+   public std::enable_shared_from_this<TileEngine>
 {
    /** The currently loaded player data. */
    std::shared_ptr<PlayerData> m_playerData;
@@ -197,6 +203,13 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
        */
       std::string getMapName() const;
 
+      /**
+       * Handler for debug console command messages.
+       *
+       * @param message The debug command message.
+       */
+      void receive(const DebugCommandMessage& message);
+      
       /**
        * Handler for map location changes.
        *
