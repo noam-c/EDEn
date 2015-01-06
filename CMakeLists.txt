@@ -13,14 +13,11 @@ SET(HEADERS
   src/Coroutines/Task.h
   src/Coroutines/TaskId.h
   src/Coroutines/Timer.h
-  src/DebugUtils.h
-  src/DebugConsoleWindow.h
-  src/Exception.h
+  src/Controls/DebugConsoleWindow.h
   src/ExecutionStack.h
   src/GameContext.h
   src/GameState.h
   src/GameStateType.h
-  src/Grid.h
   src/Graphics/GraphicsUtil.h
   src/Graphics/OpenGLExtensions.h
   src/Graphics/ScreenTexture.h
@@ -95,7 +92,6 @@ SET(HEADERS
   src/Shapes/Point2D.h
   src/Shapes/Rectangle.h
   src/Settings/Settings.h
-  src/Singleton.h
   src/Sprites/Animation.h
   src/Sprites/FrameSequence.h
   src/Sprites/Sprite.h
@@ -133,7 +129,11 @@ SET(HEADERS
   src/Transitions/RandomTransitionGenerator.h
   src/Transitions/BlendState.h
   src/TODOLIST.h
+  src/utils/DebugUtils.h
+  src/utils/Exception.h
+  src/utils/Grid.h
   src/utils/IntegerSequence.h
+  src/utils/Singleton.h
 )
 
 SET(SOURCES
@@ -144,6 +144,7 @@ SET(SOURCES
   src/json/jsoncpp.cpp
   src/Audio/Music.cpp
   src/Audio/Sound.cpp
+  src/Controls/DebugConsoleWindow.cpp
   src/Coroutines/Coroutine.cpp
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
@@ -242,10 +243,9 @@ SET(SOURCES
   src/Transitions/SpinState.cpp
   src/Transitions/RandomTransitionGenerator.cpp
   src/Transitions/BlendState.cpp
+  src/utils/DebugUtils.cpp
+  src/utils/Exception.cpp
   src/main.cpp
-  src/DebugUtils.cpp
-  src/DebugConsoleWindow.cpp
-  src/Exception.cpp
   src/ExecutionStack.cpp
   src/GameContext.cpp
   src/GameState.cpp
@@ -259,6 +259,7 @@ SET(SOURCE_GROUP_DELIMITER "/")
 
 SOURCE_GROUP("//" REGULAR_EXPRESSION src/[^/]*)
 SOURCE_GROUP(Audio REGULAR_EXPRESSION src/Audio/.*)
+SOURCE_GROUP(Controls REGULAR_EXPRESSION src/Controls/.*)
 SOURCE_GROUP(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 SOURCE_GROUP(Metadata REGULAR_EXPRESSION src/Metadata/.*)
 SOURCE_GROUP(Graphics REGULAR_EXPRESSION src/Graphics/.*)
@@ -289,6 +290,7 @@ ENDIF()
 INCLUDE_DIRECTORIES(
   src
   src/Audio
+  src/Controls
   src/Coroutines
   src/Metadata
   src/Graphics
