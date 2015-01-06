@@ -1,6 +1,7 @@
 <rml id="shell">
    <head>
       <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="common.rcss" />
       <link type="text/rcss" href="menu.rcss" />
    </head>
    <body class="shell">

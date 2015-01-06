@@ -1,6 +1,7 @@
 <rml>
    <head>
       <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="common.rcss" />
       <link type="text/rcss" href="menu.rcss" />
       <link type="text/rcss" href="skillpane.rcss" />
    </head>

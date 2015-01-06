@@ -1,0 +1,10 @@
+.hidden
+{
+   visibility: hidden;
+}
+
+.collapsed
+{
+   display: none;
+}
+
