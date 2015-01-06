@@ -6,8 +6,9 @@
 
 #include "DialogueController.h"
 
-#include <Rocket/Core.h>
+#include <algorithm>
 
+#include "DialogueBox.h"
 #include "Scheduler.h"
 #include "ScriptEngine.h"
 #include "DebugUtils.h"
@@ -24,38 +25,23 @@ bool DialogueController::DialogueCoroutine::resume(long timePassed)
    return m_dialogueController.resume(timePassed);
 }
 
-DialogueController::DialogueController(Rocket::Core::Context& context, Scheduler& scheduler, ScriptEngine& engine) :
+DialogueController::DialogueController(ScriptEngine& engine) :
    m_scriptEngine(engine),
-   m_context(context),
-   m_mainDialogue(nullptr),
    m_fastMode(false)
 {
-   initMainDialogue();
-   clearDialogue();
+}
 
+void DialogueController::initialize(Scheduler& scheduler, std::shared_ptr<DialogueBox> dialogueBox)
+{
+   m_mainDialogue = dialogueBox;
+   clearDialogue();
+   
    scheduler.start(std::make_shared<DialogueCoroutine>(*this));
 }
 
-DialogueController::~DialogueController()
+void DialogueController::addLine(DialogueLineType type, const std::string& speech, const std::shared_ptr<Task>& task)
 {
-   if(m_dialogueBoxDocument != nullptr)
-   {
-      m_dialogueBoxDocument->Close();
-   }
-}
-
-void DialogueController::initMainDialogue()
-{
-   m_dialogueBoxDocument = m_context.LoadDocument("data/gui/dialogueBox.rml");
-   if(m_dialogueBoxDocument != nullptr)
-   {
-      m_mainDialogue = m_dialogueBoxDocument->GetElementById("textArea");
-   }
-}
-
-void DialogueController::addLine(LineType type, const std::string& speech, const std::shared_ptr<Task>& task)
-{
-   m_lineQueue.emplace(new Line(type, speech, task));
+   m_lineQueue.emplace(type, speech, task);
    updateDialogueBox();
 }
 
@@ -67,22 +53,6 @@ void DialogueController::narrate(const std::string& speech, const std::shared_pt
 void DialogueController::say(const std::string& speech, const std::shared_ptr<Task>& task)
 {
    addLine(SAY, speech, task);
-}
-
-void DialogueController::updateDialogueBox()
-{
-   if(!m_lineQueue.empty())
-   {
-      m_mainDialogue->GetOwnerDocument()->Show();
-
-      bool isSpeech = m_lineQueue.front()->type == SAY;
-      m_dialogueBoxDocument->SetClass("speech", isSpeech);
-      m_dialogueBoxDocument->SetClass("narration", !isSpeech);
-   }
-   else
-   {
-      m_mainDialogue->GetOwnerDocument()->Hide();
-   }
 }
 
 void DialogueController::setFastModeEnabled(bool enabled)
@@ -97,7 +67,7 @@ void DialogueController::setFastModeEnabled(bool enabled)
 
 void DialogueController::advanceDialogue()
 {
-   if(m_lineQueue.empty())
+   if(!hasDialogue())
    {
       // No dialogue to advance
       return;
@@ -106,36 +76,37 @@ void DialogueController::advanceDialogue()
    auto& currLine = m_lineQueue.front();
    // See if we ran over any embedded scripts that we should execute
    unsigned int openIndex, closeIndex;
-   if(currLine->getNextBracketPair(openIndex, closeIndex))
+   if(currLine.getNextBracketPair(openIndex, closeIndex))
    {
       // If there is a bracket pair coming up and we're past the point of the
       // open bracket, then extract the script string and run it
       if(openIndex <= m_charsToShow)
       {
          m_charsToShow = openIndex;
-         std::string script = currLine->removeNextScriptString();
+         std::string script = currLine.removeNextScriptString();
          m_scriptEngine.runScriptString(script);
       }
    }
 
-   std::string dialogue = currLine->dialogue;
-
-   // If we have run to the end of the dialogue, we show all the text.
-   if(m_charsToShow >= dialogue.size())
-   {
-      m_charsToShow = dialogue.size();
-   }
-
-   m_dialogueBoxDocument->SetClass("dialogueComplete", dialogueComplete());
-
-   // Display the necessary piece of text in the text box
-   dialogue = dialogue.substr(0, m_charsToShow);
-   m_mainDialogue->SetInnerRML(dialogue.c_str());
+   m_charsToShow = std::min(m_charsToShow, currLine.text.size());
+   updateDialogueBox();
 }
 
-bool DialogueController::dialogueComplete() const
+/**
+ * Update the dialogue box to reflect the current line of dialogue.
+ */
+void DialogueController::updateDialogueBox()
 {
-   return hasDialogue() && m_charsToShow >= m_lineQueue.front()->dialogue.size();
+   auto dialogueBox = m_mainDialogue.lock();
+   if (dialogueBox)
+   {
+      dialogueBox->refresh();
+   }
+}
+
+bool DialogueController::isCurrentLineComplete() const
+{
+   return hasDialogue() && m_charsToShow >= m_lineQueue.front().text.size();
 }
 
 bool DialogueController::hasDialogue() const
@@ -153,7 +124,7 @@ void DialogueController::clearDialogue()
       m_lineQueue.pop();
    }
 
-   m_mainDialogue->SetInnerRML("");
+   updateDialogueBox();
 }
 
 int DialogueController::getMillisecondsPerCharacter() const
@@ -169,7 +140,7 @@ int DialogueController::getMillisecondsPerCharacter() const
 
 bool DialogueController::nextLine()
 {
-   if(!hasDialogue() || !dialogueComplete())
+   if(!hasDialogue() || !isCurrentLineComplete())
    {
       return false;
    }
@@ -184,7 +155,7 @@ bool DialogueController::nextLine()
 
 bool DialogueController::resume(long timePassed)
 {
-   if(hasDialogue() && !dialogueComplete())
+   if(hasDialogue() && !isCurrentLineComplete())
    {
       m_dialogueTime -= timePassed;
       while(m_dialogueTime < 0)
@@ -199,18 +170,18 @@ bool DialogueController::resume(long timePassed)
    return false;
 }
 
-DialogueController::Line::Line(LineType type, const std::string& dialogue, const std::shared_ptr<Task>& task) :
+DialogueController::Line::Line(DialogueLineType type, const std::string& text, const std::shared_ptr<Task>& task) :
    task(task),
    type(type),
-   dialogue(dialogue)
+   text(text)
 {
    int openIndex = 0;
    int closeIndex = 0;
 
    for(;;)
    {
-      int nextOpenIndex = dialogue.find('<', openIndex+1);
-      int nextCloseIndex = dialogue.find('>', closeIndex+1);
+      int nextOpenIndex = text.find('<', openIndex+1);
+      int nextCloseIndex = text.find('>', closeIndex+1);
 
       if(nextOpenIndex < 0)
       {
@@ -278,9 +249,27 @@ std::string DialogueController::Line::removeNextScriptString()
    m_closeScriptBrackets.pop();
 
    const int scriptLength = closeIndex - openIndex;
-   std::string script = dialogue.substr(openIndex + 1, scriptLength - 1);
-   dialogue.replace(openIndex, scriptLength + 1, "");
+   std::string script = text.substr(openIndex + 1, scriptLength - 1);
+   text.replace(openIndex, scriptLength + 1, "");
 
-   DEBUG("Extracting script %s, leaving dialogue %s", script.c_str(), dialogue.c_str());
+   DEBUG("Extracting script %s, leaving dialogue %s", script.c_str(), text.c_str());
    return script;
+}
+
+std::string DialogueController::getTextToShow() const
+{
+   if (!hasDialogue())
+   {
+      return "";
+   }
+   
+   auto& currLineText = m_lineQueue.front().text;
+   return currLineText.substr(0, m_charsToShow);
+}
+
+DialogueLineType DialogueController::getLineType() const
+{
+   return hasDialogue() ?
+      m_lineQueue.front().type :
+      DialogueLineType::SAY;
 }

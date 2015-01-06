@@ -44,15 +44,17 @@ TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> pla
    m_playerData(playerData),
    m_initialized(false),
    m_entityGrid(*this, m_messagePipe),
-   m_overlay(m_messagePipe, *playerData, getMetadata(), getStateType(), *m_rocketContext),
-   m_dialogue(*m_rocketContext, m_scheduler, getScriptEngine()),
-   m_playerActor(m_messagePipe, m_entityGrid, *playerData)
+   m_dialogue(getScriptEngine()),
+   m_playerActor(m_messagePipe, m_entityGrid, *playerData),
+   m_overlay(m_messagePipe, *playerData, getMetadata(), getStateType(), *m_rocketContext, m_dialogue)
 {
    m_messagePipe.registerListener<DebugCommandMessage>(this);
    m_messagePipe.registerListener<MapExitMessage>(this);
    m_messagePipe.registerListener<MapTriggerMessage>(this);
 
    m_cameraTarget = &m_playerActor;
+   
+   m_dialogue.initialize(m_scheduler, m_overlay.getDialogueBox());
 }
 
 TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const std::string& chapterName) :

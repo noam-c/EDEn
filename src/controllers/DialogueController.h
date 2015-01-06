@@ -14,16 +14,18 @@
 #include "Coroutine.h"
 #include "Task.h"
 
+class DialogueBox;
 class ScriptEngine;
 
-namespace Rocket
+/**
+ * There are two kinds of dialogues (for now); speech and narration/thought.
+ */
+enum DialogueLineType
 {
-   namespace Core
-   {
-      class Context;
-      class Element;
-      class ElementDocument;
-   };
+   /** Dialogue is narrated in center screen */
+   NARRATE,
+   /** Dialogue is spoken to the player via bottom dialogue box */
+   SAY
 };
 
 /**
@@ -44,9 +46,6 @@ class DialogueController
 {
    /** The HARDCODED time-per-letter speed */
    static const int MILLISECONDS_PER_LETTER = 100;
-
-   /** Abstract the implementation of the dialogue boxes */
-   typedef Rocket::Core::Element DialogueBox;
 
    class DialogueCoroutine : public Coroutine
    {
@@ -71,19 +70,7 @@ class DialogueController
    };
 
    /**
-    * There are two kinds of dialogues (for now); speech and narration/thought.
-    */
-   enum LineType
-   {
-      /** Dialogue is narrated in center screen */
-      NARRATE,
-      /** Dialogue is spoken to the player via bottom dialogue box */
-      SAY
-   };
-
-   /**
-    * A line of dialogue is a string of dialogue and a LineType
-    * It determines what is said and how.
+    * A line of dialogue contains everything needed to determine what is said and how it is said.
     *
     * @author Noam Chitayat
     */
@@ -99,17 +86,17 @@ class DialogueController
       std::shared_ptr<Task> task;
 
       public:
-         /** The type of line (how it should be displayed) */
-         LineType type;
+         /** The type of line (how its text should be displayed) */
+         DialogueLineType type;
 
-         /** The dialogue itself. */
-         std::string dialogue;
+         /** The text in the line. */
+         std::string text;
 
          /**
           *  Constructor. Initializes values and indexes the locations of
           *  embedded scripts in the line of dialogue for later use.
           */
-         Line(LineType type, const std::string& dialogue, const std::shared_ptr<Task>& task);
+         Line(DialogueLineType type, const std::string& text, const std::shared_ptr<Task>& task);
 
          ~Line();
 
@@ -129,19 +116,13 @@ class DialogueController
    };
 
    /** The queue to hold all the pending dialogue sequences. */
-   std::queue<std::unique_ptr<Line>> m_lineQueue;
+   std::queue<Line> m_lineQueue;
 
    /** The script engine to call when embedded instructions are found */
    ScriptEngine& m_scriptEngine;
 
-   /** The Rocket context that will manage the dialogue boxes */
-   Rocket::Core::Context& m_context;
-
-   /** The RML document holding the main dialogue box */
-   Rocket::Core::ElementDocument* m_dialogueBoxDocument;
-
    /** Main dialogue box for speech or narration */
-   DialogueBox* m_mainDialogue;
+   std::weak_ptr<DialogueBox> m_mainDialogue;
 
    /**
     * How much time since a letter was added to the screen's dialogue box
@@ -152,7 +133,7 @@ class DialogueController
    /**
     * The number of characters that should be placed on the screen.
     */
-   unsigned int m_charsToShow;
+   size_t m_charsToShow;
 
    /**
     * True iff the user has indicated that dialogue should flow more quickly.
@@ -163,11 +144,6 @@ class DialogueController
     * Initialize the main dialogue box.
     */
    void initMainDialogue();
-
-   /**
-    * @return true iff the current line of dialogue is finished writing to screen
-    */
-   bool dialogueComplete() const;
 
    /**
     * Refresh the dialogue box to show enough letters on the screen for the amount of time passed.
@@ -187,7 +163,7 @@ class DialogueController
     * @param speech The speech to enqueue in the dialogue controller.
     * @param task The ticket to be signalled when the line is finished
     */
-   void addLine(LineType type, const std::string& speech, const std::shared_ptr<Task>& task);
+   void addLine(DialogueLineType type, const std::string& speech, const std::shared_ptr<Task>& task);
 
    /**
     * Clears any dialogue currently being displayed onscreen.
@@ -206,15 +182,18 @@ class DialogueController
        * Constructor.
        *
        * @param context The Rocket context of the current state.
-       * @param scheduler The scheduler that will manage the dialogue controller's execution.
        * @param engine The scripting engine to call with embedded scripts.
        */
-      DialogueController(Rocket::Core::Context& context, Scheduler& scheduler, ScriptEngine& engine);
+      DialogueController(ScriptEngine& engine);
 
       /**
-       * Destructor.
+       * Initializes the dialogue controller by associating it with a view object and
+       * starting its execution on a given scheduler.
+       *
+       * @param scheduler The scheduler that will manage the dialogue controller's execution.
+       * @param dialogueBox The view that will be updated with dialogue changes.
        */
-      ~DialogueController();
+      void initialize(Scheduler& scheduler, std::shared_ptr<DialogueBox> dialogueBox);
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next
@@ -264,6 +243,20 @@ class DialogueController
        */
       bool resume(long timePassed);
 
+      /**
+       * @return true iff the current line of dialogue is finished writing to screen
+       */
+      bool isCurrentLineComplete() const;
+
+      /**
+       * @return the string to show in a dialogue display.
+       */
+      std::string getTextToShow() const;
+      
+      /**
+       * @return the type of the line currently on display.
+       */
+      DialogueLineType getLineType() const;
 };
 
 #endif

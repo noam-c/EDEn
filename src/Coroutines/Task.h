@@ -25,7 +25,7 @@ class Task
    friend class Scheduler;
 
    /** True iff the Scheduler managing this Task has been destroyed. */
-   bool m_schedulerDestroyed;
+   bool m_taskDeactivated;
 
    /** The unique identifier for this task */
    const TaskId m_id;
@@ -41,6 +41,28 @@ class Task
     *  @param scheduler The scheduler to signal when the task is completed.
     */
    Task(const TaskId taskId, Scheduler& scheduler);
+   
+   /**
+    * Move constructor. Acquires the ID of the other tesk
+    * and deactivates it so that there is at most one active
+    * task for a given ID.
+    */
+   Task(Task&& other);
+
+   /**
+    * Because tasks have unique IDs, they cannot be copied.
+    */
+   Task(const Task& other) = delete;
+   
+   /**
+    * Because tasks have unique IDs, they cannot be assigned.
+    */
+   Task& operator=(const Task& other) = delete;
+
+   /**
+    * Because tasks have unique IDs, they cannot be assigned.
+    */
+   Task& operator=(Task&& other) = delete;
 
    /**
     * Signals to a task that the Scheduler has been destroyed,
@@ -64,7 +86,7 @@ class Task
        */
       template<typename ... Results> void complete(Results&& ... results)
       {
-         if(!m_schedulerDestroyed)
+         if(!m_taskDeactivated)
          {
             m_scheduler.completeTask(m_id, Task::makeResultsObject(std::forward<Results>(results)...));
          }

@@ -73,9 +73,6 @@ class TileEngine:
    /** The current map that the player is in. */
    EntityGrid m_entityGrid;
 
-   /** The GUI overlaid on top of the map in the tile engine. */
-   TileEngineOverlay m_overlay;
-   
    /** The coroutine scheduler used by the tile engine. */
    Scheduler m_scheduler;
 
@@ -85,6 +82,9 @@ class TileEngine:
    /** The actor representing the player character on the map */
    PlayerCharacter m_playerActor;
 
+   /** The GUI overlaid on top of the map in the tile engine. */
+   TileEngineOverlay m_overlay;
+   
    /** A list of all NPCs in the map, identified by their names. */
    std::map<std::string, NPC> m_npcList;
 

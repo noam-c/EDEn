@@ -11,11 +11,19 @@
 const int debugFlag = DEBUG_SCHEDULER;
 
 Task::Task(TaskId taskId, Scheduler& scheduler) :
-   m_schedulerDestroyed(false),
+   m_taskDeactivated(false),
    m_id(taskId),
    m_scheduler(scheduler)
 {
    DEBUG("Creating task %d", m_id);
+}
+
+Task::Task(Task&& other) :
+   m_taskDeactivated(other.m_taskDeactivated),
+   m_id(other.m_id),
+   m_scheduler(other.m_scheduler)
+{
+   other.m_taskDeactivated = true;
 }
 
 Task::~Task()
@@ -30,5 +38,5 @@ std::unique_ptr<ICoroutineResults> Task::makeResultsObject()
 
 void Task::signalSchedulerDestroyed()
 {
-   m_schedulerDestroyed = true;
+   m_taskDeactivated = true;
 }

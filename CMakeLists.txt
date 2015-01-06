@@ -135,6 +135,7 @@ SET(HEADERS
   src/utils/IntegerSequence.h
   src/utils/Singleton.h
   src/views/DebugConsoleWindow.h
+  src/views/DialogueBox.h
 )
 
 SET(SOURCES
@@ -247,6 +248,7 @@ SET(SOURCES
   src/utils/DebugUtils.cpp
   src/utils/Exception.cpp
   src/views/DebugConsoleWindow.cpp
+  src/views/DialogueBox.cpp
   src/main.cpp
   src/ExecutionStack.cpp
   src/GameContext.cpp
