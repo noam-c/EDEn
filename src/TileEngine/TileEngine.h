@@ -9,15 +9,14 @@
 
 #include "GameState.h"
 #include "MessagePipe.h"
-#include "DebugConsoleWindow.h"
 #include "EntityGrid.h"
 #include "Camera.h"
 #include "Listener.h"
 #include "PlayerData.h"
-#include "ShortcutBar.h"
 #include "Point2D.h"
 #include "PlayerCharacter.h"
 #include "Scheduler.h"
+#include "TileEngineOverlay.h"
 #include "DialogueController.h"
 
 #include <map>
@@ -65,15 +64,12 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
    /** The location of the player, if the game is starting from a chapter in progress. */
    SaveLocation m_saveLocationToInitialize;
 
-   /** The debug console window to be used for diagnostics. */
-   DebugConsoleWindow m_consoleWindow;
-
    /** The current map that the player is in. */
    EntityGrid m_entityGrid;
 
-   /** The window containing the player's shortcuts. */
-   ShortcutBar m_shortcutBar;
-
+   /** The GUI overlaid on top of the map in the tile engine. */
+   TileEngineOverlay m_overlay;
+   
    /** The coroutine scheduler used by the tile engine. */
    Scheduler m_scheduler;
 
@@ -98,11 +94,6 @@ class TileEngine: public GameState, public messaging::Listener<MapExitMessage>, 
     * @param chapterName The name of the chapter.
     */
    void startChapter(const std::string& chapterName);
-
-   /**
-    * Toggles the debug console on or off.
-    */
-   void toggleDebugConsole();
 
    /**
     * Recalculate the camera offset (based on map and window dimensions)

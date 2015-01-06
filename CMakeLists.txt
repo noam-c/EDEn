@@ -117,6 +117,7 @@ SET(HEADERS
   src/TileEngine/Region.h
   src/TileEngine/RoyFloydWarshallMatrices.h
   src/TileEngine/TileEngine.h
+  src/TileEngine/TileEngineOverlay.h
   src/TileEngine/LuaTileEngine.h
   src/TileEngine/Tileset.h
   src/TileEngine/TileState.h
@@ -228,6 +229,7 @@ SET(SOURCES
   src/TileEngine/Region.cpp
   src/TileEngine/RoyFloydWarshallMatrices.cpp
   src/TileEngine/TileEngine.cpp
+  src/TileEngine/TileEngineOverlay.cpp
   src/TileEngine/LuaTileEngine.cpp
   src/TileEngine/Tileset.cpp
   src/TileEngine/TileState.cpp

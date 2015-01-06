@@ -42,9 +42,8 @@ TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> pla
    GameState(gameContext, GameStateType::FIELD, "TileEngine"),
    m_playerData(playerData),
    m_initialized(false),
-   m_consoleWindow(*m_rocketContext),
    m_entityGrid(*this, m_messagePipe),
-   m_shortcutBar(*playerData, getMetadata(), getStateType(), *m_rocketContext),
+   m_overlay(*playerData, getMetadata(), getStateType(), *m_rocketContext),
    m_dialogue(*m_rocketContext, m_scheduler, getScriptEngine()),
    m_playerActor(m_messagePipe, m_entityGrid, *playerData)
 {
@@ -220,22 +219,9 @@ void TileEngine::recalculateMapOffsets()
       m_entityGrid.getMapBounds().getSize() * TILE_SIZE :
       shapes::Size();
 
-   const int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - m_shortcutBar.getHeight();
+   const int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - m_overlay.getShortcutBarHeight();
    const shapes::Size screenSize(GraphicsUtil::getInstance()->getWidth(), totalUsableHeight);
    m_camera.setViewBounds(screenSize, mapPixelBounds);
-}
-
-void TileEngine::toggleDebugConsole()
-{
-   bool consoleWindowVisible = m_consoleWindow.isVisible();
-   if(consoleWindowVisible)
-   {
-      m_consoleWindow.hide();
-   }
-   else
-   {
-      m_consoleWindow.show();
-   }
 }
 
 NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size, const MovementDirection direction)
@@ -299,7 +285,7 @@ PlayerCharacter* TileEngine::getPlayerCharacter()
 void TileEngine::activate()
 {
    GameState::activate();
-   m_shortcutBar.refresh();
+   m_overlay.refresh();
    recalculateMapOffsets();
    m_playerData->bindMessagePipe(&m_messagePipe);
    getScriptEngine().setTileEngine(shared_from_this());
@@ -334,7 +320,7 @@ void TileEngine::deactivate()
    getScriptEngine().setTileEngine(nullptr);
    m_playerData->unbindMessagePipe();
    GameState::deactivate();
-   m_shortcutBar.refresh();
+   m_overlay.refresh();
    recalculateMapOffsets();
 }
 
@@ -488,7 +474,7 @@ void TileEngine::handleInputEvents(bool& finishState)
             {
                case SDLK_SPACE:
                {
-                  if(!m_consoleWindow.isVisible())
+                  if(!m_overlay.isDebugConsoleVisible())
                   {
                      if(m_dialogue.hasDialogue())
                      {
@@ -513,12 +499,12 @@ void TileEngine::handleInputEvents(bool& finishState)
                }
                case SDLK_BACKQUOTE:
                {
-                  toggleDebugConsole();
+                  m_overlay.toggleDebugConsole();
                   return;
                }
                case SDLK_TAB:
                {
-                  if(!m_consoleWindow.isVisible())
+                  if(!m_overlay.isDebugConsoleVisible())
                   {
                      auto menu = std::make_shared<HomeMenu>(m_gameContext, *m_playerData);
                      getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, shared_from_this(), menu));
@@ -534,7 +520,7 @@ void TileEngine::handleInputEvents(bool& finishState)
          }
          case SDL_KEYUP:
          {
-            if(!m_consoleWindow.isVisible())
+            if(!m_overlay.isDebugConsoleVisible())
             {
                switch(event.key.keysym.sym)
                {
