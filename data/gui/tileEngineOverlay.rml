@@ -2,7 +2,7 @@
    <head>
       <link type="text/rcss" href="base.rcss" />
       <link type="text/rcss" href="common.rcss" />
-      <link type="text/rcss" href="dialogueBox.rcss" />
+      <link type="text/rcss" href="tileEngineOverlay.rcss" />
    </head>
    <body>
       <span id="textArea" class="dialogueText"></span>

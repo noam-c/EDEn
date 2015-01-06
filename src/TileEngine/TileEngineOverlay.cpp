@@ -4,7 +4,7 @@ TileEngineOverlay::TileEngineOverlay(messaging::MessagePipe& messagePipe, Player
    m_consoleWindow(messagePipe, rocketContext),
    m_shortcutBar(playerData, metadata, stateType, rocketContext)
 {
-   m_overlayDocument = rocketContext.LoadDocument("data/gui/dialogueBox.rml");
+   m_overlayDocument = rocketContext.LoadDocument("data/gui/tileEngineOverlay.rml");
    
    if (m_overlayDocument != nullptr)
    {
@@ -17,6 +17,7 @@ TileEngineOverlay::~TileEngineOverlay()
 {
    if(m_overlayDocument != nullptr)
    {
+      m_overlayDocument->RemoveReference();
       m_overlayDocument->Close();
    }
 }
