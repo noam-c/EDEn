@@ -7,13 +7,13 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 SET(HEADERS
   src/Audio/Music.h
   src/Audio/Sound.h
+  src/controllers/DialogueController.h
   src/Coroutines/Coroutine.h
   src/Coroutines/CoroutineResults.h
   src/Coroutines/Scheduler.h
   src/Coroutines/Task.h
   src/Coroutines/TaskId.h
   src/Coroutines/Timer.h
-  src/Controls/DebugConsoleWindow.h
   src/ExecutionStack.h
   src/GameContext.h
   src/GameState.h
@@ -101,7 +101,6 @@ SET(HEADERS
   src/TileEngine/LuaActor.h
   src/TileEngine/Camera.h
   src/TileEngine/CameraSlider.h
-  src/TileEngine/DialogueController.h
   src/TileEngine/EntityGrid.h
   src/TileEngine/Layer.h
   src/TileEngine/Map.h
@@ -135,6 +134,7 @@ SET(HEADERS
   src/utils/Grid.h
   src/utils/IntegerSequence.h
   src/utils/Singleton.h
+  src/views/DebugConsoleWindow.h
 )
 
 SET(SOURCES
@@ -145,7 +145,7 @@ SET(SOURCES
   src/json/jsoncpp.cpp
   src/Audio/Music.cpp
   src/Audio/Sound.cpp
-  src/Controls/DebugConsoleWindow.cpp
+  src/controllers/DialogueController.cpp
   src/Coroutines/Coroutine.cpp
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
@@ -219,7 +219,6 @@ SET(SOURCES
   src/TileEngine/LuaActor.cpp
   src/TileEngine/Camera.cpp
   src/TileEngine/CameraSlider.cpp
-  src/TileEngine/DialogueController.cpp
   src/TileEngine/EntityGrid.cpp
   src/TileEngine/Layer.cpp
   src/TileEngine/Map.cpp
@@ -247,6 +246,7 @@ SET(SOURCES
   src/Transitions/BlendState.cpp
   src/utils/DebugUtils.cpp
   src/utils/Exception.cpp
+  src/views/DebugConsoleWindow.cpp
   src/main.cpp
   src/ExecutionStack.cpp
   src/GameContext.cpp
@@ -261,7 +261,7 @@ SET(SOURCE_GROUP_DELIMITER "/")
 
 SOURCE_GROUP("//" REGULAR_EXPRESSION src/[^/]*)
 SOURCE_GROUP(Audio REGULAR_EXPRESSION src/Audio/.*)
-SOURCE_GROUP(Controls REGULAR_EXPRESSION src/Controls/.*)
+SOURCE_GROUP(controllers REGULAR_EXPRESSION src/controllers/.*)
 SOURCE_GROUP(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 SOURCE_GROUP(Metadata REGULAR_EXPRESSION src/Metadata/.*)
 SOURCE_GROUP(Graphics REGULAR_EXPRESSION src/Graphics/.*)
@@ -283,6 +283,7 @@ SOURCE_GROUP(json REGULAR_EXPRESSION src/json/.*)
 SOURCE_GROUP(LuaWrapper REGULAR_EXPRESSION src/LuaWrapper/.*)
 SOURCE_GROUP(tinyxml REGULAR_EXPRESSION src/tinyxml/.*)
 SOURCE_GROUP(utils REGULAR_EXPRESSION src/utils/.*)
+SOURCE_GROUP(views REGULAR_EXPRESSION src/views/.*)
 
 IF(NOT ${CMAKE_GENERATOR} STREQUAL "Xcode")
    SOURCE_GROUP("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
@@ -292,7 +293,7 @@ ENDIF()
 INCLUDE_DIRECTORIES(
   src
   src/Audio
-  src/Controls
+  src/controllers
   src/Coroutines
   src/Metadata
   src/Graphics
@@ -316,6 +317,7 @@ INCLUDE_DIRECTORIES(
   src/LuaWrapper
   src/tinyxml
   src/utils
+  src/views
 )
 
 ADD_DEFINITIONS(
