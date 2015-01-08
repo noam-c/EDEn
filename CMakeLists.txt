@@ -8,6 +8,7 @@ SET(HEADERS
   src/Audio/Music.h
   src/Audio/Sound.h
   src/controllers/DialogueController.h
+  src/controllers/DialogueEntry.h
   src/Coroutines/Coroutine.h
   src/Coroutines/CoroutineResults.h
   src/Coroutines/Scheduler.h
@@ -147,6 +148,7 @@ SET(SOURCES
   src/Audio/Music.cpp
   src/Audio/Sound.cpp
   src/controllers/DialogueController.cpp
+  src/controllers/DialogueEntry.cpp
   src/Coroutines/Coroutine.cpp
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp

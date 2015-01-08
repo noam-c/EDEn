@@ -27,7 +27,7 @@ void DialogueBox::refresh()
 
    if(shouldBeShown)
    {
-      bool isSpeech = m_controller.getLineType() == DialogueLineType::SAY;
+      bool isSpeech = m_controller.getEntryType() == DialogueEntryType::SAY;
       m_dialogueBox->SetClass("speech", isSpeech);
       m_dialogueBox->SetClass("narration", !isSpeech);
    }

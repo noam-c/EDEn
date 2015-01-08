@@ -39,9 +39,9 @@ void DialogueController::initialize(Scheduler& scheduler, std::shared_ptr<Dialog
    scheduler.start(std::make_shared<DialogueCoroutine>(*this));
 }
 
-void DialogueController::addLine(DialogueLineType type, const std::string& speech, const std::shared_ptr<Task>& task)
+void DialogueController::addLine(DialogueEntryType type, const std::string& speech, const std::shared_ptr<Task>& task)
 {
-   m_lineQueue.emplace(type, speech, task);
+   m_dialogueQueue.emplace(type, speech, task);
    updateDialogueBox();
 }
 
@@ -73,7 +73,7 @@ void DialogueController::advanceDialogue()
       return;
    }
 
-   auto& currLine = m_lineQueue.front();
+   auto& currLine = m_dialogueQueue.front();
    // See if we ran over any embedded scripts that we should execute
    unsigned int openIndex, closeIndex;
    if(currLine.getNextBracketPair(openIndex, closeIndex))
@@ -106,12 +106,12 @@ void DialogueController::updateDialogueBox()
 
 bool DialogueController::isCurrentLineComplete() const
 {
-   return hasDialogue() && m_charsToShow >= m_lineQueue.front().text.size();
+   return hasDialogue() && m_charsToShow >= m_dialogueQueue.front().text.size();
 }
 
 bool DialogueController::hasDialogue() const
 {
-   return !m_lineQueue.empty();
+   return !m_dialogueQueue.empty();
 }
 
 void DialogueController::clearDialogue()
@@ -119,9 +119,9 @@ void DialogueController::clearDialogue()
    m_dialogueTime = getMillisecondsPerCharacter();
    m_charsToShow = 0;
 
-   if(!m_lineQueue.empty())
+   if(!m_dialogueQueue.empty())
    {
-      m_lineQueue.pop();
+      m_dialogueQueue.pop();
    }
 
    updateDialogueBox();
@@ -170,92 +170,6 @@ bool DialogueController::resume(long timePassed)
    return false;
 }
 
-DialogueController::Line::Line(DialogueLineType type, const std::string& text, const std::shared_ptr<Task>& task) :
-   task(task),
-   type(type),
-   text(text)
-{
-   int openIndex = 0;
-   int closeIndex = 0;
-
-   for(;;)
-   {
-      int nextOpenIndex = text.find('<', openIndex+1);
-      int nextCloseIndex = text.find('>', closeIndex+1);
-
-      if(nextOpenIndex < 0)
-      {
-         if(nextCloseIndex >= 0)
-         {
-            T_T("Extra '>' character detected in dialogue line."
-                " Please balance your dialogue script brackets (< and >).");
-         }
-
-         break;
-      }
-      else if(nextCloseIndex < 0)
-      {
-         T_T("Found '<' without matching '>' in dialogue line."
-            " Please balance your dialogue script brackets ('<' and '>').");
-      }
-      else if(nextCloseIndex < nextOpenIndex)
-      {
-         T_T("Found extra '>' character in dialogue line."
-            " Please balance your dialogue script brackets ('<' and '>').");
-      }
-      else if(nextOpenIndex < closeIndex)
-      {
-         T_T("Found nested '<' character in dialogue line."
-            " Please revise the line to remove nested brackets ('<' and '>').");
-      }
-      else
-      {
-         openIndex = nextOpenIndex;
-         closeIndex = nextCloseIndex;
-         m_openScriptBrackets.push(openIndex);
-         m_closeScriptBrackets.push(closeIndex);
-         DEBUG("Found embedded script starting at %d, ending at %d", openIndex, closeIndex);
-      }
-   }
-}
-
-DialogueController::Line::~Line()
-{
-   if(task)
-   {
-      task->complete();
-   }
-}
-
-bool DialogueController::Line::getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex) const
-{
-   if(m_openScriptBrackets.empty())
-   {
-      return false;
-   }
-
-   openIndex = m_openScriptBrackets.front();
-   closeIndex = m_closeScriptBrackets.front();
-
-   return true;
-}
-
-std::string DialogueController::Line::removeNextScriptString()
-{
-   unsigned int openIndex, closeIndex;
-   getNextBracketPair(openIndex, closeIndex);
-
-   m_openScriptBrackets.pop();
-   m_closeScriptBrackets.pop();
-
-   const int scriptLength = closeIndex - openIndex;
-   std::string script = text.substr(openIndex + 1, scriptLength - 1);
-   text.replace(openIndex, scriptLength + 1, "");
-
-   DEBUG("Extracting script %s, leaving dialogue %s", script.c_str(), text.c_str());
-   return script;
-}
-
 std::string DialogueController::getTextToShow() const
 {
    if (!hasDialogue())
@@ -263,13 +177,13 @@ std::string DialogueController::getTextToShow() const
       return "";
    }
    
-   auto& currLineText = m_lineQueue.front().text;
+   auto& currLineText = m_dialogueQueue.front().text;
    return currLineText.substr(0, m_charsToShow);
 }
 
-DialogueLineType DialogueController::getLineType() const
+DialogueEntryType DialogueController::getEntryType() const
 {
    return hasDialogue() ?
-      m_lineQueue.front().type :
-      DialogueLineType::SAY;
+      m_dialogueQueue.front().type :
+      DialogueEntryType::SAY;
 }

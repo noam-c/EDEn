@@ -12,21 +12,11 @@
 #include <string>
 
 #include "Coroutine.h"
-#include "Task.h"
+#include "DialogueEntry.h"
 
 class DialogueBox;
 class ScriptEngine;
-
-/**
- * There are two kinds of dialogues (for now); speech and narration/thought.
- */
-enum DialogueLineType
-{
-   /** Dialogue is narrated in center screen */
-   NARRATE,
-   /** Dialogue is spoken to the player via bottom dialogue box */
-   SAY
-};
+class Task;
 
 /**
  * The dialogue controller controls all of the dialogue boxes that hold
@@ -69,54 +59,8 @@ class DialogueController
          bool resume(long timePassed);
    };
 
-   /**
-    * A line of dialogue contains everything needed to determine what is said and how it is said.
-    *
-    * @author Noam Chitayat
-    */
-   class Line
-   {
-      /** A queue of upcoming open script brackets ('<' characters) */
-      std::queue<int> m_openScriptBrackets;
-
-      /** A queue of upcoming close script brackets ('>' characters) */
-      std::queue<int> m_closeScriptBrackets;
-
-      /** The task ID waiting on this particular line of dialogue */
-      std::shared_ptr<Task> task;
-
-      public:
-         /** The type of line (how its text should be displayed) */
-         DialogueLineType type;
-
-         /** The text in the line. */
-         std::string text;
-
-         /**
-          *  Constructor. Initializes values and indexes the locations of
-          *  embedded scripts in the line of dialogue for later use.
-          */
-         Line(DialogueLineType type, const std::string& text, const std::shared_ptr<Task>& task);
-
-         ~Line();
-
-         /**
-          *  Gets the next embdedded script bracket pair.
-          *
-          *  @return true iff there are embedded script brackets left in the string
-          */
-         bool getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex) const;
-
-         /**
-          *  Gets the next embedded script and removes it from the dialogue line.
-          *
-          *  @return the script string removed from the dialogue line
-          */
-         std::string removeNextScriptString();
-   };
-
    /** The queue to hold all the pending dialogue sequences. */
-   std::queue<Line> m_lineQueue;
+   std::queue<DialogueEntry> m_dialogueQueue;
 
    /** The script engine to call when embedded instructions are found */
    ScriptEngine& m_scriptEngine;
@@ -163,7 +107,7 @@ class DialogueController
     * @param speech The speech to enqueue in the dialogue controller.
     * @param task The ticket to be signalled when the line is finished
     */
-   void addLine(DialogueLineType type, const std::string& speech, const std::shared_ptr<Task>& task);
+   void addLine(DialogueEntryType type, const std::string& speech, const std::shared_ptr<Task>& task);
 
    /**
     * Clears any dialogue currently being displayed onscreen.
@@ -256,7 +200,7 @@ class DialogueController
       /**
        * @return the type of the line currently on display.
        */
-      DialogueLineType getLineType() const;
+      DialogueEntryType getEntryType() const;
 };
 
 #endif
