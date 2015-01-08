@@ -81,6 +81,14 @@ class ScriptEngine
     */
    int runScript(const std::shared_ptr<Script>& script, Scheduler& scheduler);
 
+   /**
+    * Retrieves the raw pointer to the tile engine.
+    * Used to operate on the tile engine without incrementing its strong ref count.
+    * Useful since many functions that ScriptEngine calls finish with a longjmp,
+    * so a shared_ptr reference may not get cleaned up!
+    */
+   TileEngine* getRawTileEngine();
+   
    public:
       /**
        * Constructor. Initializes a Lua VM and initializes members as needed.

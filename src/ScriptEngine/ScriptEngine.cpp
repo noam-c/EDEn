@@ -155,6 +155,18 @@ void ScriptEngine::setPlayerData(std::shared_ptr<PlayerData> playerData)
       lua_setglobal(m_luaVM, "roster");
    }
 }
+
+TileEngine* ScriptEngine::getRawTileEngine()
+{
+   auto sharedPtr = m_tileEngine.lock();
+   if(sharedPtr)
+   {
+      return sharedPtr.get();
+   }
+   
+   return nullptr;
+}
+
 int ScriptEngine::narrate(lua_State* luaStack)
 {
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
@@ -163,8 +175,8 @@ int ScriptEngine::narrate(lua_State* luaStack)
       return 0;
    }
 
-   auto tileEngine = m_tileEngine.lock();
-   if(!tileEngine)
+   TileEngine* tileEngine = getRawTileEngine();
+   if(tileEngine == nullptr)
    {
       DEBUG("Missing tile engine. Cannot add dialogue.");
       return lua_error(luaStack);
@@ -203,13 +215,12 @@ int ScriptEngine::say(lua_State* luaStack)
       return 0;
    }
 
-   auto tileEngine = m_tileEngine.lock();
-   if(!tileEngine)
+   TileEngine* tileEngine = getRawTileEngine();
+   if(tileEngine == nullptr)
    {
       DEBUG("Missing tile engine. Cannot add dialogue.");
       return lua_error(luaStack);
    }
-
 
    std::string text;
    if(!ScriptUtilities::getParameter(luaStack, 1, 1, "text", text))
@@ -239,7 +250,7 @@ int ScriptEngine::say(lua_State* luaStack)
 int ScriptEngine::playSound(lua_State* luaStack)
 {
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
-   if (scheduler == nullptr)
+   if(scheduler == nullptr)
    {
       return 0;
    }
@@ -361,8 +372,9 @@ int ScriptEngine::generateRandom(lua_State* luaStack)
 
 int ScriptEngine::setRegion(lua_State* luaStack)
 {
-   auto tileEngine = m_tileEngine.lock();
-   if(!tileEngine)
+   TileEngine* tileEngine = getRawTileEngine();
+
+   if(tileEngine == nullptr)
    {
       DEBUG("Missing tile engine. Cannot set region.");
       return lua_error(luaStack);
