@@ -8,6 +8,7 @@
 #define SCRIPT_UTILITIES_H
 
 #include <string>
+#include <vector>
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -23,9 +24,12 @@ extern "C"
 class ScriptUtilities
 {
    static bool isBoolean(lua_State* luaStack, int index);
+   static bool isTable(lua_State* luaStack, int index);
 
    static bool isString(lua_State* luaStack, int index);
    static std::string retrieveString(lua_State* luaStack, int index);
+   
+   static std::vector<std::string> retrieveStringArray(lua_State* luaStack, int index);
 
    template<typename T> static bool isType(lua_State* luaStack, int index);
    template<typename T> static T* retrieveType(lua_State* luaStack, int index);
@@ -41,6 +45,8 @@ class ScriptUtilities
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, double& value);
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool& value);
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::string& value);
+
+      static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::vector<std::string>& values);
 };
 
 template<typename T> bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool (*checkType)(lua_State*, int), T (*retrieve)(lua_State*, int), T& result)
