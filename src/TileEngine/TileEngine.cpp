@@ -53,7 +53,7 @@ TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> pla
    m_messagePipe.registerListener<MapTriggerMessage>(this);
 
    m_cameraTarget = &m_playerActor;
-   
+
    m_dialogue.initialize(m_scheduler, m_overlay.getDialogueBox());
 }
 
@@ -130,14 +130,14 @@ void TileEngine::receive(const MapTriggerMessage& message)
    }
 }
 
-void TileEngine::dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task)
+void TileEngine::dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
 {
-   m_dialogue.narrate(narration, task);
+   m_dialogue.narrate(narration, task, choices);
 }
 
-void TileEngine::dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task)
+void TileEngine::dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
 {
-   m_dialogue.say(speech, task);
+   m_dialogue.say(speech, task, choices);
 }
 
 int TileEngine::setRegion(const std::string& regionName, const std::string& mapName)
@@ -472,7 +472,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                      if(m_dialogue.hasDialogue())
                      {
                         m_dialogue.setFastModeEnabled(true);
-                        
+
                         if (!event.key.repeat)
                         {
                            m_dialogue.nextLine();

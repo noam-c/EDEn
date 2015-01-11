@@ -84,7 +84,7 @@ class TileEngine:
 
    /** The GUI overlaid on top of the map in the tile engine. */
    TileEngineOverlay m_overlay;
-   
+
    /** A list of all NPCs in the map, identified by their names. */
    std::map<std::string, NPC> m_npcList;
 
@@ -209,7 +209,7 @@ class TileEngine:
        * @param message The debug command message.
        */
       void receive(const DebugCommandMessage& message);
-      
+
       /**
        * Handler for map location changes.
        *
@@ -230,7 +230,7 @@ class TileEngine:
        * @param narration The line of dialogue to appear as a narration.
        * @param task The ticket of this narration instruction
        */
-      void dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task);
+      void dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices);
 
       /**
        * Send a line of dialogue to the DialogueController as speech.
@@ -238,7 +238,7 @@ class TileEngine:
        * @param speech The line of dialogue to appear as character speech.
        * @param task The ticket of this speech instruction
        */
-      void dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task);
+      void dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices);
 
       /**
        * Set a new location for the gameplay to take place in.

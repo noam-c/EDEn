@@ -27,6 +27,8 @@ bool DialogueController::DialogueCoroutine::resume(long timePassed)
 
 DialogueController::DialogueController(ScriptEngine& engine) :
    m_scriptEngine(engine),
+   m_timeSinceLastCharacterAdded(MILLISECONDS_PER_LETTER),
+   m_charsToShow(0),
    m_fastMode(false)
 {
 }
@@ -35,31 +37,36 @@ void DialogueController::initialize(Scheduler& scheduler, std::shared_ptr<Dialog
 {
    m_mainDialogue = dialogueBox;
    clearDialogue();
-   
+
    scheduler.start(std::make_shared<DialogueCoroutine>(*this));
 }
 
-void DialogueController::addLine(DialogueEntryType type, const std::string& speech, const std::shared_ptr<Task>& task)
+void DialogueController::addLine(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task)
 {
-   m_dialogueQueue.emplace(type, speech, task);
-   updateDialogueBox();
+   bool currentlyHasDialogue = hasDialogue();
+   m_dialogueQueue.emplace(type, text, choices, task);
+
+   if(!currentlyHasDialogue)
+   {
+      updateDialogueBox(true /*hasCurrentLineChanged*/);
+   }
 }
 
-void DialogueController::narrate(const std::string& speech, const std::shared_ptr<Task>& task)
+void DialogueController::narrate(const std::string& text, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
 {
-   addLine(NARRATE, speech, task);
+   addLine(NARRATE, text, choices, task);
 }
 
-void DialogueController::say(const std::string& speech, const std::shared_ptr<Task>& task)
+void DialogueController::say(const std::string& text, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
 {
-   addLine(SAY, speech, task);
+   addLine(SAY, text, choices, task);
 }
 
 void DialogueController::setFastModeEnabled(bool enabled)
 {
    if(!m_fastMode)
    {
-      m_dialogueTime = -1;
+      m_timeSinceLastCharacterAdded = -1;
    }
 
    m_fastMode = enabled;
@@ -73,34 +80,41 @@ void DialogueController::advanceDialogue()
       return;
    }
 
-   auto& currLine = m_dialogueQueue.front();
+   DialogueEntry& currEntry = m_dialogueQueue.front();
    // See if we ran over any embedded scripts that we should execute
    unsigned int openIndex, closeIndex;
-   if(currLine.getNextBracketPair(openIndex, closeIndex))
+   if(currEntry.getNextBracketPair(openIndex, closeIndex))
    {
       // If there is a bracket pair coming up and we're past the point of the
       // open bracket, then extract the script string and run it
       if(openIndex <= m_charsToShow)
       {
          m_charsToShow = openIndex;
-         std::string script = currLine.removeNextScriptString();
+         std::string script = currEntry.removeNextScriptString();
          m_scriptEngine.runScriptString(script);
       }
    }
 
-   m_charsToShow = std::min(m_charsToShow, currLine.text.size());
+   m_charsToShow = std::min(m_charsToShow, currEntry.text.size());
    updateDialogueBox();
 }
 
 /**
  * Update the dialogue box to reflect the current line of dialogue.
  */
-void DialogueController::updateDialogueBox()
+void DialogueController::updateDialogueBox(bool hasCurrentLineChanged)
 {
    auto dialogueBox = m_mainDialogue.lock();
    if (dialogueBox)
    {
-      dialogueBox->refresh();
+      if(hasCurrentLineChanged)
+      {
+         dialogueBox->onDialogueChanged();
+      }
+      else
+      {
+         dialogueBox->onDialogueAdvanced();
+      }
    }
 }
 
@@ -116,7 +130,7 @@ bool DialogueController::hasDialogue() const
 
 void DialogueController::clearDialogue()
 {
-   m_dialogueTime = getMillisecondsPerCharacter();
+   m_timeSinceLastCharacterAdded = getMillisecondsPerCharacter();
    m_charsToShow = 0;
 
    if(!m_dialogueQueue.empty())
@@ -124,7 +138,7 @@ void DialogueController::clearDialogue()
       m_dialogueQueue.pop();
    }
 
-   updateDialogueBox();
+   updateDialogueBox(true /*hasCurrentLineChanged*/);
 }
 
 int DialogueController::getMillisecondsPerCharacter() const
@@ -138,9 +152,22 @@ int DialogueController::getMillisecondsPerCharacter() const
    return time;
 }
 
-bool DialogueController::nextLine()
+void DialogueController::choiceSelected(int choiceIndex)
 {
    if(!hasDialogue() || !isCurrentLineComplete())
+   {
+      return;
+   }
+
+   if(m_dialogueQueue.front().choiceSelected(choiceIndex))
+   {
+      clearDialogue();
+   }
+}
+
+bool DialogueController::nextLine()
+{
+   if(!hasDialogue() || !isCurrentLineComplete() || hasChoices())
    {
       return false;
    }
@@ -148,7 +175,6 @@ bool DialogueController::nextLine()
    // If the dialogue is finished, clear the dialogue box and
    // move on to the next line
    clearDialogue();
-   updateDialogueBox();
 
    return true;
 }
@@ -157,10 +183,10 @@ bool DialogueController::resume(long timePassed)
 {
    if(hasDialogue() && !isCurrentLineComplete())
    {
-      m_dialogueTime -= timePassed;
-      while(m_dialogueTime < 0)
+      m_timeSinceLastCharacterAdded -= timePassed;
+      while(m_timeSinceLastCharacterAdded < 0)
       {
-         m_dialogueTime += getMillisecondsPerCharacter();
+         m_timeSinceLastCharacterAdded += getMillisecondsPerCharacter();
          ++m_charsToShow;
       }
 
@@ -170,13 +196,23 @@ bool DialogueController::resume(long timePassed)
    return false;
 }
 
+bool DialogueController::hasChoices() const
+{
+   return hasDialogue() && !m_dialogueQueue.front().choices.empty();
+}
+
+const DialogueChoiceList& DialogueController::getCurrentChoices() const
+{
+   return m_dialogueQueue.front().choices;
+}
+
 std::string DialogueController::getTextToShow() const
 {
    if (!hasDialogue())
    {
       return "";
    }
-   
+
    auto& currLineText = m_dialogueQueue.front().text;
    return currLineText.substr(0, m_charsToShow);
 }

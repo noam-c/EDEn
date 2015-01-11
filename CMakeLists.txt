@@ -135,6 +135,7 @@ SET(HEADERS
   src/utils/Grid.h
   src/utils/IntegerSequence.h
   src/utils/Singleton.h
+  src/views/ChoicesDataSource.h
   src/views/DebugConsoleWindow.h
   src/views/DialogueBox.h
 )
@@ -249,6 +250,7 @@ SET(SOURCES
   src/Transitions/BlendState.cpp
   src/utils/DebugUtils.cpp
   src/utils/Exception.cpp
+  src/views/ChoicesDataSource.cpp
   src/views/DebugConsoleWindow.cpp
   src/views/DialogueBox.cpp
   src/main.cpp

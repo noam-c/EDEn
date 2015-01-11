@@ -1,5 +1,9 @@
 function activate(me)
    me:lookAt{playerSprite}
-   say{'You can save your game now.', waitForFinish=true}
-   map:openSaveMenu{}
+   saveChoice = say{'Would you like to save your game?', choices={"Save", "Don't Save"}}
+   if saveChoice == 0 then
+      map:openSaveMenu{}
+   end
+
+   say{'See you later!'}
 end

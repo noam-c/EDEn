@@ -6,13 +6,13 @@
 
 #include "PlayerCharacter.h"
 #include "Sprite.h"
-#include "TileEngine.h"
 #include "Pathfinder.h"
 #include "EntityGrid.h"
 #include "PlayerData.h"
 #include "CharacterRoster.h"
 #include "RosterUpdateMessage.h"
 #include "Character.h"
+#include "MessagePipe.h"
 
 #include <math.h>
 #include <SDL.h>

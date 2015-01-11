@@ -5,7 +5,13 @@
       <link type="text/rcss" href="tileEngineOverlay.rcss" />
    </head>
    <body>
-      <span id="textArea" class="dialogueText"></span>
-      <span class="readyNote">&gt;</span>
+      <div id="dialogueBox">
+         <div id="textArea" class="dialogueText"></div>
+         <span class="readyNote">&gt;</span>
+         <datagrid id="choiceList" source="choicesDataSource.choices">
+            <col fields="text" width="90%"></col>
+         </datagrid>
+      </div>
    </body>
 </rml>
+

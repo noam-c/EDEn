@@ -40,10 +40,10 @@ class TileEngineOverlay
 
    /** The active dialogue box instance, if one was built for this overlay. */
    std::shared_ptr<DialogueBox> m_dialogueBox;
-   
+
    /** The window containing the player's shortcuts. */
    ShortcutBar m_shortcutBar;
-   
+
    public:
       /**
        * Constructor.
@@ -75,7 +75,7 @@ class TileEngineOverlay
        * @return the height of the shortcut bar.
        */
       int getShortcutBarHeight();
-   
+
       /**
        * @return true iff the debug console is currently visible.
        */

@@ -72,7 +72,7 @@ class DialogueController
     * How much time since a letter was added to the screen's dialogue box
     * from the current line.
     */
-   int m_dialogueTime;
+   int m_timeSinceLastCharacterAdded;
 
    /**
     * The number of characters that should be placed on the screen.
@@ -97,17 +97,17 @@ class DialogueController
    /**
     * Update the dialogue box to reflect the current line of dialogue.
     */
-   void updateDialogueBox();
+   void updateDialogueBox(bool hasCurrentLineChanged = false);
 
    /**
     * Enqueue a line of speech in the dialogue box.
     * If there is already a line being spoken, append the new speech.
     *
     * @param type The type of line that will be enqueued.
-    * @param speech The speech to enqueue in the dialogue controller.
+    * @param text The speech to enqueue in the dialogue controller.
     * @param task The ticket to be signalled when the line is finished
     */
-   void addLine(DialogueEntryType type, const std::string& speech, const std::shared_ptr<Task>& task);
+   void addLine(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task);
 
    /**
     * Clears any dialogue currently being displayed onscreen.
@@ -148,6 +148,8 @@ class DialogueController
        */
       bool nextLine();
 
+      void choiceSelected(int choiceIndex);
+
       /**
        * @return true iff there is currently a line of dialogue being shown.
        */
@@ -157,17 +159,17 @@ class DialogueController
        * Enqueue a line of speech said by a character.
        *
        * @param speech The dialogue that will be said.
-       * @param task The ticket of this speech instruction
+       * @param task The task associated with this speech instruction.
        */
-      void say(const std::string& speech, const std::shared_ptr<Task>& task);
+      void say(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices);
 
       /**
        * Enqueue a line of speech narrated or thought by a character.
        *
        * @param speech The dialogue that will be narrated.
-       * @param task The ticket of this narration instruction
+       * @param task The task associated with this narration instruction
        */
-      void narrate(const std::string& speech, const std::shared_ptr<Task>& task);
+      void narrate(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices);
 
       /**
        * Enables or disables fast mode.
@@ -193,10 +195,20 @@ class DialogueController
       bool isCurrentLineComplete() const;
 
       /**
+       * @return true iff the current line of dialogue has one or more choices.
+       */
+      bool hasChoices() const;
+
+      /**
+       * @return the choice list to show in a dialogue display.
+       */
+      const DialogueChoiceList& getCurrentChoices() const;
+
+      /**
        * @return the string to show in a dialogue display.
        */
       std::string getTextToShow() const;
-      
+
       /**
        * @return the type of the line currently on display.
        */

@@ -88,7 +88,7 @@ class ScriptEngine
     * so a shared_ptr reference may not get cleaned up!
     */
    TileEngine* getRawTileEngine();
-   
+
    public:
       /**
        * Constructor. Initializes a Lua VM and initializes members as needed.

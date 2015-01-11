@@ -163,7 +163,7 @@ TileEngine* ScriptEngine::getRawTileEngine()
    {
       return sharedPtr.get();
    }
-   
+
    return nullptr;
 }
 
@@ -183,25 +183,37 @@ int ScriptEngine::narrate(lua_State* luaStack)
    }
 
    std::string text;
-   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "text", text))
+   ScriptUtilities::getParameter(luaStack, 1, 1, "text", text);
+
+   std::vector<std::string> choices;
+   ScriptUtilities::getParameter(luaStack, 1, 2, "choices", choices);
+
+   if(text.empty() && choices.empty())
    {
-      DEBUG("Text not found. Cannot add dialogue.");
+      DEBUG("Text and choices not found. Cannot add dialogue.");
       return lua_error(luaStack);
    }
 
    bool waitForFinish;
-   if(!ScriptUtilities::getParameter(luaStack, 1, -1, "waitForFinish", waitForFinish))
+
+   if(!choices.empty())
+   {
+      // Must wait for a choice to be made if choices are offered to the user
+      waitForFinish = true;
+   }
+   else if(!ScriptUtilities::getParameter(luaStack, 1, -1, "waitForFinish", waitForFinish))
    {
       waitForFinish = false;
    }
 
-   DEBUG("Narrating text: %s", text.c_str());
    auto task = scheduler->createNewTask();
-   tileEngine->dialogueNarrate(text, task);
+   DEBUG("Narrating text: %s", text.c_str());
+   tileEngine->dialogueNarrate(text, task, choices);
 
+   int numResultsExpected = choices.empty() ? 0 : 1;
    if(waitForFinish)
    {
-      return waitUntilFinished(task, 0);
+      return waitUntilFinished(task, numResultsExpected);
    }
 
    return 0;
@@ -223,25 +235,37 @@ int ScriptEngine::say(lua_State* luaStack)
    }
 
    std::string text;
-   if(!ScriptUtilities::getParameter(luaStack, 1, 1, "text", text))
+   ScriptUtilities::getParameter(luaStack, 1, 1, "text", text);
+
+   std::vector<std::string> choices;
+   ScriptUtilities::getParameter(luaStack, 1, 2, "choices", choices);
+
+   if(text.empty() && choices.empty())
    {
-      DEBUG("Text not found. Cannot add dialogue.");
+      DEBUG("Text and choices not found. Cannot add dialogue.");
       return lua_error(luaStack);
    }
 
    bool waitForFinish;
-   if(!ScriptUtilities::getParameter(luaStack, 1, -1, "waitForFinish", waitForFinish))
+
+   if(!choices.empty())
+   {
+      // Must wait for a choice to be made if choices are offered to the user
+      waitForFinish = true;
+   }
+   else if(!ScriptUtilities::getParameter(luaStack, 1, -1, "waitForFinish", waitForFinish))
    {
       waitForFinish = false;
    }
 
    auto task = scheduler->createNewTask();
    DEBUG("Saying text: %s", text.c_str());
-   tileEngine->dialogueSay(text, task);
+   tileEngine->dialogueSay(text, task, choices);
 
+   int numResultsExpected = choices.empty() ? 0 : 1;
    if(waitForFinish)
    {
-      return waitUntilFinished(task, 0);
+      return waitUntilFinished(task, numResultsExpected);
    }
 
    return 0;

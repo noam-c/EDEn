@@ -5,10 +5,16 @@ TileEngineOverlay::TileEngineOverlay(messaging::MessagePipe& messagePipe, Player
    m_shortcutBar(playerData, metadata, stateType, rocketContext)
 {
    m_overlayDocument = rocketContext.LoadDocument("data/gui/tileEngineOverlay.rml");
-   
-   if (m_overlayDocument != nullptr)
+
+   if(m_overlayDocument != nullptr)
    {
-      m_dialogueBox = std::make_shared<DialogueBox>(m_overlayDocument, dialogueController);
+      Rocket::Core::Element* dialogueBoxElement = m_overlayDocument->GetElementById("dialogueBox");
+
+      if(dialogueBoxElement != nullptr)
+      {
+         m_dialogueBox = std::make_shared<DialogueBox>(dialogueBoxElement, dialogueController);
+      }
+
       m_overlayDocument->Show();
    }
 }

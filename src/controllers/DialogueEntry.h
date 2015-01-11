@@ -4,6 +4,7 @@
 #include <memory>
 #include <queue>
 #include <string>
+#include <vector>
 
 #include "Task.h"
 
@@ -19,6 +20,8 @@ enum DialogueEntryType
    SAY
 };
 
+typedef std::vector<std::string> DialogueChoiceList;
+
 /**
  * A line of dialogue contains everything needed to determine what is said and how it is said.
  *
@@ -33,22 +36,28 @@ class DialogueEntry
    std::queue<int> m_closeScriptBrackets;
 
    /** The task ID waiting on this particular line of dialogue */
-   std::shared_ptr<Task> task;
+   std::shared_ptr<Task> m_task;
 
    public:
       /** The type of line (how its text should be displayed) */
       DialogueEntryType type;
 
+      const DialogueChoiceList choices;
+
       /** The text in the line. */
       std::string text;
 
-      /**
-       *  Constructor. Initializes values and indexes the locations of
-       *  embedded scripts in the line of dialogue for later use.
-       */
       DialogueEntry(DialogueEntryType type, const std::string& text, const std::shared_ptr<Task>& task);
 
+      DialogueEntry(DialogueEntryType type, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task);
+
+      DialogueEntry(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task);
+
       ~DialogueEntry();
+
+      void parseTextScripts();
+
+      bool choiceSelected(int choiceIndex);
 
       /**
        *  Gets the next embdedded script bracket pair.
@@ -66,4 +75,3 @@ class DialogueEntry
 };
 
 #endif
-

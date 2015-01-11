@@ -4,9 +4,39 @@
 const int debugFlag = DEBUG_DIA_CONTR;
 
 DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, const std::shared_ptr<Task>& task) :
-   task(task),
+   m_task(task),
    type(type),
    text(text)
+{
+   parseTextScripts();
+}
+
+DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task) :
+   m_task(task),
+   type(type),
+   choices(choices),
+   text(text)
+{
+   parseTextScripts();
+}
+
+DialogueEntry::DialogueEntry(DialogueEntryType type, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task) :
+   m_task(task),
+   type(type),
+   choices(choices)
+{
+   parseTextScripts();
+}
+
+DialogueEntry::~DialogueEntry()
+{
+   if(m_task)
+   {
+      m_task->complete();
+   }
+}
+
+void DialogueEntry::parseTextScripts()
 {
    int openIndex = 0;
    int closeIndex = 0;
@@ -29,17 +59,17 @@ DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, co
       else if(nextCloseIndex < 0)
       {
          T_T("Found '<' without matching '>' in dialogue line."
-            " Please balance your dialogue script brackets ('<' and '>').");
+             " Please balance your dialogue script brackets ('<' and '>').");
       }
       else if(nextCloseIndex < nextOpenIndex)
       {
          T_T("Found extra '>' character in dialogue line."
-            " Please balance your dialogue script brackets ('<' and '>').");
+             " Please balance your dialogue script brackets ('<' and '>').");
       }
       else if(nextOpenIndex < closeIndex)
       {
          T_T("Found nested '<' character in dialogue line."
-            " Please revise the line to remove nested brackets ('<' and '>').");
+             " Please revise the line to remove nested brackets ('<' and '>').");
       }
       else
       {
@@ -52,12 +82,20 @@ DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, co
    }
 }
 
-DialogueEntry::~DialogueEntry()
+bool DialogueEntry::choiceSelected(int choiceIndex)
 {
-   if(task)
+   if(choiceIndex < 0 || choiceIndex >= choices.size())
    {
-      task->complete();
+      DEBUG("Invalid choice index selected: %d", choiceIndex);
+      return false;
    }
+
+   if(m_task)
+   {
+      m_task->complete(choiceIndex);
+   }
+
+   return true;
 }
 
 bool DialogueEntry::getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex) const
@@ -88,4 +126,3 @@ std::string DialogueEntry::removeNextScriptString()
    DEBUG("Extracting script %s, leaving dialogue %s", script.c_str(), text.c_str());
    return script;
 }
-
