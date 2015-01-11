@@ -6,9 +6,9 @@
 
 #include "EdenRocketBindings.h"
 
-void EdenRocketBindings::bindAction(Rocket::Core::ElementDocument* document, const char* id, const char* eventType, std::function<void(Rocket::Core::Event&)> handler, bool capture)
+void EdenRocketBindings::bindAction(Rocket::Core::Element* container, const char* id, const char* eventType, std::function<void(Rocket::Core::Event&)> handler, bool capture)
 {
-   Rocket::Core::Element* element = document->GetElementById(id);
+   Rocket::Core::Element* element = container->GetElementById(id);
    if(element != nullptr)
    {
       bindAction(element, eventType, handler, capture);
