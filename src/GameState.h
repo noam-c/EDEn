@@ -71,9 +71,6 @@ class GameState
       /** The Rocket context for any GUI created by the state. */
       Rocket::Core::Context* m_rocketContext;
 
-      /** True iff the Rocket context was created internally (and thus should also be destroyed internally) */
-      bool m_internalContext;
-
       /** Set true to signal the state logic to terminate so that the state is destroyed. */
       bool m_finished;
 

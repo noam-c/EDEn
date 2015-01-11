@@ -27,25 +27,30 @@ ExecutionStack::~ExecutionStack()
 
 void ExecutionStack::popState()
 {
-   auto& topState = m_stateStack.top();
+   std::shared_ptr<GameState>& topState = m_stateStack.top();
    topState->deactivate();
    m_stateStack.pop();
 
    if(m_nextState)
    {
       pushState(m_nextState);
-      m_nextState = nullptr;
+      m_nextState.reset();
    }
 }
 
-std::shared_ptr<GameState> ExecutionStack::getCurrentState() const
+std::shared_ptr<GameState>& ExecutionStack::getCurrentState()
+{
+   return m_stateStack.top();
+}
+
+const std::shared_ptr<GameState>& ExecutionStack::getCurrentState() const
 {
    return m_stateStack.top();
 }
 
 Scheduler* ExecutionStack::getCurrentScheduler() const
 {
-   std::shared_ptr<GameState> currentState = getCurrentState();
+   const std::shared_ptr<GameState>& currentState = getCurrentState();
    if(currentState != nullptr)
    {
       return currentState->getScheduler();
@@ -54,8 +59,8 @@ Scheduler* ExecutionStack::getCurrentScheduler() const
    return nullptr;
 }
 
-
-void ExecutionStack::pushState(std::shared_ptr<GameState> newState, std::shared_ptr<GameState> transitionState)
+void ExecutionStack::pushState(std::shared_ptr<GameState> newState, std::shared_ptr<GameState>
+transitionState)
 {
    if(!m_stateStack.empty())
    {
@@ -88,7 +93,7 @@ void ExecutionStack::execute()
 {
    while(!m_stateStack.empty())
    {
-      std::shared_ptr<GameState> currentState = m_stateStack.top();
+      std::shared_ptr<GameState>& currentState = m_stateStack.top();
       if(currentState->advanceFrame())
       {
          // The state is still active, so draw its results

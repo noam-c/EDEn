@@ -65,7 +65,12 @@ class ExecutionStack
       /**
        * @return The currently executing game state.
        */
-      std::shared_ptr<GameState> getCurrentState() const;
+      std::shared_ptr<GameState>& getCurrentState();
+
+      /**
+       * @return The currently executing game state.
+       */
+      const std::shared_ptr<GameState>& getCurrentState() const;
 
       /**
        * @return The currently executing game state's scheduler.
