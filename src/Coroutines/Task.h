@@ -41,7 +41,7 @@ class Task
     *  @param scheduler The scheduler to signal when the task is completed.
     */
    Task(const TaskId taskId, Scheduler& scheduler);
-   
+
    /**
     * Move constructor. Acquires the ID of the other tesk
     * and deactivates it so that there is at most one active
@@ -53,7 +53,7 @@ class Task
     * Because tasks have unique IDs, they cannot be copied.
     */
    Task(const Task& other) = delete;
-   
+
    /**
     * Because tasks have unique IDs, they cannot be assigned.
     */
@@ -84,7 +84,7 @@ class Task
        *
        * @param results The set of result values to pass to waiting coroutines.
        */
-      template<typename ... Results> void complete(Results&& ... results)
+      template<typename ... Results> void complete(Results ... results)
       {
          if(!m_taskDeactivated)
          {
