@@ -30,7 +30,7 @@ SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData) :
 }
 
 SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell) :
-   CharacterDependentMenu(gameContext, playerData, "SkillMenu", menuShell),
+   CharacterDependentMenu(gameContext, playerData, "SkillMenu", std::move(menuShell)),
    m_skillViewModel(*this, getMetadata())
 {
    initialize();

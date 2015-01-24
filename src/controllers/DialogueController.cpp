@@ -33,9 +33,9 @@ DialogueController::DialogueController(ScriptEngine& engine) :
 {
 }
 
-void DialogueController::initialize(Scheduler& scheduler, std::shared_ptr<DialogueBox> dialogueBox)
+void DialogueController::initialize(Scheduler& scheduler, std::weak_ptr<DialogueBox> dialogueBox)
 {
-   m_mainDialogue = dialogueBox;
+   m_mainDialogue = std::move(dialogueBox);
    clearDialogue();
 
    scheduler.start(std::make_shared<DialogueCoroutine>(*this));

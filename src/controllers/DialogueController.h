@@ -137,7 +137,7 @@ class DialogueController
        * @param scheduler The scheduler that will manage the dialogue controller's execution.
        * @param dialogueBox The view that will be updated with dialogue changes.
        */
-      void initialize(Scheduler& scheduler, std::shared_ptr<DialogueBox> dialogueBox);
+      void initialize(Scheduler& scheduler, std::weak_ptr<DialogueBox> dialogueBox);
 
       /**
        * Clears a finished line of dialogue from the screen and loads the next

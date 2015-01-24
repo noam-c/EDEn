@@ -31,7 +31,7 @@ std::string ResourceLoader::getPath(ResourceKey name, ResourceType type)
 std::shared_ptr<Resource> ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
 {
    // Construct a new resource instance based on the resource type
-   std::shared_ptr<Resource> newResource(nullptr);
+   std::shared_ptr<Resource> newResource;
    switch(type)
    {
       case MUSIC:
@@ -95,7 +95,7 @@ void ResourceLoader::tryInitialize(const std::shared_ptr<Resource>& resource, Re
 
 std::shared_ptr<Resource> ResourceLoader::getResource(ResourceKey name, ResourceType type)
 {
-   std::shared_ptr<Resource> resource(nullptr);
+   std::shared_ptr<Resource> resource;
 
    auto resourceIter = resources.find(name);
    if(resourceIter == resources.end())

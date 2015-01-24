@@ -111,7 +111,7 @@ class MenuState : public GameState
        * @param stateName The unique name of the state.
        * @param shell The shell for the menu.
        */
-      MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName, std::shared_ptr<MenuShell> shell);
+      MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName, std::shared_ptr<MenuShell> menuShell);
 
       /**
        * Destructor.

@@ -43,8 +43,8 @@ class HomeMenu: public MenuState
 
    int m_selectedDestinationMenu;
 
-   void pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<MenuShell> menuShell);
-   void pushCharacterDependentMenu(int optionIndex, int characterIndex, std::shared_ptr<MenuShell> menuShell);
+   void pushCharacterIndependentMenu(int optionIndex);
+   void pushCharacterDependentMenu(int optionIndex, int characterIndex);
 
    /**
     * Initializes the home menu pane and populates the sidebar.
@@ -62,7 +62,7 @@ class HomeMenu: public MenuState
     * @param slotIndex The character slot that was selected.
     * @param menuShell The menu shell shared between the menus.
     */
-   void selectCharacter(int slotIndex, std::shared_ptr<MenuShell> menuShell);
+   void selectCharacter(int slotIndex);
 
    public:
       /**
@@ -83,7 +83,7 @@ class HomeMenu: public MenuState
       /**
        * Destructor.
        */
-      ~HomeMenu() = default;
+      ~HomeMenu();
 
       /**
        * Handles sidebar option click events by navigating to the

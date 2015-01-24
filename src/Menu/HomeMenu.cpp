@@ -34,12 +34,14 @@ HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData) :
 }
 
 HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell) :
-   MenuState(gameContext, playerData, "HomeMenu", menuShell),
+   MenuState(gameContext, playerData, "HomeMenu", std::move(menuShell)),
    m_homeViewModel(playerData),
    m_selectedDestinationMenu(-1)
 {
    initialize();
 }
+
+HomeMenu::~HomeMenu() = default;
 
 void HomeMenu::initialize()
 {
@@ -76,7 +78,7 @@ void HomeMenu::characterClicked(Rocket::Core::Event& event)
       {
          DEBUG("Character click registered.");
          int characterIndex = rowElement->GetParentRelativeIndex();
-         selectCharacter(characterIndex, m_menuShell);
+         selectCharacter(characterIndex);
       }
    }
 }
@@ -89,7 +91,7 @@ void HomeMenu::sidebarClicked(int optionIndex)
       {
          case 0:
          case 7:
-            pushCharacterIndependentMenu(optionIndex, m_menuShell);
+            pushCharacterIndependentMenu(optionIndex);
             break;
          case 3:
             m_selectedDestinationMenu = optionIndex;
@@ -100,13 +102,13 @@ void HomeMenu::sidebarClicked(int optionIndex)
    }
 }
 
-void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, std::shared_ptr<MenuShell> menuShell)
+void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex)
 {
    std::shared_ptr<CharacterDependentMenu> newState;
    switch(optionIndex)
    {
       case 3:
-         newState = std::make_shared<SkillMenu>(m_gameContext, m_playerData, menuShell);
+         newState = std::make_shared<SkillMenu>(m_gameContext, m_playerData, m_menuShell);
          DEBUG("Skill menu constructed");
          break;
       default:
@@ -120,13 +122,13 @@ void HomeMenu::pushCharacterDependentMenu(int optionIndex, int characterIndex, s
    }
 }
 
-void HomeMenu::pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<MenuShell> menuShell)
+void HomeMenu::pushCharacterIndependentMenu(int optionIndex)
 {
    std::shared_ptr<MenuState> newState;
    switch(optionIndex)
    {
       case 0:
-         newState = std::make_shared<ItemMenu>(m_gameContext, m_playerData, menuShell);
+         newState = std::make_shared<ItemMenu>(m_gameContext, m_playerData, m_menuShell);
          DEBUG("Item menu constructed.");
          break;
       default:
@@ -140,7 +142,7 @@ void HomeMenu::pushCharacterIndependentMenu(int optionIndex, std::shared_ptr<Men
    }
 }
 
-void HomeMenu::selectCharacter(int slotIndex, std::shared_ptr<MenuShell> menuShell)
+void HomeMenu::selectCharacter(int slotIndex)
 {
    DEBUG("Character selected at slot %d", slotIndex);
 
@@ -150,7 +152,7 @@ void HomeMenu::selectCharacter(int slotIndex, std::shared_ptr<MenuShell> menuShe
     */
    if(m_selectedDestinationMenu >= 0)
    {
-      pushCharacterDependentMenu(m_selectedDestinationMenu, slotIndex, menuShell);
+      pushCharacterDependentMenu(m_selectedDestinationMenu, slotIndex);
       DEBUG("Character-dependent menu state pushed onto stack.");
    }
 

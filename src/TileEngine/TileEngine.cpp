@@ -41,12 +41,12 @@ const int TileEngine::TILE_SIZE = 32;
 
 TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData) :
    GameState(gameContext, GameStateType::FIELD, "TileEngine"),
-   m_playerData(playerData),
+   m_playerData(std::move(playerData)),
    m_initialized(false),
    m_entityGrid(*this, m_messagePipe),
    m_dialogue(getScriptEngine()),
-   m_playerActor(m_messagePipe, m_entityGrid, *playerData),
-   m_overlay(m_messagePipe, *playerData, getMetadata(), getStateType(), *m_rocketContext, m_dialogue)
+   m_playerActor(m_messagePipe, m_entityGrid, *m_playerData),
+   m_overlay(m_messagePipe, *m_playerData, getMetadata(), getStateType(), *m_rocketContext, m_dialogue)
 {
    m_messagePipe.registerListener<DebugCommandMessage>(this);
    m_messagePipe.registerListener<MapExitMessage>(this);
@@ -58,13 +58,13 @@ TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> pla
 }
 
 TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const std::string& chapterName) :
-   TileEngine(gameContext, playerData)
+   TileEngine(gameContext, std::move(playerData))
 {
    m_chapterToInitialize = chapterName;
 }
 
 TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const SaveLocation& saveLocation) :
-   TileEngine(gameContext, playerData)
+   TileEngine(gameContext, std::move(playerData))
 {
    m_saveLocationToInitialize = saveLocation;
 }
@@ -499,8 +499,10 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   if(!m_overlay.isDebugConsoleVisible())
                   {
+                     auto currentState = std::static_pointer_cast<GameState>(shared_from_this());
                      auto menu = std::make_shared<HomeMenu>(m_gameContext, *m_playerData);
-                     getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, shared_from_this(), menu));
+                     auto nextState = std::static_pointer_cast<GameState>(menu);
+                     getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, currentState, nextState));
                      return;
                   }
                }
