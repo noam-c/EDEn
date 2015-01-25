@@ -32,6 +32,7 @@
 #include "RandomTransitionGenerator.h"
 #include "HomeMenu.h"
 #include "SaveMenu.h"
+#include "ScreenTexture.h"
 #include "MapTriggerCallback.h"
 
 #include "DebugUtils.h"
@@ -499,10 +500,8 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   if(!m_overlay.isDebugConsoleVisible())
                   {
-                     auto currentState = std::static_pointer_cast<GameState>(shared_from_this());
                      auto menu = std::make_shared<HomeMenu>(m_gameContext, *m_playerData);
-                     auto nextState = std::static_pointer_cast<GameState>(menu);
-                     getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, currentState, nextState));
+                     getExecutionStack()->pushState(menu, RandomTransitionGenerator::create(m_gameContext, ScreenTexture::create(*this), ScreenTexture::create(*menu)));
                      return;
                   }
                }

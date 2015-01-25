@@ -5,6 +5,7 @@
  */
 
 #include "ScreenTexture.h"
+#include "GameState.h"
 #include "GraphicsUtil.h"
 #include "OpenGLExtensions.h"
 #include "Size.h"
@@ -12,8 +13,10 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_GRAPHICS;
 
-ScreenTexture::ScreenTexture()
+ScreenTexture::ScreenTexture() :
+   m_frameBuffer(0)
 {
+   glGenTextures(1, &m_textureHandle);
    m_size = shapes::Size(GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight());
    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
 
@@ -34,29 +37,35 @@ ScreenTexture::ScreenTexture()
    }
 }
 
-void ScreenTexture::startCapture()
+ScreenTexture::ScreenTexture(ScreenTexture&& rhs) :
+   Texture(std::move(rhs)),
+   m_frameBuffer(0)
 {
-   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
-   if(extensions.isFrameBuffersEnabled())
+   if(rhs.m_valid)
    {
-      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, m_frameBuffer);
-      (*extensions.getFramebufferTexture2DFunction())(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, m_textureHandle, 0);
+      std::swap(m_frameBuffer, rhs.m_frameBuffer);
    }
 }
 
-void ScreenTexture::endCapture()
+ScreenTexture& ScreenTexture::operator=(ScreenTexture&& rhs)
 {
-   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
-   if(extensions.isFrameBuffersEnabled())
+   Texture::operator=(std::move(rhs));
+   if(rhs.m_valid)
    {
-      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, 0);
+      m_frameBuffer = rhs.m_frameBuffer;
+      rhs.m_frameBuffer = 0;
    }
-
-   m_valid = true;
+   
+   return *this;
 }
 
 ScreenTexture::~ScreenTexture()
 {
+   if(!m_valid)
+   {
+      return;
+   }
+   
    const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
    if(extensions.isFrameBuffersEnabled())
    {
@@ -64,3 +73,34 @@ ScreenTexture::~ScreenTexture()
    }
 }
 
+ScreenTexture ScreenTexture::create(GameState& gameState)
+{
+   ScreenTexture texture;
+
+   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
+   if(extensions.isFrameBuffersEnabled())
+   {
+      bool wasActive = gameState.isActive();
+      
+      if(!wasActive)
+      {
+         gameState.activate();
+      }
+      
+      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, texture.m_frameBuffer);
+      (*extensions.getFramebufferTexture2DFunction())(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture.m_textureHandle, 0);
+
+      gameState.drawFrame();
+
+      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, 0);
+
+      if(!wasActive)
+      {
+         gameState.deactivate();
+      }
+
+      texture.m_valid = true;
+   }
+   
+   return texture;
+}

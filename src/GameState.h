@@ -53,6 +53,9 @@ class GameState
       /** Timestamp of the last logic step of the state. */
       unsigned long m_time;
 
+      /** True iff the GameState has been activated. */
+      bool m_active;
+
       /** The type of the current game state. */
       GameStateType m_stateType;
 
@@ -128,6 +131,11 @@ class GameState
        * In other words, deactivate is always called when this state relinquishes control of the game loop.
        */
       virtual void deactivate();
+
+      /**
+       * @return true iff the GameState has been activated.
+       */
+      bool isActive() const;
 
       /**
        * Called every frame in order to trigger logic processing in the game state

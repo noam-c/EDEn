@@ -11,6 +11,8 @@ typedef unsigned int GLuint;
 
 #include "Texture.h"
 
+class GameState;
+
 /**
  * A texture created from a capture of the screen's state.
  * Call startCapture to redirect drawing operations to this
@@ -43,23 +45,27 @@ class ScreenTexture : public Texture
       ScreenTexture();
 
       /**
-       * Begin redirecting OpenGL draw commands into the frame buffer.
-       * This call MUST be followed with a call to endCapture after the
-       * screen draw is complete.
+       * Copying is disallowed.
        */
-      void startCapture();
+      ScreenTexture(const ScreenTexture& rhs) = delete;
 
       /**
-       * Finish the screen capture after drawing. Unbinds the frame buffer
-       * and pipes the results into a texture.
+       * Move constructor and assignment.
        */
-      void endCapture();
+      ScreenTexture(ScreenTexture&& rhs);
+      ScreenTexture& operator=(ScreenTexture&& rhs);
 
       /**
        * Destructor.
        * Cleans up the allocated FBO.
        */
       ~ScreenTexture();
+
+      /**
+       * Takes a snapshot of the given GameState and
+       * captures it into the texture.
+       */
+      static ScreenTexture create(GameState& gameState);
 };
 
 #endif

@@ -23,16 +23,13 @@ class Texture
 {
    protected:
       /** The texture handle */
-      GLuint m_textureHandle;
+      GLuint m_textureHandle = 0;
 
       /** True iff the texture was successfully generated */
-      bool m_valid;
+      bool m_valid = false;
 
       /** Texture size (in pixels) */
       shapes::Size m_size;
-
-      /** Default constructor (used when subclass initializes the texture). */
-      Texture();
 
       /**
        * Generates an OpenGL texture from an SDL Surface.
@@ -42,6 +39,12 @@ class Texture
       void initTextureFromImage(SDL_Surface* image);
 
    public:
+      /**
+       * Default constructor.
+       * Creates an empty (uninitialized) texture object.
+       */
+      Texture();
+
       /**
        * Constructor.
        * Creates an OpenGL texture from a given image.
@@ -62,6 +65,23 @@ class Texture
       Texture(const void* imageData, GLenum imageFormat, const shapes::Size& imageSize, int bytesPerPixel);
 
       /**
+       * Disallow copying.
+       */
+      Texture(const Texture& rhs) = delete;
+      Texture& operator=(const Texture& rhs) = delete;
+
+      /**
+       * Move constructor and assignment.
+       */
+      Texture(Texture&& rhs);
+      Texture& operator=(Texture&& rhs);
+
+      /**
+       * Destructor.
+       */
+      virtual ~Texture();
+
+      /**
        * Binds the texture to the drawing context for
        * modification or drawing.
        */
@@ -76,11 +96,6 @@ class Texture
        * @return the dimensions of the texture in pixels.
        */
       const shapes::Size& getSize() const;
-
-      /**
-       * Destructor.
-       */
-      virtual ~Texture();
 };
 
 #endif

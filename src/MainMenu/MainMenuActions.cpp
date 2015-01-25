@@ -19,6 +19,7 @@
 #include "HomeMenu.h"
 #include "SaveMenu.h"
 #include "PlayerData.h"
+#include "ScreenTexture.h"
 
 #define CHAP1 "chapter1"
 #define SAVE_GAME "data/savegames/savegame1.edd"
@@ -33,7 +34,7 @@ void MainMenu::NewGameAction()
 {
    auto playerData = std::make_shared<PlayerData>(getMetadata());
    auto tileEngine = std::make_shared<TileEngine>(m_gameContext, playerData, CHAP1);
-   getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, shared_from_this()));
+   getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, ScreenTexture::create(*this)));
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
 }
@@ -74,7 +75,7 @@ void MainMenu::OptionsAction()
    auto titleScreenSettingsMenuState = std::make_shared<TitleScreenSettingsMenu>(m_gameContext);
    getExecutionStack()->pushState(
       titleScreenSettingsMenuState,
-      std::make_shared<BlendState>(m_gameContext, shared_from_this(), titleScreenSettingsMenuState, 500));
+      std::make_shared<BlendState>(m_gameContext, ScreenTexture::create(*this), ScreenTexture::create(*titleScreenSettingsMenuState), 500));
 }
 
 /**

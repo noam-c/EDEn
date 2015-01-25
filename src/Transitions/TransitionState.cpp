@@ -12,44 +12,43 @@
 #include "DebugUtils.h"
 const int debugFlag = DEBUG_TRANSITIONS;
 
-TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName,
-      std::shared_ptr<GameState> oldState, std::shared_ptr<GameState> newState, long transitionLength) :
-      GameState(gameContext, GameStateType::TRANSITION, stateName),
-      m_totalTime(0),
-      m_transitionLength(transitionLength),
-      m_progress(1.0f)
+TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName, Texture&& oldStateTexture, long transitionLength) :
+   GameState(gameContext, GameStateType::TRANSITION, stateName),
+   m_totalTime(0),
+   m_transitionLength(transitionLength),
+   m_progress(1.0f),
+   m_oldStateTexture(std::move(oldStateTexture))
 {
-   if(oldState != nullptr)
+   if(!oldStateTexture.isValid())
    {
-      if(!captureStateToTexture(oldState, m_oldStateTexture))
-      {
-         DEBUG("Failed to create screen capture for old state.");
-      }
+      DEBUG("Received invalid/uninitialized screen capture for old state.");
+   }
+   
+   activate();
+}
+
+TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName, Texture&& oldStateTexture,Texture&& newStateTexture, long transitionLength) :
+   GameState(gameContext, GameStateType::TRANSITION, stateName),
+   m_totalTime(0),
+   m_transitionLength(transitionLength),
+   m_progress(1.0f),
+   m_oldStateTexture(std::move(oldStateTexture)),
+   m_newStateTexture(std::move(newStateTexture))
+{
+   if(!oldStateTexture.isValid())
+   {
+      DEBUG("Received invalid/uninitialized screen capture for old state.");
    }
 
-   if(newState != nullptr)
+   if(!newStateTexture.isValid())
    {
-      if(!captureStateToTexture(newState, m_newStateTexture))
-      {
-         DEBUG("Failed to create screen capture for new state.");
-      }
+      DEBUG("Received invalid/uninitialized screen capture for new state.");
    }
 
    activate();
 }
 
 TransitionState::~TransitionState() = default;
-
-bool TransitionState::captureStateToTexture(std::shared_ptr<GameState> state, ScreenTexture& screenTexture)
-{
-   state->activate();
-   screenTexture.startCapture();
-   state->drawFrame();
-   screenTexture.endCapture();
-   state->deactivate();
-
-   return !glGetError();
-}
 
 bool TransitionState::step(long timePassed)
 {

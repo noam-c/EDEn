@@ -13,8 +13,8 @@
 
 const int debugFlag = DEBUG_TRANSITIONS;
 
-FadeState::FadeState(GameContext& gameContext, std::shared_ptr<GameState> oldState, long transitionLength) :
-   TransitionState(gameContext, "FadeState", oldState, nullptr, transitionLength)
+FadeState::FadeState(GameContext& gameContext, Texture&& oldStateTexture, long transitionLength) :
+   TransitionState(gameContext, "FadeState", std::move(oldStateTexture), transitionLength)
 {
 }
 

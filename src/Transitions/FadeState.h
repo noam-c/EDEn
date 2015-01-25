@@ -32,7 +32,7 @@ class FadeState : public TransitionState
        * @param oldState The state that is being faded out.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      FadeState(GameContext& gameContext, std::shared_ptr<GameState> oldState, long transitionLength = 1000);
+      FadeState(GameContext& gameContext, Texture&& oldStateTexture, long transitionLength = 1000);
 
       /**
        * Destructor.

@@ -22,6 +22,7 @@ const int GameState::MAX_FRAME_TIME = 32;
 
 GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName) :
    m_time(SDL_GetTicks()),
+   m_active(false),
    m_stateType(stateType),
    m_gameContext(gameContext)
 {
@@ -65,10 +66,17 @@ void GameState::activate()
 {
    m_finished = false;
    m_rocketContext->Update();
+   m_active = true;
 }
 
 void GameState::deactivate()
 {
+   m_active = false;
+}
+
+bool GameState::isActive() const
+{
+   return m_active;
 }
 
 bool GameState::advanceFrame()

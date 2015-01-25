@@ -13,8 +13,8 @@
 
 const int debugFlag = DEBUG_GRAPHICS;
 
-BlendState::BlendState(GameContext& gameContext, std::shared_ptr<GameState> oldState, std::shared_ptr<GameState> newState, long transitionLength) :
-   TransitionState(gameContext, "BlendState", oldState, newState, transitionLength)
+BlendState::BlendState(GameContext& gameContext, Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength) :
+   TransitionState(gameContext, "BlendState", std::move(oldStateTexture), std::move(newStateTexture), transitionLength)
 {
 }
 

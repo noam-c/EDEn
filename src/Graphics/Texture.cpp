@@ -9,14 +9,9 @@
 
 const int debugFlag = DEBUG_GRAPHICS;
 
-Texture::Texture() :
-   m_valid(false)
-{
-   glGenTextures(1, &m_textureHandle);
-}
+Texture::Texture() = default;
 
-Texture::Texture(const std::string& imagePath) :
-   m_valid(false)
+Texture::Texture(const std::string& imagePath)
 {
    // Create the texture
    DEBUG("Generating texture...");
@@ -69,7 +64,6 @@ Texture::Texture(const std::string& imagePath) :
 }
 
 Texture::Texture(const void* imageData, GLenum imageFormat, const shapes::Size& imageSize, int bytesPerPixel) :
-   m_valid(false),
    m_size(imageSize)
 {
    // Create the texture
@@ -91,6 +85,31 @@ Texture::Texture(const void* imageData, GLenum imageFormat, const shapes::Size& 
    DEBUG("Texture creation complete.");
 }
 
+Texture::Texture(Texture&& rhs)
+{
+   if(rhs.m_valid)
+   {
+      std::swap(m_valid, rhs.m_valid);
+      std::swap(m_size, rhs.m_size);
+      std::swap(m_textureHandle, rhs.m_textureHandle);
+   }
+}
+
+Texture& Texture::operator=(Texture&& rhs)
+{
+   if(rhs.m_valid)
+   {
+      m_valid = rhs.m_valid;
+      m_size = rhs.m_size;
+      m_textureHandle = rhs.m_textureHandle;
+
+      rhs.m_valid = false;
+      rhs.m_textureHandle = 0;
+   }
+
+   return *this;
+}
+
 void Texture::bind()
 {
    // Any texture ops on GL_TEXTURE_2D will become associated with this texture
@@ -109,5 +128,8 @@ const shapes::Size& Texture::getSize() const
 
 Texture::~Texture()
 {
-   glDeleteTextures(1, &m_textureHandle);
+   if(m_textureHandle != 0)
+   {
+      glDeleteTextures(1, &m_textureHandle);
+   }
 }
