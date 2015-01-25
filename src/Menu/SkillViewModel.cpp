@@ -11,7 +11,6 @@
 #include "Skill.h"
 #include "SkillMenu.h"
 
-#include "dirent.h"
 #include <sstream>
 #include <string>
 

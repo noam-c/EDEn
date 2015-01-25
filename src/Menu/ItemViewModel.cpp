@@ -10,7 +10,6 @@
 #include "Inventory.h"
 #include "Item.h"
 
-#include "dirent.h"
 #include <sstream>
 #include <string>
 

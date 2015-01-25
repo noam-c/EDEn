@@ -13,8 +13,6 @@
 #include "PlayerData.h"
 #include "PlayerDataSummary.h"
 
-#include "dirent.h"
-
 #include "ExecutionStack.h"
 #include "TileEngine.h"
 #include "FadeState.h"
