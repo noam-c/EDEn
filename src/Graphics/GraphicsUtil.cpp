@@ -5,16 +5,21 @@
  */
 
 #include "GraphicsUtil.h"
+
+#include <dirent.h>
+
 #include <SDL.h>
 #include "SDL_opengl.h"
 #include "SDL_image.h"
 #include "SDL_mixer.h"
+
 #include <Rocket/Core.h>
 #include <Rocket/Controls.h>
+
 #include "RocketSDLInputMapping.h"
 #include "Settings.h"
 #include "Size.h"
-#include <dirent.h>
+#include "Sound.h"
 
 #include "DebugUtils.h"
 
@@ -59,6 +64,8 @@ void GraphicsUtil::initSDL()
       DEBUG("Unable to open audio: %s\n", SDL_GetError());
       exit(1);
    }
+
+   Mix_ChannelFinished(&Sound::channelFinished);
 
    // Enable the OpenGL double buffer
    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);

@@ -42,7 +42,7 @@ class Resource : public std::enable_shared_from_this<Resource>
    /**
     * The name of the resource.
     */
-   const ResourceKey& m_name;
+   const ResourceKey m_name;
 
    /**
     * Loading function for initialization of the resource from file.

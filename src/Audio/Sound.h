@@ -9,7 +9,9 @@
 
 #include "Resource.h"
 #include "SDL_mixer.h"
+#include <atomic>
 #include <map>
+#include <mutex>
 
 class Task;
 
@@ -22,15 +24,11 @@ class Task;
 class Sound : public Resource
 {
    /** The map of currently playing Sound resources based on channel. */
-   static std::map<int, std::weak_ptr<Sound>> playingList;
+   static std::map<int, Sound*> playingList;
 
-   /**
-    * A callback used when a channel is released and its sound is done playing.
-    *
-    * @param channel The channel that has finished playing a sound.
-    */
-   static void channelFinished(int channel);
-
+   /** The mutex used to synchronize use of playingList. */
+   static std::mutex playingListMutex;
+   
    /** A Task object used to signal waiting coroutines when this sound object is done playing. */
    std::shared_ptr<Task> m_playTask;
 
@@ -38,7 +36,10 @@ class Sound : public Resource
    std::unique_ptr<Mix_Chunk, void(*)(Mix_Chunk*)> m_sound;
 
    /** This sound's current channel. */
-   int m_playingChannel;
+   std::atomic_int m_playingChannel;
+
+   /** The mutex used to synchronize this Sound's resources. */
+   std::mutex m_playbackMutex;
 
    /**
     * Loads the music resource with the specified file name and path.
@@ -48,17 +49,31 @@ class Sound : public Resource
    void load(const std::string& path);
 
    /**
-    * A callback used to signal to the sound that it has finished playing.
+    * A callback used to signal to the sound that it has finished playing or that it has been
+    * stopped (e.g. by calling Sound::stop or the Sound's destructor).
+    * N.B.: This function is called by both the main thread and the SDL_Mixer thread.
     */
    void finished();
 
    public:
+      /**
+       * A callback used when a channel is released and its sound is done playing.
+       *
+       * @param channel The channel that has finished playing a sound.
+       */
+      static void channelFinished(int channel);
+
       /**
        * Constructor.
        *
        * @param name The name of the sound Resource.
        */
       Sound(ResourceKey name);
+
+      /**
+       * Destructor.
+       */
+      ~Sound();
 
       /**
        * Play this sound once.
@@ -71,11 +86,6 @@ class Sound : public Resource
        * Stop this sound if it is currently playing.
        */
       void stop();
-
-      /**
-       * Destructor.
-       */
-      ~Sound();
 };
 
 #endif

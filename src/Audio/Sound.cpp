@@ -12,18 +12,31 @@
 
 const int debugFlag = DEBUG_AUDIO;
 
-std::map<int, std::weak_ptr<Sound>> Sound::playingList;
+std::map<int, Sound*> Sound::playingList;
+std::mutex Sound::playingListMutex;
 
 void Sound::channelFinished(int channel)
 {
    DEBUG("Channel %d finished playing.", channel);
-   auto finishedSound = Sound::playingList[channel].lock();
-   if(finishedSound)
+
+   Sound* soundToFinish = nullptr;
+
    {
-      finishedSound->finished();
+      std::lock_guard<decltype(playingListMutex)> playingListLock(playingListMutex);
+
+      auto finishedSoundIter = Sound::playingList.find(channel);
+      if(finishedSoundIter != Sound::playingList.end())
+      {
+         std::swap(soundToFinish, finishedSoundIter->second);
+      }
+   }
+   
+   if(soundToFinish != nullptr)
+   {
+      soundToFinish->finished();
    }
 
-   Sound::playingList[channel].reset();
+   DEBUG("Channel %d: 'channelFinished' completed.", channel);
 }
 
 Sound::Sound(ResourceKey name) :
@@ -33,14 +46,17 @@ Sound::Sound(ResourceKey name) :
 {
 }
 
+Sound::~Sound()
+{
+   DEBUG("Sound \"%s\": Deleting...", getResourceName().c_str());
+   stop();
+}
+
 void Sound::load(const std::string& path)
 {
-   /**
-    * \todo This should only be called once. Move it into initialization code.
-    */
-   Mix_ChannelFinished(&Sound::channelFinished);
+   std::lock_guard<decltype(m_playbackMutex)> lock(m_playbackMutex);
 
-   DEBUG("Loading WAV %s", path.c_str());
+   DEBUG("Sound \"%s\": Loading WAV %s", getResourceName().c_str(), path.c_str());
    m_sound.reset(Mix_LoadWAV(path.c_str()));
 
    if(!m_sound)
@@ -48,11 +64,13 @@ void Sound::load(const std::string& path)
       T_T(Mix_GetError());
    }
 
-   DEBUG("Successfully loaded WAV %s.", path.c_str());
+   DEBUG("Sound \"%s\": Successfully loaded WAV %s.", getResourceName().c_str(), path.c_str());
 }
 
 void Sound::play(const std::shared_ptr<Task>& task)
 {
+   std::lock_guard<decltype(m_playbackMutex)> playbackLock(m_playbackMutex);
+
    if(!Settings::getCurrentSettings().isSoundEnabled() || !m_sound)
    {
       if(task)
@@ -63,31 +81,68 @@ void Sound::play(const std::shared_ptr<Task>& task)
       return;
    }
 
-   m_playingChannel = Mix_PlayChannel(-1, m_sound.get(), 0);
-   if(m_playingChannel == -1)
-   {
-      DEBUG("There was a problem playing the sound ""%s"": %s", getResourceName().c_str(), Mix_GetError());
-   }
+   // If the sound is already playing somewhere, stop it.
+   stop();
 
-   Sound::playingList[m_playingChannel] = std::static_pointer_cast<Sound>(shared_from_this());
-   m_playTask = task;
+   // At this point, there should be nothing playing.
+   DEBUG("Sound \"%s\": Playing...", getResourceName().c_str());
+
+   {
+      std::lock_guard<decltype(playingListMutex)> playingListLock(playingListMutex);
+
+      m_playingChannel = Mix_PlayChannel(-1, m_sound.get(), 0);
+      if(m_playingChannel == -1)
+      {
+         DEBUG("There was a problem playing the sound ""%s"": %s", getResourceName().c_str(), Mix_GetError());
+         task->complete();
+         return;
+      }
+
+      DEBUG("Sound \"%s\": Using channel %d.", getResourceName().c_str(), m_playingChannel.load());
+
+      Sound::playingList[m_playingChannel] = this;
+      m_playTask = task;
+   }
 }
 
 void Sound::stop()
 {
-   if(m_playingChannel >= 0)
+   int playingChannel = m_playingChannel.load();
+
+   bool ownsChannel = false;
+   if(playingChannel != -1)
    {
-      auto soundInChannel = Sound::playingList[m_playingChannel].lock();
-      if(soundInChannel && this == soundInChannel.get())
-      {
-         Mix_HaltChannel(m_playingChannel);
-      }
+      std::lock_guard<decltype(playingListMutex)> playingListLock(playingListMutex);
+      auto soundInChannelIter = Sound::playingList.find(playingChannel);
+
+      ownsChannel =
+         soundInChannelIter != Sound::playingList.end() &&
+         soundInChannelIter->second == this;
+   }
+   
+   if(ownsChannel)
+   {
+      DEBUG("Sound \"%s\": Stopping...", getResourceName().c_str());
+
+      // N.B.: This call will synchronously call the
+      // Mix_ChannelFinished callback, so make sure that
+      // path doesn't try to recursively acquire any locks
+      // acquired at this point
+      Mix_HaltChannel(playingChannel);
+
+      DEBUG("Sound \"%s\": Stopped.", getResourceName().c_str());
+   }
+   else
+   {
+      m_playingChannel = -1;
    }
 }
 
 void Sound::finished()
 {
-   DEBUG("Sound finished.");
+   DEBUG("Sound \"%s\": Finished.", getResourceName().c_str());
+   std::lock_guard<decltype(m_playbackMutex)> lock(m_playbackMutex);
+
    if(m_playTask)
    {
       m_playTask->complete();
@@ -95,10 +150,4 @@ void Sound::finished()
    }
 
    m_playingChannel = -1;
-}
-
-Sound::~Sound()
-{
-   DEBUG("Deleting sound: %s", getResourceName().c_str());
-   stop();
 }
