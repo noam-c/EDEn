@@ -19,12 +19,8 @@
    #define DEBUG_PAUSE
 #endif
 
-#ifndef __PRETTY_FUNCTION__
-   #define __PRETTY_FUNCTION__ __FILE__
-#endif
-
 // Macro for exception-related information (should be passed into every exception constructor)
-#define EXCEPTION_INFO __PRETTY_FUNCTION__, __LINE__
+#define EXCEPTION_INFO __func__, __LINE__
 
 #define T_T(x) throw Exception(EXCEPTION_INFO, x);
 
