@@ -36,7 +36,7 @@
 #include "MapTriggerCallback.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_TILE_ENG;
+#define DEBUG_FLAG DEBUG_TILE_ENG
 
 const int TileEngine::TILE_SIZE = 32;
 

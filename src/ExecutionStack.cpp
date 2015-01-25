@@ -9,7 +9,7 @@
 #include "DebugUtils.h"
 #include "GameState.h"
 
-const int debugFlag = DEBUG_EXEC_STACK;
+#define DEBUG_FLAG DEBUG_EXEC_STACK
 
 ExecutionStack::ExecutionStack() :
    m_nextState(nullptr)

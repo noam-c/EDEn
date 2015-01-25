@@ -14,7 +14,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_ACTOR;
+#define DEBUG_FLAG DEBUG_ACTOR
 
 NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const MovementDirection direction, const std::string& sheetName,
             messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const std::string& regionName, const shapes::Point2D& location, const shapes::Size& size) :

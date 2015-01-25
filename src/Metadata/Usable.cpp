@@ -22,7 +22,7 @@ extern "C"
 }
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_METADATA;
+#define DEBUG_FLAG DEBUG_METADATA
 
 const char* Usable::ID_ATTRIBUTE = "id";
 const char* Usable::NAME_ATTRIBUTE = "name";

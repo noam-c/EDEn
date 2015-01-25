@@ -7,7 +7,7 @@
 #include "Animation.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SPRITE;
+#define DEBUG_FLAG DEBUG_SPRITE
 
 #define MILLISECONDS_PER_FRAME 100
 

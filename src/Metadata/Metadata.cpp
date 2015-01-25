@@ -12,7 +12,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_PLAYER;
+#define DEBUG_FLAG DEBUG_PLAYER
 const char* ITEM_DATA_PATH = "data/metadata/items.edb";
 const char* SKILL_DATA_PATH = "data/metadata/skills.edb";
 

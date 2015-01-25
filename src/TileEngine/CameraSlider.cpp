@@ -10,7 +10,7 @@
 #include <math.h>
 #include <algorithm>
 
-const int debugFlag = DEBUG_TILE_ENG;
+#define DEBUG_FLAG DEBUG_TILE_ENG
 
 CameraSlider::CameraSlider(Camera& camera, const shapes::Point2D& origin, const shapes::Point2D& destination, double speed) :
    m_camera(camera),

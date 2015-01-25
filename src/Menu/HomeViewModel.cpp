@@ -13,7 +13,7 @@
 #include <sstream>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 HomeViewModel::HomeViewModel(PlayerData& playerData) :
    Rocket::Controls::DataSource("homeViewModel"),

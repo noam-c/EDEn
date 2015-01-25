@@ -11,7 +11,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_TRANSITIONS;
+#define DEBUG_FLAG DEBUG_TRANSITIONS
 
 FadeState::FadeState(GameContext& gameContext, Texture&& oldStateTexture, long transitionLength) :
    TransitionState(gameContext, "FadeState", std::move(oldStateTexture), transitionLength)

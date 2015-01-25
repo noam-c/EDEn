@@ -7,7 +7,7 @@
 #include "json.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_PLAYER;
+#define DEBUG_FLAG DEBUG_PLAYER
 
 const char* Aspect::ID_ATTRIBUTE = "id";
 const char* Aspect::NAME_ATTRIBUTE = "name";

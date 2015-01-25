@@ -8,7 +8,7 @@
 #include "Scheduler.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SCHEDULER;
+#define DEBUG_FLAG DEBUG_SCHEDULER
 
 Task::Task(TaskId taskId, Scheduler& scheduler) :
    m_taskDeactivated(false),

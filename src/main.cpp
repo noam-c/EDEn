@@ -17,7 +17,7 @@
 #include "SDL.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_MAIN;
+#define DEBUG_FLAG DEBUG_MAIN
 
 /**
  * The main function.

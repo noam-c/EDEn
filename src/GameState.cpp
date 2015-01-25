@@ -16,7 +16,7 @@
 #include "RocketSDLInputMapping.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_GAME_STATE;
+#define DEBUG_FLAG DEBUG_GAME_STATE
 
 const int GameState::MAX_FRAME_TIME = 32;
 

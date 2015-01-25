@@ -17,7 +17,7 @@
 #include "Skill.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 ShortcutBar::ShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext) :
    m_rocketContext(rocketContext),

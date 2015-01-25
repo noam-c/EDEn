@@ -9,7 +9,7 @@
 #include "json/json.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_SETTINGS;
+#define DEBUG_FLAG DEBUG_SETTINGS
 
 const std::string Settings::DEFAULT_SETTINGS_PATH = "settings.ini";
 Settings Settings::currentSettings;

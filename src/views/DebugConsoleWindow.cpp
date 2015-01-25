@@ -10,7 +10,7 @@
 #include "DebugCommandMessage.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_ROCKET;
+#define DEBUG_FLAG DEBUG_ROCKET
 
 DebugConsoleWindow::DebugConsoleWindow(messaging::MessagePipe& messagePipe, Rocket::Core::Context& context) :
    m_messagePipe(messagePipe),

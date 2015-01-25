@@ -19,7 +19,7 @@
 #include "ExecutionStack.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 SkillMenu::SkillMenu(GameContext& gameContext, PlayerData& playerData) :
    CharacterDependentMenu(gameContext, playerData, "SkillMenu"),

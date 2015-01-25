@@ -15,7 +15,7 @@
 #include <string>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 const Rocket::Core::String SkillViewModel::UnknownSkillIconPath("data/images/icons/I_Rock01.png");
 

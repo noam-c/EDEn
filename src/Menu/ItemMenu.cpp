@@ -17,7 +17,7 @@
 #include "ExecutionStack.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 ItemMenu::ItemMenu(GameContext& gameContext, PlayerData& playerData) :
    MenuState(gameContext, playerData, "ItemMenu"),

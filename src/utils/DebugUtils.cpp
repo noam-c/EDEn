@@ -12,7 +12,9 @@ long DebugUtils::debugFlags = DEBUG_ALL;
 
 void DebugUtils::print(long flag, std::string str)
 {
-   if(debugFlags & flag) fprintf(stderr, "%s", str.c_str());
+   if(debugFlags & flag) {
+      fprintf(stderr, "%s", str.c_str());
+   }
 }
 
 void DebugUtils::print(long flag, const char* fmt, ...)

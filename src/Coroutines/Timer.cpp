@@ -7,7 +7,7 @@
 #include "Timer.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SCHEDULER;
+#define DEBUG_FLAG DEBUG_SCHEDULER
 
 Timer::Timer(long timeLeft) :
    m_timeLeft(timeLeft)

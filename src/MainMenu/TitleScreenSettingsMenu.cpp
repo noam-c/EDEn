@@ -15,7 +15,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SETTINGS | DEBUG_TITLE;
+#define DEBUG_FLAG DEBUG_SETTINGS | DEBUG_TITLE
 
 TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
    GameState(gameContext, GameStateType::TITLE, "TitleScreenSettingsMenu")

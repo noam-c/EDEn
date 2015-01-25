@@ -18,7 +18,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_RES_LOAD | DEBUG_SPRITE;
+#define DEBUG_FLAG DEBUG_RES_LOAD | DEBUG_SPRITE
 
 const std::string Spritesheet::IMG_EXTENSION = ".png";
 const std::string Spritesheet::DATA_EXTENSION = ".eds";

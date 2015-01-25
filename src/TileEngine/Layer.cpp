@@ -12,7 +12,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_TILE_ENG;
+#define DEBUG_FLAG DEBUG_TILE_ENG
 
 Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
    m_bounds(bounds),

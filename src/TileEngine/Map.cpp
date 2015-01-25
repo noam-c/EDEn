@@ -13,7 +13,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_RES_LOAD | DEBUG_ENTITY_GRID;
+#define DEBUG_FLAG DEBUG_RES_LOAD | DEBUG_ENTITY_GRID
 
 // Define as 1 to have the game draw the map's passibility matrix
 #define DRAW_PASSIBILITY 0

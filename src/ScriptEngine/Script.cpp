@@ -18,7 +18,7 @@ extern "C"
 #include "LuaWrapper.hpp"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_SCRIPT_ENG;
+#define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
 Script::Script(const std::string& name) :
    m_scriptName(name),

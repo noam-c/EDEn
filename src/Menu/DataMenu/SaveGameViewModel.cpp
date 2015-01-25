@@ -12,7 +12,7 @@
 #include "SaveMenu.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 SaveGameViewModel::SaveGameViewModel(SaveGameModel& model) :
       Rocket::Controls::DataSource("dataViewModel"),

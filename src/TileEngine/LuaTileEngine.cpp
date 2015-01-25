@@ -14,7 +14,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SCRIPT_ENG;
+#define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
 static int TileEngineL_AddNPC(lua_State* luaVM)
 {

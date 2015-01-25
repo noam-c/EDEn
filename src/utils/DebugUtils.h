@@ -12,7 +12,7 @@
 
 // Make a nice easy access macro for debug statements in the code
 #ifdef DEBUG_MODE
-   #define DEBUG(x, ...) DebugUtils::print(debugFlag, x, ## __VA_ARGS__)
+   #define DEBUG(str, ...) DebugUtils::print(DEBUG_FLAG, str, ## __VA_ARGS__)
    #define DEBUG_PAUSE DebugUtils::pause();
 #else
    #define DEBUG(x, ...)

@@ -6,7 +6,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_TILE_ENG;
+#define DEBUG_FLAG DEBUG_TILE_ENG
 
 Camera::Camera() :
    m_cameraApplied(false),

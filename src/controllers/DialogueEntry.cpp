@@ -1,7 +1,7 @@
 #include "DialogueEntry.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_DIA_CONTR;
+#define DEBUG_FLAG DEBUG_DIA_CONTR
 
 DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, const std::shared_ptr<Task>& task) :
    m_task(task),

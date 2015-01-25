@@ -14,7 +14,7 @@
 #include <tuple>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_PATHFINDER;
+#define DEBUG_FLAG DEBUG_PATHFINDER
 
 const float Pathfinder::ROOT_2 = 1.41421356f;
 

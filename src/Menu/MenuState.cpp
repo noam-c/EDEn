@@ -13,7 +13,7 @@
 #include "ShortcutBar.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 MenuState::MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName) :
    GameState(gameContext, GameStateType::MENU, stateName),

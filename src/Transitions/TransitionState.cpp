@@ -10,7 +10,7 @@
 #include "SDL_opengl.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_TRANSITIONS;
+#define DEBUG_FLAG DEBUG_TRANSITIONS
 
 TransitionState::TransitionState(GameContext& gameContext, const std::string& stateName, Texture&& oldStateTexture, long transitionLength) :
    GameState(gameContext, GameStateType::TRANSITION, stateName),

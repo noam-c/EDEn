@@ -16,7 +16,7 @@
 #include "NPC.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_SCRIPT_ENG;
+#define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
 const std::string ScriptFactory::EXTENSION = ".lua";
 const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scripts/maps/", "data/scripts/npcs/", "data/scripts/items/", "data/scripts/skills/" };

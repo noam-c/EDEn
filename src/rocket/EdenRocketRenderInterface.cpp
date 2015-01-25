@@ -25,7 +25,7 @@
 #include "Size.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_ROCKET;
+#define DEBUG_FLAG DEBUG_ROCKET
 
 #define GL_CLAMP_TO_EDGE 0x812F
 

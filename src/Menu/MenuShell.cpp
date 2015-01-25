@@ -11,7 +11,7 @@
 #include <Rocket/Core.h>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
    m_rocketContext(rocketContext),

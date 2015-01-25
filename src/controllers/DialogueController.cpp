@@ -13,7 +13,7 @@
 #include "ScriptEngine.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_DIA_CONTR;
+#define DEBUG_FLAG DEBUG_DIA_CONTR
 
 DialogueController::DialogueCoroutine::DialogueCoroutine(DialogueController& controller) :
    m_dialogueController(controller)

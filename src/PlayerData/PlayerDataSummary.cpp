@@ -11,7 +11,7 @@
 #include "json.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_PLAYER;
+#define DEBUG_FLAG DEBUG_PLAYER
 
 const char* PlayerDataSummary::CHARACTER_LIST_ELEMENT = "Characters";
 const char* PlayerDataSummary::CHARACTER_ELEMENT = "Character";

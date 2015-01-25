@@ -15,7 +15,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_MENU;
+#define DEBUG_FLAG DEBUG_MENU
 
 SaveGameModel::SaveGameModel(SaveMenu& saveMenu, const Metadata& metadata) :
    m_saveMenu(saveMenu),

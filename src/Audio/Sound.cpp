@@ -10,7 +10,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_AUDIO;
+#define DEBUG_FLAG DEBUG_AUDIO
 
 std::map<int, Sound*> Sound::playingList;
 std::mutex Sound::playingListMutex;

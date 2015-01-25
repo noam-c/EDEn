@@ -14,7 +14,7 @@
 #include "Character.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_PLAYER;
+#define DEBUG_FLAG DEBUG_PLAYER
 
 const char* CharacterRoster::PARTY_ELEMENT = "Party";
 

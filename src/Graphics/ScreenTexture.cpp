@@ -11,7 +11,7 @@
 #include "Size.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_GRAPHICS;
+#define DEBUG_FLAG DEBUG_GRAPHICS
 
 ScreenTexture::ScreenTexture() :
    m_frameBuffer(0)

@@ -12,7 +12,7 @@
 #include "Skill.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_PLAYER;
+#define DEBUG_FLAG DEBUG_PLAYER
 
 const char* Character::ID_ATTRIBUTE = "id";
 const char* Character::ARCHETYPE_ATTRIBUTE = "archetype";

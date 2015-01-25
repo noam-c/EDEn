@@ -14,7 +14,7 @@
 #include <algorithm>
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_RES_LOAD | DEBUG_TILE_ENG;
+#define DEBUG_FLAG DEBUG_RES_LOAD | DEBUG_TILE_ENG
 
 Tileset::Tileset(ResourceKey name) :
    Resource(name),

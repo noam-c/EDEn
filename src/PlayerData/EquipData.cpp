@@ -10,7 +10,7 @@
 #include "Item.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_PLAYER;
+#define DEBUG_FLAG DEBUG_PLAYER
 
 void EquipData::load(const Metadata& metadata, const Json::Value& equipment)
 {

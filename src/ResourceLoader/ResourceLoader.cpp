@@ -16,7 +16,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_RES_LOAD;
+#define DEBUG_FLAG DEBUG_RES_LOAD
 
 const std::string ResourceLoader::PATHS[] = {"data/sounds/", "data/regions/", "data/tilesets/", "data/music/", "data/sprites/"};
 const std::string ResourceLoader::EXTENSIONS[] = {".wav", "/", ".tsx", "", ""};

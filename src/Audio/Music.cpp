@@ -8,7 +8,7 @@
 #include "Settings.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_AUDIO;
+#define DEBUG_FLAG DEBUG_AUDIO
 
 std::shared_ptr<Music> Music::currentMusic(nullptr);
 

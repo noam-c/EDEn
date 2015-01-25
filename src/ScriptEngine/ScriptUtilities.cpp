@@ -7,7 +7,7 @@
 #include "ScriptUtilities.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_SCRIPT_ENG;
+#define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
 bool ScriptUtilities::isBoolean(lua_State* luaStack, int index)
 {

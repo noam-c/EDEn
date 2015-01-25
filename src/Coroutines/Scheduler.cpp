@@ -11,7 +11,7 @@
 #include <tuple>
 #include <utility>
 
-const int debugFlag = DEBUG_SCHEDULER;
+#define DEBUG_FLAG DEBUG_SCHEDULER
 
 Scheduler::Scheduler() :
    m_runningCoroutine(nullptr),

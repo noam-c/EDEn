@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_DIA_CONTR;
+#define DEBUG_FLAG DEBUG_DIA_CONTR
 
 ChoicesDataSource::ChoicesDataSource(DialogueController& choiceProvider) :
    Rocket::Controls::DataSource("choicesDataSource"),

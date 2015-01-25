@@ -15,7 +15,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_TITLE;
+#define DEBUG_FLAG DEBUG_TITLE
 
 enum MainMenuActions
 {

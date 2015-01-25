@@ -9,7 +9,7 @@
 #include <Rocket/Core.h>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_ROCKET;
+#define DEBUG_FLAG DEBUG_ROCKET
 
 float EdenRocketSystemInterface::GetElapsedTime()
 {

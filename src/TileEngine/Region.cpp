@@ -10,7 +10,7 @@
 #include <dirent.h>
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_RES_LOAD;
+#define DEBUG_FLAG DEBUG_RES_LOAD
 
 Region::Region(const ResourceKey& name) :
    Resource(name),

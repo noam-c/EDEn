@@ -8,7 +8,7 @@
 #include "json.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_PLAYER;
+#define DEBUG_FLAG DEBUG_PLAYER
 
 const char* Quest::NAME_ATTRIBUTE = "name";
 

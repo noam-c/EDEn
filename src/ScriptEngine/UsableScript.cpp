@@ -9,7 +9,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_METADATA;
+#define DEBUG_FLAG DEBUG_METADATA
 
 #include "LuaWrapper.hpp"
 

@@ -41,7 +41,7 @@ extern "C"
 }
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_SCRIPT_ENG;
+#define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
 #define REGISTER_LUA_ENUM_VALUE(name, value) \
   lua_pushlstring(m_luaVM, #name, sizeof(#name)-1); \

@@ -17,7 +17,7 @@ extern "C"
 }
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_SCRIPT_ENG;
+#define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
 static int luaNarrate(lua_State* luaVM)
 {

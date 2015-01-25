@@ -7,7 +7,7 @@
 #include "RocketSDLInputMapping.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_ROCKET;
+#define DEBUG_FLAG DEBUG_ROCKET
 
 std::map<SDL_Keycode, Rocket::Core::Input::KeyIdentifier> RocketSDLInputMapping::keyMap;
 

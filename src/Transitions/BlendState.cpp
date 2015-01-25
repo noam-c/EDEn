@@ -11,7 +11,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_GRAPHICS;
+#define DEBUG_FLAG DEBUG_GRAPHICS
 
 BlendState::BlendState(GameContext& gameContext, Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength) :
    TransitionState(gameContext, "BlendState", std::move(oldStateTexture), std::move(newStateTexture), transitionLength)

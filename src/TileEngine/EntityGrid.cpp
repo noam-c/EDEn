@@ -21,7 +21,7 @@
 #include "SDL_opengl.h"
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_ENTITY_GRID;
+#define DEBUG_FLAG DEBUG_ENTITY_GRID
 
 // Define as 1 to draw the entity grid's state instead of the map
 #define DRAW_ENTITY_GRID 0

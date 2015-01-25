@@ -18,7 +18,7 @@
 #include <SDL.h>
 
 #include "DebugUtils.h"
-const int debugFlag = DEBUG_TILE_ENG;
+#define DEBUG_FLAG DEBUG_TILE_ENG
 
 const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";

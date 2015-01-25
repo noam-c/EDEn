@@ -10,7 +10,7 @@
 #include "ResourceLoader.h"
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_SPRITE;
+#define DEBUG_FLAG DEBUG_SPRITE
 
 Sprite::Sprite(const std::shared_ptr<Spritesheet>& sheet) :
    m_sheet(sheet),
