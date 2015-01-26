@@ -14,6 +14,7 @@
 #include "MenuShell.h"
 #include "TitleScreenSettingsMenu.h"
 #include "TileEngine.h"
+#include "TransitionState.h"
 #include "FadeState.h"
 #include "BlendState.h"
 #include "HomeMenu.h"
@@ -34,7 +35,9 @@ void MainMenu::NewGameAction()
 {
    auto playerData = std::make_shared<PlayerData>(getMetadata());
    auto tileEngine = std::make_shared<TileEngine>(m_gameContext, playerData, CHAP1);
-   getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, ScreenTexture::create(*this)));
+   auto blendTransition = std::make_shared<FadeState>(ScreenTexture::create(*this));
+
+   getExecutionStack()->pushState(tileEngine, std::make_shared<TransitionState>(m_gameContext, blendTransition));
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
 }
@@ -73,9 +76,11 @@ void MainMenu::LoadGameAction()
 void MainMenu::OptionsAction()
 {
    auto titleScreenSettingsMenuState = std::make_shared<TitleScreenSettingsMenu>(m_gameContext);
+
+   auto blendTransition = std::make_shared<BlendState>(ScreenTexture::create(*this), ScreenTexture::create(*titleScreenSettingsMenuState), 500);
    getExecutionStack()->pushState(
       titleScreenSettingsMenuState,
-      std::make_shared<BlendState>(m_gameContext, ScreenTexture::create(*this), ScreenTexture::create(*titleScreenSettingsMenuState), 500));
+      std::make_shared<TransitionState>(m_gameContext, blendTransition));
 }
 
 /**

@@ -9,14 +9,14 @@
 
 #include <memory>
 
-#include "TransitionState.h"
+#include "Transition.h"
 
 /**
  * A transition that slowly fades out the old state,
  * allowing it to completely fade to black before displaying
  * the new state.
  */
-class FadeState : public TransitionState
+class FadeState : public Transition
 {
    protected:
       /**
@@ -28,11 +28,10 @@ class FadeState : public TransitionState
       /**
        * Constructor.
        *
-       * @param gameContext The context containing the execution stack managing this transition.
        * @param oldState The state that is being faded out.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      FadeState(GameContext& gameContext, Texture&& oldStateTexture, long transitionLength = 1000);
+      FadeState(Texture&& oldStateTexture, long transitionLength = 1000);
 
       /**
        * Destructor.

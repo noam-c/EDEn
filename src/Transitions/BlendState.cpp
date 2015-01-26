@@ -13,8 +13,8 @@
 
 #define DEBUG_FLAG DEBUG_GRAPHICS
 
-BlendState::BlendState(GameContext& gameContext, Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength) :
-   TransitionState(gameContext, "BlendState", std::move(oldStateTexture), std::move(newStateTexture), transitionLength)
+BlendState::BlendState(Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength) :
+   Transition(std::move(oldStateTexture), std::move(newStateTexture), transitionLength)
 {
 }
 

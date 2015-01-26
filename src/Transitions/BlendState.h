@@ -9,7 +9,7 @@
 
 #include <memory>
 
-#include "TransitionState.h"
+#include "Transition.h"
 
 /**
  * A transition that slowly blends in the new state while
@@ -18,7 +18,7 @@
  *
  * @author Noam Chitayat
  */
-class BlendState : public TransitionState
+class BlendState : public Transition
 {
    protected:
       /**
@@ -30,12 +30,11 @@ class BlendState : public TransitionState
       /**
        * Constructor.
        *
-       * @param gameContext The context containing the execution stack managing this transition.
-       * @param oldState The state that is being transitioned away from.
-       * @param newState The state that is being transitioned to.
+       * @param oldStateTexture The texture that is being transitioned away from.
+       * @param newStateTexture The texture that is being transitioned to.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      BlendState(GameContext& gameContext, Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength = 1000);
+      BlendState(Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength = 1000);
 
       /**
        * Destructor.

@@ -15,6 +15,7 @@
 
 #include "ExecutionStack.h"
 #include "TileEngine.h"
+#include "TransitionState.h"
 #include "FadeState.h"
 #include "ScreenTexture.h"
 #include "DebugUtils.h"
@@ -264,7 +265,9 @@ void SaveMenu::confirmLoadClicked(Rocket::Core::Event& event)
    auto loadResult = m_model.loadSaveGame(m_selectedSlot);
    hideConfirmDialog();
    auto tileEngine = std::make_shared<TileEngine>(m_gameContext, std::get<0>(loadResult), std::get<1>(loadResult));
-   getExecutionStack()->pushState(tileEngine, std::make_shared<FadeState>(m_gameContext, ScreenTexture::create(*this)));
+   auto fadeTransition = std::make_shared<FadeState>(ScreenTexture::create(*this));
+
+   getExecutionStack()->pushState(tileEngine, std::make_shared<TransitionState>(m_gameContext, fadeTransition));
    m_finished = true;
 }
 

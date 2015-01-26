@@ -13,8 +13,8 @@
 
 #define DEBUG_FLAG DEBUG_TRANSITIONS
 
-FadeState::FadeState(GameContext& gameContext, Texture&& oldStateTexture, long transitionLength) :
-   TransitionState(gameContext, "FadeState", std::move(oldStateTexture), transitionLength)
+FadeState::FadeState(Texture&& oldStateTexture, long transitionLength) :
+   Transition(std::move(oldStateTexture), transitionLength)
 {
 }
 

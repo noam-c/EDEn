@@ -3,14 +3,14 @@
 
 #include <memory>
 
-#include "TransitionState.h"
+#include "Transition.h"
 
 /**
  * A transition that creates a spin and shrink effect for the previous transition.
  *
  * @author Bobby Richter
  */
-class SpinState : public TransitionState
+class SpinState : public Transition
 {
    protected:
       /**
@@ -22,11 +22,10 @@ class SpinState : public TransitionState
       /**
        * Constructor.
        *
-       * @param gameContext The context containing the execution stack managing this transition.
-       * @param oldState The state that is being faded out.
+       * @param oldStateTexture The state that is being faded out.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      SpinState(GameContext& gameContext, Texture&& oldStateTexture, long transitionLength = 1000);
+      SpinState(Texture&& oldStateTexture, long transitionLength = 1000);
 
       /**
        * Destructor.

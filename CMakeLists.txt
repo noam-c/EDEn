@@ -124,6 +124,7 @@ SET(HEADERS
   src/TileEngine/Messages/MapTriggerMessage.h
   src/tinyxml/tinystr.h
   src/tinyxml/tinyxml.h
+  src/Transitions/Transition.h
   src/Transitions/TransitionState.h
   src/Transitions/FadeState.h
   src/Transitions/SpinState.h
@@ -243,6 +244,7 @@ SET(SOURCES
   src/TileEngine/Messages/DebugCommandMessage.cpp
   src/TileEngine/Messages/MapExitMessage.cpp
   src/TileEngine/Messages/MapTriggerMessage.cpp
+  src/Transitions/Transition.cpp
   src/Transitions/TransitionState.cpp
   src/Transitions/FadeState.cpp
   src/Transitions/SpinState.cpp
