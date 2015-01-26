@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
-#ifndef BLEND_STATE_H
-#define BLEND_STATE_H
+#ifndef BLEND_TRANSITION_H
+#define BLEND_TRANSITION_H
 
 #include <memory>
 
@@ -18,7 +18,7 @@
  *
  * @author Noam Chitayat
  */
-class BlendState : public Transition
+class BlendTransition : public Transition
 {
    protected:
       /**
@@ -34,12 +34,12 @@ class BlendState : public Transition
        * @param newStateTexture The texture that is being transitioned to.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      BlendState(Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength = 1000);
+      BlendTransition(Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength = 1000);
 
       /**
        * Destructor.
        */
-      ~BlendState() = default;
+      ~BlendTransition() = default;
 };
 
 #endif

@@ -22,9 +22,9 @@ std::shared_ptr<GameState> RandomTransitionGenerator::create(GameContext& gameCo
    std::shared_ptr<Transition> transition;
    switch(randomNumber)
    {
-      case 0: transition = std::make_shared<FadeState>(std::move(oldStateTexture), transitionLength); break;
-      case 1: transition = std::make_shared<SpinState>(std::move(oldStateTexture), transitionLength); break;
-      case 2: transition = std::make_shared<BlendState>(std::move(oldStateTexture), std::move(newStateTexture), transitionLength); break;
+      case 0: transition = std::make_shared<FadeTransition>(std::move(oldStateTexture), transitionLength); break;
+      case 1: transition = std::make_shared<SpinTransition>(std::move(oldStateTexture), transitionLength); break;
+      case 2: transition = std::make_shared<BlendTransition>(std::move(oldStateTexture), std::move(newStateTexture), transitionLength); break;
    }
 
    return std::make_shared<TransitionState>(gameContext, transition);

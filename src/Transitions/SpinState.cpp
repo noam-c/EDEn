@@ -17,12 +17,12 @@ const float PI = 3.14159265f;
 
 #define DEBUG_FLAG DEBUG_GRAPHICS
 
-SpinState::SpinState(Texture&& oldStateTexture, long transitionLength) :
+SpinTransition::SpinTransition(Texture&& oldStateTexture, long transitionLength) :
    Transition(std::move(oldStateTexture), transitionLength)
 {
 }
 
-void SpinState::draw()
+void SpinTransition::draw()
 {
    const float width = static_cast<float>(GraphicsUtil::getInstance()->getWidth());
    const float height = static_cast<float>(GraphicsUtil::getInstance()->getHeight());

@@ -13,12 +13,12 @@
 
 #define DEBUG_FLAG DEBUG_GRAPHICS
 
-BlendState::BlendState(Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength) :
+BlendTransition::BlendTransition(Texture&& oldStateTexture, Texture&& newStateTexture, long transitionLength) :
    Transition(std::move(oldStateTexture), std::move(newStateTexture), transitionLength)
 {
 }
 
-void BlendState::draw()
+void BlendTransition::draw()
 {
    const float width = static_cast<float>(GraphicsUtil::getInstance()->getWidth());
    const float height = static_cast<float>(GraphicsUtil::getInstance()->getHeight());

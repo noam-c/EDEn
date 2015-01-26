@@ -1,5 +1,5 @@
-#ifndef SPIN_STATE_H
-#define SPIN_STATE_H
+#ifndef SPIN_TRANSITION_H
+#define SPIN_TRANSITION_H
 
 #include <memory>
 
@@ -10,7 +10,7 @@
  *
  * @author Bobby Richter
  */
-class SpinState : public Transition
+class SpinTransition : public Transition
 {
    protected:
       /**
@@ -25,12 +25,12 @@ class SpinState : public Transition
        * @param oldStateTexture The state that is being faded out.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      SpinState(Texture&& oldStateTexture, long transitionLength = 1000);
+      SpinTransition(Texture&& oldStateTexture, long transitionLength = 1000);
 
       /**
        * Destructor.
        */
-      ~SpinState() = default;
+      ~SpinTransition() = default;
 };
 
 #endif

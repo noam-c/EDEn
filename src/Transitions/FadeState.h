@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
-#ifndef FADE_STATE_H
-#define FADE_STATE_H
+#ifndef FADE_TRANSITION_H
+#define FADE_TRANSITION_H
 
 #include <memory>
 
@@ -16,7 +16,7 @@
  * allowing it to completely fade to black before displaying
  * the new state.
  */
-class FadeState : public Transition
+class FadeTransition : public Transition
 {
    protected:
       /**
@@ -31,12 +31,12 @@ class FadeState : public Transition
        * @param oldState The state that is being faded out.
        * @param transitionLength The length (in milliseconds) of the transition.
        */
-      FadeState(Texture&& oldStateTexture, long transitionLength = 1000);
+      FadeTransition(Texture&& oldStateTexture, long transitionLength = 1000);
 
       /**
        * Destructor.
        */
-      ~FadeState() = default;
+      ~FadeTransition() = default;
 };
 
 #endif

@@ -13,12 +13,12 @@
 
 #define DEBUG_FLAG DEBUG_TRANSITIONS
 
-FadeState::FadeState(Texture&& oldStateTexture, long transitionLength) :
+FadeTransition::FadeTransition(Texture&& oldStateTexture, long transitionLength) :
    Transition(std::move(oldStateTexture), transitionLength)
 {
 }
 
-void FadeState::draw()
+void FadeTransition::draw()
 {
    const float width = static_cast<float>(GraphicsUtil::getInstance()->getWidth());
    const float height = static_cast<float>(GraphicsUtil::getInstance()->getHeight());
