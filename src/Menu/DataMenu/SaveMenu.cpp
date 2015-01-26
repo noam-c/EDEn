@@ -16,7 +16,7 @@
 #include "ExecutionStack.h"
 #include "TileEngine.h"
 #include "TransitionState.h"
-#include "FadeState.h"
+#include "FadeTransition.h"
 #include "ScreenTexture.h"
 #include "DebugUtils.h"
 

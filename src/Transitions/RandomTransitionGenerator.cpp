@@ -6,9 +6,9 @@
 
 #include "RandomTransitionGenerator.h"
 
-#include "BlendState.h"
-#include "FadeState.h"
-#include "SpinState.h"
+#include "BlendTransition.h"
+#include "FadeTransition.h"
+#include "SpinTransition.h"
 #include "TransitionState.h"
 
 // For rand()

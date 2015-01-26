@@ -4,7 +4,7 @@
  *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
-#include "BlendState.h"
+#include "BlendTransition.h"
 #include "GraphicsUtil.h"
 #include "SDL.h"
 #include "SDL_opengl.h"

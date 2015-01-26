@@ -126,10 +126,10 @@ SET(HEADERS
   src/tinyxml/tinyxml.h
   src/Transitions/Transition.h
   src/Transitions/TransitionState.h
-  src/Transitions/FadeState.h
-  src/Transitions/SpinState.h
+  src/Transitions/FadeTransition.h
+  src/Transitions/SpinTransition.h
   src/Transitions/RandomTransitionGenerator.h
-  src/Transitions/BlendState.h
+  src/Transitions/BlendTransition.h
   src/TODOLIST.h
   src/utils/DebugUtils.h
   src/utils/Exception.h
@@ -246,10 +246,10 @@ SET(SOURCES
   src/TileEngine/Messages/MapTriggerMessage.cpp
   src/Transitions/Transition.cpp
   src/Transitions/TransitionState.cpp
-  src/Transitions/FadeState.cpp
-  src/Transitions/SpinState.cpp
+  src/Transitions/FadeTransition.cpp
+  src/Transitions/SpinTransition.cpp
   src/Transitions/RandomTransitionGenerator.cpp
-  src/Transitions/BlendState.cpp
+  src/Transitions/BlendTransition.cpp
   src/utils/DebugUtils.cpp
   src/utils/Exception.cpp
   src/views/ChoicesDataSource.cpp
