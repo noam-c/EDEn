@@ -60,11 +60,9 @@ class DialogueEntry
       bool choiceSelected(int choiceIndex);
 
       /**
-       *  Gets the next embdedded script bracket pair.
-       *
-       *  @return true iff there are embedded script brackets left in the string
+       *  @return the starting index of the next embedded script, or -1 if there is none
        */
-      bool getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex) const;
+      int getBeginningOfNextScript() const;
 
       /**
        *  Gets the next embedded script and removes it from the dialogue line.

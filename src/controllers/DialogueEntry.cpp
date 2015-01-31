@@ -98,31 +98,34 @@ bool DialogueEntry::choiceSelected(int choiceIndex)
    return true;
 }
 
-bool DialogueEntry::getNextBracketPair(unsigned int& openIndex, unsigned int& closeIndex) const
+int DialogueEntry::getBeginningOfNextScript() const
 {
-   if(m_openScriptBrackets.empty())
+   if(!m_openScriptBrackets.empty() && !m_closeScriptBrackets.empty())
    {
-      return false;
+      return m_openScriptBrackets.front();
    }
 
-   openIndex = m_openScriptBrackets.front();
-   closeIndex = m_closeScriptBrackets.front();
-
-   return true;
+   return -1;
 }
 
 std::string DialogueEntry::removeNextScriptString()
 {
-   unsigned int openIndex, closeIndex;
-   getNextBracketPair(openIndex, closeIndex);
+   std::string script;
 
-   m_openScriptBrackets.pop();
-   m_closeScriptBrackets.pop();
+   if(!m_openScriptBrackets.empty() && !m_closeScriptBrackets.empty())
+   {
+      const int openIndex = m_openScriptBrackets.front();
+      const int closeIndex = m_closeScriptBrackets.front();
 
-   const int scriptLength = closeIndex - openIndex;
-   std::string script = text.substr(openIndex + 1, scriptLength - 1);
-   text.replace(openIndex, scriptLength + 1, "");
+      const int scriptLength = closeIndex - openIndex;
+      script = text.substr(openIndex + 1, scriptLength - 1);
+      text.replace(openIndex, scriptLength + 1, "");
 
-   DEBUG("Extracting script %s, leaving dialogue %s", script.c_str(), text.c_str());
+      DEBUG("Extracting script %s, leaving dialogue %s", script.c_str(), text.c_str());
+      
+      m_openScriptBrackets.pop();
+      m_closeScriptBrackets.pop();
+   }
+
    return script;
 }

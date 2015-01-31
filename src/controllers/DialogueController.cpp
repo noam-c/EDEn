@@ -82,17 +82,14 @@ void DialogueController::advanceDialogue()
 
    DialogueEntry& currEntry = m_dialogueQueue.front();
    // See if we ran over any embedded scripts that we should execute
-   unsigned int openIndex, closeIndex;
-   if(currEntry.getNextBracketPair(openIndex, closeIndex))
+   const int openIndex = currEntry.getBeginningOfNextScript();
+   if(openIndex >= 0 && openIndex <= m_charsToShow)
    {
       // If there is a bracket pair coming up and we're past the point of the
       // open bracket, then extract the script string and run it
-      if(openIndex <= m_charsToShow)
-      {
-         m_charsToShow = openIndex;
-         std::string script = currEntry.removeNextScriptString();
-         m_scriptEngine.runScriptString(script);
-      }
+      m_charsToShow = openIndex;
+      std::string script = currEntry.removeNextScriptString();
+      m_scriptEngine.runScriptString(script);
    }
 
    m_charsToShow = std::min(m_charsToShow, currEntry.text.size());
