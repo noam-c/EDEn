@@ -266,44 +266,6 @@ void GraphicsUtil::resetAbsoluteOffset()
    m_currentYOffset = 0;
 }
 
-void GraphicsUtil::FadeToColor(float red, float green, float blue, int delay)
-{
-   long time = SDL_GetTicks();
-   float alpha = 0.0f;
-
-   glPushAttrib(GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-   glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-   glEnable(GL_BLEND);
-   glDisable(GL_DEPTH_TEST);
-   glDisable(GL_TEXTURE_2D);
-
-   for (;;)
-   {
-      glBegin(GL_QUADS);
-         glColor4f(red, green, blue, alpha);
-         glVertex3f( 0.0f,         0.0f,          0.0f);
-         glVertex3f( (float)m_width, 0.0f,          0.0f);
-         glVertex3f( (float)m_width, (float)m_height, 0.0f);
-         glVertex3f( 0.0f,         (float)m_height, 0.0f);
-      glEnd();
-
-      GraphicsUtil::getInstance()->flipScreen();
-
-      long timePassed = SDL_GetTicks() - time;
-      alpha = ((timePassed*1.0f)/delay);
-
-      //We're done when alpha reaches 1.0
-      if (alpha >= 1.0f)
-      {
-         glColor3f(1.0f,1.0f,1.0f);
-         break;
-      }
-   }
-
-   glPopAttrib();
-}
-
 void GraphicsUtil::finish()
 {
    // Shut down Rocket

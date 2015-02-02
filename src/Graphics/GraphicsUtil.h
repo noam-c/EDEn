@@ -162,16 +162,6 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
       void resetAbsoluteOffset();
 
       /**
-       *  Graphical effect: Fade to a specific colour in a specified time period
-       *
-       *  @param red   The amount of red   (0.0f <= red <= 1.0f)
-       *  @param green The amount of green (0.0f <= green <= 1.0f)
-       *  @param blue  The amount of blue  (0.0f <= blue <= 1.0f)
-       *  @param delay The amount of time taken for the fade (in milliseconds)
-       */
-      void FadeToColor(float red, float green, float blue, int delay);
-
-      /**
        * Clear the color buffers and reset the model matrix
        * \todo Come up with a better name for this (though that suggestion indicates that this method may not be good design).
        */

@@ -35,9 +35,9 @@ void MainMenu::NewGameAction()
 {
    auto playerData = std::make_shared<PlayerData>(getMetadata());
    auto tileEngine = std::make_shared<TileEngine>(m_gameContext, playerData, CHAP1);
-   auto blendTransition = std::make_shared<FadeTransition>(ScreenTexture::create(*this));
+   auto fadeTransition = std::make_shared<FadeTransition>(ScreenTexture::create(*this));
 
-   getExecutionStack()->pushState(tileEngine, std::make_shared<TransitionState>(m_gameContext, blendTransition));
+   getExecutionStack()->pushState(tileEngine, std::make_shared<TransitionState>(m_gameContext, fadeTransition));
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
 }
@@ -99,5 +99,8 @@ void MainMenu::QuitAction()
    m_chooseSound->play();
    Music::fadeOutMusic(1000);
 
-   GraphicsUtil::getInstance()->FadeToColor(0.0f, 0.0f, 0.0f, 1000);
+   auto fadeTransition = std::make_shared<FadeTransition>(ScreenTexture::create(*this));
+
+   getExecutionStack()->pushState(std::make_shared<TransitionState>(m_gameContext, fadeTransition));
+
 }

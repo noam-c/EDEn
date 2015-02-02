@@ -24,7 +24,8 @@ GameState::GameState(GameContext& gameContext, GameStateType stateType, const st
    m_time(SDL_GetTicks()),
    m_active(false),
    m_stateType(stateType),
-   m_gameContext(gameContext)
+   m_gameContext(gameContext),
+   m_finished(false)
 {
    m_rocketContext = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
 }
@@ -32,7 +33,8 @@ GameState::GameState(GameContext& gameContext, GameStateType stateType, const st
 GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName, Rocket::Core::Context* context) :
    m_stateType(stateType),
    m_gameContext(gameContext),
-   m_rocketContext(context)
+   m_rocketContext(context),
+   m_finished(false)
 {
    context->AddReference();
 }
@@ -64,7 +66,6 @@ ScriptEngine& GameState::getScriptEngine() const
 
 void GameState::activate()
 {
-   m_finished = false;
    m_rocketContext->Update();
    m_active = true;
 }
