@@ -30,7 +30,7 @@ class ImageFormatter : public Rocket::Controls::DataFormatter
        * @param formatted_data The string that will hold the final formatted image tag.
        * @param raw_data A single-entry string array containing the path to an image, relative to the RML GUI folder.
        */
-      void FormatData(Rocket::Core::String& formatted_data, const Rocket::Core::StringList& raw_data);
+      void FormatData(Rocket::Core::String& formatted_data, const Rocket::Core::StringList& raw_data) override;
 };
 
 #endif

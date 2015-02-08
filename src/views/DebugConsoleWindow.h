@@ -23,7 +23,7 @@ namespace Rocket
  *
  * @author Noam Chitayat
  */
-class DebugConsoleWindow
+class DebugConsoleWindow final
 {
    /** The message pipe used for trigger events. */
    messaging::MessagePipe& m_messagePipe;

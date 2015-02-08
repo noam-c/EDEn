@@ -39,7 +39,7 @@ class Region : public Resource
     *
     * @param path The path to the directory containing the region's maps.
     */
-   virtual void load(const std::string& path);
+   void load(const std::string& path) override;
 
    public:
       /**

@@ -18,13 +18,13 @@
  *
  * @author Noam Chitayat
  */
-class BlendTransition : public Transition
+class BlendTransition final : public Transition
 {
    protected:
       /**
        * Draws a blend between the old and new state.
        */
-      void draw();
+      void draw() override;
 
    public:
       /**
@@ -39,7 +39,7 @@ class BlendTransition : public Transition
       /**
        * Destructor.
        */
-      ~BlendTransition() = default;
+      ~BlendTransition() override = default;
 };
 
 #endif

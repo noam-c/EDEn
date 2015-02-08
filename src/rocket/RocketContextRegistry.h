@@ -37,21 +37,21 @@ class RocketContextRegistry : public Rocket::Core::Plugin
        *
        * @return the event classes that the plugin is interested in.
        */
-      virtual int GetEventClasses();
+      virtual int GetEventClasses() override;
 
       /**
        * Called by Rocket when a new Rocket Context is created.
        *
        * @param context The context that was just created.
        */
-      virtual void OnContextCreate(Rocket::Core::Context* context);
+      virtual void OnContextCreate(Rocket::Core::Context* context) override;
 
       /**
        * Called by Rocket when a Rocket Context is destroyed.
        *
        * @param context The context that is being destroyed.
        */
-      virtual void OnContextDestroy(Rocket::Core::Context* context);
+      virtual void OnContextDestroy(Rocket::Core::Context* context) override;
 
       /**
        * @return a list of all currently active contexts.

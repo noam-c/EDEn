@@ -4,7 +4,7 @@
 #include <Rocket/Core.h>
 #include <functional>
 
-class RocketListener : public Rocket::Core::EventListener
+class RocketListener final : public Rocket::Core::EventListener
 {
    Rocket::Core::Element* m_element;
    Rocket::Core::String m_eventType;
@@ -20,7 +20,7 @@ class RocketListener : public Rocket::Core::EventListener
 
       ~RocketListener();
 
-      void ProcessEvent(Rocket::Core::Event& event);
+      void ProcessEvent(Rocket::Core::Event& event) override;
 };
 
 #endif

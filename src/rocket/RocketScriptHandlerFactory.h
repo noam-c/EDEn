@@ -14,9 +14,9 @@ class RocketScriptHandlerFactory : public Rocket::Core::EventListenerInstancer
       RocketScriptHandlerFactory(ScriptEngine& scriptEngine);
 
       virtual Rocket::Core::EventListener* InstanceEventListener(
-            const Rocket::Core::String& value, Rocket::Core::Element* element);
+            const Rocket::Core::String& value, Rocket::Core::Element* element) override;
 
-      virtual void Release();
+      virtual void Release() override;
 };
 
 #endif

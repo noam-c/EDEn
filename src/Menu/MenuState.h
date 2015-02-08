@@ -71,29 +71,29 @@ class MenuState : public GameState
       /**
        * Sets this menu state to be the current one.
        */
-      virtual void activate();
+      virtual void activate() override;
 
       /**
        * Removes this menu state from active use.
        */
-      virtual void deactivate();
+      virtual void deactivate() override;
 
       /**
        * @return The scheduler used to manage the menu's coroutines
        */
-      Scheduler* getScheduler();
+      Scheduler* getScheduler() override;
 
       /**
        * Draws the menu.
        */
-      void draw();
+      void draw() override;
 
       /**
        * Perform logic for the menu screen.
        *
        * @return true iff the user is not finished with the menu.
        */
-      bool step(long timePassed);
+      bool step(long timePassed) override;
 
    public:
       /**
@@ -116,7 +116,7 @@ class MenuState : public GameState
       /**
        * Destructor.
        */
-      virtual ~MenuState() = 0;
+      virtual ~MenuState() override = 0;
 
       /**
        * @return A list of options that are displayed on the menu sidebar.

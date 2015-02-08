@@ -29,7 +29,7 @@ class Tileset : public Resource
    /** The tile texture */
    std::unique_ptr<Texture> m_texture;
 
-   void load(const std::string& path);
+   void load(const std::string& path) override;
 
    public:
 

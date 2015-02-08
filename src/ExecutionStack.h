@@ -22,7 +22,7 @@ class Scheduler;
  *
  * @author Noam Chitayat
  */
-class ExecutionStack
+class ExecutionStack final
 {
    /**
     * The stack that holds the various states that the player

@@ -24,7 +24,7 @@ class Metadata;
 class PlayerData;
 class ScriptEngine;
 
-class ShortcutBar
+class ShortcutBar final
 {
    /** The event binding collection for the debug window */
    EdenRocketBindings m_bindings;

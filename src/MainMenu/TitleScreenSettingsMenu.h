@@ -32,7 +32,7 @@ class Settings;
  *
  * @author Noam Chitayat
  */
-class TitleScreenSettingsMenu: public GameState
+class TitleScreenSettingsMenu final : public GameState
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
@@ -73,7 +73,7 @@ class TitleScreenSettingsMenu: public GameState
       /**
        * Waits a millisecond between draws (no rush on a title screen)
        */
-      void draw();
+      void draw() override;
 
       /**
        * Perform logic for the title screen.
@@ -82,12 +82,12 @@ class TitleScreenSettingsMenu: public GameState
        *
        * @return true iff the title screen is not finished running (no quit event)
        */
-      bool step(long timePassed);
+      bool step(long timePassed) override;
 
       /**
        * @return the title screen settings menu's script scheduler
        */
-      Scheduler* getScheduler();
+      Scheduler* getScheduler() override;
 
    public:
       /**
@@ -101,7 +101,7 @@ class TitleScreenSettingsMenu: public GameState
       /**
        * Destructor.
        */
-      ~TitleScreenSettingsMenu();
+      ~TitleScreenSettingsMenu() override;
 };
 
 #endif

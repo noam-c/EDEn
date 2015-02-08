@@ -52,7 +52,7 @@ class Script : public Coroutine
        * @return true iff the script runs to completion, false if the coroutine
        *         yielded, or there was an error in execution.
        */
-      bool resume(long timePassed);
+      virtual bool resume(long timePassed) override;
 
       /**
        * Yield the script execution
@@ -62,12 +62,12 @@ class Script : public Coroutine
        * @return The Lua yield code (LUA_YIELD) so that the resumer of the coroutine
        *         can regain control and handle the yield.
        */
-      int yield(int numResults);
+      int yield(int numResults) override;
 
       /**
        * Destructor. Made abstract in order to make Scripts abstract.
        */
-      virtual ~Script() = 0;
+      virtual ~Script() override = 0;
 };
 
 #endif

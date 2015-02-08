@@ -15,7 +15,7 @@
  *
  * @author Noam Chitayat
  */
-class FileScript : public Script
+class FileScript final : public Script
 {
    public:
       /**
@@ -37,7 +37,7 @@ class FileScript : public Script
       /**
        * Destructor.
        */
-      ~FileScript() = default;
+      ~FileScript() override = default;
 };
 
 #endif

@@ -21,7 +21,7 @@ class Task;
  *
  * @author Noam Chitayat
  */
-class Sound : public Resource
+class Sound final : public Resource
 {
    /** The map of currently playing Sound resources based on channel. */
    static std::map<int, Sound*> playingList;
@@ -46,7 +46,7 @@ class Sound : public Resource
     *
     * @param path The path to the music file.
     */
-   void load(const std::string& path);
+   void load(const std::string& path) override;
 
    /**
     * A callback used to signal to the sound that it has finished playing or that it has been
@@ -73,7 +73,7 @@ class Sound : public Resource
       /**
        * Destructor.
        */
-      ~Sound();
+      ~Sound() override;
 
       /**
        * Play this sound once.

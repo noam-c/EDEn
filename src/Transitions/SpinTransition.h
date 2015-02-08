@@ -10,13 +10,13 @@
  *
  * @author Bobby Richter
  */
-class SpinTransition : public Transition
+class SpinTransition final : public Transition
 {
    protected:
       /**
        * Draws the old state, rotated and scaled for transitional effect.
        */
-      void draw();
+      void draw() override;
 
    public:
       /**

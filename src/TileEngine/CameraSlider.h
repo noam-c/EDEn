@@ -47,7 +47,7 @@ class CameraSlider : public Coroutine
        *
        * @return true iff the slide has completed.
        */
-      bool resume(long timePassed);
+      bool resume(long timePassed) override;
 };
 
 #endif

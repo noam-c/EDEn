@@ -29,7 +29,7 @@ namespace messaging
  *
  * @author Noam Chitayat
  */
-class TileEngineOverlay
+class TileEngineOverlay final
 {
    /** The RML document that represents the overlay GUI. */
    Rocket::Core::ElementDocument* m_overlayDocument;

@@ -34,7 +34,7 @@ typedef std::vector<std::pair<std::string, std::unique_ptr<PlayerDataSummary>> >
  *
  * @author Noam Chitayat
  */
-class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
+class SaveMenu final : public GameState, public std::enable_shared_from_this<SaveMenu>
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
@@ -188,7 +188,7 @@ class SaveMenu: public GameState, public std::enable_shared_from_this<SaveMenu>
       /**
        * Destructor.
        */
-      ~SaveMenu();
+      ~SaveMenu() override;
 
       /**
        * Refresh the menu after the backing data has changed.

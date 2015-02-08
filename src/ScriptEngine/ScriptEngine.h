@@ -36,7 +36,7 @@ struct lua_State;
  *
  * @author Noam Chitayat
  */
-class ScriptEngine
+class ScriptEngine final
 {
    /**
     * The tile engine to execute commands on

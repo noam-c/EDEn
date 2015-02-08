@@ -45,13 +45,13 @@ class PushOnLuaStackOp : public ICoroutineResultOp
       {
       }
 
-      void operator()(bool arg)
+      void operator()(bool arg) override
       {
          DEBUG("Pushing boolean: %d", arg);
          lua_pushboolean(m_luaVM, arg);
       }
 
-      void operator()(int arg)
+      void operator()(int arg) override
       {
          DEBUG("Pushing number: %d", arg);
          lua_pushnumber(m_luaVM, arg);

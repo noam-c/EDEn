@@ -27,7 +27,7 @@ typedef std::vector<std::string> DialogueChoiceList;
  *
  * @author Noam Chitayat
  */
-class DialogueEntry
+class DialogueEntry final
 {
    /** A queue of upcoming open script brackets ('<' characters) */
    std::queue<int> m_openScriptBrackets;

@@ -17,7 +17,7 @@
  *
  * @author Noam Chitayat
  */
-class Music : public Resource
+class Music final : public Resource
 {
    /** The current music that is playing. */
    static std::shared_ptr<Music> currentMusic;
@@ -35,7 +35,7 @@ class Music : public Resource
     *
     * @param path The path to the music file.
     */
-   void load(const std::string& path);
+   void load(const std::string& path) override;
 
    public:
       /**
@@ -70,7 +70,7 @@ class Music : public Resource
       /**
        * Destructor.
        */
-      ~Music();
+      ~Music() override;
 };
 
 #endif

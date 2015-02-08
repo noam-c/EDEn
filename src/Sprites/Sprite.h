@@ -24,7 +24,7 @@ enum class MovementDirection;
  * static frames. Sprites are used to represent projectiles, characters,
  * anything that isn't background.
  */
-class Sprite
+class Sprite final
 {
    /** The spritesheet containing this sprite's frames. */
    std::shared_ptr<Spritesheet> m_sheet;

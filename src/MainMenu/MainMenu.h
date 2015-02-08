@@ -32,7 +32,7 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class MainMenu: public GameState, public std::enable_shared_from_this<MainMenu>
+class MainMenu final : public GameState, public std::enable_shared_from_this<MainMenu>
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
@@ -81,7 +81,7 @@ class MainMenu: public GameState, public std::enable_shared_from_this<MainMenu>
       /**
        * Waits a millisecond between draws (no rush on a title screen)
        */
-      void draw();
+      void draw() override;
 
       /**
        * Perform logic for the title screen.
@@ -90,7 +90,7 @@ class MainMenu: public GameState, public std::enable_shared_from_this<MainMenu>
        *
        * @return true iff the title screen is not finished running (no quit event)
        */
-      bool step(long timePassed);
+      bool step(long timePassed) override;
 
       /**
        * @return the main menu's script scheduler
@@ -109,7 +109,7 @@ class MainMenu: public GameState, public std::enable_shared_from_this<MainMenu>
       /**
        * Destructor.
        */
-      ~MainMenu();
+      ~MainMenu() override;
 };
 
 #endif

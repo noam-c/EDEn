@@ -43,7 +43,7 @@ struct MapTriggerMessage;
  *
  * @author Noam Chitayat
  */
-class TileEngine:
+class TileEngine final :
    public GameState,
    public messaging::Listener<DebugCommandMessage>,
    public messaging::Listener<MapExitMessage>,
@@ -146,25 +146,25 @@ class TileEngine:
        * Activation of state.
        * Rebinds the TileEngine's message pipe to the player data.
        */
-      void activate();
+      void activate() override;
       /**
        * Deactivation of state.
        * Unbinds the TileEngine's message pipe from the player data.
        */
-      void deactivate();
+      void deactivate() override;
 
       /**
        * Logic step.
        * Sends time passed to all controllers so that they can update accordingly.
        * Takes user input if there is any.
        */
-      bool step(long timePassed);
+      bool step(long timePassed) override;
 
       /**
        * Draw map tiles if a map is loaded in, and then coordinate the drawing
        * of all the controllers and widgets.
        */
-      void draw();
+      void draw() override;
 
    public:
       /** Tile size constant */
@@ -191,12 +191,12 @@ class TileEngine:
       /**
        * Destructor.
        */
-      ~TileEngine();
+      ~TileEngine() override;
 
       /**
        * @return The tile engine's coroutine scheduler.
        */
-      Scheduler* getScheduler();
+      Scheduler* getScheduler() override;
 
       /**
        * @return The name of the currently loaded map.
@@ -208,21 +208,21 @@ class TileEngine:
        *
        * @param message The debug command message.
        */
-      void receive(const DebugCommandMessage& message);
+      void receive(const DebugCommandMessage& message) override;
 
       /**
        * Handler for map location changes.
        *
        * @param message The map exit message.
        */
-      void receive(const MapExitMessage& message);
+      void receive(const MapExitMessage& message) override;
 
       /**
        * Handler for map trigger entry.
        *
        * @param message The map trigger message.
        */
-      void receive(const MapTriggerMessage& message);
+      void receive(const MapTriggerMessage& message) override;
 
       /**
        * Send a line of dialogue to the DialogueController as a narration.

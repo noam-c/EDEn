@@ -36,7 +36,7 @@ class ScriptEngine;
  *
  * @author Noam Chitayat
  */
-class NPC : public Actor
+class NPC final : public Actor
 {
    /** The NPC's coroutine of execution */
    std::shared_ptr<NPCScript> m_coroutine;
@@ -85,7 +85,7 @@ class NPC : public Actor
       /**
        * Destructor.
        */
-      ~NPC();
+      ~NPC() override;
 };
 
 #endif

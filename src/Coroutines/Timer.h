@@ -17,7 +17,7 @@
  *
  * @author Noam Chitayat
  */
-class Timer : public Coroutine
+class Timer final : public Coroutine
 {
    /** The amount of time left before this timer is finished. */
    long m_timeLeft;
@@ -42,7 +42,7 @@ class Timer : public Coroutine
        *
        * @return true iff the timer has completed.
        */
-      bool resume(long timePassed);
+      bool resume(long timePassed) override;
 };
 
 #endif

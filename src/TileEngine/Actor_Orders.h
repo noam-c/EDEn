@@ -41,7 +41,7 @@ class Actor::StandOrder : public Actor::Order
 
    public:
       StandOrder(Actor& actor, MovementDirection direction);
-      bool perform(long timePassed);
+      bool perform(long timePassed) override;
 };
 
 /**
@@ -50,7 +50,7 @@ class Actor::StandOrder : public Actor::Order
  *
  * @author Noam Chitayat
  */
-class Actor::MoveOrder : public Actor::Order
+class Actor::MoveOrder final : public Actor::Order
 {
    /**
     * Tracks if the move order has calculated a path from
@@ -106,9 +106,10 @@ class Actor::MoveOrder : public Actor::Order
       /**
        * Destructor.
        */
-      ~MoveOrder();
-      bool perform(long timePassed);
-      void draw() const;
+      ~MoveOrder() override;
+
+      bool perform(long timePassed) override;
+      void draw() const override;
 };
 
 #endif

@@ -17,7 +17,7 @@ struct lua_State;
  *
  * @author Noam Chitayat
  */
-struct MapTriggerCallback
+struct MapTriggerCallback final
 {
    /** The Lua VM on which to run the callback function. */
    lua_State* m_luaVM;

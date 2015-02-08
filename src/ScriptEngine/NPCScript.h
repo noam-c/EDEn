@@ -33,7 +33,7 @@ class NPC;
  *
  * @author Noam Chitayat
  */
-class NPCScript : public Script
+class NPCScript final : public Script
 {
    /**
     * The functions that can be called on an NPC.
@@ -93,7 +93,7 @@ class NPCScript : public Script
       /**
        * Destructor.
        */
-      ~NPCScript();
+      ~NPCScript() override;
 
       /**
        * Call a function on this NPC's script.
@@ -113,7 +113,7 @@ class NPCScript : public Script
        *
        * @return true iff the NPC is finished and the coroutine should end.
        */
-      bool resume(long timePassed);
+      bool resume(long timePassed) override;
 
       /**
        * Activates this NPC as a result of player action.

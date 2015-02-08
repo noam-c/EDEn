@@ -15,7 +15,7 @@
  *
  * @author Noam Chitayat
  */
-class StringScript : public Script
+class StringScript final : public Script
 {
    public:
       /**
@@ -31,7 +31,7 @@ class StringScript : public Script
       /**
        * Destructor.
        */
-      ~StringScript() = default;
+      ~StringScript() override = default;
 };
 
 #endif

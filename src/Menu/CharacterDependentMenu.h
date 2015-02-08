@@ -10,7 +10,7 @@ class CharacterDependentMenu : public MenuState
       CharacterDependentMenu(GameContext& gameContext, PlayerData& playerData, const std::string& stateName);
       CharacterDependentMenu(GameContext& gameContext, PlayerData& playerData, const std::string& stateName, std::shared_ptr<MenuShell> menuShell);
       virtual void setCharacter(int characterIndex) = 0;
-      virtual ~CharacterDependentMenu() = default;
+      virtual ~CharacterDependentMenu() override = default;
 };
 
 #endif

@@ -16,7 +16,7 @@ class Skill : public Usable
    unsigned int m_masteryThreshold;
 
    protected:
-      std::shared_ptr<UsableScript> createScript(ScriptEngine& scriptEngine);
+      std::shared_ptr<UsableScript> createScript(ScriptEngine& scriptEngine) override;
 
    public:
       /**
@@ -29,7 +29,7 @@ class Skill : public Usable
       unsigned int getAdeptitudeThreshold() const;
       unsigned int getMasteryThreshold() const;
 
-      bool use(ScriptEngine& scriptEngine, GameStateType gameStateType, Character* usingCharacter);
+      bool use(ScriptEngine& scriptEngine, GameStateType gameStateType, Character* usingCharacter) override;
 };
 
 #endif

@@ -31,7 +31,7 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class SkillMenu: public CharacterDependentMenu
+class SkillMenu : public CharacterDependentMenu
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
@@ -68,7 +68,7 @@ class SkillMenu: public CharacterDependentMenu
       SkillMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell);
 
       Character* getSelectedCharacter() const;
-      void setCharacter(int characterIndex);
+      void setCharacter(int characterIndex) override;
 };
 
 #endif

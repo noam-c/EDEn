@@ -16,13 +16,13 @@
  * allowing it to completely fade to black before displaying
  * the new state.
  */
-class FadeTransition : public Transition
+class FadeTransition final : public Transition
 {
    protected:
       /**
        * Draws a faded version of the old state.
        */
-      void draw();
+      void draw() override;
 
    public:
       /**
@@ -36,7 +36,7 @@ class FadeTransition : public Transition
       /**
        * Destructor.
        */
-      ~FadeTransition() = default;
+      ~FadeTransition() override = default;
 };
 
 #endif

@@ -29,7 +29,7 @@ class GameState;
  * @author Noam Chitayat
  * @author Bobby Richter
  */
-class ScreenTexture : public Texture
+class ScreenTexture final : public Texture
 {
    protected:
       /**
@@ -48,6 +48,7 @@ class ScreenTexture : public Texture
        * Copying is disallowed.
        */
       ScreenTexture(const ScreenTexture& rhs) = delete;
+      ScreenTexture& operator=(const ScreenTexture& rhs) = delete;
 
       /**
        * Move constructor and assignment.
@@ -59,7 +60,7 @@ class ScreenTexture : public Texture
        * Destructor.
        * Cleans up the allocated FBO.
        */
-      ~ScreenTexture();
+      ~ScreenTexture() override;
 
       /**
        * Takes a snapshot of the given GameState and

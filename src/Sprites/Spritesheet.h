@@ -81,7 +81,7 @@ class Spritesheet : public Resource
     *
     * @param path The path to the spritesheet image and data.
     */
-   void load(const std::string& path);
+   void load(const std::string& path) override;
 
    /**
     * Loads the sprite frames from the spritesheet data.

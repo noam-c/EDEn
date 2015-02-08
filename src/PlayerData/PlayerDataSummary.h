@@ -29,7 +29,7 @@ namespace Json
  *
  * @author Noam Chitayat
  */
-class PlayerDataSummary
+class PlayerDataSummary final
 {
    static const char* CHARACTER_LIST_ELEMENT;
    static const char* CHARACTER_ELEMENT;

@@ -33,7 +33,7 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class HomeMenu: public MenuState
+class HomeMenu final : public MenuState
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
@@ -83,7 +83,7 @@ class HomeMenu: public MenuState
       /**
        * Destructor.
        */
-      ~HomeMenu();
+      ~HomeMenu() override;
 
       /**
        * Handles sidebar option click events by navigating to the
@@ -91,7 +91,7 @@ class HomeMenu: public MenuState
        *
        * @param optionIndex The index of the sidebar option that was clicked.
        */
-      void sidebarClicked(int optionIndex);
+      void sidebarClicked(int optionIndex) override;
 };
 
 #endif

@@ -49,7 +49,7 @@ class ICoroutineResults
  *
  * @author Noam Chitayat
  */
-template<typename ... Results> class CoroutineResults : public ICoroutineResults
+template<typename ... Results> class CoroutineResults final : public ICoroutineResults
 {
    std::tuple<Results...> m_results;
 
@@ -59,7 +59,7 @@ template<typename ... Results> class CoroutineResults : public ICoroutineResults
       {
       }
 
-      size_t getSize() const
+      size_t getSize() const override
       {
          return sizeof...(Results);
       }
@@ -76,14 +76,14 @@ template<typename ... Results> class CoroutineResults : public ICoroutineResults
          });
       }
 
-      void forEach(ICoroutineResultOp& op)
+      void forEach(ICoroutineResultOp& op) override
       {
          // Since std::tuples don't support runtime iteration,
          // iterate over (and operate on) the results tuple using a compile-time integer sequence.
          operateOnResults(op, GenerateIntegerSequence<sizeof...(Results)>());
       }
 
-      ~CoroutineResults() = default;
+      ~CoroutineResults() override = default;
 };
 
 #endif

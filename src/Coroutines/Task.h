@@ -20,7 +20,7 @@
  *
  * @author Noam Chitayat
  */
-class Task
+class Task final
 {
    friend class Scheduler;
 

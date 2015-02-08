@@ -28,7 +28,7 @@ class ICoroutineResults;
  *
  * @author Noam Chitayat
  */
-class Scheduler
+class Scheduler final
 {
    /** A list of coroutines. */
    typedef std::set<std::shared_ptr<Coroutine>> CoroutineList;

@@ -79,7 +79,7 @@ class Exception : public std::exception
       /**
        * Destructor.
        */
-      virtual ~Exception() = default;
+      virtual ~Exception() override = default;
 };
 
 #endif

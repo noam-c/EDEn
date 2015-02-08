@@ -48,7 +48,7 @@ struct TileState;
  *
  * @author Noam Chitayat
  */
-class EntityGrid : messaging::Listener<ActorMoveMessage>
+class EntityGrid final : messaging::Listener<ActorMoveMessage>
 {
    friend class Pathfinder;
 

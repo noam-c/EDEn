@@ -40,7 +40,7 @@ class ShortcutBar;
  *
  * @author Noam Chitayat
  */
-class MenuShell
+class MenuShell final
 {
    /** The Rocket context which holds the shell's GUI components. */
    Rocket::Core::Context* m_rocketContext;

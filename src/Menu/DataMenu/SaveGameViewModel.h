@@ -42,14 +42,14 @@ class SaveGameViewModel : public Rocket::Controls::DataSource
        * @param row_index The index of the desired row.
        * @param columns The list of desired columns within the row.
        */
-      void GetRow(Rocket::Core::StringList& row, const Rocket::Core::String& table, int row_index, const Rocket::Core::StringList& columns);
+      void GetRow(Rocket::Core::StringList& row, const Rocket::Core::String& table, int row_index, const Rocket::Core::StringList& columns) override;
 
       /**
        * @param table The table to query for row count.
        *
        * @return The number of rows in the specified table.
        */
-      int GetNumRows(const Rocket::Core::String& table);
+      int GetNumRows(const Rocket::Core::String& table) override;
 
       void refresh(int rowIndex);
 };

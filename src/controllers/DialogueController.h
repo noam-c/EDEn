@@ -56,7 +56,7 @@ class DialogueController
           *
           * @return the result of the parent dialogue controller's resumption
           */
-         bool resume(long timePassed);
+         bool resume(long timePassed) override;
    };
 
    /** The queue to hold all the pending dialogue sequences. */

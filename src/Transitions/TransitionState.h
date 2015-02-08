@@ -20,12 +20,12 @@ class TransitionState : public GameState
       /**
        * Update the transition to the right timeframe.
        */
-      bool step(long timePassed);
+      bool step(long timePassed) override;
       
       /**
        * Draw the transition.
        */
-      void draw();
+      void draw() override;
 
    public:
       /**

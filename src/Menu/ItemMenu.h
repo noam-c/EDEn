@@ -30,7 +30,7 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class ItemMenu: public MenuState
+class ItemMenu final : public MenuState
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;
@@ -66,7 +66,7 @@ class ItemMenu: public MenuState
       /**
        * Destructor.
        */
-      ~ItemMenu() = default;
+      ~ItemMenu() override = default;
 };
 
 #endif

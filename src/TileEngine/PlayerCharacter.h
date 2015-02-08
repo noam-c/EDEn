@@ -23,7 +23,7 @@ struct RosterUpdateMessage;
  *
  * @author Noam Chitayat
  */
-class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMessage>
+class PlayerCharacter final : public Actor, public messaging::Listener<RosterUpdateMessage>
 {
    /** The walking prefix used to load walking sprites. */
    static const std::string WALKING_PREFIX;
@@ -55,7 +55,7 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
       /**
        * Destructor.
        */
-      ~PlayerCharacter() = default;
+      ~PlayerCharacter() override = default;
 
       /**
        * @return true iff the player character is an active entity on the map.
@@ -77,24 +77,24 @@ class PlayerCharacter : public Actor, public messaging::Listener<RosterUpdateMes
        *
        * @param dst The coordinates (in pixels) for the actor to move to
        */
-      virtual void move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task);
+      virtual void move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task) override;
 
       /**
        * Takes player input and determines the character's direction and speed,
        * as well as updating the location based on the speed.
        */
-      void step(long timePassed);
+      void step(long timePassed) override;
 
       /**
        * Draws the player character at the playerLocation coordinates.
        */
-      void draw() const;
+      void draw() const override;
 
       /**
        * Handle an update to the character roster by keeping the
        * player actor sprite in sync with the current party leader.
        */
-      void receive(const RosterUpdateMessage& message);
+      void receive(const RosterUpdateMessage& message) override;
 };
 
 #endif

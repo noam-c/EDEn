@@ -101,7 +101,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * Initializes SDL and OpenGL.
        * Initialize Rocket GUI library.
        */
-      virtual void initialize();
+      virtual void initialize() override;
 
       /**
        * Singleton destructor.
@@ -111,7 +111,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * - the SDL TrueTypeFont library
        * - the SDL layer
        */
-      virtual void finish();
+      virtual void finish() override;
 
    public:
 

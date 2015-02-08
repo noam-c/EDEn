@@ -14,7 +14,7 @@
  * A utility class to help maintain and manage access
  * to a 2-dimensional array.
  */
-template<typename T> class Grid
+template<typename T> class Grid final
 {
    /** The array representing the 2D grid. */
    std::vector<T> m_grid;
