@@ -5,11 +5,14 @@
  */
 
 #include "Actor.h"
-#include "Actor_Orders.h"
-#include "SDL_opengl.h"
-#include "TileEngine.h"
-#include "Map.h"
+
 #include <math.h>
+#include "SDL_opengl.h"
+
+#include "Actor_Orders.h"
+#include "Map.h"
+#include "MovementDirection.h"
+#include "TileEngine.h"
 
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_ACTOR

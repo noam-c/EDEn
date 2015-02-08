@@ -5,14 +5,15 @@
  */
 
 #include "PlayerCharacter.h"
-#include "Sprite.h"
-#include "Pathfinder.h"
-#include "EntityGrid.h"
-#include "PlayerData.h"
-#include "CharacterRoster.h"
-#include "RosterUpdateMessage.h"
 #include "Character.h"
+#include "CharacterRoster.h"
+#include "EntityGrid.h"
 #include "MessagePipe.h"
+#include "MovementDirection.h"
+#include "Pathfinder.h"
+#include "PlayerData.h"
+#include "RosterUpdateMessage.h"
+#include "Sprite.h"
 
 #include <math.h>
 #include <SDL.h>
