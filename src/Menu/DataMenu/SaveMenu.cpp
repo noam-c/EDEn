@@ -265,9 +265,8 @@ void SaveMenu::confirmLoadClicked(Rocket::Core::Event& event)
    auto loadResult = m_model.loadSaveGame(m_selectedSlot);
    hideConfirmDialog();
    auto tileEngine = std::make_shared<TileEngine>(m_gameContext, std::get<0>(loadResult), std::get<1>(loadResult));
-   auto fadeTransition = std::make_shared<FadeTransition>(ScreenTexture::create(*this));
 
-   getExecutionStack()->pushState(tileEngine, std::make_shared<TransitionState>(m_gameContext, fadeTransition));
+   getExecutionStack()->pushState(tileEngine, TransitionState::makeTransition<FadeTransition>(m_gameContext, ScreenTexture::create(*this)));
    m_finished = true;
 }
 

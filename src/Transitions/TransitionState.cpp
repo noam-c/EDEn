@@ -9,7 +9,7 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_TRANSITIONS
 
-TransitionState::TransitionState(GameContext& gameContext, std::shared_ptr<Transition> transition) :
+TransitionState::TransitionState(GameContext& gameContext, std::unique_ptr<Transition>&& transition) :
    GameState(gameContext, GameStateType::TRANSITION, "Transition"),
    m_transition(std::move(transition))
 {
