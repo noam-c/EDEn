@@ -5,8 +5,9 @@
  */
 
 #include "GameState.h"
-#include "GraphicsUtil.h"
+
 #include "GameContext.h"
+#include "GraphicsUtil.h"
 
 #include <algorithm>
 

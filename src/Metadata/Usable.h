@@ -11,20 +11,16 @@
 #include <string>
 #include "UsableId.h"
 
-/**
- * \todo Change this include to forward declarations when enums
- * can be forward declared in the product.
- */
-#include "GameStateType.h"
-
 namespace Json
 {
    class Value;
 };
 
+enum class GameStateType;
+
+class Character;
 class ScriptEngine;
 class UsableScript;
-class Character;
 
 /**
  * Metadata for a usable. Since currently, all the games usables are non-customizable (no 'unique' usables),

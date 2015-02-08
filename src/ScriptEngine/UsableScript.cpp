@@ -5,6 +5,9 @@
  */
 
 #include "UsableScript.h"
+
+#include "EnumUtils.h"
+
 #include "Usable.h"
 
 #include "DebugUtils.h"
@@ -27,7 +30,7 @@ const char* UsableScript::FUNCTION_NAMES[] = { "onMenuUse", "onFieldUse", "onBat
 UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, const Usable& usable) :
    Script(scriptPath),
    m_usable(usable),
-   m_functionExists(NUM_FUNCTIONS)
+   m_functionExists(EnumUtils::toNumber(UsableFunction::NUM_FUNCTIONS))
 {
    m_luaStack = lua_newthread(luaVM);
 
@@ -54,9 +57,9 @@ UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, cons
    // do using the Lua/C++ API.
 
    // Create a table for this NPC's functions
-   lua_createtable(m_luaStack, 0, NUM_FUNCTIONS);
+   lua_createtable(m_luaStack, 0, m_functionExists.size());
 
-   for(int i = 0; i < NUM_FUNCTIONS; ++i)
+   for(size_t i = 0; i < m_functionExists.size(); ++i)
    {
       DEBUG("Checking for function %s.", FUNCTION_NAMES[i]);
 
@@ -108,13 +111,13 @@ UsableScript::~UsableScript()
 
 bool UsableScript::callFunction(UsableFunction function, Character* usingCharacter)
 {
-   if(m_functionExists[function])
+   if(m_functionExists[EnumUtils::toNumber(function)])
    {
       // Load the table of Lua functions for this NPC
       lua_getglobal(m_luaStack, m_scriptName.c_str());
 
       // Grab the function name
-      const char* functionName = FUNCTION_NAMES[function];
+      const char* functionName = FUNCTION_NAMES[EnumUtils::toNumber(function)];
 
       DEBUG("Usable ID %d running function %s", m_usable.getId(), functionName);
 
@@ -138,15 +141,15 @@ bool UsableScript::callFunction(UsableFunction function, Character* usingCharact
 
 bool UsableScript::onMenuUse(Character* usingCharacter)
 {
-   return callFunction(MENU_USE, usingCharacter);
+   return callFunction(UsableFunction::MENU_USE, usingCharacter);
 }
 
 bool UsableScript::onFieldUse(Character* usingCharacter)
 {
-   return callFunction(FIELD_USE, usingCharacter);
+   return callFunction(UsableFunction::FIELD_USE, usingCharacter);
 }
 
 bool UsableScript::onBattleUse(Character* usingCharacter)
 {
-   return callFunction(BATTLE_USE, usingCharacter);
+   return callFunction(UsableFunction::BATTLE_USE, usingCharacter);
 }

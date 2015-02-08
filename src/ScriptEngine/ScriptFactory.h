@@ -35,7 +35,7 @@ class ScriptFactory
     * The ScriptFactory handles creation of various kinds of scripts.
     * This enum contains the types of resources available.
     */
-   enum ScriptType
+   enum class ScriptType
    {
       /** Scripts to be called when chapters are loaded */
       CHAPTER_SCRIPT,

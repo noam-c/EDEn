@@ -5,13 +5,18 @@
  */
 
 #include "PlayerData.h"
-#include "Character.h"
-#include "Metadata.h"
-#include "Item.h"
-#include "Skill.h"
-#include "Shortcut.h"
+
 #include <fstream>
+
 #include "json.h"
+
+#include "Character.h"
+#include "EnumUtils.h"
+#include "Item.h"
+#include "Metadata.h"
+#include "MovementDirection.h"
+#include "Shortcut.h"
+#include "Skill.h"
 
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_PLAYER
@@ -40,7 +45,7 @@ Json::Value SaveLocation::serialize() const
    locationNode[SaveLocation::MAP_ATTRIBUTE] = map;
    locationNode[SaveLocation::X_ATTRIBUTE] = coords.x;
    locationNode[SaveLocation::Y_ATTRIBUTE] = coords.y;
-   locationNode[SaveLocation::DIRECTION_ATTRIBUTE] = direction;
+   locationNode[SaveLocation::DIRECTION_ATTRIBUTE] = EnumUtils::toNumber(direction);
 
    return locationNode;
 }
@@ -187,9 +192,9 @@ SaveLocation PlayerData::parseLocation(Json::Value& rootElement)
       auto x = locationNode[SaveLocation::X_ATTRIBUTE].asInt();
       auto y = locationNode[SaveLocation::Y_ATTRIBUTE].asInt();
       MovementDirection direction = static_cast<MovementDirection>(locationNode[SaveLocation::DIRECTION_ATTRIBUTE].asUInt());
-      if(direction > NUM_DIRECTIONS)
+      if(direction > MovementDirection::NUM_DIRECTIONS)
       {
-         direction = DOWN;
+         direction = MovementDirection::DOWN;
       }
 
       saveLocation.coords = shapes::Point2D(x,y);

@@ -58,19 +58,19 @@ void Actor::MoveOrder::updateNextWaypoint(shapes::Point2D location, MovementDire
    // For now, when the Actor must move diagonally, it will always face up or down
    if(location.y < m_nextWaypoint.y)
    {
-      direction = DOWN;
+      direction = MovementDirection::DOWN;
    }
    else if(location.y > m_nextWaypoint.y)
    {
-      direction = UP;
+      direction = MovementDirection::UP;
    }
    else if(location.x < m_nextWaypoint.x)
    {
-      direction = RIGHT;
+      direction = MovementDirection::RIGHT;
    }
    else if(location.x > m_nextWaypoint.x)
    {
-      direction = LEFT;
+      direction = MovementDirection::LEFT;
    }
 }
 

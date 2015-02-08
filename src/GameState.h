@@ -9,7 +9,6 @@
 
 #include <memory>
 #include <string>
-#include "GameStateType.h"
 
 class ExecutionStack;
 class GameContext;
@@ -27,6 +26,17 @@ namespace Rocket
 };
 
 union SDL_Event;
+
+
+enum class GameStateType
+{
+   UNKNOWN,
+   TITLE,
+   FIELD,
+   MENU,
+   BATTLE,
+   TRANSITION,
+};
 
 /**
  * This class abstractly represents a potential state for the game to enter

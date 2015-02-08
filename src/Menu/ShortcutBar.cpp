@@ -88,11 +88,11 @@ void ShortcutBar::shortcutClicked(Rocket::Core::Event& event)
 bool ShortcutBar::invokeShortcut(int shortcutIndex)
 {
    const Shortcut& shortcut = m_playerData.getShortcut(shortcutIndex);
-   if(shortcut.usableType == Shortcut::ITEM)
+   if(shortcut.usableType == Shortcut::UsableType::ITEM)
    {
       return m_metadata.useItem(shortcut.usableId, m_stateType);
    }
-   else if(shortcut.usableType == Shortcut::SKILL)
+   else if(shortcut.usableType == Shortcut::UsableType::SKILL)
    {
       CharacterRoster* roster = m_playerData.getRoster();
       Character* usingCharacter = roster != nullptr ? roster->getCharacter(shortcut.characterId) : nullptr;
@@ -195,7 +195,7 @@ void ShortcutBar::refresh()
    {
       const Shortcut& shortcut = m_playerData.getShortcut(i);
       const Usable* usable =
-         shortcut.usableType == Shortcut::ITEM ?
+         shortcut.usableType == Shortcut::UsableType::ITEM ?
             static_cast<const Usable*>(m_metadata.getItem(shortcut.usableId)) :
             static_cast<const Usable*>(m_metadata.getSkill(shortcut.usableId));
 
@@ -205,7 +205,7 @@ void ShortcutBar::refresh()
 
       if(usable != nullptr)
       {
-         if (shortcut.usableType == Shortcut::ITEM)
+         if (shortcut.usableType == Shortcut::UsableType::ITEM)
          {
             DEBUG("Adding shortcut for item %d", shortcut.usableId);
             shortcutElementAttributes.Set("itemId", static_cast<int>(shortcut.usableId));
@@ -225,7 +225,7 @@ void ShortcutBar::refresh()
          shortcutIconElementAttributes.Set("src", shortcutIconPath);
          shortcutIconElementAttributes.Set("class", "shortcutIcon");
 
-         if (shortcut.usableType == Shortcut::ITEM)
+         if (shortcut.usableType == Shortcut::UsableType::ITEM)
          {
             const Rocket::Core::String shortcutQuantity(8, "%d", m_playerData.getInventory()->getItemQuantity(shortcut.usableId));
             Rocket::Core::Element* shortcutQuantityElement = m_shortcutBarDocument->CreateElement("span");

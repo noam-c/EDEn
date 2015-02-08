@@ -12,17 +12,19 @@
 #include <list>
 #include <memory>
 #include <vector>
+
 #include "Grid.h"
-#include "MovementDirection.h"
+#include "Listener.h"
 #include "Pathfinder.h"
 #include "Rectangle.h"
-#include "Listener.h"
 
 class Obstacle;
 class Map;
 class Actor;
 class TileEngine;
 class TriggerZone;
+
+enum class MovementDirection;
 
 struct ActorMoveMessage;
 

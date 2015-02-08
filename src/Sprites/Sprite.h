@@ -10,8 +10,6 @@
 #include <memory>
 #include <string>
 
-#include "MovementDirection.h"
-
 namespace shapes
 {
    struct Point2D;
@@ -19,6 +17,7 @@ namespace shapes
 
 class Spritesheet;
 class Animation;
+enum class MovementDirection;
 
 /**
  * A sprite is a movable object that can go through different animations or

@@ -5,20 +5,23 @@
  */
 
 #include "EntityGrid.h"
-#include "Map.h"
-#include "TileEngine.h"
-#include "TileState.h"
-#include "Point2D.h"
-#include "Rectangle.h"
+
+#include "SDL_opengl.h"
+
 #include "Actor.h"
-#include "PlayerCharacter.h"
-#include "MessagePipe.h"
-#include "TriggerZone.h"
-#include "MapExit.h"
 #include "ActorMoveMessage.h"
+#include "Map.h"
+#include "MapExit.h"
 #include "MapExitMessage.h"
 #include "MapTriggerMessage.h"
-#include "SDL_opengl.h"
+#include "MessagePipe.h"
+#include "MovementDirection.h"
+#include "PlayerCharacter.h"
+#include "Point2D.h"
+#include "Rectangle.h"
+#include "TileEngine.h"
+#include "TileState.h"
+#include "TriggerZone.h"
 
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_ENTITY_GRID
@@ -92,7 +95,7 @@ void EntityGrid::setMapData(std::weak_ptr<const Map> mapData)
       for(unsigned int y = 0; y < collisionMapHeight; ++y)
       {
          bool passible = map->isPassible(x / collisionTileRatio, y / collisionTileRatio);
-         m_collisionMap(x, y).entityType = passible ? TileState::FREE : TileState::OBSTACLE;
+         m_collisionMap(x, y).entityType = passible ? TileState::EntityType::FREE : TileState::EntityType::OBSTACLE;
       }
    }
 
@@ -149,18 +152,18 @@ EntityGrid::Path EntityGrid::findReroutedPath(const shapes::Point2D& src, const 
 
 bool EntityGrid::addObstacle(const shapes::Point2D& location, const shapes::Size& size)
 {
-   return occupyArea(shapes::Rectangle(location, size), TileState(TileState::OBSTACLE));
+   return occupyArea(shapes::Rectangle(location, size), TileState(TileState::EntityType::OBSTACLE));
 }
 
 bool EntityGrid::addActor(Actor* actor, const shapes::Point2D& area)
 {
-   return occupyArea(shapes::Rectangle(area, actor->getSize()), TileState(TileState::ACTOR, actor));
+   return occupyArea(shapes::Rectangle(area, actor->getSize()), TileState(TileState::EntityType::ACTOR, actor));
 }
 
 bool EntityGrid::changeActorLocation(Actor* actor, const shapes::Point2D& dst)
 {
    const shapes::Rectangle dstArea(dst, actor->getSize());
-   TileState actorState(TileState::ACTOR, actor);
+   TileState actorState(TileState::EntityType::ACTOR, actor);
    if(occupyArea(dstArea, actorState))
    {
       freeArea(actor->getLocation(), dst, actor->getSize(), actorState);
@@ -187,16 +190,16 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
    const MovementDirection direction = actor->getDirection();
    switch(direction)
    {
-      case UP_LEFT:
-      case LEFT:
-      case DOWN_LEFT:
+      case MovementDirection::UP_LEFT:
+      case MovementDirection::LEFT:
+      case MovementDirection::DOWN_LEFT:
       {
          adjacentLocation.x -= MOVEMENT_TILE_SIZE;
          break;
       }
-      case UP_RIGHT:
-      case RIGHT:
-      case DOWN_RIGHT:
+      case MovementDirection::UP_RIGHT:
+      case MovementDirection::RIGHT:
+      case MovementDirection::DOWN_RIGHT:
       {
          adjacentLocation.x += actorSize.width;
          break;
@@ -209,16 +212,16 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
 
    switch(direction)
    {
-      case UP_RIGHT:
-      case UP:
-      case UP_LEFT:
+      case MovementDirection::UP_RIGHT:
+      case MovementDirection::UP:
+      case MovementDirection::UP_LEFT:
       {
          adjacentLocation.y -= MOVEMENT_TILE_SIZE;
          break;
       }
-      case DOWN_LEFT:
-      case DOWN:
-      case DOWN_RIGHT:
+      case MovementDirection::DOWN_LEFT:
+      case MovementDirection::DOWN:
+      case MovementDirection::DOWN_RIGHT:
       {
          adjacentLocation.y += actorSize.height;
          break;
@@ -239,7 +242,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
       for(int rectX = rectLeft; rectX <= rectRight; ++rectX)
       {
          const TileState& collisionTile = m_collisionMap(rectX, rectY);
-         if(collisionTile.entityType == TileState::ACTOR && collisionTile.entity != actor)
+         if(collisionTile.entityType == TileState::EntityType::ACTOR && collisionTile.entity != actor)
          {
             return static_cast<Actor*>(collisionTile.entity);
          }
@@ -251,7 +254,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
 
 bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) const
 {
-   if(m_collisionMap.empty() || state.entityType == TileState::FREE)
+   if(m_collisionMap.empty() || state.entityType == TileState::EntityType::FREE)
    {
       return false;
    }
@@ -270,7 +273,7 @@ bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) c
          // We cannot occupy the point if it is reserved by an entity other than the entity attempting to occupy it.
          // For instance, we cannot occupy a tile already occupied by an obstacle or a different character.
          const TileState& collisionTile = m_collisionMap(collisionMapX, collisionMapY);
-         if(collisionTile.entityType != TileState::FREE)
+         if(collisionTile.entityType != TileState::EntityType::FREE)
          {
             if(collisionTile.entityType != state.entityType || collisionTile.entity != state.entity)
             {
@@ -301,7 +304,7 @@ void EntityGrid::freeArea(const shapes::Rectangle& areaToFree)
 {
    shapes::Rectangle rectToFree = getCollisionMapEdges(areaToFree);
 
-   setArea(rectToFree, TileState(TileState::FREE));
+   setArea(rectToFree, TileState(TileState::EntityType::FREE));
 }
 
 void EntityGrid::freeArea(const shapes::Point2D& previousLocation, const shapes::Point2D& currentLocation, const shapes::Size& size, TileState state)
@@ -324,7 +327,7 @@ bool EntityGrid::isAreaFree(const shapes::Rectangle& area) const
       {
          // We cannot occupy the point if it is reserved by an obstacle or a character.
          const TileState& collisionTile = m_collisionMap(collisionMapX, collisionMapY);
-         if(collisionTile.entityType != TileState::FREE)
+         if(collisionTile.entityType != TileState::EntityType::FREE)
          {
             return false;
          }
@@ -339,7 +342,7 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
    if(xDirection == 0 && yDirection == 0) return false;
    if(distance == 0) return false;
 
-   TileState actorState(TileState::ACTOR, actor);
+   TileState actorState(TileState::EntityType::ACTOR, actor);
 
    const shapes::Point2D& source = actor->getLocation();
    const shapes::Size& actorSize = actor->getSize();
@@ -411,18 +414,18 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
 
 bool EntityGrid::beginMovement(Actor* actor, const shapes::Point2D& dst)
 {
-   return occupyArea(shapes::Rectangle(dst, actor->getSize()), TileState(TileState::ACTOR, actor));
+   return occupyArea(shapes::Rectangle(dst, actor->getSize()), TileState(TileState::EntityType::ACTOR, actor));
 }
 
 void EntityGrid::abortMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst)
 {
-   freeArea(src, actor->getLocation(), actor->getSize(), TileState(TileState::ACTOR, actor));
-   freeArea(dst, actor->getLocation(), actor->getSize(), TileState(TileState::ACTOR, actor));
+   freeArea(src, actor->getLocation(), actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
+   freeArea(dst, actor->getLocation(), actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
 }
 
 void EntityGrid::endMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst)
 {
-   freeArea(src, dst, actor->getSize(), TileState(TileState::ACTOR, actor));
+   freeArea(src, dst, actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
 }
 
 void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
@@ -460,12 +463,12 @@ void EntityGrid::drawBackground(int y) const
 
          switch(m_collisionMap(x, y).entityType)
          {
-            case TileState::FREE:
+            case TileState::EntityType::FREE:
             {
                glColor3f(0.0f, 0.5f, 0.0f);
                break;
             }
-            case TileState::ACTOR:
+            case TileState::EntityType::ACTOR:
             {
                if(m_collisionMap(x, y).entity == nullptr)
                {
@@ -477,7 +480,7 @@ void EntityGrid::drawBackground(int y) const
                }
                break;
             }
-            case TileState::OBSTACLE:
+            case TileState::EntityType::OBSTACLE:
             default:
             {
                glColor3f(0.5f, 0.5f, 0.0f);

@@ -33,7 +33,7 @@ class ResourceLoader
     * types of resources. This enum contains the types of resources
     * available.
     */
-   enum ResourceType
+   enum class ResourceType
    {
       /** Sound effects to be played during gameplay */
       SOUND,

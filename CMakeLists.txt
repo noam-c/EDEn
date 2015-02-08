@@ -18,7 +18,6 @@ SET(HEADERS
   src/ExecutionStack.h
   src/GameContext.h
   src/GameState.h
-  src/GameStateType.h
   src/Graphics/GraphicsUtil.h
   src/Graphics/OpenGLExtensions.h
   src/Graphics/ScreenTexture.h
@@ -132,6 +131,7 @@ SET(HEADERS
   src/Transitions/BlendTransition.h
   src/TODOLIST.h
   src/utils/DebugUtils.h
+  src/utils/EnumUtils.h
   src/utils/Exception.h
   src/utils/Grid.h
   src/utils/IntegerSequence.h

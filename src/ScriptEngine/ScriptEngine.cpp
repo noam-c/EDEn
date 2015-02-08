@@ -5,29 +5,30 @@
  */
 
 #include "ScriptEngine.h"
-#include "TileEngine.h"
-#include "PlayerData.h"
+
+#include "EnumUtils.h"
 #include "ExecutionStack.h"
-#include "Scheduler.h"
-#include "ResourceLoader.h"
-#include "Music.h"
-#include "Sound.h"
-#include "Timer.h"
-#include "NPC.h"
-#include "MovementDirection.h"
 #include "FileScript.h"
-#include "StringScript.h"
+#include "MovementDirection.h"
+#include "Music.h"
+#include "NPC.h"
+#include "PlayerData.h"
+#include "ResourceLoader.h"
+#include "Scheduler.h"
 #include "ScriptFactory.h"
 #include "ScriptUtilities.h"
+#include "Sound.h"
+#include "StringScript.h"
+#include "TileEngine.h"
+#include "Timer.h"
 
-#include "LuaPlayerCharacter.h"
 #include "LuaActor.h"
-#include "LuaTileEngine.h"
-
 #include "LuaCharacter.h"
 #include "LuaCharacterRoster.h"
-#include "LuaQuest.h"
 #include "LuaInventory.h"
+#include "LuaPlayerCharacter.h"
+#include "LuaQuest.h"
+#include "LuaTileEngine.h"
 
 #include "LuaWrapper.hpp"
 
@@ -96,15 +97,15 @@ ScriptEngine::~ScriptEngine()
 void ScriptEngine::registerEnums()
 {
    lua_newtable(m_luaVM);
-   REGISTER_LUA_ENUM_VALUE(None, NONE);
-   REGISTER_LUA_ENUM_VALUE(Up, UP);
-   REGISTER_LUA_ENUM_VALUE(Down, DOWN);
-   REGISTER_LUA_ENUM_VALUE(Left, LEFT);
-   REGISTER_LUA_ENUM_VALUE(Right, RIGHT);
-   REGISTER_LUA_ENUM_VALUE(UpLeft, UP_LEFT);
-   REGISTER_LUA_ENUM_VALUE(UpRight, UP_RIGHT);
-   REGISTER_LUA_ENUM_VALUE(DownLeft, DOWN_LEFT);
-   REGISTER_LUA_ENUM_VALUE(DownRight, DOWN_RIGHT);
+   REGISTER_LUA_ENUM_VALUE(None, EnumUtils::toNumber(MovementDirection::NONE));
+   REGISTER_LUA_ENUM_VALUE(Up, EnumUtils::toNumber(MovementDirection::UP));
+   REGISTER_LUA_ENUM_VALUE(Down, EnumUtils::toNumber(MovementDirection::DOWN));
+   REGISTER_LUA_ENUM_VALUE(Left, EnumUtils::toNumber(MovementDirection::LEFT));
+   REGISTER_LUA_ENUM_VALUE(Right, EnumUtils::toNumber(MovementDirection::RIGHT));
+   REGISTER_LUA_ENUM_VALUE(UpLeft, EnumUtils::toNumber(MovementDirection::UP_LEFT));
+   REGISTER_LUA_ENUM_VALUE(UpRight, EnumUtils::toNumber(MovementDirection::UP_RIGHT));
+   REGISTER_LUA_ENUM_VALUE(DownLeft, EnumUtils::toNumber(MovementDirection::DOWN_LEFT));
+   REGISTER_LUA_ENUM_VALUE(DownRight, EnumUtils::toNumber(MovementDirection::DOWN_RIGHT));
    lua_setglobal(m_luaVM, "Direction");
 }
 

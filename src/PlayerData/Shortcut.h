@@ -21,7 +21,7 @@ struct Shortcut
    static const char* TYPE_ATTRIBUTE;
    static const char* CHARACTER_ID_ATTRIBUTE;
 
-   enum UsableType
+   enum class UsableType
    {
       EMPTY = 0,
       ITEM = 1,

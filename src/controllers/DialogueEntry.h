@@ -11,7 +11,7 @@
 /**
  * There are two ways to display dialogue (for now); speech and narration/thought.
  */
-enum DialogueEntryType
+enum class DialogueEntryType
 {
    /** Dialogue is narrated in center screen */
    NARRATE,

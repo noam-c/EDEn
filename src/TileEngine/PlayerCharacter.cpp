@@ -24,7 +24,7 @@ const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData) :
-   Actor("player", messagePipe, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 0.2f, DOWN),
+   Actor("player", messagePipe, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 0.2f, MovementDirection::DOWN),
    m_roster(*playerData.getRoster()),
    m_active(false),
    m_cumulativeDistanceCovered(0)
@@ -88,26 +88,50 @@ void PlayerCharacter::step(long timePassed)
    if(!keystate[SDL_SCANCODE_UP] && keystate[SDL_SCANCODE_DOWN])
    {
       // Positive velocity in the y-axis
-      direction = DOWN;
+      direction = MovementDirection::DOWN;
       yDirection = 1;
    }
    else if(keystate[SDL_SCANCODE_UP] && !keystate[SDL_SCANCODE_DOWN])
    {
       // Negative velocity in the y-axis
-      direction = UP;
+      direction = MovementDirection::UP;
       yDirection = -1;
    }
 
    if(!keystate[SDL_SCANCODE_LEFT] && keystate[SDL_SCANCODE_RIGHT])
    {
       // Positive velocity in the x-axis
-      direction = direction == UP ? UP_RIGHT : direction == DOWN ? DOWN_RIGHT : RIGHT;
+      if(direction == MovementDirection::UP)
+      {
+         direction = MovementDirection::UP_RIGHT;
+      }
+      else if(direction == MovementDirection::DOWN)
+      {
+         direction = MovementDirection::DOWN_RIGHT;
+      }
+      else
+      {
+         direction = MovementDirection::RIGHT;
+      }
+
       xDirection = 1;
    }
    else if(keystate[SDL_SCANCODE_LEFT] && !keystate[SDL_SCANCODE_RIGHT])
    {
       // Negative velocity in the x-axis
-      direction = direction == UP ? UP_LEFT : direction == DOWN ? DOWN_LEFT : LEFT;
+      if(direction == MovementDirection::UP)
+      {
+         direction = MovementDirection::UP_LEFT;
+      }
+      else if(direction == MovementDirection::DOWN)
+      {
+         direction = MovementDirection::DOWN_LEFT;
+      }
+      else
+      {
+         direction = MovementDirection::LEFT;
+      }
+
       xDirection = -1;
    }
 

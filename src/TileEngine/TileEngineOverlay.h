@@ -5,7 +5,6 @@
 
 #include "DebugConsoleWindow.h"
 #include "DialogueBox.h"
-#include "GameStateType.h"
 #include "ShortcutBar.h"
 
 class PlayerData;

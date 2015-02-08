@@ -6,11 +6,13 @@
 
 #include "ResourceLoader.h"
 
+#include "EnumUtils.h"
+
 #include "Music.h"
-#include "Sound.h"
-#include "Tileset.h"
 #include "Region.h"
+#include "Sound.h"
 #include "Spritesheet.h"
+#include "Tileset.h"
 
 #include <fstream>
 
@@ -25,7 +27,8 @@ std::map<ResourceKey, std::shared_ptr<Resource>> ResourceLoader::resources;
 
 std::string ResourceLoader::getPath(ResourceKey name, ResourceType type)
 {
-   return PATHS[type] + name + EXTENSIONS[type];
+   const auto typeIndex = EnumUtils::toNumber(type);
+   return PATHS[typeIndex] + name + EXTENSIONS[typeIndex];
 }
 
 std::shared_ptr<Resource> ResourceLoader::loadNewResource(ResourceKey name, ResourceType type)
@@ -34,31 +37,31 @@ std::shared_ptr<Resource> ResourceLoader::loadNewResource(ResourceKey name, Reso
    std::shared_ptr<Resource> newResource;
    switch(type)
    {
-      case MUSIC:
+      case ResourceType::MUSIC:
       {
          // Create a resource to hold a song
          newResource = std::make_shared<Music>(name);
          break;
       }
-      case SOUND:
+      case ResourceType::SOUND:
       {
          // Create a resource to hold a sound effect
          newResource = std::make_shared<Sound>(name);
          break;
       }
-      case TILESET:
+      case ResourceType::TILESET:
       {
          // Create a resource to hold a tile set
          newResource = std::make_shared<Tileset>(name);
          break;
       }
-      case REGION:
+      case ResourceType::REGION:
       {
          // Create a resource to hold a region
          newResource = std::make_shared<Region>(name);
          break;
       }
-      case SPRITESHEET:
+      case ResourceType::SPRITESHEET:
       {
          // Create a resource to hold a spritesheet
          newResource = std::make_shared<Spritesheet>(name);
@@ -121,27 +124,27 @@ std::shared_ptr<Resource> ResourceLoader::getResource(ResourceKey name, Resource
 
 std::shared_ptr<Music> ResourceLoader::getMusic(ResourceKey name)
 {
-   return std::static_pointer_cast<Music>(getResource(name, MUSIC));
+   return std::static_pointer_cast<Music>(getResource(name, ResourceType::MUSIC));
 }
 
 std::shared_ptr<Sound> ResourceLoader::getSound(ResourceKey name)
 {
-   return std::static_pointer_cast<Sound>(getResource(name, SOUND));
+   return std::static_pointer_cast<Sound>(getResource(name, ResourceType::SOUND));
 }
 
 std::shared_ptr<Tileset> ResourceLoader::getTileset(ResourceKey name)
 {
-   return std::static_pointer_cast<Tileset>(getResource(name, TILESET));
+   return std::static_pointer_cast<Tileset>(getResource(name, ResourceType::TILESET));
 }
 
 std::shared_ptr<Region> ResourceLoader::getRegion(ResourceKey name)
 {
-   return std::static_pointer_cast<Region>(getResource(name, REGION));
+   return std::static_pointer_cast<Region>(getResource(name, ResourceType::REGION));
 }
 
 std::shared_ptr<Spritesheet> ResourceLoader::getSpritesheet(ResourceKey name)
 {
-   return std::static_pointer_cast<Spritesheet>(getResource(name, SPRITESHEET));
+   return std::static_pointer_cast<Spritesheet>(getResource(name, ResourceType::SPRITESHEET));
 }
 
 void ResourceLoader::freeAll()

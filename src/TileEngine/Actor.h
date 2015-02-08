@@ -11,14 +11,14 @@
 #include <string>
 #include <memory>
 
-#include "MovementDirection.h"
-#include "Size.h"
 #include "Point2D.h"
+#include "Size.h"
 
 class EntityGrid;
 class Sprite;
 class Spritesheet;
 class Task;
+enum class MovementDirection;
 
 namespace messaging
 {

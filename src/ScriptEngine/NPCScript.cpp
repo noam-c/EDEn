@@ -5,7 +5,10 @@
  */
 
 #include "NPCScript.h"
+
+#include "EnumUtils.h"
 #include "NPC.h"
+
 #include "DebugUtils.h"
 
 #define DEBUG_FLAG DEBUG_ACTOR
@@ -25,7 +28,7 @@ const char* NPCScript::FUNCTION_NAMES[] = { "idle", "activate" };
 
 NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) :
    Script(scriptPath),
-   m_functionExists(NUM_FUNCTIONS),
+   m_functionExists(EnumUtils::toNumber(NPCFunction::NUM_FUNCTIONS)),
    m_npc(npc),
    m_activated(false),
    m_finished(false)
@@ -54,10 +57,12 @@ NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) 
    // flexibility of the scripts, because anything you can do in Lua, you can
    // do using the Lua/C++ API.
 
-   // Create a table for this NPC's functions
-   lua_createtable(m_luaStack, 0, NUM_FUNCTIONS);
+   const auto numFunctions = m_functionExists.size();
 
-   for(int i = 0; i < NUM_FUNCTIONS; ++i)
+   // Create a table for this NPC's functions
+   lua_createtable(m_luaStack, 0, numFunctions);
+
+   for(size_t i = 0; i < numFunctions; ++i)
    {
       DEBUG("Checking for function %s.", FUNCTION_NAMES[i]);
 
@@ -109,13 +114,14 @@ NPCScript::~NPCScript()
 
 bool NPCScript::callFunction(NPCFunction function)
 {
-   if(m_functionExists[function])
+   const auto functionIndex = EnumUtils::toNumber(function);
+   if(m_functionExists[functionIndex])
    {
       // Load the table of Lua functions for this NPC
       lua_getglobal(m_luaStack, m_scriptName.c_str());
 
       // Grab the function name
-      const char* functionName = FUNCTION_NAMES[function];
+      const char* functionName = FUNCTION_NAMES[functionIndex];
 
       DEBUG("NPC %s running function %s", m_npc->getName().c_str(), functionName);
 
@@ -140,7 +146,7 @@ bool NPCScript::resume(long timePassed)
    if(m_activated)
    {
       m_activated = false;
-      callFunction(ACTIVATE);
+      callFunction(NPCFunction::ACTIVATE);
    }
    else if(m_running)
    {
@@ -149,7 +155,7 @@ bool NPCScript::resume(long timePassed)
    }
    else if(m_npc->isIdle())
    {
-      callFunction(IDLE);
+      callFunction(NPCFunction::IDLE);
    }
 
    return false;

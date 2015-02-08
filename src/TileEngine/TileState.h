@@ -16,7 +16,7 @@ struct TileState
    /**
     * The kinds of entities that can occupy a tile.
     */
-   enum EntityType
+   enum class EntityType
    {
       /** No entity is on the tile */
       FREE,
@@ -40,7 +40,7 @@ struct TileState
     * @param type The type of entity occupying the tile.
     * @param entity The entity in the tile.
     */
-   TileState(EntityType type = FREE, void* entity = nullptr);
+   TileState(EntityType type = EntityType::FREE, void* entity = nullptr);
 };
 
 #endif

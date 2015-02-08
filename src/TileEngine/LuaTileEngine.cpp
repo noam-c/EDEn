@@ -5,12 +5,14 @@
  */
 
 #include "LuaTileEngine.h"
-#include "ScriptUtilities.h"
-#include "TileEngine.h"
-#include "NPC.h"
-#include "Size.h"
-#include "Point2D.h"
+
+#include "EnumUtils.h"
 #include "MapTriggerCallback.h"
+#include "NPC.h"
+#include "Point2D.h"
+#include "ScriptUtilities.h"
+#include "Size.h"
+#include "TileEngine.h"
 
 #include "DebugUtils.h"
 
@@ -65,7 +67,7 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
    int directionValue;
    if(!ScriptUtilities::getParameter(luaVM, 2, -1, "direction", directionValue))
    {
-      directionValue = static_cast<int>(DOWN);
+      directionValue = EnumUtils::toNumber(MovementDirection::DOWN);
    }
 
    DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());

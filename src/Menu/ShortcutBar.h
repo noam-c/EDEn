@@ -9,11 +9,7 @@
 
 #include "EdenRocketBindings.h"
 
-/**
- * \todo Change this include to forward declarations when enums
- * can be forward declared in the product.
- */
-#include "GameStateType.h"
+enum class GameStateType;
 
 namespace Rocket
 {

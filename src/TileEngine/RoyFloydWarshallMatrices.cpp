@@ -89,8 +89,8 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
 
             bool adjacent = xAdjacent && yAdjacent;
             bool diagonallyAdjacent = aTile.x != bTile.x && aTile.y != bTile.y;
-            bool aTileIsObstacle = (*grid)(aTile.x, aTile.y).entityType == TileState::OBSTACLE;
-            bool bTileIsObstacle = (*grid)(bTile.x, bTile.y).entityType == TileState::OBSTACLE;
+            bool aTileIsObstacle = (*grid)(aTile.x, aTile.y).entityType == TileState::EntityType::OBSTACLE;
+            bool bTileIsObstacle = (*grid)(bTile.x, bTile.y).entityType == TileState::EntityType::OBSTACLE;
 
             distanceMatrix(a, b) = std::numeric_limits<float>::infinity();
             successorMatrix(a, b) = -1;
@@ -100,8 +100,8 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
                if(diagonallyAdjacent)
                {
                   bool diagonalTraversalBlocked =
-                  (*grid)(aTile.x, bTile.y).entityType == TileState::OBSTACLE ||
-                  (*grid)(bTile.x, aTile.y).entityType == TileState::OBSTACLE;
+                  (*grid)(aTile.x, bTile.y).entityType == TileState::EntityType::OBSTACLE ||
+                  (*grid)(bTile.x, aTile.y).entityType == TileState::EntityType::OBSTACLE;
 
                   if(!diagonalTraversalBlocked)
                   {

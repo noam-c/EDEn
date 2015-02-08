@@ -27,7 +27,7 @@ class UsableScript : public Script
     * added to FUNCTION_NAMES. The functions are optional and can be replaced
     * by an empty function if they do not exist.
     */
-   enum UsableFunction
+   enum class UsableFunction
    {
       /** The function for using an usable in the menu. */
       MENU_USE,

@@ -5,9 +5,13 @@
  */
 
 #include "Sprite.h"
-#include "Spritesheet.h"
+
 #include "Animation.h"
+#include "EnumUtils.h"
+#include "MovementDirection.h"
 #include "ResourceLoader.h"
+#include "Spritesheet.h"
+
 #include "DebugUtils.h"
 
 #define DEBUG_FLAG DEBUG_SPRITE
@@ -15,7 +19,7 @@
 Sprite::Sprite(const std::shared_ptr<Spritesheet>& sheet) :
    m_sheet(sheet),
    m_frameIndex(0),
-   m_currDirection(NONE)
+   m_currDirection(MovementDirection::NONE)
 {
 }
 
@@ -31,7 +35,7 @@ void Sprite::clearCurrentFrame()
    // Default to frame 0 for now.
    m_frameIndex = 0;
 
-   m_currDirection = NONE;
+   m_currDirection = MovementDirection::NONE;
    m_currName = "";
 }
 
@@ -47,27 +51,27 @@ std::string Sprite::toDirectionString(MovementDirection direction)
 {
    switch(direction)
    {
-      case UP:
-      case UP_LEFT:
-      case UP_RIGHT:
+      case MovementDirection::UP:
+      case MovementDirection::UP_LEFT:
+      case MovementDirection::UP_RIGHT:
       {
          return "_up";
       }
-      case DOWN:
-      case DOWN_LEFT:
-      case DOWN_RIGHT:
+      case MovementDirection::DOWN:
+      case MovementDirection::DOWN_LEFT:
+      case MovementDirection::DOWN_RIGHT:
       {
          return "_down";
       }
-      case LEFT:
+      case MovementDirection::LEFT:
       {
          return "_left";
       }
-      case RIGHT:
+      case MovementDirection::RIGHT:
       {
          return "_right";
       }
-      case NONE:
+      case MovementDirection::NONE:
       default:
       {
          return "";
@@ -81,7 +85,7 @@ void Sprite::setFrame(const std::string& frameName, MovementDirection direction)
 
    int frameIndex;
 
-   if(direction == NONE || (frameIndex = m_sheet->getFrameIndex(frameName + toDirectionString(direction))) < 0)
+   if(direction == MovementDirection::NONE || (frameIndex = m_sheet->getFrameIndex(frameName + toDirectionString(direction))) < 0)
    {
       frameIndex = m_sheet->getFrameIndex(frameName);
    }
@@ -103,7 +107,7 @@ void Sprite::setAnimation(const std::string& animationName, MovementDirection di
 
    std::unique_ptr<Animation> animation(nullptr);
 
-   if(direction == NONE || (animation = m_sheet->getAnimation(animationName + toDirectionString(direction))) == nullptr)
+   if(direction == MovementDirection::NONE || (animation = m_sheet->getAnimation(animationName + toDirectionString(direction))) == nullptr)
    {
       animation = m_sheet->getAnimation(animationName);
    }

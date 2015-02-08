@@ -54,12 +54,12 @@ void DialogueController::addLine(DialogueEntryType type, const std::string& text
 
 void DialogueController::narrate(const std::string& text, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
 {
-   addLine(NARRATE, text, choices, task);
+   addLine(DialogueEntryType::NARRATE, text, choices, task);
 }
 
 void DialogueController::say(const std::string& text, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
 {
-   addLine(SAY, text, choices, task);
+   addLine(DialogueEntryType::SAY, text, choices, task);
 }
 
 void DialogueController::setFastModeEnabled(bool enabled)

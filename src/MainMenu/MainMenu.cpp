@@ -17,7 +17,7 @@
 
 #define DEBUG_FLAG DEBUG_TITLE
 
-enum MainMenuActions
+enum class MainMenuActions
 {
    NEW_GAME_ACTION,
    LOAD_GAME_ACTION,

@@ -9,7 +9,6 @@
 
 #include <map>
 #include <string>
-#include "GameStateType.h"
 #include "UsableId.h"
 #include "Item.h"
 #include "Skill.h"
@@ -21,6 +20,8 @@ namespace Json
 
 class Character;
 class GameContext;
+class GameState;
+enum class GameStateType;
 
 typedef class Usable Item;
 class Skill;

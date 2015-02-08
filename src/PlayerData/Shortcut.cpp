@@ -12,19 +12,19 @@ const char* Shortcut::TYPE_ATTRIBUTE = "type";
 const char* Shortcut::CHARACTER_ID_ATTRIBUTE = "character";
 
 Shortcut::Shortcut() :
-   usableType(EMPTY),
+   usableType(UsableType::EMPTY),
    usableId(0)
 {
 }
 
 Shortcut::Shortcut(UsableId itemId) :
-   usableType(ITEM),
+   usableType(UsableType::ITEM),
    usableId(itemId)
 {
 }
 
 Shortcut::Shortcut(UsableId skillId, const std::string& characterId) :
-   usableType(SKILL),
+   usableType(UsableType::SKILL),
    usableId(skillId),
    characterId(characterId)
 {
@@ -37,7 +37,7 @@ Shortcut Shortcut::getEmptyShortcut()
 
 void Shortcut::load(Json::Value& shortcutJson)
 {
-   usableType = EMPTY;
+   usableType = UsableType::EMPTY;
    usableId = 0;
    characterId = "";
 
@@ -47,17 +47,17 @@ void Shortcut::load(Json::Value& shortcutJson)
       int loadedUsableType = shortcutJson[Shortcut::TYPE_ATTRIBUTE].asInt();
       std::string loadedCharacterId = shortcutJson[Shortcut::CHARACTER_ID_ATTRIBUTE].asString();
 
-      if(loadedUsableType == static_cast<int>(ITEM) &&
+      if(loadedUsableType == static_cast<int>(UsableType::ITEM) &&
          loadedUsableId > 0)
       {
-         usableType = ITEM;
+         usableType = UsableType::ITEM;
          usableId = loadedUsableId;
       }
-      else if(loadedUsableType == static_cast<int>(SKILL) &&
+      else if(loadedUsableType == static_cast<int>(UsableType::SKILL) &&
               loadedUsableId > 0 &&
               !loadedCharacterId.empty())
       {
-         usableType = SKILL;
+         usableType = UsableType::SKILL;
          usableId = loadedUsableId;
          characterId = loadedCharacterId;
       }
@@ -68,13 +68,13 @@ Json::Value Shortcut::serialize() const
 {
    Json::Value serializedShortcut(Json::nullValue);
 
-   if(usableType == ITEM && usableId > 0)
+   if(usableType == UsableType::ITEM && usableId > 0)
    {
       serializedShortcut = Json::Value(Json::objectValue);
-      serializedShortcut[Shortcut::ID_ATTRIBUTE] = usableId;
-      serializedShortcut[Shortcut::TYPE_ATTRIBUTE] = usableType;
+      serializedShortcut[ID_ATTRIBUTE] = usableId;
+      serializedShortcut[TYPE_ATTRIBUTE] = static_cast<int>(usableType);
    }
-   else if(usableType == SKILL && usableId > 0 && !characterId.empty())
+   else if(usableType == UsableType::SKILL && usableId > 0 && !characterId.empty())
    {
       serializedShortcut = Json::Value(Json::objectValue);
       serializedShortcut[Shortcut::ID_ATTRIBUTE] = usableId;

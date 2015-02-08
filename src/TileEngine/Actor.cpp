@@ -5,14 +5,15 @@
  */
 
 #include "Actor.h"
-#include "ResourceLoader.h"
+
+#include "Actor_Orders.h"
+#include "ActorMoveMessage.h"
 #include "EntityGrid.h"
+#include "MessagePipe.h"
+#include "MovementDirection.h"
+#include "ResourceLoader.h"
 #include "Sprite.h"
 #include "TileEngine.h"
-#include "Actor_Orders.h"
-#include "MessagePipe.h"
-#include "ActorMoveMessage.h"
-#include "DebugUtils.h"
 
 const std::string Actor::DEFAULT_WALKING_PREFIX = "walk";
 const std::string Actor::DEFAULT_STANDING_PREFIX = "stand";
@@ -117,22 +118,22 @@ void Actor::faceActor(Actor* other)
    {
       if(xDiff < 0)
       {
-         directionToOther = RIGHT;
+         directionToOther = MovementDirection::RIGHT;
       }
       else if(xDiff > 0)
       {
-         directionToOther = LEFT;
+         directionToOther = MovementDirection::LEFT;
       }
    }
    else
    {
       if(yDiff < 0)
       {
-         directionToOther = DOWN;
+         directionToOther = MovementDirection::DOWN;
       }
       else if(yDiff > 0)
       {
-         directionToOther = UP;
+         directionToOther = MovementDirection::UP;
       }
    }
 

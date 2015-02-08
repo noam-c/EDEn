@@ -7,6 +7,13 @@
 #include "Usable.h"
 #include "json.h"
 
+/**
+ * \todo Usable shouldn't need to know about game states.
+ * Let the game state determine how to use things and tell
+ * the Usable more specifically what to do.
+ */
+#include "GameState.h"
+
 #include "ScriptEngine.h"
 #include "UsableScript.h"
 

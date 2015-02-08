@@ -41,7 +41,7 @@ class NPCScript : public Script
     * added to FUNCTION_NAMES. The functions are optional and can be replaced
     * by an empty function if they do not exist in a given NPC.
     */
-   enum NPCFunction
+   enum class NPCFunction
    {
       /** The idling function for the NPC (runs if the NPC is not running any other instructions). */
       IDLE,
@@ -73,6 +73,8 @@ class NPCScript : public Script
 
    /** True iff the NPC script is finished and should be unscheduled. */
    bool m_finished;
+
+   static constexpr std::underlying_type<NPCFunction>::type getNumFunctions();
 
    public:
       /**

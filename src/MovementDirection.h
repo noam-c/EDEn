@@ -10,7 +10,7 @@
 /**
  * Represents one of the eight directions of movement used by NPCs and the player in the game.
  */
-enum MovementDirection
+enum class MovementDirection
 {
    NONE,
    UP,

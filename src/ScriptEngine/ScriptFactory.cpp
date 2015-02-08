@@ -7,6 +7,7 @@
 #include "ScriptFactory.h"
 
 #include <sstream>
+#include <type_traits>
 
 #include "FileScript.h"
 #include "UsableScript.h"
@@ -23,7 +24,8 @@ const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scr
 
 std::string ScriptFactory::getPath(const std::string& name, ScriptType type)
 {
-   return PATHS[type] + name + EXTENSION;
+   static_assert(std::is_integral<std::underlying_type<ScriptType>::type>::value, "ScriptType has to be integral since it is used as an array subscript.");
+   return PATHS[static_cast<int>(type)] + name + EXTENSION;
 }
 
 std::shared_ptr<Script> ScriptFactory::createScript(lua_State* luaVM, const std::string& name, ScriptType type)
@@ -40,7 +42,7 @@ std::shared_ptr<Script> ScriptFactory::createScript(lua_State* luaVM, const std:
 std::shared_ptr<NPCScript> ScriptFactory::createNPCCoroutine(lua_State* luaVM, NPC* npc, const std::string& regionName, const std::string& mapName)
 {
    std::string scriptName = regionName + '/' + mapName + '/' + npc->getName();
-   return std::make_shared<NPCScript>(luaVM, ScriptFactory::getPath(scriptName, NPC_SCRIPT), npc);
+   return std::make_shared<NPCScript>(luaVM, ScriptFactory::getPath(scriptName, ScriptType::NPC_SCRIPT), npc);
 }
 
 std::shared_ptr<UsableScript> ScriptFactory::getItemScript(lua_State* luaVM, const Item& item)
@@ -48,7 +50,7 @@ std::shared_ptr<UsableScript> ScriptFactory::getItemScript(lua_State* luaVM, con
    std::ostringstream itemIdBuffer;
    itemIdBuffer << item.getId();
 
-   return std::make_shared<UsableScript>(luaVM, ScriptFactory::getPath(itemIdBuffer.str(), ITEM_SCRIPT), item);
+   return std::make_shared<UsableScript>(luaVM, ScriptFactory::getPath(itemIdBuffer.str(), ScriptType::ITEM_SCRIPT), item);
 }
 
 std::shared_ptr<UsableScript> ScriptFactory::getSkillScript(lua_State* luaVM, const Skill& skill)
@@ -56,16 +58,16 @@ std::shared_ptr<UsableScript> ScriptFactory::getSkillScript(lua_State* luaVM, co
    std::ostringstream skillIdBuffer;
    skillIdBuffer << skill.getId();
 
-   return std::make_shared<UsableScript>(luaVM, ScriptFactory::getPath(skillIdBuffer.str(), SKILL_SCRIPT), skill);
+   return std::make_shared<UsableScript>(luaVM, ScriptFactory::getPath(skillIdBuffer.str(), ScriptType::SKILL_SCRIPT), skill);
 }
 
 std::shared_ptr<Script> ScriptFactory::getMapScript(lua_State* luaVM, const std::string& regionName, const std::string& mapName)
 {
    std::string scriptName = regionName + '/' + mapName;
-   return ScriptFactory::createScript(luaVM, scriptName, MAP_SCRIPT);
+   return ScriptFactory::createScript(luaVM, scriptName, ScriptType::MAP_SCRIPT);
 }
 
 std::shared_ptr<Script> ScriptFactory::getChapterScript(lua_State* luaVM, const std::string& name)
 {
-    return ScriptFactory::createScript(luaVM, name, CHAPTER_SCRIPT);
+    return ScriptFactory::createScript(luaVM, name, ScriptType::CHAPTER_SCRIPT);
 }

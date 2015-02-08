@@ -12,16 +12,16 @@
 
 #include "CharacterRoster.h"
 #include "Inventory.h"
+#include "Point2D.h"
 #include "Quest.h"
 #include "Shortcut.h"
 #include "UsableId.h"
-#include "Point2D.h"
-#include "MovementDirection.h"
 
 class Character;
 typedef class Usable Item;
 struct EquipSlot;
 class Metadata;
+enum class MovementDirection;
 
 namespace Json
 {

@@ -13,12 +13,6 @@
 #include "EdenRocketBindings.h"
 #include "Scheduler.h"
 
-/**
- * \todo Change this include to forward declarations when enums
- * can be forward declared in the product.
- */
-#include "GameStateType.h"
-
 namespace Rocket
 {
    namespace Core
@@ -29,6 +23,8 @@ namespace Rocket
       class Event;
    };
 };
+
+enum class GameStateType;
 
 class MenuState;
 class Metadata;
