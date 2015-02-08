@@ -154,14 +154,14 @@ class GameState
        *
        * @return true iff the state is not yet finished.
        */
-      virtual bool advanceFrame();
+      bool advanceFrame();
 
       /**
        * Called every frame in order to trigger drawing the game state
        * that is at the top of the execution stack.
        * Generic drawing code that is performed in every game state (such as drawing GUI and flipping the buffer) should go in here.
        */
-      virtual void drawFrame();
+      void drawFrame();
 
       /**
        * @return the state's coroutine scheduler, or nullptr if none exists.
