@@ -11,25 +11,12 @@
 
 #define DEBUG_FLAG DEBUG_EXEC_STACK
 
-ExecutionStack::ExecutionStack() :
-   m_nextState(nullptr)
-{
-}
-
-ExecutionStack::~ExecutionStack()
-{
-   // Delete all states on the stack
-   while(!m_stateStack.empty())
-   {
-      popState();
-   }
-}
-
 void ExecutionStack::popState()
 {
-   std::shared_ptr<GameState>& topState = m_stateStack.top();
-   topState->deactivate();
+   std::shared_ptr<GameState> topState = m_stateStack.top();
    m_stateStack.pop();
+
+   topState->deactivate();
 
    if(m_nextState)
    {
@@ -62,31 +49,32 @@ Scheduler* ExecutionStack::getCurrentScheduler() const
 void ExecutionStack::pushState(std::shared_ptr<GameState> newState, std::shared_ptr<GameState>
 transitionState)
 {
-   if(!m_stateStack.empty())
-   {
-      m_stateStack.top()->deactivate();
+   if(m_nextState && transitionState) {
+      DEBUG("Attempted to push a transition in the middle of a transition. Aborting new transition.");
+      transitionState.reset();
    }
 
-   newState->setExecutionStack(this);
+   auto stateToDeactivate = !m_stateStack.empty() ?
+      m_stateStack.top() :
+      nullptr;
+
+   auto& stateToPush = transitionState ? transitionState : newState;
+
+   m_stateStack.push(stateToPush);
+   stateToPush->setExecutionStack(this);
 
    if(transitionState)
    {
-      transitionState->setExecutionStack(this);
-
-      m_stateStack.push(transitionState);
-      if(m_nextState)
-      {
-         T_T("Attempted to push a transition in the middle of a transition.");
-      }
-
       m_nextState = newState;
-   }
-   else
-   {
-      m_stateStack.push(newState);
+      newState->setExecutionStack(this);
    }
 
-   m_stateStack.top()->activate();
+   if(stateToDeactivate)
+   {
+      stateToDeactivate->deactivate();
+   }
+
+   stateToPush->activate();
 }
 
 void ExecutionStack::execute()

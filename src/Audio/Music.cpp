@@ -25,12 +25,14 @@ Music::~Music()
 
 void Music::load(const std::string& path)
 {
-   m_music.reset(Mix_LoadMUS(path.c_str()));
+   auto music = Mix_LoadMUS(path.c_str());
 
-   if(!m_music)
+   if(!music)
    {
       T_T(Mix_GetError());
    }
+
+   m_music.reset(music);
 }
 
 bool Music::isMusicPlaying()

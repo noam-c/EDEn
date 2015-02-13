@@ -33,7 +33,7 @@ class ExecutionStack final
    /**
     * The next state to push after the current transition completes.
     */
-   std::shared_ptr<GameState> m_nextState;
+   std::shared_ptr<GameState> m_nextState = nullptr;
 
    /**
     * Remove and delete the most recent state pushed on the stack.
@@ -41,16 +41,6 @@ class ExecutionStack final
    void popState();
 
    public:
-      /**
-       * Constructor.
-       */
-      ExecutionStack();
-
-      /**
-       * Destructor.
-       */
-      ~ExecutionStack();
-
       /**
        * Pushes (and activates) a new game state.
        * After this method call, newState is responsible

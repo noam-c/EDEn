@@ -10,14 +10,14 @@
 
 long DebugUtils::debugFlags = DEBUG_ALL;
 
-void DebugUtils::print(long flag, std::string str)
+void DebugUtils::print(long flag, std::string str) noexcept
 {
    if(debugFlags & flag) {
       fprintf(stderr, "%s", str.c_str());
    }
 }
 
-void DebugUtils::print(long flag, const char* fmt, ...)
+void DebugUtils::print(long flag, const char* fmt, ...) noexcept
 {
    if(debugFlags & flag)
    {
@@ -29,7 +29,7 @@ void DebugUtils::print(long flag, const char* fmt, ...)
    }
 }
 
-void DebugUtils::pause()
+void DebugUtils::pause() noexcept
 {
    printf("Press enter to continue...\n");
    getchar();

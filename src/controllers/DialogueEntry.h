@@ -35,7 +35,7 @@ class DialogueEntry final
    /** A queue of upcoming close script brackets ('>' characters) */
    std::queue<int> m_closeScriptBrackets;
 
-   /** The task ID waiting on this particular line of dialogue */
+   /** The task waiting on this particular line of dialogue */
    std::shared_ptr<Task> m_task;
 
    public:
@@ -53,16 +53,15 @@ class DialogueEntry final
 
       DialogueEntry(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task);
 
-      ~DialogueEntry();
-
       void parseTextScripts();
 
+      void finish();
       bool choiceSelected(int choiceIndex);
 
       /**
        *  @return the starting index of the next embedded script, or -1 if there is none
        */
-      int getBeginningOfNextScript() const;
+      int getBeginningOfNextScript() const noexcept;
 
       /**
        *  Gets the next embedded script and removes it from the dialogue line.

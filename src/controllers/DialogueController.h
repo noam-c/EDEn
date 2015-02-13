@@ -112,13 +112,13 @@ class DialogueController
    /**
     * Clears any dialogue currently being displayed onscreen.
     */
-   void clearDialogue();
+   void clearDialogue() noexcept;
 
    /**
     * @return The amount of time (in milliseconds) to wait before
     *         adding another letter.
     */
-   int getMillisecondsPerCharacter() const;
+   int getMillisecondsPerCharacter() const noexcept;
 
    public:
 
@@ -153,7 +153,7 @@ class DialogueController
       /**
        * @return true iff there is currently a line of dialogue being shown.
        */
-      bool hasDialogue() const;
+      bool hasDialogue() const noexcept;
 
       /**
        * Enqueue a line of speech said by a character.
@@ -192,7 +192,7 @@ class DialogueController
       /**
        * @return true iff the current line of dialogue is finished writing to screen
        */
-      bool isCurrentLineComplete() const;
+      bool isCurrentLineComplete() const noexcept;
 
       /**
        * @return true iff the current line of dialogue has one or more choices.

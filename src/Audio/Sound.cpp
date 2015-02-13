@@ -57,14 +57,16 @@ void Sound::load(const std::string& path)
    std::lock_guard<decltype(m_playbackMutex)> lock(m_playbackMutex);
 
    DEBUG("Sound \"%s\": Loading WAV %s", getResourceName().c_str(), path.c_str());
-   m_sound.reset(Mix_LoadWAV(path.c_str()));
+   
+   auto sound = Mix_LoadWAV(path.c_str());
 
-   if(!m_sound)
+   if(!sound)
    {
       T_T(Mix_GetError());
    }
 
    DEBUG("Sound \"%s\": Successfully loaded WAV %s.", getResourceName().c_str(), path.c_str());
+   m_sound.reset(sound);
 }
 
 void Sound::play(const std::shared_ptr<Task>& task)

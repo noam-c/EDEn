@@ -50,7 +50,7 @@ ExecutionStack* GameState::getExecutionStack() const
    return m_executionStack;
 }
 
-void GameState::setExecutionStack(ExecutionStack* executionStack)
+void GameState::setExecutionStack(ExecutionStack* executionStack) noexcept
 {
    m_executionStack = executionStack;
 }

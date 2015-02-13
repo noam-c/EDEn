@@ -75,7 +75,7 @@ class DebugUtils
        * @param flag the associated debug flag (usually set at the top of *.cpp files).
        * @param str the string to print.
        */
-      static void print(long flag, std::string str);
+      static void print(long flag, std::string str) noexcept;
 
       /**
        * Print a string to the error log if the associated debug flag is active
@@ -84,13 +84,13 @@ class DebugUtils
        * @param flag the associated debug flag (usually set at the top of *.cpp files).
        * @param fmt the format string to print
        */
-      static void print(long flag, const char* fmt, ...);
+      static void print(long flag, const char* fmt, ...) noexcept;
 
       /**
        * Standard debug pausing mechanism.
        * Print out "Press enter to continue" and wait for input.
        */
-      static void pause();
+      static void pause() noexcept;
 };
 
 #endif

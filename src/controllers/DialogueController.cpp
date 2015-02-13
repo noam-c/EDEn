@@ -115,17 +115,17 @@ void DialogueController::updateDialogueBox(bool hasCurrentLineChanged)
    }
 }
 
-bool DialogueController::isCurrentLineComplete() const
+bool DialogueController::isCurrentLineComplete() const noexcept
 {
    return hasDialogue() && m_charsToShow >= m_dialogueQueue.front().text.size();
 }
 
-bool DialogueController::hasDialogue() const
+bool DialogueController::hasDialogue() const noexcept
 {
    return !m_dialogueQueue.empty();
 }
 
-void DialogueController::clearDialogue()
+void DialogueController::clearDialogue() noexcept
 {
    m_timeSinceLastCharacterAdded = getMillisecondsPerCharacter();
    m_charsToShow = 0;
@@ -138,7 +138,7 @@ void DialogueController::clearDialogue()
    updateDialogueBox(true /*hasCurrentLineChanged*/);
 }
 
-int DialogueController::getMillisecondsPerCharacter() const
+int DialogueController::getMillisecondsPerCharacter() const noexcept
 {
    int time = MILLISECONDS_PER_LETTER;
    if(m_fastMode)
@@ -171,6 +171,7 @@ bool DialogueController::nextLine()
 
    // If the dialogue is finished, clear the dialogue box and
    // move on to the next line
+   m_dialogueQueue.front().finish();
    clearDialogue();
 
    return true;

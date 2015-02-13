@@ -90,7 +90,7 @@ int Scheduler::block(const std::shared_ptr<Task>& pendingTask, int numResults)
 std::shared_ptr<Task> Scheduler::createNewTask()
 {
    TaskId taskId = m_nextId;
-   auto nextTask = m_activeTasks.emplace(std::piecewise_construct,
+   auto& nextTask = m_activeTasks.emplace(std::piecewise_construct,
                                          std::forward_as_tuple(taskId),
                                          std::forward_as_tuple(new Task(taskId, *this))).first->second;
    m_nextId++;

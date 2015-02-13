@@ -28,14 +28,6 @@ DialogueEntry::DialogueEntry(DialogueEntryType type, const DialogueChoiceList& c
    parseTextScripts();
 }
 
-DialogueEntry::~DialogueEntry()
-{
-   if(m_task)
-   {
-      m_task->complete();
-   }
-}
-
 void DialogueEntry::parseTextScripts()
 {
    int openIndex = 0;
@@ -82,6 +74,14 @@ void DialogueEntry::parseTextScripts()
    }
 }
 
+void DialogueEntry::finish()
+{
+   if(m_task)
+   {
+      m_task->complete();
+   }
+}
+
 bool DialogueEntry::choiceSelected(int choiceIndex)
 {
    if(choiceIndex < 0 || choiceIndex >= choices.size())
@@ -90,15 +90,12 @@ bool DialogueEntry::choiceSelected(int choiceIndex)
       return false;
    }
 
-   if(m_task)
-   {
-      m_task->complete(choiceIndex);
-   }
+   finish();
 
    return true;
 }
 
-int DialogueEntry::getBeginningOfNextScript() const
+int DialogueEntry::getBeginningOfNextScript() const noexcept
 {
    if(!m_openScriptBrackets.empty() && !m_closeScriptBrackets.empty())
    {

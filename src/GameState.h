@@ -71,7 +71,7 @@ class GameState
 
       ExecutionStack* m_executionStack;
 
-      void setExecutionStack(ExecutionStack* executionStack);
+      void setExecutionStack(ExecutionStack* executionStack) noexcept;
 
    protected:
       ExecutionStack* getExecutionStack() const;

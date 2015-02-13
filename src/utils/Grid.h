@@ -44,16 +44,6 @@ template<typename T> class Grid final
       }
 
       /**
-       * Copy constructor.
-       */
-      Grid(const Grid<T>& other) = default;
-
-      /**
-       * Destructor.
-       */
-      ~Grid() = default;
-
-      /**
        * @param x The x-coordinate of the cell to retrieve.
        * @param y The y-coordinate of the cell to retrieve.
        *
@@ -78,14 +68,14 @@ template<typename T> class Grid final
       /**
        * @return true iff the Grid has no contents.
        */
-      bool empty() const {
+      bool empty() const noexcept {
          return m_grid.empty();
       }
 
       /**
        * Clears out the contents of the Grid.
        */
-      void clear()
+      void clear() noexcept
       {
          m_width = 0;
          m_grid.clear();
