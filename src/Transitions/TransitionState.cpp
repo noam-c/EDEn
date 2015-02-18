@@ -13,7 +13,6 @@ TransitionState::TransitionState(GameContext& gameContext, std::unique_ptr<Trans
    GameState(gameContext, GameStateType::TRANSITION, "Transition"),
    m_transition(std::move(transition))
 {
-   activate();
 }
 
 void TransitionState::draw()
