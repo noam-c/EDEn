@@ -8,22 +8,12 @@
 
 namespace shapes
 {
-   Size::Size() :
-      width(0),
-      height(0)
-   {}
-
-   Size::Size(unsigned int width, unsigned int height) :
-      width(width),
-      height(height)
-   {}
-
-   bool Size::operator==(const Size& rhs) const
+   bool Size::operator==(const Size& rhs) const noexcept
    {
       return width == rhs.width && height == rhs.height;
    }
 
-   bool Size::operator!=(const Size& rhs) const
+   bool Size::operator!=(const Size& rhs) const noexcept
    {
       return width != rhs.width || height != rhs.height;
    }
@@ -33,7 +23,7 @@ namespace shapes
       return Size(width * coeff, height * coeff);
    }
 
-   Size& Size::operator*=(int coeff)
+   Size& Size::operator*=(int coeff) noexcept
    {
       width *= coeff;
       height *= coeff;
@@ -45,7 +35,7 @@ namespace shapes
       return Size(width / coeff, height / coeff);
    }
 
-   Size& Size::operator/=(int coeff)
+   Size& Size::operator/=(int coeff) noexcept
    {
       width /= coeff;
       height /= coeff;

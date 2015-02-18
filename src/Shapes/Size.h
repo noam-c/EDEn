@@ -21,7 +21,10 @@ namespace shapes
        * Constructor.
        * Creates empty Size (width: 0, height: 0).
        */
-      Size();
+      constexpr Size() :
+         width(0),
+         height(0)
+      {}
 
       /**
        * Constructor.
@@ -30,17 +33,20 @@ namespace shapes
        * @param width The width of the Size.
        * @param height The height of the Size.
        */
-      Size(unsigned int width, unsigned int height);
+      constexpr Size(unsigned int width, unsigned int height) :
+         width(width),
+         height(height)
+      {}
 
       /**
        * Equality operator.
        */
-      bool operator==(const Size& rhs) const;
+      bool operator==(const Size& rhs) const noexcept;
 
       /**
        * Inequality operator.
        */
-      bool operator!=(const Size& rhs) const;
+      bool operator!=(const Size& rhs) const noexcept;
 
       /**
        * Multiplication operator.
@@ -50,7 +56,7 @@ namespace shapes
       /**
        * Multiplication assignment operator.
        */
-      Size& operator*=(int coeff);
+      Size& operator*=(int coeff) noexcept;
 
       /**
        * Division operator.
@@ -60,7 +66,7 @@ namespace shapes
       /**
        * Division assignment operator.
        */
-      Size& operator/=(int coeff);
+      Size& operator/=(int coeff) noexcept;
    };
 };
 
