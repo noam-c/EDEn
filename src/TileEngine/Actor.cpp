@@ -73,7 +73,7 @@ void Actor::draw() const
 {
    if(m_sprite)
    {
-      m_sprite->draw(shapes::Point2D(m_pixelLoc.x, m_pixelLoc.y + TileEngine::TILE_SIZE));
+      m_sprite->draw({ m_pixelLoc.x, m_pixelLoc.y + TileEngine::TILE_SIZE });
    }
 
    if(!m_orders.empty())

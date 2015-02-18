@@ -29,7 +29,7 @@ static int PlayerCharacterL_Show(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   playerCharacter->addToMap(shapes::Point2D(x, y));
+   playerCharacter->addToMap({ x, y });
 
    return 0;
 }
@@ -67,7 +67,7 @@ static int PlayerCharacterL_SetLocation(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   playerCharacter->setLocation(shapes::Point2D(x, y));
+   playerCharacter->setLocation({ x, y });
 
    return 0;
 }

@@ -294,9 +294,12 @@ void Pathfinder::evaluateAdjacentNodes(const TileState& entityState, const shape
 
          if(diagonalMovement)
          {
+            const shapes::Point2D horizontalDestinationPoint(evaluatedNode->point.x, adjacentPoint.y);
+            const shapes::Point2D verticalDestinationPoint(adjacentPoint.x, evaluatedNode->point.y);
+
             freeTile = freeTile &&
-               entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(evaluatedNode->point.x, adjacentPoint.y) * m_movementTileSize, entitySize), entityState) &&
-               entityGrid.canOccupyArea(shapes::Rectangle(shapes::Point2D(adjacentPoint.x, evaluatedNode->point.y) * m_movementTileSize, entitySize), entityState);
+               entityGrid.canOccupyArea(shapes::Rectangle(horizontalDestinationPoint * m_movementTileSize, entitySize), entityState) &&
+               entityGrid.canOccupyArea(shapes::Rectangle(verticalDestinationPoint * m_movementTileSize, entitySize), entityState);
          }
 
          if(freeTile)

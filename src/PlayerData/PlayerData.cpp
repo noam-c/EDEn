@@ -197,7 +197,7 @@ SaveLocation PlayerData::parseLocation(Json::Value& rootElement)
          direction = MovementDirection::DOWN;
       }
 
-      saveLocation.coords = shapes::Point2D(x,y);
+      saveLocation.coords = { x, y };
       saveLocation.direction = direction;
    }
 

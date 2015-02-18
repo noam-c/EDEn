@@ -18,7 +18,7 @@ const float RoyFloydWarshallMatrices::ROOT_2 = 1.41421356f;
 shapes::Point2D RoyFloydWarshallMatrices::tileNumToCoords(int tileNum, int width)
 {
    div_t result = div(tileNum, width);
-   return shapes::Point2D(result.rem, result.quot);
+   return { result.rem, result.quot };
 }
 
 int RoyFloydWarshallMatrices::coordsToTileNum(const shapes::Point2D& tileLocation, int width)

@@ -7,6 +7,7 @@
 #ifndef POINT_2D_H
 #define POINT_2D_H
 
+#include <tuple>
 #include <vector>
 
 namespace shapes
@@ -29,7 +30,10 @@ namespace shapes
        * Constructor.
        * Creates a point set at origin (0,0).
        */
-      Point2D();
+      constexpr Point2D() :
+         x(0),
+         y(0)
+      {}
 
       /**
        * Constructor.
@@ -38,17 +42,32 @@ namespace shapes
        * @param x The x-coordinate for the point.
        * @param y The y-coordinate for the point.
        */
-      Point2D(int x, int y);
+      constexpr Point2D(int x, int y) :
+         x(x),
+         y(y)
+      {}
+      
+      /**
+       * Constructor.
+       * Creates a point set at (x,y).
+       *
+       * @param x The x-coordinate for the point.
+       * @param y The y-coordinate for the point.
+       */
+      constexpr Point2D(std::pair<int, int> coordsPair) :
+         x(coordsPair.first),
+         y(coordsPair.second)
+      {}
 
       /**
        * Equality operator.
        */
-      bool operator==(const Point2D& rhs) const;
+      bool operator==(const Point2D& rhs) const noexcept;
 
       /**
        * Inequality operator.
        */
-      bool operator!=(const Point2D& rhs) const;
+      bool operator!=(const Point2D& rhs) const noexcept;
 
       /**
        * Multiplication operator.

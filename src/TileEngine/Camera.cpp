@@ -41,16 +41,18 @@ bool Camera::isPointWithinViewport(const shapes::Point2D& point) const
 shapes::Point2D Camera::getPointWithinScene(const shapes::Point2D& point) const
 {
    const shapes::Point2D cameraFocalOffset = calculateCameraFocalOffset();
-   return shapes::Point2D(
+   return {
       point.x - m_offset.x - cameraFocalOffset.x,
-      point.y - m_offset.y - cameraFocalOffset.y);
+      point.y - m_offset.y - cameraFocalOffset.y
+   };
 }
 
 shapes::Point2D Camera::getClampedPoint(const shapes::Point2D& point) const
 {
-   return shapes::Point2D(
+   return {
       std::min(std::max(point.x, static_cast<signed int>(m_viewportSize.width / 2)), static_cast<signed int>(m_sceneSize.width - m_viewportSize.width / 2)),
-      std::min(std::max(point.y, static_cast<signed int>(m_viewportSize.height / 2)), static_cast<signed int>(m_sceneSize.height - m_viewportSize.height / 2)));
+      std::min(std::max(point.y, static_cast<signed int>(m_viewportSize.height / 2)), static_cast<signed int>(m_sceneSize.height - m_viewportSize.height / 2))
+   };
 }
 
 void Camera::setViewBounds(const shapes::Size& viewportSize, const shapes::Size& sceneSize)

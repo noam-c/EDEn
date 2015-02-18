@@ -81,11 +81,11 @@ namespace shapes
 
    shapes::Point2D Rectangle::getTopLeftCorner() const
    {
-      return shapes::Point2D(left, top);
+      return { left, top };
    }
 
    shapes::Point2D Rectangle::getBottomRightCorner() const
    {
-      return shapes::Point2D(right, bottom);
+      return { right, bottom };
    }
 };
