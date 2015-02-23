@@ -17,10 +17,11 @@
 
 #include "Grid.h"
 #include "Rectangle.h"
-#include "Layer.h"
 #include "TriggerZone.h"
 #include "Point2D.h"
 #include "MapExit.h"
+
+class Layer;
 
 /**
  * A map is a subset of a Region consisting of a single rectangular set of tiles
@@ -94,6 +95,8 @@ class Map
        * @param filePath The path to the map file to load.
        */
       Map(const std::string& name, const std::string& filePath);
+
+      ~Map();
 
       /**
        * @return The name of this map.

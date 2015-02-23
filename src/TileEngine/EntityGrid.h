@@ -80,11 +80,6 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
    shapes::Rectangle m_collisionMapBounds;
 
    /**
-    * Clean up the map of tile states.
-    */
-   void deleteCollisionMap();
-
-   /**
     * @param area The pixel-coordinate rectangle to determine boundaries for.
     *
     * @return Get the tile boundaries of the specified rectangle.

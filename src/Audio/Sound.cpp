@@ -5,6 +5,9 @@
  */
 
 #include "Sound.h"
+
+#include "SDL_mixer.h"
+
 #include "Settings.h"
 #include "Task.h"
 

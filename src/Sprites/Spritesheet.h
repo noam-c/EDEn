@@ -8,13 +8,16 @@
 #define SPRITESHEET_H
 
 #include "Resource.h"
-#include "FrameSequence.h"
-#include "Rectangle.h"
-#include "Size.h"
+
 #include <map>
 #include <memory>
 #include <vector>
 #include <string>
+
+#include "FrameSequence.h"
+#include "Rectangle.h"
+#include "Size.h"
+#include "Texture.h"
 
 namespace Json
 {
@@ -28,7 +31,6 @@ namespace shapes
 
 struct SpriteFrame;
 class Animation;
-class Texture;
 
 /**
  * The Spritesheet class represents an entire spritesheet image. It holds a
@@ -55,7 +57,7 @@ class Spritesheet : public Resource
    static const std::string UNTITLED_LINE;
 
    /** The spritesheet texture */
-   std::unique_ptr<Texture> m_texture;
+   Texture m_texture;
 
    /** Spritesheet size (in pixels) */
    shapes::Size m_size;
@@ -111,7 +113,7 @@ class Spritesheet : public Resource
        * @param point The location to draw at.
        * @param frameIndex The frame to draw.
        */
-      void draw(const shapes::Point2D& point, const int frameIndex) const;
+      void draw(const shapes::Point2D& point, const int frameIndex);
 
       /**
        * Get the index of a frame specified by the frame name.

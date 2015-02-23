@@ -5,9 +5,13 @@
  */
 
 #include "Character.h"
+
 #include "json.h"
+
 #include <fstream>
 #include <algorithm>
+
+#include "Aspect.h"
 #include "Metadata.h"
 #include "Skill.h"
 
@@ -89,6 +93,8 @@ Character::Character(const Metadata& metadata, const std::string& id, const Json
    m_hp = std::min(m_hp, getMaxHP());
    m_sp = std::min(m_sp, getMaxSP());
 }
+
+Character::~Character() = default;
 
 void Character::parseArchetypeData(const Metadata& metadata, const Json::Value& archetypeData)
 {

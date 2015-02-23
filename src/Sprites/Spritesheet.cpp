@@ -32,7 +32,6 @@ const std::string Spritesheet::UNTITLED_LINE = "untitled";
 
 Spritesheet::Spritesheet(ResourceKey name) :
    Resource(name),
-   m_texture(nullptr),
    m_numFrames(0)
 {
 }
@@ -44,8 +43,8 @@ void Spritesheet::load(const std::string& path)
    imgPath += IMG_EXTENSION;
 
    DEBUG("Loading spritesheet image \"%s\"...", imgPath.c_str());
-   m_texture = std::unique_ptr<Texture>(new Texture(imgPath));
-   m_size = m_texture->getSize();
+   m_texture = Texture(imgPath);
+   m_size = m_texture.getSize();
 
    // Load in the spritesheet data file, which tells the engine where
    // each frame is in the image
@@ -222,7 +221,7 @@ std::unique_ptr<Animation> Spritesheet::getAnimation(const std::string& animatio
 }
 
 
-void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
+void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex)
 {
    if(!isInitialized())
    {
@@ -268,7 +267,7 @@ void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex) const
    // Set the alpha blending evaluation function
    glAlphaFunc(GL_GREATER, 0.1f);
 
-   m_texture->bind();
+   m_texture.bind();
 
    glBegin(GL_QUADS);
       glTexCoord2f(frameLeft, frameTop); glVertex3f(destLeft, destTop, 0.0f);

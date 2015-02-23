@@ -5,13 +5,18 @@
  */
 
 #include "Tileset.h"
+
 #include "SDL_opengl.h"
-#include <fstream>
-#include "tinyxml.h"
-#include "GraphicsUtil.h"
-#include "TileEngine.h"
-#include "Texture.h"
+
 #include <algorithm>
+#include <fstream>
+
+#include "tinyxml.h"
+
+#include "GraphicsUtil.h"
+#include "Texture.h"
+#include "TileEngine.h"
+
 #include "DebugUtils.h"
 
 #define DEBUG_FLAG DEBUG_RES_LOAD | DEBUG_TILE_ENG

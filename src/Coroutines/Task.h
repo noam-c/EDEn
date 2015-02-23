@@ -10,6 +10,7 @@
 #include <utility>
 
 #include "Coroutine.h"
+#include "CoroutineResults.h"
 #include "Scheduler.h"
 #include "TaskId.h"
 

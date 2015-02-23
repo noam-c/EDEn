@@ -6,6 +6,8 @@
 
 #include "Script.h"
 
+#include "CoroutineResults.h"
+
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
 extern "C"

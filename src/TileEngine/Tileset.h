@@ -9,8 +9,10 @@
 
 #include "Resource.h"
 #include "Size.h"
-#include "Texture.h"
+
 #include <vector>
+
+class Texture;
 
 /**
  * This resource holds a tileset image texture and associated data

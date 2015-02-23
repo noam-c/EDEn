@@ -11,7 +11,7 @@
 #include <tuple>
 #include <utility>
 
-#include "CoroutineResults.h"
+class ICoroutineResults;
 
 /**
  * A Coroutine is, in this case, an object that can yield, resume or block.
@@ -60,7 +60,7 @@ class Coroutine
       /**
        * Destructor.
        */
-      virtual ~Coroutine() = default;
+      virtual ~Coroutine();
 
       /**
        * @return the numeric identifier for this Coroutine.

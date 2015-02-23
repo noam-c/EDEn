@@ -5,6 +5,7 @@
  */
 
 #include "Coroutine.h"
+#include "CoroutineResults.h"
 
 int Coroutine::nextCoroutineId = 0;
 
@@ -12,6 +13,8 @@ Coroutine::Coroutine() :
       m_coroutineId(nextCoroutineId++)
 {
 }
+
+Coroutine::~Coroutine() = default;
 
 void Coroutine::setResults(std::unique_ptr<ICoroutineResults>&& results)
 {

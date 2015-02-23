@@ -11,7 +11,8 @@
 #include <type_traits>
 
 #include "GameState.h"
-#include "Transition.h"
+
+class Transition;
 
 class TransitionState : public GameState
 {
@@ -36,6 +37,8 @@ class TransitionState : public GameState
        * @param transition The transition to animate.
        */
       TransitionState(GameContext& gameContext, std::unique_ptr<Transition>&& transition);
+
+      ~TransitionState();
 
       template <typename TransitionType, typename ... TransitionArgs> static std::shared_ptr<TransitionState> makeTransition(GameContext& gameContext, TransitionArgs... args)
          {

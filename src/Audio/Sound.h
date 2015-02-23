@@ -8,11 +8,11 @@
 #define SOUND_H
 
 #include "Resource.h"
-#include "SDL_mixer.h"
 #include <atomic>
 #include <map>
 #include <mutex>
 
+struct Mix_Chunk;
 class Task;
 
 /**

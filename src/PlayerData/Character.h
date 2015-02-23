@@ -12,13 +12,13 @@
 #include <memory>
 #include "EquipData.h"
 #include "SkillList.h"
-#include "Aspect.h"
 
 namespace Json
 {
    class Value;
 };
 
+class Aspect;
 class CharacterArchetype;
 class Metadata;
 
@@ -171,6 +171,8 @@ class Character
        * @param charToLoad The JSON node containing the character's data.
        */
       Character(const Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
+
+      ~Character();
 
       /**
        * Serialize the character data into JSON output.

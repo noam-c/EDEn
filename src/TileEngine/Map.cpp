@@ -5,11 +5,13 @@
  */
 
 #include "Map.h"
-#include "Tileset.h"
+
+#include "Layer.h"
 #include "Pathfinder.h"
 #include "ResourceLoader.h"
-#include "TileEngine.h"
 #include "Size.h"
+#include "TileEngine.h"
+#include "Tileset.h"
 
 #include "DebugUtils.h"
 
@@ -105,6 +107,8 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
 
    DEBUG("Map loaded.");
 }
+
+Map::~Map() = default;
 
 void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
 {

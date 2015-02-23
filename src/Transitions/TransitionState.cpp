@@ -6,6 +6,8 @@
 
 #include "TransitionState.h"
 
+#include "Transition.h"
+
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_TRANSITIONS
 
@@ -14,6 +16,8 @@ TransitionState::TransitionState(GameContext& gameContext, std::unique_ptr<Trans
    m_transition(std::move(transition))
 {
 }
+
+TransitionState::~TransitionState() = default;
 
 void TransitionState::draw()
 {
