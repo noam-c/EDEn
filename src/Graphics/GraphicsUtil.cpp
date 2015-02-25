@@ -73,16 +73,18 @@ void GraphicsUtil::initSDL()
    // On exit, run the SDL cleanup
    atexit (SDL_Quit);
 
-   std::unique_ptr<std::string> errorMsg(nullptr);
-   if(!initSDLVideoMode(errorMsg))
+   auto videoModeChangeResult = initSDLVideoMode();
+   if(!std::get<0>(videoModeChangeResult))
    {
-      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", m_width, m_height, m_bitsPerPixel, errorMsg ? errorMsg->c_str() : "");
+      DEBUG("Couldn't set %dx%dx%d video mode: %s\n", m_width, m_height, m_bitsPerPixel, std::get<1>(videoModeChangeResult).c_str());
       exit(1);
    }
 }
 
-bool GraphicsUtil::initSDLVideoMode(std::unique_ptr<std::string>& errorMsg)
+std::tuple<bool, std::string> GraphicsUtil::initSDLVideoMode()
 {
+   std::string errorMsg;
+
    // Set video mode based on user's choice of resolution
    unsigned int windowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
    if(m_fullScreenEnabled)
@@ -105,8 +107,8 @@ bool GraphicsUtil::initSDLVideoMode(std::unique_ptr<std::string>& errorMsg)
 
    if(m_window == nullptr)
    {
-      errorMsg.reset(new std::string(SDL_GetError()));
-      return false;
+      errorMsg = std::string(SDL_GetError());
+      return { false, errorMsg };
    }
 
    if(m_openGLContext != nullptr)
@@ -118,8 +120,8 @@ bool GraphicsUtil::initSDLVideoMode(std::unique_ptr<std::string>& errorMsg)
       m_openGLContext = SDL_GL_CreateContext(m_window);
       if(!m_openGLContext)
       {
-         errorMsg.reset(new std::string(SDL_GetError()));
-         return false;
+         errorMsg = std::string(SDL_GetError());
+         return { false, errorMsg };
       }
    }
 
@@ -142,7 +144,7 @@ bool GraphicsUtil::initSDLVideoMode(std::unique_ptr<std::string>& errorMsg)
 
    glMatrixMode(GL_MODELVIEW);
 
-   return true;
+   return { true, errorMsg };
 }
 
 void GraphicsUtil::initRocket()
@@ -207,7 +209,7 @@ bool GraphicsUtil::isVideoModeRefreshRequired() const
       currentSettingsResolution.getBitsPerPixel() != m_bitsPerPixel;
 }
 
-bool GraphicsUtil::refreshVideoMode(std::unique_ptr<std::string>& errorMsg)
+std::tuple<bool, std::string> GraphicsUtil::refreshVideoMode()
 {
    const Settings& currentSettings = Settings::getCurrentSettings();
    const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();
@@ -217,8 +219,8 @@ bool GraphicsUtil::refreshVideoMode(std::unique_ptr<std::string>& errorMsg)
    m_height = currentSettingsResolution.getHeight();
    m_bitsPerPixel = currentSettingsResolution.getBitsPerPixel();
 
-   bool success = initSDLVideoMode(errorMsg);
-   if(success)
+   auto videoModeChangeResult = initSDLVideoMode();
+   if(std::get<0>(videoModeChangeResult))
    {
       const std::vector<Rocket::Core::Context*>& activeContexts = m_rocketContextRegistry.getActiveContexts();
       for(auto& context : activeContexts)
@@ -227,7 +229,7 @@ bool GraphicsUtil::refreshVideoMode(std::unique_ptr<std::string>& errorMsg)
       }
    }
 
-   return success;
+   return videoModeChangeResult;
 }
 
 const OpenGLExtensions& GraphicsUtil::getExtensions() const

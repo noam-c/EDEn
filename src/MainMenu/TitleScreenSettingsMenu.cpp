@@ -109,14 +109,16 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event& event)
       bool settingsUpdateSuccess = true;
       if(GraphicsUtil::getInstance()->isVideoModeRefreshRequired())
       {
-         std::unique_ptr<std::string> errorMsg(nullptr);
-         settingsUpdateSuccess = GraphicsUtil::getInstance()->refreshVideoMode(errorMsg);
+         auto settingsUpdateResult = GraphicsUtil::getInstance()->refreshVideoMode();
+
+         settingsUpdateSuccess = std::get<0>(settingsUpdateResult);
          if(!settingsUpdateSuccess)
          {
             DEBUG("Failed to refresh video mode:");
-            if(errorMsg)
+            auto errorMsg = std::get<1>(settingsUpdateResult);
+            if(!errorMsg.empty())
             {
-               DEBUG("%s", errorMsg->c_str());
+               DEBUG("%s", errorMsg.c_str());
             }
             else
             {
@@ -124,11 +126,15 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event& event)
             }
 
             Settings::getCurrentSettings().revertVideoChanges();
-            if(!GraphicsUtil::getInstance()->refreshVideoMode(errorMsg))
+            settingsUpdateResult = GraphicsUtil::getInstance()->refreshVideoMode();
+
+            settingsUpdateSuccess = std::get<0>(settingsUpdateResult);
+            if(!settingsUpdateSuccess)
             {
-               if(errorMsg)
+               errorMsg = std::get<1>(settingsUpdateResult);
+               if(!errorMsg.empty())
                {
-                  DEBUG("%s", errorMsg->c_str());
+                  DEBUG("%s", errorMsg.c_str());
                }
 
                T_T("Failed to revert video mode!");
@@ -139,14 +145,14 @@ void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event& event)
       if(settingsUpdateSuccess)
       {
          saveSettings();
-         m_finished = true;
       }
    }
    else
    {
       revertSettings();
-      m_finished = true;
    }
+
+   m_finished = true;
 }
 
 void TitleScreenSettingsMenu::saveSettings()
