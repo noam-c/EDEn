@@ -55,7 +55,7 @@ template<typename ... Results> class CoroutineResults final : public ICoroutineR
 
    public:
       CoroutineResults(Results&& ... results) :
-         m_results(std::make_tuple(results...))
+         m_results(std::forward_as_tuple(results...))
       {
       }
 

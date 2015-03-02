@@ -161,7 +161,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
       }
 
       // Get the frames of the animation
-      auto frameSequence = std::unique_ptr<FrameSequence>(new FrameSequence());
+      std::unique_ptr<FrameSequence> frameSequence(new FrameSequence());
 
       Json::Value& frameArray = currAnimation["frames"];
       int sequenceLength = frameArray.size();
@@ -190,7 +190,7 @@ void Spritesheet::parseAnimations(Json::Value& rootElement)
          DEBUG("Animation %s: Adding node with index %d", animationName.c_str(), frameIndex);
 
          // Add the retrieved frame index into the sequence of frames
-         frameSequence->push_back(frameIndex);
+         frameSequence->emplace_back(frameIndex);
       }
 
       // Bind the animation name to the next available animation index

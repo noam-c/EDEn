@@ -41,7 +41,7 @@ ScreenTexture::ScreenTexture(ScreenTexture&& rhs) :
    Texture(std::move(rhs)),
    m_frameBuffer(0)
 {
-   if(rhs.m_valid)
+   if(m_valid)
    {
       std::swap(m_frameBuffer, rhs.m_frameBuffer);
    }
@@ -50,7 +50,7 @@ ScreenTexture::ScreenTexture(ScreenTexture&& rhs) :
 ScreenTexture& ScreenTexture::operator=(ScreenTexture&& rhs)
 {
    Texture::operator=(std::move(rhs));
-   if(rhs.m_valid)
+   if(m_valid)
    {
       m_frameBuffer = rhs.m_frameBuffer;
       rhs.m_frameBuffer = 0;

@@ -40,7 +40,7 @@ class TransitionState : public GameState
 
       ~TransitionState();
 
-      template <typename TransitionType, typename ... TransitionArgs> static std::shared_ptr<TransitionState> makeTransition(GameContext& gameContext, TransitionArgs... args)
+      template <typename TransitionType, typename ... TransitionArgs> static std::shared_ptr<TransitionState> makeTransition(GameContext& gameContext, TransitionArgs&& ... args)
          {
             static_assert(std::is_base_of<Transition, TransitionType>::value, "Cannot create a TransitionState with anything other than a Transition subclass.");
 

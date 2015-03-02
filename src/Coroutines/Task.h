@@ -85,7 +85,7 @@ class Task final
        *
        * @param results The set of result values to pass to waiting coroutines.
        */
-      template<typename ... Results> void complete(Results ... results)
+      template<typename ... Results> void complete(Results&& ... results)
       {
          if(!m_taskDeactivated)
          {

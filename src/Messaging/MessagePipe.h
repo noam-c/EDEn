@@ -31,12 +31,12 @@ namespace messaging
          public:
             void registerListener(Listener<T>* listener)
             {
-               m_listeners.insert(std::move(listener));
+               m_listeners.emplace(listener);
             }
 
             void unregisterListener(Listener<T>* listener)
             {
-               m_listeners.erase(std::move(listener));
+               m_listeners.erase(listener);
             }
 
             void send(const T& message) const

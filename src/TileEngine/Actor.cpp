@@ -145,7 +145,7 @@ void Actor::setSpritesheet(const std::string& sheetName)
    std::shared_ptr<Spritesheet> sheet = ResourceLoader::getSpritesheet(sheetName);
    if(!m_sprite)
    {
-      m_sprite = std::move(std::unique_ptr<Sprite>(new Sprite(sheet)));
+      m_sprite.reset(new Sprite(sheet));
    }
    else
    {
