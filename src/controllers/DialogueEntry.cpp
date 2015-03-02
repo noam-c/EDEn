@@ -89,8 +89,13 @@ bool DialogueEntry::choiceSelected(int choiceIndex)
       DEBUG("Invalid choice index selected: %d", choiceIndex);
       return false;
    }
+   
+   DEBUG("Selected choice index: %d", choiceIndex);
 
-   finish();
+   if(m_task)
+   {
+      m_task->complete(choiceIndex);
+   }
 
    return true;
 }
