@@ -8,7 +8,7 @@
 
 #include "Animation.h"
 #include "EnumUtils.h"
-#include "MovementDirection.h"
+#include "Direction.h"
 #include "ResourceLoader.h"
 #include "Spritesheet.h"
 

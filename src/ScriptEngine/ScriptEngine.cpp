@@ -9,7 +9,7 @@
 #include "EnumUtils.h"
 #include "ExecutionStack.h"
 #include "FileScript.h"
-#include "MovementDirection.h"
+#include "Direction.h"
 #include "Music.h"
 #include "NPC.h"
 #include "PlayerData.h"

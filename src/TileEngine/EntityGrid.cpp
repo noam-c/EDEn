@@ -15,7 +15,7 @@
 #include "MapExitMessage.h"
 #include "MapTriggerMessage.h"
 #include "MessagePipe.h"
-#include "MovementDirection.h"
+#include "Direction.h"
 #include "PlayerCharacter.h"
 #include "Point2D.h"
 #include "Rectangle.h"

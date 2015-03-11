@@ -14,7 +14,7 @@
 #include "EnumUtils.h"
 #include "Item.h"
 #include "Metadata.h"
-#include "MovementDirection.h"
+#include "Direction.h"
 #include "Shortcut.h"
 #include "Skill.h"
 

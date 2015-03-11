@@ -8,7 +8,7 @@
 
 #include "EnumUtils.h"
 #include "MapTriggerCallback.h"
-#include "MovementDirection.h"
+#include "Direction.h"
 #include "NPC.h"
 #include "Point2D.h"
 #include "ScriptUtilities.h"

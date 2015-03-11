@@ -11,7 +11,7 @@
 
 #include "Actor_Orders.h"
 #include "Map.h"
-#include "MovementDirection.h"
+#include "Direction.h"
 #include "TileEngine.h"
 
 #include "DebugUtils.h"

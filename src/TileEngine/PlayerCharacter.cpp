@@ -9,7 +9,7 @@
 #include "CharacterRoster.h"
 #include "EntityGrid.h"
 #include "MessagePipe.h"
-#include "MovementDirection.h"
+#include "Direction.h"
 #include "Pathfinder.h"
 #include "PlayerData.h"
 #include "RosterUpdateMessage.h"

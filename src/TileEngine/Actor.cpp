@@ -10,7 +10,7 @@
 #include "ActorMoveMessage.h"
 #include "EntityGrid.h"
 #include "MessagePipe.h"
-#include "MovementDirection.h"
+#include "Direction.h"
 #include "ResourceLoader.h"
 #include "Sprite.h"
 #include "TileEngine.h"

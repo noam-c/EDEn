@@ -18,6 +18,7 @@ SET(HEADERS
   src/ExecutionStack.h
   src/GameContext.h
   src/GameState.h
+  src/Geometry/Direction.h
   src/Geometry/Size.h
   src/Geometry/Point2D.h
   src/Geometry/Rectangle.h
@@ -54,7 +55,6 @@ SET(HEADERS
   src/Menu/ShortcutBar.h
   src/Messaging/MessagePipe.h
   src/Messaging/Listener.h
-  src/MovementDirection.h
   src/PlayerData/Aspect.h
   src/PlayerData/Character.h
   src/PlayerData/LuaCharacter.h
