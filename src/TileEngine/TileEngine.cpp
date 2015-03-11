@@ -234,7 +234,7 @@ void TileEngine::recalculateMapOffsets()
    m_camera.setViewBounds(screenSize, mapPixelBounds);
 }
 
-NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const geometry::Point2D& npcLocation, const geometry::Size& size, const MovementDirection direction)
+NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const geometry::Point2D& npcLocation, const geometry::Size& size, const Direction direction)
 {
    NPC* npcToAdd = nullptr;
 

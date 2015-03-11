@@ -21,7 +21,7 @@ class Character;
 typedef class Usable Item;
 struct EquipSlot;
 class Metadata;
-enum class MovementDirection;
+enum class Direction;
 
 namespace Json
 {
@@ -49,7 +49,7 @@ struct SaveLocation
    std::string region;
    std::string map;
    geometry::Point2D coords;
-   MovementDirection direction;
+   Direction direction;
 
    Json::Value serialize() const;
    bool isValid() const;

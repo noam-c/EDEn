@@ -97,15 +97,15 @@ ScriptEngine::~ScriptEngine()
 void ScriptEngine::registerEnums()
 {
    lua_newtable(m_luaVM);
-   REGISTER_LUA_ENUM_VALUE(None, EnumUtils::toNumber(MovementDirection::NONE));
-   REGISTER_LUA_ENUM_VALUE(Up, EnumUtils::toNumber(MovementDirection::UP));
-   REGISTER_LUA_ENUM_VALUE(Down, EnumUtils::toNumber(MovementDirection::DOWN));
-   REGISTER_LUA_ENUM_VALUE(Left, EnumUtils::toNumber(MovementDirection::LEFT));
-   REGISTER_LUA_ENUM_VALUE(Right, EnumUtils::toNumber(MovementDirection::RIGHT));
-   REGISTER_LUA_ENUM_VALUE(UpLeft, EnumUtils::toNumber(MovementDirection::UP_LEFT));
-   REGISTER_LUA_ENUM_VALUE(UpRight, EnumUtils::toNumber(MovementDirection::UP_RIGHT));
-   REGISTER_LUA_ENUM_VALUE(DownLeft, EnumUtils::toNumber(MovementDirection::DOWN_LEFT));
-   REGISTER_LUA_ENUM_VALUE(DownRight, EnumUtils::toNumber(MovementDirection::DOWN_RIGHT));
+   REGISTER_LUA_ENUM_VALUE(None, EnumUtils::toNumber(Direction::NONE));
+   REGISTER_LUA_ENUM_VALUE(Up, EnumUtils::toNumber(Direction::UP));
+   REGISTER_LUA_ENUM_VALUE(Down, EnumUtils::toNumber(Direction::DOWN));
+   REGISTER_LUA_ENUM_VALUE(Left, EnumUtils::toNumber(Direction::LEFT));
+   REGISTER_LUA_ENUM_VALUE(Right, EnumUtils::toNumber(Direction::RIGHT));
+   REGISTER_LUA_ENUM_VALUE(UpLeft, EnumUtils::toNumber(Direction::UP_LEFT));
+   REGISTER_LUA_ENUM_VALUE(UpRight, EnumUtils::toNumber(Direction::UP_RIGHT));
+   REGISTER_LUA_ENUM_VALUE(DownLeft, EnumUtils::toNumber(Direction::DOWN_LEFT));
+   REGISTER_LUA_ENUM_VALUE(DownRight, EnumUtils::toNumber(Direction::DOWN_RIGHT));
    lua_setglobal(m_luaVM, "Direction");
 }
 

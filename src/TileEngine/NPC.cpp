@@ -16,7 +16,7 @@
 
 #define DEBUG_FLAG DEBUG_ACTOR
 
-NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const MovementDirection direction, const std::string& sheetName,
+NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const Direction direction, const std::string& sheetName,
             messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const std::string& regionName, const geometry::Point2D& location, const geometry::Size& size) :
    Actor(name, messagePipe, entityGrid, location, size, 0.1f, direction)
 {

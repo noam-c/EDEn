@@ -24,7 +24,7 @@ class Actor;
 class TileEngine;
 class TriggerZone;
 
-enum class MovementDirection;
+enum class Direction;
 
 struct ActorMoveMessage;
 

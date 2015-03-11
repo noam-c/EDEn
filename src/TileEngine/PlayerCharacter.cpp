@@ -25,7 +25,7 @@ const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData) :
-   Actor("player", messagePipe, map, geometry::Point2D(0, 0), geometry::Size(32, 32), 0.2f, MovementDirection::DOWN),
+   Actor("player", messagePipe, map, geometry::Point2D(0, 0), geometry::Size(32, 32), 0.2f, Direction::DOWN),
    m_roster(*playerData.getRoster()),
    m_active(false),
    m_cumulativeDistanceCovered(0)
@@ -81,7 +81,7 @@ void PlayerCharacter::step(long timePassed)
 {
    if(!m_active) return;
 
-   MovementDirection direction = getDirection();
+   Direction direction = getDirection();
    int xDirection = 0;
    int yDirection = 0;
 
@@ -89,30 +89,30 @@ void PlayerCharacter::step(long timePassed)
    if(!keystate[SDL_SCANCODE_UP] && keystate[SDL_SCANCODE_DOWN])
    {
       // Positive velocity in the y-axis
-      direction = MovementDirection::DOWN;
+      direction = Direction::DOWN;
       yDirection = 1;
    }
    else if(keystate[SDL_SCANCODE_UP] && !keystate[SDL_SCANCODE_DOWN])
    {
       // Negative velocity in the y-axis
-      direction = MovementDirection::UP;
+      direction = Direction::UP;
       yDirection = -1;
    }
 
    if(!keystate[SDL_SCANCODE_LEFT] && keystate[SDL_SCANCODE_RIGHT])
    {
       // Positive velocity in the x-axis
-      if(direction == MovementDirection::UP)
+      if(direction == Direction::UP)
       {
-         direction = MovementDirection::UP_RIGHT;
+         direction = Direction::UP_RIGHT;
       }
-      else if(direction == MovementDirection::DOWN)
+      else if(direction == Direction::DOWN)
       {
-         direction = MovementDirection::DOWN_RIGHT;
+         direction = Direction::DOWN_RIGHT;
       }
       else
       {
-         direction = MovementDirection::RIGHT;
+         direction = Direction::RIGHT;
       }
 
       xDirection = 1;
@@ -120,17 +120,17 @@ void PlayerCharacter::step(long timePassed)
    else if(keystate[SDL_SCANCODE_LEFT] && !keystate[SDL_SCANCODE_RIGHT])
    {
       // Negative velocity in the x-axis
-      if(direction == MovementDirection::UP)
+      if(direction == Direction::UP)
       {
-         direction = MovementDirection::UP_LEFT;
+         direction = Direction::UP_LEFT;
       }
-      else if(direction == MovementDirection::DOWN)
+      else if(direction == Direction::DOWN)
       {
-         direction = MovementDirection::DOWN_LEFT;
+         direction = Direction::DOWN_LEFT;
       }
       else
       {
-         direction = MovementDirection::LEFT;
+         direction = Direction::LEFT;
       }
 
       xDirection = -1;

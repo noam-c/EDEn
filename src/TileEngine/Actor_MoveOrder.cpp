@@ -39,7 +39,7 @@ Actor::MoveOrder::~MoveOrder()
    }
 }
 
-void Actor::MoveOrder::updateDirection(MovementDirection newDirection, bool moving)
+void Actor::MoveOrder::updateDirection(Direction newDirection, bool moving)
 {
    m_actor.setDirection(newDirection);
    if(moving)
@@ -52,7 +52,7 @@ void Actor::MoveOrder::updateDirection(MovementDirection newDirection, bool movi
    }
 }
 
-void Actor::MoveOrder::updateNextWaypoint(geometry::Point2D location, MovementDirection& direction)
+void Actor::MoveOrder::updateNextWaypoint(geometry::Point2D location, Direction& direction)
 {
    m_lastWaypoint = location;
    m_nextWaypoint = m_path.front();
@@ -61,26 +61,26 @@ void Actor::MoveOrder::updateNextWaypoint(geometry::Point2D location, MovementDi
    // For now, when the Actor must move diagonally, it will always face up or down
    if(location.y < m_nextWaypoint.y)
    {
-      direction = MovementDirection::DOWN;
+      direction = Direction::DOWN;
    }
    else if(location.y > m_nextWaypoint.y)
    {
-      direction = MovementDirection::UP;
+      direction = Direction::UP;
    }
    else if(location.x < m_nextWaypoint.x)
    {
-      direction = MovementDirection::RIGHT;
+      direction = Direction::RIGHT;
    }
    else if(location.x > m_nextWaypoint.x)
    {
-      direction = MovementDirection::LEFT;
+      direction = Direction::LEFT;
    }
 }
 
 bool Actor::MoveOrder::perform(long timePassed)
 {
    geometry::Point2D location = m_actor.getLocation();
-   MovementDirection newDirection = m_actor.getDirection();
+   Direction newDirection = m_actor.getDirection();
    const float vel = m_actor.getMovementSpeed();
    m_cumulativeDistanceCovered +=timePassed * vel;
    long distanceCovered = 0;

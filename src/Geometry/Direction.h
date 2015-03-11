@@ -4,13 +4,13 @@
  *  Copyright (C) 2007-2015 Noam Chitayat. All rights reserved.
  */
 
-#ifndef MOVEMENT_DIRECTION_H
-#define MOVEMENT_DIRECTION_H
+#ifndef DIRECTION_H
+#define DIRECTION_H
 
 /**
  * Represents one of the eight directions of movement used by NPCs and the player in the game.
  */
-enum class MovementDirection
+enum class Direction
 {
    NONE,
    UP,

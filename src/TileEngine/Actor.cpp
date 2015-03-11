@@ -20,7 +20,7 @@ const std::string Actor::DEFAULT_STANDING_PREFIX = "stand";
 
 #define DEBUG_FLAG DEBUG_ACTOR
 
-Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, MovementDirection direction) :
+Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, Direction direction) :
    m_name(name),
    m_pixelLoc(location),
    m_size(size),
@@ -100,7 +100,7 @@ void Actor::move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task
    }
 }
 
-void Actor::stand(MovementDirection direction)
+void Actor::stand(Direction direction)
 {
    m_orders.emplace(new StandOrder(*this, direction));
 }
@@ -109,7 +109,7 @@ void Actor::faceActor(Actor* other)
 {
    geometry::Point2D currentLocation = getLocation();
    geometry::Point2D otherLocation = other->getLocation();
-   MovementDirection directionToOther = getDirection();
+   Direction directionToOther = getDirection();
 
    int xDiff = currentLocation.x - otherLocation.x;
    int yDiff = currentLocation.y - otherLocation.y;
@@ -118,22 +118,22 @@ void Actor::faceActor(Actor* other)
    {
       if(xDiff < 0)
       {
-         directionToOther = MovementDirection::RIGHT;
+         directionToOther = Direction::RIGHT;
       }
       else if(xDiff > 0)
       {
-         directionToOther = MovementDirection::LEFT;
+         directionToOther = Direction::LEFT;
       }
    }
    else
    {
       if(yDiff < 0)
       {
-         directionToOther = MovementDirection::DOWN;
+         directionToOther = Direction::DOWN;
       }
       else if(yDiff > 0)
       {
-         directionToOther = MovementDirection::UP;
+         directionToOther = Direction::UP;
       }
    }
 
@@ -189,12 +189,12 @@ const geometry::Point2D& Actor::getLocation() const
    return m_pixelLoc;
 }
 
-void Actor::setDirection(MovementDirection direction)
+void Actor::setDirection(Direction direction)
 {
    m_currDirection = direction;
 }
 
-MovementDirection Actor::getDirection() const
+Direction Actor::getDirection() const
 {
    return m_currDirection;
 }
