@@ -18,6 +18,9 @@ SET(HEADERS
   src/ExecutionStack.h
   src/GameContext.h
   src/GameState.h
+  src/Geometry/Size.h
+  src/Geometry/Point2D.h
+  src/Geometry/Rectangle.h
   src/Graphics/GraphicsUtil.h
   src/Graphics/OpenGLExtensions.h
   src/Graphics/ScreenTexture.h
@@ -88,9 +91,6 @@ SET(HEADERS
   src/ScriptEngine/ScriptUtilities.h
   src/ScriptEngine/StringScript.h
   src/ScriptEngine/UsableScript.h
-  src/Shapes/Size.h
-  src/Shapes/Point2D.h
-  src/Shapes/Rectangle.h
   src/Settings/Settings.h
   src/Sprites/Animation.h
   src/Sprites/FrameSequence.h
@@ -155,6 +155,9 @@ SET(SOURCES
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
   src/Coroutines/Timer.cpp
+  src/Geometry/Size.cpp
+  src/Geometry/Point2D.cpp
+  src/Geometry/Rectangle.cpp
   src/Metadata/Metadata.cpp
   src/Metadata/Skill.cpp
   src/Metadata/Usable.cpp
@@ -200,9 +203,6 @@ SET(SOURCES
   src/rocket/RocketContextRegistry.cpp
   src/rocket/RocketListener.cpp
   src/rocket/RocketSDLInputMapping.cpp
-  src/Shapes/Size.cpp
-  src/Shapes/Point2D.cpp
-  src/Shapes/Rectangle.cpp
   src/ScriptEngine/FileScript.cpp
   src/ScriptEngine/MapTriggerCallback.cpp
   src/ScriptEngine/NPCScript.cpp
@@ -272,6 +272,7 @@ SOURCE_GROUP(Audio REGULAR_EXPRESSION src/Audio/.*)
 SOURCE_GROUP(controllers REGULAR_EXPRESSION src/controllers/.*)
 SOURCE_GROUP(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 SOURCE_GROUP(Metadata REGULAR_EXPRESSION src/Metadata/.*)
+SOURCE_GROUP(Geometry REGULAR_EXPRESSION src/Geometry/.*)
 SOURCE_GROUP(Graphics REGULAR_EXPRESSION src/Graphics/.*)
 SOURCE_GROUP(MainMenu REGULAR_EXPRESSION src/MainMenu/.*)
 SOURCE_GROUP("Menu//DataMenu" REGULAR_EXPRESSION src/Menu/DataMenu/.*)
@@ -283,7 +284,6 @@ SOURCE_GROUP(ResourceLoader REGULAR_EXPRESSION src/ResourceLoader/.*)
 SOURCE_GROUP(rocket REGULAR_EXPRESSION src/rocket/.*)
 SOURCE_GROUP(ScriptEngine REGULAR_EXPRESSION src/ScriptEngine/.*)
 SOURCE_GROUP(Settings REGULAR_EXPRESSION src/Settings/.*)
-SOURCE_GROUP(Shapes REGULAR_EXPRESSION src/Shapes/.*)
 SOURCE_GROUP(Sprites REGULAR_EXPRESSION src/Sprites/.*)
 SOURCE_GROUP(TileEngine REGULAR_EXPRESSION src/TileEngine/.*)
 SOURCE_GROUP(Transitions REGULAR_EXPRESSION src/Transitions/.*)
@@ -304,6 +304,7 @@ INCLUDE_DIRECTORIES(
   src/controllers
   src/Coroutines
   src/Metadata
+  src/Geometry
   src/Graphics
   src/MainMenu
   src/Menu
@@ -316,7 +317,6 @@ INCLUDE_DIRECTORIES(
   src/rocket
   src/ScriptEngine
   src/Settings
-  src/Shapes
   src/Sprites
   src/TileEngine
   src/TileEngine/Messages
