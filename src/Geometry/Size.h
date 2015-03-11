@@ -7,7 +7,7 @@
 #ifndef SIZE_H
 #define SIZE_H
 
-namespace shapes
+namespace geometry
 {
    struct Size
    {

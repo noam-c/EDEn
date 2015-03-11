@@ -10,7 +10,7 @@
 #include <memory>
 #include <string>
 
-namespace shapes
+namespace geometry
 {
    struct Point2D;
 };
@@ -103,7 +103,7 @@ class Sprite final
        *
        * @param point The location to draw at.
        */
-      void draw(const shapes::Point2D& point) const;
+      void draw(const geometry::Point2D& point) const;
 };
 
 #endif

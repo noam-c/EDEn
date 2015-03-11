@@ -74,8 +74,8 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
    DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
    DEBUG("NPC Location will be (%d, %d)", x, y);
 
-   const shapes::Point2D npcLocation(x, y);
-   const shapes::Size npcSize(width, height);
+   const geometry::Point2D npcLocation(x, y);
+   const geometry::Size npcSize(width, height);
    const MovementDirection direction = static_cast<MovementDirection>(directionValue);
 
    npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize, direction);
@@ -175,14 +175,14 @@ static int TileEngineL_SlideCamera(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   const shapes::Point2D destination(destinationX, destinationY);
+   const geometry::Point2D destination(destinationX, destinationY);
 
    int originX;
    int originY;
    bool originXProvided = ScriptUtilities::getParameter(luaVM, 2, 3, "originX", originX);
    bool originYProvided = ScriptUtilities::getParameter(luaVM, 2, 4, "originY", originY);
 
-   shapes::Point2D origin;
+   geometry::Point2D origin;
    if(originXProvided && originYProvided)
    {
       origin.x = originX;

@@ -23,7 +23,7 @@ struct SDL_Window;
 typedef void* SDL_GLContext;
 union SDL_Event;
 
-namespace shapes
+namespace geometry
 {
    struct Size;
 };

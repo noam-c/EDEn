@@ -131,7 +131,7 @@ void Sprite::step(long timePassed)
    }
 }
 
-void Sprite::draw(const shapes::Point2D& point) const
+void Sprite::draw(const geometry::Point2D& point) const
 {
    int indexToDraw = m_animation != nullptr ? m_animation->getIndex() : m_frameIndex;
    m_sheet->draw(point, indexToDraw);

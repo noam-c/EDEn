@@ -7,7 +7,7 @@
 #include "Point2D.h"
 #include "Rectangle.h"
 
-namespace shapes
+namespace geometry
 {
    const Point2D Point2D::ORIGIN(0, 0);
 

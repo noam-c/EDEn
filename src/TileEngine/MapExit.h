@@ -13,11 +13,11 @@
 class MapExit
 {
    std::string m_nextMap;
-   shapes::Rectangle m_bounds;
+   geometry::Rectangle m_bounds;
 
    public:
-      MapExit(const std::string& nextMap, const shapes::Rectangle& bounds);
-      const shapes::Rectangle& getBounds() const;
+      MapExit(const std::string& nextMap, const geometry::Rectangle& bounds);
+      const geometry::Rectangle& getBounds() const;
       const std::string getNextMap() const;
 };
 

@@ -17,7 +17,7 @@ ScreenTexture::ScreenTexture() :
    m_frameBuffer(0)
 {
    glGenTextures(1, &m_textureHandle);
-   m_size = shapes::Size(GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight());
+   m_size = geometry::Size(GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight());
    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
 
    glEnable(GL_TEXTURE_2D);

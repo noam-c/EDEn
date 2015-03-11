@@ -112,7 +112,7 @@ bool EdenRocketRenderInterface::GenerateTexture(
       const Rocket::Core::Vector2i& sourceDimensions)
 {
    Texture* texture = new Texture(reinterpret_cast<const void*>(source),
-         GL_RGBA, shapes::Size(sourceDimensions.x, sourceDimensions.y), 4);
+         GL_RGBA, geometry::Size(sourceDimensions.x, sourceDimensions.y), 4);
 
    texture->bind();
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

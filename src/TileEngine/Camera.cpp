@@ -16,12 +16,12 @@ Camera::Camera() :
 {
 }
 
-shapes::Point2D Camera::getFocalPoint() const
+geometry::Point2D Camera::getFocalPoint() const
 {
-   return m_focalPointSet ? m_focalPoint : shapes::Point2D::ORIGIN;
+   return m_focalPointSet ? m_focalPoint : geometry::Point2D::ORIGIN;
 }
 
-void Camera::setFocalPoint(const shapes::Point2D& point)
+void Camera::setFocalPoint(const geometry::Point2D& point)
 {
    m_focalPoint = point;
    m_focalPointSet = true;
@@ -29,25 +29,25 @@ void Camera::setFocalPoint(const shapes::Point2D& point)
 
 void Camera::clearFocalPoint()
 {
-   m_focalPoint = shapes::Point2D::ORIGIN;
+   m_focalPoint = geometry::Point2D::ORIGIN;
    m_focalPointSet = false;
 }
 
-bool Camera::isPointWithinViewport(const shapes::Point2D& point) const
+bool Camera::isPointWithinViewport(const geometry::Point2D& point) const
 {
-   return shapes::Rectangle(m_offset, m_viewportSize).contains(point);
+   return geometry::Rectangle(m_offset, m_viewportSize).contains(point);
 }
 
-shapes::Point2D Camera::getPointWithinScene(const shapes::Point2D& point) const
+geometry::Point2D Camera::getPointWithinScene(const geometry::Point2D& point) const
 {
-   const shapes::Point2D cameraFocalOffset = calculateCameraFocalOffset();
+   const geometry::Point2D cameraFocalOffset = calculateCameraFocalOffset();
    return {
       point.x - m_offset.x - cameraFocalOffset.x,
       point.y - m_offset.y - cameraFocalOffset.y
    };
 }
 
-shapes::Point2D Camera::getClampedPoint(const shapes::Point2D& point) const
+geometry::Point2D Camera::getClampedPoint(const geometry::Point2D& point) const
 {
    return {
       std::min(std::max(point.x, static_cast<signed int>(m_viewportSize.width / 2)), static_cast<signed int>(m_sceneSize.width - m_viewportSize.width / 2)),
@@ -55,7 +55,7 @@ shapes::Point2D Camera::getClampedPoint(const shapes::Point2D& point) const
    };
 }
 
-void Camera::setViewBounds(const shapes::Size& viewportSize, const shapes::Size& sceneSize)
+void Camera::setViewBounds(const geometry::Size& viewportSize, const geometry::Size& sceneSize)
 {
    m_viewportSize = viewportSize;
    m_sceneSize = sceneSize;
@@ -66,9 +66,9 @@ void Camera::setViewBounds(const shapes::Size& viewportSize, const shapes::Size&
               (m_viewportSize.height - m_sceneSize.height) / 2 : 0;
 }
 
-shapes::Point2D Camera::calculateCameraFocalOffset() const
+geometry::Point2D Camera::calculateCameraFocalOffset() const
 {
-   shapes::Point2D cameraFocalOffset = shapes::Point2D::ORIGIN;
+   geometry::Point2D cameraFocalOffset = geometry::Point2D::ORIGIN;
    if (m_focalPointSet)
    {
       if(m_offset.x == 0)
@@ -113,9 +113,9 @@ void Camera::apply()
       const int scissorYOffset = GraphicsUtil::getInstance()->getHeight() - m_viewportSize.height;
       glScissor(0, scissorYOffset, m_viewportSize.width, m_viewportSize.height);
 
-      shapes::Point2D cameraFocalOffset = calculateCameraFocalOffset();
+      geometry::Point2D cameraFocalOffset = calculateCameraFocalOffset();
 
-      if(cameraFocalOffset != shapes::Point2D::ORIGIN)
+      if(cameraFocalOffset != geometry::Point2D::ORIGIN)
       {
          // Perform an inverse translation from the focal point to shift
          // the scene to the camera

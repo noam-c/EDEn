@@ -33,7 +33,7 @@ static int ActorL_Move(lua_State* luaVM)
    auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
    auto task = scriptEngine->createTask();
 
-   const shapes::Point2D destination(x, y);
+   const geometry::Point2D destination(x, y);
    actor->move(destination, task);
 
    int callResult = 0;

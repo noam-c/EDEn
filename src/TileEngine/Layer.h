@@ -12,7 +12,7 @@
 
 #include "Grid.h"
 
-namespace shapes
+namespace geometry
 {
    struct Rectangle;
 };
@@ -32,7 +32,7 @@ class Layer
    Grid<int> m_tileMap;
 
    /** The bounds (in tiles) of the map containing this layer. */
-   const shapes::Rectangle& m_bounds;
+   const geometry::Rectangle& m_bounds;
 
    /** The height offset (in tiles) of this layer. */
    int m_heightOffset;
@@ -44,7 +44,7 @@ class Layer
        * @param layerData The map data for this layer.
        * @param bounds The bounds of the map.
        */
-      Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds);
+      Layer(const TiXmlElement* layerData, const geometry::Rectangle& bounds);
 
       /**
        * Draws a row of the layer to screen.

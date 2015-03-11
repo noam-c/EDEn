@@ -6,12 +6,12 @@
 
 #include "TriggerZone.h"
 
-TriggerZone::TriggerZone(const std::string& name, const shapes::Rectangle& bounds) :
+TriggerZone::TriggerZone(const std::string& name, const geometry::Rectangle& bounds) :
    m_name(name),
    m_bounds(bounds)
 {}
 
-const shapes::Rectangle& TriggerZone::getBounds() const
+const geometry::Rectangle& TriggerZone::getBounds() const
 {
     return m_bounds;
 }

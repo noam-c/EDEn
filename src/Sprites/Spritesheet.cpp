@@ -114,7 +114,7 @@ void Spritesheet::parseFrames(Json::Value& rootElement)
       }
 
       // Get the frame rectangle coordinates
-      const shapes::Rectangle rect(
+      const geometry::Rectangle rect(
             currFrame["top"].asInt(),
             currFrame["left"].asInt(),
             currFrame["bottom"].asInt(),
@@ -221,7 +221,7 @@ std::unique_ptr<Animation> Spritesheet::getAnimation(const std::string& animatio
 }
 
 
-void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex)
+void Spritesheet::draw(const geometry::Point2D& point, const int frameIndex)
 {
    if(!isInitialized())
    {
@@ -236,7 +236,7 @@ void Spritesheet::draw(const shapes::Point2D& point, const int frameIndex)
       return;
    }
 
-   const shapes::Rectangle& frame = m_frameList[frameIndex];
+   const geometry::Rectangle& frame = m_frameList[frameIndex];
 
    /**
     * \todo We can do all these calculations when the frames are initialized

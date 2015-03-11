@@ -61,8 +61,8 @@ class NPC final : public Actor
       NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name,
           const MovementDirection direction, const std::string& sheetName,
           messaging::MessagePipe& messagePipe, EntityGrid& entityGrid,
-          const std::string& regionName, const shapes::Point2D& location,
-          const shapes::Size& size);
+          const std::string& regionName, const geometry::Point2D& location,
+          const geometry::Size& size);
 
       /**
        * The NPC is currently not doing anything, nor has it been asked to do

@@ -65,7 +65,7 @@ class PlayerCharacter final : public Actor, public messaging::Listener<RosterUpd
       /**
        * Adds the player entity to the map at the specified location.
        */
-      void addToMap(const shapes::Point2D& location);
+      void addToMap(const geometry::Point2D& location);
 
       /**
        * Deactivates the player entity.
@@ -77,7 +77,7 @@ class PlayerCharacter final : public Actor, public messaging::Listener<RosterUpd
        *
        * @param dst The coordinates (in pixels) for the actor to move to
        */
-      virtual void move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task) override;
+      virtual void move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task) override;
 
       /**
        * Takes player input and determines the character's direction and speed,

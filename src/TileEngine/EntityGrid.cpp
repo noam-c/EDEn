@@ -48,15 +48,15 @@ EntityGrid::~EntityGrid()
    m_messagePipe.unregisterListener(this);
 }
 
-shapes::Rectangle EntityGrid::getCollisionMapEdges(const shapes::Rectangle& area) const
+geometry::Rectangle EntityGrid::getCollisionMapEdges(const geometry::Rectangle& area) const
 {
-   const shapes::Point2D collisionMapTopLeft(area.left, area.top);
-   const shapes::Point2D collisionMapBottomRight(area.right - 1, area.bottom - 1);
+   const geometry::Point2D collisionMapTopLeft(area.left, area.top);
+   const geometry::Point2D collisionMapBottomRight(area.right - 1, area.bottom - 1);
 
-   return shapes::Rectangle(collisionMapTopLeft / MOVEMENT_TILE_SIZE, collisionMapBottomRight / MOVEMENT_TILE_SIZE);
+   return geometry::Rectangle(collisionMapTopLeft / MOVEMENT_TILE_SIZE, collisionMapBottomRight / MOVEMENT_TILE_SIZE);
 }
 
-const shapes::Point2D& EntityGrid::getMapEntrance(const std::string& exitedMapName) const
+const geometry::Point2D& EntityGrid::getMapEntrance(const std::string& exitedMapName) const
 {
    std::shared_ptr<const Map> map(m_map.lock());
    if(!map)
@@ -84,7 +84,7 @@ void EntityGrid::setMapData(std::weak_ptr<const Map> mapData)
    const int collisionTileRatio = TileEngine::TILE_SIZE / MOVEMENT_TILE_SIZE;
 
    auto collisionMapSize = map->getBounds().getSize() * collisionTileRatio;
-   m_collisionMapBounds = shapes::Rectangle(shapes::Point2D::ORIGIN, collisionMapSize);
+   m_collisionMapBounds = geometry::Rectangle(geometry::Point2D::ORIGIN, collisionMapSize);
 
    const unsigned int collisionMapHeight = collisionMapSize.height;
    const unsigned int collisionMapWidth = collisionMapSize.width;
@@ -114,7 +114,7 @@ const std::string& EntityGrid::getMapName() const
    return map->getName();
 }
 
-const shapes::Rectangle& EntityGrid::getMapBounds() const
+const geometry::Rectangle& EntityGrid::getMapBounds() const
 {
    std::shared_ptr<const Map> map(m_map.lock());
    if(!map)
@@ -125,9 +125,9 @@ const shapes::Rectangle& EntityGrid::getMapBounds() const
    return map->getBounds();
 }
 
-bool EntityGrid::withinMap(const shapes::Point2D& point) const
+bool EntityGrid::withinMap(const geometry::Point2D& point) const
 {
-   shapes::Rectangle pixelBounds(shapes::Point2D::ORIGIN, getMapBounds().getSize() * TileEngine::TILE_SIZE);
+   geometry::Rectangle pixelBounds(geometry::Point2D::ORIGIN, getMapBounds().getSize() * TileEngine::TILE_SIZE);
    return pixelBounds.contains(point);
 }
 
@@ -140,29 +140,29 @@ void EntityGrid::step(long timePassed)
    }
 }
 
-EntityGrid::Path EntityGrid::findBestPath(const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size)
+EntityGrid::Path EntityGrid::findBestPath(const geometry::Point2D& src, const geometry::Point2D& dst, const geometry::Size& size)
 {
    return m_pathfinder.findBestPath(*this, src, dst, size);
 }
 
-EntityGrid::Path EntityGrid::findReroutedPath(const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size)
+EntityGrid::Path EntityGrid::findReroutedPath(const geometry::Point2D& src, const geometry::Point2D& dst, const geometry::Size& size)
 {
    return m_pathfinder.findReroutedPath(*this, src, dst, size);
 }
 
-bool EntityGrid::addObstacle(const shapes::Point2D& location, const shapes::Size& size)
+bool EntityGrid::addObstacle(const geometry::Point2D& location, const geometry::Size& size)
 {
-   return occupyArea(shapes::Rectangle(location, size), TileState(TileState::EntityType::OBSTACLE));
+   return occupyArea(geometry::Rectangle(location, size), TileState(TileState::EntityType::OBSTACLE));
 }
 
-bool EntityGrid::addActor(Actor* actor, const shapes::Point2D& area)
+bool EntityGrid::addActor(Actor* actor, const geometry::Point2D& area)
 {
-   return occupyArea(shapes::Rectangle(area, actor->getSize()), TileState(TileState::EntityType::ACTOR, actor));
+   return occupyArea(geometry::Rectangle(area, actor->getSize()), TileState(TileState::EntityType::ACTOR, actor));
 }
 
-bool EntityGrid::changeActorLocation(Actor* actor, const shapes::Point2D& dst)
+bool EntityGrid::changeActorLocation(Actor* actor, const geometry::Point2D& dst)
 {
-   const shapes::Rectangle dstArea(dst, actor->getSize());
+   const geometry::Rectangle dstArea(dst, actor->getSize());
    TileState actorState(TileState::EntityType::ACTOR, actor);
    if(occupyArea(dstArea, actorState))
    {
@@ -175,7 +175,7 @@ bool EntityGrid::changeActorLocation(Actor* actor, const shapes::Point2D& dst)
 
 void EntityGrid::removeActor(Actor* actor)
 {
-   freeArea(shapes::Rectangle(actor->getLocation(), actor->getSize()));
+   freeArea(geometry::Rectangle(actor->getLocation(), actor->getSize()));
 }
 
 Actor* EntityGrid::getAdjacentActor(Actor* actor) const
@@ -185,8 +185,8 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
       return nullptr;
    }
 
-   shapes::Point2D adjacentLocation = actor->getLocation();
-   const shapes::Size& actorSize = actor->getSize();
+   geometry::Point2D adjacentLocation = actor->getLocation();
+   const geometry::Size& actorSize = actor->getSize();
    const MovementDirection direction = actor->getDirection();
    switch(direction)
    {
@@ -252,14 +252,14 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
    return nullptr;
 }
 
-bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) const
+bool EntityGrid::canOccupyArea(const geometry::Rectangle& area, TileState state) const
 {
    if(m_collisionMap.empty() || state.entityType == TileState::EntityType::FREE)
    {
       return false;
    }
 
-   shapes::Rectangle areaRect = getCollisionMapEdges(area);
+   geometry::Rectangle areaRect = getCollisionMapEdges(area);
 
    if(!m_collisionMapBounds.contains(areaRect))
    {
@@ -286,9 +286,9 @@ bool EntityGrid::canOccupyArea(const shapes::Rectangle& area, TileState state) c
    return true;
 }
 
-bool EntityGrid::occupyArea(const shapes::Rectangle& area, TileState state)
+bool EntityGrid::occupyArea(const geometry::Rectangle& area, TileState state)
 {
-   shapes::Rectangle areaRect = getCollisionMapEdges(area);
+   geometry::Rectangle areaRect = getCollisionMapEdges(area);
 
    if(canOccupyArea(area, state))
    {
@@ -300,26 +300,26 @@ bool EntityGrid::occupyArea(const shapes::Rectangle& area, TileState state)
    return false;
 }
 
-void EntityGrid::freeArea(const shapes::Rectangle& areaToFree)
+void EntityGrid::freeArea(const geometry::Rectangle& areaToFree)
 {
-   shapes::Rectangle rectToFree = getCollisionMapEdges(areaToFree);
+   geometry::Rectangle rectToFree = getCollisionMapEdges(areaToFree);
 
    setArea(rectToFree, TileState(TileState::EntityType::FREE));
 }
 
-void EntityGrid::freeArea(const shapes::Point2D& previousLocation, const shapes::Point2D& currentLocation, const shapes::Size& size, TileState state)
+void EntityGrid::freeArea(const geometry::Point2D& previousLocation, const geometry::Point2D& currentLocation, const geometry::Size& size, TileState state)
 {
-   freeArea(shapes::Rectangle(previousLocation, size));
+   freeArea(geometry::Rectangle(previousLocation, size));
 
-   shapes::Rectangle currentRect = getCollisionMapEdges(shapes::Rectangle(currentLocation, size));
+   geometry::Rectangle currentRect = getCollisionMapEdges(geometry::Rectangle(currentLocation, size));
    setArea(currentRect, state);
 }
 
-bool EntityGrid::isAreaFree(const shapes::Rectangle& area) const
+bool EntityGrid::isAreaFree(const geometry::Rectangle& area) const
 {
    if(m_collisionMap.empty()) return false;
 
-   shapes::Rectangle areaRect = getCollisionMapEdges(area);
+   geometry::Rectangle areaRect = getCollisionMapEdges(area);
 
    for(int collisionMapY = areaRect.top; collisionMapY < areaRect.bottom; ++collisionMapY)
    {
@@ -344,12 +344,12 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
 
    TileState actorState(TileState::EntityType::ACTOR, actor);
 
-   const shapes::Point2D& source = actor->getLocation();
-   const shapes::Size& actorSize = actor->getSize();
+   const geometry::Point2D& source = actor->getLocation();
+   const geometry::Size& actorSize = actor->getSize();
 
-   const shapes::Size mapPixelSize = shapes::Size(m_collisionMapBounds.getWidth(), m_collisionMapBounds.getHeight()) * MOVEMENT_TILE_SIZE;
+   const geometry::Size mapPixelSize = geometry::Size(m_collisionMapBounds.getWidth(), m_collisionMapBounds.getHeight()) * MOVEMENT_TILE_SIZE;
 
-   shapes::Point2D lastAvailablePoint = source;
+   geometry::Point2D lastAvailablePoint = source;
 
    while(distance > 0)
    {
@@ -357,7 +357,7 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
       distance -= distanceTraversed;
 
       // Get the next point for movement, and clamp it to the map Size
-      shapes::Point2D nextPoint;
+      geometry::Point2D nextPoint;
       nextPoint.x = lastAvailablePoint.x + xDirection * distanceTraversed;
       nextPoint.x = std::max(nextPoint.x, 0);
       nextPoint.x = std::min(nextPoint.x, static_cast<int>(mapPixelSize.width) - MOVEMENT_TILE_SIZE);
@@ -372,16 +372,16 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
          break;
       }
 
-      if(!canOccupyArea(shapes::Rectangle(nextPoint, actorSize), actorState))
+      if(!canOccupyArea(geometry::Rectangle(nextPoint, actorSize), actorState))
       {
-         shapes::Point2D nextHorizontalPoint(nextPoint.x, lastAvailablePoint.y);
-         shapes::Point2D nextVerticalPoint(lastAvailablePoint.x, nextPoint.y);
+         geometry::Point2D nextHorizontalPoint(nextPoint.x, lastAvailablePoint.y);
+         geometry::Point2D nextVerticalPoint(lastAvailablePoint.x, nextPoint.y);
 
-         if(canOccupyArea(shapes::Rectangle(nextHorizontalPoint, actorSize), actorState))
+         if(canOccupyArea(geometry::Rectangle(nextHorizontalPoint, actorSize), actorState))
          {
             lastAvailablePoint = nextHorizontalPoint;
          }
-         else if(canOccupyArea(shapes::Rectangle(nextVerticalPoint, actorSize), actorState))
+         else if(canOccupyArea(geometry::Rectangle(nextVerticalPoint, actorSize), actorState))
          {
             lastAvailablePoint = nextVerticalPoint;
          }
@@ -394,7 +394,7 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
 
    if(lastAvailablePoint != source)
    {
-      if(occupyArea(shapes::Rectangle(lastAvailablePoint, actor->getSize()), actorState))
+      if(occupyArea(geometry::Rectangle(lastAvailablePoint, actor->getSize()), actorState))
       {
          // If we moved, update the map accordingly
          freeArea(source, lastAvailablePoint, actorSize, actorState);
@@ -405,30 +405,30 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
       else
       {
          // If updating failed, just stick with the start location
-         occupyArea(shapes::Rectangle(source, actorSize), actorState);
+         occupyArea(geometry::Rectangle(source, actorSize), actorState);
       }
    }
 
    return false;
 }
 
-bool EntityGrid::beginMovement(Actor* actor, const shapes::Point2D& dst)
+bool EntityGrid::beginMovement(Actor* actor, const geometry::Point2D& dst)
 {
-   return occupyArea(shapes::Rectangle(dst, actor->getSize()), TileState(TileState::EntityType::ACTOR, actor));
+   return occupyArea(geometry::Rectangle(dst, actor->getSize()), TileState(TileState::EntityType::ACTOR, actor));
 }
 
-void EntityGrid::abortMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst)
+void EntityGrid::abortMovement(Actor* actor, const geometry::Point2D& src, const geometry::Point2D& dst)
 {
    freeArea(src, actor->getLocation(), actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
    freeArea(dst, actor->getLocation(), actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
 }
 
-void EntityGrid::endMovement(Actor* actor, const shapes::Point2D& src, const shapes::Point2D& dst)
+void EntityGrid::endMovement(Actor* actor, const geometry::Point2D& src, const geometry::Point2D& dst)
 {
    freeArea(src, dst, actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
 }
 
-void EntityGrid::setArea(const shapes::Rectangle& area, TileState state)
+void EntityGrid::setArea(const geometry::Rectangle& area, TileState state)
 {
    if(m_collisionMap.empty()) return;
 

@@ -15,18 +15,18 @@
 
 const float RoyFloydWarshallMatrices::ROOT_2 = 1.41421356f;
 
-shapes::Point2D RoyFloydWarshallMatrices::tileNumToCoords(int tileNum, int width)
+geometry::Point2D RoyFloydWarshallMatrices::tileNumToCoords(int tileNum, int width)
 {
    div_t result = div(tileNum, width);
    return { result.rem, result.quot };
 }
 
-int RoyFloydWarshallMatrices::coordsToTileNum(const shapes::Point2D& tileLocation, int width)
+int RoyFloydWarshallMatrices::coordsToTileNum(const geometry::Point2D& tileLocation, int width)
 {
    return (tileLocation.y * width + tileLocation.x);
 }
 
-std::tuple<bool, shapes::Point2D> RoyFloydWarshallMatrices::getSuccessor(shapes::Point2D src, shapes::Point2D dst) const
+std::tuple<bool, geometry::Point2D> RoyFloydWarshallMatrices::getSuccessor(geometry::Point2D src, geometry::Point2D dst) const
 {
    int srcTileNum = RoyFloydWarshallMatrices::coordsToTileNum(src, m_width);
    int dstTileNum = RoyFloydWarshallMatrices::coordsToTileNum(dst, m_width);
@@ -38,17 +38,17 @@ std::tuple<bool, shapes::Point2D> RoyFloydWarshallMatrices::getSuccessor(shapes:
       return std::make_tuple(true, tileNumToCoords(successorTileNum, m_width));
    }
 
-   return std::make_tuple(false, shapes::Point2D::ORIGIN);
+   return std::make_tuple(false, geometry::Point2D::ORIGIN);
 }
 
-float RoyFloydWarshallMatrices::getDistance(shapes::Point2D src, shapes::Point2D dst) const
+float RoyFloydWarshallMatrices::getDistance(geometry::Point2D src, geometry::Point2D dst) const
 {
    int srcTileNum = RoyFloydWarshallMatrices::coordsToTileNum(src, m_width);
    int dstTileNum = RoyFloydWarshallMatrices::coordsToTileNum(dst, m_width);
    return m_distanceMatrix(srcTileNum, dstTileNum);
 }
 
-RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const shapes::Rectangle* gridBounds)
+RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const geometry::Rectangle* gridBounds)
 {
    RoyFloydWarshallMatrices matrices;
 
@@ -62,13 +62,13 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
 
    matrices.m_width = gridBounds->getWidth();
    const unsigned int NUM_TILES = gridBounds->getArea();
-   const auto matrixSize = shapes::Size(NUM_TILES, NUM_TILES);
+   const auto matrixSize = geometry::Size(NUM_TILES, NUM_TILES);
 
    distanceMatrix.resize(matrixSize);
    successorMatrix.resize(matrixSize);
 
-   shapes::Point2D aTile;
-   shapes::Point2D bTile;
+   geometry::Point2D aTile;
+   geometry::Point2D bTile;
 
    for(unsigned int a = 0; a < NUM_TILES; ++a)
    {

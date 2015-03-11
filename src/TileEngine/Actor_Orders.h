@@ -65,13 +65,13 @@ class Actor::MoveOrder final : public Actor::Order
    bool m_movementBegun;
 
    /** The destination that the Actor will move to. */
-   const shapes::Point2D m_dst;
+   const geometry::Point2D m_dst;
 
    /** The last node that the Actor successfully moved to. */
-   shapes::Point2D m_lastWaypoint;
+   geometry::Point2D m_lastWaypoint;
 
    /** The next node that the Actor will move to. */
-   shapes::Point2D m_nextWaypoint;
+   geometry::Point2D m_nextWaypoint;
 
    std::shared_ptr<Task> m_task;
 
@@ -91,7 +91,7 @@ class Actor::MoveOrder final : public Actor::Order
     * @param moving True iff the Actor is moving toward another destination.
     */
    void updateDirection(MovementDirection newDirection, bool moving);
-   void updateNextWaypoint(shapes::Point2D location, MovementDirection& direction);
+   void updateNextWaypoint(geometry::Point2D location, MovementDirection& direction);
 
    public:
       /**
@@ -101,7 +101,7 @@ class Actor::MoveOrder final : public Actor::Order
        * @param destination The point that the Actor will move to.
        * @param entityGrid The grid that the Actor is moving on.
        */
-      MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const shapes::Point2D& destination, EntityGrid& entityGrid);
+      MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid);
 
       /**
        * Destructor.

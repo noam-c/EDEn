@@ -8,7 +8,7 @@
 #include "Point2D.h"
 #include "Size.h"
 
-namespace shapes
+namespace geometry
 {
    Rectangle::Rectangle() :
       top(0),
@@ -79,12 +79,12 @@ namespace shapes
       return bottom - top;
    }
 
-   shapes::Point2D Rectangle::getTopLeftCorner() const
+   geometry::Point2D Rectangle::getTopLeftCorner() const
    {
       return { left, top };
    }
 
-   shapes::Point2D Rectangle::getBottomRightCorner() const
+   geometry::Point2D Rectangle::getBottomRightCorner() const
    {
       return { right, bottom };
    }

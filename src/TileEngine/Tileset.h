@@ -23,7 +23,7 @@ class Texture;
 class Tileset : public Resource
 {
    /** Tileset size (in tiles) */
-   shapes::Size m_size;
+   geometry::Size m_size;
 
    /** Passibility matrix */
    std::vector<bool> m_passibility;

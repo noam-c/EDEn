@@ -23,19 +23,19 @@ class Camera
    bool m_cameraApplied;
 
    /** The focal point for the camera to center around. */
-   shapes::Point2D m_focalPoint;
+   geometry::Point2D m_focalPoint;
 
    /** True iff there is a focal point set for the camera to center around. */
    bool m_focalPointSet;
 
    /** The offset from the top-left corner of the window to the top-left corner of the camera's viewport. */
-   shapes::Point2D m_offset;
+   geometry::Point2D m_offset;
 
    /** The size of the camera's viewport. */
-   shapes::Size m_viewportSize;
+   geometry::Size m_viewportSize;
 
    /** The size of the scene that the camera is pointing at. */
-   shapes::Size m_sceneSize;
+   geometry::Size m_sceneSize;
 
    /**
     * Calculates the offset required to show the focal point as close to the center
@@ -43,7 +43,7 @@ class Camera
     *
     * @return The offset to translate the camera with to make the focal point visible.
     */
-   shapes::Point2D calculateCameraFocalOffset() const;
+   geometry::Point2D calculateCameraFocalOffset() const;
 
    public:
       /**
@@ -58,7 +58,7 @@ class Camera
        *
        * @returns true iff the given point is within the camera's viewport.
        */
-      bool isPointWithinViewport(const shapes::Point2D& point) const;
+      bool isPointWithinViewport(const geometry::Point2D& point) const;
 
       /**
        * Reverses the camera's transformation of the scene to determine
@@ -68,14 +68,14 @@ class Camera
        *
        * @return The given point translated into scene coordinates.
        */
-      shapes::Point2D getPointWithinScene(const shapes::Point2D& point) const;
+      geometry::Point2D getPointWithinScene(const geometry::Point2D& point) const;
 
       /**
        * @param point The point to clamp.
        *
        * @return the closest point to the specified point before the camera would clamp to the scene borders.
        */
-      shapes::Point2D getClampedPoint(const shapes::Point2D& point) const;
+      geometry::Point2D getClampedPoint(const geometry::Point2D& point) const;
 
       /*
        * Sets the viewport and scene bounds for the camera.
@@ -83,21 +83,21 @@ class Camera
        * @param viewportSize The size of the camera's viewport (the area that will be drawn within it).
        * @param sceneSize The size of the scene that the camera is pointing at.
        */
-      void setViewBounds(const shapes::Size& viewportSize, const shapes::Size& sceneSize);
+      void setViewBounds(const geometry::Size& viewportSize, const geometry::Size& sceneSize);
 
       /**
        * Gets the current point that the camera is centered around.
        *
        * @return The point that the camera is centering on (or origin if the focal point is not set).
        */
-      shapes::Point2D getFocalPoint() const;
+      geometry::Point2D getFocalPoint() const;
 
       /**
        * Sets a new point for the camera to center around.
        *
        * @param point The point to center on if the viewport is smaller than the scene on either dimension.
        */
-      void setFocalPoint(const shapes::Point2D& point);
+      void setFocalPoint(const geometry::Point2D& point);
 
       /**
        * Clears the set focal point, resetting the camera so that it doesn't center on anything.

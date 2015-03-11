@@ -7,7 +7,7 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-namespace shapes
+namespace geometry
 {
    struct Point2D;
    struct Size;
@@ -110,12 +110,12 @@ namespace shapes
       /**
        * @return the location of the top left corner of the rectangle.
        */
-      shapes::Point2D getTopLeftCorner() const;
+      geometry::Point2D getTopLeftCorner() const;
 
       /**
        * @return the location of the bottom right corner of the rectangle.
        */
-      shapes::Point2D getBottomRightCorner() const;
+      geometry::Point2D getBottomRightCorner() const;
    };
 };
 

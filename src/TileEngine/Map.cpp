@@ -51,7 +51,7 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
    root->Attribute("width", &width);
    root->Attribute("height", &height);
 
-   m_bounds = shapes::Rectangle(shapes::Point2D::ORIGIN, shapes::Size(width, height));
+   m_bounds = geometry::Rectangle(geometry::Point2D::ORIGIN, geometry::Size(width, height));
 
    const TiXmlElement* layerElement = root->FirstChildElement("layer");
    while(layerElement != nullptr)
@@ -117,7 +117,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
    DEBUG("Loading collision layer.");
    if(collisionGroupElement != nullptr)
    {
-      shapes::Point2D topLeft;
+      geometry::Point2D topLeft;
       int width;
       int height;
 
@@ -129,7 +129,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
          objectElement->Attribute("width", &width);
          objectElement->Attribute("height", &height);
 
-         shapes::Rectangle rect(topLeft / TileEngine::TILE_SIZE, shapes::Size(width, height) / TileEngine::TILE_SIZE);
+         geometry::Rectangle rect(topLeft / TileEngine::TILE_SIZE, geometry::Size(width, height) / TileEngine::TILE_SIZE);
          DEBUG("Found collision object at %d,%d with width %d and height %d.", rect.left, rect.top, rect.getWidth(), rect.getHeight());
          if(rect.getWidth() > 0 && rect.getHeight() > 0)
          {
@@ -152,7 +152,7 @@ void Map::parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement)
    DEBUG("Loading entrance layer.");
    if(entrancesGroupElement != nullptr)
    {
-      shapes::Point2D entrance;
+      geometry::Point2D entrance;
 
       const TiXmlElement* objectElement = entrancesGroupElement->FirstChildElement("object");
       while(objectElement != nullptr)
@@ -192,7 +192,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
    DEBUG("Loading exit layer.");
    if(exitsGroupElement != nullptr)
    {
-      shapes::Point2D topLeft;
+      geometry::Point2D topLeft;
       int width;
       int height;
 
@@ -218,7 +218,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
             propertyElement = propertyElement->NextSiblingElement("property");
          }
 
-         shapes::Rectangle rect(topLeft, shapes::Size(width, height));
+         geometry::Rectangle rect(topLeft, geometry::Size(width, height));
          DEBUG("Found exit %s at %d,%d with width %d and height %d.",
                nextMap.c_str(), topLeft.x, topLeft.y, rect.getWidth(), rect.getHeight());
 
@@ -237,7 +237,7 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
    DEBUG("Loading exit layer.");
    if(triggersGroupElement != nullptr)
    {
-      shapes::Point2D topLeft;
+      geometry::Point2D topLeft;
       int width;
       int height;
 
@@ -263,7 +263,7 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
             propertyElement = propertyElement->NextSiblingElement("property");
          }
 
-         shapes::Rectangle rect(topLeft, shapes::Size(width, height));
+         geometry::Rectangle rect(topLeft, geometry::Size(width, height));
          DEBUG("Found trigger %s at %d,%d with width %d and height %d.",
                name.c_str(), topLeft.x, topLeft.y, rect.getWidth(), rect.getHeight());
 
@@ -303,7 +303,7 @@ const std::string& Map::getName() const
    return m_name;
 }
 
-const shapes::Rectangle& Map::getBounds() const
+const geometry::Rectangle& Map::getBounds() const
 {
    return m_bounds;
 }
@@ -318,13 +318,13 @@ const std::vector<MapExit>& Map::getMapExits() const
    return m_mapExits;
 }
 
-const shapes::Point2D& Map::getMapEntrance(const std::string& previousMap) const
+const geometry::Point2D& Map::getMapEntrance(const std::string& previousMap) const
 {
    const auto& result = m_mapEntrances.find(previousMap);
 
    if(result == m_mapEntrances.end())
    {
-      return shapes::Point2D::ORIGIN;
+      return geometry::Point2D::ORIGIN;
    }
 
    return result->second;

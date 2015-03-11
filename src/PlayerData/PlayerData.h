@@ -48,7 +48,7 @@ struct SaveLocation
 
    std::string region;
    std::string map;
-   shapes::Point2D coords;
+   geometry::Point2D coords;
    MovementDirection direction;
 
    Json::Value serialize() const;

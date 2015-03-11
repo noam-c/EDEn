@@ -14,7 +14,7 @@
 
 #define DEBUG_FLAG DEBUG_TILE_ENG
 
-Layer::Layer(const TiXmlElement* layerData, const shapes::Rectangle& bounds) :
+Layer::Layer(const TiXmlElement* layerData, const geometry::Rectangle& bounds) :
    m_bounds(bounds),
    m_heightOffset(0)
 {

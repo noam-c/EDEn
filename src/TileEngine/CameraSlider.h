@@ -22,8 +22,8 @@ class CameraSlider : public Coroutine
    /** The camera to manipulate. */
    Camera& m_camera;
 
-   const shapes::Point2D m_origin;
-   const shapes::Point2D m_destination;
+   const geometry::Point2D m_origin;
+   const geometry::Point2D m_destination;
 
    /** The amount of time that has passed since the slide began. */
    long m_totalTimePassed;
@@ -38,7 +38,7 @@ class CameraSlider : public Coroutine
       /**
        * Constructor.
        */
-      CameraSlider(Camera& camera, const shapes::Point2D& origin, const shapes::Point2D& destination, double speed);
+      CameraSlider(Camera& camera, const geometry::Point2D& origin, const geometry::Point2D& destination, double speed);
 
       /**
        * Resume this camera slide.

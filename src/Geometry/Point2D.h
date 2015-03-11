@@ -10,7 +10,7 @@
 #include <tuple>
 #include <vector>
 
-namespace shapes
+namespace geometry
 {
    struct Rectangle;
 

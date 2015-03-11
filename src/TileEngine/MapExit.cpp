@@ -6,12 +6,12 @@
 
 #include "MapExit.h"
 
-MapExit::MapExit(const std::string& nextMap, const shapes::Rectangle& bounds) :
+MapExit::MapExit(const std::string& nextMap, const geometry::Rectangle& bounds) :
    m_nextMap(nextMap),
    m_bounds(bounds)
 {}
 
-const shapes::Rectangle& MapExit::getBounds() const
+const geometry::Rectangle& MapExit::getBounds() const
 {
     return m_bounds;
 }

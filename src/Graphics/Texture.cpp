@@ -63,7 +63,7 @@ Texture::Texture(const std::string& imagePath)
    DEBUG("Texture creation complete.");
 }
 
-Texture::Texture(const void* imageData, GLenum imageFormat, const shapes::Size& imageSize, int bytesPerPixel) :
+Texture::Texture(const void* imageData, GLenum imageFormat, const geometry::Size& imageSize, int bytesPerPixel) :
    m_size(imageSize)
 {
    // Create the texture
@@ -121,7 +121,7 @@ bool Texture::isValid() const
    return m_valid;
 }
 
-const shapes::Size& Texture::getSize() const
+const geometry::Size& Texture::getSize() const
 {
    return m_size;
 }

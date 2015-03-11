@@ -12,7 +12,7 @@
 
 #define DEBUG_FLAG DEBUG_TILE_ENG
 
-CameraSlider::CameraSlider(Camera& camera, const shapes::Point2D& origin, const shapes::Point2D& destination, double speed) :
+CameraSlider::CameraSlider(Camera& camera, const geometry::Point2D& origin, const geometry::Point2D& destination, double speed) :
    m_camera(camera),
    m_origin(camera.getClampedPoint(origin)),
    m_destination(camera.getClampedPoint(destination)),
@@ -46,7 +46,7 @@ bool CameraSlider::resume(long timePassed)
    const int xDistanceMoved = m_xSpeed * m_totalTimePassed;
    const int yDistanceMoved = m_ySpeed * m_totalTimePassed;
 
-   shapes::Point2D focalPoint;
+   geometry::Point2D focalPoint;
 
    focalPoint.x = m_destination.x < m_origin.x ?
       std::max(m_origin.x - xDistanceMoved, m_destination.x) :

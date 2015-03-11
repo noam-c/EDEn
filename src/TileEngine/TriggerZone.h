@@ -13,11 +13,11 @@
 class TriggerZone
 {
    std::string m_name;
-   shapes::Rectangle m_bounds;
+   geometry::Rectangle m_bounds;
 
    public:
-      TriggerZone(const std::string& name, const shapes::Rectangle& bounds);
-      const shapes::Rectangle& getBounds() const;
+      TriggerZone(const std::string& name, const geometry::Rectangle& bounds);
+      const geometry::Rectangle& getBounds() const;
       const std::string getName() const;
 };
 

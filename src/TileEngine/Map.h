@@ -49,13 +49,13 @@ class Map
    std::vector<TriggerZone> m_triggerZones;
 
    /** The list of the map's entrances */
-   std::map<std::string, shapes::Point2D> m_mapEntrances;
+   std::map<std::string, geometry::Point2D> m_mapEntrances;
 
    /** The list of the map's exits */
    std::vector<MapExit> m_mapExits;
 
    /** The bounds (in tiles) of this map */
-   shapes::Rectangle m_bounds;
+   geometry::Rectangle m_bounds;
 
    /**
     * Parse the map layer that holds collision data.
@@ -106,7 +106,7 @@ class Map
       /**
        * @return The bounds of the map (in tiles).
        */
-      const shapes::Rectangle& getBounds() const;
+      const geometry::Rectangle& getBounds() const;
 
       /**
        * @return The list of trigger zones for this map
@@ -118,7 +118,7 @@ class Map
        *
        * @return The point of entry for the given origin map name.
        */
-      const shapes::Point2D& getMapEntrance(const std::string& previousMap) const;
+      const geometry::Point2D& getMapEntrance(const std::string& previousMap) const;
 
       /**
        * @return The list of exits for this map

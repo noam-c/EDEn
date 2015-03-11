@@ -104,7 +104,7 @@ void TileEngine::receive(const MapExitMessage& message)
       std::string enteredMap = message.mapExit.getNextMap();
       DEBUG("Exit signal received: Exiting %s and entering %s", exitedMap.c_str(), enteredMap.c_str());
       setMap(enteredMap);
-      const shapes::Point2D& entryPoint = m_entityGrid.getMapEntrance(exitedMap);
+      const geometry::Point2D& entryPoint = m_entityGrid.getMapEntrance(exitedMap);
       m_playerActor.addToMap(entryPoint);
       followWithCamera(m_playerActor);
    }
@@ -185,7 +185,7 @@ void TileEngine::releaseCamera()
    m_cameraTarget = nullptr;
 }
 
-int TileEngine::slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed)
+int TileEngine::slideCamera(const geometry::Point2D& origin, const geometry::Point2D& destination, double speed)
 {
    if(speed > 0)
    {
@@ -211,7 +211,7 @@ int TileEngine::openSaveMenu()
    return 0;
 }
 
-shapes::Point2D TileEngine::getCurrentCameraLocation() const
+geometry::Point2D TileEngine::getCurrentCameraLocation() const
 {
    if(m_cameraTarget != nullptr)
    {
@@ -225,20 +225,20 @@ shapes::Point2D TileEngine::getCurrentCameraLocation() const
 
 void TileEngine::recalculateMapOffsets()
 {
-   const shapes::Size mapPixelBounds = m_entityGrid.hasMapData() ?
+   const geometry::Size mapPixelBounds = m_entityGrid.hasMapData() ?
       m_entityGrid.getMapBounds().getSize() * TILE_SIZE :
-      shapes::Size();
+      geometry::Size();
 
    const int totalUsableHeight = GraphicsUtil::getInstance()->getHeight() - m_overlay.getShortcutBarHeight();
-   const shapes::Size screenSize(GraphicsUtil::getInstance()->getWidth(), totalUsableHeight);
+   const geometry::Size screenSize(GraphicsUtil::getInstance()->getWidth(), totalUsableHeight);
    m_camera.setViewBounds(screenSize, mapPixelBounds);
 }
 
-NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const shapes::Point2D& npcLocation, const shapes::Size& size, const MovementDirection direction)
+NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const geometry::Point2D& npcLocation, const geometry::Size& size, const MovementDirection direction)
 {
    NPC* npcToAdd = nullptr;
 
-   if(m_entityGrid.isAreaFree(shapes::Rectangle(npcLocation, size)))
+   if(m_entityGrid.isAreaFree(geometry::Rectangle(npcLocation, size)))
    {
       auto insertResult = m_npcList.emplace(
                           std::piecewise_construct,
@@ -450,12 +450,12 @@ void TileEngine::handleInputEvents(bool& finishState)
       {
          case SDL_MOUSEBUTTONDOWN:
          {
-            const shapes::Point2D mouseClickLocation(event.button.x, event.button.y);
+            const geometry::Point2D mouseClickLocation(event.button.x, event.button.y);
             if(m_camera.isPointWithinViewport(mouseClickLocation))
             {
-               const shapes::Point2D pointWithinScene = m_camera.getPointWithinScene(mouseClickLocation);
+               const geometry::Point2D pointWithinScene = m_camera.getPointWithinScene(mouseClickLocation);
 
-               if(m_entityGrid.isAreaFree(shapes::Rectangle(pointWithinScene, m_playerActor.getSize())))
+               if(m_entityGrid.isAreaFree(geometry::Rectangle(pointWithinScene, m_playerActor.getSize())))
                {
                   m_playerActor.move(pointWithinScene, nullptr);
                }

@@ -19,7 +19,7 @@ class Actor;
 class EntityGrid;
 class Map;
 
-namespace shapes
+namespace geometry
 {
    struct Size;
    struct Point2D;
@@ -49,7 +49,7 @@ class Pathfinder
    const Grid<TileState>* m_collisionGrid;
 
    /** The bounds (in tiles) of the grid. */
-   const shapes::Rectangle* m_collisionGridBounds;
+   const geometry::Rectangle* m_collisionGridBounds;
 
    /**
     * Runs the Roy-Floyd-Warshall algorithm on the initialized entity grid
@@ -64,7 +64,7 @@ class Pathfinder
 
    public:
       /** A set of waypoints to move through in order to go from one point to another. */
-      typedef std::list<shapes::Point2D> Path;
+      typedef std::list<geometry::Point2D> Path;
 
       /**
        * Constructor.
@@ -78,7 +78,7 @@ class Pathfinder
        * @param tileSize The size (in pixels) of each tile.
        * @param gridBounds The bounds of the grid.
        */
-      void initialize(const Grid<TileState>& grid, int tileSize, const shapes::Rectangle& gridBounds);
+      void initialize(const Grid<TileState>& grid, int tileSize, const geometry::Rectangle& gridBounds);
 
       /**
        * Finds an ideal path from the source coordinates to the destination.
@@ -88,7 +88,7 @@ class Pathfinder
        *
        * @return The ideal best path from the source point to the destination point.
        */
-      Path findBestPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const;
+      Path findBestPath(const EntityGrid& entityGrid, const geometry::Point2D& src, const geometry::Point2D& dst, const geometry::Size& size) const;
 
       /**
        * Finds the shortest path from the source coordinates to the destination
@@ -101,7 +101,7 @@ class Pathfinder
        *
        * @return The shortest unobstructed path from the source point to the destination point.
        */
-      Path findReroutedPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const;
+      Path findReroutedPath(const EntityGrid& entityGrid, const geometry::Point2D& src, const geometry::Point2D& dst, const geometry::Size& size) const;
 
    private:
       /**
@@ -110,7 +110,7 @@ class Pathfinder
 
        * @return A straight path from origin to goal, regardless of anything being in the way.
        */
-      Path getStraightPath(const shapes::Point2D& src, const shapes::Point2D& dst) const;
+      Path getStraightPath(const geometry::Point2D& src, const geometry::Point2D& dst) const;
 
       /**
        * Uses the successor matrix computed on Pathfinder construction to determine the best path.
@@ -121,7 +121,7 @@ class Pathfinder
        *
        * @return The best path computed by the Roy-Floyd-Warshall algorithm.
        */
-      Path findRFWPath(const shapes::Point2D& src, const shapes::Point2D& dst, const RoyFloydWarshallMatrices& rfwMatrices) const;
+      Path findRFWPath(const geometry::Point2D& src, const geometry::Point2D& dst, const RoyFloydWarshallMatrices& rfwMatrices) const;
 
       /**
        * Manhattan distance heuristic for A* search.
@@ -131,7 +131,7 @@ class Pathfinder
        *
        * @return the Manhattan distance (horizontal + vertical steps between src and dst).
        */
-      static unsigned int getManhattanDistance(const shapes::Point2D& src, const shapes::Point2D& dst);
+      static unsigned int getManhattanDistance(const geometry::Point2D& src, const geometry::Point2D& dst);
 
       /**
        * @param point The point to evaluate for neighbours.
@@ -139,7 +139,7 @@ class Pathfinder
        *
        * @return A set of points adjacent to the point within the given bounds.
        */
-      static std::vector<shapes::Point2D> getAdjacentPoints(const shapes::Point2D& point, const shapes::Rectangle& bounds);
+      static std::vector<geometry::Point2D> getAdjacentPoints(const geometry::Point2D& point, const geometry::Rectangle& bounds);
 
       /**
        * Uses the A* algorithm to dynamically find the best possible path. Uses the Roy-Floyd-Warshall distance matrix as a heuristic when determining the best path.
@@ -152,7 +152,7 @@ class Pathfinder
        *
        * @return The best path computed by the A* algorithm.
        */
-      Path findAStarPath(const EntityGrid& entityGrid, const shapes::Point2D& src, const shapes::Point2D& dst, const shapes::Size& size) const;
+      Path findAStarPath(const EntityGrid& entityGrid, const geometry::Point2D& src, const geometry::Point2D& dst, const geometry::Size& size) const;
 
       /**
        * A node used in A* search.
@@ -173,7 +173,7 @@ class Pathfinder
        * @param openSet The open set used to accumulate undiscovered points.
        * @param discovered A mapping from tile numbers to whether or not they have been discovered.
        */
-      void evaluateAdjacentNodes(const TileState& entityState, const shapes::Size& entitySize, const std::shared_ptr<AStarNode>& evaluatedNode, const shapes::Point2D& destinationTile, const EntityGrid& entityGrid, const RoyFloydWarshallMatrices *const rfwMatrices, std::vector<std::shared_ptr<AStarNode>>& openSet, Grid<int>& discovered) const;
+      void evaluateAdjacentNodes(const TileState& entityState, const geometry::Size& entitySize, const std::shared_ptr<AStarNode>& evaluatedNode, const geometry::Point2D& destinationTile, const EntityGrid& entityGrid, const RoyFloydWarshallMatrices *const rfwMatrices, std::vector<std::shared_ptr<AStarNode>>& openSet, Grid<int>& discovered) const;
 };
 
 #endif

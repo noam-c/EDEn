@@ -13,11 +13,11 @@ class Actor;
 
 struct ActorMoveMessage
 {
-   const shapes::Point2D oldLocation;
-   const shapes::Point2D newLocation;
+   const geometry::Point2D oldLocation;
+   const geometry::Point2D newLocation;
    const Actor* const movingActor;
 
-   ActorMoveMessage(const shapes::Point2D& oldLocation, const shapes::Point2D& newLocation, const Actor* const movingActor);
+   ActorMoveMessage(const geometry::Point2D& oldLocation, const geometry::Point2D& newLocation, const Actor* const movingActor);
 };
 
 #endif

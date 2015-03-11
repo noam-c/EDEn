@@ -29,7 +29,7 @@ class Texture
       bool m_valid = false;
 
       /** Texture size (in pixels) */
-      shapes::Size m_size;
+      geometry::Size m_size;
 
       /**
        * Generates an OpenGL texture from an SDL Surface.
@@ -62,7 +62,7 @@ class Texture
        * @param imageSize the size of the image (in pixels)
        * @param bytesPerPixel the number of bytes representing each pixel in the image
        */
-      Texture(const void* imageData, GLenum imageFormat, const shapes::Size& imageSize, int bytesPerPixel);
+      Texture(const void* imageData, GLenum imageFormat, const geometry::Size& imageSize, int bytesPerPixel);
 
       /**
        * Disallow copying.
@@ -95,7 +95,7 @@ class Texture
       /**
        * @return the dimensions of the texture in pixels.
        */
-      const shapes::Size& getSize() const;
+      const geometry::Size& getSize() const;
 };
 
 #endif

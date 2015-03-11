@@ -20,7 +20,7 @@ const std::string Actor::DEFAULT_STANDING_PREFIX = "stand";
 
 #define DEBUG_FLAG DEBUG_ACTOR
 
-Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction) :
+Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, MovementDirection direction) :
    m_name(name),
    m_pixelLoc(location),
    m_size(size),
@@ -47,7 +47,7 @@ const std::string& Actor::getName() const
    return m_name;
 }
 
-const shapes::Size& Actor::getSize() const
+const geometry::Size& Actor::getSize() const
 {
    return m_size;
 }
@@ -87,7 +87,7 @@ bool Actor::isIdle() const
    return m_orders.empty();
 }
 
-void Actor::move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task)
+void Actor::move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task)
 {
    if(m_entityGrid.withinMap(dst))
    {
@@ -107,8 +107,8 @@ void Actor::stand(MovementDirection direction)
 
 void Actor::faceActor(Actor* other)
 {
-   shapes::Point2D currentLocation = getLocation();
-   shapes::Point2D otherLocation = other->getLocation();
+   geometry::Point2D currentLocation = getLocation();
+   geometry::Point2D otherLocation = other->getLocation();
    MovementDirection directionToOther = getDirection();
 
    int xDiff = currentLocation.x - otherLocation.x;
@@ -177,14 +177,14 @@ void Actor::setAnimation(const std::string& animationName)
    m_sprite->setAnimation(animationName, m_currDirection);
 }
 
-void Actor::setLocation(const shapes::Point2D& location)
+void Actor::setLocation(const geometry::Point2D& location)
 {
-   const shapes::Point2D oldLocation = m_pixelLoc;
+   const geometry::Point2D oldLocation = m_pixelLoc;
    m_pixelLoc = location;
    m_messagePipe.sendMessage(ActorMoveMessage(oldLocation, location, this));
 }
 
-const shapes::Point2D& Actor::getLocation() const
+const geometry::Point2D& Actor::getLocation() const
 {
    return m_pixelLoc;
 }

@@ -10,7 +10,7 @@
 #include "Grid.h"
 #include "Rectangle.h"
 
-namespace shapes
+namespace geometry
 {
    struct Point2D;
 };
@@ -43,7 +43,7 @@ class RoyFloydWarshallMatrices
     *
     * @return The 2D point on the grid corresponding to the given tile number.
     */
-   static shapes::Point2D tileNumToCoords(int tileNum, int width);
+   static geometry::Point2D tileNumToCoords(int tileNum, int width);
 
    /**
     * @param tileLocation A 2D point on the grid.
@@ -51,7 +51,7 @@ class RoyFloydWarshallMatrices
     *
     * @return The matrix index of the given tile.
     */
-   static int coordsToTileNum(const shapes::Point2D& tileLocation, int width);
+   static int coordsToTileNum(const geometry::Point2D& tileLocation, int width);
 
    /**
     * Constructor is private.
@@ -70,7 +70,7 @@ class RoyFloydWarshallMatrices
        *
        * @return a tuple object containing a success boolean (1) and, if successful, a tile to move to (2).
        */
-      std::tuple<bool, shapes::Point2D> getSuccessor(shapes::Point2D src, shapes::Point2D dst) const;
+      std::tuple<bool, geometry::Point2D> getSuccessor(geometry::Point2D src, geometry::Point2D dst) const;
 
       /**
        * Gets the shortest distance between
@@ -81,7 +81,7 @@ class RoyFloydWarshallMatrices
        *
        * @return The distance between the two points given.
        */
-      float getDistance(shapes::Point2D src, shapes::Point2D dst) const;
+      float getDistance(geometry::Point2D src, geometry::Point2D dst) const;
 
       /**
        * @param grid A grid of free spaces and obstacles.
@@ -89,7 +89,7 @@ class RoyFloydWarshallMatrices
        *
        * @return the results of the RFW algorithm for the given grid.
        */
-      static RoyFloydWarshallMatrices calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const shapes::Rectangle* gridBounds);
+      static RoyFloydWarshallMatrices calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const geometry::Rectangle* gridBounds);
 };
 
 #endif

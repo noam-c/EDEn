@@ -38,10 +38,10 @@ class Actor
    std::queue<std::unique_ptr<Order>> m_orders;
 
    /** The current location of the actor (in pixels) */
-   shapes::Point2D m_pixelLoc;
+   geometry::Point2D m_pixelLoc;
 
    /** The size of the actor (in pixels) */
-   shapes::Size m_size;
+   geometry::Size m_size;
 
    /** The movement speed of the actor */
    float m_movementSpeed;
@@ -72,7 +72,7 @@ class Actor
        * @param movementSpeed The speed of the actor's movement.
        * @param direction The starting direction of the actor.
        */
-       Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const shapes::Point2D& location, const shapes::Size& size, double movementSpeed, MovementDirection direction);
+       Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, MovementDirection direction);
 
       /**
        * Destructor.
@@ -99,7 +99,7 @@ class Actor
       /**
        * @return The size of this Actor (in pixels).
        */
-      const shapes::Size& getSize() const;
+      const geometry::Size& getSize() const;
 
       /**
        * Performs a logic step of this NPC. During the step, the NPC works on
@@ -140,7 +140,7 @@ class Actor
        *
        * @param dst The coordinates (in pixels) for the actor to move to
        */
-      virtual void move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task);
+      virtual void move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task);
 
       /**
        * This function changes the actor's spritesheet.
@@ -172,12 +172,12 @@ class Actor
        *
        * @param location The new location of the actor.
        */
-      void setLocation(const shapes::Point2D& location);
+      void setLocation(const geometry::Point2D& location);
 
       /**
        * @return The location of the actor.
        */
-      const shapes::Point2D& getLocation() const;
+      const geometry::Point2D& getLocation() const;
 
       /**
        * This function changes the direction that the actor is facing.

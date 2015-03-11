@@ -280,7 +280,7 @@ class TileEngine final :
        * @param destination The destination point to slide the camera to.
        * @param speed The speed that the camera should slide with.
        */
-      int slideCamera(const shapes::Point2D& origin, const shapes::Point2D& destination, double speed);
+      int slideCamera(const geometry::Point2D& origin, const geometry::Point2D& destination, double speed);
 
       /**
        * Open the save menu.
@@ -292,7 +292,7 @@ class TileEngine final :
       /**
        * Get the current location that the camera will reveal.
        */
-      shapes::Point2D getCurrentCameraLocation() const;
+      geometry::Point2D getCurrentCameraLocation() const;
 
       /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.
@@ -306,7 +306,7 @@ class TileEngine final :
        * @return The created NPC (or nullptr if it could not be placed in the map).
        */
       NPC* addNPC(const std::string& npcName, const std::string& spritesheetName,
-                  const shapes::Point2D& npcLocation, const shapes::Size& size,
+                  const geometry::Point2D& npcLocation, const geometry::Size& size,
                   const MovementDirection direction);
 
       /**

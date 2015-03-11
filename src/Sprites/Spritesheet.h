@@ -24,7 +24,7 @@ namespace Json
    class Value;
 };
 
-namespace shapes
+namespace geometry
 {
    struct Point2D;
 };
@@ -60,10 +60,10 @@ class Spritesheet : public Resource
    Texture m_texture;
 
    /** Spritesheet size (in pixels) */
-   shapes::Size m_size;
+   geometry::Size m_size;
 
    /** The list of frames, which hold locations of different sprites in the sheet. */
-   std::vector<shapes::Rectangle> m_frameList;
+   std::vector<geometry::Rectangle> m_frameList;
 
    /** The number of frames available in the spritesheet. */
    int m_numFrames;
@@ -113,7 +113,7 @@ class Spritesheet : public Resource
        * @param point The location to draw at.
        * @param frameIndex The frame to draw.
        */
-      void draw(const shapes::Point2D& point, const int frameIndex);
+      void draw(const geometry::Point2D& point, const int frameIndex);
 
       /**
        * Get the index of a frame specified by the frame name.

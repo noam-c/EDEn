@@ -20,7 +20,7 @@
 // Define as 1 to draw the NPC's projected path to the screen
 #define DRAW_PATH 0
 
-Actor::MoveOrder::MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const shapes::Point2D& destination, EntityGrid& entityGrid) :
+Actor::MoveOrder::MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid) :
    Order(actor),
    m_pathInitialized(false),
    m_movementBegun(false),
@@ -52,7 +52,7 @@ void Actor::MoveOrder::updateDirection(MovementDirection newDirection, bool movi
    }
 }
 
-void Actor::MoveOrder::updateNextWaypoint(shapes::Point2D location, MovementDirection& direction)
+void Actor::MoveOrder::updateNextWaypoint(geometry::Point2D location, MovementDirection& direction)
 {
    m_lastWaypoint = location;
    m_nextWaypoint = m_path.front();
@@ -79,7 +79,7 @@ void Actor::MoveOrder::updateNextWaypoint(shapes::Point2D location, MovementDire
 
 bool Actor::MoveOrder::perform(long timePassed)
 {
-   shapes::Point2D location = m_actor.getLocation();
+   geometry::Point2D location = m_actor.getLocation();
    MovementDirection newDirection = m_actor.getDirection();
    const float vel = m_actor.getMovementSpeed();
    m_cumulativeDistanceCovered +=timePassed * vel;

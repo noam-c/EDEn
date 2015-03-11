@@ -25,7 +25,7 @@ const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData) :
-   Actor("player", messagePipe, map, shapes::Point2D(0, 0), shapes::Size(32, 32), 0.2f, MovementDirection::DOWN),
+   Actor("player", messagePipe, map, geometry::Point2D(0, 0), geometry::Size(32, 32), 0.2f, MovementDirection::DOWN),
    m_roster(*playerData.getRoster()),
    m_active(false),
    m_cumulativeDistanceCovered(0)
@@ -39,7 +39,7 @@ bool PlayerCharacter::isActive() const
     return m_active;
 }
 
-void PlayerCharacter::addToMap(const shapes::Point2D& location)
+void PlayerCharacter::addToMap(const geometry::Point2D& location)
 {
    if(m_roster.getPartyLeader() != nullptr)
    {
@@ -71,7 +71,7 @@ void PlayerCharacter::removeFromMap()
    }
 }
 
-void PlayerCharacter::move(const shapes::Point2D& dst, const std::shared_ptr<Task>& task)
+void PlayerCharacter::move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task)
 {
    flushOrders();
    Actor::move(dst, task);

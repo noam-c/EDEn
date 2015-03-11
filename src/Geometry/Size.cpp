@@ -6,7 +6,7 @@
 
 #include "Size.h"
 
-namespace shapes
+namespace geometry
 {
    bool Size::operator==(const Size& rhs) const noexcept
    {
