@@ -24,8 +24,6 @@ class Actor;
 class TileEngine;
 class TriggerZone;
 
-enum class Direction;
-
 struct ActorMoveMessage;
 
 namespace messaging
@@ -35,6 +33,7 @@ namespace messaging
 
 namespace geometry
 {
+   enum class Direction;
    struct Size;
    struct Point2D;
 };

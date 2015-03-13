@@ -7,21 +7,24 @@
 #ifndef DIRECTION_H
 #define DIRECTION_H
 
-/**
- * Represents one of the eight directions of movement used by NPCs and the player in the game.
- */
-enum class Direction
+namespace geometry
 {
-   NONE,
-   UP,
-   DOWN,
-   LEFT,
-   RIGHT,
-   UP_LEFT,
-   UP_RIGHT,
-   DOWN_LEFT,
-   DOWN_RIGHT,
-   NUM_DIRECTIONS
+   /**
+    * Represents one of the eight directions of movement used by NPCs and the player in the game.
+    */
+   enum class Direction
+   {
+      NONE,
+      UP,
+      DOWN,
+      LEFT,
+      RIGHT,
+      UP_LEFT,
+      UP_RIGHT,
+      DOWN_LEFT,
+      DOWN_RIGHT,
+      NUM_DIRECTIONS
+   };
 };
 
 #endif

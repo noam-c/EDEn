@@ -68,7 +68,7 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
    int directionValue;
    if(!ScriptUtilities::getParameter(luaVM, 2, -1, "direction", directionValue))
    {
-      directionValue = EnumUtils::toNumber(Direction::DOWN);
+      directionValue = EnumUtils::toNumber(geometry::Direction::DOWN);
    }
 
    DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
@@ -76,7 +76,7 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
 
    const geometry::Point2D npcLocation(x, y);
    const geometry::Size npcSize(width, height);
-   const Direction direction = static_cast<Direction>(directionValue);
+   const geometry::Direction direction = static_cast<geometry::Direction>(directionValue);
 
    npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize, direction);
 

@@ -187,19 +187,19 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
 
    geometry::Point2D adjacentLocation = actor->getLocation();
    const geometry::Size& actorSize = actor->getSize();
-   const Direction direction = actor->getDirection();
+   const geometry::Direction direction = actor->getDirection();
    switch(direction)
    {
-      case Direction::UP_LEFT:
-      case Direction::LEFT:
-      case Direction::DOWN_LEFT:
+      case geometry::Direction::UP_LEFT:
+      case geometry::Direction::LEFT:
+      case geometry::Direction::DOWN_LEFT:
       {
          adjacentLocation.x -= MOVEMENT_TILE_SIZE;
          break;
       }
-      case Direction::UP_RIGHT:
-      case Direction::RIGHT:
-      case Direction::DOWN_RIGHT:
+      case geometry::Direction::UP_RIGHT:
+      case geometry::Direction::RIGHT:
+      case geometry::Direction::DOWN_RIGHT:
       {
          adjacentLocation.x += actorSize.width;
          break;
@@ -212,16 +212,16 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
 
    switch(direction)
    {
-      case Direction::UP_RIGHT:
-      case Direction::UP:
-      case Direction::UP_LEFT:
+      case geometry::Direction::UP_RIGHT:
+      case geometry::Direction::UP:
+      case geometry::Direction::UP_LEFT:
       {
          adjacentLocation.y -= MOVEMENT_TILE_SIZE;
          break;
       }
-      case Direction::DOWN_LEFT:
-      case Direction::DOWN:
-      case Direction::DOWN_RIGHT:
+      case geometry::Direction::DOWN_LEFT:
+      case geometry::Direction::DOWN:
+      case geometry::Direction::DOWN_RIGHT:
       {
          adjacentLocation.y += actorSize.height;
          break;

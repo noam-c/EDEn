@@ -18,12 +18,16 @@ class EntityGrid;
 class Sprite;
 class Spritesheet;
 class Task;
-enum class Direction;
+
+namespace geometry
+{
+   enum class Direction;
+};
 
 namespace messaging
 {
    class MessagePipe;
-}
+};
 
 class Actor
 {
@@ -47,7 +51,7 @@ class Actor
    float m_movementSpeed;
 
    /** The direction that the actor is currently facing */
-   Direction m_currDirection;
+   geometry::Direction m_currDirection;
 
    protected:
       /** The Actor's associated sprite, which is drawn on screen. */
@@ -72,7 +76,7 @@ class Actor
        * @param movementSpeed The speed of the actor's movement.
        * @param direction The starting direction of the actor.
        */
-       Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, Direction direction);
+       Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, geometry::Direction direction);
 
       /**
        * Destructor.
@@ -126,7 +130,7 @@ class Actor
        *
        * @param direction The direction for the actor to face when standing.
        */
-      void stand(Direction direction);
+      void stand(geometry::Direction direction);
 
       /**
        * Change the actor's direction so that it is facing the specified actor.
@@ -184,12 +188,12 @@ class Actor
        *
        * @param direction The new direction for the actor to face.
        */
-      void setDirection(Direction direction);
+      void setDirection(geometry::Direction direction);
 
       /**
        * @return The direction that the actor is currently facing.
        */
-      Direction getDirection() const;
+      geometry::Direction getDirection() const;
 
       /**
        * This function changes the movement speed of the actor.

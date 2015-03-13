@@ -191,10 +191,10 @@ SaveLocation PlayerData::parseLocation(Json::Value& rootElement)
 
       auto x = locationNode[SaveLocation::X_ATTRIBUTE].asInt();
       auto y = locationNode[SaveLocation::Y_ATTRIBUTE].asInt();
-      Direction direction = static_cast<Direction>(locationNode[SaveLocation::DIRECTION_ATTRIBUTE].asUInt());
-      if(direction > Direction::NUM_DIRECTIONS)
+      geometry::Direction direction = static_cast<geometry::Direction>(locationNode[SaveLocation::DIRECTION_ATTRIBUTE].asUInt());
+      if(direction > geometry::Direction::NUM_DIRECTIONS)
       {
-         direction = Direction::DOWN;
+         direction = geometry::Direction::DOWN;
       }
 
       saveLocation.coords = { x, y };

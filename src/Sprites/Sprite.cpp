@@ -19,7 +19,7 @@
 Sprite::Sprite(const std::shared_ptr<Spritesheet>& sheet) :
    m_sheet(sheet),
    m_frameIndex(0),
-   m_currDirection(Direction::NONE)
+   m_currDirection(geometry::Direction::NONE)
 {
 }
 
@@ -35,7 +35,7 @@ void Sprite::clearCurrentFrame()
    // Default to frame 0 for now.
    m_frameIndex = 0;
 
-   m_currDirection = Direction::NONE;
+   m_currDirection = geometry::Direction::NONE;
    m_currName = "";
 }
 
@@ -47,31 +47,31 @@ void Sprite::setSheet(const std::shared_ptr<Spritesheet>& sheet)
    clearCurrentFrame();
 }
 
-std::string Sprite::toDirectionString(Direction direction)
+std::string Sprite::toDirectionString(geometry::Direction direction)
 {
    switch(direction)
    {
-      case Direction::UP:
-      case Direction::UP_LEFT:
-      case Direction::UP_RIGHT:
+      case geometry::Direction::UP:
+      case geometry::Direction::UP_LEFT:
+      case geometry::Direction::UP_RIGHT:
       {
          return "_up";
       }
-      case Direction::DOWN:
-      case Direction::DOWN_LEFT:
-      case Direction::DOWN_RIGHT:
+      case geometry::Direction::DOWN:
+      case geometry::Direction::DOWN_LEFT:
+      case geometry::Direction::DOWN_RIGHT:
       {
          return "_down";
       }
-      case Direction::LEFT:
+      case geometry::Direction::LEFT:
       {
          return "_left";
       }
-      case Direction::RIGHT:
+      case geometry::Direction::RIGHT:
       {
          return "_right";
       }
-      case Direction::NONE:
+      case geometry::Direction::NONE:
       default:
       {
          return "";
@@ -79,13 +79,13 @@ std::string Sprite::toDirectionString(Direction direction)
    }
 }
 
-void Sprite::setFrame(const std::string& frameName, Direction direction)
+void Sprite::setFrame(const std::string& frameName, geometry::Direction direction)
 {
    if(!m_animation && frameName == m_currName && direction == m_currDirection) return;
 
    int frameIndex;
 
-   if(direction == Direction::NONE || (frameIndex = m_sheet->getFrameIndex(frameName + toDirectionString(direction))) < 0)
+   if(direction == geometry::Direction::NONE || (frameIndex = m_sheet->getFrameIndex(frameName + toDirectionString(direction))) < 0)
    {
       frameIndex = m_sheet->getFrameIndex(frameName);
    }
@@ -101,13 +101,13 @@ void Sprite::setFrame(const std::string& frameName, Direction direction)
    m_frameIndex = frameIndex;
 }
 
-void Sprite::setAnimation(const std::string& animationName, Direction direction)
+void Sprite::setAnimation(const std::string& animationName, geometry::Direction direction)
 {
    if(m_animation != nullptr && animationName == m_currName && direction == m_currDirection) return;
 
    std::unique_ptr<Animation> animation(nullptr);
 
-   if(direction == Direction::NONE || (animation = m_sheet->getAnimation(animationName + toDirectionString(direction))) == nullptr)
+   if(direction == geometry::Direction::NONE || (animation = m_sheet->getAnimation(animationName + toDirectionString(direction))) == nullptr)
    {
       animation = m_sheet->getAnimation(animationName);
    }

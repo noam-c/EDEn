@@ -37,10 +37,10 @@ class Actor::Order
  */
 class Actor::StandOrder : public Actor::Order
 {
-   Direction m_direction;
+   geometry::Direction m_direction;
 
    public:
-      StandOrder(Actor& actor, Direction direction);
+      StandOrder(Actor& actor, geometry::Direction direction);
       bool perform(long timePassed) override;
 };
 
@@ -90,8 +90,8 @@ class Actor::MoveOrder final : public Actor::Order
     * @param newDirection The new direction to face.
     * @param moving True iff the Actor is moving toward another destination.
     */
-   void updateDirection(Direction newDirection, bool moving);
-   void updateNextWaypoint(geometry::Point2D location, Direction& direction);
+   void updateDirection(geometry::Direction newDirection, bool moving);
+   void updateNextWaypoint(geometry::Point2D location, geometry::Direction& direction);
 
    public:
       /**

@@ -12,12 +12,12 @@
 
 namespace geometry
 {
+   enum class Direction;
    struct Point2D;
 };
 
 class Spritesheet;
 class Animation;
-enum class Direction;
 
 /**
  * A sprite is a movable object that can go through different animations or
@@ -39,14 +39,14 @@ class Sprite final
    std::string m_currName;
 
    /** The direction that the current frame/animation is facing. */
-   Direction m_currDirection;
+   geometry::Direction m_currDirection;
 
    /**
     * @param direction A direction to convert to a string.
     *
     * @return The string to append to a frame or animation for a given direction.
     */
-   std::string toDirectionString(Direction direction);
+   std::string toDirectionString(geometry::Direction direction);
 
    public:
 
@@ -80,7 +80,7 @@ class Sprite final
        * @param frameName The name of the static frame.
        * @param direction The direction that the new sprite should face.
        */
-      void setFrame(const std::string& frameName, Direction direction);
+      void setFrame(const std::string& frameName, geometry::Direction direction);
 
       /**
        * Set an animation to draw for this sprite.
@@ -88,7 +88,7 @@ class Sprite final
        * @param animationName The name of the animation.
        * @param direction The direction that the new sprite should face.
        */
-      void setAnimation(const std::string& animationName, Direction direction);
+      void setAnimation(const std::string& animationName, geometry::Direction direction);
 
       /**
        * A logic step for the sprite. Currently just advances the animation if

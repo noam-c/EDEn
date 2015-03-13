@@ -307,7 +307,7 @@ class TileEngine final :
        */
       NPC* addNPC(const std::string& npcName, const std::string& spritesheetName,
                   const geometry::Point2D& npcLocation, const geometry::Size& size,
-                  const Direction direction);
+                  const geometry::Direction direction);
 
       /**
        * @param npcName The name of the NPC to find.

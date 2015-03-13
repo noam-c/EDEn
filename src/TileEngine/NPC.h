@@ -59,7 +59,7 @@ class NPC final : public Actor
        * @param size The size (in pixels) of the NPC.
        */
       NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name,
-          const Direction direction, const std::string& sheetName,
+          const geometry::Direction direction, const std::string& sheetName,
           messaging::MessagePipe& messagePipe, EntityGrid& entityGrid,
           const std::string& regionName, const geometry::Point2D& location,
           const geometry::Size& size);
