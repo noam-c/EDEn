@@ -1,0 +1,17 @@
+<rml>
+   <head>
+      <link type="text/rcss" href="base.rcss" />
+      <link type="text/rcss" href="common.rcss" />
+      <link type="text/rcss" href="battleSystemOverlay.rcss" />
+   </head>
+   <body>
+      <div id="dialogueBox">
+         <div id="textArea" class="dialogueText"></div>
+         <span class="readyNote">&gt;</span>
+         <datagrid id="choiceList" source="choicesDataSource.choices">
+            <col fields="text" width="90%"></col>
+         </datagrid>
+      </div>
+   </body>
+</rml>
+

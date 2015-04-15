@@ -1,0 +1,78 @@
+body
+{
+   font-family: Lunchtime Doubly So;
+   font-size: 16px;
+   height: 100%;
+   z-index: 2;
+}
+
+.dialogueText
+{
+   color: #FFFFFF;
+}
+
+#dialogueBox
+{
+   position: absolute;
+   padding: 5px;
+   min-height: 64px;
+}
+
+#dialogueBox #choiceList
+{
+   padding-top: 10px;
+}
+
+#dialogueBox #choiceList,
+#dialogueBox #textArea
+{
+   display: block;
+}
+
+#dialogueBox #choiceList datagridheader
+{
+   height: 0;
+   display: none;
+}
+
+#dialogueBox.narration #choiceList datagridcell
+{
+   width: 100%;
+   text-align: center;
+}
+
+#dialogueBox.narration
+{
+   text-align: center;
+   top: 50%;
+}
+
+#dialogueBox.speech
+{
+   background-color: #0033AB;
+   border-color: #000000AA;
+   border-width: 3px;
+   bottom: 0;
+}
+
+.readyNote,
+#choiceList
+{
+   visibility: hidden;
+}
+
+.dialogueComplete.speech.noChoices .readyNote,
+.dialogueComplete #choiceList
+{
+   visibility: visible;
+}
+
+.speech .readyNote
+{
+   display: block;
+   position: absolute;
+   text-align: right;
+   bottom: 0;
+   right: 10px;
+}
+

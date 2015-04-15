@@ -34,6 +34,11 @@ static int luaSetRegion(lua_State* luaVM)
    return ScriptEngine::getScriptEngineForVM(luaVM)->setRegion(luaVM);
 }
 
+static int luaStartBattle(lua_State* luaVM)
+{
+   return ScriptEngine::getScriptEngineForVM(luaVM)->startBattle(luaVM);
+}
+
 static int luaPlaySound(lua_State* luaVM)
 {
    return ScriptEngine::getScriptEngineForVM(luaVM)->playSound(luaVM);
@@ -82,4 +87,5 @@ void ScriptEngine::registerFunctions()
 
    // Tile Engine functions
    registerFunction(m_luaVM, "setRegion", luaSetRegion);
+   registerFunction(m_luaVM, "startBattle", luaStartBattle);
 }

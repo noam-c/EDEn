@@ -7,6 +7,8 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 SET(HEADERS
   src/Audio/Music.h
   src/Audio/Sound.h
+  src/BattleSystem/BattleController.h
+  src/BattleSystem/BattleOverlay.h
   src/controllers/DialogueController.h
   src/controllers/DialogueEntry.h
   src/Coroutines/Coroutine.h
@@ -149,6 +151,8 @@ SET(SOURCES
   src/json/jsoncpp.cpp
   src/Audio/Music.cpp
   src/Audio/Sound.cpp
+  src/BattleSystem/BattleController.cpp
+  src/BattleSystem/BattleOverlay.cpp
   src/controllers/DialogueController.cpp
   src/controllers/DialogueEntry.cpp
   src/Coroutines/Coroutine.cpp
@@ -269,6 +273,7 @@ SET(SOURCE_GROUP_DELIMITER "/")
 
 SOURCE_GROUP("//" REGULAR_EXPRESSION src/[^/]*)
 SOURCE_GROUP(Audio REGULAR_EXPRESSION src/Audio/.*)
+SOURCE_GROUP(BattleSystem REGULAR_EXPRESSION src/BattleSystem/.*)
 SOURCE_GROUP(controllers REGULAR_EXPRESSION src/controllers/.*)
 SOURCE_GROUP(Coroutines REGULAR_EXPRESSION src/Coroutines/.*)
 SOURCE_GROUP(Metadata REGULAR_EXPRESSION src/Metadata/.*)
@@ -301,6 +306,7 @@ ENDIF()
 INCLUDE_DIRECTORIES(
   src
   src/Audio
+  src/BattleSystem
   src/controllers
   src/Coroutines
   src/Metadata

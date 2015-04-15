@@ -249,6 +249,17 @@ class TileEngine final :
        *
        * @return 0 or the yield code for a new map script.
        */
+      int startBattle(std::shared_ptr<Task> task);
+   
+      /**
+       * Set a new location for the gameplay to take place in.
+       *
+       * @param regionName The name of the new region to set.
+       * @param mapName The name of the map to use within the region.
+       *                By default, uses the first map declared in the region.
+       *
+       * @return 0 or the yield code for a new map script.
+       */
       int setRegion(const std::string& regionName, const std::string& mapName = "");
 
       /**

@@ -14,7 +14,8 @@
 #include "Singleton.h"
 #include "Task.h"
 
-// We will need to talk to the tile engine and player data from Lua
+// We will need to talk to the tile engine, battle system and player data from Lua
+class BattleController;
 class TileEngine;
 class PlayerData;
 class ExecutionStack;
@@ -42,6 +43,11 @@ class ScriptEngine final
     * The tile engine to execute commands on
     */
    std::weak_ptr<TileEngine> m_tileEngine;
+
+   /**
+    * The battle controller to execute commands on
+    */
+   std::weak_ptr<BattleController> m_battleController;
 
    /**
     * The player data to execute commands on
@@ -162,6 +168,13 @@ class ScriptEngine final
        * @param engine The tile engine to set.
        */
       void setTileEngine(std::shared_ptr<TileEngine> engine);
+      
+      /**
+       * Set the battle controller to send commands to.
+       *
+       * @param engine The battle controller to set.
+       */
+      void setBattleController(std::shared_ptr<BattleController> engine);
 
       /**
        * Set the player data to send commands to.
@@ -221,6 +234,7 @@ class ScriptEngine final
 
       ///////////////// Tile engine functions /////////////////
       int setRegion(lua_State* luaStack);
+      int startBattle(lua_State* luaStack);
 };
 
 #endif

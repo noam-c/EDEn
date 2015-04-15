@@ -30,6 +30,9 @@
 #include "ExecutionStack.h"
 #include "CameraSlider.h"
 #include "RandomTransitionGenerator.h"
+#include "TransitionState.h"
+#include "SpinTransition.h"
+#include "BattleController.h"
 #include "HomeMenu.h"
 #include "SaveMenu.h"
 #include "ScreenTexture.h"
@@ -139,6 +142,14 @@ void TileEngine::dialogueNarrate(const std::string& narration, const std::shared
 void TileEngine::dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
 {
    m_dialogue.say(speech, task, choices);
+}
+
+int TileEngine::startBattle(std::shared_ptr<Task> task)
+{
+   auto battleState = std::make_shared<BattleController>(m_gameContext, m_playerData, task);
+   getExecutionStack()->pushState(battleState, TransitionState::makeTransition<SpinTransition>(m_gameContext, ScreenTexture::create(*this)));
+
+   return m_scheduler.block(task);
 }
 
 int TileEngine::setRegion(const std::string& regionName, const std::string& mapName)

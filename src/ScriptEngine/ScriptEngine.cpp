@@ -109,6 +109,11 @@ void ScriptEngine::registerEnums()
    lua_setglobal(m_luaVM, "Direction");
 }
 
+void ScriptEngine::setBattleController(std::shared_ptr<BattleController> controller)
+{
+   m_battleController = controller;
+}
+
 void ScriptEngine::setTileEngine(std::shared_ptr<TileEngine> engine)
 {
    m_tileEngine = engine;
@@ -393,6 +398,29 @@ int ScriptEngine::generateRandom(lua_State* luaStack)
    lua_pushnumber(luaStack, (rand() % (maxValue - minValue)) + minValue);
 
    return 1;
+}
+
+int ScriptEngine::startBattle(lua_State* luaStack)
+{
+   Scheduler* scheduler = m_executionStack.getCurrentScheduler();
+   if(scheduler == nullptr)
+   {
+      return 0;
+   }
+
+   TileEngine* tileEngine = getRawTileEngine();
+      if(tileEngine == nullptr)
+   {
+      DEBUG("Missing tile engine. Cannot set region.");
+      return lua_error(luaStack);
+   }
+
+   auto task(scheduler->createNewTask());
+
+   DEBUG("Starting battle");
+   tileEngine->startBattle(task);
+   
+   return waitUntilFinished(task, 0);
 }
 
 int ScriptEngine::setRegion(lua_State* luaStack)
