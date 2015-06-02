@@ -13,7 +13,7 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_PLAYER
 
-const char* PlayerDataSummary::CHARACTER_LIST_ELEMENT = "Characters";
+const char* PlayerDataSummary::CHARACTER_LIST_ELEMENT = "Roster";
 const char* PlayerDataSummary::CHARACTER_ELEMENT = "Character";
 
 PlayerDataSummary::PlayerDataSummary(const Metadata& metadata) :

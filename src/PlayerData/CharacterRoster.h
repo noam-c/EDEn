@@ -25,6 +25,8 @@ class Metadata;
 
 class CharacterRoster
 {
+   static const char* CHARACTERS_ELEMENT;
+   static const char* LEADER_ELEMENT;
    static const char* PARTY_ELEMENT;
 
    const Metadata& m_metadata;

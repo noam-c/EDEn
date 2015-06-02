@@ -1,10 +1,57 @@
 
 {
-   "Characters" : 
+   "Inventory" : 
+   [
+      
+      {
+         "itemNum" : 1,
+         "quantity" : 5
+      },
+      
+      {
+         "itemNum" : 2,
+         "quantity" : 10
+      }
+   ],
+   "Location" : 
    {
-      "Party" : 
+      "direction" : 0,
+      "map" : "outside",
+      "region" : "sereia",
+      "x" : 480,
+      "y" : 480
+   },
+   "Quest" : 
+   {
+      "Quest" : 
       [
          
+         {
+            "Description" : "The old man said he wanted five tiger pelts...",
+            "Quest" : 
+            [
+               
+               {
+                  "Quest" : [],
+                  "completed" : false,
+                  "name" : "Kill five tigers",
+                  "optional" : false
+               }
+            ],
+            "completed" : false,
+            "name" : "Five Tigers",
+            "optional" : false
+         }
+      ],
+      "completed" : false,
+      "name" : "root",
+      "optional" : false
+   },
+   "Roster" : 
+   {
+      "Characters" : 
+      {
+         "akrom" : 
          {
             "Aspects" : [ "alchemist", "gunner" ],
             "Equipment" : 
@@ -51,12 +98,11 @@
             "Spritesheet" : "npc1",
             "baseStats" : {},
             "hp" : 0,
-            "id" : "akrom",
             "level" : 1,
             "name" : "Akrom",
             "sp" : 0
          },
-         
+         "kain" : 
          {
             "Aspects" : [ "mystic", "hunter" ],
             "Equipment" : 
@@ -99,55 +145,21 @@
             {
                "path" : "data/characters/kain.jpg"
             },
-            "Skills" : { "1": 15, "2": 30 },
+            "Skills" : 
+            {
+               "1" : 15,
+               "2" : 30
+            },
             "Spritesheet" : "kain",
             "baseStats" : {},
             "hp" : 0,
-            "id" : "kain",
             "level" : 1,
             "name" : "Kain",
             "sp" : 0
          }
-      ]
-   },
-   "Inventory" : 
-   [
-      
-      {
-         "itemNum" : 1,
-         "quantity" : 5
       },
-      
-      {
-         "itemNum" : 2,
-         "quantity" : 10
-      }
-   ],
-   "Quest" : 
-   {
-      "Quest" : 
-      [
-         
-         {
-            "Description" : "The old man said he wanted five tiger pelts...",
-            "Quest" : 
-            [
-               
-               {
-                  "Quest" : [],
-                  "completed" : false,
-                  "name" : "Kill five tigers",
-                  "optional" : false
-               }
-            ],
-            "completed" : false,
-            "name" : "Five Tigers",
-            "optional" : false
-         }
-      ],
-      "completed" : false,
-      "name" : "root",
-      "optional" : false
+      "Leader" : "kain",
+      "Party" : [ "kain", "akrom" ]
    },
    "Shortcuts" : 
    [

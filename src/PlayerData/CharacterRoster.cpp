@@ -16,6 +16,8 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_PLAYER
 
+const char* CharacterRoster::CHARACTERS_ELEMENT = "Characters";
+const char* CharacterRoster::LEADER_ELEMENT = "Leader";
 const char* CharacterRoster::PARTY_ELEMENT = "Party";
 
 CharacterRoster::CharacterRoster(const Metadata& metadata) :
@@ -103,36 +105,60 @@ void CharacterRoster::addToParty(Character* character)
    signalRosterUpdate();
 }
 
-void CharacterRoster::load(const Json::Value& charactersElement)
+void CharacterRoster::load(const Json::Value& rosterElement)
 {
    clear();
 
-   const Json::Value& partyElement = charactersElement[CharacterRoster::PARTY_ELEMENT];
+   const auto& charactersElement = rosterElement[CharacterRoster::CHARACTERS_ELEMENT];
+   const auto& partyLeaderElement = rosterElement[CharacterRoster::LEADER_ELEMENT];
+   const auto& partyElement = rosterElement[CharacterRoster::PARTY_ELEMENT];
 
+   if(charactersElement.isObject() && charactersElement.size() > 0)
+   {
+      for(auto iter = charactersElement.begin(); iter != charactersElement.end(); ++iter)
+      {
+         auto characterId = iter.key().asString();
+         DEBUG("Adding character %s to roster...", characterId.c_str());
+         Json::Value characterNode = *iter;
+         m_allCharacters.emplace(std::piecewise_construct,
+                                 std::forward_as_tuple(characterId),
+                                 std::forward_as_tuple(m_metadata, characterId, characterNode));
+      }
+   }
+   
    int partySize = partyElement.size();
-
    if(partyElement.isArray() && partySize > 0)
    {
       DEBUG("Loading party...");
       for(int i = 0; i < partySize; ++i)
       {
-         Json::Value characterNode = partyElement[i];
-         DEBUG("Adding character %d...", i);
-         std::string characterId = characterNode[Character::ID_ATTRIBUTE].asString();
-         auto result = m_allCharacters.emplace(std::piecewise_construct,
-                                 std::forward_as_tuple(characterId),
-                                 std::forward_as_tuple(m_metadata, characterId, characterNode));
+         if(!partyElement[i].isString())
+         {
+            continue;
+         }
 
-         auto& currCharacter = result.first->second;
+         auto characterId = partyElement[i].asString();
+         auto result = m_allCharacters.find(characterId);
+
+         if(result == m_allCharacters.end())
+         {
+            continue;
+         }
+
+         DEBUG("Adding character %s to party...", characterId.c_str());
+         auto& currCharacter = result->second;
          m_party.push_back(&currCharacter);
+         
+         if(partyLeaderElement.isString() &&
+            characterId == partyLeaderElement.asString())
+         {
+            DEBUG("Party leader %s designated.", characterId.c_str());
+            m_partyLeader = &currCharacter;
+         }
       }
 
       if(m_partyLeader == nullptr && m_party.size() > 0)
       {
-         /**
-          * \todo Persist the party leader in the save data and remove
-          * this hardcoded party leader setting.
-          */
          m_partyLeader = m_party[0];
       }
 
@@ -144,15 +170,24 @@ void CharacterRoster::load(const Json::Value& charactersElement)
 
 Json::Value CharacterRoster::serialize() const
 {
+   Json::Value rosterNode(Json::objectValue);
    Json::Value charactersNode(Json::objectValue);
+
    Json::Value partyNode(Json::arrayValue);
    for(const auto& character : m_party)
    {
-      partyNode.append(character->serialize());
+      charactersNode[character->getId()] = character->serialize();
+      partyNode.append(character->getId());
    }
-
-   charactersNode[CharacterRoster::PARTY_ELEMENT] = partyNode;
-   return charactersNode;
+   
+   rosterNode[CharacterRoster::CHARACTERS_ELEMENT] = charactersNode;
+   
+   if(m_partyLeader)
+   {
+      rosterNode[CharacterRoster::LEADER_ELEMENT] = m_partyLeader->getId();
+   }
+   rosterNode[CharacterRoster::PARTY_ELEMENT] = partyNode;
+   return rosterNode;
 }
 
 void CharacterRoster::removeFromParty(Character* character)

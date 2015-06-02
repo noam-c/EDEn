@@ -1,76 +1,57 @@
 
 {
-   "Location" :
+   "Inventory" : 
+   [
+      
+      {
+         "itemNum" : 1,
+         "quantity" : 5
+      },
+      
+      {
+         "itemNum" : 2,
+         "quantity" : 10
+      }
+   ],
+   "Location" : 
    {
-      "x" : 480,
-      "y" : 480,
-      "region" : "sereia",
+      "direction" : 0,
       "map" : "outside",
-      "chapter" : "chapter1"
+      "region" : "sereia",
+      "x" : 480,
+      "y" : 480
    },
-   "Characters" : 
+   "Quest" : 
    {
-      "Party" : 
+      "Quest" : 
       [
          
          {
-            "Aspects" : [ "mystic", "hunter" ],
-            "Equipment" : 
-            {
-               "Body" : 
+            "Description" : "The old man said he wanted five tiger pelts...",
+            "Quest" : 
+            [
+               
                {
-                  "equipped" : 401,
-                  "types" : [ 1 ]
-               },
-               "Feet" : 
-               {
-                  "types" : [ 2 ]
-               },
-               "Garment" : null,
-               "Head" : 
-               {
-                  "equipped" : 300,
-                  "types" : [ 0 ]
-               },
-               "Off1" : 
-               {
-                  "enabled" : false
-               },
-               "Off2" : 
-               {
-                  "enabled" : false
-               },
-               "Wpn1" : 
-               {
-                  "equipped" : 503,
-                  "types" : [ 8, 11 ]
-               },
-               "Wpn2" : 
-               {
-                  "equipped" : 503,
-                  "types" : [ 8, 11 ]
+                  "Quest" : [],
+                  "completed" : false,
+                  "name" : "Kill five tigers",
+                  "optional" : false
                }
-            },
-            "Portrait" : 
-            {
-               "path" : "data/characters/kain.jpg"
-            },
-            "Skills" : { "1": 15, "2": 30 },
-            "Spritesheet" : "kain",
-            "baseStats" : 
-            {
-               "int" : 6,
-               "maxHP" : 200,
-               "maxSP" : 30,
-               "str" : 7
-            },
-            "hp" : 0,
-            "id" : "kain",
-            "level" : 1,
-            "name" : "Kain",
-            "sp" : 0
-         },
-         
+            ],
+            "completed" : false,
+            "name" : "Five Tigers",
+            "optional" : false
+         }
+      ],
+      "completed" : false,
+      "name" : "root",
+      "optional" : false
+   },
+   "Roster" : 
+   {
+      "Characters" : 
+      {
+         "akrom" : 
          {
             "Aspects" : [ "alchemist", "gunner" ],
             "Equipment" : 
@@ -123,12 +104,72 @@
                "str" : 7
             },
             "hp" : 0,
-            "id" : "akrom",
             "level" : 1,
             "name" : "Akrom",
             "sp" : 0
          },
-         
+         "kain" : 
+         {
+            "Aspects" : [ "mystic", "hunter" ],
+            "Equipment" : 
+            {
+               "Body" : 
+               {
+                  "equipped" : 401,
+                  "types" : [ 1 ]
+               },
+               "Feet" : 
+               {
+                  "types" : [ 2 ]
+               },
+               "Garment" : null,
+               "Head" : 
+               {
+                  "equipped" : 300,
+                  "types" : [ 0 ]
+               },
+               "Off1" : 
+               {
+                  "enabled" : false
+               },
+               "Off2" : 
+               {
+                  "enabled" : false
+               },
+               "Wpn1" : 
+               {
+                  "equipped" : 503,
+                  "types" : [ 8, 11 ]
+               },
+               "Wpn2" : 
+               {
+                  "equipped" : 503,
+                  "types" : [ 8, 11 ]
+               }
+            },
+            "Portrait" : 
+            {
+               "path" : "data/characters/kain.jpg"
+            },
+            "Skills" : 
+            {
+               "1" : 15,
+               "2" : 30
+            },
+            "Spritesheet" : "kain",
+            "baseStats" : 
+            {
+               "int" : 6,
+               "maxHP" : 200,
+               "maxSP" : 30,
+               "str" : 7
+            },
+            "hp" : 0,
+            "level" : 1,
+            "name" : "Kain",
+            "sp" : 0
+         },
+         "shiara" : 
          {
             "Aspects" : [ "mystic" ],
             "Equipment" : 
@@ -181,51 +222,13 @@
                "str" : 2
             },
             "hp" : 0,
-            "id" : "shiara",
             "level" : 1,
             "name" : "Shiara",
             "sp" : 0
          }
-      ]
-   },
-   "Inventory" : 
-   [
-      
-      {
-         "itemNum" : 1,
-         "quantity" : 5
       },
-      
-      {
-         "itemNum" : 2,
-         "quantity" : 10
-      }
-   ],
-   "Quest" : 
-   {
-      "Quest" : 
-      [
-         
-         {
-            "Description" : "The old man said he wanted five tiger pelts...",
-            "Quest" : 
-            [
-               
-               {
-                  "Quest" : [],
-                  "completed" : false,
-                  "name" : "Kill five tigers",
-                  "optional" : false
-               }
-            ],
-            "completed" : false,
-            "name" : "Five Tigers",
-            "optional" : false
-         }
-      ],
-      "completed" : false,
-      "name" : "root",
-      "optional" : false
+      "Leader" : "kain",
+      "Party" : [ "kain", "akrom", "shiara" ]
    },
    "Shortcuts" : 
    [

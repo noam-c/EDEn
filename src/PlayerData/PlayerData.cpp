@@ -21,7 +21,7 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_PLAYER
 
-const char* PlayerData::CHARACTER_LIST_ELEMENT = "Characters";
+const char* PlayerData::CHARACTER_LIST_ELEMENT = "Roster";
 const char* PlayerData::CHARACTER_ELEMENT = "Character";
 
 const char* PlayerData::SHORTCUTS_ELEMENT = "Shortcuts";

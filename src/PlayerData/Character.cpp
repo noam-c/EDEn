@@ -18,7 +18,6 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_PLAYER
 
-const char* Character::ID_ATTRIBUTE = "id";
 const char* Character::ARCHETYPE_ATTRIBUTE = "archetype";
 const char* Character::NAME_ATTRIBUTE = "name";
 
@@ -164,7 +163,6 @@ Json::Value Character::serialize() const
       characterNode[Character::ARCHETYPE_ATTRIBUTE] = m_archetype;
    }
 
-   characterNode[Character::ID_ATTRIBUTE] = m_id;
    characterNode[Character::LEVEL_ATTRIBUTE] = m_level;
    characterNode[Character::NAME_ATTRIBUTE] = m_name;
 

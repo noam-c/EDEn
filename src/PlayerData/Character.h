@@ -154,8 +154,6 @@ class Character
    void refreshAvailableSkills();
 
    public:
-      static const char* ID_ATTRIBUTE;
-
       /**
        * Constructor used to create a new character.
        * Initializes the entire character using the base archetype data.
