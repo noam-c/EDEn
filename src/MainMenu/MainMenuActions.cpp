@@ -11,6 +11,7 @@
 #include "Sound.h"
 
 #include <Rocket/Core.h>
+#include "BattleController.h"
 #include "MenuShell.h"
 #include "TitleScreenSettingsMenu.h"
 #include "TileEngine.h"
@@ -42,6 +43,22 @@ void MainMenu::NewGameAction()
 }
 
 /**
+ * 'Battle Prototype' was selected. Push a Battle state.
+ * \todo This will eventually be removed entirely, as it is only a programmer convenience right now.
+ */
+void MainMenu::BattlePrototypeAction()
+{
+   // PlayerData is held in a shared_ptr. However, BattleController doesn't
+   // expect to manage the lifetime of a PlayerData object, and thus
+   // takes a reference to PlayerData rather than a pointer.
+   // MainMenu will manage the lifetime for now, but after the battle system
+   // is in good shape, this code will be removed anyway.
+   auto loadResult = PlayerData::load(SAVE_GAME, getMetadata());
+   m_prototypePlayerData = std::get<0>(loadResult);
+   getExecutionStack()->pushState(std::make_shared<BattleController>(m_gameContext, m_prototypePlayerData));
+}
+
+/**
  * 'Menu Prototype' was selected. Push a Menu state.
  * \todo This will eventually be removed entirely, as it is only a programmer convenience right now.
  */
@@ -53,8 +70,8 @@ void MainMenu::MenuPrototypeAction()
    // MainMenu will manage the lifetime for now, but after the menu
    // is in good shape, this code will be removed anyway.
    auto loadResult = PlayerData::load(SAVE_GAME, getMetadata());
-   m_menuPrototypePlayerData = std::get<0>(loadResult);
-   getExecutionStack()->pushState(std::make_shared<HomeMenu>(m_gameContext, *m_menuPrototypePlayerData));
+   m_prototypePlayerData = std::get<0>(loadResult);
+   getExecutionStack()->pushState(std::make_shared<HomeMenu>(m_gameContext, *m_prototypePlayerData));
 }
 
 /**

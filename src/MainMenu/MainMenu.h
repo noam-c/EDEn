@@ -49,7 +49,7 @@ class MainMenu final : public GameState, public std::enable_shared_from_this<Mai
    /** Sound for picking an option */
    std::shared_ptr<Sound> m_chooseSound;
 
-   std::shared_ptr<PlayerData> m_menuPrototypePlayerData;
+   std::shared_ptr<PlayerData> m_prototypePlayerData;
 
    /** The title screen RML document */
    Rocket::Core::ElementDocument* m_titleDocument;
@@ -71,6 +71,7 @@ class MainMenu final : public GameState, public std::enable_shared_from_this<Mai
 
    //Actions for the list ops - see documentation in MainMenuActions.cpp
    void NewGameAction();
+   void BattlePrototypeAction();
    void MenuPrototypeAction();
    void LoadGameAction();
    void OptionsAction();

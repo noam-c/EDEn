@@ -42,6 +42,7 @@ MainMenu::MainMenu(GameContext& gameContext) :
       m_titleDocument->Show();
       m_bindings.bindAction(m_titleDocument, "newGameAction", "click", [this](Rocket::Core::Event& event) { NewGameAction(); });
       m_bindings.bindAction(m_titleDocument, "menuPrototypeAction", "click", [this](Rocket::Core::Event& event) { MenuPrototypeAction(); });
+      m_bindings.bindAction(m_titleDocument, "battlePrototypeAction", "click", [this](Rocket::Core::Event& event) { BattlePrototypeAction(); });
       m_bindings.bindAction(m_titleDocument, "loadGameAction", "click", [this](Rocket::Core::Event& event) { LoadGameAction(); });
       m_bindings.bindAction(m_titleDocument, "optionsAction", "click", [this](Rocket::Core::Event& event) { OptionsAction(); });
       m_bindings.bindAction(m_titleDocument, "aboutAction", "click", [this](Rocket::Core::Event& event) { AboutAction(); });

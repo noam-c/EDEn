@@ -10,6 +10,7 @@
          <div id="newGameAction" class="option selected">New Game</div>
          <div id="loadGameAction" class="option">Load Game</div>
          <div id="menuPrototypeAction" class="option">Menu Prototype</div>
+         <div id="battlePrototypeAction" class="option">Battle Prototype</div>
          <div id="optionsAction" class="option">Options</div>
          <div id="aboutAction" class="option">About</div>
          <div id="quitGameAction" class="option">Exit Game</div>
