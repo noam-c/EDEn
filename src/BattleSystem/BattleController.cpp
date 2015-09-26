@@ -90,7 +90,7 @@ bool BattleController::step(long timePassed)
 
    handleInputEvents(done);
 
-   if(done)
+   if(done && m_battleTask)
    {
       m_battleTask->complete();
    }

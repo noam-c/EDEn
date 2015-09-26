@@ -85,7 +85,7 @@ class BattleController final :
        * @param gameContext The context containing the execution stack.
        * @param playerData The currently loaded player data.
        */
-      BattleController(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, std::shared_ptr<Task> battleTask);
+      BattleController(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, std::shared_ptr<Task> battleTask = nullptr);
 
       /**
        * Destructor.
