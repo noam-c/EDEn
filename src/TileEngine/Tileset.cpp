@@ -75,13 +75,18 @@ void Tileset::load(const std::string& path)
    std::fill(m_passibility.begin(), m_passibility.end(), true);
 
    TiXmlElement* tileElement = root->FirstChildElement("tile");
-   while(tileElement != nullptr)
+   for(;tileElement != nullptr; tileElement = tileElement->NextSiblingElement("tile"))
    {
       int tileNum = -1;
       tileElement->Attribute("id", &tileNum);
 
       TiXmlElement* propertiesElement = tileElement->FirstChildElement("properties");
 
+      if(!propertiesElement)
+      {
+         continue;
+      }
+      
       TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
       while(propertyElement != nullptr)
       {
@@ -95,7 +100,7 @@ void Tileset::load(const std::string& path)
          propertyElement = propertyElement->NextSiblingElement("property");
       }
 
-      tileElement = tileElement->NextSiblingElement("tile");
+      
    }
 }
 
