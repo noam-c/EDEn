@@ -188,40 +188,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,198,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="collision">
-  <object id="17" x="576" y="960" width="32" height="32"/>
-  <object id="18" x="544" y="992" width="32" height="32"/>
-  <object id="20" x="608" y="992" width="32" height="96"/>
-  <object id="23" x="480" y="800" width="32" height="32"/>
-  <object id="26" x="512" y="832" width="32" height="32"/>
-  <object id="27" x="608" y="800" width="32" height="32"/>
-  <object id="29" x="544" y="1056" width="32" height="32"/>
-  <object id="33" x="480" y="480" width="32" height="64"/>
-  <object id="34" x="512" y="576" width="32" height="32"/>
-  <object id="35" x="544" y="512" width="32" height="32"/>
-  <object id="36" x="448" y="576" width="32" height="64"/>
-  <object id="37" x="480" y="640" width="64" height="32"/>
-  <object id="38" x="512" y="256" width="32" height="32"/>
-  <object id="39" x="480" y="288" width="32" height="32"/>
-  <object id="40" x="512" y="160" width="32" height="32"/>
-  <object id="41" x="448" y="64" width="32" height="32"/>
-  <object id="43" x="512" y="0" width="32" height="32"/>
-  <object id="45" x="608" y="64" width="32" height="32"/>
-  <object id="46" x="256" y="128" width="64" height="32"/>
-  <object id="47" x="352" y="128" width="32" height="32"/>
-  <object id="48" x="352" y="224" width="32" height="32"/>
-  <object id="49" x="96" y="416" width="32" height="32"/>
-  <object id="51" x="96" y="128" width="64" height="32"/>
-  <object id="61" x="704" y="768" width="96" height="352"/>
-  <object id="62" x="672" y="800" width="32" height="224"/>
-  <object id="63" x="640" y="864" width="32" height="128"/>
-  <object id="67" x="704" y="672" width="96" height="32"/>
-  <object id="69" x="672" y="0" width="128" height="672"/>
-  <object id="70" x="640" y="0" width="32" height="192"/>
-  <object id="71" x="640" y="224" width="32" height="384"/>
-  <object id="72" x="608" y="320" width="32" height="192"/>
-  <object id="73" x="544" y="928" width="32" height="32"/>
- </objectgroup>
+ <objectgroup name="collision"/>
  <objectgroup name="exits">
   <object id="12" x="256" y="0" width="192" height="64">
    <properties>
