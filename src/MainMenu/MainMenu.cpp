@@ -69,16 +69,11 @@ bool MainMenu::step(long timePassed)
 
    waitForInputEvent(done);
 
-   /* The menu shouldn't run too fast */
-   SDL_Delay (1);
-
    return !done;
 }
 
 void MainMenu::waitForInputEvent(bool& finishState)
 {
-   SDL_Delay (1);
-
    SDL_Event event;
 
    /* Check for events */

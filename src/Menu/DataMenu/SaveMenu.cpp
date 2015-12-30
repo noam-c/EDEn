@@ -113,16 +113,11 @@ bool SaveMenu::step(long timePassed)
    m_scheduler.runCoroutines(timePassed);
    bool done = waitForInputEvent();
 
-   /* The menu shouldn't run too fast */
-   SDL_Delay (1);
-
    return !done;
 }
 
 bool SaveMenu::waitForInputEvent()
 {
-   SDL_Delay (1);
-
    SDL_Event event;
 
    /* Check for events */
