@@ -8,6 +8,11 @@
 
 namespace geometry
 {
+   unsigned int Size::getArea() const noexcept
+   {
+      return width * height;
+   }
+
    bool Size::operator==(const Size& rhs) const noexcept
    {
       return width == rhs.width && height == rhs.height;
