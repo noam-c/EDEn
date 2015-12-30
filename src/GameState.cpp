@@ -19,7 +19,8 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_GAME_STATE
 
-const int GameState::MAX_FRAME_TIME = 32;
+const int GameState::MIN_FRAME_TIME = 16; // 60fps == about 16ms per frame
+const int GameState::MAX_FRAME_TIME = 32; // 30fps == about 32ms per frame
 
 GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName) :
    m_time(SDL_GetTicks()),
@@ -89,7 +90,13 @@ bool GameState::advanceFrame()
    m_time = SDL_GetTicks();
 
    long timePassed = std::min<long>(m_time - prevTime, GameState::MAX_FRAME_TIME);
-
+   
+   if(timePassed < GameState::MIN_FRAME_TIME)
+   {
+      long timeLeft = GameState::MIN_FRAME_TIME - timePassed;
+      SDL_Delay(timeLeft);
+   }
+   
    return step(timePassed);
 }
 
