@@ -59,11 +59,15 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
       const std::string layerName(layerElement->Attribute("name"));
       if(layerName == "background")
       {
+         // This 'new' is being emplaced into a unique_ptr and therefore
+         // cleanup will be handled automatically.
          m_backgroundLayers.emplace_back(new Layer(layerElement, m_bounds));
          DEBUG("Background layer added.");
       }
       else if(layerName == "foreground")
       {
+         // This 'new' is being emplaced into a unique_ptr and therefore
+         // cleanup will be handled automatically.
          m_foregroundLayers.emplace_back(new Layer(layerElement, m_bounds));
          DEBUG("Foreground layer added.");
       }
@@ -71,12 +75,14 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
       layerElement = layerElement->NextSiblingElement("layer");
    }
 
+   initializePassibilityMatrix();
+   
    bool hasCollisionLayer = false;
    bool hasEntrancesLayer = false;
    bool hasExitsLayer = false;
    bool hasTriggersLayer = false;
 
-   const TiXmlElement* objectGroupElement = root->FirstChildElement("objectgroup");
+   auto const* objectGroupElement = root->FirstChildElement("objectgroup");
    while(objectGroupElement != nullptr)
    {
       std::string objectGroupName = objectGroupElement->Attribute("name");
@@ -101,7 +107,6 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
          hasTriggersLayer = true;
       }
 
-
       objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
    }
 
@@ -110,10 +115,13 @@ Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
 
 Map::~Map() = default;
 
+void Map::addCollisionRect(const geometry::Rectangle& rect)
+{
+   m_passibilityMap.fillRect(rect, 0);
+}
+
 void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
 {
-   initializePassibilityMatrix();
-
    DEBUG("Loading collision layer.");
    if(collisionGroupElement != nullptr)
    {
@@ -131,16 +139,7 @@ void Map::parseCollisionGroup(const TiXmlElement* collisionGroupElement)
 
          geometry::Rectangle rect(topLeft / TileEngine::TILE_SIZE, geometry::Size(width, height) / TileEngine::TILE_SIZE);
          DEBUG("Found collision object at %d,%d with width %d and height %d.", rect.left, rect.top, rect.getWidth(), rect.getHeight());
-         if(rect.getWidth() > 0 && rect.getHeight() > 0)
-         {
-            for(int y = rect.top; y < rect.bottom; ++y)
-            {
-               for(int x = rect.left; x < rect.right; ++x)
-               {
-                  m_passibilityMap(x, y) = 0;
-               }
-            }
-         }
+         addCollisionRect(rect);
 
          objectElement = objectElement->NextSiblingElement("object");
       }
@@ -285,15 +284,16 @@ bool Map::isPassible(int x, int y) const
 void Map::initializePassibilityMatrix()
 {
    const auto& size = m_bounds.getSize();
-   const auto& width = size.width;
-   const auto& height = size.height;
+   
+   m_passibilityMap.resize(size, 1);
 
-   m_passibilityMap.resize(size);
-   for(unsigned int x = 0; x < width; ++x)
-   {
-      for(unsigned int y = 0; y < height; ++y)
-      {
-         m_passibilityMap(x, y) = 1;
+   const auto processRect = [this](const geometry::Rectangle& rect) {
+      addCollisionRect(rect);
+   };
+
+   for(const auto& layers : {&m_backgroundLayers, &m_foregroundLayers}) {
+      for(const auto& layer : *layers) {
+         layer->forEachCollisionRect(processRect);
       }
    }
 }
@@ -359,7 +359,7 @@ void Map::drawForeground(int row) const
       {
          if(!isPassible(column, row))
          {
-            Tileset::drawColorToTile(column, row, 1.0f, 0.0f, 0.0f);
+            Tileset::drawColorToTile(column, row, 1.0f, 0.0f, 0.0f, 0.2f);
          }
       }
    }

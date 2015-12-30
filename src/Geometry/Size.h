@@ -39,6 +39,11 @@ namespace geometry
       {}
 
       /**
+       * Get the total area prescribed by this Size.
+       */
+      unsigned int getArea() const noexcept;
+
+      /**
        * Equality operator.
        */
       bool operator==(const Size& rhs) const noexcept;

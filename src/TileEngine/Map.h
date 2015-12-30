@@ -58,6 +58,14 @@ class Map
    geometry::Rectangle m_bounds;
 
    /**
+    * Adds an collision rectangle to the passibility map, marking
+    * the area occupied by the rectangle as impassible.
+    *
+    * @param rect The map subregion that should be marked impassible
+    */
+   void addCollisionRect(const geometry::Rectangle& rect);
+   
+   /**
     * Parse the map layer that holds collision data.
     */
    void parseCollisionGroup(const TiXmlElement* collisionGroupElement);
@@ -82,8 +90,6 @@ class Map
     */
    void initializePassibilityMatrix();
 
-   Map() = delete;
-
    public:
 
       /**
@@ -96,6 +102,12 @@ class Map
        */
       Map(const std::string& name, const std::string& filePath);
 
+      /**
+       * Destructor.
+       *
+       * Explicitly declared and defaulted in order to force the definition
+       * out of the header file (tiny build-time optimization).
+       */
       ~Map();
 
       /**

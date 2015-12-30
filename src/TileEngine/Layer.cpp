@@ -5,6 +5,8 @@
  */
 
 #include "Layer.h"
+
+#include "Point2D.h"
 #include "Rectangle.h"
 #include "ResourceLoader.h"
 #include "Tileset.h"
@@ -69,7 +71,32 @@ Layer::Layer(const TiXmlElement* layerData, const geometry::Rectangle& bounds) :
       {
          std::string entry;
          std::getline(layerStream, entry, ',');
-         m_tileMap(x, y + m_heightOffset) = atoi(entry.c_str()) - 1;
+         m_tileMap(x, y + m_heightOffset) = std::stoi(entry.c_str()) - 1;
+      }
+   }
+}
+
+void Layer::forEachCollisionRect(std::function<void(const geometry::Rectangle&)>&& func) const
+{
+   for(int y = 0; y < m_bounds.getHeight(); ++y)
+   {
+      for(int x = 0; x < m_bounds.getWidth(); ++x)
+      {
+         const auto& tileNum = m_tileMap(x, y);
+         if(tileNum < 0)
+         {
+            continue;
+         }
+
+         const auto rect =
+            m_tileset->getCollisionRect(tileNum)
+               .translate(x, y - m_heightOffset)
+               .getIntersection(m_bounds);
+
+         if(rect.isValid())
+         {
+            func(rect);
+         }
       }
    }
 }
