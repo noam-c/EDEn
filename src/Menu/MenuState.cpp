@@ -68,9 +68,6 @@ bool MenuState::step(long timePassed)
 
    waitForInputEvent(done);
 
-   /* The menu shouldn't run too fast */
-   SDL_Delay (1);
-
    return !done;
 }
 
