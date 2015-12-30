@@ -156,15 +156,30 @@ void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
    float destBottom = float((destY + 1) * TileEngine::TILE_SIZE);
 
    glPushAttrib(GL_ENABLE_BIT);
+   glEnable(GL_BLEND);
    glDisable(GL_TEXTURE_2D);
+
+   // Save old glBlendFunc values.
+   // There is no bit in glPushAttrib that would preserve them, so
+   // do it the old(er)-school way.
+   int oldBlendSrc;
+   int oldBlendDst;
+   glGetIntegerv(GL_BLEND_SRC, &oldBlendSrc);
+   glGetIntegerv(GL_BLEND_DST, &oldBlendDst);
+
+   glBlendFunc(GL_ONE, GL_DST_ALPHA);
+   
    glBegin(GL_QUADS);
-      glColor3f(r, g, b);
+      glColor4f(r, g, b, 0.2f);
       glVertex3f(destLeft, destTop, 0.0f);
       glVertex3f(destRight, destTop, 0.0f);
       glVertex3f(destRight, destBottom, 0.0f);
       glVertex3f(destLeft, destBottom, 0.0f);
       glColor3f(1.0f, 1.0f, 1.0f);
    glEnd();
+   
+   // Restore all OpenGL state
+   glBlendFunc(oldBlendSrc, oldBlendDst);
    glPopAttrib();
 }
 

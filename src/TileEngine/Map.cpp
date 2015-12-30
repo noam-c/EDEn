@@ -17,8 +17,8 @@
 
 #define DEBUG_FLAG DEBUG_RES_LOAD | DEBUG_ENTITY_GRID
 
-// Define as 1 to have the game draw the map's passibility matrix
-#define DRAW_PASSIBILITY 0
+// Define as 1 to have the map rendering highlight the map's impassible terrain
+#define DRAW_IMPASSIBILITY 0
 
 Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
 {
@@ -336,40 +336,31 @@ void Map::step(long timePassed) const
 
 void Map::drawBackground(int row) const
 {
-   if(DRAW_PASSIBILITY)
+   bool firstLayer = true;
+   for(const auto& layer : m_backgroundLayers)
    {
-      const unsigned int width = m_bounds.getWidth();
-
-      for(unsigned int column = 0; column < width; ++column)
-      {
-         if(isPassible(column, row))
-         {
-            Tileset::drawColorToTile(column, row, 0.0f, 1.0f, 0.0f);
-         }
-         else
-         {
-            Tileset::drawColorToTile(column, row, 1.0f, 0.0f, 0.0f);
-         }
-      }
-   }
-   else
-   {
-      bool firstLayer = true;
-      for(const auto& layer : m_backgroundLayers)
-      {
-         layer->draw(row, !firstLayer);
-         firstLayer = false;
-      }
+      layer->draw(row, !firstLayer);
+      firstLayer = false;
    }
 }
 
 void Map::drawForeground(int row) const
 {
-   if(!DRAW_PASSIBILITY)
+   for(const auto& layer : m_foregroundLayers)
    {
-      for(const auto& layer : m_foregroundLayers)
+      layer->draw(row, true);
+   }
+
+   if(DRAW_IMPASSIBILITY)
+   {
+      const unsigned int width = m_bounds.getWidth();
+      
+      for(unsigned int column = 0; column < width; ++column)
       {
-         layer->draw(row, true);
+         if(!isPassible(column, row))
+         {
+            Tileset::drawColorToTile(column, row, 1.0f, 0.0f, 0.0f);
+         }
       }
    }
 }
