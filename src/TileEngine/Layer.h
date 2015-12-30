@@ -7,6 +7,7 @@
 #ifndef LAYER_H
 #define LAYER_H
 
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -45,6 +46,13 @@ class Layer
        * @param bounds The bounds of the map.
        */
       Layer(const TiXmlElement* layerData, const geometry::Rectangle& bounds);
+
+      /**
+       * Perform the given function for each collision rectangle in this layer.
+       *
+       * @param func The iterator function to perform on each collision rectangle.
+       */
+      void forEachCollisionRect(std::function<void(const geometry::Rectangle&)>&& func) const;
 
       /**
        * Draws a row of the layer to screen.

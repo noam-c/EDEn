@@ -64,6 +64,21 @@ namespace geometry
       Rectangle(int top, int left, int bottom, int right);
 
       /**
+       * Get a version of this Rectangle with a translation applied.
+       *
+       * @param x The amount to translate to the right.
+       * @param y The amount to translate downward.
+       *
+       * @return A clone of this Rectangle, with its edges translated by x and y.
+       */
+      Rectangle translate(int x, int y) const;
+
+      /**
+       * @return true iff this Rectangle is valid (it has height and width).
+       */
+      bool isValid() const;
+
+      /**
        * @return The area of the rectangle (width * height).
        */
       unsigned int getArea() const;
@@ -75,6 +90,14 @@ namespace geometry
        * @return true iff this Rectangle intersects with the other Rectangle.
        */
       bool intersects(const Rectangle& other) const;
+
+      /**
+       * Gets the overlapping section between two Rectangles.
+       *
+       * @param other The Rectangle to check for intersection with this Rectangle.
+       * @return a Rectangle representing the overlap between the two Rectangles.
+       */
+      Rectangle getIntersection(const Rectangle& other) const;
 
       /**
        * Test for containment of another Rectangle.

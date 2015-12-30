@@ -31,8 +31,25 @@ namespace geometry
       right(bottomRight.x)
    {}
 
-   Rectangle::Rectangle(int top, int left, int bottom, int right) : top(top), left(left), bottom(bottom), right(right)
+   Rectangle::Rectangle(int top, int left, int bottom, int right) :
+      top(top),
+      left(left),
+      bottom(bottom),
+      right(right)
    {}
+
+   Rectangle Rectangle::translate(int x, int y) const
+   {
+      return Rectangle(top + y,
+                       left + x,
+                       bottom + y,
+                       right + x);
+   }
+
+   bool Rectangle::isValid() const
+   {
+      return getWidth() != 0 && getHeight() != 0;
+   }
 
    unsigned int Rectangle::getArea() const
    {
@@ -41,11 +58,25 @@ namespace geometry
 
    bool Rectangle::intersects(const Rectangle& other) const
    {
-      return !(other.left > right
+      return isValid()
+         && other.isValid()
+         && !(other.left > right
                 || other.right < left
                 || other.top > bottom
-                || other.bottom < top
-                );
+                || other.bottom < top);
+   }
+
+   Rectangle Rectangle::getIntersection(const Rectangle& other) const
+   {
+      if(!intersects(other) || !isValid() || !other.isValid())
+      {
+         return Rectangle();
+      }
+
+      return Rectangle(std::max(top, other.top),
+                       std::max(left, other.left),
+                       std::min(bottom, other.bottom),
+                       std::min(right, other.right));
    }
 
    bool Rectangle::contains(const Rectangle& other) const

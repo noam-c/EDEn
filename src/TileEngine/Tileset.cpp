@@ -66,41 +66,39 @@ void Tileset::load(const std::string& path)
    m_texture.reset(new Texture(std::string("data/tilesets/") + imagePath));
    m_size = m_texture->getSize() / TileEngine::TILE_SIZE;
 
-   // \todo When Tiled makes it easier, the tileset data needs to hold the default
-   // passibility matrix for a Tileset
-   // Since maps will rarely change the passibility of tiles, it doesn't make
-   // sense to hold passibility within each map's data; a map's Lua script
-   // should be able to cheat default passibility if necessary.
-   m_passibility.resize(m_size.width * m_size.height);
-   std::fill(m_passibility.begin(), m_passibility.end(), true);
+   m_collisionShapes.resize(m_size.getArea());
 
-   TiXmlElement* tileElement = root->FirstChildElement("tile");
+   auto const* tileElement = root->FirstChildElement("tile");
    for(;tileElement != nullptr; tileElement = tileElement->NextSiblingElement("tile"))
    {
       int tileNum = -1;
       tileElement->Attribute("id", &tileNum);
 
-      TiXmlElement* propertiesElement = tileElement->FirstChildElement("properties");
-
-      if(!propertiesElement)
+      if(tileNum < 0)
       {
          continue;
       }
-      
-      TiXmlElement* propertyElement = propertiesElement->FirstChildElement("property");
-      while(propertyElement != nullptr)
+
+      auto& collisionShape = m_collisionShapes[tileNum];
+
+      // Retrieve the collision shape information for this tile
+      const auto objectGroupElement = tileElement->FirstChildElement("objectgroup");
+
+      if(objectGroupElement)
       {
-         if(std::string(propertyElement->Attribute("name")) == "collision")
+         const auto collisionElement = objectGroupElement->FirstChildElement("object");
+         if(collisionElement)
          {
-            const std::string collision = propertyElement->Attribute("value");
-            m_passibility[tileNum] = collision != "true";
-            break;
+            collisionShape.left = std::stoi(collisionElement->Attribute("x")) / TileEngine::TILE_SIZE;
+            collisionShape.top = std::stoi(collisionElement->Attribute("y")) / TileEngine::TILE_SIZE;
+
+            const auto collisionWidth = std::stoi(collisionElement->Attribute("width")) / TileEngine::TILE_SIZE;
+            const auto collisionHeight = std::stoi(collisionElement->Attribute("height")) / TileEngine::TILE_SIZE;
+
+            collisionShape.right = collisionShape.left + collisionWidth;
+            collisionShape.bottom = collisionShape.top + collisionHeight;
          }
-
-         propertyElement = propertyElement->NextSiblingElement("property");
       }
-
-      
    }
 }
 
@@ -148,7 +146,7 @@ void Tileset::draw(int destX, int destY, int tileNum, bool useAlphaTesting)
    glPopAttrib();
 }
 
-void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
+void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b, float a)
 {
    float destLeft = float(destX * TileEngine::TILE_SIZE);
    float destRight = float((destX + 1) * TileEngine::TILE_SIZE);
@@ -168,14 +166,14 @@ void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
    glGetIntegerv(GL_BLEND_DST, &oldBlendDst);
 
    glBlendFunc(GL_ONE, GL_DST_ALPHA);
-   
+
    glBegin(GL_QUADS);
-      glColor4f(r, g, b, 0.2f);
+      glColor4f(r, g, b, a);
       glVertex3f(destLeft, destTop, 0.0f);
       glVertex3f(destRight, destTop, 0.0f);
       glVertex3f(destRight, destBottom, 0.0f);
       glVertex3f(destLeft, destBottom, 0.0f);
-      glColor3f(1.0f, 1.0f, 1.0f);
+      glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
    glEnd();
    
    // Restore all OpenGL state
@@ -183,7 +181,7 @@ void Tileset::drawColorToTile(int destX, int destY, float r, float g, float b)
    glPopAttrib();
 }
 
-bool Tileset::isPassible(int tileNum) const
+geometry::Rectangle Tileset::getCollisionRect(int tileNum) const
 {
-   return m_passibility[tileNum];
+   return m_collisionShapes[tileNum];
 }
