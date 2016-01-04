@@ -57,6 +57,9 @@ class GameState
    friend class ExecutionStack;
 
    private:
+      /** The minimum amount of milliseconds that should pass between frames. */
+      const static int MIN_FRAME_TIME;
+   
       /** The maximum amount of milliseconds allowed to pass between frames. */
       const static int MAX_FRAME_TIME;
 

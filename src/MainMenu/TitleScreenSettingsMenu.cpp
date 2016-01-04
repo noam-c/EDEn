@@ -172,16 +172,11 @@ bool TitleScreenSettingsMenu::step(long timePassed)
 
    waitForInputEvent(done);
 
-   /* The menu shouldn't run too fast */
-   SDL_Delay (1);
-
    return !done;
 }
 
 void TitleScreenSettingsMenu::waitForInputEvent(bool& finishState)
 {
-   SDL_Delay (1);
-
    SDL_Event event;
 
    /* Check for events */
