@@ -90,14 +90,13 @@ bool GameState::advanceFrame()
    m_time = SDL_GetTicks();
 
    long timePassed = std::min<long>(m_time - prevTime, GameState::MAX_FRAME_TIME);
-   
+
    if(timePassed < GameState::MIN_FRAME_TIME)
    {
-      long timeLeft = GameState::MIN_FRAME_TIME - timePassed;
-      SDL_Delay(timeLeft);
+      SDL_Delay(GameState::MIN_FRAME_TIME - timePassed);
       timePassed = GameState::MIN_FRAME_TIME;
    }
-   
+
    return step(timePassed);
 }
 
