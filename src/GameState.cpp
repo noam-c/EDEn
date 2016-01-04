@@ -95,6 +95,7 @@ bool GameState::advanceFrame()
    {
       long timeLeft = GameState::MIN_FRAME_TIME - timePassed;
       SDL_Delay(timeLeft);
+      timePassed = GameState::MIN_FRAME_TIME;
    }
    
    return step(timePassed);
