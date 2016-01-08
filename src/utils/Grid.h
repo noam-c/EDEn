@@ -7,6 +7,7 @@
 #ifndef GRID_H
 #define GRID_H
 
+#include "Rectangle.h"
 #include "Size.h"
 #include <vector>
 
@@ -19,19 +20,14 @@ template<typename T> class Grid final
    /** The array representing the 2D grid. */
    std::vector<T> m_grid;
 
-   /** The width of the grid (used for proper 2D grid indexing). */
-   unsigned int m_width;
+   /** The size of the grid (used for proper 2D grid indexing). */
+   geometry::Size m_size;
 
    public:
       /**
        * Construct an empty, zero-length grid.
-       *
-       * @param size The initial size of the Grid.
        */
-      Grid() :
-         m_width(0)
-      {
-      }
+      Grid() = default;
 
       /**
        * Construct a Grid with the specified dimensions.
@@ -51,7 +47,7 @@ template<typename T> class Grid final
        */
       const T& operator()(unsigned int x, unsigned int y) const
       {
-         return m_grid[y * m_width + x];
+         return m_grid[y * m_size.width + x];
       }
 
       /**
@@ -62,7 +58,7 @@ template<typename T> class Grid final
        */
       T& operator()(unsigned int x, unsigned int y)
       {
-         return m_grid[y * m_width + x];
+         return m_grid[y * m_size.width + x];
       }
 
       /**
@@ -77,7 +73,7 @@ template<typename T> class Grid final
        */
       void clear() noexcept
       {
-         m_width = 0;
+         m_size = {0,0};
          m_grid.clear();
       }
 
@@ -88,8 +84,30 @@ template<typename T> class Grid final
        */
       void resize(const geometry::Size& size, const T& defaultValue = T())
       {
-         m_width = size.width;
-         m_grid.resize(size.width * size.height, defaultValue);
+         m_size = size;
+         m_grid.resize(m_size.getArea(), defaultValue);
+      }
+   
+      /**
+       * Sets all grid cells in a given rectangle to a specific value.
+       *
+       * @param rect The Rectangle representing the subregion to modify in the Grid.
+       * @param value The value to fill the subregion with.
+       */
+      void fillRect(const geometry::Rectangle& rect, const T& value)
+      {
+         if(!rect.isValid())
+         {
+            return;
+         }
+
+         for(int y = rect.top; y < rect.bottom; ++y)
+         {
+            for(int x = rect.left; x < rect.right; ++x)
+            {
+               operator()(x, y) = value;
+            }
+         }
       }
 };
 
