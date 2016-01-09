@@ -49,14 +49,13 @@ namespace geometry
       
       /**
        * Constructor.
-       * Creates a point set at (x,y).
+       * Creates a point set at pair.
        *
-       * @param x The x-coordinate for the point.
-       * @param y The y-coordinate for the point.
+       * @param coordsPair an x-y pair of coordinates.
        */
-      constexpr Point2D(std::pair<int, int> coordsPair) :
-         x(coordsPair.first),
-         y(coordsPair.second)
+      constexpr Point2D(std::pair<int, int> pair) :
+         x(pair.first),
+         y(pair.second)
       {}
 
       /**
