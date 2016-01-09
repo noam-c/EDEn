@@ -22,8 +22,7 @@ namespace geometry
        * Creates empty Size (width: 0, height: 0).
        */
       constexpr Size() :
-         width(0),
-         height(0)
+         Size(0, 0)
       {}
 
       /**

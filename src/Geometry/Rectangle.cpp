@@ -11,24 +11,28 @@
 namespace geometry
 {
    Rectangle::Rectangle() :
-      top(0),
-      left(0),
-      bottom(0),
-      right(0)
+      Rectangle(0, 0, 0, 0)
    {}
 
    Rectangle::Rectangle(const Point2D& topLeft, const Size& size) :
-      top(topLeft.y),
-      left(topLeft.x),
-      bottom(top + size.height),
-      right(left + size.width)
+      Rectangle(topLeft.y,
+                topLeft.x,
+                topLeft.y + size.height,
+                topLeft.x + size.width)
    {}
 
    Rectangle::Rectangle(const Point2D& topLeft, const Point2D& bottomRight) :
-      top(topLeft.y),
-      left(topLeft.x),
-      bottom(bottomRight.y),
-      right(bottomRight.x)
+      Rectangle(topLeft.y,
+                topLeft.x,
+                bottomRight.y,
+                bottomRight.x)
+   {}
+
+   Rectangle::Rectangle(std::tuple<int, int, int, int> edges) :
+      Rectangle(std::get<0>(edges),
+                std::get<1>(edges),
+                std::get<2>(edges),
+                std::get<3>(edges))
    {}
 
    Rectangle::Rectangle(int top, int left, int bottom, int right) :
@@ -40,10 +44,12 @@ namespace geometry
 
    Rectangle Rectangle::translate(int x, int y) const
    {
-      return Rectangle(top + y,
-                       left + x,
-                       bottom + y,
-                       right + x);
+      return {
+         top + y,
+         left + x,
+         bottom + y,
+         right + x
+      };
    }
 
    bool Rectangle::isValid() const
@@ -73,10 +79,12 @@ namespace geometry
          return Rectangle();
       }
 
-      return Rectangle(std::max(top, other.top),
-                       std::max(left, other.left),
-                       std::min(bottom, other.bottom),
-                       std::min(right, other.right));
+      return {
+         std::max(top, other.top),
+         std::max(left, other.left),
+         std::min(bottom, other.bottom),
+         std::min(right, other.right)
+      };
    }
 
    bool Rectangle::contains(const Rectangle& other) const

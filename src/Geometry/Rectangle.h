@@ -7,6 +7,8 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
+#include <tuple>
+
 namespace geometry
 {
    struct Point2D;
@@ -52,6 +54,13 @@ namespace geometry
        * @param bottomRight The bottom-right corner of the rectangle.
        */
       Rectangle(const Point2D& topLeft, const Point2D& bottomRight);
+      
+      /**
+       * Constructor.
+       *
+       * @param edges The top, left, bottom, and right edges.
+       */
+      Rectangle(std::tuple<int, int, int, int> edges);
 
       /**
        * Constructor.
