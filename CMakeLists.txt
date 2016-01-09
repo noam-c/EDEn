@@ -88,7 +88,6 @@ SET(HEADERS
   src/ScriptEngine/NPCScript.h
   src/ScriptEngine/Script.h
   src/ScriptEngine/ScriptEngine.h
-  src/ScriptEngine/ScriptException.h
   src/ScriptEngine/ScriptFactory.h
   src/ScriptEngine/ScriptUtilities.h
   src/ScriptEngine/StringScript.h
