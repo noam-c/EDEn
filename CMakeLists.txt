@@ -130,7 +130,6 @@ SET(HEADERS
   src/Transitions/SpinTransition.h
   src/Transitions/RandomTransitionGenerator.h
   src/Transitions/BlendTransition.h
-  src/TODOLIST.h
   src/utils/DebugUtils.h
   src/utils/EnumUtils.h
   src/utils/Exception.h
