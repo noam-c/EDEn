@@ -7,6 +7,7 @@
 #ifndef RFW_MATRICES_H
 #define RFW_MATRICES_H
 
+#include "CancelableTask.h"
 #include "Grid.h"
 #include "Rectangle.h"
 
@@ -86,10 +87,11 @@ class RoyFloydWarshallMatrices
       /**
        * @param grid A grid of free spaces and obstacles.
        * @param gridBounds The rectangle representing the bounds of the grid.
+       * @param cancelCalculation An atomic flag used to determine if the calculation was canceled in flight.
        *
        * @return the results of the RFW algorithm for the given grid.
        */
-      static RoyFloydWarshallMatrices calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const geometry::Rectangle* gridBounds);
+      static RoyFloydWarshallMatrices calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const geometry::Rectangle* gridBounds, std::atomic<bool>& cancelCalculation);
 };
 
 #endif
