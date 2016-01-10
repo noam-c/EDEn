@@ -9,6 +9,7 @@
 
 #include <atomic>
 #include <future>
+#include <type_traits>
 
 /**
  * A wrapper for an std::async task. Exposes the ability
@@ -39,11 +40,19 @@ template<typename Return> class CancelableTask
        */
       template<typename Func, typename... Args> void runTask(Func&& func, Args&&... args)
       {
+         // This assert just helps debug what may otherwise be a difficult-to-decipher
+         // template complaint from the compiler.
+         static_assert(
+           std::is_same<decltype(func(args..., std::ref(m_cancel))), Return>::value,
+           "CancelableTask<Return>: func does not return type Return for the given args.");
+
          m_cancel = false;
          m_future = std::async(
                       std::launch::async,
                       std::forward<Func>(func),
                       std::forward<Args>(args)...,
+                      // Without std::ref, m_cancel is passed by copy to std::async, which
+                      // doesn't work (can't copy atomics, also it's a template mismatch).
                       std::ref(m_cancel));
       }
 
