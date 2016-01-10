@@ -30,7 +30,13 @@ void Pathfinder::initialize(const Grid<TileState>& grid, int tileSize, const geo
    m_movementTileSize = tileSize;
    m_collisionGrid = &grid;
    m_collisionGridBounds = &gridBounds;
-   m_royFloydWarshallCalculation = std::shared_future<RoyFloydWarshallMatrices>(std::async(std::launch::async, &RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices, m_collisionGrid, m_collisionGridBounds));
+   
+   m_royFloydWarshallCalculation.cancel();
+
+   m_royFloydWarshallCalculation.runTask(
+                                      &RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices,
+                                      m_collisionGrid,
+                                      m_collisionGridBounds);
    DEBUG("Pathfinder reinitialized.");
 }
 
@@ -41,7 +47,7 @@ bool Pathfinder::isRoyFloydWarshallCalculationReady() const
       return false;
    }
 
-   std::future_status futureStatus = m_royFloydWarshallCalculation.wait_for(std::chrono::seconds(0));
+   const auto futureStatus = m_royFloydWarshallCalculation.waitFor(std::chrono::seconds(0));
 
    return futureStatus == std::future_status::ready;
 }
