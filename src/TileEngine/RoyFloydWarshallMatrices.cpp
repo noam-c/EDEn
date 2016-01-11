@@ -48,7 +48,7 @@ float RoyFloydWarshallMatrices::getDistance(geometry::Point2D src, geometry::Poi
    return m_distanceMatrix(srcTileNum, dstTileNum);
 }
 
-RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const geometry::Rectangle* gridBounds)
+RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices(const Grid<TileState>* grid, const geometry::Rectangle* gridBounds, std::atomic<bool>& cancelCalculation)
 {
    RoyFloydWarshallMatrices matrices;
 
@@ -73,7 +73,7 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
    for(unsigned int a = 0; a < NUM_TILES; ++a)
    {
       aTile = tileNumToCoords(a, matrices.m_width);
-      for(unsigned int b = 0; b < NUM_TILES; ++b)
+      for(unsigned int b = 0; b < NUM_TILES && !cancelCalculation; ++b)
       {
          if(a == b)
          {
@@ -123,7 +123,7 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
    {
       for(unsigned int a = 0; a < NUM_TILES; ++a)
       {
-         for(unsigned int b = 0; b < NUM_TILES; ++b)
+         for(unsigned int b = 0; b < NUM_TILES && !cancelCalculation; ++b)
          {
             float distance = distanceMatrix(a, i) + distanceMatrix(i, b);
             if(distance < distanceMatrix(a, b))
@@ -133,6 +133,11 @@ RoyFloydWarshallMatrices RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatr
             }
          }
       }
+   }
+
+   if(cancelCalculation)
+   {
+      DEBUG("Interrupted calculation of RFW matrices. Aborting...");
    }
 
    return matrices;

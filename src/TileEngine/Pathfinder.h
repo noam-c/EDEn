@@ -39,8 +39,8 @@ class Pathfinder
    /** The square root of 2. */
    static const float ROOT_2;
 
-   /** The future for the asynchronous calculation of the grid's RFW matrices. */
-   std::shared_future<RoyFloydWarshallMatrices> m_royFloydWarshallCalculation;
+   /** The task tracking the asynchronous calculation of the grid's RFW matrices. */
+   CancelableTask<RoyFloydWarshallMatrices> m_royFloydWarshallCalculation;
 
    /** The size (in pixels) of each tile. */
    int m_movementTileSize;
