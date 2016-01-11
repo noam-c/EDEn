@@ -31,8 +31,6 @@ void Pathfinder::initialize(const Grid<TileState>& grid, int tileSize, const geo
    m_collisionGrid = &grid;
    m_collisionGridBounds = &gridBounds;
    
-   m_royFloydWarshallCalculation.cancel();
-
    m_royFloydWarshallCalculation.runTask(
                                       &RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices,
                                       m_collisionGrid,
