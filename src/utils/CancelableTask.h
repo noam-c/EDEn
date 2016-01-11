@@ -46,6 +46,11 @@ template<typename Return> class CancelableTask
            std::is_same<decltype(func(args..., std::ref(m_cancel))), Return>::value,
            "CancelableTask<Return>: func does not return type Return for the given args.");
 
+         // Signal the current task to cancel before the new one begins,
+         // since reassigning m_future will cause the current thread to
+         // block until the current task completes.
+         cancel();
+
          m_cancel = false;
          m_future = std::async(
                       std::launch::async,
