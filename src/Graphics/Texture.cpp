@@ -1,8 +1,8 @@
 #include "Texture.h"
+#include "GraphicsUtil.h"
 #include <SDL.h>
 #include "SDL_opengl.h"
 #include "SDL_image.h"
-#include "GraphicsUtil.h"
 #include "Size.h"
 
 #include "DebugUtils.h"

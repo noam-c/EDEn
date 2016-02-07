@@ -7,7 +7,6 @@
 #include "ScreenTexture.h"
 #include "GameState.h"
 #include "GraphicsUtil.h"
-#include "OpenGLExtensions.h"
 #include "Size.h"
 
 #include "DebugUtils.h"
@@ -30,10 +29,13 @@ ScreenTexture::ScreenTexture() :
 
    glPopAttrib();
 
-   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
-   if(extensions.isFrameBuffersEnabled())
+   if(GLEW_ARB_framebuffer_object)
    {
-      (*extensions.getGenFramebuffersFunction())(1, &m_frameBuffer);
+      glGenFramebuffers(1, &m_frameBuffer);
+   }
+   else if(GLEW_EXT_framebuffer_object)
+   {
+      glGenFramebuffersEXT(1, &m_frameBuffer);
    }
 }
 
@@ -66,10 +68,13 @@ ScreenTexture::~ScreenTexture()
       return;
    }
    
-   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
-   if(extensions.isFrameBuffersEnabled())
+   if(GLEW_ARB_framebuffer_object)
    {
-      (*extensions.getDeleteFramebuffersFunction())(1, &m_frameBuffer);
+      glDeleteFramebuffers(1, &m_frameBuffer);
+   }
+   else if(GLEW_EXT_framebuffer_object)
+   {
+      glDeleteFramebuffersEXT(1, &m_frameBuffer);
    }
 }
 
@@ -77,8 +82,7 @@ ScreenTexture ScreenTexture::create(GameState& gameState)
 {
    ScreenTexture texture;
 
-   const OpenGLExtensions& extensions = GraphicsUtil::getInstance()->getExtensions();
-   if(extensions.isFrameBuffersEnabled())
+   if(GLEW_EXT_framebuffer_object || GLEW_ARB_framebuffer_object)
    {
       bool wasActive = gameState.isActive();
       
@@ -86,13 +90,22 @@ ScreenTexture ScreenTexture::create(GameState& gameState)
       {
          gameState.activate();
       }
+
+      if(GLEW_ARB_framebuffer_object)
+      {
+         glBindFramebuffer(GL_FRAMEBUFFER, texture.m_frameBuffer);
+         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.m_textureHandle, 0);
+         
+         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      }
+      else if(GLEW_EXT_framebuffer_object)
+      {
+         glBindFramebuffer(GL_FRAMEBUFFER_EXT, texture.m_frameBuffer);
+         glFramebufferTexture2D(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture.m_textureHandle, 0);
+
+         glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
+      }
       
-      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, texture.m_frameBuffer);
-      (*extensions.getFramebufferTexture2DFunction())(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture.m_textureHandle, 0);
-
-      gameState.drawFrame();
-
-      (*extensions.getBindFramebufferFunction())(GL_FRAMEBUFFER_EXT, 0);
 
       if(!wasActive)
       {
@@ -101,6 +114,6 @@ ScreenTexture ScreenTexture::create(GameState& gameState)
 
       texture.m_valid = true;
    }
-   
+
    return texture;
 }
