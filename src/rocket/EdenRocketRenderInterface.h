@@ -19,7 +19,6 @@
 #define EDEN_ROCKET_RENDER_INTERFACE_H
 
 #include "Rocket/Core/RenderInterface.h"
-#include "SDL_opengl.h"
 
 /**
  * OpenGL render interface for Rocket, using EDEn's texture management
