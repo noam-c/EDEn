@@ -39,7 +39,6 @@ void GraphicsUtil::initialize()
    m_currentYOffset = 0;
 
    initSDL();
-   m_openGLExtensions.initialize();
    initRocket();
 }
 
@@ -52,7 +51,7 @@ void GraphicsUtil::initSDL()
    int audio_buffers = 2048;
 
    // Initialize SDL audio and video bindings
-   if(SDL_Init (SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0)
+   if(SDL_Init(SDL_INIT_AUDIO|SDL_INIT_VIDEO) < 0)
    {
       DEBUG("Couldn't initialize SDL: %s\n", SDL_GetError());
       exit(1);
@@ -79,6 +78,15 @@ void GraphicsUtil::initSDL()
       DEBUG("Couldn't set %dx%dx%d video mode: %s\n", m_width, m_height, m_bitsPerPixel, std::get<1>(videoModeChangeResult).c_str());
       exit(1);
    }
+
+   GLenum err = glewInit();
+   if(err)
+   {
+      DEBUG("Error: %s\n", glewGetErrorString(err));
+      exit(1);
+   }
+
+   DEBUG("Using GLEW %s", glewGetString(GLEW_VERSION));
 }
 
 std::tuple<bool, std::string> GraphicsUtil::initSDLVideoMode()
@@ -230,11 +238,6 @@ std::tuple<bool, std::string> GraphicsUtil::refreshVideoMode()
    }
 
    return videoModeChangeResult;
-}
-
-const OpenGLExtensions& GraphicsUtil::getExtensions() const
-{
-   return m_openGLExtensions;
 }
 
 int GraphicsUtil::getWidth() const
