@@ -6,14 +6,13 @@
 
 #include "Tileset.h"
 
-#include "SDL_opengl.h"
-
 #include <algorithm>
 #include <fstream>
 
 #include "tinyxml.h"
 
 #include "GraphicsUtil.h"
+
 #include "Texture.h"
 #include "TileEngine.h"
 

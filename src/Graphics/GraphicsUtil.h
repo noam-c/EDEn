@@ -9,7 +9,8 @@
 
 #include "Singleton.h"
 
-#include "OpenGLExtensions.h"
+#include <GL/glew.h>
+
 #include "RocketContextRegistry.h"
 #include "EdenRocketRenderInterface.h"
 #include "EdenRocketSystemInterface.h"
@@ -45,9 +46,6 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
 
    /** The OpenGL context used by the main window */
    SDL_GLContext m_openGLContext;
-
-   /** The OpenGL Extensions */
-   OpenGLExtensions m_openGLExtensions;
 
    /** The render interface that Rocket will use. */
    EdenRocketRenderInterface m_rocketRenderInterface;
@@ -118,11 +116,6 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
 
       bool isVideoModeRefreshRequired() const;
       std::tuple<bool, std::string> refreshVideoMode();
-
-      /**
-       * @return The extension manager for this graphical context.
-       */
-      const OpenGLExtensions& getExtensions() const;
 
       /**
        * @return The width of the screen
