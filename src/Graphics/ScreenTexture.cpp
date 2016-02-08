@@ -95,17 +95,23 @@ ScreenTexture ScreenTexture::create(GameState& gameState)
       {
          glBindFramebuffer(GL_FRAMEBUFFER, texture.m_frameBuffer);
          glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.m_textureHandle, 0);
-         
-         glBindFramebuffer(GL_FRAMEBUFFER, 0);
       }
       else if(GLEW_EXT_framebuffer_object)
       {
          glBindFramebuffer(GL_FRAMEBUFFER_EXT, texture.m_frameBuffer);
          glFramebufferTexture2D(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture.m_textureHandle, 0);
-
-         glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
       }
       
+      gameState.drawFrame();
+
+      if(GLEW_ARB_framebuffer_object)
+      {
+         glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      }
+      else if(GLEW_EXT_framebuffer_object)
+      {
+         glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
+      }
 
       if(!wasActive)
       {
