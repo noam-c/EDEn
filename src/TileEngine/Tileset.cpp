@@ -13,8 +13,6 @@
 
 #include "GraphicsUtil.h"
 
-#include "SDL_opengl.h"
-
 #include "Texture.h"
 #include "TileEngine.h"
 
