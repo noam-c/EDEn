@@ -15,8 +15,11 @@
 ScreenTexture::ScreenTexture() :
    m_frameBuffer(0)
 {
+   auto graphics = GraphicsUtil::getInstance();
+   auto& extensions = graphics->getExtensions();
+
    glGenTextures(1, &m_textureHandle);
-   m_size = geometry::Size(GraphicsUtil::getInstance()->getWidth(), GraphicsUtil::getInstance()->getHeight());
+   m_size = geometry::Size(graphics->getWidth(), graphics->getHeight());
    glPushAttrib(GL_ENABLE_BIT | GL_TEXTURE_BIT);
 
    glEnable(GL_TEXTURE_2D);
@@ -29,14 +32,7 @@ ScreenTexture::ScreenTexture() :
 
    glPopAttrib();
 
-   if(GLEW_ARB_framebuffer_object)
-   {
-      glGenFramebuffers(1, &m_frameBuffer);
-   }
-   else if(GLEW_EXT_framebuffer_object)
-   {
-      glGenFramebuffersEXT(1, &m_frameBuffer);
-   }
+   extensions.glGenFramebuffers(1, &m_frameBuffer);
 }
 
 ScreenTexture::ScreenTexture(ScreenTexture&& rhs) :
@@ -68,21 +64,15 @@ ScreenTexture::~ScreenTexture()
       return;
    }
    
-   if(GLEW_ARB_framebuffer_object)
-   {
-      glDeleteFramebuffers(1, &m_frameBuffer);
-   }
-   else if(GLEW_EXT_framebuffer_object)
-   {
-      glDeleteFramebuffersEXT(1, &m_frameBuffer);
-   }
+   GraphicsUtil::getInstance()->getExtensions().glDeleteFramebuffers(1, &m_frameBuffer);
 }
 
 ScreenTexture ScreenTexture::create(GameState& gameState)
 {
    ScreenTexture texture;
 
-   if(GLEW_EXT_framebuffer_object || GLEW_ARB_framebuffer_object)
+   auto& extensions = GraphicsUtil::getInstance()->getExtensions();
+   if(extensions.isFrameBuffersEnabled())
    {
       bool wasActive = gameState.isActive();
       
@@ -91,27 +81,12 @@ ScreenTexture ScreenTexture::create(GameState& gameState)
          gameState.activate();
       }
 
-      if(GLEW_ARB_framebuffer_object)
-      {
-         glBindFramebuffer(GL_FRAMEBUFFER, texture.m_frameBuffer);
-         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.m_textureHandle, 0);
-      }
-      else if(GLEW_EXT_framebuffer_object)
-      {
-         glBindFramebuffer(GL_FRAMEBUFFER_EXT, texture.m_frameBuffer);
-         glFramebufferTexture2D(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture.m_textureHandle, 0);
-      }
+      extensions.glBindFramebuffer(GL_FRAMEBUFFER, texture.m_frameBuffer);
+      extensions.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.m_textureHandle, 0);
       
       gameState.drawFrame();
 
-      if(GLEW_ARB_framebuffer_object)
-      {
-         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-      }
-      else if(GLEW_EXT_framebuffer_object)
-      {
-         glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
-      }
+      extensions.glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
       if(!wasActive)
       {
