@@ -7,83 +7,78 @@
 #ifndef OPENGL_EXTENSIONS
 #define OPENGL_EXTENSIONS
 
-#define GL_GLEXT_PROTOTYPES 1
-#include "SDL_opengl.h"
-#undef GL_GLEXT_PROTOTYPES
+#include <GL/glew.h>
+
+// Boilerplate for OpenGL extensions.
+// Declares a member function pointer and creates a
+// public function to forward calls to it.
+// \todo: This is a helpful way to reduce code repetition,
+// but makes debugging kind of a pain. Replace this with
+// code generation once such a solution is implemented.
+#define EXTENSION(ext) \
+  private: \
+    decltype(ext) m_##ext = nullptr; \
+  public: \
+    template<typename ... Args> auto ext(Args... args) \
+      -> decltype(ext(args...)) \
+    { \
+       m_##ext(args...); \
+    }
 
 /**
- * A helper class to load in and manage the extensions needed by the game.
+ * A helper class to select the extensions needed
+ * by the game based on what's available in the
+ * underlying hardware.
  *
  * @author Noam Chitayat
  */
 class OpenGLExtensions
 {
-   typedef void (APIENTRY * glBindFramebufferFunction)(GLenum, GLuint);
-   typedef void (APIENTRY * glDeleteFramebuffersFunction)(GLsizei, const GLuint *);
-   typedef void (APIENTRY * glGenFramebuffersFunction)(GLsizei, GLuint *);
-   typedef void (APIENTRY * glFramebufferTexture2DFunction)(GLenum, GLenum, GLenum, GLuint, GLint);
-
-   /**
-    * The pointer to the glBindFramebufferEXT function.
-    */
-   glBindFramebufferFunction m_glBindFramebufferEXT;
-
-   /**
-    * The pointer to the glDeleteFramebuffersEXT function.
-    */
-   glDeleteFramebuffersFunction m_glDeleteFramebuffersEXT;
-
-   /**
-    * The pointer to the glGenFramebuffersEXT function.
-    */
-   glGenFramebuffersFunction m_glGenFramebuffersEXT;
-
-   /**
-    * The pointer to the glFramebufferTexture2DEXT function.
-    */
-   glFramebufferTexture2DFunction m_glFramebufferTexture2DEXT;
-
+   
    /**
     * Flag indicating whether or not Frame Buffer Objects (FBOs) are supported on this device.
     */
    bool m_framebuffersEnabled;
 
+   /**
+    * Flag indicating whether or not Buffer Objects are supported on this device.
+    */
+   bool m_bufferObjectsEnabled;
+   
+   /* Framebuffers */
+
+   EXTENSION(glGenFramebuffers);
+   EXTENSION(glDeleteFramebuffers);
+   EXTENSION(glBindFramebuffer);
+   EXTENSION(glFramebufferTexture2D);
+
+   /* Buffer objects */
+   EXTENSION(glGenBuffers);
+   EXTENSION(glDeleteBuffers);
+   EXTENSION(glBindBuffer);
+   EXTENSION(glBufferData);
+   
+   bool initFramebuffers();
+   
+   bool initBufferObjects();
+
    public:
-
-      /**
-       * Constructor.
-       */
-      OpenGLExtensions();
-
       /**
        * Initializes OpenGL extensions needed by the game
        */
       void initialize();
 
       /**
+       * @return true iff buffer objects are supported on this device.
+       */
+      bool isBufferObjectsEnabled() const;
+
+      /**
        * @return true iff FBOs are supported on this device.
        */
       bool isFrameBuffersEnabled() const;
-
-      /**
-       * @return a pointer to the glBindFramebufferEXT function.
-       */
-      glBindFramebufferFunction getBindFramebufferFunction() const;
-
-      /**
-       * @return a pointer to the glDeleteFramebuffersEXT function.
-       */
-      glDeleteFramebuffersFunction getDeleteFramebuffersFunction() const;
-
-      /**
-       * @return a pointer to the glGenFramebuffersEXT function.
-       */
-      glGenFramebuffersFunction getGenFramebuffersFunction() const;
-
-      /**
-       * @return a pointer to the glFramebufferTexture2DEXT function.
-       */
-      glFramebufferTexture2DFunction getFramebufferTexture2DFunction() const;
 };
+
+#undef EXTENSION
 
 #endif

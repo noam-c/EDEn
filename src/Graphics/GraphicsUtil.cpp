@@ -79,12 +79,7 @@ void GraphicsUtil::initSDL()
       exit(1);
    }
 
-   GLenum err = glewInit();
-   if(err)
-   {
-      DEBUG("Error: %s\n", glewGetErrorString(err));
-      exit(1);
-   }
+   m_openGLExtensions.initialize();
 
    DEBUG("Using GLEW %s", glewGetString(GLEW_VERSION));
 }
@@ -238,6 +233,11 @@ std::tuple<bool, std::string> GraphicsUtil::refreshVideoMode()
    }
 
    return videoModeChangeResult;
+}
+
+OpenGLExtensions& GraphicsUtil::getExtensions()
+{
+   return m_openGLExtensions;
 }
 
 int GraphicsUtil::getWidth() const
