@@ -1,3 +1,9 @@
+/*
+ *  This file is covered by the Ruby license. See LICENSE.txt for more details.
+ *
+ *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
+ */
+
 #ifndef BATTLE_OVERLAY_H
 #define BATTLE_OVERLAY_H
 
