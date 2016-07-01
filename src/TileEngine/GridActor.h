@@ -11,6 +11,7 @@
 #include <string>
 #include <memory>
 
+#include "Actor.h"
 #include "Point2D.h"
 #include "Size.h"
 
@@ -29,7 +30,7 @@ namespace messaging
    class MessagePipe;
 };
 
-class GridActor
+class GridActor : public Actor
 {
    class Order;
    class MoveOrder;

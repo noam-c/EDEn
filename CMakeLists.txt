@@ -5,6 +5,7 @@ PROJECT(eden)
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 
 SET(HEADERS
+  src/actor/Actor.h
   src/Audio/Music.h
   src/Audio/Sound.h
   src/BattleSystem/BattleController.h
@@ -148,6 +149,7 @@ SET(SOURCES
   src/tinyxml/tinyxmlerror.cpp
   src/tinyxml/tinyxmlparser.cpp
   src/json/jsoncpp.cpp
+  src/actor/Actor.cpp
   src/Audio/Music.cpp
   src/Audio/Sound.cpp
   src/BattleSystem/BattleController.cpp
@@ -271,6 +273,7 @@ SET(SOURCES
 SET(SOURCE_GROUP_DELIMITER "/")
 
 SOURCE_GROUP("//" REGULAR_EXPRESSION src/[^/]*)
+SOURCE_GROUP(actor REGULAR_EXPRESSION src/actor/.*)
 SOURCE_GROUP(Audio REGULAR_EXPRESSION src/Audio/.*)
 SOURCE_GROUP(BattleSystem REGULAR_EXPRESSION src/BattleSystem/.*)
 SOURCE_GROUP(controllers REGULAR_EXPRESSION src/controllers/.*)
@@ -304,6 +307,7 @@ ENDIF()
 
 INCLUDE_DIRECTORIES(
   src
+  src/actor
   src/Audio
   src/BattleSystem
   src/controllers
