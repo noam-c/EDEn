@@ -7,7 +7,7 @@
 #ifndef MAP_TRIGGER_CALLBACK_H
 #define MAP_TRIGGER_CALLBACK_H
 
-class Actor;
+class GridActor;
 struct lua_State;
 
 /**
@@ -42,7 +42,7 @@ struct MapTriggerCallback final
     *
     * @param actor The Actor that stepped into the map trigger zone.
     */
-   int operator()(Actor* actor);
+   int operator()(GridActor* actor);
 };
 
 #endif

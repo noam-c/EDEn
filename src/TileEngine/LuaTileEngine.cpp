@@ -80,7 +80,7 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
 
    npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize, direction);
 
-   luaW_push<Actor>(luaVM, npc);
+   luaW_push<GridActor>(luaVM, npc);
    return 1;
 }
 
@@ -133,8 +133,8 @@ static int TileEngineL_FollowWithCamera(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   Actor* target = nullptr;
-   if(!ScriptUtilities::getParameter<Actor>(luaVM, 2, 1, "target", target))
+   GridActor* target = nullptr;
+   if(!ScriptUtilities::getParameter<GridActor>(luaVM, 2, 1, "target", target))
    {
       return lua_error(luaVM);
    }

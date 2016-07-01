@@ -4,15 +4,15 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#include "LuaActor.h"
+#include "LuaGridActor.h"
 #include "ScriptUtilities.h"
 #include "ScriptEngine.h"
-#include "Actor.h"
+#include "GridActor.h"
 #include "Point2D.h"
 
-static int ActorL_Move(lua_State* luaVM)
+static int GridActorL_Move(lua_State* luaVM)
 {
-   Actor* actor = luaW_check<Actor>(luaVM, 1);
+   GridActor* actor = luaW_check<GridActor>(luaVM, 1);
    if (actor == nullptr)
    {
       return lua_error(luaVM);
@@ -50,9 +50,9 @@ static int ActorL_Move(lua_State* luaVM)
    return callResult;
 }
 
-static int ActorL_SetSprite(lua_State* luaVM)
+static int GridActorL_SetSprite(lua_State* luaVM)
 {
-   Actor* actor = luaW_check<Actor>(luaVM, 1);
+   GridActor* actor = luaW_check<GridActor>(luaVM, 1);
    if (actor == nullptr)
    {
       return lua_error(luaVM);
@@ -67,9 +67,9 @@ static int ActorL_SetSprite(lua_State* luaVM)
    return 0;
 }
 
-static int ActorL_SetAnimation(lua_State* luaVM)
+static int GridActorL_SetAnimation(lua_State* luaVM)
 {
-   Actor* actor = luaW_check<Actor>(luaVM, 1);
+   GridActor* actor = luaW_check<GridActor>(luaVM, 1);
    if (actor == nullptr)
    {
       return lua_error(luaVM);
@@ -86,9 +86,9 @@ static int ActorL_SetAnimation(lua_State* luaVM)
    return 0;
 }
 
-static int ActorL_SetSpritesheet(lua_State* luaVM)
+static int GridActorL_SetSpritesheet(lua_State* luaVM)
 {
-   Actor* actor = luaW_check<Actor>(luaVM, 1);
+   GridActor* actor = luaW_check<GridActor>(luaVM, 1);
    if (actor == nullptr)
    {
       return lua_error(luaVM);
@@ -105,16 +105,16 @@ static int ActorL_SetSpritesheet(lua_State* luaVM)
    return 0;
 }
 
-static int ActorL_LookAt(lua_State* luaVM)
+static int GridActorL_LookAt(lua_State* luaVM)
 {
-   Actor* actor = luaW_check<Actor>(luaVM, 1);
+   GridActor* actor = luaW_check<GridActor>(luaVM, 1);
    if (actor == nullptr)
    {
       return lua_error(luaVM);
    }
 
-   Actor* target;
-   if(!ScriptUtilities::getParameter<Actor>(luaVM, 2, 1, "target", target))
+   GridActor* target;
+   if(!ScriptUtilities::getParameter<GridActor>(luaVM, 2, 1, "target", target))
    {
       return lua_error(luaVM);
    }
@@ -126,15 +126,15 @@ static int ActorL_LookAt(lua_State* luaVM)
 
 static luaL_Reg actorMetatable[] =
 {
-   { "move", ActorL_Move },
-   { "setSprite", ActorL_SetSprite },
-   { "setAnimation", ActorL_SetAnimation },
-   { "setSpritesheet", ActorL_SetSpritesheet },
-   { "lookAt", ActorL_LookAt },
+   { "move", GridActorL_Move },
+   { "setSprite", GridActorL_SetSprite },
+   { "setAnimation", GridActorL_SetAnimation },
+   { "setSpritesheet", GridActorL_SetSpritesheet },
+   { "lookAt", GridActorL_LookAt },
    { nullptr, nullptr }
 };
 
 void luaopen_Actor(lua_State* luaVM)
 {
-   luaW_register<Actor>(luaVM, "Actor", nullptr, actorMetatable, nullptr, nullptr);
+   luaW_register<GridActor>(luaVM, "Actor", nullptr, actorMetatable, nullptr, nullptr);
 }

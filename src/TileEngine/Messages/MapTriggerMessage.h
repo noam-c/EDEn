@@ -7,15 +7,15 @@
 #ifndef MAP_TRIGGER_MESSAGE_H
 #define MAP_TRIGGER_MESSAGE_H
 
-class Actor;
+class GridActor;
 class TriggerZone;
 
 struct MapTriggerMessage
 {
    const TriggerZone& triggerZone;
-   const Actor* const triggeringActor;
+   const GridActor* const triggeringActor;
 
-   MapTriggerMessage(const TriggerZone& triggerZone, const Actor* const movingActor);
+   MapTriggerMessage(const TriggerZone& triggerZone, const GridActor* const movingActor);
 };
 
 #endif

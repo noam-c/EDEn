@@ -22,9 +22,9 @@
 #include "TileEngine.h"
 #include "Timer.h"
 
-#include "LuaActor.h"
 #include "LuaCharacter.h"
 #include "LuaCharacterRoster.h"
+#include "LuaGridActor.h"
 #include "LuaInventory.h"
 #include "LuaPlayerCharacter.h"
 #include "LuaQuest.h"

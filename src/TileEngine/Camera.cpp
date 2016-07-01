@@ -6,7 +6,7 @@
 
 #include "Camera.h"
 #include "GraphicsUtil.h"
-#include "Actor.h"
+#include "GridActor.h"
 #include "Point2D.h"
 #include "Rectangle.h"
 

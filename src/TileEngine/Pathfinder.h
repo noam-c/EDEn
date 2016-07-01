@@ -15,7 +15,7 @@
 #include "Rectangle.h"
 #include "RoyFloydWarshallMatrices.h"
 
-class Actor;
+class GridActor;
 class EntityGrid;
 class Map;
 

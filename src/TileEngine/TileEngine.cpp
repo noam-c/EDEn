@@ -186,7 +186,7 @@ int TileEngine::setMap(std::string mapName)
    return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, m_scheduler);
 }
 
-void TileEngine::followWithCamera(const Actor& target)
+void TileEngine::followWithCamera(const GridActor& target)
 {
    m_cameraTarget = &target;
 }
@@ -293,7 +293,7 @@ void TileEngine::addTriggerListener(const std::string& triggerName, std::unique_
    m_triggerScripts.emplace_back(triggerName, std::move(callback));
 }
 
-bool TileEngine::isPlayerCharacter(const Actor* const actor) const
+bool TileEngine::isPlayerCharacter(const GridActor* const actor) const
 {
    return &m_playerActor == actor;
 }
@@ -353,9 +353,9 @@ void TileEngine::stepNPCs(long timePassed)
    }
 }
 
-std::vector<const Actor*> TileEngine::collectActors() const
+std::vector<const GridActor*> TileEngine::collectActors() const
 {
-   std::vector<const Actor*> actors;
+   std::vector<const GridActor*> actors;
    actors.reserve(m_npcList.size() + 1);
    for(auto& iter : m_npcList)
    {
@@ -391,7 +391,7 @@ void TileEngine::draw()
          std::sort(
             actors.begin(),
             actors.end(),
-            [](const Actor* lhs, const Actor* rhs)
+            [](const GridActor* lhs, const GridActor* rhs)
             {
                return lhs->getLocation().y + lhs->getSize().height < rhs->getLocation().y + rhs->getSize().height;
             }

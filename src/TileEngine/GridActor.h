@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#ifndef ACTOR_H
-#define ACTOR_H
+#ifndef GRID_ACTOR_H
+#define GRID_ACTOR_H
 
 #include <queue>
 #include <string>
@@ -29,7 +29,7 @@ namespace messaging
    class MessagePipe;
 };
 
-class Actor
+class GridActor
 {
    class Order;
    class MoveOrder;
@@ -76,12 +76,12 @@ class Actor
        * @param movementSpeed The speed of the actor's movement.
        * @param direction The starting direction of the actor.
        */
-       Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, geometry::Direction direction);
+       GridActor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, geometry::Direction direction);
 
       /**
        * Destructor.
        */
-      virtual ~Actor() = 0;
+      virtual ~GridActor() = 0;
 
       /**
        * Clear the Actor's current set of orders.
@@ -137,7 +137,7 @@ class Actor
        *
        * @param other The actor to turn and face.
        */
-      void faceActor(Actor* other);
+      void faceActor(GridActor* other);
 
       /**
        * This function enqueues a movement instruction.

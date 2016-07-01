@@ -7,7 +7,7 @@
 #ifndef NPC_H
 #define NPC_H
 
-#include "Actor.h"
+#include "GridActor.h"
 #include <memory>
 
 class NPCScript;
@@ -36,7 +36,7 @@ class ScriptEngine;
  *
  * @author Noam Chitayat
  */
-class NPC final : public Actor
+class NPC final : public GridActor
 {
    /** The NPC's coroutine of execution */
    std::shared_ptr<NPCScript> m_coroutine;

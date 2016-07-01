@@ -4,8 +4,8 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#ifndef ACTOR_ORDER_H
-#define ACTOR_ORDER_H
+#ifndef GRID_ACTOR_ORDER_H
+#define GRID_ACTOR_ORDER_H
 
 #include "EntityGrid.h"
 
@@ -17,11 +17,11 @@
  *
  * @author Noam Chitayat
  */
-class Actor::Order
+class GridActor::Order
 {
    protected:
-      Actor& m_actor;
-      Order(Actor& actor) : m_actor(actor) {}
+      GridActor& m_actor;
+      Order(GridActor& actor) : m_actor(actor) {}
 
    public:
       virtual bool perform(long timePassed) = 0;
@@ -35,12 +35,12 @@ class Actor::Order
  *
  * @author Noam Chitayat
  */
-class Actor::StandOrder : public Actor::Order
+class GridActor::StandOrder : public GridActor::Order
 {
    geometry::Direction m_direction;
 
    public:
-      StandOrder(Actor& actor, geometry::Direction direction);
+      StandOrder(GridActor& actor, geometry::Direction direction);
       bool perform(long timePassed) override;
 };
 
@@ -50,7 +50,7 @@ class Actor::StandOrder : public Actor::Order
  *
  * @author Noam Chitayat
  */
-class Actor::MoveOrder final : public Actor::Order
+class GridActor::MoveOrder final : public GridActor::Order
 {
    /**
     * Tracks if the move order has calculated a path from
@@ -101,7 +101,7 @@ class Actor::MoveOrder final : public Actor::Order
        * @param destination The point that the Actor will move to.
        * @param entityGrid The grid that the Actor is moving on.
        */
-      MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid);
+      MoveOrder(GridActor& actor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid);
 
       /**
        * Destructor.

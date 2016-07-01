@@ -83,5 +83,5 @@ static luaL_Reg playerCharacterMetatable[] =
 void luaopen_PlayerCharacter(lua_State* luaVM)
 {
    luaW_register<PlayerCharacter>(luaVM, "PlayerCharacter", nullptr, playerCharacterMetatable, nullptr, nullptr);
-   luaW_extend<PlayerCharacter, Actor>(luaVM);
+   luaW_extend<PlayerCharacter, GridActor>(luaVM);
 }

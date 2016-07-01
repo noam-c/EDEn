@@ -92,7 +92,7 @@ class TileEngine final :
    Camera m_camera;
 
    /** An optional Actor target for the camera to follow. */
-   const Actor* m_cameraTarget;
+   const GridActor* m_cameraTarget;
 
    /**
     * Loads a chapter script.
@@ -131,7 +131,7 @@ class TileEngine final :
     *
     * @return a vector of all the active actors.
     */
-   std::vector<const Actor*> collectActors() const;
+   std::vector<const GridActor*> collectActors() const;
 
    /**
     * Constructor.
@@ -277,7 +277,7 @@ class TileEngine final :
        *
        * @param target The actor to follow with the camera
        */
-      void followWithCamera(const Actor& target);
+      void followWithCamera(const GridActor& target);
 
       /**
        * Order the camera to stop following its target, if it has one.
@@ -339,7 +339,7 @@ class TileEngine final :
       /**
        * @return Whether or not the given actor is the player character.
        */
-      bool isPlayerCharacter(const Actor* const actor) const;
+      bool isPlayerCharacter(const GridActor* const actor) const;
 
       /**
        * @return The player character in the tile engine.

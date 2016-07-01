@@ -130,7 +130,7 @@ bool NPCScript::callFunction(NPCFunction function)
       lua_gettable(m_luaStack, -2);
 
       // Push NPC as argument
-      luaW_push<Actor>(m_luaStack, m_npc);
+      luaW_push<GridActor>(m_luaStack, m_npc);
 
       // Run the script
       return runScript(1);

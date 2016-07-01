@@ -4,12 +4,12 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#include "Actor.h"
+#include "GridActor.h"
 
 #include <math.h>
 #include "SDL_opengl.h"
 
-#include "Actor_Orders.h"
+#include "GridActor_Orders.h"
 #include "Map.h"
 #include "Direction.h"
 #include "TileEngine.h"
@@ -20,7 +20,7 @@
 // Define as 1 to draw the NPC's projected path to the screen
 #define DRAW_PATH 0
 
-Actor::MoveOrder::MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid) :
+GridActor::MoveOrder::MoveOrder(GridActor& actor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid) :
    Order(actor),
    m_pathInitialized(false),
    m_movementBegun(false),
@@ -31,7 +31,7 @@ Actor::MoveOrder::MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, con
 {
 }
 
-Actor::MoveOrder::~MoveOrder()
+GridActor::MoveOrder::~MoveOrder()
 {
    if(m_movementBegun)
    {
@@ -39,20 +39,20 @@ Actor::MoveOrder::~MoveOrder()
    }
 }
 
-void Actor::MoveOrder::updateDirection(geometry::Direction newDirection, bool moving)
+void GridActor::MoveOrder::updateDirection(geometry::Direction newDirection, bool moving)
 {
    m_actor.setDirection(newDirection);
    if(moving)
    {
-      m_actor.setAnimation(Actor::DEFAULT_WALKING_PREFIX);
+      m_actor.setAnimation(GridActor::DEFAULT_WALKING_PREFIX);
    }
    else
    {
-      m_actor.setFrame(Actor::DEFAULT_STANDING_PREFIX);
+      m_actor.setFrame(GridActor::DEFAULT_STANDING_PREFIX);
    }
 }
 
-void Actor::MoveOrder::updateNextWaypoint(geometry::Point2D location, geometry::Direction& direction)
+void GridActor::MoveOrder::updateNextWaypoint(geometry::Point2D location, geometry::Direction& direction)
 {
    m_lastWaypoint = location;
    m_nextWaypoint = m_path.front();
@@ -77,7 +77,7 @@ void Actor::MoveOrder::updateNextWaypoint(geometry::Point2D location, geometry::
    }
 }
 
-bool Actor::MoveOrder::perform(long timePassed)
+bool GridActor::MoveOrder::perform(long timePassed)
 {
    geometry::Point2D location = m_actor.getLocation();
    geometry::Direction newDirection = m_actor.getDirection();
@@ -213,7 +213,7 @@ bool Actor::MoveOrder::perform(long timePassed)
    return false;
 }
 
-void Actor::MoveOrder::draw() const
+void GridActor::MoveOrder::draw() const
 {
    if(DRAW_PATH)
    {

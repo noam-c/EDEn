@@ -4,18 +4,18 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#include "Actor.h"
-#include "Actor_Orders.h"
+#include "GridActor.h"
+#include "GridActor_Orders.h"
 
-Actor::StandOrder::StandOrder(Actor& actor, geometry::Direction direction) :
+GridActor::StandOrder::StandOrder(GridActor& actor, geometry::Direction direction) :
    Order(actor),
    m_direction(direction)
 {
 }
 
-bool Actor::StandOrder::perform(long timePassed)
+bool GridActor::StandOrder::perform(long timePassed)
 {
    m_actor.setDirection(m_direction);
-   m_actor.setFrame(Actor::DEFAULT_STANDING_PREFIX);
+   m_actor.setFrame(GridActor::DEFAULT_STANDING_PREFIX);
    return true;
 }

@@ -18,7 +18,7 @@
 
 NPC::NPC(ScriptEngine& engine, Scheduler& scheduler, const std::string& name, const geometry::Direction direction, const std::string& sheetName,
             messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const std::string& regionName, const geometry::Point2D& location, const geometry::Size& size) :
-   Actor(name, messagePipe, entityGrid, location, size, 0.1f, direction)
+   GridActor(name, messagePipe, entityGrid, location, size, 0.1f, direction)
 {
    m_coroutine = engine.createNPCCoroutine(this, regionName, entityGrid.getMapName());
    scheduler.start(m_coroutine);

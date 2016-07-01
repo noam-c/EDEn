@@ -25,7 +25,7 @@ const std::string PlayerCharacter::WALKING_PREFIX = "walk";
 const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData) :
-   Actor("player", messagePipe, map, geometry::Point2D(0, 0), geometry::Size(32, 32), 0.2f, geometry::Direction::DOWN),
+   GridActor("player", messagePipe, map, geometry::Point2D(0, 0), geometry::Size(32, 32), 0.2f, geometry::Direction::DOWN),
    m_roster(*playerData.getRoster()),
    m_active(false),
    m_cumulativeDistanceCovered(0)
@@ -74,7 +74,7 @@ void PlayerCharacter::removeFromMap()
 void PlayerCharacter::move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task)
 {
    flushOrders();
-   Actor::move(dst, task);
+   GridActor::move(dst, task);
 }
 
 void PlayerCharacter::step(long timePassed)
@@ -172,14 +172,14 @@ void PlayerCharacter::step(long timePassed)
       m_sprite->setFrame(STANDING_PREFIX, direction);
    }
 
-   Actor::step(timePassed);
+   GridActor::step(timePassed);
 }
 
 void PlayerCharacter::draw() const
 {
    if(m_active)
    {
-      Actor::draw();
+      GridActor::draw();
    }
 }
 

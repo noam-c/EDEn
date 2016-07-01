@@ -97,9 +97,9 @@ SET(HEADERS
   src/Sprites/FrameSequence.h
   src/Sprites/Sprite.h
   src/Sprites/Spritesheet.h
-  src/TileEngine/Actor.h
-  src/TileEngine/Actor_Orders.h
-  src/TileEngine/LuaActor.h
+  src/TileEngine/GridActor.h
+  src/TileEngine/GridActor_Orders.h
+  src/TileEngine/LuaGridActor.h
   src/TileEngine/Camera.h
   src/TileEngine/CameraSlider.h
   src/TileEngine/EntityGrid.h
@@ -118,7 +118,7 @@ SET(HEADERS
   src/TileEngine/Tileset.h
   src/TileEngine/TileState.h
   src/TileEngine/TriggerZone.h
-  src/TileEngine/Messages/ActorMoveMessage.h
+  src/TileEngine/Messages/GridActorMoveMessage.h
   src/TileEngine/Messages/DebugCommandMessage.h
   src/TileEngine/Messages/MapExitMessage.h
   src/TileEngine/Messages/MapTriggerMessage.h
@@ -221,10 +221,10 @@ SET(SOURCES
   src/Sprites/Animation.cpp
   src/Sprites/Sprite.cpp
   src/Sprites/Spritesheet.cpp
-  src/TileEngine/Actor.cpp
-  src/TileEngine/Actor_MoveOrder.cpp
-  src/TileEngine/Actor_StandOrder.cpp
-  src/TileEngine/LuaActor.cpp
+  src/TileEngine/GridActor.cpp
+  src/TileEngine/GridActor_MoveOrder.cpp
+  src/TileEngine/GridActor_StandOrder.cpp
+  src/TileEngine/LuaGridActor.cpp
   src/TileEngine/Camera.cpp
   src/TileEngine/CameraSlider.cpp
   src/TileEngine/EntityGrid.cpp
@@ -243,8 +243,8 @@ SET(SOURCES
   src/TileEngine/Tileset.cpp
   src/TileEngine/TileState.cpp
   src/TileEngine/TriggerZone.cpp
-  src/TileEngine/Messages/ActorMoveMessage.cpp
   src/TileEngine/Messages/DebugCommandMessage.cpp
+  src/TileEngine/Messages/GridActorMoveMessage.cpp
   src/TileEngine/Messages/MapExitMessage.cpp
   src/TileEngine/Messages/MapTriggerMessage.cpp
   src/Transitions/Transition.cpp

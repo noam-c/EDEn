@@ -27,12 +27,12 @@ MapTriggerCallback::~MapTriggerCallback()
    luaL_unref(m_luaVM, LUA_REGISTRYINDEX, m_registryIndex);
 }
 
-int MapTriggerCallback::operator()(Actor* actor)
+int MapTriggerCallback::operator()(GridActor* actor)
 {
    if(m_registryIndex != LUA_NOREF)
    {
       lua_rawgeti(m_luaVM, LUA_REGISTRYINDEX, m_registryIndex);
-      luaW_push<Actor>(m_luaVM, actor);
+      luaW_push<GridActor>(m_luaVM, actor);
       return lua_pcall(m_luaVM, 1, 0, 0);
    }
 

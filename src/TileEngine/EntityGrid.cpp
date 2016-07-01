@@ -8,8 +8,8 @@
 
 #include "SDL_opengl.h"
 
-#include "Actor.h"
-#include "ActorMoveMessage.h"
+#include "GridActor.h"
+#include "GridActorMoveMessage.h"
 #include "Map.h"
 #include "MapExit.h"
 #include "MapExitMessage.h"
@@ -155,12 +155,12 @@ bool EntityGrid::addObstacle(const geometry::Point2D& location, const geometry::
    return occupyArea(geometry::Rectangle(location, size), TileState(TileState::EntityType::OBSTACLE));
 }
 
-bool EntityGrid::addActor(Actor* actor, const geometry::Point2D& area)
+bool EntityGrid::addActor(GridActor* actor, const geometry::Point2D& area)
 {
    return occupyArea(geometry::Rectangle(area, actor->getSize()), TileState(TileState::EntityType::ACTOR, actor));
 }
 
-bool EntityGrid::changeActorLocation(Actor* actor, const geometry::Point2D& dst)
+bool EntityGrid::changeActorLocation(GridActor* actor, const geometry::Point2D& dst)
 {
    const geometry::Rectangle dstArea(dst, actor->getSize());
    TileState actorState(TileState::EntityType::ACTOR, actor);
@@ -173,12 +173,12 @@ bool EntityGrid::changeActorLocation(Actor* actor, const geometry::Point2D& dst)
    return false;
 }
 
-void EntityGrid::removeActor(Actor* actor)
+void EntityGrid::removeActor(GridActor* actor)
 {
    freeArea(geometry::Rectangle(actor->getLocation(), actor->getSize()));
 }
 
-Actor* EntityGrid::getAdjacentActor(Actor* actor) const
+GridActor* EntityGrid::getAdjacentActor(GridActor* actor) const
 {
    if(m_collisionMap.empty())
    {
@@ -244,7 +244,7 @@ Actor* EntityGrid::getAdjacentActor(Actor* actor) const
          const TileState& collisionTile = m_collisionMap(rectX, rectY);
          if(collisionTile.entityType == TileState::EntityType::ACTOR && collisionTile.entity != actor)
          {
-            return static_cast<Actor*>(collisionTile.entity);
+            return static_cast<GridActor*>(collisionTile.entity);
          }
       }
    }
@@ -337,7 +337,7 @@ bool EntityGrid::isAreaFree(const geometry::Rectangle& area) const
    return true;
 }
 
-bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance)
+bool EntityGrid::moveToClosestPoint(GridActor* actor, int xDirection, int yDirection, int distance)
 {
    if(xDirection == 0 && yDirection == 0) return false;
    if(distance == 0) return false;
@@ -412,18 +412,18 @@ bool EntityGrid::moveToClosestPoint(Actor* actor, int xDirection, int yDirection
    return false;
 }
 
-bool EntityGrid::beginMovement(Actor* actor, const geometry::Point2D& dst)
+bool EntityGrid::beginMovement(GridActor* actor, const geometry::Point2D& dst)
 {
    return occupyArea(geometry::Rectangle(dst, actor->getSize()), TileState(TileState::EntityType::ACTOR, actor));
 }
 
-void EntityGrid::abortMovement(Actor* actor, const geometry::Point2D& src, const geometry::Point2D& dst)
+void EntityGrid::abortMovement(GridActor* actor, const geometry::Point2D& src, const geometry::Point2D& dst)
 {
    freeArea(src, actor->getLocation(), actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
    freeArea(dst, actor->getLocation(), actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
 }
 
-void EntityGrid::endMovement(Actor* actor, const geometry::Point2D& src, const geometry::Point2D& dst)
+void EntityGrid::endMovement(GridActor* actor, const geometry::Point2D& src, const geometry::Point2D& dst)
 {
    freeArea(src, dst, actor->getSize(), TileState(TileState::EntityType::ACTOR, actor));
 }
@@ -512,7 +512,7 @@ void EntityGrid::drawForeground(int y) const
    }
 }
 
-void EntityGrid::receive(const ActorMoveMessage& message)
+void EntityGrid::receive(const GridActorMoveMessage& message)
 {
    std::shared_ptr<const Map> map(m_map.lock());
    if(!map)

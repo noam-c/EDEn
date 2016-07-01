@@ -4,10 +4,10 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#include "Actor.h"
+#include "GridActor.h"
 
-#include "Actor_Orders.h"
-#include "ActorMoveMessage.h"
+#include "GridActor_Orders.h"
+#include "GridActorMoveMessage.h"
 #include "EntityGrid.h"
 #include "MessagePipe.h"
 #include "Direction.h"
@@ -15,12 +15,12 @@
 #include "Sprite.h"
 #include "TileEngine.h"
 
-const std::string Actor::DEFAULT_WALKING_PREFIX = "walk";
-const std::string Actor::DEFAULT_STANDING_PREFIX = "stand";
+const std::string GridActor::DEFAULT_WALKING_PREFIX = "walk";
+const std::string GridActor::DEFAULT_STANDING_PREFIX = "stand";
 
 #define DEBUG_FLAG DEBUG_ACTOR
 
-Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, geometry::Direction direction) :
+GridActor::GridActor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, geometry::Direction direction) :
    m_name(name),
    m_pixelLoc(location),
    m_size(size),
@@ -32,9 +32,9 @@ Actor::Actor(const std::string& name, messaging::MessagePipe& messagePipe, Entit
 {
 }
 
-Actor::~Actor() = default;
+GridActor::~GridActor() = default;
 
-void Actor::flushOrders()
+void GridActor::flushOrders()
 {
    while(!m_orders.empty())
    {
@@ -42,17 +42,17 @@ void Actor::flushOrders()
    }
 }
 
-const std::string& Actor::getName() const
+const std::string& GridActor::getName() const
 {
    return m_name;
 }
 
-const geometry::Size& Actor::getSize() const
+const geometry::Size& GridActor::getSize() const
 {
    return m_size;
 }
 
-void Actor::step(long timePassed)
+void GridActor::step(long timePassed)
 {
    if(m_sprite)
    {
@@ -69,7 +69,7 @@ void Actor::step(long timePassed)
    }
 }
 
-void Actor::draw() const
+void GridActor::draw() const
 {
    if(m_sprite)
    {
@@ -82,12 +82,12 @@ void Actor::draw() const
    }
 }
 
-bool Actor::isIdle() const
+bool GridActor::isIdle() const
 {
    return m_orders.empty();
 }
 
-void Actor::move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task)
+void GridActor::move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task)
 {
    if(m_entityGrid.withinMap(dst))
    {
@@ -100,12 +100,12 @@ void Actor::move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task
    }
 }
 
-void Actor::stand(geometry::Direction direction)
+void GridActor::stand(geometry::Direction direction)
 {
    m_orders.emplace(new StandOrder(*this, direction));
 }
 
-void Actor::faceActor(Actor* other)
+void GridActor::faceActor(GridActor* other)
 {
    geometry::Point2D currentLocation = getLocation();
    geometry::Point2D otherLocation = other->getLocation();
@@ -140,7 +140,7 @@ void Actor::faceActor(Actor* other)
    stand(directionToOther);
 }
 
-void Actor::setSpritesheet(const std::string& sheetName)
+void GridActor::setSpritesheet(const std::string& sheetName)
 {
    std::shared_ptr<Spritesheet> sheet = ResourceLoader::getSpritesheet(sheetName);
    if(!m_sprite)
@@ -152,10 +152,10 @@ void Actor::setSpritesheet(const std::string& sheetName)
       m_sprite->setSheet(sheet);
    }
 
-   m_sprite->setFrame(Actor::DEFAULT_STANDING_PREFIX, m_currDirection);
+   m_sprite->setFrame(GridActor::DEFAULT_STANDING_PREFIX, m_currDirection);
 }
 
-void Actor::setFrame(const std::string& frameName)
+void GridActor::setFrame(const std::string& frameName)
 {
    if(!m_sprite)
    {
@@ -166,7 +166,7 @@ void Actor::setFrame(const std::string& frameName)
    m_sprite->setFrame(frameName, m_currDirection);
 }
 
-void Actor::setAnimation(const std::string& animationName)
+void GridActor::setAnimation(const std::string& animationName)
 {
    if(!m_sprite)
    {
@@ -177,34 +177,34 @@ void Actor::setAnimation(const std::string& animationName)
    m_sprite->setAnimation(animationName, m_currDirection);
 }
 
-void Actor::setLocation(const geometry::Point2D& location)
+void GridActor::setLocation(const geometry::Point2D& location)
 {
    const geometry::Point2D oldLocation = m_pixelLoc;
    m_pixelLoc = location;
-   m_messagePipe.sendMessage(ActorMoveMessage(oldLocation, location, this));
+   m_messagePipe.sendMessage(GridActorMoveMessage(oldLocation, location, this));
 }
 
-const geometry::Point2D& Actor::getLocation() const
+const geometry::Point2D& GridActor::getLocation() const
 {
    return m_pixelLoc;
 }
 
-void Actor::setDirection(geometry::Direction direction)
+void GridActor::setDirection(geometry::Direction direction)
 {
    m_currDirection = direction;
 }
 
-geometry::Direction Actor::getDirection() const
+geometry::Direction GridActor::getDirection() const
 {
    return m_currDirection;
 }
 
-void Actor::setMovementSpeed(float speed)
+void GridActor::setMovementSpeed(float speed)
 {
    m_movementSpeed = speed;
 }
 
-float Actor::getMovementSpeed() const
+float GridActor::getMovementSpeed() const
 {
    return m_movementSpeed;
 }

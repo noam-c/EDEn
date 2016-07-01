@@ -7,7 +7,7 @@
 #ifndef PLAYER_CHARACTER_H
 #define PLAYER_CHARACTER_H
 
-#include "Actor.h"
+#include "GridActor.h"
 #include "Listener.h"
 
 class EntityGrid;
@@ -23,7 +23,7 @@ struct RosterUpdateMessage;
  *
  * @author Noam Chitayat
  */
-class PlayerCharacter final : public Actor, public messaging::Listener<RosterUpdateMessage>
+class PlayerCharacter final : public GridActor, public messaging::Listener<RosterUpdateMessage>
 {
    /** The walking prefix used to load walking sprites. */
    static const std::string WALKING_PREFIX;

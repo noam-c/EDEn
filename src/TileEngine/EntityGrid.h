@@ -20,11 +20,11 @@
 
 class Obstacle;
 class Map;
-class Actor;
+class GridActor;
 class TileEngine;
 class TriggerZone;
 
-struct ActorMoveMessage;
+struct GridActorMoveMessage;
 
 namespace messaging
 {
@@ -47,7 +47,7 @@ struct TileState;
  *
  * @author Noam Chitayat
  */
-class EntityGrid final : messaging::Listener<ActorMoveMessage>
+class EntityGrid final : messaging::Listener<GridActorMoveMessage>
 {
    friend class Pathfinder;
 
@@ -244,7 +244,7 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
        *
        * @return true if the actor has been successfully placed in the area, false if there was something else in the area.
        */
-      bool addActor(Actor* actor, const geometry::Point2D& area);
+      bool addActor(GridActor* actor, const geometry::Point2D& area);
 
       /**
        * Change the actor location, if the destination tiles are available to occupy.
@@ -255,21 +255,21 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
        *
        * @return true if the player character has been successfully moved to the destination, false if there was something else in the destination.
        */
-      bool changeActorLocation(Actor* actor, const geometry::Point2D& dst);
+      bool changeActorLocation(GridActor* actor, const geometry::Point2D& dst);
 
       /**
        * Remove the player and free the tiles under it.
        *
        * @param actor The actor that is being removed.
        */
-      void removeActor(Actor* actor);
+      void removeActor(GridActor* actor);
 
       /**
        * Gets the actor occupying the area in front of the specified actor, if one exists.
        *
        * @param actor The actor to search in front of.
        */
-      Actor* getAdjacentActor(Actor* actor) const;
+      GridActor* getAdjacentActor(GridActor* actor) const;
 
       /**
        * Given the distance the entity can move and the direction, moves as far as possible until an obstacle is encountered.
@@ -281,7 +281,7 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
        *
        * @return true iff the actor moved to a new location
        */
-      bool moveToClosestPoint(Actor* actor, int xDirection, int yDirection, int distance);
+      bool moveToClosestPoint(GridActor* actor, int xDirection, int yDirection, int distance);
 
       /**
        * Request permission from the EntityGrid to move an Actor from the source to the given destination.
@@ -292,7 +292,7 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
        *
        * @return true iff the actor can move from the source to the destination.
        */
-      bool beginMovement(Actor* actor, const geometry::Point2D& dst);
+      bool beginMovement(GridActor* actor, const geometry::Point2D& dst);
 
       /**
        * Notifies the EntityGrid that the actor failed to complete movement from the source to the given destination and occupies some area between the source and destination.
@@ -301,7 +301,7 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the original destination (in pixels).
        */
-      void abortMovement(Actor* actor, const geometry::Point2D& src, const geometry::Point2D& dst);
+      void abortMovement(GridActor* actor, const geometry::Point2D& src, const geometry::Point2D& dst);
 
       /**
        * Notifies the EntityGrid that the actor moved successfully from the source to the given destination and no longer occupies the source coordinates.
@@ -310,7 +310,7 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
        * @param src The coordinates of the source (in pixels).
        * @param dst The coordinates of the destination (in pixels).
        */
-      void endMovement(Actor* actor, const geometry::Point2D& src, const geometry::Point2D& dst);
+      void endMovement(GridActor* actor, const geometry::Point2D& src, const geometry::Point2D& dst);
 
       /**
        * Draw a row of the background layers of the map.
@@ -331,7 +331,7 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
        *
        * @param message The location change message that was fired.
        */
-      void receive(const ActorMoveMessage& message);
+      void receive(const GridActorMoveMessage& message);
 };
 
 #endif
