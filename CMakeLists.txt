@@ -10,6 +10,7 @@ SET(HEADERS
   src/Audio/Sound.h
   src/BattleSystem/BattleController.h
   src/BattleSystem/BattleOverlay.h
+  src/BattleSystem/CombatActor.h
   src/controllers/DialogueController.h
   src/controllers/DialogueEntry.h
   src/Coroutines/Coroutine.h
@@ -154,6 +155,7 @@ SET(SOURCES
   src/Audio/Sound.cpp
   src/BattleSystem/BattleController.cpp
   src/BattleSystem/BattleOverlay.cpp
+  src/BattleSystem/CombatActor.cpp
   src/controllers/DialogueController.cpp
   src/controllers/DialogueEntry.cpp
   src/Coroutines/Coroutine.cpp

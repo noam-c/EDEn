@@ -11,22 +11,14 @@
 #include "EntityGrid.h"
 #include "MessagePipe.h"
 #include "Direction.h"
-#include "ResourceLoader.h"
 #include "Sprite.h"
 #include "TileEngine.h"
-
-const std::string GridActor::DEFAULT_WALKING_PREFIX = "walk";
-const std::string GridActor::DEFAULT_STANDING_PREFIX = "stand";
 
 #define DEBUG_FLAG DEBUG_ACTOR
 
 GridActor::GridActor(const std::string& name, messaging::MessagePipe& messagePipe, EntityGrid& entityGrid, const geometry::Point2D& location, const geometry::Size& size, double movementSpeed, geometry::Direction direction) :
-   m_name(name),
-   m_pixelLoc(location),
-   m_size(size),
+   Actor(name, location, size, direction),
    m_movementSpeed(movementSpeed),
-   m_currDirection(direction),
-   m_sprite(nullptr),
    m_entityGrid(entityGrid),
    m_messagePipe(messagePipe)
 {
@@ -42,22 +34,9 @@ void GridActor::flushOrders()
    }
 }
 
-const std::string& GridActor::getName() const
-{
-   return m_name;
-}
-
-const geometry::Size& GridActor::getSize() const
-{
-   return m_size;
-}
-
 void GridActor::step(long timePassed)
 {
-   if(m_sprite)
-   {
-      m_sprite->step(timePassed);
-   }
+   Actor::step(timePassed);
 
    if(!isIdle())
    {
@@ -140,63 +119,11 @@ void GridActor::faceActor(GridActor* other)
    stand(directionToOther);
 }
 
-void GridActor::setSpritesheet(const std::string& sheetName)
-{
-   std::shared_ptr<Spritesheet> sheet = ResourceLoader::getSpritesheet(sheetName);
-   if(!m_sprite)
-   {
-      m_sprite.reset(new Sprite(sheet));
-   }
-   else
-   {
-      m_sprite->setSheet(sheet);
-   }
-
-   m_sprite->setFrame(GridActor::DEFAULT_STANDING_PREFIX, m_currDirection);
-}
-
-void GridActor::setFrame(const std::string& frameName)
-{
-   if(!m_sprite)
-   {
-      DEBUG("Failed to set sprite frame because actor %s doesn't have a sprite.", m_name.c_str());
-      return;
-   }
-
-   m_sprite->setFrame(frameName, m_currDirection);
-}
-
-void GridActor::setAnimation(const std::string& animationName)
-{
-   if(!m_sprite)
-   {
-      DEBUG("Failed to set sprite animation because actor %s doesn't have a sprite.", m_name.c_str());
-      return;
-   }
-
-   m_sprite->setAnimation(animationName, m_currDirection);
-}
-
 void GridActor::setLocation(const geometry::Point2D& location)
 {
-   const geometry::Point2D oldLocation = m_pixelLoc;
-   m_pixelLoc = location;
+   const auto oldLocation = m_pixelLoc;
+   Actor::setLocation(location);
    m_messagePipe.sendMessage(GridActorMoveMessage(oldLocation, location, this));
-}
-
-const geometry::Point2D& GridActor::getLocation() const
-{
-   return m_pixelLoc;
-}
-
-void GridActor::setDirection(geometry::Direction direction)
-{
-   m_currDirection = direction;
-}
-
-geometry::Direction GridActor::getDirection() const
-{
-   return m_currDirection;
 }
 
 void GridActor::setMovementSpeed(float speed)

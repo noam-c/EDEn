@@ -16,14 +16,7 @@
 #include "Size.h"
 
 class EntityGrid;
-class Sprite;
-class Spritesheet;
 class Task;
-
-namespace geometry
-{
-   enum class Direction;
-};
 
 namespace messaging
 {
@@ -36,28 +29,13 @@ class GridActor : public Actor
    class MoveOrder;
    class StandOrder;
 
-   /** The Actor's name */
-   const std::string m_name;
-
    /** A queue of orders for the actor to perform */
    std::queue<std::unique_ptr<Order>> m_orders;
-
-   /** The current location of the actor (in pixels) */
-   geometry::Point2D m_pixelLoc;
-
-   /** The size of the actor (in pixels) */
-   geometry::Size m_size;
 
    /** The movement speed of the actor */
    float m_movementSpeed;
 
-   /** The direction that the actor is currently facing */
-   geometry::Direction m_currDirection;
-
    protected:
-      /** The Actor's associated sprite, which is drawn on screen. */
-      std::unique_ptr<Sprite> m_sprite;
-
       /** The grid of actors which this Actor interacts with. */
       EntityGrid& m_entityGrid;
 
@@ -67,7 +45,6 @@ class GridActor : public Actor
       /**
        * Constructor for the actor.
        * Initializes the actor's coroutine and loads the associated script.
-       * Loads a sprite for the actor based on a given Spritesheet.
        *
        * @param name The name of the actor (must also be the name of its script).
        * @param messagePipe The message pipe used to send and receive events.
@@ -90,25 +67,8 @@ class GridActor : public Actor
       void flushOrders();
 
    public:
-      /** The default animation set to use when the Actor is moving. */
-      const static std::string DEFAULT_WALKING_PREFIX;
-
-      /** The default frame set to use when the Actor is not moving. */
-      const static std::string DEFAULT_STANDING_PREFIX;
-
       /**
-       * @return The name of this Actor.
-       */
-      const std::string& getName() const;
-
-      /**
-       * @return The size of this Actor (in pixels).
-       */
-      const geometry::Size& getSize() const;
-
-      /**
-       * Performs a logic step of this NPC. During the step, the NPC works on
-       * enqueued Instructions if there are any.
+       * Performs a logic step of this actor, updating the current executing order.
        *
        * @param timePassed The amount of time that has passed since the last frame.
        */
@@ -141,35 +101,6 @@ class GridActor : public Actor
       void faceActor(GridActor* other);
 
       /**
-       * This function enqueues a movement instruction.
-       *
-       * @param dst The coordinates (in pixels) for the actor to move to
-       */
-      virtual void move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task);
-
-      /**
-       * This function changes the actor's spritesheet.
-       *
-       * @param sheetName The name of the spritesheet to get.
-       */
-      void setSpritesheet(const std::string& sheetName);
-
-      /**
-       * This function changes the actor's frame.
-       *
-       * @param frameName The name of the frame to use.
-       */
-      void setFrame(const std::string& frameName);
-
-      /**
-       * This function changes the actor's animation.
-       *
-       * @param animationName The name of the animation to use.
-       *
-       */
-      void setAnimation(const std::string& animationName);
-
-      /**
        * Change the location of the actor.
        * NOTE: This method is used for instantly changing the
        * location of the actor. To have the actor move to a new location,
@@ -177,24 +108,14 @@ class GridActor : public Actor
        *
        * @param location The new location of the actor.
        */
-      void setLocation(const geometry::Point2D& location);
+      virtual void setLocation(const geometry::Point2D& location);
 
       /**
-       * @return The location of the actor.
-       */
-      const geometry::Point2D& getLocation() const;
-
-      /**
-       * This function changes the direction that the actor is facing.
+       * This function enqueues a movement instruction.
        *
-       * @param direction The new direction for the actor to face.
+       * @param dst The coordinates (in pixels) for the actor to move to
        */
-      void setDirection(geometry::Direction direction);
-
-      /**
-       * @return The direction that the actor is currently facing.
-       */
-      geometry::Direction getDirection() const;
+      virtual void move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task);
 
       /**
        * This function changes the movement speed of the actor.

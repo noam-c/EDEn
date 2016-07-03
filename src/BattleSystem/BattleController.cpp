@@ -13,7 +13,9 @@
 #include <tuple>
 #include <SDL.h>
 
+#include "CombatActor.h"
 #include "DebugCommandMessage.h"
+#include "Direction.h"
 #include "ScriptEngine.h"
 #include "NPC.h"
 #include "PlayerData.h"
@@ -68,11 +70,22 @@ void BattleController::activate()
    getScriptEngine().setBattleController(shared_from_this());
    getScriptEngine().setPlayerData(m_playerData);
 
+   for(size_t i = 0; i < 4; ++i)
+   {
+      m_combatants.emplace_back(
+         std::string("combatant_").append(std::to_string(i)),
+         geometry::Point2D(300, static_cast<int>(100*(i+1))),
+         geometry::Size(50,100),
+         geometry::Direction::RIGHT);
+      
+      m_combatants[i].setSpritesheet("kain");
+   }
    m_initialized = true;
 }
 
 void BattleController::deactivate()
 {
+   m_combatants.clear();
    getScriptEngine().setPlayerData(nullptr);
    getScriptEngine().setBattleController(nullptr);
    m_playerData->unbindMessagePipe();
@@ -81,6 +94,10 @@ void BattleController::deactivate()
 
 void BattleController::draw()
 {
+   for(auto& c : m_combatants)
+   {
+      c.draw();
+   }
 }
 
 bool BattleController::step(long timePassed)

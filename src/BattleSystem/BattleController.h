@@ -8,6 +8,7 @@
 #define BATTLE_CONTROLLER_H
 
 #include "GameState.h"
+#include "Actor.h"
 #include "BattleOverlay.h"
 #include "DialogueController.h"
 #include "MessagePipe.h"
@@ -17,6 +18,7 @@
 #include <memory>
 #include <string>
 
+class CombatActor;
 class PlayerData;
 
 /**
@@ -44,7 +46,9 @@ class BattleController final :
 
    /** The GUI overlaid on top of the battle. */
    BattleOverlay m_overlay;
-   
+
+   std::vector<CombatActor> m_combatants;
+
    /**
     * Handles input events specific to the tile engine.
     *
