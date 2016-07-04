@@ -70,16 +70,18 @@ void BattleController::activate()
    getScriptEngine().setBattleController(shared_from_this());
    getScriptEngine().setPlayerData(m_playerData);
 
-   for(size_t i = 0; i < 4; ++i)
+   const auto& party = m_playerData->getRoster()->getParty();
+   for(int i = 0; i < party.size(); ++i)
    {
+      const auto& c = *party[i];
       m_combatants.emplace_back(
-         std::string("combatant_").append(std::to_string(i)),
+         c.getId(),
          geometry::Point2D(300, static_cast<int>(100*(i+1))),
          geometry::Size(50,100),
          geometry::Direction::RIGHT);
-      
-      m_combatants[i].setSpritesheet("kain");
+      m_combatants.back().setSpritesheet(c.getSpritesheetId());
    }
+
    m_initialized = true;
 }
 
