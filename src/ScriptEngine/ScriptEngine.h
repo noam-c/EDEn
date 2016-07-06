@@ -8,6 +8,7 @@
 #define SCRIPT_ENGINE_H
 
 #include <memory>
+#include <functional>
 #include <stack>
 #include <string>
 #include <tuple>
@@ -90,11 +91,19 @@ class ScriptEngine final
    /**
     * Retrieves the raw pointer to the tile engine.
     * Used to operate on the tile engine without incrementing its strong ref count.
-    * Useful since many functions that ScriptEngine calls finish with a longjmp,
+    * Useful since many functions called by ScriptEngine finish with a longjmp,
     * so a shared_ptr reference may not get cleaned up!
     */
    TileEngine* getRawTileEngine();
 
+   /**
+    * Retrieves the raw pointer to the battle controller.
+    * Used to operate on the battle controller without incrementing its strong ref count.
+    * Useful since many functions called by ScriptEngine finish with a longjmp,
+    * so a shared_ptr reference may not get cleaned up!
+    */
+   BattleController* getRawBattleController();
+   
    public:
       /**
        * Constructor. Initializes a Lua VM and initializes members as needed.
@@ -147,6 +156,14 @@ class ScriptEngine final
        * @param scheduler The scheduler that will manage the new script coroutine.
        */
       int runChapterScript(const std::string& chapterName, Scheduler& scheduler);
+
+      /**
+       * Run a specified battle initialization script.
+       *
+       * @param battleScriptName The name of the battle script to run.
+       * @param scheduler The scheduler that will manage the new script coroutine.
+       */
+      int runBattleScript(const std::string& battleScriptName, Scheduler& scheduler);
 
       /**
        * Run a string of script with the specified name.

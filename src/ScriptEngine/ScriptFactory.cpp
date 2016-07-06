@@ -19,13 +19,29 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
-const std::string ScriptFactory::EXTENSION = ".lua";
-const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scripts/maps/", "data/scripts/npcs/", "data/scripts/items/", "data/scripts/skills/" };
+const std::string SCRIPT_FILE_EXTENSION = ".lua";
+const std::string ScriptFactory::getPathForType(ScriptType type)
+{
+   switch(type)
+   {
+      case ScriptType::CHAPTER_SCRIPT:
+         return "data/scripts/chapters/";
+      case ScriptType::MAP_SCRIPT:
+         return "data/scripts/maps/";
+      case ScriptType::BATTLE_SCRIPT:
+         return "data/scripts/battles/";
+      case ScriptType::NPC_SCRIPT:
+         return "data/scripts/npcs/";
+      case ScriptType::ITEM_SCRIPT:
+         return "data/scripts/items/";
+      case ScriptType::SKILL_SCRIPT:
+         return "data/scripts/skills/";
+   }
+}
 
 std::string ScriptFactory::getPath(const std::string& name, ScriptType type)
 {
-   static_assert(std::is_integral<std::underlying_type<ScriptType>::type>::value, "ScriptType has to be integral since it is used as an array subscript.");
-   return PATHS[static_cast<int>(type)] + name + EXTENSION;
+   return getPathForType(type) + name + SCRIPT_FILE_EXTENSION;
 }
 
 std::shared_ptr<Script> ScriptFactory::createScript(lua_State* luaVM, const std::string& name, ScriptType type)
@@ -70,4 +86,9 @@ std::shared_ptr<Script> ScriptFactory::getMapScript(lua_State* luaVM, const std:
 std::shared_ptr<Script> ScriptFactory::getChapterScript(lua_State* luaVM, const std::string& name)
 {
     return ScriptFactory::createScript(luaVM, name, ScriptType::CHAPTER_SCRIPT);
+}
+
+std::shared_ptr<Script> ScriptFactory::getBattleScript(lua_State* luaVM, const std::string& name)
+{
+   return ScriptFactory::createScript(luaVM, name, ScriptType::BATTLE_SCRIPT);
 }

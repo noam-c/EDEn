@@ -173,6 +173,17 @@ TileEngine* ScriptEngine::getRawTileEngine()
    return nullptr;
 }
 
+BattleController* ScriptEngine::getRawBattleController()
+{
+   auto sharedPtr = m_battleController.lock();
+   if(sharedPtr)
+   {
+      return sharedPtr.get();
+   }
+
+   return nullptr;
+}
+
 int ScriptEngine::narrate(lua_State* luaStack)
 {
    Scheduler* scheduler = m_executionStack.getCurrentScheduler();
@@ -462,33 +473,29 @@ std::shared_ptr<UsableScript> ScriptEngine::createSkillScript(const Skill& skill
 
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)
 {
-   auto mapScript = ScriptFactory::getMapScript(m_luaVM, regionName, mapName);
-   if(mapScript)
-   {
-      return runScript(mapScript, scheduler);
-   }
-
-   return 0;
+   return runScript(ScriptFactory::getMapScript(m_luaVM, regionName, mapName), scheduler);
 }
 
 int ScriptEngine::runChapterScript(const std::string& chapterName, Scheduler& scheduler)
 {
-   auto chapterScript = ScriptFactory::getChapterScript(m_luaVM, chapterName);
-   if(chapterScript)
-   {
-      return runScript(chapterScript, scheduler);
-   }
+   return runScript(ScriptFactory::getChapterScript(m_luaVM, chapterName), scheduler);
+}
 
-   return 0;
+int ScriptEngine::runBattleScript(const std::string& battleScriptName, Scheduler& scheduler)
+{
+   return runScript(ScriptFactory::getBattleScript(m_luaVM, battleScriptName), scheduler);
 }
 
 int ScriptEngine::runScript(const std::shared_ptr<Script>& script, Scheduler& scheduler)
 {
-   scheduler.start(script);
-
-   if(scheduler.hasRunningCoroutine())
+   if(script)
    {
-      return scheduler.join(script);
+      scheduler.start(script);
+
+      if(scheduler.hasRunningCoroutine())
+      {
+         return scheduler.join(script);
+      }
    }
 
    return 0;

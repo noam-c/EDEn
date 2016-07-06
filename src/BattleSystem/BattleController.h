@@ -47,6 +47,10 @@ class BattleController final :
    /** The GUI overlaid on top of the battle. */
    BattleOverlay m_overlay;
 
+   /** The script to run when a battle begins to set up the battle system. */
+   std::string m_battleInitScript;
+
+   /** A list of combatants in the current battle. */
    std::vector<CombatActor> m_combatants;
 
    /**
@@ -88,9 +92,22 @@ class BattleController final :
        *
        * @param gameContext The context containing the execution stack.
        * @param playerData The currently loaded player data.
+       * @param battleInitScript The setup script to run when initializing the battle.
+       * @param battleTask The task to signal on completion of the battle, if needed.
+       */
+      BattleController(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const std::string& battleInitScript, std::shared_ptr<Task> battleTask = nullptr);
+
+      /**
+       * Constructor for a default battle.
+       * Creates a BattleController that runs a battle with the default.lua
+       * battle script.
+       *
+       * @param gameContext The context containing the execution stack.
+       * @param playerData The currently loaded player data.
+       * @param battleTask The task to signal on completion of the battle, if needed.
        */
       BattleController(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, std::shared_ptr<Task> battleTask = nullptr);
-
+   
       /**
        * Destructor.
        */

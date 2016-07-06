@@ -1,0 +1,1 @@
+print "Initializing default battle"

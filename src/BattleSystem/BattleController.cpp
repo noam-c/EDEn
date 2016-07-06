@@ -32,15 +32,21 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_BATTLE_ENG
 
-BattleController::BattleController(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, std::shared_ptr<Task> battleTask) :
+BattleController::BattleController(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, const std::string& battleInitScript, std::shared_ptr<Task> battleTask) :
    GameState(gameContext, GameStateType::FIELD, "BattleController"),
    m_playerData(std::move(playerData)),
    m_battleTask(std::move(battleTask)),
    m_initialized(false),
    m_dialogue(getScriptEngine()),
-   m_overlay(m_messagePipe, *m_playerData, getMetadata(), getStateType(), *m_rocketContext, m_dialogue)
+   m_overlay(m_messagePipe, *m_playerData, getMetadata(), getStateType(), *m_rocketContext, m_dialogue),
+   m_battleInitScript(battleInitScript)
 {
    m_dialogue.initialize(m_scheduler, m_overlay.getDialogueBox());
+}
+
+BattleController::BattleController(GameContext& gameContext, std::shared_ptr<PlayerData> playerData, std::shared_ptr<Task> battleTask) :
+   BattleController(gameContext, playerData, "default", battleTask)
+{
 }
 
 BattleController::~BattleController()
@@ -70,16 +76,9 @@ void BattleController::activate()
    getScriptEngine().setBattleController(shared_from_this());
    getScriptEngine().setPlayerData(m_playerData);
 
-   const auto& party = m_playerData->getRoster()->getParty();
-   for(int i = 0; i < party.size(); ++i)
+   if(!m_initialized)
    {
-      const auto& c = *party[i];
-      m_combatants.emplace_back(
-         c.getId(),
-         geometry::Point2D(300, static_cast<int>(100*(i+1))),
-         geometry::Size(50,100),
-         geometry::Direction::RIGHT);
-      m_combatants.back().setSpritesheet(c.getSpritesheetId());
+      getScriptEngine().runBattleScript(m_battleInitScript, m_scheduler);
    }
 
    m_initialized = true;
@@ -87,7 +86,6 @@ void BattleController::activate()
 
 void BattleController::deactivate()
 {
-   m_combatants.clear();
    getScriptEngine().setPlayerData(nullptr);
    getScriptEngine().setBattleController(nullptr);
    m_playerData->unbindMessagePipe();

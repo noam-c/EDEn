@@ -7,6 +7,7 @@
 #ifndef SCRIPT_FACTORY_H
 #define SCRIPT_FACTORY_H
 
+#include <map>
 #include <memory>
 #include <string>
 
@@ -41,6 +42,8 @@ class ScriptFactory
       CHAPTER_SCRIPT,
       /** Scripts to be called when maps are loaded */
       MAP_SCRIPT,
+      /** Scripts to be called when battles are loaded */
+      BATTLE_SCRIPT,
       /** Scripts containing instructions for NPC behaviour */
       NPC_SCRIPT,
       /** Scripts containing instructions for item behaviour */
@@ -50,15 +53,10 @@ class ScriptFactory
    };
 
    /**
-    *  The file extension used for scripts.
-    */
-   static const std::string EXTENSION;
-
-   /**
     * A list of paths to various kinds of scripts, in the same order as the
     * ScriptType enum.
     */
-   static const std::string PATHS[];
+   static const std::string getPathForType(ScriptType type);
 
    /**
     * Load a script specified by the given name.
@@ -122,6 +120,14 @@ class ScriptFactory
        * @return The chapter script given by the specified chapter name
        */
       static std::shared_ptr<Script> getChapterScript(lua_State* luaVM, const std::string& name);
+   
+      /**
+       * @param luaVM The Lua VM to be used to load the script
+       * @param name The name of the battle script to load
+       *
+       * @return The battle script given by the specified chapter name
+       */
+      static std::shared_ptr<Script> getBattleScript(lua_State* luaVM, const std::string& name);
 };
 
 #endif
