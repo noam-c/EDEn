@@ -9,6 +9,19 @@
 
 #include "ScriptUtilities.h"
 
+static int CharacterL_GetId(lua_State* luaVM)
+{
+   const Character* character = luaW_check<Character>(luaVM, 1);
+   if(character == nullptr)
+   {
+      return lua_error(luaVM);
+   }
+   
+   const auto& id = character->getId();
+   lua_pushstring(luaVM, id.c_str());
+   return 1;
+}
+
 static int CharacterL_GetName(lua_State* luaVM)
 {
    const Character* character = luaW_check<Character>(luaVM, 1);
@@ -16,15 +29,30 @@ static int CharacterL_GetName(lua_State* luaVM)
    {
       return lua_error(luaVM);
    }
-
-   std::string name = character->getName();
+   
+   const auto& name = character->getName();
    lua_pushstring(luaVM, name.c_str());
+   return 1;
+}
+
+static int CharacterL_GetSpritesheetId(lua_State* luaVM)
+{
+   const Character* character = luaW_check<Character>(luaVM, 1);
+   if(character == nullptr)
+   {
+      return lua_error(luaVM);
+   }
+
+   const auto& spritesheetId = character->getSpritesheetId();
+   lua_pushstring(luaVM, spritesheetId.c_str());
    return 1;
 }
 
 static luaL_Reg characterMetatable[] =
 {
+   { "getId", CharacterL_GetId },
    { "getName", CharacterL_GetName },
+   { "getSpritesheetId", CharacterL_GetSpritesheetId },
    { nullptr, nullptr }
 };
 

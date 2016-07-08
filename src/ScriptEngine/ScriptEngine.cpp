@@ -22,8 +22,10 @@
 #include "TileEngine.h"
 #include "Timer.h"
 
+#include "LuaBattleController.h"
 #include "LuaCharacter.h"
 #include "LuaCharacterRoster.h"
+#include "LuaCombatActor.h"
 #include "LuaGridActor.h"
 #include "LuaInventory.h"
 #include "LuaPlayerCharacter.h"
@@ -76,12 +78,15 @@ ScriptEngine::ScriptEngine(ExecutionStack& executionStack) :
    lua_setglobal(m_luaVM, SCRIPT_ENG_LUA_NAME);
 
    luaopen_TileEngine(m_luaVM);
-   luaopen_Actor(m_luaVM);
+   luaopen_GridActor(m_luaVM);
    luaopen_PlayerCharacter(m_luaVM);
    luaopen_Quest(m_luaVM);
    luaopen_Inventory(m_luaVM);
    luaopen_Character(m_luaVM);
    luaopen_CharacterRoster(m_luaVM);
+
+   luaopen_BattleController(m_luaVM);
+   luaopen_CombatActor(m_luaVM);
 }
 
 ScriptEngine::~ScriptEngine()
@@ -112,6 +117,16 @@ void ScriptEngine::registerEnums()
 void ScriptEngine::setBattleController(std::shared_ptr<BattleController> controller)
 {
    m_battleController = controller;
+   if(controller)
+   {
+      luaW_push(m_luaVM, controller.get());
+      lua_setglobal(m_luaVM, "battle");
+   }
+   else
+   {
+      lua_pushnil(m_luaVM);
+      lua_setglobal(m_luaVM, "battle");
+   }
 }
 
 void ScriptEngine::setTileEngine(std::shared_ptr<TileEngine> engine)

@@ -11,6 +11,8 @@ SET(HEADERS
   src/BattleSystem/BattleController.h
   src/BattleSystem/BattleOverlay.h
   src/BattleSystem/CombatActor.h
+  src/BattleSystem/LuaBattleController.h
+  src/BattleSystem/LuaCombatActor.h
   src/controllers/DialogueController.h
   src/controllers/DialogueEntry.h
   src/Coroutines/Coroutine.h
@@ -156,6 +158,8 @@ SET(SOURCES
   src/BattleSystem/BattleController.cpp
   src/BattleSystem/BattleOverlay.cpp
   src/BattleSystem/CombatActor.cpp
+  src/BattleSystem/LuaBattleController.cpp
+  src/BattleSystem/LuaCombatActor.cpp
   src/controllers/DialogueController.cpp
   src/controllers/DialogueEntry.cpp
   src/Coroutines/Coroutine.cpp

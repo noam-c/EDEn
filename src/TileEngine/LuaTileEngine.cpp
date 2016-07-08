@@ -21,8 +21,6 @@
 
 static int TileEngineL_AddNPC(lua_State* luaVM)
 {
-   NPC* npc = nullptr;
-
    TileEngine* tileEngine = luaW_check<TileEngine>(luaVM, 1);
    if (tileEngine == nullptr)
    {
@@ -78,7 +76,7 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
    const geometry::Size npcSize(width, height);
    const geometry::Direction direction = static_cast<geometry::Direction>(directionValue);
 
-   npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize, direction);
+   auto npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize, direction);
 
    luaW_push<GridActor>(luaVM, npc);
    return 1;

@@ -4,11 +4,11 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#ifndef LUA_GRID_ACTOR_H
-#define LUA_GRID_ACTOR_H
+#ifndef LUA_BATTLE_CONTROLLER_H
+#define LUA_BATTLE_CONTROLLER_H
 
 struct lua_State;
 
-void luaopen_GridActor(lua_State* luaVM);
+void luaopen_BattleController(lua_State* luaVM);
 
 #endif

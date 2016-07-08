@@ -59,6 +59,18 @@ Scheduler* BattleController::getScheduler()
    return &m_scheduler;
 }
 
+CombatActor* BattleController::addCombatant(const std::string& id, const geometry::Point2D& coords, const geometry::Size& size, geometry::Direction direction, const std::string& spritesheetId)
+{
+   m_combatants.emplace_back(
+      id,
+      coords,
+      size,
+      direction);
+
+   m_combatants.back().setSpritesheet(spritesheetId);
+   return &m_combatants.back();
+}
+
 void BattleController::dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
 {
    m_dialogue.narrate(narration, task, choices);

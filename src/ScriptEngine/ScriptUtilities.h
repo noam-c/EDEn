@@ -37,17 +37,39 @@ class ScriptUtilities
    template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool (*checkType)(lua_State*, int), T (*retrieve)(lua_State*, int), T& result);
 
    public:
+      template<typename T> static void pushListCopy(lua_State* luaStack, const std::vector<T>& list);
+
       template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T (*retrieve)(lua_State*, int, int*), T& result);
+
       template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T*& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, int& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, long& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, float& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, double& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::string& value);
 
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::vector<std::string>& values);
 };
+
+template<typename T> void ScriptUtilities::pushListCopy(lua_State* luaStack, const std::vector<T>& list)
+{
+   lua_createtable(luaStack, list.size(), 0);
+   int newTable = lua_gettop(luaStack);
+   int index = 1;
+   for(const T& entry : list)
+   {
+      luaW_push(luaStack, entry);
+      lua_rawseti(luaStack, newTable, index);
+      ++index;
+   }
+}
 
 template<typename T> bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool (*checkType)(lua_State*, int), T (*retrieve)(lua_State*, int), T& result)
 {

@@ -124,7 +124,7 @@ static int GridActorL_LookAt(lua_State* luaVM)
    return 0;
 }
 
-static luaL_Reg actorMetatable[] =
+static luaL_Reg gridActorMetatable[] =
 {
    { "move", GridActorL_Move },
    { "setSprite", GridActorL_SetSprite },
@@ -134,7 +134,7 @@ static luaL_Reg actorMetatable[] =
    { nullptr, nullptr }
 };
 
-void luaopen_Actor(lua_State* luaVM)
+void luaopen_GridActor(lua_State* luaVM)
 {
-   luaW_register<GridActor>(luaVM, "Actor", nullptr, actorMetatable, nullptr, nullptr);
+   luaW_register<GridActor>(luaVM, "GridActor", nullptr, gridActorMetatable, nullptr, nullptr);
 }

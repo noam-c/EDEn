@@ -118,6 +118,8 @@ class BattleController final :
        */
       Scheduler* getScheduler() override;
 
+      CombatActor* addCombatant(const std::string& id, const geometry::Point2D& coords, const geometry::Size& size, geometry::Direction direction, const std::string& spritesheetId);
+
       /**
        * Send a line of dialogue to the DialogueController as a narration.
        *

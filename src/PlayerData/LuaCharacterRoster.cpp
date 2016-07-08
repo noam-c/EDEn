@@ -47,10 +47,24 @@ static int CharacterListL_AddToParty(lua_State* luaVM)
    return 0;
 }
 
+static int CharacterListL_GetParty(lua_State* luaVM)
+{
+   CharacterRoster* characterRoster = luaW_check<CharacterRoster>(luaVM, 1);
+   if(characterRoster == nullptr)
+   {
+      return lua_error(luaVM);
+   }
+   
+   ScriptUtilities::pushListCopy(luaVM, characterRoster->getParty());
+
+   return 1;
+}
+
 static luaL_Reg characterRosterMetatable[] =
 {
    { "createCharacter", CharacterListL_CreateCharacter },
    { "addToParty", CharacterListL_AddToParty },
+   { "getParty", CharacterListL_GetParty },
    { nullptr, nullptr }
 };
 
