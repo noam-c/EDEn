@@ -38,12 +38,23 @@ class ScriptUtilities
 
    public:
       template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T (*retrieve)(lua_State*, int, int*), T& result);
+
       template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T*& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, int& value);
+
+      static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, unsigned int& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, long& value);
+
+      static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, unsigned long& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, float& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, double& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::string& value);
 
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::vector<std::string>& values);
