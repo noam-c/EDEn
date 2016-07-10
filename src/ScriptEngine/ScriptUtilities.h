@@ -45,7 +45,11 @@ class ScriptUtilities
 
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, int& value);
 
+      static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, unsigned int& value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, long& value);
+
+      static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, unsigned long& value);
 
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, float& value);
 

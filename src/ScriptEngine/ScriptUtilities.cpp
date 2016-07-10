@@ -71,6 +71,20 @@ bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int para
    return false;
 }
 
+bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, unsigned int& value)
+{
+   lua_Unsigned luaIntegerResult;
+   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, lua_tounsignedx, luaIntegerResult);
+   
+   if (foundParameter)
+   {
+      value = static_cast<unsigned int>(luaIntegerResult);
+      return true;
+   }
+   
+   return false;
+}
+
 bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, long& value)
 {
    lua_Integer luaIntegerResult;
@@ -82,6 +96,20 @@ bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int para
       return true;
    }
 
+   return false;
+}
+
+bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, unsigned long& value)
+{
+   lua_Unsigned luaIntegerResult;
+   bool foundParameter = ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, lua_tounsignedx, luaIntegerResult);
+   
+   if (foundParameter)
+   {
+      value = static_cast<unsigned long>(luaIntegerResult);
+      return true;
+   }
+   
    return false;
 }
 

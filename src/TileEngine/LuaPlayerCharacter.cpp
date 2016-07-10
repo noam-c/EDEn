@@ -7,7 +7,6 @@
 #include "LuaPlayerCharacter.h"
 #include "ScriptUtilities.h"
 #include "PlayerCharacter.h"
-#include "Point2D.h"
 
 static int PlayerCharacterL_Show(lua_State* luaVM)
 {

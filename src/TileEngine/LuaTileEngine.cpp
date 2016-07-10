@@ -51,13 +51,13 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   int width;
+   unsigned int width;
    if(!ScriptUtilities::getParameter(luaVM, 2, -1, "width", width))
    {
       width = 32;
    }
 
-   int height;
+   unsigned int height;
    if(!ScriptUtilities::getParameter(luaVM, 2, -1, "height", height))
    {
       height = 32;
@@ -72,11 +72,9 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
    DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
    DEBUG("NPC Location will be (%d, %d)", x, y);
 
-   const geometry::Point2D npcLocation(x, y);
-   const geometry::Size npcSize(width, height);
    const geometry::Direction direction = static_cast<geometry::Direction>(directionValue);
 
-   auto npc = tileEngine->addNPC(npcName, spritesheetName, npcLocation, npcSize, direction);
+   auto npc = tileEngine->addNPC(npcName, spritesheetName, {x, y}, {width, height}, direction);
 
    luaW_push<GridActor>(luaVM, npc);
    return 1;

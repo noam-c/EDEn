@@ -8,7 +8,6 @@
 #include "ScriptUtilities.h"
 #include "ScriptEngine.h"
 #include "GridActor.h"
-#include "Point2D.h"
 
 static int GridActorL_Move(lua_State* luaVM)
 {
@@ -33,8 +32,7 @@ static int GridActorL_Move(lua_State* luaVM)
    auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
    auto task = scriptEngine->createTask();
 
-   const geometry::Point2D destination(x, y);
-   actor->move(destination, task);
+   actor->move({x, y}, task);
 
    int callResult = 0;
 
