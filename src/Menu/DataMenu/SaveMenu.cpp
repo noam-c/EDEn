@@ -22,10 +22,11 @@
 
 #define DEBUG_FLAG DEBUG_MENU
 
-SaveMenu::SaveMenu(GameContext& gameContext) :
+SaveMenu::SaveMenu(GameContext& gameContext, std::shared_ptr<Task> saveTask) :
    GameState(gameContext, GameStateType::MENU, "LoadMenu"),
    m_model(*this, getMetadata()),
    m_saveLocation(SaveLocation()),
+   m_saveTask(saveTask),
    m_saveGameViewModel(m_model),
    m_selectedSlot(-1)
 {
@@ -33,11 +34,12 @@ SaveMenu::SaveMenu(GameContext& gameContext) :
    initializeConfirmDialog(true /*loadMode*/);
 }
 
-SaveMenu::SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerData, const SaveLocation saveLocation) :
+SaveMenu::SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerData, const SaveLocation saveLocation, std::shared_ptr<Task> saveTask) :
    GameState(gameContext, GameStateType::MENU, "SaveMenu"),
    m_model(*this, getMetadata()),
    m_saveLocation(saveLocation),
    m_playerData(playerData),
+   m_saveTask(saveTask),
    m_saveGameViewModel(m_model),
    m_selectedSlot(-1)
 {
@@ -112,6 +114,11 @@ bool SaveMenu::step(long timePassed)
 
    m_scheduler.runCoroutines(timePassed);
    bool done = waitForInputEvent();
+
+   if(done && m_saveTask)
+   {
+      m_saveTask->complete();
+   }
 
    return !done;
 }

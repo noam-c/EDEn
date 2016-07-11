@@ -11,6 +11,7 @@
 #include "Direction.h"
 #include "NPC.h"
 #include "Point2D.h"
+#include "ScriptEngine.h"
 #include "ScriptUtilities.h"
 #include "Size.h"
 #include "TileEngine.h"
@@ -210,7 +211,10 @@ static int TileEngineL_OpenSaveMenu(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   return tileEngine->openSaveMenu();
+   auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
+   auto task = scriptEngine->createTask();
+   tileEngine->openSaveMenu(task);
+   return scriptEngine->waitUntilFinished(task, 0);
 }
 
 static int TileEngineL_TilesToPixels(lua_State* luaVM)

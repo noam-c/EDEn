@@ -51,6 +51,8 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
    /** The current player data. */
    std::weak_ptr<PlayerData> m_playerData;
 
+   std::shared_ptr<Task> m_saveTask;
+
    /** The list of savegame files and their respective data. */
    SaveGameList m_saveGames;
 
@@ -175,7 +177,7 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      SaveMenu(GameContext& gameContext);
+      SaveMenu(GameContext& gameContext, std::shared_ptr<Task> saveTask = nullptr);
 
       /**
        * Constructor.
@@ -183,7 +185,7 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerData, const SaveLocation saveLocation);
+      SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerData, const SaveLocation saveLocation, std::shared_ptr<Task> saveTask = nullptr);
 
       /**
        * Destructor.

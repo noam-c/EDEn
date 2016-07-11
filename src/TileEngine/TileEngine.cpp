@@ -209,7 +209,7 @@ int TileEngine::slideCamera(const geometry::Point2D& origin, const geometry::Poi
    return 0;
 }
 
-int TileEngine::openSaveMenu()
+void TileEngine::openSaveMenu(std::shared_ptr<Task>& task)
 {
    SaveLocation location;
    location.region = m_currRegion->getName();
@@ -217,9 +217,8 @@ int TileEngine::openSaveMenu()
    location.coords = m_playerActor.getLocation();
    location.direction = m_playerActor.getDirection();
 
-   auto saveMenu = std::make_shared<SaveMenu>(m_gameContext, m_playerData, location);
+   auto saveMenu = std::make_shared<SaveMenu>(m_gameContext, m_playerData, location, task);
    getExecutionStack()->pushState(saveMenu);
-   return 0;
 }
 
 geometry::Point2D TileEngine::getCurrentCameraLocation() const

@@ -295,10 +295,8 @@ class TileEngine final :
 
       /**
        * Open the save menu.
-       *
-       * @return 0 or the yield code for the save menu's completion.
        */
-      int openSaveMenu();
+      void openSaveMenu(std::shared_ptr<Task>& task);
 
       /**
        * Get the current location that the camera will reveal.
