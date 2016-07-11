@@ -21,13 +21,9 @@
 #include "PlayerData.h"
 #include "GraphicsUtil.h"
 #include "ResourceLoader.h"
-#include "Region.h"
-#include "TriggerZone.h"
-#include "Pathfinder.h"
 #include "Rectangle.h"
 #include "ExecutionStack.h"
 #include "ScreenTexture.h"
-#include "MapTriggerCallback.h"
 
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_BATTLE_ENG
