@@ -174,33 +174,19 @@ static int TileEngineL_SlideCamera(lua_State* luaVM)
 
    const geometry::Point2D destination(destinationX, destinationY);
 
-   int originX;
-   int originY;
-   bool originXProvided = ScriptUtilities::getParameter(luaVM, 2, 3, "originX", originX);
-   bool originYProvided = ScriptUtilities::getParameter(luaVM, 2, 4, "originY", originY);
-
-   geometry::Point2D origin;
-   if(originXProvided && originYProvided)
-   {
-      origin.x = originX;
-      origin.y = originY;
-   }
-   else if(!originXProvided && !originYProvided)
-   {
-      origin = tileEngine->getCurrentCameraLocation();
-   }
-   else
-   {
-      return lua_error(luaVM);
-   }
-
    double speed;
    if(!ScriptUtilities::getParameter(luaVM, 2, 5, "speed", speed) || speed <= 0.0f)
    {
       speed = 0.1f;
    }
 
-   return tileEngine->slideCamera(origin, destination, speed);
+   auto slideWork = [tileEngine, destination, speed](const std::shared_ptr<Task>& task)
+   {
+      tileEngine->slideCamera(destination, speed, task);
+   };
+   
+   auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
+   scriptEngine->scheduleWork(slideWork, true);
 }
 
 static int TileEngineL_OpenSaveMenu(lua_State* luaVM)

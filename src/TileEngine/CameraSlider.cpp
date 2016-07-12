@@ -4,18 +4,21 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#include "CameraSlider.h"
-#include "Camera.h"
-#include "DebugUtils.h"
 #include <math.h>
 #include <algorithm>
 
+#include "CameraSlider.h"
+#include "Camera.h"
+#include "DebugUtils.h"
+#include "Task.h"
+
 #define DEBUG_FLAG DEBUG_TILE_ENG
 
-CameraSlider::CameraSlider(Camera& camera, const geometry::Point2D& origin, const geometry::Point2D& destination, double speed) :
+CameraSlider::CameraSlider(Camera& camera, const geometry::Point2D& origin, const geometry::Point2D& destination, double speed, const std::shared_ptr<Task>& task) :
    m_camera(camera),
    m_origin(camera.getClampedPoint(origin)),
    m_destination(camera.getClampedPoint(destination)),
+   m_task(task),
    m_totalTimePassed(0)
 {
    const double xMagnitude = m_destination.x - m_origin.x;
@@ -58,5 +61,15 @@ bool CameraSlider::resume(long timePassed)
 
    m_camera.setFocalPoint(focalPoint);
 
-   return focalPoint == m_destination;
+   if(focalPoint == m_destination)
+   {
+      if(m_task)
+      {
+         m_task->complete();
+      }
+      
+      return true;
+   }
+   
+   return false;
 }

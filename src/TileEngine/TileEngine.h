@@ -287,11 +287,10 @@ class TileEngine final :
       /**
        * Order the camera to slide from one location of the map to another.
        *
-       * @param origin The origin point to start the slide from.
        * @param destination The destination point to slide the camera to.
        * @param speed The speed that the camera should slide with.
        */
-      int slideCamera(const geometry::Point2D& origin, const geometry::Point2D& destination, double speed);
+      void slideCamera(const geometry::Point2D& destination, double speed, const std::shared_ptr<Task>& task = nullptr);
 
       /**
        * Open the save menu.

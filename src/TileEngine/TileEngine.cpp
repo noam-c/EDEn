@@ -196,17 +196,15 @@ void TileEngine::releaseCamera()
    m_cameraTarget = nullptr;
 }
 
-int TileEngine::slideCamera(const geometry::Point2D& origin, const geometry::Point2D& destination, double speed)
+void TileEngine::slideCamera(const geometry::Point2D& destination, double speed, const std::shared_ptr<Task>& task)
 {
+   const auto& origin = getCurrentCameraLocation();
    if(speed > 0)
    {
-      auto slider = std::make_shared<CameraSlider>(m_camera, origin, destination, speed);
+      auto slider = std::make_shared<CameraSlider>(m_camera, origin, destination, speed, task);
       m_cameraTarget = nullptr;
       m_scheduler.start(slider);
-      return m_scheduler.join(slider);
    }
-
-   return 0;
 }
 
 void TileEngine::openSaveMenu(const std::shared_ptr<Task>& task)
