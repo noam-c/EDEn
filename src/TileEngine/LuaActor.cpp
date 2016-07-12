@@ -29,23 +29,19 @@ static int ActorL_Move(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
-   auto task = scriptEngine->createTask();
-
-   actor->move({x, y}, task);
-
-   int callResult = 0;
-
    bool waitForFinish;
-   if(ScriptUtilities::getParameter(luaVM, 2, 3, "waitForFinish", waitForFinish))
+   if(!ScriptUtilities::getParameter(luaVM, 2, 3, "waitForFinish", waitForFinish))
    {
-      if(waitForFinish)
-      {
-         callResult = scriptEngine->waitUntilFinished(task, 1);
-      }
+      waitForFinish = false;
    }
 
-   return callResult;
+   auto moveWork = [actor, x, y](const std::shared_ptr<Task>& task)
+   {
+      actor->move({x, y}, task);
+   };
+   
+   auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
+   return scriptEngine->scheduleWork(moveWork, waitForFinish);
 }
 
 static int ActorL_SetSprite(lua_State* luaVM)

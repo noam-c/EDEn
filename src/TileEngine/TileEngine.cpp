@@ -209,7 +209,7 @@ int TileEngine::slideCamera(const geometry::Point2D& origin, const geometry::Poi
    return 0;
 }
 
-void TileEngine::openSaveMenu(std::shared_ptr<Task>& task)
+void TileEngine::openSaveMenu(const std::shared_ptr<Task>& task)
 {
    SaveLocation location;
    location.region = m_currRegion->getName();

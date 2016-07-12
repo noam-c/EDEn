@@ -211,10 +211,13 @@ static int TileEngineL_OpenSaveMenu(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
+   auto saveMenuWork = [tileEngine](const std::shared_ptr<Task>& task)
+   {
+      tileEngine->openSaveMenu(task);
+   };
+
    auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
-   auto task = scriptEngine->createTask();
-   tileEngine->openSaveMenu(task);
-   return scriptEngine->waitUntilFinished(task, 0);
+   return scriptEngine->scheduleWork(saveMenuWork, true /*waitUntilFinished*/);
 }
 
 static int TileEngineL_TilesToPixels(lua_State* luaVM)
