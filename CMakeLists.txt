@@ -83,6 +83,7 @@ SET(HEADERS
   src/rocket/RocketListener.h
   src/rocket/RocketScriptHandler.h
   src/rocket/RocketScriptHandlerFactory.h
+  src/ScriptEngine/EdenApiMacros.h
   src/ScriptEngine/FileScript.h
   src/ScriptEngine/MapTriggerCallback.h
   src/ScriptEngine/NPCScript.h

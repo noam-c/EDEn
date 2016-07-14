@@ -39,23 +39,47 @@ class ScriptUtilities
    public:
       template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T (*retrieve)(lua_State*, int, int*), T& result);
 
+//      template<typename T> static void pushParameter(lua_State* luaStack, const T& result);
+   
       template<typename T> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, T*& value);
+
+//      template<typename T> static void pushParameter(lua_State* luaStack, const T*& result);
+   
+      template<class Enum, typename std::enable_if<std::is_enum<Enum>::value, bool>::type = true> static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, Enum& value);
+   
+//      template<class Enum, typename std::enable_if<std::is_enum<Enum>::value, bool>::type = true> static void pushParameter(lua_State* luaStack, Enum& value);
 
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, int& value);
 
+//      static void pushParameter(lua_State* luaStack, int value);
+
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, unsigned int& value);
 
+//      static void pushParameter(lua_State* luaStack, unsigned int value);
+   
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, long& value);
 
+//      static void pushParameter(lua_State* luaStack, long value);
+   
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, unsigned long& value);
 
+//      static void pushParameter(lua_State* luaStack, unsigned long value);
+   
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, float& value);
 
+//      static bool pushParameter(lua_State* luaStack, float value);
+   
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, double& value);
+   
+//      static bool pushParameter(lua_State* luaStack, double value);
 
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, bool& value);
 
+//      static bool pushParameter(lua_State* luaStack, bool value);
+   
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::string& value);
+   
+//      static bool pushParameter(lua_State* luaStack, const std::string& value);
 
       static bool getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, std::vector<std::string>& values);
 };
@@ -118,6 +142,18 @@ template<typename T> bool ScriptUtilities::getParameter(lua_State* luaStack, int
    }
 
    return foundParameter;
+}
+
+template<class Enum, typename std::enable_if<std::is_enum<Enum>::value, bool>::type> bool ScriptUtilities::getParameter(lua_State* luaStack, int tableIndex, int parameterIndex, const std::string parameterName, Enum& value)
+{
+   int numericValue;
+   if(!ScriptUtilities::getParameter(luaStack, tableIndex, parameterIndex, parameterName, numericValue))
+   {
+      return false;
+   }
+
+   value = static_cast<Enum>(numericValue);
+   return true;
 }
 
 template<typename T> bool ScriptUtilities::isType(lua_State* luaStack, int index)
