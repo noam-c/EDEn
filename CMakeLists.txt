@@ -83,6 +83,7 @@ SET(HEADERS
   src/rocket/RocketListener.h
   src/rocket/RocketScriptHandler.h
   src/rocket/RocketScriptHandlerFactory.h
+  src/ScriptEngine/CharacterDataScript.h
   src/ScriptEngine/FileScript.h
   src/ScriptEngine/MapTriggerCallback.h
   src/ScriptEngine/NPCScript.h
@@ -206,6 +207,7 @@ SET(SOURCES
   src/rocket/RocketContextRegistry.cpp
   src/rocket/RocketListener.cpp
   src/rocket/RocketSDLInputMapping.cpp
+  src/ScriptEngine/CharacterDataScript.cpp
   src/ScriptEngine/FileScript.cpp
   src/ScriptEngine/MapTriggerCallback.cpp
   src/ScriptEngine/NPCScript.cpp

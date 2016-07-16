@@ -63,7 +63,21 @@ Json::Value Character::loadArchetype(const std::string& archetypeId)
    return jsonRoot;
 }
 
-Character::Character(const Metadata& metadata, const std::string& id, int level) :
+Character Character::createCharacter(Metadata& metadata, const std::string& id, int level)
+{
+   Character c(metadata, id, level);
+   c.initialize();
+   return c;
+}
+
+Character Character::loadCharacter(Metadata& metadata, const std::string& id, const Json::Value& charToLoad)
+{
+   Character c(metadata, id, charToLoad);
+   c.initialize();
+   return c;
+}
+
+Character::Character(Metadata& metadata, const std::string& id, int level) :
    m_metadata(metadata),
    m_id(id),
    m_selectedAspect(0),
@@ -76,7 +90,7 @@ Character::Character(const Metadata& metadata, const std::string& id, int level)
    m_sp = getMaxSP();
 }
 
-Character::Character(const Metadata& metadata, const std::string& id, const Json::Value& charToLoad) :
+Character::Character(Metadata& metadata, const std::string& id, const Json::Value& charToLoad) :
    m_metadata(metadata),
    m_id(id)
 {
@@ -93,7 +107,19 @@ Character::Character(const Metadata& metadata, const std::string& id, const Json
    m_sp = std::min(m_sp, getMaxSP());
 }
 
+Character::Character(Character&& character) = default;
+
 Character::~Character() = default;
+
+void Character::initialize()
+{
+   if(m_initialized)
+   {
+      return;
+   }
+
+   m_initialized = m_metadata.initializeCharacter(this);
+}
 
 void Character::parseArchetypeData(const Metadata& metadata, const Json::Value& archetypeData)
 {

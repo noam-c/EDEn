@@ -55,7 +55,7 @@ bool SaveLocation::isValid() const
    return !region.empty() && !map.empty();
 }
 
-PlayerData::PlayerData(const Metadata& metadata) :
+PlayerData::PlayerData(Metadata& metadata) :
    m_roster(metadata),
    m_rootQuest(std::string("root")),
    m_shortcutList(PlayerData::SHORTCUT_BAR_SIZE, Shortcut::getEmptyShortcut())
@@ -72,7 +72,7 @@ void PlayerData::unbindMessagePipe()
    bindMessagePipe(nullptr);
 }
 
-std::tuple<std::shared_ptr<PlayerData>, SaveLocation> PlayerData::load(const std::string& path, const Metadata& metadata)
+std::tuple<std::shared_ptr<PlayerData>, SaveLocation> PlayerData::load(const std::string& path, Metadata& metadata)
 {
    DEBUG("Loading save file %s", path.c_str());
 

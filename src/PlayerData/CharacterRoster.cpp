@@ -20,7 +20,7 @@ const char* CharacterRoster::CHARACTERS_ELEMENT = "Characters";
 const char* CharacterRoster::LEADER_ELEMENT = "Leader";
 const char* CharacterRoster::PARTY_ELEMENT = "Party";
 
-CharacterRoster::CharacterRoster(const Metadata& metadata) :
+CharacterRoster::CharacterRoster(Metadata& metadata) :
    m_metadata(metadata),
    m_messagePipe(nullptr),
    m_partyLeader(nullptr)
@@ -49,10 +49,7 @@ void CharacterRoster::clear()
 
 Character* CharacterRoster::loadNewCharacter(const std::string& id)
 {
-   auto insertionResult = m_allCharacters.emplace(
-                             std::piecewise_construct,
-                             std::forward_as_tuple(id),
-                             std::forward_as_tuple(m_metadata, id));
+   auto insertionResult = m_allCharacters.emplace(id, Character::createCharacter(m_metadata, id));
 
    auto characterIterator = insertionResult.first;
    bool success = insertionResult.second;
@@ -120,9 +117,7 @@ void CharacterRoster::load(const Json::Value& rosterElement)
          auto characterId = iter.key().asString();
          DEBUG("Adding character %s to roster...", characterId.c_str());
          Json::Value characterNode = *iter;
-         m_allCharacters.emplace(std::piecewise_construct,
-                                 std::forward_as_tuple(characterId),
-                                 std::forward_as_tuple(m_metadata, characterId, characterNode));
+         m_allCharacters.emplace(characterId, Character::loadCharacter(m_metadata, characterId, characterNode));
       }
    }
    

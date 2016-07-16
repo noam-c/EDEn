@@ -21,6 +21,7 @@ namespace Json
 class Aspect;
 class CharacterArchetype;
 class Metadata;
+class ScriptEngine;
 
 /**
  * A model holding the data for a character that can be used by the player.
@@ -55,8 +56,10 @@ class Character
    typedef std::map<UsableId, unsigned int> SkillUsage;
 
    /** The metadata containing skill information. */
-   const Metadata& m_metadata;
+   Metadata& m_metadata;
 
+   bool m_initialized = false;
+   
    /** The character's ID for data lookups. */
    std::string m_id;
 
@@ -78,7 +81,7 @@ class Character
    /** The ID of the spritesheet resource used for this character. */
    std::string m_spritesheetId;
 
-   /** Character status attributes */
+   /** Character base stats, from which current stats are derived. */
    std::map<std::string, int> m_baseStats;
 
    /** Current level of the character. */
@@ -153,24 +156,36 @@ class Character
 
    void refreshAvailableSkills();
 
-   public:
-      /**
-       * Constructor used to create a new character.
-       * Initializes the entire character using the base archetype data.
-       *
-       * @param id The id of the new character.
-       * @param level The starting level of the new character.
-       */
-      Character(const Metadata& metadata, const std::string& id, int level = 1);
+   /**
+    * Constructor used to create a new character.
+    * Initializes the entire character using the base archetype data.
+    *
+    * @param id The id of the new character.
+    * @param level The starting level of the new character.
+    */
+   Character(Metadata& metadata, const std::string& id, int level = 1);
 
-      /**
-       * Constructor used to load an existing character.
-       *
-       * @param charToLoad The JSON node containing the character's data.
-       */
-      Character(const Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
+   /**
+    * Constructor used to load an existing character.
+    *
+    * @param charToLoad The JSON node containing the character's data.
+    */
+   Character(Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
+
+   public:
+      static Character createCharacter(Metadata& metadata, const std::string& id, int level = 1);
+
+      static Character loadCharacter(Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
+
+      Character(const Character& character) = delete;
+      Character& operator=(const Character& character) = delete;
+
+      Character(Character&& character);
+      Character& operator=(Character&& character) = delete;
 
       ~Character();
+
+      void initialize();
 
       /**
        * Serialize the character data into JSON output.

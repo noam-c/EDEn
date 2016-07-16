@@ -19,6 +19,7 @@ class BattleController;
 class TileEngine;
 class PlayerData;
 class ExecutionStack;
+class Character;
 
 class Scheduler;
 class Script;
@@ -155,6 +156,14 @@ class ScriptEngine final
        */
       int runScriptString(const std::string& scriptString);
 
+      /**
+       * Run a specified character initialization script.
+       *
+       * @param scriptName The name of the character data script.
+       * @param character The character to initialize.
+       */
+      bool runCharacterInitScript(const std::string& scriptName, Character* character);
+   
       /**
        * Call a script function object.
        *
