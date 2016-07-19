@@ -12,6 +12,7 @@
 #include <algorithm>
 
 #include "Aspect.h"
+#include "JsonUtils.h"
 #include "Metadata.h"
 #include "Skill.h"
 
@@ -150,15 +151,11 @@ void Character::parseAspects(const Json::Value& aspectsDataContainer)
    }
 }
 
-void Character::parseBaseStats(const Json::Value& baseStatsDataContainer)
+void Character::parseBaseStats(const Json::Value& obj)
 {
-   const Json::Value& baseStatsData = baseStatsDataContainer[Character::BASE_STATS_ELEMENT];
-   for(Json::Value::const_iterator baseStatNameIter = baseStatsData.begin(); baseStatNameIter != baseStatsData.end(); ++baseStatNameIter)
-   {
-      m_baseStats.emplace(std::piecewise_construct,
-                          std::forward_as_tuple(baseStatNameIter.key().asString()),
-                          std::forward_as_tuple((*baseStatNameIter).asInt()));
-   }
+   const auto& baseStatsData = obj[Character::BASE_STATS_ELEMENT];
+   m_baseStats = JsonUtils::toStlMap<int>(baseStatsData);
+}
 }
 
 void Character::parseSkills(const Json::Value& skillsDataContainer)

@@ -134,6 +134,7 @@ SET(HEADERS
   src/utils/CancelableTask.h
   src/utils/DebugUtils.h
   src/utils/EnumUtils.h
+  src/utils/JsonUtils.h
   src/utils/Exception.h
   src/utils/Grid.h
   src/utils/IntegerSequence.h
@@ -257,6 +258,7 @@ SET(SOURCES
   src/Transitions/BlendTransition.cpp
   src/utils/DebugUtils.cpp
   src/utils/Exception.cpp
+  src/utils/JsonUtils.cpp
   src/views/ChoicesDataSource.cpp
   src/views/DebugConsoleWindow.cpp
   src/views/DialogueBox.cpp
