@@ -76,7 +76,7 @@ class Metadata
       bool useItem(UsableId key, const GameStateType stateType);
       bool useSkill(UsableId key, const GameStateType stateType, Character* usingCharacter);
 
-      bool initializeCharacter(Character* character);
+      bool initializeCharacter(Character* character, const std::string& characterSchema);
 };
 
 #endif

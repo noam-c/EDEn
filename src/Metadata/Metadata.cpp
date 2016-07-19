@@ -133,8 +133,8 @@ bool Metadata::useSkill(UsableId key, const GameStateType stateType, Character* 
    return false;
 }
 
-bool Metadata::initializeCharacter(Character* character)
+bool Metadata::initializeCharacter(Character* character, const std::string& characterSchema)
 {
-   m_scriptEngine.runCharacterInitScript("default", character);
+   m_scriptEngine.runCharacterInitScript(characterSchema, character);
    return false;
 }

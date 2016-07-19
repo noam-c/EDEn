@@ -1,5 +1,6 @@
 {
    "name" : "Akrom",
+   "schema" : "default",
    "Portrait" : 
    {
       "path" : "data/characters/akrom.jpg"

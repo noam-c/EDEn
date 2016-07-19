@@ -98,6 +98,7 @@
             "Spritesheet" : "npc1",
             "baseStats" : {},
             "level" : 1,
+            "schema" : "default",
             "name" : "Akrom"
          },
          "kain" : 
@@ -151,6 +152,7 @@
             "Spritesheet" : "kain",
             "baseStats" : {},
             "level" : 1,
+            "schema" : "default",
             "name" : "Kain"
          }
       },

@@ -21,6 +21,7 @@
 
 const char* Character::ARCHETYPE_ATTRIBUTE = "archetype";
 const char* Character::NAME_ATTRIBUTE = "name";
+const char* Character::SCHEMA_ATTRIBUTE = "schema";
 
 const char* Character::BASE_STATS_ELEMENT = "baseStats";
 const char* Character::CURRENT_STATS_ELEMENT = "currentStats";
@@ -108,12 +109,13 @@ void Character::initialize()
       return;
    }
 
-   m_initialized = m_metadata.initializeCharacter(this);
+   m_initialized = m_metadata.initializeCharacter(this, m_schema);
 }
 
 void Character::parseArchetypeData(const Metadata& metadata, const Json::Value& archetypeData)
 {
    m_name = archetypeData[Character::NAME_ATTRIBUTE].asString();
+   m_schema = archetypeData[Character::SCHEMA_ATTRIBUTE].asString();
    m_spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
    parseAspects(archetypeData);

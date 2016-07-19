@@ -33,6 +33,7 @@ class Character
 {
    static const char* ARCHETYPE_ATTRIBUTE;
    static const char* NAME_ATTRIBUTE;
+   static const char* SCHEMA_ATTRIBUTE;
 
    static const char* BASE_STATS_ELEMENT;
    static const char* CURRENT_STATS_ELEMENT;
@@ -66,6 +67,9 @@ class Character
    /** The name of the character. */
    std::string m_name;
 
+   /** The schema used to create the character. */
+   std::string m_schema;
+   
    /** The archetype that was loaded for this character (empty if the default archetype was used). */
    std::string m_archetype;
 

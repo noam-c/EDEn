@@ -104,6 +104,7 @@
                "str" : 7
             },
             "level" : 1,
+            "schema" : "default",
             "name" : "Akrom"
          },
          "kain" : 
@@ -163,6 +164,7 @@
                "str" : 7
             },
             "level" : 1,
+            "schema" : "default",
             "name" : "Kain"
          },
          "shiara" : 
@@ -218,6 +220,7 @@
                "str" : 2
             },
             "level" : 1,
+            "schema" : "default",
             "name" : "Shiara"
          }
       },
