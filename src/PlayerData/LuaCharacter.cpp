@@ -22,9 +22,43 @@ static int CharacterL_GetName(lua_State* luaVM)
    return 1;
 }
 
+static int CharacterL_Stat(lua_State* luaVM)
+{
+   Character* character = luaW_check<Character>(luaVM, 1);
+   if(character == nullptr)
+   {
+      return lua_error(luaVM);
+   }
+   
+   std::string name;
+   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "name", name))
+   {
+      return lua_error(luaVM);
+   }
+
+   int value;
+   if(ScriptUtilities::getParameter(luaVM, 2, 2, "value", value))
+   {
+      character->setStatAttribute(name, value);
+      return 0;
+   }
+
+   if(character->hasStatAttribute(name))
+   {
+      lua_pushnumber(luaVM, character->getStatAttribute(name));
+   }
+   else
+   {
+      lua_pushnil(luaVM);
+   }
+
+   return 1;
+}
+
 static luaL_Reg characterMetatable[] =
 {
    { "getName", CharacterL_GetName },
+   { "stat", CharacterL_Stat },
    { nullptr, nullptr }
 };
 

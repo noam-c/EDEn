@@ -97,10 +97,8 @@
             "Skills" : {},
             "Spritesheet" : "npc1",
             "baseStats" : {},
-            "hp" : 0,
             "level" : 1,
-            "name" : "Akrom",
-            "sp" : 0
+            "name" : "Akrom"
          },
          "kain" : 
          {
@@ -152,10 +150,8 @@
             },
             "Spritesheet" : "kain",
             "baseStats" : {},
-            "hp" : 0,
             "level" : 1,
-            "name" : "Kain",
-            "sp" : 0
+            "name" : "Kain"
          }
       },
       "Leader" : "kain",

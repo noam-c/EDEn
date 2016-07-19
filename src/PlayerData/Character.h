@@ -35,7 +35,7 @@ class Character
    static const char* NAME_ATTRIBUTE;
 
    static const char* BASE_STATS_ELEMENT;
-   static const char* STATS_ELEMENT;
+   static const char* CURRENT_STATS_ELEMENT;
    static const char* SKILLS_ELEMENT;
    static const char* EQUIPMENT_ELEMENT;
    static const char* ASPECTS_ELEMENT;
@@ -84,14 +84,11 @@ class Character
    /** Character base stats, from which current stats are derived. */
    std::map<std::string, int> m_baseStats;
 
+   /** Current character stats */
+   std::map<std::string, int> m_currentStats;
+   
    /** Current level of the character. */
    unsigned int m_level;
-
-   /** Current health of the character. */
-   int m_hp;
-
-   /** Current stamina of the character. */
-   int m_sp;
 
    /** The equipment worn by this Character. */
    EquipData m_equipment;
@@ -216,17 +213,20 @@ class Character
       std::string getPortraitPath() const;
 
       /**
-       * @param The name of the requested status attribute.
+       * @param The name of the requested stat attribute.
        *
-       * @return The current value for the requested status attribute.
+       * @return Whether or not the character has the requested stat attribute.
+       */
+      bool hasStatAttribute(const std::string& attributeName) const;
+
+      /**
+       * @param The name of the requested stat attribute.
+       *
+       * @return The current value for the requested stat attribute.
        */
       int getStatAttribute(const std::string& attributeName) const;
 
-      // Getters for health and stamina.
-      int getMaxHP() const;
-      int getMaxSP() const;
-      int getHP() const;
-      int getSP() const;
+      void setStatAttribute(const std::string& attributeName, int newValue);
 
       /**
        * @return The character's equipment information.
