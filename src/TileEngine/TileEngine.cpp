@@ -168,21 +168,39 @@ int TileEngine::setMap(std::string mapName)
    m_playerActor.removeFromMap();
 
    DEBUG("Setting map...");
+   std::weak_ptr<const Map> map;
+
    if(!mapName.empty())
    {
       // If a map name was supplied, then we set this map and run its script
-      m_entityGrid.setMapData(m_currRegion->getMap(mapName));
+      map = m_currRegion->getMap(mapName);
    }
    else
    {
       // Otherwise, we use the region's default starting map
-      m_entityGrid.setMapData(m_currRegion->getStartingMap());
-      mapName = m_entityGrid.getMapName();
+      map = m_currRegion->getStartingMap();
    }
+
+   auto mapSharedPtr = map.lock();
+   if(!mapSharedPtr)
+   {
+      T_T("Failed to dereference map right after loading it.");
+   }
+
+   m_entityGrid.setMapData(mapSharedPtr);
+   mapName = mapSharedPtr->getName();
 
    DEBUG("Map set to: %s", mapName.c_str());
 
    recalculateMapOffsets();
+   
+   DEBUG("Spawning NPCs...");
+   
+   for(const auto& npcToSpawn : mapSharedPtr->getNPCSpawnPoints())
+   {
+      addNPC(npcToSpawn.name, npcToSpawn.spritesheet, npcToSpawn.location, npcToSpawn.size, npcToSpawn.direction);
+   }
+   
    return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, m_scheduler);
 }
 

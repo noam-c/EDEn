@@ -158,6 +158,7 @@ SET(SOURCES
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
   src/Coroutines/Timer.cpp
+  src/Geometry/Direction.cpp
   src/Geometry/Size.cpp
   src/Geometry/Point2D.cpp
   src/Geometry/Rectangle.cpp
