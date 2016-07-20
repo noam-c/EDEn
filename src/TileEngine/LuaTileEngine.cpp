@@ -186,7 +186,7 @@ static int TileEngineL_SlideCamera(lua_State* luaVM)
    };
    
    auto scriptEngine = ScriptEngine::getScriptEngineForVM(luaVM);
-   scriptEngine->scheduleWork(slideWork, true);
+   return scriptEngine->scheduleWork(slideWork, true);
 }
 
 static int TileEngineL_OpenSaveMenu(lua_State* luaVM)
