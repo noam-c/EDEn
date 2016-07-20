@@ -23,8 +23,7 @@ extern "C"
 #define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
 Script::Script(const std::string& name) :
-   m_scriptName(name),
-   m_running(false)
+   m_scriptName(name)
 {
 }
 

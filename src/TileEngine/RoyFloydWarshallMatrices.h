@@ -59,7 +59,7 @@ class RoyFloydWarshallMatrices
     * Please use <code>RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices</code>
     * to create an instance.
     */
-   RoyFloydWarshallMatrices() = default;
+   RoyFloydWarshallMatrices();
 
    public:
       /**

@@ -66,7 +66,7 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
    Rocket::Core::ElementDocument* m_confirmDocument;
 
    /** The slot to save to after the user confirms the save. */
-   int m_selectedSlot;
+   int m_selectedSlot = -1;
 
    /**
     * Poll and handle the next input event.

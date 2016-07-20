@@ -57,7 +57,6 @@ bool SaveLocation::isValid() const
 
 PlayerData::PlayerData(const Metadata& metadata) :
    m_roster(metadata),
-   m_rootQuest(std::string("root")),
    m_shortcutList(PlayerData::SHORTCUT_BAR_SIZE, Shortcut::getEmptyShortcut())
 {
 }

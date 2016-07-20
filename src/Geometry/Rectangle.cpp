@@ -10,9 +10,7 @@
 
 namespace geometry
 {
-   Rectangle::Rectangle() :
-      Rectangle(0, 0, 0, 0)
-   {}
+   Rectangle::Rectangle() = default;
 
    Rectangle::Rectangle(const Point2D& topLeft, const Size& size) :
       Rectangle(topLeft.y,

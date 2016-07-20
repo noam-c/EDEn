@@ -46,17 +46,15 @@ const int TileEngine::TILE_SIZE = 32;
 TileEngine::TileEngine(GameContext& gameContext, std::shared_ptr<PlayerData> playerData) :
    GameState(gameContext, GameStateType::FIELD, "TileEngine"),
    m_playerData(std::move(playerData)),
-   m_initialized(false),
    m_entityGrid(*this, m_messagePipe),
    m_dialogue(getScriptEngine()),
    m_playerActor(m_messagePipe, m_entityGrid, *m_playerData),
-   m_overlay(m_messagePipe, *m_playerData, getMetadata(), getStateType(), *m_rocketContext, m_dialogue)
+   m_overlay(m_messagePipe, *m_playerData, getMetadata(), getStateType(), *m_rocketContext, m_dialogue),
+   m_cameraTarget(&m_playerActor)
 {
    m_messagePipe.registerListener<DebugCommandMessage>(this);
    m_messagePipe.registerListener<MapExitMessage>(this);
    m_messagePipe.registerListener<MapTriggerMessage>(this);
-
-   m_cameraTarget = &m_playerActor;
 
    m_dialogue.initialize(m_scheduler, m_overlay.getDialogueBox());
 }

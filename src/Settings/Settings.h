@@ -24,13 +24,13 @@ class Settings
    static Settings currentSettings;
 
    /** True iff music should be played in the game. */
-   bool m_musicEnabled;
+   bool m_musicEnabled = true;
 
    /** True iff sound effects should be played in the game. */
-   bool m_soundEnabled;
+   bool m_soundEnabled = true;
 
    /** True iff fullscreen mode is enabled in the game. */
-   bool m_fullScreenEnabled;
+   bool m_fullScreenEnabled = false;
 
    Settings(bool isSnapshot = false);
 
@@ -81,7 +81,7 @@ class Settings
       };
 
    private:
-      Resolution m_resolution;
+      Resolution m_resolution = Resolution(1024, 768, 32);
 
    public:
       static void initialize();

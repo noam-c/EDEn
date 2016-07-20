@@ -18,8 +18,7 @@ CameraSlider::CameraSlider(Camera& camera, const geometry::Point2D& origin, cons
    m_camera(camera),
    m_origin(camera.getClampedPoint(origin)),
    m_destination(camera.getClampedPoint(destination)),
-   m_task(task),
-   m_totalTimePassed(0)
+   m_task(task)
 {
    const double xMagnitude = m_destination.x - m_origin.x;
    const double yMagnitude = m_destination.y - m_origin.y;

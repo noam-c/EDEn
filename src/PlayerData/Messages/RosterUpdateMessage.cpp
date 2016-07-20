@@ -5,3 +5,5 @@
  */
 
 #include "RosterUpdateMessage.h"
+
+RosterUpdateMessage::RosterUpdateMessage() = default;

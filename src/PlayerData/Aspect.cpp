@@ -55,11 +55,10 @@ std::unique_ptr<Aspect> Aspect::loadAspect(const std::string& aspectId)
    return std::unique_ptr<Aspect>(new Aspect(jsonRoot));
 }
 
-Aspect::Aspect(const Json::Value& aspectToLoad)
+Aspect::Aspect(const Json::Value& aspectToLoad) :
+   m_id(aspectToLoad[Aspect::ID_ATTRIBUTE].asString()),
+   m_name(aspectToLoad[Aspect::NAME_ATTRIBUTE].asString())
 {
-   m_id = aspectToLoad[Aspect::ID_ATTRIBUTE].asString();
-   m_name = aspectToLoad[Aspect::NAME_ATTRIBUTE].asString();
-
    parseStatBonuses(aspectToLoad);
    parseSkillTree(aspectToLoad);
 }

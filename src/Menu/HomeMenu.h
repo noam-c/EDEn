@@ -41,7 +41,7 @@ class HomeMenu final : public MenuState
    /** The view model */
    HomeViewModel m_homeViewModel;
 
-   int m_selectedDestinationMenu;
+   int m_selectedDestinationMenu = -1;
 
    void pushCharacterIndependentMenu(int optionIndex);
    void pushCharacterDependentMenu(int optionIndex, int characterIndex);

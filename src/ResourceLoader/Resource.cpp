@@ -7,7 +7,6 @@
 #include "Resource.h"
 
 Resource::Resource(const ResourceKey& name) :
-   m_initialized(false),
    m_name(name)
 {
 }

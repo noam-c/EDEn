@@ -11,11 +11,7 @@ const char* Shortcut::ID_ATTRIBUTE = "id";
 const char* Shortcut::TYPE_ATTRIBUTE = "type";
 const char* Shortcut::CHARACTER_ID_ATTRIBUTE = "character";
 
-Shortcut::Shortcut() :
-   usableType(UsableType::EMPTY),
-   usableId(0)
-{
-}
+Shortcut::Shortcut() = default;
 
 Shortcut::Shortcut(UsableId itemId) :
    usableType(UsableType::ITEM),
@@ -84,4 +80,3 @@ Json::Value Shortcut::serialize() const
 
    return serializedShortcut;
 }
-

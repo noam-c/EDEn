@@ -28,7 +28,7 @@ class Script : public Coroutine
       std::string m_scriptName;
 
       /** Flag indicating whether or not the script is currently in the middle of a run */
-      bool m_running;
+      bool m_running = false;
 
       /**
        * Runs the script until completion or yielding. Prints out any errors encountered

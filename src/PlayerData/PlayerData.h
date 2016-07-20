@@ -83,7 +83,7 @@ class PlayerData
    CharacterRoster m_roster;
 
    /** The top-level quest for the game. Contains all the quests that the player can complete. */
-   Quest m_rootQuest;
+   Quest m_rootQuest = Quest("root");
 
    /** The player's shortcut list. */
    std::vector<Shortcut> m_shortcutList;

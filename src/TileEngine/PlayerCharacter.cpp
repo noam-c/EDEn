@@ -26,13 +26,13 @@ const std::string PlayerCharacter::STANDING_PREFIX = "stand";
 
 PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid& map, const PlayerData& playerData) :
    Actor("player", messagePipe, map, geometry::Point2D(0, 0), geometry::Size(32, 32), 0.2f, geometry::Direction::DOWN),
-   m_roster(*playerData.getRoster()),
-   m_active(false),
-   m_cumulativeDistanceCovered(0)
+   m_roster(*playerData.getRoster())
 {
    messagePipe.registerListener(this);
    refreshLeaderSprite();
 }
+
+PlayerCharacter::~PlayerCharacter() = default;
 
 bool PlayerCharacter::isActive() const
 {

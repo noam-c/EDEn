@@ -35,10 +35,10 @@ class PlayerCharacter final : public Actor, public messaging::Listener<RosterUpd
    const CharacterRoster& m_roster;
 
    /** True iff the player entity is active on the map. */
-   bool m_active;
+   bool m_active = false;
 
    /** Total distance for the character to move. */
-   float m_cumulativeDistanceCovered;
+   float m_cumulativeDistanceCovered = 0;
 
    void refreshLeaderSprite();
 
@@ -55,7 +55,7 @@ class PlayerCharacter final : public Actor, public messaging::Listener<RosterUpd
       /**
        * Destructor.
        */
-      ~PlayerCharacter() override = default;
+      ~PlayerCharacter() override;
 
       /**
        * @return true iff the player character is an active entity on the map.

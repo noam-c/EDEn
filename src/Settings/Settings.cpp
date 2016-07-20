@@ -34,13 +34,8 @@ void Settings::initialize()
 }
 
 Settings::Settings(bool isSnapshot) :
-   m_settingsSnapshot(isSnapshot ? nullptr : std::unique_ptr<Settings>(new Settings(true))),
-   m_musicEnabled(true),
-   m_soundEnabled(true),
-   m_fullScreenEnabled(false),
-   m_resolution(1024, 768, 32)
+   m_settingsSnapshot(isSnapshot ? nullptr : std::unique_ptr<Settings>(new Settings(true)))
 {
-
 }
 
 void Settings::setSettings(const Settings& other)

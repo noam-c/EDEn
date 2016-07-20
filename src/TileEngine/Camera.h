@@ -20,16 +20,16 @@
 class Camera
 {
    /** True iff the camera's transformations have been applied to the renderer. */
-   bool m_cameraApplied;
+   bool m_cameraApplied = false;
 
    /** The focal point for the camera to center around. */
-   geometry::Point2D m_focalPoint;
+   geometry::Point2D m_focalPoint = geometry::Point2D::ORIGIN;
 
    /** True iff there is a focal point set for the camera to center around. */
-   bool m_focalPointSet;
+   bool m_focalPointSet = false;
 
    /** The offset from the top-left corner of the window to the top-left corner of the camera's viewport. */
-   geometry::Point2D m_offset;
+   geometry::Point2D m_offset = geometry::Point2D::ORIGIN;
 
    /** The size of the camera's viewport. */
    geometry::Size m_viewportSize;

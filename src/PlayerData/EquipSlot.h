@@ -27,7 +27,7 @@ typedef class Usable Item;
 struct EquipSlot
 {
    /** The currently equipped item (nullptr if nothing is equipped). */
-   const Item* equipped;
+   const Item* equipped = nullptr;
 
    /** The list of accepted types */
    std::vector<int> acceptedTypes;
@@ -37,7 +37,7 @@ struct EquipSlot
     * The best example would be the free hand slot, if the main weapon is 2-handed. You can't use the free hand
     * in that case.
     */
-   bool enabled;
+   bool enabled = true;
 
    /**
     * Constructor.

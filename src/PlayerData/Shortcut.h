@@ -28,8 +28,8 @@ struct Shortcut
       SKILL = 2,
    };
 
-   UsableType usableType;
-   UsableId usableId;
+   UsableType usableType = UsableType::EMPTY;
+   UsableId usableId = 0;
    std::string characterId;
 
    Shortcut(UsableId itemId);

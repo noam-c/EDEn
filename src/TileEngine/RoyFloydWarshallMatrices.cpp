@@ -26,6 +26,8 @@ int RoyFloydWarshallMatrices::coordsToTileNum(const geometry::Point2D& tileLocat
    return (tileLocation.y * width + tileLocation.x);
 }
 
+RoyFloydWarshallMatrices::RoyFloydWarshallMatrices() = default;
+
 std::tuple<bool, geometry::Point2D> RoyFloydWarshallMatrices::getSuccessor(geometry::Point2D src, geometry::Point2D dst) const
 {
    int srcTileNum = RoyFloydWarshallMatrices::coordsToTileNum(src, m_width);

@@ -21,9 +21,7 @@ const char* CharacterRoster::LEADER_ELEMENT = "Leader";
 const char* CharacterRoster::PARTY_ELEMENT = "Party";
 
 CharacterRoster::CharacterRoster(const Metadata& metadata) :
-   m_metadata(metadata),
-   m_messagePipe(nullptr),
-   m_partyLeader(nullptr)
+   m_metadata(metadata)
 {
 }
 

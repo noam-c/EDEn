@@ -8,7 +8,6 @@
 
 #include "Animation.h"
 #include "EnumUtils.h"
-#include "Direction.h"
 #include "ResourceLoader.h"
 #include "Spritesheet.h"
 
@@ -17,9 +16,7 @@
 #define DEBUG_FLAG DEBUG_SPRITE
 
 Sprite::Sprite(const std::shared_ptr<Spritesheet>& sheet) :
-   m_sheet(sheet),
-   m_frameIndex(0),
-   m_currDirection(geometry::Direction::NONE)
+   m_sheet(sheet)
 {
 }
 

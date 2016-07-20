@@ -14,8 +14,7 @@
 Animation::Animation(const std::string& name, const FrameSequence& frameSequence) :
    m_name(name),
    m_frameSequence(frameSequence),
-   m_curr(frameSequence.begin()),
-   m_timeToNextAnimation(MILLISECONDS_PER_FRAME)
+   m_curr(frameSequence.begin())
 {}
 
 void Animation::update(long timePassed)

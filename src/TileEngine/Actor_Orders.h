@@ -56,13 +56,13 @@ class Actor::MoveOrder final : public Actor::Order
     * Tracks if the move order has calculated a path from
     * the Actor's current location to the destination.
     */
-   bool m_pathInitialized;
+   bool m_pathInitialized = false;
 
    /**
     * Tracks if the Actor has begun movement
     * towards the next node in its path.
     */
-   bool m_movementBegun;
+   bool m_movementBegun = false;
 
    /** The destination that the Actor will move to. */
    const geometry::Point2D m_dst;
@@ -82,7 +82,7 @@ class Actor::MoveOrder final : public Actor::Order
    EntityGrid::Path m_path;
 
    /** Total distance for the character to move. */
-   float m_cumulativeDistanceCovered;
+   float m_cumulativeDistanceCovered = 0;
 
    /**
     * Update the direction that the Actor is facing, as well as the sprite used.

@@ -9,11 +9,7 @@
 #include "Item.h"
 #include "json.h"
 
-EquipSlot::EquipSlot() :
-   equipped(nullptr),
-   enabled(true)
-{
-}
+EquipSlot::EquipSlot() = default;
 
 void EquipSlot::load(const Metadata& metadata, const Json::Value& inputJson)
 {
