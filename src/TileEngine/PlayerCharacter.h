@@ -77,7 +77,7 @@ class PlayerCharacter final : public Actor, public messaging::Listener<RosterUpd
        *
        * @param dst The coordinates (in pixels) for the actor to move to
        */
-      virtual void move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task) override;
+      void move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task) override;
 
       /**
        * Takes player input and determines the character's direction and speed,

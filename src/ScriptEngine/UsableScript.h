@@ -84,7 +84,7 @@ class UsableScript final : public Script
       /**
        * Destructor.
        */
-      virtual ~UsableScript() override;
+      ~UsableScript() override;
 
       bool onMenuUse(Character* usingCharacter = nullptr);
 

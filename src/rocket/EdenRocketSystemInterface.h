@@ -20,14 +20,14 @@ class EdenRocketSystemInterface final : public Rocket::Core::SystemInterface
       /**
        * @return the number of seconds elapsed since the start of the application.
        */
-      virtual float GetElapsedTime() override;
+      float GetElapsedTime() override;
 
       /**
        * Log a debug message using the EDEn debugging system.
        *
        * @return true iff execution should continue
        */
-      virtual bool LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message) override;
+      bool LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message) override;
 };
 
 #endif
