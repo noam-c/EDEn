@@ -24,7 +24,7 @@ typedef class Usable Item;
  *
  * @author Noam Chitayat
  */
-struct EquipSlot
+struct EquipSlot final
 {
    /** The currently equipped item (nullptr if nothing is equipped). */
    const Item* equipped = nullptr;

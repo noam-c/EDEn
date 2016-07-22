@@ -35,7 +35,7 @@ class Actor::Order
  *
  * @author Noam Chitayat
  */
-class Actor::StandOrder : public Actor::Order
+class Actor::StandOrder final : public Actor::Order
 {
    geometry::Direction m_direction;
 

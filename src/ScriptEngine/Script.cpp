@@ -36,7 +36,7 @@ Script::~Script() = default;
  *
  * @author Noam Chitayat
  */
-class PushOnLuaStackOp : public ICoroutineResultOp
+class PushOnLuaStackOp final : public ICoroutineResultOp
 {
    lua_State* m_luaVM;
 

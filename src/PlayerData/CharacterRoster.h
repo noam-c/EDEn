@@ -23,7 +23,7 @@ namespace messaging
 
 class Metadata;
 
-class CharacterRoster
+class CharacterRoster final
 {
    static const char* CHARACTERS_ELEMENT;
    static const char* LEADER_ELEMENT;

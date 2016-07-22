@@ -38,7 +38,7 @@ typedef unsigned int GLuint;
  *
  * @author Noam Chitayat
  */
-class GraphicsUtil : public Singleton<GraphicsUtil>
+class GraphicsUtil final : public Singleton<GraphicsUtil>
 {
    /** The main window */
    SDL_Window* m_window;

@@ -19,7 +19,7 @@ namespace geometry
     *
     * @author Noam Chitayat
     */
-   struct Point2D
+   struct Point2D final
    {
       /** The x-coordinate of this point. */
       int x = 0;

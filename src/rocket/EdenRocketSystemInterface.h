@@ -14,7 +14,7 @@
  *
  * @author Noam Chitayat
  */
-class EdenRocketSystemInterface : public Rocket::Core::SystemInterface
+class EdenRocketSystemInterface final : public Rocket::Core::SystemInterface
 {
    public:
       /**

@@ -21,7 +21,7 @@ namespace geometry
 class Tileset;
 class TiXmlElement;
 
-class Layer
+class Layer final
 {
    /** The name of the tileset in use by this layer */
    std::string m_tilesetName;

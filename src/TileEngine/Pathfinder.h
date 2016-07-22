@@ -34,7 +34,7 @@ struct TileState;
  *
  * @author Noam Chitayat
  */
-class Pathfinder
+class Pathfinder final
 {
    /** The square root of 2. */
    static const float ROOT_2;

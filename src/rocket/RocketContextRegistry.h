@@ -25,7 +25,7 @@ namespace Rocket
  *
  * @author Noam Chitayat
  */
-class RocketContextRegistry : public Rocket::Core::Plugin
+class RocketContextRegistry final : public Rocket::Core::Plugin
 {
    /** The list of currently active Rocket contexts. */
    std::vector<Rocket::Core::Context*> m_activeRocketContexts;

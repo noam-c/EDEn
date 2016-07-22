@@ -60,7 +60,7 @@
  *
  *  @author Noam Chitayat
  */
-class DebugUtils
+class DebugUtils final
 {
    /**
     * Debug flags to output on. This variable controls which components of

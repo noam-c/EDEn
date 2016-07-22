@@ -31,7 +31,7 @@ class Layer;
  *
  * @author Noam Chitayat
  */
-class Map
+class Map final
 {
    /** The name of this map */
    std::string m_name;

@@ -14,7 +14,7 @@
 
 class Transition;
 
-class TransitionState : public GameState
+class TransitionState final : public GameState
 {
    std::unique_ptr<Transition> m_transition;
 

@@ -35,7 +35,7 @@ namespace Json
  *
  * @author Noam Chitayat
  */
-class Aspect
+class Aspect final
 {
    static const char* ID_ATTRIBUTE;
    static const char* NAME_ATTRIBUTE;
@@ -50,7 +50,7 @@ class Aspect
     *
     * @author Noam Chitayat
     */
-   class StatBonusCalculation
+   class StatBonusCalculation final
    {
       /** The coefficient by which the stat bonus will be scaled */
       double m_coefficient;

@@ -24,7 +24,7 @@ struct TileState;
  *
  * @author Noam Chitayat
  */
-class RoyFloydWarshallMatrices
+class RoyFloydWarshallMatrices final
 {
    /** The square root of 2. */
    static const float ROOT_2;

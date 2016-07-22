@@ -28,7 +28,7 @@ class Metadata;
  *
  * @author Noam Chitayat
  */
-class Character
+class Character final
 {
    static const char* ARCHETYPE_ATTRIBUTE;
    static const char* NAME_ATTRIBUTE;

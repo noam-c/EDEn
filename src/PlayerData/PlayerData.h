@@ -42,7 +42,7 @@ namespace messaging
  *
  * @author Noam Chitayat
  */
-struct SaveLocation
+struct SaveLocation final
 {
    static const char* REGION_ATTRIBUTE;
    static const char* MAP_ATTRIBUTE;
@@ -67,7 +67,7 @@ struct Shortcut;
  *
  * @author Noam Chitayat
  */
-class PlayerData
+class PlayerData final
 {
    static const char* CHARACTER_LIST_ELEMENT;
    static const char* CHARACTER_ELEMENT;

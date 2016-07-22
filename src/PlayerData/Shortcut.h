@@ -15,7 +15,7 @@ namespace Json
    class Value;
 };
 
-struct Shortcut
+struct Shortcut final
 {
    static const char* ID_ATTRIBUTE;
    static const char* TYPE_ATTRIBUTE;

@@ -11,7 +11,7 @@
 
 class ScriptEngine;
 
-class RocketScriptHandler : public Rocket::Core::EventListener
+class RocketScriptHandler final : public Rocket::Core::EventListener
 {
    ScriptEngine& m_scriptEngine;
    const std::string m_scriptString;

@@ -12,7 +12,7 @@
 class ScriptEngine;
 class RocketScriptHandler;
 
-class RocketScriptHandlerFactory : public Rocket::Core::EventListenerInstancer
+class RocketScriptHandlerFactory final : public Rocket::Core::EventListenerInstancer
 {
    ScriptEngine& m_scriptEngine;
 

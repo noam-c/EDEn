@@ -32,12 +32,12 @@ class Task;
  *
  * @author Noam Chitayat
  */
-class DialogueController
+class DialogueController final
 {
    /** The HARDCODED time-per-letter speed */
    static const int MILLISECONDS_PER_LETTER = 100;
 
-   class DialogueCoroutine : public Coroutine
+   class DialogueCoroutine final : public Coroutine
    {
       DialogueController& m_dialogueController;
 

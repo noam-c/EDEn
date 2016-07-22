@@ -16,7 +16,7 @@
  *
  * @author Noam Chitayat
  */
-class Settings
+class Settings final
 {
    const static std::string DEFAULT_SETTINGS_PATH;
 
@@ -54,7 +54,7 @@ class Settings
    void load(std::istream& input);
 
    public:
-      class Resolution
+      class Resolution final
       {
          /** The height of the game's window. */
          unsigned int height;

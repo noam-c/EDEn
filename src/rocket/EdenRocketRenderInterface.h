@@ -27,7 +27,7 @@
  * @author Peter Curry
  * @author Noam Chitayat
  */
-class EdenRocketRenderInterface : public Rocket::Core::RenderInterface
+class EdenRocketRenderInterface final : public Rocket::Core::RenderInterface
 {
    public:
       /**

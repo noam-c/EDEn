@@ -19,7 +19,7 @@ namespace geometry
     *
     * @author Noam Chitayat
     */
-   struct Rectangle
+   struct Rectangle final
    {
       /** The Y-location of the top edge of the rectangle. */
       int top = 0;

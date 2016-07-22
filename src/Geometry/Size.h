@@ -9,7 +9,7 @@
 
 namespace geometry
 {
-   struct Size
+   struct Size final
    {
       /** The width of the shape associated with this size. */
       unsigned int width = 0;

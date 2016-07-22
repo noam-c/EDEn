@@ -119,7 +119,7 @@ std::vector<geometry::Point2D> Pathfinder::getAdjacentPoints(const geometry::Poi
  *
  * @author Noam Chitayat
  */
-class Pathfinder::AStarNode
+class Pathfinder::AStarNode final
 {
 private:
 
