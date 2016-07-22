@@ -149,12 +149,12 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
    void initializeConfirmDialog(bool loadMode);
 
    protected:
-      void activate();
+      void activate() override;
 
       /**
        * Waits a millisecond between draws (no rush on a title screen)
        */
-      void draw();
+      void draw() override;
 
       /**
        * Perform logic for the title screen.
@@ -163,12 +163,12 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
        *
        * @return true iff the title screen is not finished running (no quit event)
        */
-      bool step(long timePassed);
+      bool step(long timePassed) override;
 
       /**
        * @return the main menu's script scheduler
        */
-      Scheduler* getScheduler();
+      Scheduler* getScheduler() override;
 
    public:
       /**

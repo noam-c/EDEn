@@ -49,6 +49,8 @@ class Region : public Resource
        */
       Region(const ResourceKey& name);
 
+      ~Region() override;
+
       /** @return the name of the region. */
       std::string getName() const;
 

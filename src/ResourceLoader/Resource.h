@@ -80,7 +80,7 @@ class Resource : public std::enable_shared_from_this<Resource>
       /**
        * Destructor.
        */
-      virtual ~Resource() = default;
+      virtual ~Resource() = 0;
 };
 
 #endif

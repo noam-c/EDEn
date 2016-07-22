@@ -46,6 +46,11 @@ class Script : public Coroutine
        * Constructor.
        */
       Script(const std::string& name);
+   
+      /**
+       * Destructor. Made abstract in order to make Scripts abstract.
+       */
+      virtual ~Script() override = 0;
 
       /**
        * Performs a Lua resume on the coroutine.
@@ -63,11 +68,6 @@ class Script : public Coroutine
        *         can regain control and handle the yield.
        */
       int yield(int numResults) override;
-
-      /**
-       * Destructor. Made abstract in order to make Scripts abstract.
-       */
-      virtual ~Script() override = 0;
 };
 
 #endif

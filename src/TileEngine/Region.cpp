@@ -18,6 +18,8 @@ Region::Region(const ResourceKey& name) :
 {
 }
 
+Region::~Region() = default;
+
 void Region::load(const std::string& path)
 {
    struct dirent *entry;

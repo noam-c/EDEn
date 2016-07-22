@@ -96,7 +96,7 @@ class MainMenu final : public GameState, public std::enable_shared_from_this<Mai
       /**
        * @return the main menu's script scheduler
        */
-      Scheduler* getScheduler();
+      Scheduler* getScheduler() override;
 
    public:
       /**

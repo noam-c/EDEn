@@ -11,6 +11,8 @@ Resource::Resource(const ResourceKey& name) :
 {
 }
 
+Resource::~Resource() = default;
+
 bool Resource::isInitialized() const
 {
    return m_initialized;
