@@ -20,15 +20,6 @@
 // Define as 1 to have the map rendering highlight the map's impassible terrain
 #define DRAW_IMPASSIBILITY 0
 
-Map::NPCSpawnPoint::NPCSpawnPoint(const std::string& name, const std::string& spritesheet, geometry::Point2D location, geometry::Size size, geometry::Direction direction) :
-   name(name),
-   spritesheet(spritesheet),
-   location(location),
-   size(size),
-   direction(direction)
-{
-}
-
 Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
 {
    DEBUG("Loading map file %s", filePath.c_str());
@@ -351,7 +342,7 @@ void Map::parseNPCGroup(const TiXmlElement* npcGroupElement)
             !npcName.empty() &&
             !spritesheet.empty())
          {
-            m_npcsToSpawn.emplace_back(npcName, spritesheet, topLeft, size, direction);
+            m_npcsToSpawn.emplace_back(NPCSpawnPoint{npcName, spritesheet, topLeft, size, direction});
          }
 
          objectElement = objectElement->NextSiblingElement("object");

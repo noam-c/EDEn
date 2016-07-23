@@ -43,8 +43,6 @@ class Map
          geometry::Point2D location;
          geometry::Size size;
          geometry::Direction direction;
-         
-         NPCSpawnPoint(const std::string& name, const std::string& spritesheet, geometry::Point2D location, geometry::Size size, geometry::Direction direction);
       };
       
    private:
