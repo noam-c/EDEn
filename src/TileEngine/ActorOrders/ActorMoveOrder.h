@@ -4,45 +4,11 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#ifndef ACTOR_ORDER_H
-#define ACTOR_ORDER_H
+#ifndef ACTOR_MOVE_ORDER_H
+#define ACTOR_MOVE_ORDER_H
 
+#include "ActorOrder.h"
 #include "EntityGrid.h"
-
-/**
- * An abstract class for asynchronous Actor instructions.
- * These instructions are meant to be sent to an Actor and then
- * processed using a call to the Order's <code>perform</code> function
- * in each frame.
- *
- * @author Noam Chitayat
- */
-class Actor::Order
-{
-   protected:
-      Actor& m_actor;
-      Order(Actor& actor) : m_actor(actor) {}
-
-   public:
-      virtual bool perform(long timePassed) = 0;
-      virtual void draw() const {}
-      virtual ~Order() = default;
-};
-
-/**
- * An order that causes the Actor to stand still, facing a
- * specified direction.
- *
- * @author Noam Chitayat
- */
-class Actor::StandOrder final : public Actor::Order
-{
-   geometry::Direction m_direction;
-
-   public:
-      StandOrder(Actor& actor, geometry::Direction direction);
-      bool perform(long timePassed) override;
-};
 
 /**
  * An order that causes the Actor to move to a specified

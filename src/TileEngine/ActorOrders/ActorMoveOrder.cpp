@@ -9,8 +9,7 @@
 #include <math.h>
 #include "SDL_opengl.h"
 
-#include "Actor_Orders.h"
-#include "Map.h"
+#include "ActorMoveOrder.h"
 #include "Direction.h"
 #include "TileEngine.h"
 
