@@ -219,7 +219,6 @@ SET(SOURCES
   src/ScriptEngine/StringScript.cpp
   src/ScriptEngine/UsableScript.cpp
   src/Settings/Settings.cpp
-  src/Settings/SettingsResolution.cpp
   src/Sprites/Animation.cpp
   src/Sprites/Sprite.cpp
   src/Sprites/Spritesheet.cpp

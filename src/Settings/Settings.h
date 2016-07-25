@@ -54,7 +54,7 @@ class Settings final
    void load(std::istream& input);
 
    public:
-      class Resolution final
+      struct Resolution final
       {
          /** The height of the game's window. */
          unsigned int height;
@@ -64,24 +64,10 @@ class Settings final
 
          /** The bit depth of the game's window. */
          unsigned int bitsPerPixel;
-
-         public:
-            Resolution(unsigned int width, unsigned int height, unsigned int bitsPerPixel);
-            Resolution(const Resolution& other);
-            Resolution& operator=(const Resolution& other);
-
-            /** The height of the game's window. */
-            unsigned int getHeight() const;
-
-            /** The width of the game's window. */
-            unsigned int getWidth() const;
-
-            /** The bit depth of the game's window. */
-            unsigned int getBitsPerPixel() const;
       };
 
    private:
-      Resolution m_resolution = Resolution(1024, 768, 32);
+      Resolution m_resolution = {1024, 768, 32};
 
    public:
       static void initialize();
