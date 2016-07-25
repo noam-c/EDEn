@@ -66,7 +66,8 @@ class Map
 
       /** The list of the map's exits */
       std::vector<MapExit> m_mapExits;
-      
+
+      /** The list of NPCs to create when the map is loaded */
       std::vector<NPCSpawnPoint> m_npcsToSpawn;
 
       /** The bounds (in tiles) of this map */
