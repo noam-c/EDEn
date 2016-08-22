@@ -36,17 +36,17 @@ DialogueEntry::DialogueEntry(DialogueEntryType type, const DialogueChoiceList& c
 
 void DialogueEntry::parseTextScripts()
 {
-   int openIndex = 0;
-   int closeIndex = 0;
+   size_t openIndex = 0;
+   size_t closeIndex = 0;
 
    for(;;)
    {
-      int nextOpenIndex = text.find('<', openIndex+1);
-      int nextCloseIndex = text.find('>', closeIndex+1);
+      auto nextOpenIndex = text.find('<', openIndex+1);
+      auto nextCloseIndex = text.find('>', closeIndex+1);
 
-      if(nextOpenIndex < 0)
+      if(nextOpenIndex == std::string::npos)
       {
-         if(nextCloseIndex >= 0)
+         if(nextCloseIndex != std::string::npos)
          {
             T_T("Extra '>' character detected in dialogue line."
                 " Please balance your dialogue script brackets (< and >).");
@@ -54,7 +54,7 @@ void DialogueEntry::parseTextScripts()
 
          break;
       }
-      else if(nextCloseIndex < 0)
+      else if(nextCloseIndex == std::string::npos)
       {
          T_T("Found '<' without matching '>' in dialogue line."
              " Please balance your dialogue script brackets ('<' and '>').");
@@ -106,7 +106,7 @@ bool DialogueEntry::choiceSelected(int choiceIndex)
    return true;
 }
 
-int DialogueEntry::getBeginningOfNextScript() const noexcept
+size_t DialogueEntry::getBeginningOfNextScript() const noexcept
 {
    if(!m_openScriptBrackets.empty() && !m_closeScriptBrackets.empty())
    {
@@ -122,8 +122,8 @@ std::string DialogueEntry::removeNextScriptString()
 
    if(!m_openScriptBrackets.empty() && !m_closeScriptBrackets.empty())
    {
-      const int openIndex = m_openScriptBrackets.front();
-      const int closeIndex = m_closeScriptBrackets.front();
+      const auto openIndex = m_openScriptBrackets.front();
+      const auto closeIndex = m_closeScriptBrackets.front();
 
       const int scriptLength = closeIndex - openIndex;
       script = text.substr(openIndex + 1, scriptLength - 1);

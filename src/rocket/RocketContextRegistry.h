@@ -25,7 +25,7 @@ namespace Rocket
  *
  * @author Noam Chitayat
  */
-class RocketContextRegistry : public Rocket::Core::Plugin
+class RocketContextRegistry final : public Rocket::Core::Plugin
 {
    /** The list of currently active Rocket contexts. */
    std::vector<Rocket::Core::Context*> m_activeRocketContexts;
@@ -37,21 +37,21 @@ class RocketContextRegistry : public Rocket::Core::Plugin
        *
        * @return the event classes that the plugin is interested in.
        */
-      virtual int GetEventClasses() override;
+      int GetEventClasses() override;
 
       /**
        * Called by Rocket when a new Rocket Context is created.
        *
        * @param context The context that was just created.
        */
-      virtual void OnContextCreate(Rocket::Core::Context* context) override;
+      void OnContextCreate(Rocket::Core::Context* context) override;
 
       /**
        * Called by Rocket when a Rocket Context is destroyed.
        *
        * @param context The context that is being destroyed.
        */
-      virtual void OnContextDestroy(Rocket::Core::Context* context) override;
+      void OnContextDestroy(Rocket::Core::Context* context) override;
 
       /**
        * @return a list of all currently active contexts.

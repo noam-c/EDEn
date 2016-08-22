@@ -9,8 +9,7 @@
 #include <math.h>
 #include "SDL_opengl.h"
 
-#include "Actor_Orders.h"
-#include "Map.h"
+#include "ActorMoveOrder.h"
 #include "Direction.h"
 #include "TileEngine.h"
 
@@ -22,12 +21,9 @@
 
 Actor::MoveOrder::MoveOrder(Actor& actor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid) :
    Order(actor),
-   m_pathInitialized(false),
-   m_movementBegun(false),
    m_dst(destination),
    m_task(task),
-   m_entityGrid(entityGrid),
-   m_cumulativeDistanceCovered(0)
+   m_entityGrid(entityGrid)
 {
 }
 

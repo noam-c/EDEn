@@ -23,7 +23,7 @@ typedef class Usable Item;
  *
  * @author Noam Chitayat
  */
-class Inventory
+class Inventory final
 {
    static const char* ITEM_ELEMENT;
    static const char* ITEM_NUM_ATTRIBUTE;

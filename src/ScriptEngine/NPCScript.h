@@ -69,10 +69,10 @@ class NPCScript final : public Script
    NPC* m_npc;
 
    /** True iff the NPC script received a signal to call the NPC's activate function. */
-   bool m_activated;
+   bool m_activated = false;
 
    /** True iff the NPC script is finished and should be unscheduled. */
-   bool m_finished;
+   bool m_finished = false;
 
    static constexpr std::underlying_type<NPCFunction>::type getNumFunctions();
 

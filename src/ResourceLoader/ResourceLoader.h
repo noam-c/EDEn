@@ -26,7 +26,7 @@ class Spritesheet;
  *
  * @author Noam Chitayat
  */
-class ResourceLoader
+class ResourceLoader final
 {
    /**
     * The ResourceLoader handles loading and caching of multiple

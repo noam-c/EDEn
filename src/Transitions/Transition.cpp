@@ -10,9 +10,7 @@
 #define DEBUG_FLAG DEBUG_TRANSITIONS
 
 Transition::Transition(Texture&& oldStateTexture, long transitionLength) :
-   m_totalTime(0),
    m_transitionLength(transitionLength),
-   m_progress(1.0f),
    m_oldStateTexture(std::move(oldStateTexture))
 {
    if(!m_oldStateTexture.isValid())

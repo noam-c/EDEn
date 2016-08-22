@@ -80,7 +80,6 @@ Character Character::loadCharacter(Metadata& metadata, const std::string& id, co
 Character::Character(Metadata& metadata, const std::string& id, int level) :
    m_metadata(metadata),
    m_id(id),
-   m_selectedAspect(0),
    m_level(level)
 {
    parseArchetypeData(metadata, Character::loadArchetype(id));
@@ -88,11 +87,10 @@ Character::Character(Metadata& metadata, const std::string& id, int level) :
 
 Character::Character(Metadata& metadata, const std::string& id, const Json::Value& charToLoad) :
    m_metadata(metadata),
-   m_id(id)
+   m_id(id),
+   m_selectedAspect(charToLoad.get(Character::ASPECT_ATTRIBUTE, 0).asInt()),
+   m_level(std::max(charToLoad[Character::LEVEL_ATTRIBUTE].asInt(), 1))
 {
-   m_selectedAspect = charToLoad.get(Character::ASPECT_ATTRIBUTE, 0).asInt();
-   m_level = std::max(charToLoad[Character::LEVEL_ATTRIBUTE].asInt(), 1);
-
    parseArchetypeData(metadata, charToLoad);
    parseCurrentStats(charToLoad);
    parseSkills(charToLoad);

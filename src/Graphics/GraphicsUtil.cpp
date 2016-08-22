@@ -29,11 +29,11 @@ void GraphicsUtil::initialize()
 {
    m_window = nullptr;
    m_openGLContext = nullptr;
-   const Settings::Resolution& resolution = Settings::getCurrentSettings().getResolution();
+   const auto& resolution = Settings::getCurrentSettings().getResolution();
    m_fullScreenEnabled = Settings::getCurrentSettings().isFullScreenEnabled();
-   m_width = resolution.getWidth();
-   m_height = resolution.getHeight();
-   m_bitsPerPixel = resolution.getBitsPerPixel();
+   m_width = resolution.width;
+   m_height = resolution.height;
+   m_bitsPerPixel = resolution.bitsPerPixel;
 
    m_currentXOffset = 0;
    m_currentYOffset = 0;
@@ -202,25 +202,25 @@ void GraphicsUtil::flipScreen()
 
 bool GraphicsUtil::isVideoModeRefreshRequired() const
 {
-   const Settings& currentSettings = Settings::getCurrentSettings();
-   const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();
+   const auto& currentSettings = Settings::getCurrentSettings();
+   const auto& currentResolution = currentSettings.getResolution();
 
    return
       currentSettings.isFullScreenEnabled() != m_fullScreenEnabled ||
-      currentSettingsResolution.getWidth() != m_width ||
-      currentSettingsResolution.getHeight() != m_height ||
-      currentSettingsResolution.getBitsPerPixel() != m_bitsPerPixel;
+      currentResolution.width != m_width ||
+      currentResolution.height != m_height ||
+      currentResolution.bitsPerPixel != m_bitsPerPixel;
 }
 
 std::tuple<bool, std::string> GraphicsUtil::refreshVideoMode()
 {
-   const Settings& currentSettings = Settings::getCurrentSettings();
-   const Settings::Resolution& currentSettingsResolution = currentSettings.getResolution();
+   const auto& currentSettings = Settings::getCurrentSettings();
+   const auto& currentResolution = currentSettings.getResolution();
 
    m_fullScreenEnabled = currentSettings.isFullScreenEnabled();
-   m_width = currentSettingsResolution.getWidth();
-   m_height = currentSettingsResolution.getHeight();
-   m_bitsPerPixel = currentSettingsResolution.getBitsPerPixel();
+   m_width = currentResolution.width;
+   m_height = currentResolution.height;
+   m_bitsPerPixel = currentResolution.bitsPerPixel;
 
    auto videoModeChangeResult = initSDLVideoMode();
    if(std::get<0>(videoModeChangeResult))

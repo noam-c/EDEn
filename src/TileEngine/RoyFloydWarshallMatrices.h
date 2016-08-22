@@ -24,7 +24,7 @@ struct TileState;
  *
  * @author Noam Chitayat
  */
-class RoyFloydWarshallMatrices
+class RoyFloydWarshallMatrices final
 {
    /** The square root of 2. */
    static const float ROOT_2;
@@ -59,7 +59,7 @@ class RoyFloydWarshallMatrices
     * Please use <code>RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices</code>
     * to create an instance.
     */
-   RoyFloydWarshallMatrices() = default;
+   RoyFloydWarshallMatrices();
 
    public:
       /**

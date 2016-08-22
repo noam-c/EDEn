@@ -23,7 +23,7 @@
  *
  * @author Noam Chitayat
  */
-template<typename Return> class CancelableTask
+template<typename Return> class CancelableTask final
 {
    /** Cancel flag, used to signal a task to end ASAP. */
    std::atomic<bool> m_cancel;

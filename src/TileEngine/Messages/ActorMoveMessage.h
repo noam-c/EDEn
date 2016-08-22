@@ -11,7 +11,7 @@
 
 class Actor;
 
-struct ActorMoveMessage
+struct ActorMoveMessage final
 {
    const geometry::Point2D oldLocation;
    const geometry::Point2D newLocation;

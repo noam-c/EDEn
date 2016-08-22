@@ -62,7 +62,7 @@ class TileEngine final :
    std::vector<std::pair<std::string, std::unique_ptr<MapTriggerCallback>>> m_triggerScripts;
 
    /** True iff the TileEngine has already been initialized. */
-   bool m_initialized;
+   bool m_initialized = false;
 
    /** The chapter to start, if the game is starting from a new chapter. */
    std::string m_chapterToInitialize;

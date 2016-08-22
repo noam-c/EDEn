@@ -27,16 +27,14 @@
 
 HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData) :
    MenuState(gameContext, playerData, "HomeMenu"),
-   m_homeViewModel(playerData),
-   m_selectedDestinationMenu(-1)
+   m_homeViewModel(playerData)
 {
    initialize();
 }
 
 HomeMenu::HomeMenu(GameContext& gameContext, PlayerData& playerData, std::shared_ptr<MenuShell> menuShell) :
    MenuState(gameContext, playerData, "HomeMenu", std::move(menuShell)),
-   m_homeViewModel(playerData),
-   m_selectedDestinationMenu(-1)
+   m_homeViewModel(playerData)
 {
    initialize();
 }

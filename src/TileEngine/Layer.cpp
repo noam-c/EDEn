@@ -17,8 +17,7 @@
 #define DEBUG_FLAG DEBUG_TILE_ENG
 
 Layer::Layer(const TiXmlElement* layerData, const geometry::Rectangle& bounds) :
-   m_bounds(bounds),
-   m_heightOffset(0)
+   m_bounds(bounds)
 {
    const TiXmlElement* propertiesElement = layerData->FirstChildElement("properties");
 

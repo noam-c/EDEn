@@ -19,6 +19,8 @@
  */
 class Animation
 {
+   static const int MILLISECONDS_PER_FRAME = 100;
+
    /** The name of this animation. */
    const std::string& m_name;
 
@@ -29,7 +31,7 @@ class Animation
    FrameSequence::const_iterator m_curr;
 
    /** The time left until the Animation needs to move to the next frame. */
-   long m_timeToNextAnimation;
+   long m_timeToNextAnimation = MILLISECONDS_PER_FRAME;
 
 public:
    /**

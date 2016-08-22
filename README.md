@@ -12,7 +12,7 @@ In general, EDEn aims to help game designers quickly turn RPG stories, gameplay 
 License and Copyright
 ---------------------
 
-Most of the code is Copyright 2015 Noam Chitayat. Contributors retain copyright to their original contributions.
+Most of the code is Copyright 2016 Noam Chitayat. Contributors retain copyright to their original contributions.
 
 The EDEn source is released under the terms of the Ruby License, with the following exceptions:
 
@@ -23,15 +23,15 @@ The EDEn source is released under the terms of the Ruby License, with the follow
 
 * Code in the json folder or under the Json namespace is part of the JsonCpp JSON parsing library.
 
-	JsonCpp is copryright 2007-2015 Baptiste Lepilleur. Distributed under MIT license, or public domain if desired and recognized in your jurisdiction.
+	JsonCpp is copryright 2007-2016 Baptiste Lepilleur. Distributed under MIT license, or public domain if desired and recognized in your jurisdiction.
 
 * Code in the tinyxml folder is part of the TinyXML XML parsing library.
 
-	TinyXML is copyright 2000-2015 Lee Thomason. 
+	TinyXML is copyright 2000-2016 Lee Thomason.
 
 * Code in the LuaWrapper folder is part of the LuaWrapper library.
 
-	LuaWrapper is copyright 2010-2015 Alexander Ameson.
+	LuaWrapper is copyright 2010-2016 Alexander Ameson.
 
 Art and audio assets are copyright their creators. For specific asset credits, please refer to ASSETS.txt.
 

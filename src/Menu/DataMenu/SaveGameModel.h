@@ -25,7 +25,7 @@ class ScriptEngine;
  *
  * @author Noam Chitayat
  */
-class SaveGameModel
+class SaveGameModel final
 {
    SaveMenu& m_saveMenu;
 

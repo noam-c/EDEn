@@ -19,7 +19,7 @@ class PlayerData;
  *
  * @author Noam Chitayat
  */
-class HomeViewModel : public Rocket::Controls::DataSource
+class HomeViewModel final : public Rocket::Controls::DataSource
 {
    /** The player data backing the menu state */
    PlayerData& m_playerData;

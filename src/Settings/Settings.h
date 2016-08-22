@@ -16,7 +16,7 @@
  *
  * @author Noam Chitayat
  */
-class Settings
+class Settings final
 {
    const static std::string DEFAULT_SETTINGS_PATH;
 
@@ -24,13 +24,13 @@ class Settings
    static Settings currentSettings;
 
    /** True iff music should be played in the game. */
-   bool m_musicEnabled;
+   bool m_musicEnabled = true;
 
    /** True iff sound effects should be played in the game. */
-   bool m_soundEnabled;
+   bool m_soundEnabled = true;
 
    /** True iff fullscreen mode is enabled in the game. */
-   bool m_fullScreenEnabled;
+   bool m_fullScreenEnabled = false;
 
    Settings(bool isSnapshot = false);
 
@@ -54,7 +54,7 @@ class Settings
    void load(std::istream& input);
 
    public:
-      class Resolution
+      struct Resolution final
       {
          /** The height of the game's window. */
          unsigned int height;
@@ -64,24 +64,10 @@ class Settings
 
          /** The bit depth of the game's window. */
          unsigned int bitsPerPixel;
-
-         public:
-            Resolution(unsigned int width, unsigned int height, unsigned int bitsPerPixel);
-            Resolution(const Resolution& other);
-            Resolution& operator=(const Resolution& other);
-
-            /** The height of the game's window. */
-            unsigned int getHeight() const;
-
-            /** The width of the game's window. */
-            unsigned int getWidth() const;
-
-            /** The bit depth of the game's window. */
-            unsigned int getBitsPerPixel() const;
       };
 
    private:
-      Resolution m_resolution;
+      Resolution m_resolution = {1024, 768, 32};
 
    public:
       static void initialize();

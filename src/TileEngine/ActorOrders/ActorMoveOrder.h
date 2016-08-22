@@ -4,45 +4,11 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#ifndef ACTOR_ORDER_H
-#define ACTOR_ORDER_H
+#ifndef ACTOR_MOVE_ORDER_H
+#define ACTOR_MOVE_ORDER_H
 
+#include "ActorOrder.h"
 #include "EntityGrid.h"
-
-/**
- * An abstract class for asynchronous Actor instructions.
- * These instructions are meant to be sent to an Actor and then
- * processed using a call to the Order's <code>perform</code> function
- * in each frame.
- *
- * @author Noam Chitayat
- */
-class Actor::Order
-{
-   protected:
-      Actor& m_actor;
-      Order(Actor& actor) : m_actor(actor) {}
-
-   public:
-      virtual bool perform(long timePassed) = 0;
-      virtual void draw() const {}
-      virtual ~Order() = default;
-};
-
-/**
- * An order that causes the Actor to stand still, facing a
- * specified direction.
- *
- * @author Noam Chitayat
- */
-class Actor::StandOrder : public Actor::Order
-{
-   geometry::Direction m_direction;
-
-   public:
-      StandOrder(Actor& actor, geometry::Direction direction);
-      bool perform(long timePassed) override;
-};
 
 /**
  * An order that causes the Actor to move to a specified
@@ -56,13 +22,13 @@ class Actor::MoveOrder final : public Actor::Order
     * Tracks if the move order has calculated a path from
     * the Actor's current location to the destination.
     */
-   bool m_pathInitialized;
+   bool m_pathInitialized = false;
 
    /**
     * Tracks if the Actor has begun movement
     * towards the next node in its path.
     */
-   bool m_movementBegun;
+   bool m_movementBegun = false;
 
    /** The destination that the Actor will move to. */
    const geometry::Point2D m_dst;
@@ -82,7 +48,7 @@ class Actor::MoveOrder final : public Actor::Order
    EntityGrid::Path m_path;
 
    /** Total distance for the character to move. */
-   float m_cumulativeDistanceCovered;
+   float m_cumulativeDistanceCovered = 0;
 
    /**
     * Update the direction that the Actor is facing, as well as the sprite used.

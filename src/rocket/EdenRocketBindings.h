@@ -21,7 +21,7 @@
  *
  * @author Noam Chitayat
  */
-class EdenRocketBindings
+class EdenRocketBindings final
 {
    /** The listeners created by the view model. */
    std::vector<RocketListener> m_listeners;

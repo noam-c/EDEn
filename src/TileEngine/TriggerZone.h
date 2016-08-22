@@ -10,7 +10,7 @@
 #include <string>
 #include "Rectangle.h"
 
-class TriggerZone
+class TriggerZone final
 {
    std::string m_name;
    geometry::Rectangle m_bounds;

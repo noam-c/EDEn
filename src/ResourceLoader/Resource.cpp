@@ -7,10 +7,11 @@
 #include "Resource.h"
 
 Resource::Resource(const ResourceKey& name) :
-   m_initialized(false),
    m_name(name)
 {
 }
+
+Resource::~Resource() = default;
 
 bool Resource::isInitialized() const
 {

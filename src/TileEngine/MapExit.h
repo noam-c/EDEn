@@ -10,7 +10,7 @@
 #include <string>
 #include "Rectangle.h"
 
-class MapExit
+class MapExit final
 {
    std::string m_nextMap;
    geometry::Rectangle m_bounds;

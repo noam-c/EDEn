@@ -34,7 +34,7 @@ struct TileState;
  *
  * @author Noam Chitayat
  */
-class Pathfinder
+class Pathfinder final
 {
    /** The square root of 2. */
    static const float ROOT_2;
@@ -46,10 +46,10 @@ class Pathfinder
    int m_movementTileSize;
 
    /** The grid to compute paths on. */
-   const Grid<TileState>* m_collisionGrid;
+   const Grid<TileState>* m_collisionGrid = nullptr;
 
    /** The bounds (in tiles) of the grid. */
-   const geometry::Rectangle* m_collisionGridBounds;
+   const geometry::Rectangle* m_collisionGridBounds = nullptr;
 
    /**
     * Runs the Roy-Floyd-Warshall algorithm on the initialized entity grid

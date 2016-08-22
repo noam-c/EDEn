@@ -23,7 +23,7 @@ namespace messaging
 
 class Metadata;
 
-class CharacterRoster
+class CharacterRoster final
 {
    static const char* CHARACTERS_ELEMENT;
    static const char* LEADER_ELEMENT;
@@ -32,10 +32,10 @@ class CharacterRoster
    Metadata& m_metadata;
 
    /** The message pipe used to send messages about updates to the roster. */
-   const messaging::MessagePipe* m_messagePipe;
+   const messaging::MessagePipe* m_messagePipe = nullptr;
 
    /** The lead character in the party, who the player sees when they are playing the game. */
-   Character* m_partyLeader;
+   Character* m_partyLeader = nullptr;
 
    /** The characters in the main party, who interact with the world and participate in combat. */
    std::vector<Character*> m_party;

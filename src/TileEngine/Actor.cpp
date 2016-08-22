@@ -6,8 +6,9 @@
 
 #include "Actor.h"
 
-#include "Actor_Orders.h"
 #include "ActorMoveMessage.h"
+#include "ActorMoveOrder.h"
+#include "ActorStandOrder.h"
 #include "EntityGrid.h"
 #include "MessagePipe.h"
 #include "Direction.h"

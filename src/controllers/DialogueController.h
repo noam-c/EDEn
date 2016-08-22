@@ -32,12 +32,12 @@ class Task;
  *
  * @author Noam Chitayat
  */
-class DialogueController
+class DialogueController final
 {
    /** The HARDCODED time-per-letter speed */
    static const int MILLISECONDS_PER_LETTER = 100;
 
-   class DialogueCoroutine : public Coroutine
+   class DialogueCoroutine final : public Coroutine
    {
       DialogueController& m_dialogueController;
 
@@ -72,17 +72,17 @@ class DialogueController
     * How much time since a letter was added to the screen's dialogue box
     * from the current line.
     */
-   int m_timeSinceLastCharacterAdded;
+   int m_timeSinceLastCharacterAdded = MILLISECONDS_PER_LETTER;
 
    /**
     * The number of characters that should be placed on the screen.
     */
-   size_t m_charsToShow;
+   size_t m_charsToShow = 0;
 
    /**
     * True iff the user has indicated that dialogue should flow more quickly.
     */
-   bool m_fastMode;
+   bool m_fastMode = false;
 
    /**
     * Initialize the main dialogue box.

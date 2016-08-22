@@ -24,7 +24,7 @@ class RocketListener final : public Rocket::Core::EventListener
 
       RocketListener(RocketListener&& listener);
 
-      ~RocketListener();
+      ~RocketListener() override;
 
       void ProcessEvent(Rocket::Core::Event& event) override;
 };

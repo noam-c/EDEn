@@ -14,9 +14,11 @@
 
 Region::Region(const ResourceKey& name) :
    Resource(name),
-   m_name(name)
+   m_regionName(name)
 {
 }
+
+Region::~Region() = default;
 
 void Region::load(const std::string& path)
 {
@@ -58,7 +60,7 @@ void Region::load(const std::string& path)
 
 std::string Region::getName() const
 {
-   return m_name;
+   return m_regionName;
 }
 
 std::weak_ptr<Map> Region::getStartingMap()
