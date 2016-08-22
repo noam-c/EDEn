@@ -37,7 +37,7 @@ class Resource : public std::enable_shared_from_this<Resource>
     * True iff the resource has been successfully initialized.
     * False iff the resource is currently in an uninitialized stub/zombie state.
     */
-   bool m_initialized;
+   bool m_initialized = false;
 
    /**
     * The name of the resource.
@@ -80,7 +80,7 @@ class Resource : public std::enable_shared_from_this<Resource>
       /**
        * Destructor.
        */
-      virtual ~Resource() = default;
+      virtual ~Resource() = 0;
 };
 
 #endif

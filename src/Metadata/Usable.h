@@ -56,12 +56,12 @@ class Usable
        *
        * @param usableNode The JSON node containing the usable metadata to load.
        */
-      Usable(Json::Value& usableNode);
+      Usable(const Json::Value& usableNode);
 
       /**
        * Destructor.
        */
-      virtual ~Usable() = default;
+      virtual ~Usable();
 
       /**
        * @return The unique identifier of this usable.

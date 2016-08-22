@@ -15,8 +15,8 @@
 #define DEBUG_FLAG DEBUG_MENU
 
 SaveGameViewModel::SaveGameViewModel(SaveGameModel& model) :
-      Rocket::Controls::DataSource("dataViewModel"),
-      m_model(model)
+   Rocket::Controls::DataSource("dataViewModel"),
+   m_model(model)
 {
 }
 

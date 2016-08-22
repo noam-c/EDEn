@@ -29,9 +29,7 @@ const char* NPCScript::FUNCTION_NAMES[] = { "idle", "activate" };
 NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) :
    Script(scriptPath),
    m_functionExists(EnumUtils::toNumber(NPCFunction::NUM_FUNCTIONS)),
-   m_npc(npc),
-   m_activated(false),
-   m_finished(false)
+   m_npc(npc)
 {
    m_luaStack = lua_newthread(luaVM);
 

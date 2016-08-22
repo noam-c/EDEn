@@ -14,7 +14,7 @@
 
 class Transition;
 
-class TransitionState : public GameState
+class TransitionState final : public GameState
 {
    std::unique_ptr<Transition> m_transition;
 
@@ -38,7 +38,7 @@ class TransitionState : public GameState
        */
       TransitionState(GameContext& gameContext, std::unique_ptr<Transition>&& transition);
 
-      ~TransitionState();
+      ~TransitionState() override;
 
       template <typename TransitionType, typename ... TransitionArgs> static std::shared_ptr<TransitionState> makeTransition(GameContext& gameContext, TransitionArgs&& ... args)
          {

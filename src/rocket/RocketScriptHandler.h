@@ -11,7 +11,7 @@
 
 class ScriptEngine;
 
-class RocketScriptHandler : public Rocket::Core::EventListener
+class RocketScriptHandler final : public Rocket::Core::EventListener
 {
    ScriptEngine& m_scriptEngine;
    const std::string m_scriptString;
@@ -19,9 +19,9 @@ class RocketScriptHandler : public Rocket::Core::EventListener
    public:
       RocketScriptHandler(ScriptEngine& scriptEngine, Rocket::Core::String scriptString);
 
-      virtual void ProcessEvent(Rocket::Core::Event& event) override;
+      void ProcessEvent(Rocket::Core::Event& event) override;
 
-      virtual void OnDetach(Rocket::Core::Element* element) override;
+      void OnDetach(Rocket::Core::Element* element) override;
 };
 
 #endif

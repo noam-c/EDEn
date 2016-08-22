@@ -10,7 +10,7 @@
 class Actor;
 class TriggerZone;
 
-struct MapTriggerMessage
+struct MapTriggerMessage final
 {
    const TriggerZone& triggerZone;
    const Actor* const triggeringActor;

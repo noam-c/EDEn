@@ -16,13 +16,13 @@ class Transition
 {
    protected:
       /** The total time elapsed since the transition began. */
-      long m_totalTime;
+      long m_totalTime = 0;
 
       /** The length of time that the transition will take to complete. */
       const long m_transitionLength;
 
       /** The progress (value between 0 and 1) through the transition. */
-      double m_progress;
+      double m_progress = 1.0f;
 
       /** A texture for the old state. */
       Texture m_oldStateTexture;

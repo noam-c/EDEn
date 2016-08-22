@@ -10,9 +10,10 @@
 #include <memory>
 #include <string>
 
+#include "Direction.h"
+
 namespace geometry
 {
-   enum class Direction;
    struct Point2D;
 };
 
@@ -30,7 +31,7 @@ class Sprite final
    std::shared_ptr<Spritesheet> m_sheet;
 
    /** The index of the current static frame within the sheet. -1 if an animation is used instead. */
-   int m_frameIndex;
+   int m_frameIndex = 0;
 
    /** The animation structure to use to animate this sprite. nullptr if a static frame is used instead. */
    std::unique_ptr<Animation> m_animation;
@@ -39,7 +40,7 @@ class Sprite final
    std::string m_currName;
 
    /** The direction that the current frame/animation is facing. */
-   geometry::Direction m_currDirection;
+   geometry::Direction m_currDirection = geometry::Direction::NONE;
 
    /**
     * @param direction A direction to convert to a string.

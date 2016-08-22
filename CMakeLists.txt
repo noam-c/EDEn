@@ -98,7 +98,9 @@ SET(HEADERS
   src/Sprites/Sprite.h
   src/Sprites/Spritesheet.h
   src/TileEngine/Actor.h
-  src/TileEngine/Actor_Orders.h
+  src/TileEngine/ActorOrders/ActorOrder.h
+  src/TileEngine/ActorOrders/ActorMoveOrder.h
+  src/TileEngine/ActorOrders/ActorStandOrder.h
   src/TileEngine/LuaActor.h
   src/TileEngine/Camera.h
   src/TileEngine/CameraSlider.h
@@ -217,13 +219,13 @@ SET(SOURCES
   src/ScriptEngine/StringScript.cpp
   src/ScriptEngine/UsableScript.cpp
   src/Settings/Settings.cpp
-  src/Settings/SettingsResolution.cpp
   src/Sprites/Animation.cpp
   src/Sprites/Sprite.cpp
   src/Sprites/Spritesheet.cpp
   src/TileEngine/Actor.cpp
-  src/TileEngine/Actor_MoveOrder.cpp
-  src/TileEngine/Actor_StandOrder.cpp
+  src/TileEngine/ActorOrders/ActorOrder.cpp
+  src/TileEngine/ActorOrders/ActorMoveOrder.cpp
+  src/TileEngine/ActorOrders/ActorStandOrder.cpp
   src/TileEngine/LuaActor.cpp
   src/TileEngine/Camera.cpp
   src/TileEngine/CameraSlider.cpp
@@ -299,6 +301,7 @@ SOURCE_GROUP(views REGULAR_EXPRESSION src/views/.*)
 
 IF(NOT ${CMAKE_GENERATOR} STREQUAL "Xcode")
    SOURCE_GROUP("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
+   SOURCE_GROUP("TileEngine\\ActorOrders" REGULAR_EXPRESSION src/TileEngine/ActorOrders/.*)
    SOURCE_GROUP("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.*)
 ENDIF()
 
@@ -324,6 +327,7 @@ INCLUDE_DIRECTORIES(
   src/Settings
   src/Sprites
   src/TileEngine
+  src/TileEngine/ActorOrders
   src/TileEngine/Messages
   src/Transitions
   src/json

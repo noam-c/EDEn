@@ -52,10 +52,9 @@ extern "C"
 const char* SCRIPT_ENG_LUA_NAME = ",";
 
 ScriptEngine::ScriptEngine(ExecutionStack& executionStack) :
-   m_executionStack(executionStack)
+   m_executionStack(executionStack),
+   m_luaVM(luaL_newstate())
 {
-   m_luaVM = luaL_newstate();
-
    if(m_luaVM == nullptr)
    {
       // An error occurred

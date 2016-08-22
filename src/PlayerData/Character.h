@@ -28,7 +28,7 @@ class Metadata;
  *
  * @author Noam Chitayat
  */
-class Character
+class Character final
 {
    static const char* ARCHETYPE_ATTRIBUTE;
    static const char* NAME_ATTRIBUTE;
@@ -70,7 +70,7 @@ class Character
    std::vector<std::unique_ptr<Aspect>> m_archetypeAspects;
 
    /** The currently chosen Aspect for this character. */
-   unsigned int m_selectedAspect;
+   unsigned int m_selectedAspect = 0;
 
    /** The path to the character portrait (used in dialogue and menus). */
    std::string m_portraitPath;

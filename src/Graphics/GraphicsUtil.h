@@ -38,7 +38,7 @@ typedef unsigned int GLuint;
  *
  * @author Noam Chitayat
  */
-class GraphicsUtil : public Singleton<GraphicsUtil>
+class GraphicsUtil final : public Singleton<GraphicsUtil>
 {
    /** The main window */
    SDL_Window* m_window;
@@ -102,7 +102,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * Initializes SDL and OpenGL.
        * Initialize Rocket GUI library.
        */
-      virtual void initialize() override;
+      void initialize() override;
 
       /**
        * Singleton destructor.
@@ -112,7 +112,7 @@ class GraphicsUtil : public Singleton<GraphicsUtil>
        * - the SDL TrueTypeFont library
        * - the SDL layer
        */
-      virtual void finish() override;
+      void finish() override;
 
    public:
 

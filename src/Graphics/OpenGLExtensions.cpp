@@ -8,7 +8,7 @@
 
 #include "DebugUtils.h"
 
-const int debugFlag = DEBUG_GRAPHICS;
+#define DEBUG_FLAG DEBUG_GRAPHICS
 
 void OpenGLExtensions::initialize()
 {

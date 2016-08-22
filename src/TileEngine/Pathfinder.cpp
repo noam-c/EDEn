@@ -18,11 +18,7 @@
 
 const float Pathfinder::ROOT_2 = 1.41421356f;
 
-Pathfinder::Pathfinder() :
-   m_collisionGrid(nullptr),
-   m_collisionGridBounds(nullptr)
-{
-}
+Pathfinder::Pathfinder() = default;
 
 void Pathfinder::initialize(const Grid<TileState>& grid, int tileSize, const geometry::Rectangle& gridBounds)
 {
@@ -123,7 +119,7 @@ std::vector<geometry::Point2D> Pathfinder::getAdjacentPoints(const geometry::Poi
  *
  * @author Noam Chitayat
  */
-class Pathfinder::AStarNode
+class Pathfinder::AStarNode final
 {
 private:
 

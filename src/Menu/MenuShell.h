@@ -63,7 +63,7 @@ class MenuShell final
    EdenRocketBindings m_bindings;
 
    /** The currently active menu state */
-   MenuState* m_currentState;
+   MenuState* m_currentState = nullptr;
 
    /** The menu's script scheduler */
    Scheduler m_scheduler;

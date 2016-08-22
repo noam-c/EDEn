@@ -33,7 +33,7 @@ class ScriptEngine;
  *
  * @author Noam Chitayat
  */
-class Metadata
+class Metadata final
 {
    /** The script engine used to invoke item and skill scripts. */
    ScriptEngine& m_scriptEngine;

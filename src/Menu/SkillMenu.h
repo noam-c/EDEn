@@ -31,7 +31,7 @@ class Sound;
  *
  * @author Noam Chitayat
  */
-class SkillMenu : public CharacterDependentMenu
+class SkillMenu final : public CharacterDependentMenu
 {
    /** The event binding collection for this GUI */
    EdenRocketBindings m_bindings;

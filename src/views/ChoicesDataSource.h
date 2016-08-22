@@ -16,7 +16,7 @@ class DialogueController;
  *
  * @author Noam Chitayat
  */
-class ChoicesDataSource : public Rocket::Controls::DataSource
+class ChoicesDataSource final : public Rocket::Controls::DataSource
 {
    DialogueController& m_choiceProvider;
 

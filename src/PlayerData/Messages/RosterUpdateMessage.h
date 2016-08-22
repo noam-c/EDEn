@@ -7,9 +7,9 @@
 #ifndef ROSTER_UPDATE_MESSAGE_H
 #define ROSTER_UPDATE_MESSAGE_H
 
-struct RosterUpdateMessage
+struct RosterUpdateMessage final
 {
-   RosterUpdateMessage() = default;
+   RosterUpdateMessage();
 };
 
 #endif

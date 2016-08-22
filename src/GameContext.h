@@ -15,7 +15,7 @@
 class ScriptEngine;
 typedef class Usable Item;
 
-class GameContext
+class GameContext final
 {
    friend class GameState;
    ScriptEngine& m_scriptEngine;

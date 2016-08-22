@@ -146,7 +146,7 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
       /**
        * Destructor.
        */
-      ~EntityGrid();
+      ~EntityGrid() override;
 
       /**
        * Gets the entry point when entering this map from another specified map.
@@ -331,7 +331,7 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
        *
        * @param message The location change message that was fired.
        */
-      void receive(const ActorMoveMessage& message);
+      void receive(const ActorMoveMessage& message) override;
 };
 
 #endif

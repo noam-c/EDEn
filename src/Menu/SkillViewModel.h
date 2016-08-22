@@ -21,7 +21,7 @@ class SkillMenu;
  *
  * @author Noam Chitayat
  */
-class SkillViewModel : public Rocket::Controls::DataSource
+class SkillViewModel final : public Rocket::Controls::DataSource
 {
    const static Rocket::Core::String UnknownSkillIconPath;
 

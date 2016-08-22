@@ -26,8 +26,7 @@ MenuState::MenuState(GameContext& gameContext, PlayerData& playerData, const std
 MenuState::MenuState(GameContext& gameContext, PlayerData& playerData, const std::string& stateName, std::shared_ptr<MenuShell> menuShell) :
    GameState(gameContext, GameStateType::MENU, stateName, menuShell->getRocketContext()),
    m_playerData(playerData),
-   m_menuShell(std::move(menuShell)),
-   m_shortcutBar(nullptr)
+   m_menuShell(std::move(menuShell))
 {
 }
 

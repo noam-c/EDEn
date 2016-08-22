@@ -80,6 +80,8 @@ template<class C> class Singleton
             Singleton<C>::instance = nullptr;
          }
       }
+   
+      virtual ~Singleton() = default;
 };
 
 template<class C> Singleton<C>* Singleton<C>::instance = nullptr;
