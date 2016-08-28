@@ -6,10 +6,11 @@
 
 #include "ScriptEngine.h"
 
+#include "CharacterDataScript.h"
+#include "Direction.h"
 #include "EnumUtils.h"
 #include "ExecutionStack.h"
 #include "FileScript.h"
-#include "Direction.h"
 #include "Music.h"
 #include "NPC.h"
 #include "PlayerData.h"
@@ -444,6 +445,13 @@ std::shared_ptr<UsableScript> ScriptEngine::createItemScript(const Item& item) c
 std::shared_ptr<UsableScript> ScriptEngine::createSkillScript(const Skill& skill) const
 {
    return ScriptFactory::getSkillScript(m_luaVM, skill);
+}
+
+bool ScriptEngine::runCharacterInitScript(const std::string& scriptName, Character* character)
+{
+   DEBUG("Running character init script: %s", scriptName.c_str());
+   auto newScript = std::make_shared<CharacterDataScript>(m_luaVM, scriptName);
+   return newScript->initialize(character);
 }
 
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)

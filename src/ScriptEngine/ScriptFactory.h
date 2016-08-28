@@ -47,6 +47,8 @@ class ScriptFactory final
       ITEM_SCRIPT,
       /** Scripts containing instructions for skill behaviour */
       SKILL_SCRIPT,
+      /** Scripts containing instructions for setting up characters */
+      CHARACTER_DATA_SCRIPT,
    };
 
    /**

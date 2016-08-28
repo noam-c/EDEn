@@ -28,7 +28,7 @@ class SaveGameModel final
 {
    SaveMenu& m_saveMenu;
 
-   const Metadata& m_metadata;
+   Metadata& m_metadata;
 
    /** The list of savegame files and their respective data. */
    std::vector<std::pair<std::string, std::unique_ptr<PlayerDataSummary>>> m_saveGames;
@@ -47,7 +47,7 @@ class SaveGameModel final
       /**
        * Constructor.
        */
-      SaveGameModel(SaveMenu& saveMenu, const Metadata& metadata);
+      SaveGameModel(SaveMenu& saveMenu, Metadata& metadata);
 
       /**
        * Saves the given player data to the given save slot.

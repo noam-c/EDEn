@@ -12,6 +12,7 @@
 #include <algorithm>
 
 #include "Aspect.h"
+#include "JsonUtils.h"
 #include "Metadata.h"
 #include "Skill.h"
 
@@ -20,9 +21,10 @@
 
 const char* Character::ARCHETYPE_ATTRIBUTE = "archetype";
 const char* Character::NAME_ATTRIBUTE = "name";
+const char* Character::SCHEMA_ATTRIBUTE = "schema";
 
 const char* Character::BASE_STATS_ELEMENT = "baseStats";
-const char* Character::STATS_ELEMENT = "Stats";
+const char* Character::CURRENT_STATS_ELEMENT = "currentStats";
 const char* Character::SKILLS_ELEMENT = "Skills";
 const char* Character::EQUIPMENT_ELEMENT = "Equipment";
 const char* Character::ASPECTS_ELEMENT = "Aspects";
@@ -30,8 +32,6 @@ const char* Character::ASPECTS_ELEMENT = "Aspects";
 const char* Character::LEVEL_ATTRIBUTE = "level";
 const char* Character::ASPECT_ATTRIBUTE = "aspect";
 
-const char* Character::MAX_HP_ATTRIBUTE = "maxHP";
-const char* Character::MAX_SP_ATTRIBUTE = "maxSP";
 const char* Character::HP_ATTRIBUTE = "hp";
 const char* Character::SP_ATTRIBUTE = "sp";
 
@@ -63,39 +63,57 @@ Json::Value Character::loadArchetype(const std::string& archetypeId)
    return jsonRoot;
 }
 
-Character::Character(const Metadata& metadata, const std::string& id, int level) :
+Character Character::createCharacter(Metadata& metadata, const std::string& id, int level)
+{
+   Character c(metadata, id, level);
+   c.initialize();
+   return c;
+}
+
+Character Character::loadCharacter(Metadata& metadata, const std::string& id, const Json::Value& charToLoad)
+{
+   Character c(metadata, id, charToLoad);
+   c.initialize();
+   return c;
+}
+
+Character::Character(Metadata& metadata, const std::string& id, int level) :
    m_metadata(metadata),
    m_id(id),
    m_level(level)
 {
    parseArchetypeData(metadata, Character::loadArchetype(id));
-
-   // Start off the character with full HP/SP
-   m_hp = getMaxHP();
-   m_sp = getMaxSP();
 }
 
-Character::Character(const Metadata& metadata, const std::string& id, const Json::Value& charToLoad) :
+Character::Character(Metadata& metadata, const std::string& id, const Json::Value& charToLoad) :
    m_metadata(metadata),
    m_id(id),
    m_selectedAspect(charToLoad.get(Character::ASPECT_ATTRIBUTE, 0).asInt()),
    m_level(std::max(charToLoad[Character::LEVEL_ATTRIBUTE].asInt(), 1))
 {
    parseArchetypeData(metadata, charToLoad);
+   parseCurrentStats(charToLoad);
    parseSkills(charToLoad);
-
-   m_hp = charToLoad[Character::HP_ATTRIBUTE].asInt();
-   m_sp = charToLoad[Character::SP_ATTRIBUTE].asInt();
-
-   m_hp = std::min(m_hp, getMaxHP());
-   m_sp = std::min(m_sp, getMaxSP());
 }
 
+Character::Character(Character&& character) = default;
+
 Character::~Character() = default;
+
+void Character::initialize()
+{
+   if(m_initialized)
+   {
+      return;
+   }
+
+   m_initialized = m_metadata.initializeCharacter(this, m_schema);
+}
 
 void Character::parseArchetypeData(const Metadata& metadata, const Json::Value& archetypeData)
 {
    m_name = archetypeData[Character::NAME_ATTRIBUTE].asString();
+   m_schema = archetypeData[Character::SCHEMA_ATTRIBUTE].asString();
    m_spritesheetId = archetypeData[Character::SPRITESHEET_ATTRIBUTE].asString();
    parsePortraitData(archetypeData);
    parseAspects(archetypeData);
@@ -122,15 +140,16 @@ void Character::parseAspects(const Json::Value& aspectsDataContainer)
    }
 }
 
-void Character::parseBaseStats(const Json::Value& baseStatsDataContainer)
+void Character::parseBaseStats(const Json::Value& obj)
 {
-   const Json::Value& baseStatsData = baseStatsDataContainer[Character::BASE_STATS_ELEMENT];
-   for(Json::Value::const_iterator baseStatNameIter = baseStatsData.begin(); baseStatNameIter != baseStatsData.end(); ++baseStatNameIter)
-   {
-      m_baseStats.emplace(std::piecewise_construct,
-                          std::forward_as_tuple(baseStatNameIter.key().asString()),
-                          std::forward_as_tuple((*baseStatNameIter).asInt()));
-   }
+   const auto& baseStatsData = obj[Character::BASE_STATS_ELEMENT];
+   m_baseStats = JsonUtils::toStlMap<int>(baseStatsData);
+}
+
+void Character::parseCurrentStats(const Json::Value& obj)
+{
+   const auto& currentStatsData = obj[Character::CURRENT_STATS_ELEMENT];
+   m_currentStats = JsonUtils::toStlMap<int>(currentStatsData);
 }
 
 void Character::parseSkills(const Json::Value& skillsDataContainer)
@@ -187,11 +206,15 @@ Json::Value Character::serialize() const
 
    characterNode[Character::BASE_STATS_ELEMENT] = baseStatsNode;
 
-   characterNode[Character::HP_ATTRIBUTE] = m_hp;
-   characterNode[Character::SP_ATTRIBUTE] = m_sp;
+   Json::Value currentStatsNode(Json::objectValue);
+   for(const auto& iter : m_currentStats)
+   {
+      currentStatsNode[iter.first] = iter.second;
+   }
+   
+   characterNode[Character::CURRENT_STATS_ELEMENT] = currentStatsNode;
 
    Json::Value skillsNode(Json::objectValue);
-
    for(const auto& iter : m_skillUsage)
    {
       skillsNode[std::to_string(iter.first)] = iter.second;
@@ -204,34 +227,36 @@ Json::Value Character::serialize() const
    return characterNode;
 }
 
+bool Character::hasStatAttribute(const std::string& attributeName) const
+{
+   return (m_currentStats.find(attributeName) != m_currentStats.end()) ||
+      (m_baseStats.find(attributeName) != m_baseStats.end());
+}
+
 int Character::getStatAttribute(const std::string& attributeName) const
 {
    const auto& currentAspect = m_archetypeAspects[m_selectedAspect];
-   const auto& baseStatIterator = m_baseStats.find(attributeName);
-   int baseStat = baseStatIterator != m_baseStats.end() ?
-      baseStatIterator->second : 0;
 
-   return baseStat + currentAspect->getAspectBonus(attributeName, m_level);
+   int stat;
+
+   const auto& currentStatIterator = m_currentStats.find(attributeName);
+   if(currentStatIterator != m_currentStats.end())
+   {
+      stat = currentStatIterator->second;
+   }
+   else
+   {
+      const auto& baseStatIterator = m_baseStats.find(attributeName);
+      stat = baseStatIterator != m_baseStats.end() ?
+         baseStatIterator->second : 0;
+   }
+
+   return stat + currentAspect->getAspectBonus(attributeName, m_level);
 }
 
-int Character::getMaxHP() const
+void Character::setStatAttribute(const std::string& attributeName, int newValue)
 {
-   return getStatAttribute(Character::MAX_HP_ATTRIBUTE);
-}
-
-int Character::getMaxSP() const
-{
-   return getStatAttribute(Character::MAX_SP_ATTRIBUTE);
-}
-
-int Character::getHP() const
-{
-   return m_hp;
-}
-
-int Character::getSP() const
-{
-   return m_sp;
+   m_currentStats[attributeName] = newValue;
 }
 
 std::string Character::getId() const

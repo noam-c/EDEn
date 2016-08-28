@@ -4,17 +4,14 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#include "UsableScript.h"
+#include "CharacterDataScript.h"
 
+#include "Character.h"
 #include "EnumUtils.h"
-
-#include "Usable.h"
-
+#include "LuaWrapper.hpp"
 #include "DebugUtils.h"
 
 #define DEBUG_FLAG DEBUG_METADATA
-
-#include "LuaWrapper.hpp"
 
 // Include the Lua libraries. Since they are written in clean C, the functions
 // need to be included in this fashion to work with the C++ code.
@@ -25,14 +22,16 @@ extern "C"
    #include <lauxlib.h>
 }
 
-const char* UsableScript::FUNCTION_NAMES[] = { "onMenuUse", "onFieldUse", "onBattleUse" };
+const std::string characterDataScriptPath = "data/scripts/characters/";
+const char* CharacterDataScript::FUNCTION_NAMES[] = { "initialize" };
 
-UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, const Usable& usable) :
-   Script(scriptPath),
-   m_usable(usable),
-   m_functionExists(EnumUtils::toNumber(UsableFunction::NUM_FUNCTIONS))
+CharacterDataScript::CharacterDataScript(lua_State* luaVM, const std::string& scriptName) :
+   Script(scriptName),
+   m_functionExists(EnumUtils::toNumber(CharacterDataFunction::NUM_FUNCTIONS))
 {
    m_luaStack = lua_newthread(luaVM);
+
+   auto scriptPath = characterDataScriptPath + scriptName + ".lua";
 
    // Run through the script to gather all the usable's functions
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
@@ -41,7 +40,7 @@ UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, cons
 
    if(result != 0)
    {
-      DEBUG("Error loading usable functions for usable ID %d: %s", m_usable.getId(), lua_tostring(m_luaStack, -1));
+      DEBUG("Error loading character data script ID '%s': %s", scriptPath.c_str(), lua_tostring(m_luaStack, -1));
    }
 
    // All the below code simply takes all the global functions that the script
@@ -101,7 +100,7 @@ UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, cons
    lua_setglobal(m_luaStack, m_scriptName.c_str());
 }
 
-UsableScript::~UsableScript()
+CharacterDataScript::~CharacterDataScript()
 {
    /** \todo Check if this cleanup is appropriate. */
    // Set the function table to nil so that it gets garbage collected
@@ -109,17 +108,18 @@ UsableScript::~UsableScript()
    // lua_setglobal(luaStack, scriptPath.c_str());
 }
 
-bool UsableScript::callFunction(UsableFunction function, Character* usingCharacter)
+bool CharacterDataScript::callFunction(CharacterDataFunction function, Character* usingCharacter)
 {
-   if(m_functionExists[EnumUtils::toNumber(function)])
+   auto funcIndex = EnumUtils::toNumber(function);
+   if(m_functionExists[funcIndex])
    {
-      // Load the table of Lua functions for this NPC
+      // Load the table of Lua functions
       lua_getglobal(m_luaStack, m_scriptName.c_str());
 
       // Grab the function name
-      const char* functionName = FUNCTION_NAMES[EnumUtils::toNumber(function)];
+      const auto functionName = FUNCTION_NAMES[funcIndex];
 
-      DEBUG("Usable ID %d running function %s", m_usable.getId(), functionName);
+      DEBUG("Running CharacterData function %s", functionName);
 
       // Get the function from the NPC function table and push it on the stack
       lua_pushstring(m_luaStack, functionName);
@@ -139,17 +139,7 @@ bool UsableScript::callFunction(UsableFunction function, Character* usingCharact
    return true;
 }
 
-bool UsableScript::onMenuUse(Character* usingCharacter)
+bool CharacterDataScript::initialize(Character* usingCharacter)
 {
-   return callFunction(UsableFunction::MENU_USE, usingCharacter);
-}
-
-bool UsableScript::onFieldUse(Character* usingCharacter)
-{
-   return callFunction(UsableFunction::FIELD_USE, usingCharacter);
-}
-
-bool UsableScript::onBattleUse(Character* usingCharacter)
-{
-   return callFunction(UsableFunction::BATTLE_USE, usingCharacter);
+   return callFunction(CharacterDataFunction::INITIALIZE, usingCharacter);
 }

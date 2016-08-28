@@ -28,7 +28,7 @@ bool FileScript::initialize()
 {
    DEBUG("Script ID %d loading file %s", getId(), m_scriptName.c_str());
 
-   int result = luaL_loadfile(m_luaStack, m_scriptName.c_str());
+   auto result = luaL_loadfile(m_luaStack, m_scriptName.c_str());
    if(result != 0)
    {
       const char* errorString = luaL_checkstring(m_luaStack, 1);

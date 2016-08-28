@@ -83,6 +83,7 @@ SET(HEADERS
   src/rocket/RocketListener.h
   src/rocket/RocketScriptHandler.h
   src/rocket/RocketScriptHandlerFactory.h
+  src/ScriptEngine/CharacterDataScript.h
   src/ScriptEngine/FileScript.h
   src/ScriptEngine/MapTriggerCallback.h
   src/ScriptEngine/NPCScript.h
@@ -135,6 +136,7 @@ SET(HEADERS
   src/utils/CancelableTask.h
   src/utils/DebugUtils.h
   src/utils/EnumUtils.h
+  src/utils/JsonUtils.h
   src/utils/Exception.h
   src/utils/Grid.h
   src/utils/IntegerSequence.h
@@ -208,6 +210,7 @@ SET(SOURCES
   src/rocket/RocketContextRegistry.cpp
   src/rocket/RocketListener.cpp
   src/rocket/RocketSDLInputMapping.cpp
+  src/ScriptEngine/CharacterDataScript.cpp
   src/ScriptEngine/FileScript.cpp
   src/ScriptEngine/MapTriggerCallback.cpp
   src/ScriptEngine/NPCScript.cpp
@@ -257,6 +260,7 @@ SET(SOURCES
   src/Transitions/BlendTransition.cpp
   src/utils/DebugUtils.cpp
   src/utils/Exception.cpp
+  src/utils/JsonUtils.cpp
   src/views/ChoicesDataSource.cpp
   src/views/DebugConsoleWindow.cpp
   src/views/DialogueBox.cpp

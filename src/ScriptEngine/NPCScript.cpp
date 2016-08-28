@@ -36,7 +36,7 @@ NPCScript::NPCScript(lua_State* luaVM, const std::string& scriptPath, NPC* npc) 
    // Run through the script to gather all the NPC functions
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
 
-   int result = luaL_dofile(m_luaStack, scriptPath.c_str());
+   auto result = luaL_dofile(m_luaStack, scriptPath.c_str());
 
    if(result != 0)
    {

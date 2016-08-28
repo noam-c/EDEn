@@ -5,6 +5,7 @@
  */
 
 #include "Metadata.h"
+#include "ScriptEngine.h"
 #include "json.h"
 #include <fstream>
 #include <tuple>
@@ -129,5 +130,11 @@ bool Metadata::useSkill(UsableId key, const GameStateType stateType, Character* 
    }
 
    DEBUG("Attempted to use skill %d that does not exist", key);
+   return false;
+}
+
+bool Metadata::initializeCharacter(Character* character, const std::string& characterSchema)
+{
+   m_scriptEngine.runCharacterInitScript(characterSchema, character);
    return false;
 }

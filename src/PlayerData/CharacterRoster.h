@@ -29,7 +29,7 @@ class CharacterRoster final
    static const char* LEADER_ELEMENT;
    static const char* PARTY_ELEMENT;
 
-   const Metadata& m_metadata;
+   Metadata& m_metadata;
 
    /** The message pipe used to send messages about updates to the roster. */
    const messaging::MessagePipe* m_messagePipe = nullptr;
@@ -54,7 +54,7 @@ class CharacterRoster final
       /**
        * Constructor.
        */
-      CharacterRoster(const Metadata& metadata);
+      CharacterRoster(Metadata& metadata);
 
       /**
        * Binds a new message pipe to send player data updates to. This overwrites the previously set
