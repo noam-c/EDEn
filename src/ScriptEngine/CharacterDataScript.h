@@ -20,7 +20,7 @@ class Character;
  *
  * @author Noam Chitayat
  */
-class CharacterDataScript : public Script
+class CharacterDataScript final : public Script
 {
    /**
     * The functions that can be called on an Usable.

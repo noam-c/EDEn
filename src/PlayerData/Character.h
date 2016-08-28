@@ -21,7 +21,6 @@ namespace Json
 class Aspect;
 class CharacterArchetype;
 class Metadata;
-class ScriptEngine;
 
 /**
  * A model holding the data for a character that can be used by the player.

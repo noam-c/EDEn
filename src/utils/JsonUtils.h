@@ -25,6 +25,14 @@ namespace JsonUtils
     */
    template<typename V> V convertValue(const Json::Value& jsonValue);
 
+   /**
+    * Converts a JsonCpp Json::Value into a map. Note that because
+    * STL maps are strongly typed, this function will attempt to coerce
+    * every value in the map into the same type. This should not be used
+    * when multiple types are expected in obj.
+    *
+    * @return An STL map representing the JSON object.
+    */
    template<typename V> std::map<std::string, V> toStlMap(const Json::Value& obj)
    {
       std::map<std::string, V> newMap;

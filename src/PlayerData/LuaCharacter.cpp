@@ -24,7 +24,7 @@ static int CharacterL_GetName(lua_State* luaVM)
 
 static int CharacterL_Stat(lua_State* luaVM)
 {
-   Character* character = luaW_check<Character>(luaVM, 1);
+   auto character = luaW_check<Character>(luaVM, 1);
    if(character == nullptr)
    {
       return lua_error(luaVM);

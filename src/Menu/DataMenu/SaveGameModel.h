@@ -16,7 +16,6 @@ class PlayerData;
 class PlayerDataSummary;
 struct SaveLocation;
 class SaveMenu;
-class ScriptEngine;
 
 /**
  * Provides the title screen functionality, including the game logo, backdrop,
