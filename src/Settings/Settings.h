@@ -56,11 +56,11 @@ class Settings final
    public:
       struct Resolution final
       {
-         /** The height of the game's window. */
-         unsigned int height;
-
          /** The width of the game's window. */
          unsigned int width;
+
+         /** The height of the game's window. */
+         unsigned int height;
 
          /** The bit depth of the game's window. */
          unsigned int bitsPerPixel;
