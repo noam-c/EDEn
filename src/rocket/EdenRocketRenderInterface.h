@@ -27,38 +27,38 @@
  * @author Peter Curry
  * @author Noam Chitayat
  */
-class EdenRocketRenderInterface : public Rocket::Core::RenderInterface
+class EdenRocketRenderInterface final : public Rocket::Core::RenderInterface
 {
    public:
       /**
        * Called by Rocket when it wants to render geometry that it does not wish to optimise.
        */
-      virtual void RenderGeometry(Rocket::Core::Vertex* vertices, int numVertices, int* indices, int numIndices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation) override;
+      void RenderGeometry(Rocket::Core::Vertex* vertices, int numVertices, int* indices, int numIndices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation) override;
 
       /**
        * Called by Rocket when it wants to enable or disable scissoring to clip content.
        */
-      virtual void EnableScissorRegion(bool enable) override;
+      void EnableScissorRegion(bool enable) override;
 
       /**
        * Called by Rocket when it wants to change the scissor region.
        */
-      virtual void SetScissorRegion(int x, int y, int width, int height) override;
+      void SetScissorRegion(int x, int y, int width, int height) override;
 
       /**
        * Called by Rocket when a texture is required by the library.
        */
-      virtual bool LoadTexture(Rocket::Core::TextureHandle& textureHandle, Rocket::Core::Vector2i& textureDimensions, const Rocket::Core::String& source) override;
+      bool LoadTexture(Rocket::Core::TextureHandle& textureHandle, Rocket::Core::Vector2i& textureDimensions, const Rocket::Core::String& source) override;
 
       /**
        * Called by Rocket when a texture is required to be built from an internally-generated sequence of pixels.
        */
-      virtual bool GenerateTexture(Rocket::Core::TextureHandle& textureHandle, const Rocket::Core::byte* source, const Rocket::Core::Vector2i& sourceDimensions) override;
+      bool GenerateTexture(Rocket::Core::TextureHandle& textureHandle, const Rocket::Core::byte* source, const Rocket::Core::Vector2i& sourceDimensions) override;
 
       /**
        * Called by Rocket when a loaded texture is no longer required.
        */
-      virtual void ReleaseTexture(Rocket::Core::TextureHandle textureHandle) override;
+      void ReleaseTexture(Rocket::Core::TextureHandle textureHandle) override;
 };
 
 #endif

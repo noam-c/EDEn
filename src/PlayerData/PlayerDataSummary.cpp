@@ -16,7 +16,7 @@
 const char* PlayerDataSummary::CHARACTER_LIST_ELEMENT = "Roster";
 const char* PlayerDataSummary::CHARACTER_ELEMENT = "Character";
 
-PlayerDataSummary::PlayerDataSummary(const Metadata& metadata) :
+PlayerDataSummary::PlayerDataSummary(Metadata& metadata) :
    m_roster(metadata)
 {
 }

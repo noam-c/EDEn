@@ -103,10 +103,9 @@
                "maxSP" : 30,
                "str" : 7
             },
-            "hp" : 0,
             "level" : 1,
-            "name" : "Akrom",
-            "sp" : 0
+            "schema" : "default",
+            "name" : "Akrom"
          },
          "kain" : 
          {
@@ -164,10 +163,9 @@
                "maxSP" : 30,
                "str" : 7
             },
-            "hp" : 0,
             "level" : 1,
-            "name" : "Kain",
-            "sp" : 0
+            "schema" : "default",
+            "name" : "Kain"
          },
          "shiara" : 
          {
@@ -221,10 +219,9 @@
                "maxSP" : 100,
                "str" : 2
             },
-            "hp" : 0,
             "level" : 1,
-            "name" : "Shiara",
-            "sp" : 0
+            "schema" : "default",
+            "name" : "Shiara"
          }
       },
       "Leader" : "kain",

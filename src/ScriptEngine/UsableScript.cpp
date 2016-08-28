@@ -37,7 +37,7 @@ UsableScript::UsableScript(lua_State* luaVM, const std::string& scriptPath, cons
    // Run through the script to gather all the usable's functions
    DEBUG("Script ID %d loading functions from %s", getId(), scriptPath.c_str());
 
-   int result = luaL_dofile(luaVM, scriptPath.c_str());
+   auto result = luaL_dofile(luaVM, scriptPath.c_str());
 
    if(result != 0)
    {

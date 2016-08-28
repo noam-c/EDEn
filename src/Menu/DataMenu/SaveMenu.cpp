@@ -27,8 +27,7 @@ SaveMenu::SaveMenu(GameContext& gameContext, std::shared_ptr<Task> saveTask) :
    m_model(*this, getMetadata()),
    m_saveLocation(SaveLocation()),
    m_saveTask(saveTask),
-   m_saveGameViewModel(m_model),
-   m_selectedSlot(-1)
+   m_saveGameViewModel(m_model)
 {
    initializeMenu();
    initializeConfirmDialog(true /*loadMode*/);
@@ -40,8 +39,7 @@ SaveMenu::SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerDat
    m_saveLocation(saveLocation),
    m_playerData(playerData),
    m_saveTask(saveTask),
-   m_saveGameViewModel(m_model),
-   m_selectedSlot(-1)
+   m_saveGameViewModel(m_model)
 {
    initializeMenu();
    initializeConfirmDialog(false /*loadMode*/);

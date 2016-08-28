@@ -19,19 +19,19 @@ namespace geometry
     *
     * @author Noam Chitayat
     */
-   struct Rectangle
+   struct Rectangle final
    {
       /** The Y-location of the top edge of the rectangle. */
-      int top;
+      int top = 0;
 
       /** The X-location of the left edge of the rectangle. */
-      int left;
+      int left = 0;
 
       /** The Y-location of the bottom edge of the rectangle. */
-      int bottom;
+      int bottom = 0;
 
       /** The X-location of the right edge of the rectangle. */
-      int right;
+      int right = 0;
 
       /**
        * Default constructor.

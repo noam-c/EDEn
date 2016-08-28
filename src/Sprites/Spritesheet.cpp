@@ -30,8 +30,7 @@ const std::string Spritesheet::DATA_EXTENSION = ".eds";
 const std::string Spritesheet::UNTITLED_LINE = "untitled";
 
 Spritesheet::Spritesheet(ResourceKey name) :
-   Resource(name),
-   m_numFrames(0)
+   Resource(name)
 {
 }
 

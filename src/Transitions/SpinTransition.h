@@ -30,7 +30,7 @@ class SpinTransition final : public Transition
       /**
        * Destructor.
        */
-      ~SpinTransition() = default;
+      ~SpinTransition() override = default;
 };
 
 #endif

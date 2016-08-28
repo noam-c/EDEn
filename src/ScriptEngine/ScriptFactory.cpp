@@ -9,6 +9,7 @@
 #include <sstream>
 #include <type_traits>
 
+#include "EnumUtils.h"
 #include "FileScript.h"
 #include "UsableScript.h"
 #include "Item.h"
@@ -24,8 +25,7 @@ const std::string ScriptFactory::PATHS[] = { "data/scripts/chapters/", "data/scr
 
 std::string ScriptFactory::getPath(const std::string& name, ScriptType type)
 {
-   static_assert(std::is_integral<std::underlying_type<ScriptType>::type>::value, "ScriptType has to be integral since it is used as an array subscript.");
-   return PATHS[static_cast<int>(type)] + name + EXTENSION;
+   return PATHS[EnumUtils::toNumber(type)] + name + EXTENSION;
 }
 
 std::shared_ptr<Script> ScriptFactory::createScript(lua_State* luaVM, const std::string& name, ScriptType type)

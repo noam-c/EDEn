@@ -4,8 +4,7 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#include "Actor.h"
-#include "Actor_Orders.h"
+#include "ActorStandOrder.h"
 
 Actor::StandOrder::StandOrder(Actor& actor, geometry::Direction direction) :
    Order(actor),

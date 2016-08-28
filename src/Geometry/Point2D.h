@@ -19,21 +19,14 @@ namespace geometry
     *
     * @author Noam Chitayat
     */
-   struct Point2D
+   struct Point2D final
    {
       /** The x-coordinate of this point. */
-      int x;
+      int x = 0;
       /** The y-coordinate of this point. */
-      int y;
+      int y = 0;
 
-      /**
-       * Constructor.
-       * Creates a point set at origin (0,0).
-       */
-      constexpr Point2D() :
-         x(0),
-         y(0)
-      {}
+      constexpr Point2D() = default;
 
       /**
        * Constructor.
@@ -54,8 +47,7 @@ namespace geometry
        * @param coordsPair an x-y pair of coordinates.
        */
       constexpr Point2D(std::pair<int, int> pair) :
-         x(pair.first),
-         y(pair.second)
+         Point2D(pair.first, pair.second)
       {}
 
       /**

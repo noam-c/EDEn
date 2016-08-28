@@ -39,7 +39,7 @@ namespace Json
  *
  * @author Noam Chitayat
  */
-class Quest
+class Quest final
 {
    static const char* NAME_ATTRIBUTE;
 

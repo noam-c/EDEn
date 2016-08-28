@@ -36,10 +36,10 @@ typedef std::vector<std::string> DialogueChoiceList;
 class DialogueEntry final
 {
    /** A queue of upcoming open script brackets ('<' characters) */
-   std::queue<int> m_openScriptBrackets;
+   std::queue<size_t> m_openScriptBrackets;
 
    /** A queue of upcoming close script brackets ('>' characters) */
-   std::queue<int> m_closeScriptBrackets;
+   std::queue<size_t> m_closeScriptBrackets;
 
    /** The task waiting on this particular line of dialogue */
    std::shared_ptr<Task> m_task;
@@ -67,7 +67,7 @@ class DialogueEntry final
       /**
        *  @return the starting index of the next embedded script, or -1 if there is none
        */
-      int getBeginningOfNextScript() const noexcept;
+      size_t getBeginningOfNextScript() const noexcept;
 
       /**
        *  Gets the next embedded script and removes it from the dialogue line.

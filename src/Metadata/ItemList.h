@@ -10,6 +10,6 @@
 #include <vector>
 #include "UsableId.h"
 
-typedef std::vector<std::pair<UsableId, int> > ItemList;
+typedef std::vector<std::pair<UsableId, int>> ItemList;
 
 #endif

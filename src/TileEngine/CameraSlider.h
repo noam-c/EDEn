@@ -30,7 +30,7 @@ class CameraSlider : public Coroutine
    std::shared_ptr<Task> m_task;
 
    /** The amount of time that has passed since the slide began. */
-   long m_totalTimePassed;
+   long m_totalTimePassed = 0;
 
    /** The speed of the camera slide on the x-axis. */
    double m_xSpeed;

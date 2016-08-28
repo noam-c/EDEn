@@ -9,7 +9,7 @@
 
 #include <string>
 
-struct DebugCommandMessage
+struct DebugCommandMessage final
 {
    const std::string command;
 

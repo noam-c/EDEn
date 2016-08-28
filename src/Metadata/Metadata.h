@@ -33,7 +33,7 @@ class ScriptEngine;
  *
  * @author Noam Chitayat
  */
-class Metadata
+class Metadata final
 {
    /** The script engine used to invoke item and skill scripts. */
    ScriptEngine& m_scriptEngine;
@@ -75,6 +75,8 @@ class Metadata
 
       bool useItem(UsableId key, const GameStateType stateType);
       bool useSkill(UsableId key, const GameStateType stateType, Character* usingCharacter);
+
+      bool initializeCharacter(Character* character, const std::string& characterSchema);
 };
 
 #endif

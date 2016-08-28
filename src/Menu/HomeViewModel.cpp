@@ -43,7 +43,7 @@ void HomeViewModel::GetRow(Rocket::Core::StringList& row,
          {
             std::ostringstream hpStringStream;
 
-            hpStringStream << "HP: " << character->getHP() << '/' << character->getMaxHP();
+            hpStringStream << "HP: " << character->getStatAttribute("hp") << '/' << character->getStatAttribute("maxHP");
             std::string hpString = hpStringStream.str();
             row.emplace_back(hpString.c_str());
          }
@@ -51,7 +51,7 @@ void HomeViewModel::GetRow(Rocket::Core::StringList& row,
          {
             std::ostringstream spStringStream;
 
-            spStringStream << "SP: " << character->getSP() << '/' << character->getMaxSP();
+            spStringStream << "SP: " << character->getStatAttribute("sp") << '/' << character->getStatAttribute("maxSP");
             std::string spString = spStringStream.str();
             row.emplace_back(spString.c_str());
          }

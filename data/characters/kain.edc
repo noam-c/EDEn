@@ -1,5 +1,6 @@
 {
    "name" : "Kain",
+   "schema" : "default",
    "Portrait" : 
    {
       "path" : "data/characters/kain.jpg"

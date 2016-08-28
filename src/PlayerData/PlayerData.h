@@ -42,7 +42,7 @@ namespace messaging
  *
  * @author Noam Chitayat
  */
-struct SaveLocation
+struct SaveLocation final
 {
    static const char* REGION_ATTRIBUTE;
    static const char* MAP_ATTRIBUTE;
@@ -67,7 +67,7 @@ struct Shortcut;
  *
  * @author Noam Chitayat
  */
-class PlayerData
+class PlayerData final
 {
    static const char* CHARACTER_LIST_ELEMENT;
    static const char* CHARACTER_ELEMENT;
@@ -83,7 +83,7 @@ class PlayerData
    CharacterRoster m_roster;
 
    /** The top-level quest for the game. Contains all the quests that the player can complete. */
-   Quest m_rootQuest;
+   Quest m_rootQuest = Quest("root");
 
    /** The player's shortcut list. */
    std::vector<Shortcut> m_shortcutList;
@@ -112,7 +112,7 @@ class PlayerData
       /**
        * Constructor.
        */
-      PlayerData(const Metadata& metadata);
+      PlayerData(Metadata& metadata);
 
       /**
        * Binds a new message pipe to send player data updates to. This overwrites the previously set
@@ -132,7 +132,7 @@ class PlayerData
        *
        * @param path The path to load the player data from.
        */
-      static std::tuple<std::shared_ptr<PlayerData>, SaveLocation> load(const std::string& path, const Metadata& metadata);
+      static std::tuple<std::shared_ptr<PlayerData>, SaveLocation> load(const std::string& path, Metadata& metadata);
 
       /**
        * Save the player data to a file and set a new default file path.

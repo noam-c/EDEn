@@ -34,7 +34,7 @@ class BattleController final :
    messaging::MessagePipe m_messagePipe;
 
    /** True iff the BattleController has already been initialized. */
-   bool m_initialized;
+   bool m_initialized = false;
 
    /** The coroutine scheduler used by the combat system. */
    Scheduler m_scheduler;

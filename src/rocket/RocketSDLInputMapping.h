@@ -18,7 +18,7 @@
  *
  * @author Noam Chitayat
  */
-class RocketSDLInputMapping
+class RocketSDLInputMapping final
 {
    /**
     * The mapping between the SDLKey keyboard input enum to the

@@ -29,7 +29,7 @@ class Map;
 class Region : public Resource
 {
    /** The name of the region. */
-   std::string m_name;
+   std::string m_regionName;
 
    /** The list of maps in this region, keyed by map names. */
    std::map<std::string, std::shared_ptr<Map>> m_areas;
@@ -48,6 +48,8 @@ class Region : public Resource
        * @param name The name of the region resource.
        */
       Region(const ResourceKey& name);
+
+      ~Region() override;
 
       /** @return the name of the region. */
       std::string getName() const;

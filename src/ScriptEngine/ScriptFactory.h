@@ -29,7 +29,7 @@ struct lua_State;
  *
  * @author Noam Chitayat
  */
-class ScriptFactory
+class ScriptFactory final
 {
    /**
     * The ScriptFactory handles creation of various kinds of scripts.
@@ -47,6 +47,8 @@ class ScriptFactory
       ITEM_SCRIPT,
       /** Scripts containing instructions for skill behaviour */
       SKILL_SCRIPT,
+      /** Scripts containing instructions for setting up characters */
+      CHARACTER_DATA_SCRIPT,
    };
 
    /**

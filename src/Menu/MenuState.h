@@ -60,7 +60,7 @@ class MenuState : public GameState
       /** The shell that holds the common menu controls */
       std::shared_ptr<MenuShell> m_menuShell;
 
-      ShortcutBar* m_shortcutBar;
+      ShortcutBar* m_shortcutBar = nullptr;
 
       /** The list of sidebar options associated with this menu state. */
       std::vector<MenuShellOption> m_sidebarOptions;

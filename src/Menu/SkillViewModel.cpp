@@ -20,9 +20,9 @@
 const Rocket::Core::String SkillViewModel::UnknownSkillIconPath("data/images/icons/I_Rock01.png");
 
 SkillViewModel::SkillViewModel(SkillMenu& skillMenu, const Metadata& metadata) :
-      Rocket::Controls::DataSource("skillViewModel"),
-      m_skillMenu(skillMenu),
-      m_metadata(metadata)
+   Rocket::Controls::DataSource("skillViewModel"),
+   m_skillMenu(skillMenu),
+   m_metadata(metadata)
 {
 }
 

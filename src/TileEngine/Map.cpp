@@ -20,7 +20,8 @@
 // Define as 1 to have the map rendering highlight the map's impassible terrain
 #define DRAW_IMPASSIBILITY 0
 
-Map::Map(const std::string& name, const std::string& filePath) : m_name(name)
+Map::Map(const std::string& name, const std::string& filePath) :
+   m_name(name)
 {
    DEBUG("Loading map file %s", filePath.c_str());
 

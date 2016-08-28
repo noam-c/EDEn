@@ -21,7 +21,7 @@ class PlayerDataSummary;
  *
  * @author Noam Chitayat
  */
-class SaveGameViewModel : public Rocket::Controls::DataSource
+class SaveGameViewModel final : public Rocket::Controls::DataSource
 {
    const SaveGameModel& m_model;
 

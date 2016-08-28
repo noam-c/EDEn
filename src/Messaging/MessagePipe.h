@@ -20,11 +20,11 @@
 
 namespace messaging
 {
-   class MessagePipe
+   class MessagePipe final
    {
       class ListenerListBase {};
 
-      template<typename T> class ListenerList : public ListenerListBase
+      template<typename T> class ListenerList final : public ListenerListBase
       {
          std::set<Listener<T>*> m_listeners;
 

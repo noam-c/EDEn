@@ -23,8 +23,7 @@ extern "C"
 #define DEBUG_FLAG DEBUG_SCRIPT_ENG
 
 Script::Script(const std::string& name) :
-   m_scriptName(name),
-   m_running(false)
+   m_scriptName(name)
 {
 }
 
@@ -37,7 +36,7 @@ Script::~Script() = default;
  *
  * @author Noam Chitayat
  */
-class PushOnLuaStackOp : public ICoroutineResultOp
+class PushOnLuaStackOp final : public ICoroutineResultOp
 {
    lua_State* m_luaVM;
 

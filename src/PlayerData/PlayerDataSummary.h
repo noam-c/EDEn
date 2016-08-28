@@ -45,7 +45,7 @@ class PlayerDataSummary final
       /**
        * Constructor.
        */
-      PlayerDataSummary(const Metadata& metadata);
+      PlayerDataSummary(Metadata& metadata);
 
       /**
        * Destructor.

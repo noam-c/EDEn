@@ -34,13 +34,8 @@ void Settings::initialize()
 }
 
 Settings::Settings(bool isSnapshot) :
-   m_settingsSnapshot(isSnapshot ? nullptr : std::unique_ptr<Settings>(new Settings(true))),
-   m_musicEnabled(true),
-   m_soundEnabled(true),
-   m_fullScreenEnabled(false),
-   m_resolution(1024, 768, 32)
+   m_settingsSnapshot(isSnapshot ? nullptr : std::unique_ptr<Settings>(new Settings(true)))
 {
-
 }
 
 void Settings::setSettings(const Settings& other)
@@ -79,9 +74,9 @@ void Settings::save(std::ostream& output)
    jsonRoot["fullScreenEnabled"] = m_fullScreenEnabled;
 
    Json::Value& resolutionSettings = jsonRoot["resolution"] = Json::Value(Json::objectValue);
-   resolutionSettings["bitsPerPixel"] = m_resolution.getBitsPerPixel();
-   resolutionSettings["height"] = m_resolution.getHeight();
-   resolutionSettings["width"] = m_resolution.getWidth();
+   resolutionSettings["bitsPerPixel"] = m_resolution.bitsPerPixel;
+   resolutionSettings["height"] = m_resolution.height;
+   resolutionSettings["width"] = m_resolution.width;
 
    output << jsonRoot;
 
@@ -116,7 +111,7 @@ void Settings::load(std::istream& input)
    unsigned int resolutionHeight = resolutionSettings.get("height", 768).asUInt();
    unsigned int resolutionWidth = resolutionSettings.get("width", 1024).asUInt();
 
-   m_resolution = Settings::Resolution(resolutionWidth, resolutionHeight, resolutionBitsPerPixel);
+   m_resolution = {resolutionWidth, resolutionHeight, resolutionBitsPerPixel};
 
    if(m_settingsSnapshot)
    {

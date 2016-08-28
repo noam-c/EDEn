@@ -14,8 +14,7 @@
 #define DEBUG_FLAG DEBUG_MENU
 
 MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
-   m_rocketContext(rocketContext),
-   m_currentState(nullptr)
+   m_rocketContext(rocketContext)
 {
 
    m_rocketContext->AddReference();

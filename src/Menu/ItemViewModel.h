@@ -19,7 +19,7 @@ class PlayerData;
  *
  * @author Noam Chitayat
  */
-class ItemViewModel : public Rocket::Controls::DataSource
+class ItemViewModel final : public Rocket::Controls::DataSource
 {
    const static Rocket::Core::String UnknownItemIconPath;
 

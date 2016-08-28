@@ -24,7 +24,7 @@ typedef class Usable Item;
  *
  * @author Noam Chitayat
  */
-class EquipData
+class EquipData final
 {
    /** The equipment slot for headgear. */
    EquipSlot m_head;

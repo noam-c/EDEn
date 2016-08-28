@@ -33,7 +33,7 @@ class Layer;
  *
  * @author Noam Chitayat
  */
-class Map
+class Map final
 {
    public:
       struct NPCSpawnPoint
