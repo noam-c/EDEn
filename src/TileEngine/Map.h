@@ -24,6 +24,7 @@
 #include "TriggerZone.h"
 
 class Layer;
+struct NPCSpawnMarker;
 
 /**
  * A map is a subset of a Region consisting of a single rectangular set of tiles
@@ -35,81 +36,70 @@ class Layer;
  */
 class Map final
 {
-   public:
-      struct NPCSpawnPoint
-      {
-         std::string name;
-         std::string spritesheet;
-         geometry::Point2D location;
-         geometry::Size size;
-         geometry::Direction direction;
-      };
-      
-   private:
-      /** The name of this map */
-      std::string m_name;
+   /** The name of this map */
+   std::string m_name;
 
-      /** Background layers, which are drawn behind the sprite layer (behind NPCs, player, etc.) */
-      std::vector<std::unique_ptr<Layer>> m_backgroundLayers;
+   /** Background layers, which are drawn behind the sprite layer (behind NPCs, player, etc.) */
+   std::vector<std::unique_ptr<Layer>> m_backgroundLayers;
 
-      /** Foreground layers, which are drawn in front of the sprite layer (in front of NPCs, player, etc.) */
-      std::vector<std::unique_ptr<Layer>> m_foregroundLayers;
+   /** Foreground layers, which are drawn in front of the sprite layer (in front of NPCs, player, etc.) */
+   std::vector<std::unique_ptr<Layer>> m_foregroundLayers;
 
-      /** The passibility of the map. Typed as int to avoid vector<bool> specialization. */
-      Grid<int> m_passibilityMap;
+   /** The passibility of the map. Typed as int to avoid vector<bool> specialization. */
+   Grid<int> m_passibilityMap;
 
-      /** The list of the map's trigger zones */
-      std::vector<TriggerZone> m_triggerZones;
+   /** The list of the map's trigger zones */
+   std::vector<TriggerZone> m_triggerZones;
 
-      /** The list of the map's entrances */
-      std::map<std::string, geometry::Point2D> m_mapEntrances;
+   /** The list of the map's entrances */
+   std::map<std::string, geometry::Point2D> m_mapEntrances;
 
-      /** The list of the map's exits */
-      std::vector<MapExit> m_mapExits;
+   /** The list of the map's exits */
+   std::vector<MapExit> m_mapExits;
 
-      /** The list of NPCs to create when the map is loaded */
-      std::vector<NPCSpawnPoint> m_npcsToSpawn;
+   /** The list of NPCs to create when the map is loaded */
+   std::vector<NPCSpawnMarker> m_npcsToSpawn;
 
-      /** The bounds (in tiles) of this map */
-      geometry::Rectangle m_bounds;
+   /** The bounds (in tiles) of this map */
+   geometry::Rectangle m_bounds;
 
-      /**
-       * Adds an collision rectangle to the passibility map, marking
-       * the area occupied by the rectangle as impassible.
-       *
-       * @param rect The map subregion that should be marked impassible
-       */
-      void addCollisionRect(const geometry::Rectangle& rect);
-      
-      /**
-       * Parse the map layer that holds collision data.
-       */
-      void parseCollisionGroup(const TiXmlElement* collisionGroupElement);
+   /**
+    * Adds an collision rectangle to the passibility map, marking
+    * the area occupied by the rectangle as impassible.
+    *
+    * @param rect The map subregion that should be marked impassible
+    */
+   void addCollisionRect(const geometry::Rectangle& rect);
+   
+   /**
+    * Parse the map layer that holds collision data.
+    */
+   void parseCollisionGroup(const TiXmlElement* collisionGroupElement);
 
-      /**
-       * Parse the map layer that holds map entrance data.
-       */
-      void parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement);
+   /**
+    * Parse the map layer that holds map entrance data.
+    */
+   void parseMapEntrancesGroup(const TiXmlElement* entrancesGroupElement);
 
-      /**
-       * Parse the map layer that holds map exit data.
-       */
-      void parseMapExitsGroup(const TiXmlElement* exitsGroupElement);
+   /**
+    * Parse the map layer that holds map exit data.
+    */
+   void parseMapExitsGroup(const TiXmlElement* exitsGroupElement);
 
-      /**
-       * Parse the map layer that holds map trigger zone data.
-       */
-      void parseMapTriggersGroup(const TiXmlElement* triggersGroupElement);
+   /**
+    * Parse the map layer that holds map trigger zone data.
+    */
+   void parseMapTriggersGroup(const TiXmlElement* triggersGroupElement);
 
-      /**
-       * Parse the map layer that holds map NPC data.
-       */
-      void parseNPCGroup(const TiXmlElement* triggersGroupElement);
-      
-      /**
-       * Creates a 2-dimensional map that corresponds to the passibility of this Map
-       */
-      void initializePassibilityMatrix();
+   /**
+    * Parse the map layer that holds map NPC data.
+    */
+   void parseNPCGroup(const TiXmlElement* triggersGroupElement);
+   
+   /**
+    * Creates a 2-dimensional map that corresponds to the passibility of this Map
+    */
+   void initializePassibilityMatrix();
 
    public:
       /**
@@ -160,7 +150,7 @@ class Map final
       /**
        * @return The list of NPCs to spawn for this map
        */
-      const std::vector<NPCSpawnPoint>& getNPCSpawnPoints() const;
+      const std::vector<NPCSpawnMarker>& getNPCSpawnMarkers() const;
    
       /**
        * @return true iff the tile at this location of the map is passible

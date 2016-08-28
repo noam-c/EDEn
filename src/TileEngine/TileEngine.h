@@ -24,6 +24,7 @@
 #include <string>
 
 class NPC;
+struct NPCSpawnMarker;
 class ScriptEngine;
 class Region;
 class DialogueController;
@@ -305,17 +306,11 @@ class TileEngine final :
       /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.
        *
-       * @param npcName The name of the npc to add
-       * @param spritesheetName The name of the spritesheet to draw the NPC with
-       * @param npcLocation The location where we spawn the NPC
-       * @param size The size of the new NPC
-       * @param direction The direction that the new NPC will face at first
+       * @param npcSpawnMarker Where and how to create the NPC.
        *
        * @return The created NPC (or nullptr if it could not be placed in the map).
        */
-      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName,
-                  const geometry::Point2D& npcLocation, const geometry::Size& size,
-                  const geometry::Direction direction);
+      NPC* addNPC(const NPCSpawnMarker& npcSpawnMarker);
 
       /**
        * @param npcName The name of the NPC to find.

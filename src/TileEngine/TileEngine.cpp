@@ -37,6 +37,7 @@
 #include "SaveMenu.h"
 #include "ScreenTexture.h"
 #include "MapTriggerCallback.h"
+#include "NPCSpawnMarker.h"
 
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_TILE_ENG
@@ -192,11 +193,11 @@ int TileEngine::setMap(std::string mapName)
 
    recalculateMapOffsets();
    
-   DEBUG("Spawning NPCs...");
+   DEBUG("Spawning NPCs based on map markers...");
    
-   for(const auto& npcToSpawn : mapSharedPtr->getNPCSpawnPoints())
+   for(const auto& npcToSpawn : mapSharedPtr->getNPCSpawnMarkers())
    {
-      addNPC(npcToSpawn.name, npcToSpawn.spritesheet, npcToSpawn.location, npcToSpawn.size, npcToSpawn.direction);
+      addNPC(npcToSpawn);
    }
    
    return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, m_scheduler);
@@ -258,9 +259,13 @@ void TileEngine::recalculateMapOffsets()
    m_camera.setViewBounds(screenSize, mapPixelBounds);
 }
 
-NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const geometry::Point2D& npcLocation, const geometry::Size& size, const geometry::Direction direction)
+NPC* TileEngine::addNPC(const NPCSpawnMarker& npcSpawnMarker)
 {
    NPC* npcToAdd = nullptr;
+   const auto& npcName = npcSpawnMarker.name;
+   const auto& direction = npcSpawnMarker.direction;
+   const auto& npcLocation = npcSpawnMarker.location;
+   const auto& size = npcSpawnMarker.size;
 
    if(m_entityGrid.isAreaFree(geometry::Rectangle(npcLocation, size)))
    {
@@ -269,7 +274,7 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
                           std::forward_as_tuple(npcName),
                           std::forward_as_tuple(
                               getScriptEngine(), m_scheduler, npcName, direction,
-                              spritesheetName, m_messagePipe, m_entityGrid,
+                              npcSpawnMarker.spritesheet, m_messagePipe, m_entityGrid,
                               m_currRegion->getName(), npcLocation, size));
 
       if(insertResult.second)

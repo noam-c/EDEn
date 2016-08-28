@@ -118,6 +118,7 @@ SET(HEADERS
   src/TileEngine/TileEngine.h
   src/TileEngine/TileEngineOverlay.h
   src/TileEngine/LuaTileEngine.h
+  src/TileEngine/NPCSpawnMarker.h
   src/TileEngine/Tileset.h
   src/TileEngine/TileState.h
   src/TileEngine/TriggerZone.h

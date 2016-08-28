@@ -8,6 +8,7 @@
 
 #include "EnumUtils.h"
 #include "Layer.h"
+#include "NPCSpawnMarker.h"
 #include "Pathfinder.h"
 #include "ResourceLoader.h"
 #include "TileEngine.h"
@@ -295,7 +296,7 @@ void Map::parseNPCGroup(const TiXmlElement* npcGroupElement)
       std::string npcName;
       std::string spritesheet;
       geometry::Direction direction;
-      
+
       const TiXmlElement* objectElement = npcGroupElement->FirstChildElement("object");
       while(objectElement != nullptr)
       {
@@ -343,7 +344,7 @@ void Map::parseNPCGroup(const TiXmlElement* npcGroupElement)
             !npcName.empty() &&
             !spritesheet.empty())
          {
-            m_npcsToSpawn.emplace_back(NPCSpawnPoint{npcName, spritesheet, topLeft, size, direction});
+            m_npcsToSpawn.emplace_back(NPCSpawnMarker{npcName, spritesheet, topLeft, size, direction});
          }
 
          objectElement = objectElement->NextSiblingElement("object");
@@ -393,7 +394,7 @@ const std::vector<MapExit>& Map::getMapExits() const
    return m_mapExits;
 }
 
-const std::vector<Map::NPCSpawnPoint>& Map::getNPCSpawnPoints() const
+const std::vector<NPCSpawnMarker>& Map::getNPCSpawnMarkers() const
 {
    return m_npcsToSpawn;
 }
