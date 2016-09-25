@@ -10,18 +10,21 @@
 #include "tinyxml.h"
 
 #include <fstream>
-#include <string>
 #include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
+#include "Direction.h"
 #include "Grid.h"
-#include "Rectangle.h"
-#include "TriggerZone.h"
-#include "Point2D.h"
 #include "MapExit.h"
+#include "Point2D.h"
+#include "Rectangle.h"
+#include "Size.h"
+#include "TriggerZone.h"
 
 class Layer;
+struct NPCSpawnMarker;
 
 /**
  * A map is a subset of a Region consisting of a single rectangular set of tiles
@@ -53,6 +56,9 @@ class Map final
 
    /** The list of the map's exits */
    std::vector<MapExit> m_mapExits;
+
+   /** The list of NPCs to create when the map is loaded */
+   std::vector<NPCSpawnMarker> m_npcsToSpawn;
 
    /** The bounds (in tiles) of this map */
    geometry::Rectangle m_bounds;
@@ -86,12 +92,16 @@ class Map final
    void parseMapTriggersGroup(const TiXmlElement* triggersGroupElement);
 
    /**
+    * Parse the map layer that holds map NPC data.
+    */
+   void parseNPCGroup(const TiXmlElement* triggersGroupElement);
+   
+   /**
     * Creates a 2-dimensional map that corresponds to the passibility of this Map
     */
    void initializePassibilityMatrix();
 
    public:
-
       /**
        * Constructor. Loads map data from a Region file.
        * At the end of construction, the input stream 'in' will be at the end of
@@ -137,6 +147,11 @@ class Map final
        */
       const std::vector<MapExit>& getMapExits() const;
 
+      /**
+       * @return The list of NPCs to spawn for this map
+       */
+      const std::vector<NPCSpawnMarker>& getNPCSpawnMarkers() const;
+   
       /**
        * @return true iff the tile at this location of the map is passible
        */

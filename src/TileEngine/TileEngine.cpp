@@ -37,6 +37,7 @@
 #include "SaveMenu.h"
 #include "ScreenTexture.h"
 #include "MapTriggerCallback.h"
+#include "NPCSpawnMarker.h"
 
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_TILE_ENG
@@ -166,21 +167,39 @@ int TileEngine::setMap(std::string mapName)
    m_playerActor.removeFromMap();
 
    DEBUG("Setting map...");
+   std::weak_ptr<const Map> map;
+
    if(!mapName.empty())
    {
       // If a map name was supplied, then we set this map and run its script
-      m_entityGrid.setMapData(m_currRegion->getMap(mapName));
+      map = m_currRegion->getMap(mapName);
    }
    else
    {
       // Otherwise, we use the region's default starting map
-      m_entityGrid.setMapData(m_currRegion->getStartingMap());
-      mapName = m_entityGrid.getMapName();
+      map = m_currRegion->getStartingMap();
    }
+
+   auto mapSharedPtr = map.lock();
+   if(!mapSharedPtr)
+   {
+      T_T("Failed to dereference map right after loading it.");
+   }
+
+   m_entityGrid.setMapData(mapSharedPtr);
+   mapName = mapSharedPtr->getName();
 
    DEBUG("Map set to: %s", mapName.c_str());
 
    recalculateMapOffsets();
+   
+   DEBUG("Spawning NPCs based on map markers...");
+   
+   for(const auto& npcToSpawn : mapSharedPtr->getNPCSpawnMarkers())
+   {
+      addNPC(npcToSpawn);
+   }
+   
    return getScriptEngine().runMapScript(m_currRegion->getName(), mapName, m_scheduler);
 }
 
@@ -240,9 +259,13 @@ void TileEngine::recalculateMapOffsets()
    m_camera.setViewBounds(screenSize, mapPixelBounds);
 }
 
-NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spritesheetName, const geometry::Point2D& npcLocation, const geometry::Size& size, const geometry::Direction direction)
+NPC* TileEngine::addNPC(const NPCSpawnMarker& npcSpawnMarker)
 {
    NPC* npcToAdd = nullptr;
+   const auto& npcName = npcSpawnMarker.name;
+   const auto& direction = npcSpawnMarker.direction;
+   const auto& npcLocation = npcSpawnMarker.location;
+   const auto& size = npcSpawnMarker.size;
 
    if(m_entityGrid.isAreaFree(geometry::Rectangle(npcLocation, size)))
    {
@@ -251,7 +274,7 @@ NPC* TileEngine::addNPC(const std::string& npcName, const std::string& spriteshe
                           std::forward_as_tuple(npcName),
                           std::forward_as_tuple(
                               getScriptEngine(), m_scheduler, npcName, direction,
-                              spritesheetName, m_messagePipe, m_entityGrid,
+                              npcSpawnMarker.spritesheet, m_messagePipe, m_entityGrid,
                               m_currRegion->getName(), npcLocation, size));
 
       if(insertResult.second)

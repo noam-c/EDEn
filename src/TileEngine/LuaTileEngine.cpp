@@ -10,6 +10,7 @@
 #include "MapTriggerCallback.h"
 #include "Direction.h"
 #include "NPC.h"
+#include "NPCSpawnMarker.h"
 #include "Point2D.h"
 #include "ScriptEngine.h"
 #include "ScriptUtilities.h"
@@ -28,40 +29,36 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
       return lua_error(luaVM);
    }
 
-   std::string npcName;
-   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "name", npcName))
+   NPCSpawnMarker marker;
+
+   if(!ScriptUtilities::getParameter(luaVM, 2, 1, "name", marker.name))
    {
       return lua_error(luaVM);
    }
 
-   std::string spritesheetName;
-   if(!ScriptUtilities::getParameter(luaVM, 2, 2, "spritesheet", spritesheetName))
+   if(!ScriptUtilities::getParameter(luaVM, 2, 2, "spritesheet", marker.spritesheet))
    {
       return lua_error(luaVM);
    }
 
-   int x;
-   if(!ScriptUtilities::getParameter(luaVM, 2, 3, "x", x))
+   if(!ScriptUtilities::getParameter(luaVM, 2, 3, "x", marker.location.x))
    {
       return lua_error(luaVM);
    }
 
-   int y;
-   if(!ScriptUtilities::getParameter(luaVM, 2, 4, "y", y))
+   if(!ScriptUtilities::getParameter(luaVM, 2, 4, "y", marker.location.y))
    {
       return lua_error(luaVM);
    }
 
-   unsigned int width;
-   if(!ScriptUtilities::getParameter(luaVM, 2, -1, "width", width))
+   if(!ScriptUtilities::getParameter(luaVM, 2, -1, "width", marker.size.width))
    {
-      width = 32;
+      marker.size.width = 32;
    }
 
-   unsigned int height;
-   if(!ScriptUtilities::getParameter(luaVM, 2, -1, "height", height))
+   if(!ScriptUtilities::getParameter(luaVM, 2, -1, "height", marker.size.height))
    {
-      height = 32;
+      marker.size.height = 32;
    }
 
    int directionValue;
@@ -70,12 +67,12 @@ static int TileEngineL_AddNPC(lua_State* luaVM)
       directionValue = EnumUtils::toNumber(geometry::Direction::DOWN);
    }
 
-   DEBUG("Adding NPC %s with spritesheet %s", npcName.c_str(), spritesheetName.c_str());
-   DEBUG("NPC Location will be (%d, %d)", x, y);
+   DEBUG("Adding NPC %s with spritesheet %s", marker.name.c_str(), marker.spritesheet.c_str());
+   DEBUG("NPC Location will be (%d, %d)", marker.location.x, marker.location.y);
 
-   const geometry::Direction direction = static_cast<geometry::Direction>(directionValue);
+   marker.direction = static_cast<geometry::Direction>(directionValue);
 
-   auto npc = tileEngine->addNPC(npcName, spritesheetName, {x, y}, {width, height}, direction);
+   auto npc = tileEngine->addNPC(marker);
 
    luaW_push<Actor>(luaVM, npc);
    return 1;

@@ -7,6 +7,8 @@
 #ifndef DIRECTION_H
 #define DIRECTION_H
 
+#include <string>
+
 namespace geometry
 {
    /**
@@ -25,6 +27,8 @@ namespace geometry
       DOWN_RIGHT,
       NUM_DIRECTIONS
    };
+
+   Direction toDirection(const std::string& name);
 };
 
 #endif

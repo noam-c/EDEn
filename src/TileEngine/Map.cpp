@@ -6,10 +6,11 @@
 
 #include "Map.h"
 
+#include "EnumUtils.h"
 #include "Layer.h"
+#include "NPCSpawnMarker.h"
 #include "Pathfinder.h"
 #include "ResourceLoader.h"
-#include "Size.h"
 #include "TileEngine.h"
 #include "Tileset.h"
 
@@ -82,6 +83,7 @@ Map::Map(const std::string& name, const std::string& filePath) :
    bool hasEntrancesLayer = false;
    bool hasExitsLayer = false;
    bool hasTriggersLayer = false;
+   bool hasNPCLayer = false;
 
    auto const* objectGroupElement = root->FirstChildElement("objectgroup");
    while(objectGroupElement != nullptr)
@@ -106,6 +108,11 @@ Map::Map(const std::string& name, const std::string& filePath) :
       {
          parseMapTriggersGroup(objectGroupElement);
          hasTriggersLayer = true;
+      }
+      else if(objectGroupName == "npcs" && !hasNPCLayer)
+      {
+         parseNPCGroup(objectGroupElement);
+         hasNPCLayer = true;
       }
 
       objectGroupElement = objectGroupElement->NextSiblingElement("objectgroup");
@@ -234,7 +241,7 @@ void Map::parseMapExitsGroup(const TiXmlElement* exitsGroupElement)
 
 void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
 {
-   DEBUG("Loading exit layer.");
+   DEBUG("Loading map trigger layer.");
    if(triggersGroupElement != nullptr)
    {
       geometry::Point2D topLeft;
@@ -270,6 +277,74 @@ void Map::parseMapTriggersGroup(const TiXmlElement* triggersGroupElement)
          if(rect.getWidth() > 0 && rect.getHeight() > 0)
          {
             m_triggerZones.emplace_back(name, rect);
+         }
+
+         objectElement = objectElement->NextSiblingElement("object");
+      }
+   }
+}
+
+void Map::parseNPCGroup(const TiXmlElement* npcGroupElement)
+{
+   DEBUG("Loading NPC layer.");
+   if(npcGroupElement != nullptr)
+   {
+      geometry::Point2D topLeft;
+      geometry::Size size;
+      int width;
+      int height;
+      std::string npcName;
+      std::string spritesheet;
+      geometry::Direction direction;
+
+      const TiXmlElement* objectElement = npcGroupElement->FirstChildElement("object");
+      while(objectElement != nullptr)
+      {
+         objectElement->Attribute("x", &topLeft.x);
+         objectElement->Attribute("y", &topLeft.y);
+
+         // Attribute doesn't support unsigned ints, so we need to cast explicitly.
+         objectElement->Attribute("width", &width);
+         objectElement->Attribute("height", &height);
+         size =
+         {
+            static_cast<unsigned int>(std::max(width, 0)),
+            static_cast<unsigned int>(std::max(height, 0))
+         };
+
+         npcName = objectElement->Attribute("name");
+         direction = geometry::Direction::DOWN;
+         
+         const auto propertiesElement = objectElement->FirstChildElement("properties");
+         auto propertyElement = propertiesElement->FirstChildElement("property");
+         while(propertyElement != nullptr)
+         {
+            if(std::string(propertyElement->Attribute("name")) == "spritesheet")
+            {
+               spritesheet = propertyElement->Attribute("value");
+               break;
+            }
+            else if(std::string(propertyElement->Attribute("name")) == "direction")
+            {
+               direction = geometry::toDirection(propertyElement->Attribute("value"));
+               if(direction == geometry::Direction::NONE)
+               {
+                  direction = geometry::Direction::DOWN;
+               }
+            }
+            
+            propertyElement = propertyElement->NextSiblingElement("property");
+         }
+         
+         DEBUG("Found NPC %s at %d,%d with spritesheet %s, width %d and height %d.",
+               npcName.c_str(), topLeft.x, topLeft.y, spritesheet.c_str(), size.width, size.height);
+
+         if(size.width > 0 &&
+            size.height > 0 &&
+            !npcName.empty() &&
+            !spritesheet.empty())
+         {
+            m_npcsToSpawn.emplace_back(NPCSpawnMarker{npcName, spritesheet, topLeft, size, direction});
          }
 
          objectElement = objectElement->NextSiblingElement("object");
@@ -317,6 +392,11 @@ const std::vector<TriggerZone>& Map::getTriggerZones() const
 const std::vector<MapExit>& Map::getMapExits() const
 {
    return m_mapExits;
+}
+
+const std::vector<NPCSpawnMarker>& Map::getNPCSpawnMarkers() const
+{
+   return m_npcsToSpawn;
 }
 
 const geometry::Point2D& Map::getMapEntrance(const std::string& previousMap) const
