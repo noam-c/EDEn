@@ -27,13 +27,13 @@ struct NPCSpawnMarker
    /** The name of the spritesheet to draw the NPC with */
    std::string spritesheet;
 
-   /** npcLocation The location where we spawn the NPC */
+   /** The location where we spawn the NPC */
    geometry::Point2D location;
 
-   /** size The size of the new NPC */
+   /** The size of the new NPC */
    geometry::Size size;
 
-   /** direction The direction that the new NPC will face at first */
+   /** The direction that the new NPC will face first */
    geometry::Direction direction;
 };
 
