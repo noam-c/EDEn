@@ -21,7 +21,7 @@ namespace geometry
 class Tileset;
 class TiXmlElement;
 
-class Layer
+class Layer final
 {
    /** The name of the tileset in use by this layer */
    std::string m_tilesetName;
@@ -36,7 +36,7 @@ class Layer
    const geometry::Rectangle& m_bounds;
 
    /** The height offset (in tiles) of this layer. */
-   int m_heightOffset;
+   int m_heightOffset = 0;
 
    public:
       /**

@@ -9,13 +9,12 @@
 
 #include <type_traits>
 
-class EnumUtils
+namespace EnumUtils
 {
-   public:
-      template<class Enum, typename std::enable_if<std::is_enum<Enum>::value, bool>::type = true> static constexpr typename std::underlying_type<Enum>::type toNumber(Enum value) noexcept
-         {
-            return static_cast<typename std::underlying_type<Enum>::type>(value);
-         }
+   template<class Enum, typename std::enable_if<std::is_enum<Enum>::value, bool>::type = true> static constexpr typename std::underlying_type<Enum>::type toNumber(Enum value) noexcept
+      {
+         return static_cast<typename std::underlying_type<Enum>::type>(value);
+      }
 };
 
 #endif

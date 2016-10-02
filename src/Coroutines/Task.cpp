@@ -11,7 +11,6 @@
 #define DEBUG_FLAG DEBUG_SCHEDULER
 
 Task::Task(TaskId taskId, Scheduler& scheduler) :
-   m_taskDeactivated(false),
    m_id(taskId),
    m_scheduler(scheduler)
 {

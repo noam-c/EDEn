@@ -20,6 +20,7 @@ class BattleController;
 class TileEngine;
 class PlayerData;
 class ExecutionStack;
+class Character;
 
 class Scheduler;
 class Script;
@@ -173,6 +174,14 @@ class ScriptEngine final
       int runScriptString(const std::string& scriptString);
 
       /**
+       * Run a specified character initialization script.
+       *
+       * @param scriptName The name of the character data script.
+       * @param character The character to initialize.
+       */
+      bool runCharacterInitScript(const std::string& scriptName, Character* character);
+   
+      /**
        * Call a script function object.
        *
        * @param scriptFunction The raw script function to run.
@@ -228,14 +237,19 @@ class ScriptEngine final
 
       /**
        * Block the currently executing script until completion of the
-       * pending task.
+       * specified work.
        *
-       * @param pendingTask The task to wait on.
+       * WARNING: This function has the potential to call yield, which
+       * executes a longjmp. Therefore, this it's possible that this 
+       * function may not return.
+       *
+       * @param work The work to be done.
+       * @param waitUntilFinished True iff the current coroutine should block until the Task completes.
        * @param numResults The number of results expected when the Task completes.
        *
-       * @return The yield value from the script.
+       * @return 0, if the function returns instead of yielding (a.k.a. longjmping).
        */
-      int waitUntilFinished(const std::shared_ptr<Task>& pendingTask, int numResults);
+      int scheduleWork(std::function<void(const std::shared_ptr<Task>& task)> work, bool waitUntilFinished, int numResults = 0);
 
       /////////////////////////////////////////////////////////
       /////////// Functions supplied to Lua scripts ///////////

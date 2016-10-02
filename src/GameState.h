@@ -67,7 +67,7 @@ class GameState
       unsigned long m_time;
 
       /** True iff the GameState has been activated. */
-      bool m_active;
+      bool m_active = false;
 
       /** The type of the current game state. */
       GameStateType m_stateType;
@@ -88,7 +88,7 @@ class GameState
       Rocket::Core::Context* m_rocketContext;
 
       /** Set true to signal the state logic to terminate so that the state is destroyed. */
-      bool m_finished;
+      bool m_finished = false;
 
       /**
        * Constructor.

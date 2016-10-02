@@ -35,13 +35,15 @@ const char* Usable::ID_ATTRIBUTE = "id";
 const char* Usable::NAME_ATTRIBUTE = "name";
 const char* Usable::ICON_ATTRIBUTE = "icon";
 
-Usable::Usable(Json::Value& node) :
+Usable::Usable(const Json::Value& node) :
    m_id(node[Usable::ID_ATTRIBUTE].asInt()),
    m_name(node[Usable::NAME_ATTRIBUTE].asString()),
    m_iconPath(node[Usable::ICON_ATTRIBUTE].asString()),
    m_usableScript(nullptr)
 {
 }
+
+Usable::~Usable() = default;
 
 UsableId Usable::getId() const
 {

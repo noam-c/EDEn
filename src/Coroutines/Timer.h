@@ -31,11 +31,6 @@ class Timer final : public Coroutine
       Timer(long time);
 
       /**
-       * Destructor.
-       */
-      ~Timer();
-
-      /**
        * Resume this timer's countdown.
        *
        * @param timePassed The time that has passed since the last frame.

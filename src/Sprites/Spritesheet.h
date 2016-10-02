@@ -66,7 +66,7 @@ class Spritesheet : public Resource
    std::vector<geometry::Rectangle> m_frameList;
 
    /** The number of frames available in the spritesheet. */
-   int m_numFrames;
+   int m_numFrames = 0;
 
    /** The mapping of frame names to their indices in the frameList array. */
    std::map<std::string, int> m_frameIndices;

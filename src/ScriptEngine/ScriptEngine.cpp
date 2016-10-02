@@ -6,10 +6,11 @@
 
 #include "ScriptEngine.h"
 
+#include "CharacterDataScript.h"
+#include "Direction.h"
 #include "EnumUtils.h"
 #include "ExecutionStack.h"
 #include "FileScript.h"
-#include "Direction.h"
 #include "Music.h"
 #include "NPC.h"
 #include "PlayerData.h"
@@ -54,10 +55,9 @@ extern "C"
 const char* SCRIPT_ENG_LUA_NAME = ",";
 
 ScriptEngine::ScriptEngine(ExecutionStack& executionStack) :
-   m_executionStack(executionStack)
+   m_executionStack(executionStack),
+   m_luaVM(luaL_newstate())
 {
-   m_luaVM = luaL_newstate();
-
    if(m_luaVM == nullptr)
    {
       // An error occurred
@@ -238,17 +238,13 @@ int ScriptEngine::narrate(lua_State* luaStack)
       waitForFinish = false;
    }
 
-   auto task = scheduler->createNewTask();
-   DEBUG("Narrating text: %s", text.c_str());
-   tileEngine->dialogueNarrate(text, task, choices);
+   auto narrateWork = [tileEngine, text, choices](const std::shared_ptr<Task>& task) {
+      DEBUG("Narrating text: %s", text.c_str());
+      tileEngine->dialogueNarrate(text, task, choices);
+   };
 
    int numResultsExpected = choices.empty() ? 0 : 1;
-   if(waitForFinish)
-   {
-      return waitUntilFinished(task, numResultsExpected);
-   }
-
-   return 0;
+   return scheduleWork(narrateWork, waitForFinish, numResultsExpected);
 }
 
 int ScriptEngine::say(lua_State* luaStack)
@@ -290,17 +286,13 @@ int ScriptEngine::say(lua_State* luaStack)
       waitForFinish = false;
    }
 
-   auto task = scheduler->createNewTask();
-   DEBUG("Saying text: %s", text.c_str());
-   tileEngine->dialogueSay(text, task, choices);
+   auto sayWork = [tileEngine, text, choices](const std::shared_ptr<Task>& task) {
+      DEBUG("Saying text: %s", text.c_str());
+      tileEngine->dialogueSay(text, task, choices);
+   };
 
    int numResultsExpected = choices.empty() ? 0 : 1;
-   if(waitForFinish)
-   {
-      return waitUntilFinished(task, numResultsExpected);
-   }
-
-   return 0;
+   return scheduleWork(sayWork, waitForFinish, numResultsExpected);
 }
 
 int ScriptEngine::playSound(lua_State* luaStack)
@@ -326,17 +318,12 @@ int ScriptEngine::playSound(lua_State* luaStack)
 
    DEBUG("Playing sound: %s", soundId.c_str());
 
-   auto task(scheduler->createNewTask());
+   auto soundWork = [soundId](const std::shared_ptr<Task>& task) {
+      std::shared_ptr<Sound> sound = ResourceLoader::getSound(soundId);
+      sound->play(task);
+   };
 
-   std::shared_ptr<Sound> sound = ResourceLoader::getSound(soundId);
-   sound->play(task);
-
-   if(waitForFinish)
-   {
-      return waitUntilFinished(task, 0);
-   }
-
-   return 0;
+   return scheduleWork(soundWork, waitForFinish);
 }
 
 int ScriptEngine::playMusic(lua_State* luaStack)
@@ -441,12 +428,12 @@ int ScriptEngine::startBattle(lua_State* luaStack)
       return lua_error(luaStack);
    }
 
-   auto task(scheduler->createNewTask());
-
-   DEBUG("Starting battle");
-   tileEngine->startBattle(task);
+   auto battleWork = [tileEngine](const std::shared_ptr<Task>& task) {
+      DEBUG("Starting battle");
+      tileEngine->startBattle(task);
+   };
    
-   return waitUntilFinished(task, 0);
+   return scheduleWork(battleWork, true /*waitUntilFinished*/);
 }
 
 int ScriptEngine::setRegion(lua_State* luaStack)
@@ -484,6 +471,13 @@ std::shared_ptr<UsableScript> ScriptEngine::createItemScript(const Item& item) c
 std::shared_ptr<UsableScript> ScriptEngine::createSkillScript(const Skill& skill) const
 {
    return ScriptFactory::getSkillScript(m_luaVM, skill);
+}
+
+bool ScriptEngine::runCharacterInitScript(const std::string& scriptName, Character* character)
+{
+   DEBUG("Running character init script: %s", scriptName.c_str());
+   auto newScript = std::make_shared<CharacterDataScript>(m_luaVM, scriptName);
+   return newScript->initialize(character);
 }
 
 int ScriptEngine::runMapScript(const std::string& regionName, const std::string& mapName, Scheduler& scheduler)
@@ -554,10 +548,22 @@ std::shared_ptr<Task> ScriptEngine::createTask()
    return scheduler->createNewTask();
 }
 
-int ScriptEngine::waitUntilFinished(const std::shared_ptr<Task>& pendingTask, int numResults)
+int ScriptEngine::scheduleWork(std::function<void(const std::shared_ptr<Task>& task)> work, bool waitUntilFinished, int numResults)
 {
+   // It's important to get a reference to the current scheduler
+   // here because `work` might change the scheduler being used.
+   // (e.g. by pushing or popping a GameState off the execution stack)
    auto scheduler = m_executionStack.getCurrentScheduler();
-   return scheduler->block(pendingTask, numResults);
+   auto pendingTask = scheduler->createNewTask();
+
+   work(pendingTask);
+
+   if(waitUntilFinished)
+   {
+      return scheduler->block(pendingTask, numResults);
+   }
+
+   return 0;
 }
 
 void ScriptEngine::callFunction(lua_State* coroutine, const char* funcName)

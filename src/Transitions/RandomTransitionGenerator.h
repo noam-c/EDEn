@@ -18,7 +18,7 @@ class Texture;
  *
  * @author Bobby Richter
  */
-class RandomTransitionGenerator
+class RandomTransitionGenerator final
 {
   public:
      /**

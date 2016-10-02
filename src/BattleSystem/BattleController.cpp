@@ -32,7 +32,6 @@ BattleController::BattleController(GameContext& gameContext, std::shared_ptr<Pla
    GameState(gameContext, GameStateType::FIELD, "BattleController"),
    m_playerData(std::move(playerData)),
    m_battleTask(std::move(battleTask)),
-   m_initialized(false),
    m_dialogue(getScriptEngine()),
    m_overlay(m_messagePipe, *m_playerData, getMetadata(), getStateType(), *m_rocketContext, m_dialogue),
    m_battleInitScript(battleInitScript)

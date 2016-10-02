@@ -11,7 +11,7 @@
 
 const char* Skill::MASTERY_ATTRIBUTE = "mastery";
 
-Skill::Skill(Json::Value& skillNode) :
+Skill::Skill(const Json::Value& skillNode) :
    Usable(skillNode),
    m_masteryThreshold(skillNode[Skill::MASTERY_ATTRIBUTE].asUInt())
 {

@@ -28,13 +28,14 @@ class Metadata;
  *
  * @author Noam Chitayat
  */
-class Character
+class Character final
 {
    static const char* ARCHETYPE_ATTRIBUTE;
    static const char* NAME_ATTRIBUTE;
+   static const char* SCHEMA_ATTRIBUTE;
 
    static const char* BASE_STATS_ELEMENT;
-   static const char* STATS_ELEMENT;
+   static const char* CURRENT_STATS_ELEMENT;
    static const char* SKILLS_ELEMENT;
    static const char* EQUIPMENT_ELEMENT;
    static const char* ASPECTS_ELEMENT;
@@ -55,14 +56,19 @@ class Character
    typedef std::map<UsableId, unsigned int> SkillUsage;
 
    /** The metadata containing skill information. */
-   const Metadata& m_metadata;
+   Metadata& m_metadata;
 
+   bool m_initialized = false;
+   
    /** The character's ID for data lookups. */
    std::string m_id;
 
    /** The name of the character. */
    std::string m_name;
 
+   /** The schema used to create the character. */
+   std::string m_schema;
+   
    /** The archetype that was loaded for this character (empty if the default archetype was used). */
    std::string m_archetype;
 
@@ -70,7 +76,7 @@ class Character
    std::vector<std::unique_ptr<Aspect>> m_archetypeAspects;
 
    /** The currently chosen Aspect for this character. */
-   unsigned int m_selectedAspect;
+   unsigned int m_selectedAspect = 0;
 
    /** The path to the character portrait (used in dialogue and menus). */
    std::string m_portraitPath;
@@ -78,17 +84,14 @@ class Character
    /** The ID of the spritesheet resource used for this character. */
    std::string m_spritesheetId;
 
-   /** Character status attributes */
+   /** Character base stats, from which current stats are derived. */
    std::map<std::string, int> m_baseStats;
 
+   /** Current character stats */
+   std::map<std::string, int> m_currentStats;
+   
    /** Current level of the character. */
    unsigned int m_level;
-
-   /** Current health of the character. */
-   int m_hp;
-
-   /** Current stamina of the character. */
-   int m_sp;
 
    /** The equipment worn by this Character. */
    EquipData m_equipment;
@@ -153,24 +156,36 @@ class Character
 
    void refreshAvailableSkills();
 
-   public:
-      /**
-       * Constructor used to create a new character.
-       * Initializes the entire character using the base archetype data.
-       *
-       * @param id The id of the new character.
-       * @param level The starting level of the new character.
-       */
-      Character(const Metadata& metadata, const std::string& id, int level = 1);
+   /**
+    * Constructor used to create a new character.
+    * Initializes the entire character using the base archetype data.
+    *
+    * @param id The id of the new character.
+    * @param level The starting level of the new character.
+    */
+   Character(Metadata& metadata, const std::string& id, int level = 1);
 
-      /**
-       * Constructor used to load an existing character.
-       *
-       * @param charToLoad The JSON node containing the character's data.
-       */
-      Character(const Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
+   /**
+    * Constructor used to load an existing character.
+    *
+    * @param charToLoad The JSON node containing the character's data.
+    */
+   Character(Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
+
+   public:
+      static Character createCharacter(Metadata& metadata, const std::string& id, int level = 1);
+
+      static Character loadCharacter(Metadata& metadata, const std::string& id, const Json::Value& charToLoad);
+
+      Character(const Character& character) = delete;
+      Character& operator=(const Character& character) = delete;
+
+      Character(Character&& character);
+      Character& operator=(Character&& character) = delete;
 
       ~Character();
+
+      void initialize();
 
       /**
        * Serialize the character data into JSON output.
@@ -201,17 +216,20 @@ class Character
       std::string getPortraitPath() const;
 
       /**
-       * @param The name of the requested status attribute.
+       * @param The name of the requested stat attribute.
        *
-       * @return The current value for the requested status attribute.
+       * @return Whether or not the character has the requested stat attribute.
+       */
+      bool hasStatAttribute(const std::string& attributeName) const;
+
+      /**
+       * @param The name of the requested stat attribute.
+       *
+       * @return The current value for the requested stat attribute.
        */
       int getStatAttribute(const std::string& attributeName) const;
 
-      // Getters for health and stamina.
-      int getMaxHP() const;
-      int getMaxSP() const;
-      int getHP() const;
-      int getSP() const;
+      void setStatAttribute(const std::string& attributeName, int newValue);
 
       /**
        * @return The character's equipment information.

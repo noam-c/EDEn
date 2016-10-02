@@ -19,7 +19,7 @@ class Character;
  *
  * @author Noam Chitayat
  */
-class UsableScript : public Script
+class UsableScript final : public Script
 {
    /**
     * The functions that can be called on an Usable.
@@ -84,7 +84,7 @@ class UsableScript : public Script
       /**
        * Destructor.
        */
-      virtual ~UsableScript() override;
+      ~UsableScript() override;
 
       bool onMenuUse(Character* usingCharacter = nullptr);
 

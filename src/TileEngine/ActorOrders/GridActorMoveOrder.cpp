@@ -9,8 +9,7 @@
 #include <math.h>
 #include "SDL_opengl.h"
 
-#include "GridActor_Orders.h"
-#include "Map.h"
+#include "GridActorMoveOrder.h"
 #include "Direction.h"
 #include "TileEngine.h"
 
@@ -20,14 +19,11 @@
 // Define as 1 to draw the NPC's projected path to the screen
 #define DRAW_PATH 0
 
-GridActor::MoveOrder::MoveOrder(GridActor& actor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid) :
-   Order(actor),
-   m_pathInitialized(false),
-   m_movementBegun(false),
+GridActor::MoveOrder::MoveOrder(GridActor& gridActor, const std::shared_ptr<Task>& task, const geometry::Point2D& destination, EntityGrid& entityGrid) :
+   Order(gridActor),
    m_dst(destination),
    m_task(task),
-   m_entityGrid(entityGrid),
-   m_cumulativeDistanceCovered(0)
+   m_entityGrid(entityGrid)
 {
 }
 
@@ -35,20 +31,20 @@ GridActor::MoveOrder::~MoveOrder()
 {
    if(m_movementBegun)
    {
-      m_entityGrid.abortMovement(&m_actor, m_lastWaypoint, m_nextWaypoint);
+      m_entityGrid.abortMovement(&m_gridActor, m_lastWaypoint, m_nextWaypoint);
    }
 }
 
 void GridActor::MoveOrder::updateDirection(geometry::Direction newDirection, bool moving)
 {
-   m_actor.setDirection(newDirection);
+   m_gridActor.setDirection(newDirection);
    if(moving)
    {
-      m_actor.setAnimation(GridActor::DEFAULT_WALKING_PREFIX);
+      m_gridActor.setAnimation(GridActor::DEFAULT_WALKING_PREFIX);
    }
    else
    {
-      m_actor.setFrame(GridActor::DEFAULT_STANDING_PREFIX);
+      m_gridActor.setFrame(GridActor::DEFAULT_STANDING_PREFIX);
    }
 }
 
@@ -58,7 +54,7 @@ void GridActor::MoveOrder::updateNextWaypoint(geometry::Point2D location, geomet
    m_nextWaypoint = m_path.front();
 
    // Set the direction based on where the next tile is relative to the current location.
-   // For now, when the Actor must move diagonally, it will always face up or down
+   // For now, when the actor must move diagonally, it will always face up or down
    if(location.y < m_nextWaypoint.y)
    {
       direction = geometry::Direction::DOWN;
@@ -79,9 +75,9 @@ void GridActor::MoveOrder::updateNextWaypoint(geometry::Point2D location, geomet
 
 bool GridActor::MoveOrder::perform(long timePassed)
 {
-   geometry::Point2D location = m_actor.getLocation();
-   geometry::Direction newDirection = m_actor.getDirection();
-   const float vel = m_actor.getMovementSpeed();
+   geometry::Point2D location = m_gridActor.getLocation();
+   geometry::Direction newDirection = m_gridActor.getDirection();
+   const float vel = m_gridActor.getMovementSpeed();
    m_cumulativeDistanceCovered +=timePassed * vel;
    long distanceCovered = 0;
    if(m_cumulativeDistanceCovered > 1.0)
@@ -92,7 +88,7 @@ bool GridActor::MoveOrder::perform(long timePassed)
    // If first run, get the best pre-computed path (RFW), end frame
    // loop infinitely
    //      if there is no next vertex
-   //          if Actor is at the destination
+   //          if actor is at the destination
    //             end task
    //          else
    //             create a rerouted path (A*)
@@ -117,7 +113,7 @@ bool GridActor::MoveOrder::perform(long timePassed)
    if(!m_pathInitialized)
    {
       DEBUG("Finding an ideal path from %d,%d to %d,%d", location.x, location.y, m_dst.x, m_dst.y);
-      m_path = m_entityGrid.findBestPath(location, m_dst, m_actor.getSize());
+      m_path = m_entityGrid.findBestPath(location, m_dst, m_gridActor.getSize());
       if(m_path.empty())
       {
          // If this path is blocked, then there must be a permanent obstruction.
@@ -133,11 +129,11 @@ bool GridActor::MoveOrder::perform(long timePassed)
    {
       if(m_path.empty())
       {
-         updateDirection(m_actor.getDirection(), false);
-         m_actor.setLocation(location);
+         updateDirection(m_gridActor.getDirection(), false);
+         m_gridActor.setLocation(location);
          if(location != m_dst)
          {
-            m_path = m_entityGrid.findReroutedPath(location, m_dst, m_actor.getSize());
+            m_path = m_entityGrid.findReroutedPath(location, m_dst, m_gridActor.getSize());
             return false;
          }
 
@@ -151,12 +147,12 @@ bool GridActor::MoveOrder::perform(long timePassed)
 
       if(!m_movementBegun)
       {
-         m_movementBegun = m_entityGrid.beginMovement(&m_actor, m_path.front());
+         m_movementBegun = m_entityGrid.beginMovement(&m_gridActor, m_path.front());
          if(!m_movementBegun)
          {
-            m_path = m_entityGrid.findReroutedPath(location, m_dst, m_actor.getSize());
-            updateDirection(m_actor.getDirection(), false);
-            m_actor.setLocation(location);
+            m_path = m_entityGrid.findReroutedPath(location, m_dst, m_gridActor.getSize());
+            updateDirection(m_gridActor.getDirection(), false);
+            m_gridActor.setLocation(location);
             return false;
          }
 
@@ -169,7 +165,7 @@ bool GridActor::MoveOrder::perform(long timePassed)
 
       if (distanceCovered < stepDistance)
       {
-         // The Actor will not be able to make it to the next waypoint in this frame
+         // The actor will not be able to make it to the next waypoint in this frame
          // Move towards the waypoint as much as possible.
          if(location.x < m_nextWaypoint.x)
          {
@@ -194,15 +190,15 @@ bool GridActor::MoveOrder::perform(long timePassed)
          }
 
          // Movement for this frame is finished
-         m_actor.setLocation(location);
+         m_gridActor.setLocation(location);
          return false;
       }
 
-      // The Actor can reach the next waypoint in this frame
+      // The actor can reach the next waypoint in this frame
       distanceCovered -= stepDistance;
 
       DEBUG("Reached waypoint %d,%d", m_nextWaypoint.x, m_nextWaypoint.y);
-      m_entityGrid.endMovement(&m_actor, m_lastWaypoint, m_nextWaypoint);
+      m_entityGrid.endMovement(&m_gridActor, m_lastWaypoint, m_nextWaypoint);
       m_movementBegun = false;
 
       // Update the current waypoint and dequeue it from the path

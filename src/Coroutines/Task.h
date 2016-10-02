@@ -26,7 +26,7 @@ class Task final
    friend class Scheduler;
 
    /** True iff the Scheduler managing this Task has been destroyed. */
-   bool m_taskDeactivated;
+   bool m_taskDeactivated = false;
 
    /** The unique identifier for this task */
    const TaskId m_id;

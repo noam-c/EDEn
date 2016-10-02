@@ -26,6 +26,11 @@ class FileScript final : public Script
        * @param scriptPath The path to a script that should be run on this coroutine.
        */
       FileScript(lua_State* luaVM, const std::string& scriptPath);
+   
+      /**
+       * Destructor.
+       */
+      ~FileScript() override = default;
 
       /**
        * Loads the specified script file onto the new coroutine's stack.
@@ -33,11 +38,6 @@ class FileScript final : public Script
        * @return true iff loading of the specified script was successful.
        */
       bool initialize();
-
-      /**
-       * Destructor.
-       */
-      ~FileScript() override = default;
 };
 
 #endif

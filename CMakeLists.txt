@@ -87,6 +87,7 @@ SET(HEADERS
   src/rocket/RocketListener.h
   src/rocket/RocketScriptHandler.h
   src/rocket/RocketScriptHandlerFactory.h
+  src/ScriptEngine/CharacterDataScript.h
   src/ScriptEngine/FileScript.h
   src/ScriptEngine/MapTriggerCallback.h
   src/ScriptEngine/NPCScript.h
@@ -101,8 +102,10 @@ SET(HEADERS
   src/Sprites/FrameSequence.h
   src/Sprites/Sprite.h
   src/Sprites/Spritesheet.h
+  src/TileEngine/ActorOrders/GridActorOrder.h
+  src/TileEngine/ActorOrders/GridActorMoveOrder.h
+  src/TileEngine/ActorOrders/GridActorStandOrder.h
   src/TileEngine/GridActor.h
-  src/TileEngine/GridActor_Orders.h
   src/TileEngine/LuaGridActor.h
   src/TileEngine/Camera.h
   src/TileEngine/CameraSlider.h
@@ -119,6 +122,7 @@ SET(HEADERS
   src/TileEngine/TileEngine.h
   src/TileEngine/TileEngineOverlay.h
   src/TileEngine/LuaTileEngine.h
+  src/TileEngine/NPCSpawnMarker.h
   src/TileEngine/Tileset.h
   src/TileEngine/TileState.h
   src/TileEngine/TriggerZone.h
@@ -137,6 +141,7 @@ SET(HEADERS
   src/utils/CancelableTask.h
   src/utils/DebugUtils.h
   src/utils/EnumUtils.h
+  src/utils/JsonUtils.h
   src/utils/Exception.h
   src/utils/Grid.h
   src/utils/IntegerSequence.h
@@ -166,6 +171,7 @@ SET(SOURCES
   src/Coroutines/Scheduler.cpp
   src/Coroutines/Task.cpp
   src/Coroutines/Timer.cpp
+  src/Geometry/Direction.cpp
   src/Geometry/Size.cpp
   src/Geometry/Point2D.cpp
   src/Geometry/Rectangle.cpp
@@ -214,6 +220,7 @@ SET(SOURCES
   src/rocket/RocketContextRegistry.cpp
   src/rocket/RocketListener.cpp
   src/rocket/RocketSDLInputMapping.cpp
+  src/ScriptEngine/CharacterDataScript.cpp
   src/ScriptEngine/FileScript.cpp
   src/ScriptEngine/MapTriggerCallback.cpp
   src/ScriptEngine/NPCScript.cpp
@@ -225,13 +232,13 @@ SET(SOURCES
   src/ScriptEngine/StringScript.cpp
   src/ScriptEngine/UsableScript.cpp
   src/Settings/Settings.cpp
-  src/Settings/SettingsResolution.cpp
   src/Sprites/Animation.cpp
   src/Sprites/Sprite.cpp
   src/Sprites/Spritesheet.cpp
+  src/TileEngine/ActorOrders/GridActorOrder.cpp
+  src/TileEngine/ActorOrders/GridActorMoveOrder.cpp
+  src/TileEngine/ActorOrders/GridActorStandOrder.cpp
   src/TileEngine/GridActor.cpp
-  src/TileEngine/GridActor_MoveOrder.cpp
-  src/TileEngine/GridActor_StandOrder.cpp
   src/TileEngine/LuaGridActor.cpp
   src/TileEngine/Camera.cpp
   src/TileEngine/CameraSlider.cpp
@@ -263,6 +270,7 @@ SET(SOURCES
   src/Transitions/BlendTransition.cpp
   src/utils/DebugUtils.cpp
   src/utils/Exception.cpp
+  src/utils/JsonUtils.cpp
   src/views/ChoicesDataSource.cpp
   src/views/DebugConsoleWindow.cpp
   src/views/DialogueBox.cpp
@@ -308,6 +316,7 @@ SOURCE_GROUP(views REGULAR_EXPRESSION src/views/.*)
 
 IF(NOT ${CMAKE_GENERATOR} STREQUAL "Xcode")
    SOURCE_GROUP("PlayerData\\Messages" REGULAR_EXPRESSION src/PlayerData/Messages/.*)
+   SOURCE_GROUP("TileEngine\\ActorOrders" REGULAR_EXPRESSION src/TileEngine/ActorOrders/.*)
    SOURCE_GROUP("TileEngine\\Messages" REGULAR_EXPRESSION src/TileEngine/Messages/.*)
 ENDIF()
 
@@ -334,6 +343,7 @@ INCLUDE_DIRECTORIES(
   src/Settings
   src/Sprites
   src/TileEngine
+  src/TileEngine/ActorOrders
   src/TileEngine/Messages
   src/Transitions
   src/json

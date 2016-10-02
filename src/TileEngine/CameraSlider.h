@@ -7,10 +7,13 @@
 #ifndef CAMERA_SLIDER_H
 #define CAMERA_SLIDER_H
 
+#include <memory>
+
 #include "Coroutine.h"
 #include "Point2D.h"
 
 class Camera;
+class Task;
 
 /**
  * A CameraSlider is a Coroutine that moves the camera to a specified location over a period of time.
@@ -24,9 +27,10 @@ class CameraSlider : public Coroutine
 
    const geometry::Point2D m_origin;
    const geometry::Point2D m_destination;
+   std::shared_ptr<Task> m_task;
 
    /** The amount of time that has passed since the slide began. */
-   long m_totalTimePassed;
+   long m_totalTimePassed = 0;
 
    /** The speed of the camera slide on the x-axis. */
    double m_xSpeed;
@@ -38,7 +42,7 @@ class CameraSlider : public Coroutine
       /**
        * Constructor.
        */
-      CameraSlider(Camera& camera, const geometry::Point2D& origin, const geometry::Point2D& destination, double speed);
+      CameraSlider(Camera& camera, const geometry::Point2D& origin, const geometry::Point2D& destination, double speed, const std::shared_ptr<Task>& task);
 
       /**
        * Resume this camera slide.

@@ -62,7 +62,7 @@ class GridActor : public Actor
       virtual ~GridActor() = 0;
 
       /**
-       * Clear the Actor's current set of orders.
+       * Clear the actor's current set of orders.
        */
       void flushOrders();
 

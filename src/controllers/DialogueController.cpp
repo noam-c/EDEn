@@ -26,10 +26,7 @@ bool DialogueController::DialogueCoroutine::resume(long timePassed)
 }
 
 DialogueController::DialogueController(ScriptEngine& engine) :
-   m_scriptEngine(engine),
-   m_timeSinceLastCharacterAdded(MILLISECONDS_PER_LETTER),
-   m_charsToShow(0),
-   m_fastMode(false)
+   m_scriptEngine(engine)
 {
 }
 

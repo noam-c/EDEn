@@ -9,7 +9,7 @@
 
 class MapExit;
 
-struct MapExitMessage
+struct MapExitMessage final
 {
    const MapExit& mapExit;
 

@@ -24,6 +24,7 @@
 #include <string>
 
 class NPC;
+struct NPCSpawnMarker;
 class ScriptEngine;
 class Region;
 class DialogueController;
@@ -62,7 +63,7 @@ class TileEngine final :
    std::vector<std::pair<std::string, std::unique_ptr<MapTriggerCallback>>> m_triggerScripts;
 
    /** True iff the TileEngine has already been initialized. */
-   bool m_initialized;
+   bool m_initialized = false;
 
    /** The chapter to start, if the game is starting from a new chapter. */
    std::string m_chapterToInitialize;
@@ -287,18 +288,15 @@ class TileEngine final :
       /**
        * Order the camera to slide from one location of the map to another.
        *
-       * @param origin The origin point to start the slide from.
        * @param destination The destination point to slide the camera to.
        * @param speed The speed that the camera should slide with.
        */
-      int slideCamera(const geometry::Point2D& origin, const geometry::Point2D& destination, double speed);
+      void slideCamera(const geometry::Point2D& destination, double speed, const std::shared_ptr<Task>& task = nullptr);
 
       /**
        * Open the save menu.
-       *
-       * @return 0 or the yield code for the save menu's completion.
        */
-      int openSaveMenu();
+      void openSaveMenu(const std::shared_ptr<Task>& task);
 
       /**
        * Get the current location that the camera will reveal.
@@ -308,17 +306,11 @@ class TileEngine final :
       /**
        * Add a new NPC with the specified name into the region with the specified spritesheet.
        *
-       * @param npcName The name of the npc to add
-       * @param spritesheetName The name of the spritesheet to draw the NPC with
-       * @param npcLocation The location where we spawn the NPC
-       * @param size The size of the new NPC
-       * @param direction The direction that the new NPC will face at first
+       * @param npcSpawnMarker Where and how to create the NPC.
        *
        * @return The created NPC (or nullptr if it could not be placed in the map).
        */
-      NPC* addNPC(const std::string& npcName, const std::string& spritesheetName,
-                  const geometry::Point2D& npcLocation, const geometry::Size& size,
-                  const geometry::Direction direction);
+      NPC* addNPC(const NPCSpawnMarker& npcSpawnMarker);
 
       /**
        * @param npcName The name of the NPC to find.

@@ -9,21 +9,19 @@
 
 namespace geometry
 {
-   struct Size
+   struct Size final
    {
       /** The width of the shape associated with this size. */
-      unsigned int width;
+      unsigned int width = 0;
 
       /** The height of the shape associated with this size. */
-      unsigned int height;
+      unsigned int height = 0;
 
       /**
        * Constructor.
        * Creates empty Size (width: 0, height: 0).
        */
-      constexpr Size() :
-         Size(0, 0)
-      {}
+      constexpr Size() = default;
 
       /**
        * Constructor.

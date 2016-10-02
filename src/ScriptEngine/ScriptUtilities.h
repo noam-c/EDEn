@@ -21,7 +21,7 @@ extern "C"
 
 #include "LuaWrapper.hpp"
 
-class ScriptUtilities
+class ScriptUtilities final
 {
    static bool isBoolean(lua_State* luaStack, int index);
    static bool isTable(lua_State* luaStack, int index);

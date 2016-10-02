@@ -14,13 +14,7 @@
 
 #define DEBUG_FLAG DEBUG_TILE_ENG
 
-Camera::Camera() :
-   m_cameraApplied(false),
-   m_focalPoint(0, 0),
-   m_focalPointSet(false),
-   m_offset(0, 0)
-{
-}
+Camera::Camera() = default;
 
 geometry::Point2D Camera::getFocalPoint() const
 {

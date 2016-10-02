@@ -9,6 +9,7 @@
 #include <sstream>
 #include <type_traits>
 
+#include "EnumUtils.h"
 #include "FileScript.h"
 #include "UsableScript.h"
 #include "Item.h"

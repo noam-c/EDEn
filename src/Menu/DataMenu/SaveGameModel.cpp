@@ -17,7 +17,7 @@
 
 #define DEBUG_FLAG DEBUG_MENU
 
-SaveGameModel::SaveGameModel(SaveMenu& saveMenu, const Metadata& metadata) :
+SaveGameModel::SaveGameModel(SaveMenu& saveMenu, Metadata& metadata) :
    m_saveMenu(saveMenu),
    m_metadata(metadata)
 {

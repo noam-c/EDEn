@@ -16,7 +16,7 @@
  *
  * @author Noam Chitayat
  */
-class ImageFormatter : public Rocket::Controls::DataFormatter
+class ImageFormatter final : public Rocket::Controls::DataFormatter
 {
    public:
       /**

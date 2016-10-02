@@ -15,11 +15,6 @@ Timer::Timer(long timeLeft) :
    DEBUG("Timer ID is %d", getId());
 }
 
-Timer::~Timer()
-{
-   // Currently no extra cleanup necessary
-}
-
 bool Timer::resume(long timePassed)
 {
    m_timeLeft -= timePassed;

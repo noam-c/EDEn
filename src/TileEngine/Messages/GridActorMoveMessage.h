@@ -11,7 +11,7 @@
 
 class GridActor;
 
-struct GridActorMoveMessage
+struct GridActorMoveMessage final
 {
    const geometry::Point2D oldLocation;
    const geometry::Point2D newLocation;

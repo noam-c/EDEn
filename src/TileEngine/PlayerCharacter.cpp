@@ -34,6 +34,8 @@ PlayerCharacter::PlayerCharacter(messaging::MessagePipe& messagePipe, EntityGrid
    refreshLeaderSprite();
 }
 
+PlayerCharacter::~PlayerCharacter() = default;
+
 bool PlayerCharacter::isActive() const
 {
     return m_active;

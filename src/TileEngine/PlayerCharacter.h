@@ -35,10 +35,10 @@ class PlayerCharacter final : public GridActor, public messaging::Listener<Roste
    const CharacterRoster& m_roster;
 
    /** True iff the player entity is active on the map. */
-   bool m_active;
+   bool m_active = false;
 
    /** Total distance for the character to move. */
-   float m_cumulativeDistanceCovered;
+   float m_cumulativeDistanceCovered = 0;
 
    void refreshLeaderSprite();
 
@@ -55,7 +55,7 @@ class PlayerCharacter final : public GridActor, public messaging::Listener<Roste
       /**
        * Destructor.
        */
-      ~PlayerCharacter() override = default;
+      ~PlayerCharacter() override;
 
       /**
        * @return true iff the player character is an active entity on the map.
@@ -77,7 +77,7 @@ class PlayerCharacter final : public GridActor, public messaging::Listener<Roste
        *
        * @param dst The coordinates (in pixels) for the actor to move to
        */
-      virtual void move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task) override;
+      void move(const geometry::Point2D& dst, const std::shared_ptr<Task>& task) override;
 
       /**
        * Takes player input and determines the character's direction and speed,

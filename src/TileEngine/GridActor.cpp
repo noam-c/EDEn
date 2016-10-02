@@ -6,8 +6,9 @@
 
 #include "GridActor.h"
 
-#include "GridActor_Orders.h"
+#include "GridActorMoveOrder.h"
 #include "GridActorMoveMessage.h"
+#include "GridActorStandOrder.h"
 #include "EntityGrid.h"
 #include "MessagePipe.h"
 #include "Direction.h"

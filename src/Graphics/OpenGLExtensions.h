@@ -32,7 +32,7 @@
  *
  * @author Noam Chitayat
  */
-class OpenGLExtensions
+class OpenGLExtensions final
 {
    
    /**

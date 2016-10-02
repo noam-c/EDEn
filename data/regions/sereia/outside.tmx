@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" nextobjectid="22">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" nextobjectid="33">
  <tileset firstgid="1" source="../../tilesets/town.tsx"/>
  <layer name="background" width="30" height="20">
   <properties>
@@ -185,6 +185,24 @@
   <object id="21" x="480" y="256" width="160" height="160">
    <properties>
     <property name="trigger" value="garden"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="npcs">
+  <object id="22" name="npc1" x="0" y="0" width="32" height="32">
+   <properties>
+    <property name="spritesheet" value="npc1"/>
+   </properties>
+  </object>
+  <object id="28" name="npc2" x="0" y="96" width="32" height="32">
+   <properties>
+    <property name="spritesheet" value="npc1"/>
+   </properties>
+  </object>
+  <object id="29" name="npc3" x="0" y="288" width="32" height="32">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="spritesheet" value="npc1"/>
    </properties>
   </object>
  </objectgroup>

@@ -30,7 +30,7 @@ struct lua_State;
  *
  * @author Noam Chitayat
  */
-class ScriptFactory
+class ScriptFactory final
 {
    /**
     * The ScriptFactory handles creation of various kinds of scripts.

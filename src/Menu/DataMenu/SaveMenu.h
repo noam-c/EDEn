@@ -51,6 +51,8 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
    /** The current player data. */
    std::weak_ptr<PlayerData> m_playerData;
 
+   std::shared_ptr<Task> m_saveTask;
+
    /** The list of savegame files and their respective data. */
    SaveGameList m_saveGames;
 
@@ -64,7 +66,7 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
    Rocket::Core::ElementDocument* m_confirmDocument;
 
    /** The slot to save to after the user confirms the save. */
-   int m_selectedSlot;
+   int m_selectedSlot = -1;
 
    /**
     * Poll and handle the next input event.
@@ -147,12 +149,12 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
    void initializeConfirmDialog(bool loadMode);
 
    protected:
-      void activate();
+      void activate() override;
 
       /**
        * Waits a millisecond between draws (no rush on a title screen)
        */
-      void draw();
+      void draw() override;
 
       /**
        * Perform logic for the title screen.
@@ -161,12 +163,12 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
        *
        * @return true iff the title screen is not finished running (no quit event)
        */
-      bool step(long timePassed);
+      bool step(long timePassed) override;
 
       /**
        * @return the main menu's script scheduler
        */
-      Scheduler* getScheduler();
+      Scheduler* getScheduler() override;
 
    public:
       /**
@@ -175,7 +177,7 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      SaveMenu(GameContext& gameContext);
+      SaveMenu(GameContext& gameContext, std::shared_ptr<Task> saveTask = nullptr);
 
       /**
        * Constructor.
@@ -183,7 +185,7 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
        *
        * @param gameContext The context containing the current player data and execution stack.
        */
-      SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerData, const SaveLocation saveLocation);
+      SaveMenu(GameContext& gameContext, std::weak_ptr<PlayerData> playerData, const SaveLocation saveLocation, std::shared_ptr<Task> saveTask = nullptr);
 
       /**
        * Destructor.
