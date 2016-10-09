@@ -231,7 +231,7 @@ class TileEngine final :
        * @param narration The line of dialogue to appear as a narration.
        * @param task The ticket of this narration instruction
        */
-      void dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices);
+      void dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const ChoiceList& choices);
 
       /**
        * Send a line of dialogue to the DialogueController as speech.
@@ -239,7 +239,7 @@ class TileEngine final :
        * @param speech The line of dialogue to appear as character speech.
        * @param task The ticket of this speech instruction
        */
-      void dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices);
+      void dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const ChoiceList& choices);
 
       /**
        * Set a new location for the gameplay to take place in.

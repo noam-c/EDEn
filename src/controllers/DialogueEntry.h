@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+#include "ChoiceList.h"
 #include "Task.h"
 
 /**
@@ -25,8 +26,6 @@ enum class DialogueEntryType
    /** Dialogue is spoken to the player via bottom dialogue box */
    SAY
 };
-
-typedef std::vector<std::string> DialogueChoiceList;
 
 /**
  * A line of dialogue contains everything needed to determine what is said and how it is said.
@@ -48,16 +47,16 @@ class DialogueEntry final
       /** The type of line (how its text should be displayed) */
       DialogueEntryType type;
 
-      const DialogueChoiceList choices;
+      const ChoiceList choices;
 
       /** The text in the line. */
       std::string text;
 
       DialogueEntry(DialogueEntryType type, const std::string& text, const std::shared_ptr<Task>& task);
 
-      DialogueEntry(DialogueEntryType type, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task);
+      DialogueEntry(DialogueEntryType type, const ChoiceList& choices, const std::shared_ptr<Task>& task);
 
-      DialogueEntry(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task);
+      DialogueEntry(DialogueEntryType type, const std::string& text, const ChoiceList& choices, const std::shared_ptr<Task>& task);
 
       void parseTextScripts();
 

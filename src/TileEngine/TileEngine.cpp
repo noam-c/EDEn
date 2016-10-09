@@ -133,12 +133,12 @@ void TileEngine::receive(const MapTriggerMessage& message)
    }
 }
 
-void TileEngine::dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
+void TileEngine::dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const ChoiceList& choices)
 {
    m_dialogue.narrate(narration, task, choices);
 }
 
-void TileEngine::dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
+void TileEngine::dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const ChoiceList& choices)
 {
    m_dialogue.say(speech, task, choices);
 }

@@ -17,7 +17,7 @@ DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, co
    parseTextScripts();
 }
 
-DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task) :
+DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, const ChoiceList& choices, const std::shared_ptr<Task>& task) :
    m_task(task),
    type(type),
    choices(choices),
@@ -26,7 +26,7 @@ DialogueEntry::DialogueEntry(DialogueEntryType type, const std::string& text, co
    parseTextScripts();
 }
 
-DialogueEntry::DialogueEntry(DialogueEntryType type, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task) :
+DialogueEntry::DialogueEntry(DialogueEntryType type, const ChoiceList& choices, const std::shared_ptr<Task>& task) :
    m_task(task),
    type(type),
    choices(choices)

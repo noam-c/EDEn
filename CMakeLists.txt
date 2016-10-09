@@ -13,6 +13,8 @@ SET(HEADERS
   src/BattleSystem/CombatActor.h
   src/BattleSystem/LuaBattleController.h
   src/BattleSystem/LuaCombatActor.h
+  src/controllers/ChoiceList.h
+  src/controllers/ChoiceProvider.h
   src/controllers/DialogueController.h
   src/controllers/DialogueEntry.h
   src/Coroutines/Coroutine.h
@@ -165,6 +167,7 @@ SET(SOURCES
   src/BattleSystem/CombatActor.cpp
   src/BattleSystem/LuaBattleController.cpp
   src/BattleSystem/LuaCombatActor.cpp
+  src/controllers/ChoiceProvider.cpp
   src/controllers/DialogueController.cpp
   src/controllers/DialogueEntry.cpp
   src/Coroutines/Coroutine.cpp
@@ -437,6 +440,6 @@ ELSE()
 
    INCLUDE_DIRECTORIES(BEFORE SYSTEM ${INCL_HEADERS})
 
-   TARGET_LINK_LIBRARIES(eden ${LIBROCKET_LIBRARY} ${LIBROCKET_CONTROLS_LIBRARY} ${LIBROCKET_DEBUGGER_LIBRARY} ${LUA_LIBRARIES} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARIES} ${SDL2_LIBRARY} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
+   TARGET_LINK_LIBRARIES(eden ${LIBROCKET_LIBRARY} ${LIBROCKET_CONTROLS_LIBRARY} ${LIBROCKET_DEBUGGER_LIBRARY} ${LUA_LIBRARIES} ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 ENDIF()
 

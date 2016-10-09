@@ -11,6 +11,8 @@
 #include <queue>
 #include <string>
 
+#include "ChoiceList.h"
+#include "ChoiceProvider.h"
 #include "Coroutine.h"
 #include "DialogueEntry.h"
 
@@ -32,7 +34,7 @@ class Task;
  *
  * @author Noam Chitayat
  */
-class DialogueController final
+class DialogueController final : public ChoiceProvider
 {
    /** The HARDCODED time-per-letter speed */
    static const int MILLISECONDS_PER_LETTER = 100;
@@ -107,7 +109,8 @@ class DialogueController final
     * @param text The speech to enqueue in the dialogue controller.
     * @param task The ticket to be signalled when the line is finished
     */
-   void addLine(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task);
+   void addLine(DialogueEntryType type, const std::string& text,
+                const ChoiceList& choices, const std::shared_ptr<Task>& task);
 
    /**
     * Clears any dialogue currently being displayed onscreen.
@@ -161,7 +164,7 @@ class DialogueController final
        * @param speech The dialogue that will be said.
        * @param task The task associated with this speech instruction.
        */
-      void say(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices);
+      void say(const std::string& speech, const std::shared_ptr<Task>& task, const ChoiceList& choices);
 
       /**
        * Enqueue a line of speech narrated or thought by a character.
@@ -169,7 +172,7 @@ class DialogueController final
        * @param speech The dialogue that will be narrated.
        * @param task The task associated with this narration instruction
        */
-      void narrate(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices);
+      void narrate(const std::string& speech, const std::shared_ptr<Task>& task, const ChoiceList& choices);
 
       /**
        * Enables or disables fast mode.
@@ -202,7 +205,7 @@ class DialogueController final
       /**
        * @return the choice list to show in a dialogue display.
        */
-      const DialogueChoiceList& getCurrentChoices() const;
+      const ChoiceList& getCurrentChoices() const;
 
       /**
        * @return the string to show in a dialogue display.

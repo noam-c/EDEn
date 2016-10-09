@@ -66,12 +66,12 @@ CombatActor* BattleController::addCombatant(const std::string& id, const geometr
    return &m_combatants.back();
 }
 
-void BattleController::dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
+void BattleController::dialogueNarrate(const std::string& narration, const std::shared_ptr<Task>& task, const ChoiceList& choices)
 {
    m_dialogue.narrate(narration, task, choices);
 }
 
-void BattleController::dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
+void BattleController::dialogueSay(const std::string& speech, const std::shared_ptr<Task>& task, const ChoiceList& choices)
 {
    m_dialogue.say(speech, task, choices);
 }

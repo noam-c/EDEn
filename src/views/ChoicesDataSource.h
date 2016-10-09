@@ -9,7 +9,7 @@
 
 #include <Rocket/Controls/DataSource.h>
 
-class DialogueController;
+class ChoiceProvider;
 
 /**
  * A view model that allows a Rocket GUI to bind to a set of dialogue choices.
@@ -18,13 +18,13 @@ class DialogueController;
  */
 class ChoicesDataSource final : public Rocket::Controls::DataSource
 {
-   DialogueController& m_choiceProvider;
+   ChoiceProvider& m_choiceProvider;
 
    public:
       /**
        * Constructor.
        */
-      ChoicesDataSource(DialogueController& choiceProvider);
+      ChoicesDataSource(ChoiceProvider& choiceProvider);
 
       /**
        * Populates <code>row</code> with the specified columns of a row of data specified by <code>row_index</code>.

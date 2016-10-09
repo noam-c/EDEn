@@ -5,7 +5,7 @@
  */
 
 #include "ChoicesDataSource.h"
-#include "DialogueController.h"
+#include "ChoiceProvider.h"
 
 #include <algorithm>
 #include <string>
@@ -14,7 +14,7 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_DIA_CONTR
 
-ChoicesDataSource::ChoicesDataSource(DialogueController& choiceProvider) :
+ChoicesDataSource::ChoicesDataSource(ChoiceProvider& choiceProvider) :
    Rocket::Controls::DataSource("choicesDataSource"),
    m_choiceProvider(choiceProvider)
 {
@@ -24,7 +24,7 @@ void ChoicesDataSource::GetRow(Rocket::Core::StringList& row,
       const Rocket::Core::String& table, int row_index,
       const Rocket::Core::StringList& columns)
 {
-   if (table == "choices" && m_choiceProvider.hasDialogue())
+   if (table == "choices" && m_choiceProvider.hasChoices())
    {
       auto& choices = m_choiceProvider.getCurrentChoices();
       for (int i = 0; i < columns.size(); ++i)
@@ -41,7 +41,7 @@ int ChoicesDataSource::GetNumRows(const Rocket::Core::String& table)
 {
    if (table == "choices")
    {
-      return m_choiceProvider.hasDialogue() ?
+      return m_choiceProvider.hasChoices() ?
          m_choiceProvider.getCurrentChoices().size() : 0;
    }
 

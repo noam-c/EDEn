@@ -38,7 +38,7 @@ void DialogueController::initialize(Scheduler& scheduler, std::weak_ptr<Dialogue
    scheduler.start(std::make_shared<DialogueCoroutine>(*this));
 }
 
-void DialogueController::addLine(DialogueEntryType type, const std::string& text, const DialogueChoiceList& choices, const std::shared_ptr<Task>& task)
+void DialogueController::addLine(DialogueEntryType type, const std::string& text, const ChoiceList& choices, const std::shared_ptr<Task>& task)
 {
    bool currentlyHasDialogue = hasDialogue();
    m_dialogueQueue.emplace(type, text, choices, task);
@@ -49,12 +49,12 @@ void DialogueController::addLine(DialogueEntryType type, const std::string& text
    }
 }
 
-void DialogueController::narrate(const std::string& text, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
+void DialogueController::narrate(const std::string& text, const std::shared_ptr<Task>& task, const ChoiceList& choices)
 {
    addLine(DialogueEntryType::NARRATE, text, choices, task);
 }
 
-void DialogueController::say(const std::string& text, const std::shared_ptr<Task>& task, const DialogueChoiceList& choices)
+void DialogueController::say(const std::string& text, const std::shared_ptr<Task>& task, const ChoiceList& choices)
 {
    addLine(DialogueEntryType::SAY, text, choices, task);
 }
@@ -196,7 +196,7 @@ bool DialogueController::hasChoices() const
    return hasDialogue() && !m_dialogueQueue.front().choices.empty();
 }
 
-const DialogueChoiceList& DialogueController::getCurrentChoices() const
+const ChoiceList& DialogueController::getCurrentChoices() const
 {
    return m_dialogueQueue.front().choices;
 }

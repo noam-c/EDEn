@@ -6,10 +6,13 @@
 
 #include "BattleOverlay.h"
 
+#include <Rocket/Core.h>
+#include <Rocket/Controls.h>
+
 BattleOverlay::BattleOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext, DialogueController& dialogueController) :
    m_consoleWindow(messagePipe, rocketContext)
 {
-   m_overlayDocument = rocketContext.LoadDocument("data/gui/tileEngineOverlay.rml");
+   m_overlayDocument = rocketContext.CreateDocument();
 
    if(m_overlayDocument != nullptr)
    {
