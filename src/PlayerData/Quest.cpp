@@ -73,12 +73,18 @@ Json::Value Quest::serialize() const
    return questNode;
 }
 
-void Quest::addQuest(const std::shared_ptr<Quest>& quest)
+bool Quest::addQuest(const std::shared_ptr<Quest>& quest)
 {
    DEBUG("Adding quest %s to quest %s.", quest->m_name.c_str(), m_name.c_str());
-   m_subquests.emplace(std::piecewise_construct,
-                       std::forward_as_tuple(quest->m_name),
-                       std::forward_as_tuple(quest));
+   auto result = m_subquests.emplace(std::piecewise_construct, std::forward_as_tuple(quest->m_name), std::forward_as_tuple(quest));
+
+   if (!result.second)
+   {
+      DEBUG("Failed to create quest %s because it already exists in quest %s.", quest->m_name.c_str(), m_name.c_str());
+      return false;
+   }
+
+   return true;
 }
 
 const std::weak_ptr<Quest> Quest::getQuest(const std::string& questPath) const

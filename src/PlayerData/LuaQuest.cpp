@@ -44,7 +44,13 @@ static int QuestL_AddQuest(lua_State* luaVM)
    }
 
    auto newQuest = std::make_shared<Quest>(name, description, completed, optional);
-   parentQuest->addQuest(newQuest);
+   auto result = parentQuest->addQuest(newQuest);
+   if (!result)
+   {
+      lua_pushstring(luaVM, "Failed to add quest (another quest has the same name).");
+      return lua_error(luaVM);
+   }
+
    luaW_push<Quest>(luaVM, newQuest.get());
    return 1;
 }
