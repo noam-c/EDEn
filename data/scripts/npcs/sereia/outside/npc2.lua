@@ -13,7 +13,7 @@ function activate(me)
       if quests:isStarted{'chapter1/carryAConvo'} then
          say{'The other guy wanted to say hi?', waitForFinish=true}
          say{'Weird. Alright, say hi back.', waitForFinish=true}
-         quests:get{'chapter1/carryAConvo'}:add{'talkToNPC'}:complete()
+         quests:get{'chapter1/carryAConvo/talkToNPC'}:complete()
       end
    end
 end
