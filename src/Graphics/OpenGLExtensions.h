@@ -17,10 +17,10 @@
 // code generation once such a solution is implemented.
 #define EXTENSION(ext) \
   private: \
-    decltype(ext) m_##ext = nullptr; \
+    decltype(gl##ext) m_##ext = nullptr; \
   public: \
     template<typename ... Args> auto ext(Args... args) \
-      -> decltype(ext(args...)) \
+      -> decltype(gl##ext(args...)) \
     { \
        m_##ext(args...); \
     }
@@ -47,16 +47,16 @@ class OpenGLExtensions final
    
    /* Framebuffers */
 
-   EXTENSION(glGenFramebuffers);
-   EXTENSION(glDeleteFramebuffers);
-   EXTENSION(glBindFramebuffer);
-   EXTENSION(glFramebufferTexture2D);
+   EXTENSION(GenFramebuffers);
+   EXTENSION(DeleteFramebuffers);
+   EXTENSION(BindFramebuffer);
+   EXTENSION(FramebufferTexture2D);
 
    /* Buffer objects */
-   EXTENSION(glGenBuffers);
-   EXTENSION(glDeleteBuffers);
-   EXTENSION(glBindBuffer);
-   EXTENSION(glBufferData);
+   EXTENSION(GenBuffers);
+   EXTENSION(DeleteBuffers);
+   EXTENSION(BindBuffer);
+   EXTENSION(BufferData);
    
    bool initFramebuffers();
    

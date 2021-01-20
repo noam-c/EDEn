@@ -18,7 +18,7 @@
  */
 
 #include <EdenRocketRenderInterface.h>
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 
 #include "GraphicsUtil.h"
 #include "Texture.h"
@@ -30,11 +30,13 @@
 #define GL_CLAMP_TO_EDGE 0x812F
 
 void EdenRocketRenderInterface::RenderGeometry(
-      Rocket::Core::Vertex* vertices,
+      Rml::Core::Vertex* vertices,
       int numVertices, int* indices, int numIndices,
-      const Rocket::Core::TextureHandle texture,
-      const Rocket::Core::Vector2f& translation)
+      const Rml::Core::TextureHandle handle,
+      const Rml::Core::Vector2f& translation)
 {
+   auto texture = reinterpret_cast<Texture*>(handle);
+
    glPushMatrix();
    glPushAttrib(GL_COLOR_BUFFER_BIT | GL_ENABLE_BIT | GL_TEXTURE_BIT);
    glPushClientAttrib(GL_CLIENT_VERTEX_ARRAY_BIT);
@@ -49,8 +51,8 @@ void EdenRocketRenderInterface::RenderGeometry(
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-   glVertexPointer(2, GL_FLOAT, sizeof(Rocket::Core::Vertex), &vertices[0].position);
-   glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Rocket::Core::Vertex), &vertices[0].colour);
+   glVertexPointer(2, GL_FLOAT, sizeof(Rml::Core::Vertex), &vertices[0].position);
+   glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(Rml::Core::Vertex), &vertices[0].colour);
 
    if (!texture)
    {
@@ -60,9 +62,9 @@ void EdenRocketRenderInterface::RenderGeometry(
    else
    {
       glEnable(GL_TEXTURE_2D);
-      reinterpret_cast<Texture*>(texture)->bind();
+      texture->bind();
       glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-      glTexCoordPointer(2, GL_FLOAT, sizeof(Rocket::Core::Vertex), &vertices[0].tex_coord);
+      glTexCoordPointer(2, GL_FLOAT, sizeof(Rml::Core::Vertex), &vertices[0].tex_coord);
    }
 
    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, indices);
@@ -74,6 +76,7 @@ void EdenRocketRenderInterface::RenderGeometry(
 
 void EdenRocketRenderInterface::EnableScissorRegion(bool enable)
 {
+   glDisable(GL_STENCIL_TEST);
    if (enable)
    {
       glEnable(GL_SCISSOR_TEST);
@@ -91,25 +94,25 @@ void EdenRocketRenderInterface::SetScissorRegion(int x, int y, int width, int he
 }
 
 bool EdenRocketRenderInterface::LoadTexture(
-      Rocket::Core::TextureHandle& textureHandle,
-      Rocket::Core::Vector2i& textureDimensions,
-      const Rocket::Core::String& source)
+      Rml::Core::TextureHandle& textureHandle,
+      Rml::Core::Vector2i& textureDimensions,
+      const Rml::Core::String& source)
 {
-   Texture* texture = new Texture(std::string(source.CString()));
+   Texture* texture = new Texture(std::string(source.c_str()));
    if(!texture->isValid())
    {
       delete texture;
       return false;
    }
 
-   textureHandle = reinterpret_cast<Rocket::Core::TextureHandle>(texture);
+   textureHandle = reinterpret_cast<Rml::Core::TextureHandle>(texture);
    return true;
 }
 
 bool EdenRocketRenderInterface::GenerateTexture(
-      Rocket::Core::TextureHandle& textureHandle,
-      const Rocket::Core::byte* source,
-      const Rocket::Core::Vector2i& sourceDimensions)
+      Rml::Core::TextureHandle& textureHandle,
+      const Rml::Core::byte* source,
+      const Rml::Core::Vector2i& sourceDimensions)
 {
    Texture* texture = new Texture(reinterpret_cast<const void*>(source),
          GL_RGBA, geometry::Size(sourceDimensions.x, sourceDimensions.y), 4);
@@ -118,11 +121,11 @@ bool EdenRocketRenderInterface::GenerateTexture(
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-   textureHandle = reinterpret_cast<Rocket::Core::TextureHandle>(texture);
+   textureHandle = reinterpret_cast<Rml::Core::TextureHandle>(texture);
    return true;
 }
 
-void EdenRocketRenderInterface::ReleaseTexture(Rocket::Core::TextureHandle textureHandle)
+void EdenRocketRenderInterface::ReleaseTexture(Rml::Core::TextureHandle textureHandle)
 {
    delete reinterpret_cast<Texture*>(textureHandle);
 }

@@ -7,7 +7,7 @@
 #include "TitleScreenSettingsMenu.h"
 
 #include <SDL.h>
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 
 #include "ResourceLoader.h"
 #include "GraphicsUtil.h"
@@ -24,23 +24,23 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
 
    if(m_titleSettingsDocument != nullptr)
    {
-      Rocket::Core::Element* optionsForm = m_titleSettingsDocument->GetElementById("optionsForm");
+      auto optionsForm = m_titleSettingsDocument->GetElementById("optionsForm");
 
       if(optionsForm != nullptr)
       {
          m_musicEnabledCheckbox = optionsForm->GetElementById("musicEnabled");
          if(m_musicEnabledCheckbox != nullptr)
          {
-            m_bindings.bindAction(m_musicEnabledCheckbox, "change", [this](Rocket::Core::Event& event) { onMusicEnabledChange(event); });
+            m_bindings.bindAction(m_musicEnabledCheckbox, "change", [this](Rml::Core::Event& event) { onMusicEnabledChange(event); });
          }
 
          m_soundEnabledCheckbox = optionsForm->GetElementById("soundEnabled");
          if(m_soundEnabledCheckbox != nullptr)
          {
-            m_bindings.bindAction(m_soundEnabledCheckbox, "change", [this](Rocket::Core::Event& event) { onSoundEnabledChange(event); });
+            m_bindings.bindAction(m_soundEnabledCheckbox, "change", [this](Rml::Core::Event& event) { onSoundEnabledChange(event); });
          }
 
-         m_bindings.bindAction(optionsForm, "submit", [this](Rocket::Core::Event& event) { onSubmit(event); });
+         m_bindings.bindAction(optionsForm, "submit", [this](Rml::Core::Event& event) { onSubmit(event); });
 
          loadSettings();
       }
@@ -52,7 +52,6 @@ TitleScreenSettingsMenu::TitleScreenSettingsMenu(GameContext& gameContext) :
 TitleScreenSettingsMenu::~TitleScreenSettingsMenu()
 {
    m_titleSettingsDocument->Close();
-   m_titleSettingsDocument->RemoveReference();
 }
 
 void TitleScreenSettingsMenu::loadSettings()
@@ -87,24 +86,24 @@ void TitleScreenSettingsMenu::revertSettings()
    Settings::getCurrentSettings().revertChanges();
 }
 
-bool TitleScreenSettingsMenu::getCheckboxValue(Rocket::Core::Event& event)
+bool TitleScreenSettingsMenu::getCheckboxValue(Rml::Core::Event& event)
 {
    return event.GetCurrentElement()->GetAttribute("checked") != nullptr;
 }
 
-void TitleScreenSettingsMenu::onMusicEnabledChange(Rocket::Core::Event& event)
+void TitleScreenSettingsMenu::onMusicEnabledChange(Rml::Core::Event& event)
 {
    Settings::getCurrentSettings().setMusicEnabled(TitleScreenSettingsMenu::getCheckboxValue(event));
 }
 
-void TitleScreenSettingsMenu::onSoundEnabledChange(Rocket::Core::Event& event)
+void TitleScreenSettingsMenu::onSoundEnabledChange(Rml::Core::Event& event)
 {
    Settings::getCurrentSettings().setSoundEnabled(TitleScreenSettingsMenu::getCheckboxValue(event));
 }
 
-void TitleScreenSettingsMenu::onSubmit(Rocket::Core::Event& event)
+void TitleScreenSettingsMenu::onSubmit(Rml::Core::Event& event)
 {
-   if(event.GetParameter<Rocket::Core::String>("submit", "cancel") == "apply")
+   if(event.GetParameter<Rml::Core::String>("submit", "cancel") == "apply")
    {
       bool settingsUpdateSuccess = true;
       if(GraphicsUtil::getInstance()->isVideoModeRefreshRequired())

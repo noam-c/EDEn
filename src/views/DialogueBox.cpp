@@ -6,12 +6,12 @@
 
 #include "DialogueBox.h"
 
-#include <Rocket/Core.h>
-#include <Rocket/Controls.h>
+#include <RmlUi/Core.h>
+#include <RmlUi/Controls.h>
 
 #include "DialogueController.h"
 
-DialogueBox::DialogueBox(Rocket::Core::Element* dialogueBox, DialogueController& controller) :
+DialogueBox::DialogueBox(Rml::Core::Element* dialogueBox, DialogueController& controller) :
    m_dialogueBox(dialogueBox),
    m_controller(controller),
    m_choicesDataSource(controller)
@@ -20,7 +20,7 @@ DialogueBox::DialogueBox(Rocket::Core::Element* dialogueBox, DialogueController&
    {
       m_dialogueTextArea = m_dialogueBox->GetElementById("textArea");
       m_dialogueChoiceList = m_dialogueBox->GetElementById("choiceList");
-      m_bindings.bindAction(m_dialogueChoiceList, "click", [this](Rocket::Core::Event& event) { onChoiceListClicked(event); });
+      m_bindings.bindAction(m_dialogueChoiceList, "click", [this](Rml::Core::Event& event) { onChoiceListClicked(event); });
    }
 }
 
@@ -55,9 +55,9 @@ void DialogueBox::refresh()
    onDialogueChanged();
 }
 
-void DialogueBox::onChoiceListClicked(Rocket::Core::Event& event)
+void DialogueBox::onChoiceListClicked(Rml::Core::Event& event)
 {
-   Rocket::Core::Element* target = event.GetTargetElement();
+   auto target = event.GetTargetElement();
 
    // Move up the DOM to the datagridrow item holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
@@ -68,7 +68,7 @@ void DialogueBox::onChoiceListClicked(Rocket::Core::Event& event)
    if(target != nullptr)
    {
       // If we found a row element, cast it and get its index
-      auto rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
+      auto rowElement = dynamic_cast<Rml::Controls::ElementDataGridRow*>(target);
       if(rowElement != nullptr)
       {
          int choiceIndex = rowElement->GetParentRelativeIndex();

@@ -7,27 +7,27 @@
 #ifndef EDEN_ROCKET_SYSTEM_INTERFACE_H
 #define EDEN_ROCKET_SYSTEM_INTERFACE_H
 
-#include <Rocket/Core/SystemInterface.h>
+#include <RmlUi/Core/SystemInterface.h>
 
 /**
  * System interface for Rocket in EDEn.
  *
  * @author Noam Chitayat
  */
-class EdenRocketSystemInterface final : public Rocket::Core::SystemInterface
+class EdenRocketSystemInterface final : public Rml::Core::SystemInterface
 {
    public:
       /**
        * @return the number of seconds elapsed since the start of the application.
        */
-      float GetElapsedTime() override;
+      double GetElapsedTime() override;
 
       /**
        * Log a debug message using the EDEn debugging system.
        *
        * @return true iff execution should continue
        */
-      bool LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message) override;
+      bool LogMessage(Rml::Core::Log::Type type, const Rml::Core::String& message) override;
 };
 
 #endif

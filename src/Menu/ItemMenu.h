@@ -11,7 +11,7 @@
 #include "EdenRocketBindings.h"
 #include "ItemViewModel.h"
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -43,9 +43,9 @@ class ItemMenu final : public MenuState
     */
    void initialize();
 
-   void itemClicked(Rocket::Core::Event& event);
+   void itemClicked(Rml::Core::Event& event);
    void useItem(int rowIndex);
-   void dragStarted(Rocket::Core::Event& event);
+   void dragStarted(Rml::Core::Event& event);
 
    public:
       /**

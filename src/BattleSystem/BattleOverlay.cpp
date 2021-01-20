@@ -6,14 +6,14 @@
 
 #include "BattleOverlay.h"
 
-BattleOverlay::BattleOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext, DialogueController& dialogueController) :
+BattleOverlay::BattleOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rml::Core::Context& rocketContext, DialogueController& dialogueController) :
    m_consoleWindow(messagePipe, rocketContext)
 {
    m_overlayDocument = rocketContext.LoadDocument("data/gui/tileEngineOverlay.rml");
 
    if(m_overlayDocument != nullptr)
    {
-      Rocket::Core::Element* dialogueBoxElement = m_overlayDocument->GetElementById("dialogueBox");
+      auto dialogueBoxElement = m_overlayDocument->GetElementById("dialogueBox");
 
       if(dialogueBoxElement != nullptr)
       {
@@ -28,7 +28,6 @@ BattleOverlay::~BattleOverlay()
 {
    if(m_overlayDocument != nullptr)
    {
-      m_overlayDocument->RemoveReference();
       m_overlayDocument->Close();
    }
 }

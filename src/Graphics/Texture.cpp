@@ -30,7 +30,7 @@ Texture::Texture(const std::string& imagePath)
    if (!image)
    {
       // Problem loading the image; throw an exception
-      DEBUG(std::string("Unable to load image: ") + IMG_GetError());
+      DEBUG("Unable to load image: %s", IMG_GetError());
       return;
    }
 

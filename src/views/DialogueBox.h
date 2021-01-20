@@ -12,7 +12,7 @@
 
 class DialogueController;
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -28,22 +28,22 @@ class DialogueBox
    EdenRocketBindings m_bindings;
 
    /** The RML element holding the dialogue box */
-   Rocket::Core::Element* m_dialogueBox;
+   Rml::Core::Element* m_dialogueBox;
 
    /** The RML element holding the dialogue box text area */
-   Rocket::Core::Element* m_dialogueTextArea;
+   Rml::Core::Element* m_dialogueTextArea;
 
    /** The RML element holding the dialogue box choice list */
-   Rocket::Core::Element* m_dialogueChoiceList;
+   Rml::Core::Element* m_dialogueChoiceList;
 
    DialogueController& m_controller;
 
    ChoicesDataSource m_choicesDataSource;
 
-   void onChoiceListClicked(Rocket::Core::Event& event);
+   void onChoiceListClicked(Rml::Core::Event& event);
 
    public:
-      DialogueBox(Rocket::Core::Element* dialogueBox, DialogueController& controller);
+      DialogueBox(Rml::Core::Element* dialogueBox, DialogueController& controller);
 
       void onDialogueAdvanced();
 

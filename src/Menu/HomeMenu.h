@@ -14,7 +14,7 @@
 #include "EdenRocketBindings.h"
 #include "HomeViewModel.h"
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -54,7 +54,7 @@ class HomeMenu final : public MenuState
    /**
     * @param event The click event that occurred in the party list.
     */
-   void characterClicked(Rocket::Core::Event& event);
+   void characterClicked(Rml::Core::Event& event);
 
    /**
     * Signals to the view model that a character was selected in the menu.

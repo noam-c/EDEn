@@ -7,7 +7,7 @@
 #include "MainMenu.h"
 
 #include <SDL.h>
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 
 #include "ResourceLoader.h"
 #include "Music.h"
@@ -40,22 +40,21 @@ MainMenu::MainMenu(GameContext& gameContext) :
    if(m_titleDocument != nullptr)
    {
       m_titleDocument->Show();
-      m_bindings.bindAction(m_titleDocument, "newGameAction", "click", [this](Rocket::Core::Event& event) { NewGameAction(); });
-      m_bindings.bindAction(m_titleDocument, "menuPrototypeAction", "click", [this](Rocket::Core::Event& event) { MenuPrototypeAction(); });
-      m_bindings.bindAction(m_titleDocument, "battlePrototypeAction", "click", [this](Rocket::Core::Event& event) { BattlePrototypeAction(); });
-      m_bindings.bindAction(m_titleDocument, "loadGameAction", "click", [this](Rocket::Core::Event& event) { LoadGameAction(); });
-      m_bindings.bindAction(m_titleDocument, "optionsAction", "click", [this](Rocket::Core::Event& event) { OptionsAction(); });
-      m_bindings.bindAction(m_titleDocument, "aboutAction", "click", [this](Rocket::Core::Event& event) { AboutAction(); });
-      m_bindings.bindAction(m_titleDocument, "quitGameAction", "click", [this](Rocket::Core::Event& event) { QuitAction(); });
+      m_bindings.bindAction(m_titleDocument, "newGameAction", "click", [this](Rml::Core::Event& event) { NewGameAction(); });
+      m_bindings.bindAction(m_titleDocument, "menuPrototypeAction", "click", [this](Rml::Core::Event& event) { MenuPrototypeAction(); });
+      m_bindings.bindAction(m_titleDocument, "battlePrototypeAction", "click", [this](Rml::Core::Event& event) { BattlePrototypeAction(); });
+      m_bindings.bindAction(m_titleDocument, "loadGameAction", "click", [this](Rml::Core::Event& event) { LoadGameAction(); });
+      m_bindings.bindAction(m_titleDocument, "optionsAction", "click", [this](Rml::Core::Event& event) { OptionsAction(); });
+      m_bindings.bindAction(m_titleDocument, "aboutAction", "click", [this](Rml::Core::Event& event) { AboutAction(); });
+      m_bindings.bindAction(m_titleDocument, "quitGameAction", "click", [this](Rml::Core::Event& event) { QuitAction(); });
 
-      m_bindings.bindAction(m_titleDocument, "keydown", [this](Rocket::Core::Event& event) { listKeyDown(event); });
+      m_bindings.bindAction(m_titleDocument, "keydown", [this](Rml::Core::Event& event) { listKeyDown(event); });
    }
 }
 
 MainMenu::~MainMenu()
 {
    m_titleDocument->Close();
-   m_titleDocument->RemoveReference();
 }
 
 bool MainMenu::step(long timePassed)
@@ -112,27 +111,27 @@ void MainMenu::waitForInputEvent(bool& finishState)
    handleEvent(event);
 }
 
-void MainMenu::listKeyDown(Rocket::Core::Event& event)
+void MainMenu::listKeyDown(Rml::Core::Event& event)
 {
-   Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
+   Rml::Core::Input::KeyIdentifier key = static_cast<Rml::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rml::Core::Input::KI_UNKNOWN));
 
    switch(key)
    {
-      case Rocket::Core::Input::KI_UP:
-      case Rocket::Core::Input::KI_DOWN:
-      case Rocket::Core::Input::KI_RETURN:
+      case Rml::Core::Input::KI_UP:
+      case Rml::Core::Input::KI_DOWN:
+      case Rml::Core::Input::KI_RETURN:
          break;
       default:
          return;
    }
 
-   Rocket::Core::Element* list = m_titleDocument->GetElementById("menu");
+   auto list = m_titleDocument->GetElementById("menu");
    if(list == nullptr)
    {
       return;
    }
 
-   Rocket::Core::Element* child = list->GetFirstChild();
+   auto child = list->GetFirstChild();
    while(child != nullptr)
    {
       if(child->IsClassSet("selected"))
@@ -148,22 +147,22 @@ void MainMenu::listKeyDown(Rocket::Core::Event& event)
       return;
    }
 
-   if(key == Rocket::Core::Input::KI_RETURN)
+   if(key == Rml::Core::Input::KI_RETURN)
    {
       child->Click();
    }
-   else if(key == Rocket::Core::Input::KI_UP)
+   else if(key == Rml::Core::Input::KI_UP)
    {
-      Rocket::Core::Element* previousSibling = child->GetPreviousSibling();
+      auto previousSibling = child->GetPreviousSibling();
       if(previousSibling != nullptr)
       {
          child->SetClass("selected", false /*activate*/);
          previousSibling->SetClass("selected", true /*activate*/);
       }
    }
-   else if(key == Rocket::Core::Input::KI_DOWN)
+   else if(key == Rml::Core::Input::KI_DOWN)
    {
-      Rocket::Core::Element* nextSibling = child->GetNextSibling();
+      auto nextSibling = child->GetNextSibling();
       if(nextSibling != nullptr)
       {
          child->SetClass("selected", false /*activate*/);

@@ -7,22 +7,20 @@
 #ifndef ROCKET_SCRIPT_HANDLER_FACTORY_H
 #define ROCKET_SCRIPT_HANDLER_FACTORY_H
 
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 
 class ScriptEngine;
 class RocketScriptHandler;
 
-class RocketScriptHandlerFactory final : public Rocket::Core::EventListenerInstancer
+class RocketScriptHandlerFactory final : public Rml::Core::EventListenerInstancer
 {
    ScriptEngine& m_scriptEngine;
 
    public:
       RocketScriptHandlerFactory(ScriptEngine& scriptEngine);
 
-      Rocket::Core::EventListener* InstanceEventListener(
-            const Rocket::Core::String& value, Rocket::Core::Element* element) override;
-
-      void Release() override;
+      Rml::Core::EventListener* InstanceEventListener(
+            const Rml::Core::String& value, Rml::Core::Element* element) override;
 };
 
 #endif

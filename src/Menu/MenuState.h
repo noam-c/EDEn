@@ -13,7 +13,7 @@
 #include <memory>
 #include <vector>
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -66,7 +66,7 @@ class MenuState : public GameState
       std::vector<MenuShellOption> m_sidebarOptions;
 
       /** The menu pane RML document */
-      Rocket::Core::ElementDocument* m_paneDocument;
+      Rml::Core::ElementDocument* m_paneDocument;
 
       /**
        * Sets this menu state to be the current one.

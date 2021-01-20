@@ -13,8 +13,8 @@
 #include "SDL_image.h"
 #include "SDL_mixer.h"
 
-#include <Rocket/Core.h>
-#include <Rocket/Controls.h>
+#include <RmlUi/Core.h>
+#include <RmlUi/Controls.h>
 
 #include "RocketSDLInputMapping.h"
 #include "Settings.h"
@@ -61,6 +61,13 @@ void GraphicsUtil::initSDL()
    if(Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers))
    {
       DEBUG("Unable to open audio: %s\n", SDL_GetError());
+      exit(1);
+   }
+
+   auto mixFlags = MIX_INIT_MP3 | MIX_INIT_MID | MIX_INIT_MOD;
+   if(Mix_Init(mixFlags) & mixFlags != mixFlags)
+   {
+      DEBUG("Couldn't initialize audio: %s\n", Mix_GetError());
       exit(1);
    }
 
@@ -152,11 +159,11 @@ std::tuple<bool, std::string> GraphicsUtil::initSDLVideoMode()
 
 void GraphicsUtil::initRocket()
 {
-   Rocket::Core::SetSystemInterface(&m_rocketSystemInterface);
-   Rocket::Core::SetRenderInterface(&m_rocketRenderInterface);
-   Rocket::Core::RegisterPlugin(&m_rocketContextRegistry);
-   Rocket::Core::Initialise();
-   Rocket::Controls::Initialise();
+   Rml::Core::SetSystemInterface(&m_rocketSystemInterface);
+   Rml::Core::SetRenderInterface(&m_rocketRenderInterface);
+   Rml::Core::RegisterPlugin(&m_rocketContextRegistry);
+   Rml::Core::Initialise();
+   Rml::Controls::Initialise();
 
    const std::string fontLocation = "data/fonts";
    struct dirent *entry;
@@ -177,7 +184,7 @@ void GraphicsUtil::initRocket()
          if(extension == ".ttf" || extension == ".otf")
          {
             const std::string path = fontLocation + '/' + entry->d_name;
-            if(!Rocket::Core::FontDatabase::LoadFontFace(path.c_str()))
+            if(!Rml::Core::LoadFontFace(path.c_str()))
             {
                DEBUG("Failed to load font: %s", path.c_str());
             }
@@ -190,9 +197,14 @@ void GraphicsUtil::initRocket()
    RocketSDLInputMapping::initialize();
 }
 
-Rocket::Core::Context* GraphicsUtil::createRocketContext(const std::string& name)
+Rml::Core::Context* GraphicsUtil::createRocketContext(const std::string& name)
 {
-   return Rocket::Core::CreateContext(name.c_str(), Rocket::Core::Vector2i(m_width, m_height));
+   return Rml::Core::CreateContext(name.c_str(), Rml::Core::Vector2i(m_width, m_height));
+}
+
+bool GraphicsUtil::removeRocketContext(const std::string& name)
+{
+   return Rml::Core::RemoveContext(name.c_str());
 }
 
 void GraphicsUtil::flipScreen()
@@ -225,10 +237,10 @@ std::tuple<bool, std::string> GraphicsUtil::refreshVideoMode()
    auto videoModeChangeResult = initSDLVideoMode();
    if(std::get<0>(videoModeChangeResult))
    {
-      const std::vector<Rocket::Core::Context*>& activeContexts = m_rocketContextRegistry.getActiveContexts();
+      const std::vector<Rml::Core::Context*>& activeContexts = m_rocketContextRegistry.getActiveContexts();
       for(auto& context : activeContexts)
       {
-         context->SetDimensions(Rocket::Core::Vector2i(m_width, m_height));
+         context->SetDimensions(Rml::Core::Vector2i(m_width, m_height));
       }
    }
 
@@ -274,7 +286,7 @@ void GraphicsUtil::resetAbsoluteOffset()
 void GraphicsUtil::finish()
 {
    // Shut down Rocket
-   Rocket::Core::Shutdown();
+   Rml::Core::Shutdown();
 
    // Destroy SDL audio and video stuff
    Mix_CloseAudio();

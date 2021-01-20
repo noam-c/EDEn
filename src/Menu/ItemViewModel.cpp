@@ -16,10 +16,10 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_MENU
 
-const Rocket::Core::String ItemViewModel::UnknownItemIconPath("data/images/icons/I_Rock01.png");
+const Rml::Core::String ItemViewModel::UnknownItemIconPath("data/images/icons/I_Rock01.png");
 
 ItemViewModel::ItemViewModel(const Metadata& metadata, PlayerData& playerData) :
-   Rocket::Controls::DataSource("itemViewModel"),
+   Rml::Controls::DataSource("itemViewModel"),
    m_metadata(metadata),
    m_playerData(playerData)
 {
@@ -31,9 +31,9 @@ UsableId ItemViewModel::getItemId(int rowIndex) const
    return itemList[rowIndex].first;
 }
 
-void ItemViewModel::GetRow(Rocket::Core::StringList& row,
-      const Rocket::Core::String& table, int row_index,
-      const Rocket::Core::StringList& columns)
+void ItemViewModel::GetRow(Rml::Core::StringList& row,
+      const Rml::Core::String& table, int row_index,
+      const Rml::Core::StringList& columns)
 {
    if (table == "items")
    {
@@ -47,7 +47,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
          {
             if(rowItem == nullptr)
             {
-               row.emplace_back(13, "Unknown %d", usableId);
+               row.push_back(std::string("Unknown item: ").append(std::to_string(usableId)));
             }
             else
             {
@@ -56,7 +56,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
          }
          else if (columns[i] == "quantity")
          {
-            row.emplace_back(5, "%d", itemQuantity);
+            row.push_back(std::to_string(itemQuantity));
          }
          else if (columns[i] == "icon")
          {
@@ -73,7 +73,7 @@ void ItemViewModel::GetRow(Rocket::Core::StringList& row,
    }
 }
 
-int ItemViewModel::GetNumRows(const Rocket::Core::String& table)
+int ItemViewModel::GetNumRows(const Rml::Core::String& table)
 {
    if (table == "items")
    {

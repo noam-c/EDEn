@@ -7,7 +7,7 @@
 #ifndef ITEM_VIEW_MODEL_H
 #define ITEM_VIEW_MODEL_H
 
-#include <Rocket/Controls/DataSource.h>
+#include <RmlUi/Controls/DataSource.h>
 #include "ImageFormatter.h"
 #include "UsableId.h"
 
@@ -19,9 +19,9 @@ class PlayerData;
  *
  * @author Noam Chitayat
  */
-class ItemViewModel final : public Rocket::Controls::DataSource
+class ItemViewModel final : public Rml::Controls::DataSource
 {
-   const static Rocket::Core::String UnknownItemIconPath;
+   const static Rml::Core::String UnknownItemIconPath;
 
    const Metadata& m_metadata;
    PlayerData& m_playerData;
@@ -45,14 +45,14 @@ class ItemViewModel final : public Rocket::Controls::DataSource
        * @param row_index The index of the desired row.
        * @param columns The list of desired columns within the row.
        */
-      void GetRow(Rocket::Core::StringList& row, const Rocket::Core::String& table, int row_index, const Rocket::Core::StringList& columns) override;
+      void GetRow(Rml::Core::StringList& row, const Rml::Core::String& table, int row_index, const Rml::Core::StringList& columns) override;
 
       /**
        * @param table The table to query for row count.
        *
        * @return The number of rows in the specified table.
        */
-      int GetNumRows(const Rocket::Core::String& table) override;
+      int GetNumRows(const Rml::Core::String& table) override;
 
       void refresh(int rowIndex);
 };

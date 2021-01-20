@@ -3,7 +3,7 @@
    "schema" : "default",
    "Portrait" : 
    {
-      "path" : "data/characters/kain.jpg"
+      "path" : "characters/kain.jpg"
    },
    "Spritesheet" : "kain",
    "Aspects" : [

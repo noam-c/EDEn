@@ -10,7 +10,7 @@
 #include "Music.h"
 #include "Sound.h"
 
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 #include "BattleController.h"
 #include "MenuShell.h"
 #include "TitleScreenSettingsMenu.h"

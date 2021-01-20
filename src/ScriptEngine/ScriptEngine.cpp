@@ -549,7 +549,9 @@ void ScriptEngine::callFunction(lua_State* coroutine, const char* funcName)
    // push the function onto the stack and then resume the coroutine from the
    // start of the function
    lua_getglobal(coroutine, funcName);
-   lua_resume(coroutine, nullptr, 0);
+
+   int numResults;
+   lua_resume(coroutine, nullptr, 0, &numResults);
 }
 
 std::string ScriptEngine::getScriptPath(const std::string& scriptName)

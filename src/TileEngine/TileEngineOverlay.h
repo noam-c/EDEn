@@ -16,7 +16,7 @@
 class PlayerData;
 class Metadata;
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -38,7 +38,7 @@ namespace messaging
 class TileEngineOverlay final
 {
    /** The RML document that represents the overlay GUI. */
-   Rocket::Core::ElementDocument* m_overlayDocument;
+   Rml::Core::ElementDocument* m_overlayDocument;
 
    /** The debug console window to be used for diagnostics. */
    DebugConsoleWindow m_consoleWindow;
@@ -54,10 +54,10 @@ class TileEngineOverlay final
        * Constructor.
        * Builds the overlay GUI elements.
        */
-      TileEngineOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext, DialogueController& dialogueController);
+      TileEngineOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rml::Core::Context& rocketContext, DialogueController& dialogueController);
 
       /**
-       * Destructor. Cleans up RML documents loaded by the overlay.
+       * Destructor.
        */
       ~TileEngineOverlay();
 

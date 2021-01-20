@@ -7,6 +7,7 @@
 #ifndef SCRIPT_ENGINE_H
 #define SCRIPT_ENGINE_H
 
+#include <functional>
 #include <memory>
 #include <stack>
 #include <string>

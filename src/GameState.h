@@ -17,7 +17,7 @@ class PlayerData;
 class Scheduler;
 class ScriptEngine;
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -85,7 +85,10 @@ class GameState
       GameContext& m_gameContext;
 
       /** The Rocket context for any GUI created by the state. */
-      Rocket::Core::Context* m_rocketContext;
+      Rml::Core::Context* m_rocketContext;
+
+      /** Whether or not this state created its own Rocket context. */
+      bool m_ownedContext = false;
 
       /** Set true to signal the state logic to terminate so that the state is destroyed. */
       bool m_finished = false;
@@ -109,7 +112,7 @@ class GameState
        * @param stateName The unique name of the state.
        * @param rocketContext The Rocket context to use for this state's GUI.
        */
-      GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName, Rocket::Core::Context* rocketContext);
+      GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName, Rml::Core::Context* rocketContext);
 
       /**
        * Runs the state's logic processing

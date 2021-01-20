@@ -34,7 +34,6 @@
 const int EntityGrid::MOVEMENT_TILE_SIZE = 32;
 
 const float EntityGrid::ROOT_2 = 1.41421356f;
-const float EntityGrid::INFINITY = std::numeric_limits<float>::infinity();
 
 EntityGrid::EntityGrid(const TileEngine& tileEngine, messaging::MessagePipe& messagePipe) :
    m_tileEngine(tileEngine),

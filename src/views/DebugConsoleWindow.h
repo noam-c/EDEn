@@ -10,7 +10,7 @@
 #include "EdenRocketBindings.h"
 #include "MessagePipe.h"
 
-namespace Rocket
+namespace Rml
 {
    namespace Controls
    {
@@ -32,16 +32,16 @@ class DebugConsoleWindow final
    EdenRocketBindings m_bindings;
 
    /** The Rocket context that holds this console window. */
-   Rocket::Core::Context& m_context;
+   Rml::Core::Context& m_context;
 
    /** The Rocket document representing the debug console GUI */
-   Rocket::Core::ElementDocument* m_consoleDocument;
+   Rml::Core::ElementDocument* m_consoleDocument;
 
    /** The Rocket element that holds the command history. */
-   Rocket::Core::Element* m_logElement;
+   Rml::Core::Element* m_logElement;
 
    /** The Rocket element that holds the text box. */
-   Rocket::Controls::ElementFormControlInput* m_commandElement;
+   Rml::Controls::ElementFormControlInput* m_commandElement;
 
    public:
       /**
@@ -49,28 +49,28 @@ class DebugConsoleWindow final
        *
        * @param context The Rocket context to which this console window should attach.
        */
-      DebugConsoleWindow(messaging::MessagePipe& messagePipe, Rocket::Core::Context& context);
+      DebugConsoleWindow(messaging::MessagePipe& messagePipe, Rml::Core::Context& context);
 
       /**
        * Ensures that focus always lands on the textbox.
        *
        * @param event The focus event.
        */
-      void onFocus(Rocket::Core::Event& event);
+      void onFocus(Rml::Core::Event& event);
 
       /**
        * Consumes the key input used to submit commands (currently the Enter key).
        *
        * @param event The keyboard GUI event to consume.
        */
-      void onKeyPress(Rocket::Core::Event& event);
+      void onKeyPress(Rml::Core::Event& event);
 
       /**
        * Consumes the text change in the command prompt.
        *
        * @param event The text change event to consume.
        */
-      void onTextChange(Rocket::Core::Event& event);
+      void onTextChange(Rml::Core::Event& event);
       
       /**
        * @return true iff the debug window is currently visible.

@@ -26,20 +26,20 @@ bool OpenGLExtensions::initFramebuffers()
 {
    if(GLEW_ARB_framebuffer_object)
    {
-      m_glGenFramebuffers = ::glGenFramebuffers;
-      m_glDeleteFramebuffers = ::glDeleteFramebuffers;
-      m_glBindFramebuffer = ::glBindFramebuffer;
-      m_glFramebufferTexture2D = ::glFramebufferTexture2D;
+      m_GenFramebuffers = ::glGenFramebuffers;
+      m_DeleteFramebuffers = ::glDeleteFramebuffers;
+      m_BindFramebuffer = ::glBindFramebuffer;
+      m_FramebufferTexture2D = ::glFramebufferTexture2D;
 
       return true;
    }
 
    if(GLEW_EXT_framebuffer_object)
    {
-      m_glGenFramebuffers = ::glGenFramebuffersEXT;
-      m_glDeleteFramebuffers = ::glDeleteFramebuffersEXT;
-      m_glBindFramebuffer = ::glBindFramebufferEXT;
-      m_glFramebufferTexture2D = ::glFramebufferTexture2DEXT;
+      m_GenFramebuffers = ::glGenFramebuffersEXT;
+      m_DeleteFramebuffers = ::glDeleteFramebuffersEXT;
+      m_BindFramebuffer = ::glBindFramebufferEXT;
+      m_FramebufferTexture2D = ::glFramebufferTexture2DEXT;
 
       return true;
    }
@@ -51,20 +51,20 @@ bool OpenGLExtensions::initBufferObjects()
 {
    if(GLEW_VERSION_1_5)
    {
-      m_glGenBuffers = ::glGenBuffers;
-      m_glDeleteBuffers = ::glDeleteBuffers;
-      m_glBindBuffer = ::glBindBuffer;
-      m_glBufferData = ::glBufferData;
+      m_GenBuffers = ::glGenBuffers;
+      m_DeleteBuffers = ::glDeleteBuffers;
+      m_BindBuffer = ::glBindBuffer;
+      m_BufferData = ::glBufferData;
       
       return true;
    }
 
    if(GLEW_ARB_vertex_buffer_object)
    {
-      m_glGenBuffers = ::glGenBuffersARB;
-      m_glDeleteBuffers = ::glDeleteBuffersARB;
-      m_glBindBuffer = ::glBindBufferARB;
-      m_glBufferData = ::glBufferDataARB;
+      m_GenBuffers = ::glGenBuffersARB;
+      m_DeleteBuffers = ::glDeleteBuffersARB;
+      m_BindBuffer = ::glBindBufferARB;
+      m_BufferData = ::glBufferDataARB;
 
       return true;
    }

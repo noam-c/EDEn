@@ -83,7 +83,8 @@ bool Script::runScript(int numArgs)
    DEBUG("Resuming script with name %s, coroutine ID %d...", m_scriptName.c_str(), m_coroutineId);
    DEBUG("Lua Coroutine Address: 0x%x", m_luaStack);
 
-   int returnCode = lua_resume(m_luaStack, nullptr, numArgs);
+   int numResults;
+   int returnCode = lua_resume(m_luaStack, nullptr, numArgs, &numResults);
    switch(returnCode)
    {
       case LUA_OK:
@@ -99,8 +100,8 @@ bool Script::runScript(int numArgs)
       }
       default:
       {
-         // An error occurred: Print out the error message
-         DEBUG("Error running script: %s", lua_tostring(m_luaStack, -1));
+         std::string errorMsg(lua_tostring(m_luaStack, -1));
+         DEBUG("Error running script: %s", errorMsg.c_str());
          m_running = false;
          T_T("An error occured running this script.");
          return true;

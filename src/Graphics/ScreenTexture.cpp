@@ -32,7 +32,7 @@ ScreenTexture::ScreenTexture() :
 
    glPopAttrib();
 
-   extensions.glGenFramebuffers(1, &m_frameBuffer);
+   extensions.GenFramebuffers(1, &m_frameBuffer);
 }
 
 ScreenTexture::ScreenTexture(ScreenTexture&& rhs) :
@@ -64,7 +64,7 @@ ScreenTexture::~ScreenTexture()
       return;
    }
    
-   GraphicsUtil::getInstance()->getExtensions().glDeleteFramebuffers(1, &m_frameBuffer);
+   GraphicsUtil::getInstance()->getExtensions().DeleteFramebuffers(1, &m_frameBuffer);
 }
 
 ScreenTexture ScreenTexture::create(GameState& gameState)
@@ -81,12 +81,12 @@ ScreenTexture ScreenTexture::create(GameState& gameState)
          gameState.activate();
       }
 
-      extensions.glBindFramebuffer(GL_FRAMEBUFFER, texture.m_frameBuffer);
-      extensions.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.m_textureHandle, 0);
+      extensions.BindFramebuffer(GL_FRAMEBUFFER, texture.m_frameBuffer);
+      extensions.FramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.m_textureHandle, 0);
       
       gameState.drawFrame();
 
-      extensions.glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      extensions.BindFramebuffer(GL_FRAMEBUFFER, 0);
 
       if(!wasActive)
       {

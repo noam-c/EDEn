@@ -7,7 +7,7 @@
 #ifndef IMAGE_FORMATTER_H
 #define IMAGE_FORMATTER_H
 
-#include <Rocket/Controls/DataFormatter.h>
+#include <RmlUi/Controls/DataFormatter.h>
 
 /**
  * A formatter that converts a data grid text entry into an image tag with
@@ -16,7 +16,7 @@
  *
  * @author Noam Chitayat
  */
-class ImageFormatter final : public Rocket::Controls::DataFormatter
+class ImageFormatter final : public Rml::Controls::DataFormatter
 {
    public:
       /**
@@ -30,7 +30,7 @@ class ImageFormatter final : public Rocket::Controls::DataFormatter
        * @param formatted_data The string that will hold the final formatted image tag.
        * @param raw_data A single-entry string array containing the path to an image, relative to the RML GUI folder.
        */
-      void FormatData(Rocket::Core::String& formatted_data, const Rocket::Core::StringList& raw_data) override;
+      void FormatData(Rml::Core::String& formatted_data, const Rml::Core::StringList& raw_data) override;
 };
 
 #endif

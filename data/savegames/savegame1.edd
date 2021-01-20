@@ -92,7 +92,7 @@
             },
             "Portrait" : 
             {
-               "path" : "data/characters/akrom.jpg"
+               "path" : "characters/akrom.jpg"
             },
             "Skills" : {},
             "Spritesheet" : "npc1",
@@ -148,7 +148,7 @@
             },
             "Portrait" : 
             {
-               "path" : "data/characters/kain.jpg"
+               "path" : "characters/kain.jpg"
             },
             "Skills" : 
             {
@@ -208,7 +208,7 @@
             },
             "Portrait" : 
             {
-               "path" : "data/characters/shiara.png"
+               "path" : "characters/shiara.png"
             },
             "Skills" : {},
             "Spritesheet" : "npc1",

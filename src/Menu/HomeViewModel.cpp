@@ -16,14 +16,14 @@
 #define DEBUG_FLAG DEBUG_MENU
 
 HomeViewModel::HomeViewModel(PlayerData& playerData) :
-   Rocket::Controls::DataSource("homeViewModel"),
+   Rml::Controls::DataSource("homeViewModel"),
    m_playerData(playerData)
 {
 }
 
-void HomeViewModel::GetRow(Rocket::Core::StringList& row,
-      const Rocket::Core::String& table, int row_index,
-      const Rocket::Core::StringList& columns)
+void HomeViewModel::GetRow(Rml::Core::StringList& row,
+      const Rml::Core::String& table, int row_index,
+      const Rml::Core::StringList& columns)
 {
    Character* character = m_playerData.getRoster()->getParty()[row_index];
 
@@ -59,7 +59,7 @@ void HomeViewModel::GetRow(Rocket::Core::StringList& row,
    }
 }
 
-int HomeViewModel::GetNumRows(const Rocket::Core::String& table)
+int HomeViewModel::GetNumRows(const Rml::Core::String& table)
 {
    if (table == "party")
    {

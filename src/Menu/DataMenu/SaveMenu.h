@@ -16,7 +16,7 @@
 
 #include <memory>
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -60,10 +60,10 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
    SaveGameViewModel m_saveGameViewModel;
 
    /** The menu RML document */
-   Rocket::Core::ElementDocument* m_menuDocument;
+   Rml::Core::ElementDocument* m_menuDocument;
 
    /** The RML document for the Confirm Save window in the data menu */
-   Rocket::Core::ElementDocument* m_confirmDocument;
+   Rml::Core::ElementDocument* m_confirmDocument;
 
    /** The slot to save to after the user confirms the save. */
    int m_selectedSlot = -1;
@@ -81,7 +81,7 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
     *
     * @param event The user input event.
     */
-   void listKeyDown(Rocket::Core::Event& event);
+   void listKeyDown(Rml::Core::Event& event);
 
    /**
     * Displays the confirmation dialog to ensure that the user wants
@@ -102,21 +102,21 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
     *
     * @param event The Rocket GUI event being sent by the user input.
     */
-   void confirmSaveClicked(Rocket::Core::Event& event);
+   void confirmSaveClicked(Rml::Core::Event& event);
 
    /**
     * Event handler for the "Yes"/"Confirm" button being clicked.
     *
     * @param event The Rocket GUI event being sent by the user input.
     */
-   void confirmLoadClicked(Rocket::Core::Event& event);
+   void confirmLoadClicked(Rml::Core::Event& event);
 
    /**
     * Event handler for the "No"/"Cancel" button being clicked.
     *
     * @param event The Rocket GUI event being sent by the user input.
     */
-   void cancelClicked(Rocket::Core::Event& event);
+   void cancelClicked(Rml::Core::Event& event);
 
    /**
     * Event handler for a savegame being clicked.
@@ -124,7 +124,7 @@ class SaveMenu final : public GameState, public std::enable_shared_from_this<Sav
     *
     * @param event The Rocket GUI event that indicates which slot was clicked.
     */
-   void saveGameClicked(Rocket::Core::Event& event);
+   void saveGameClicked(Rml::Core::Event& event);
 
    /**
     * Refreshes the list of save games.

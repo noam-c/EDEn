@@ -57,9 +57,6 @@ class EntityGrid final : messaging::Listener<ActorMoveMessage>
    /** The square root of 2. */
    static const float ROOT_2;
 
-   /** Floating-point notation for infinity. */
-   static const float INFINITY;
-
    /** The tile engine that moderates this grid. */
    const TileEngine& m_tileEngine;
 

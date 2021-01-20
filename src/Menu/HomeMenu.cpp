@@ -11,8 +11,8 @@
 #include "ItemMenu.h"
 #include "SkillMenu.h"
 
-#include <Rocket/Core.h>
-#include <Rocket/Controls.h>
+#include <RmlUi/Core.h>
+#include <RmlUi/Controls.h>
 
 #include "ResourceLoader.h"
 #include "Music.h"
@@ -46,7 +46,7 @@ void HomeMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/homepane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "characterGrid", "click", [this](Rocket::Core::Event& event) { characterClicked(event); });
+      m_bindings.bindAction(m_paneDocument, "characterGrid", "click", [this](Rml::Core::Event& event) { characterClicked(event); });
    }
 
    m_sidebarOptions.push_back("Items");
@@ -58,9 +58,9 @@ void HomeMenu::initialize()
    m_sidebarOptions.push_back("Options");
 }
 
-void HomeMenu::characterClicked(Rocket::Core::Event& event)
+void HomeMenu::characterClicked(Rml::Core::Event& event)
 {
-   Rocket::Core::Element* target = event.GetTargetElement();
+   auto target = event.GetTargetElement();
 
    // Move up the DOM to the datagridrow item holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
@@ -71,7 +71,7 @@ void HomeMenu::characterClicked(Rocket::Core::Event& event)
    if(target != nullptr)
    {
       // If we found a row element, cast it and get its index
-      Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
+      Rml::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rml::Controls::ElementDataGridRow*>(target);
       if(rowElement != nullptr)
       {
          DEBUG("Character click registered.");

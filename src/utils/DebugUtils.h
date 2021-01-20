@@ -66,7 +66,7 @@ class DebugUtils final
     * Debug flags to output on. This variable controls which components of
     * the game will actually output when DEBUG is used.
     */
-   static long debugFlags;
+   static unsigned long debugFlags;
 
    public:
       /**
@@ -75,7 +75,7 @@ class DebugUtils final
        * @param flag the associated debug flag (usually set at the top of *.cpp files).
        * @param str the string to print.
        */
-      static void print(long flag, std::string str) noexcept;
+      static void print(unsigned long flag, std::string str) noexcept;
 
       /**
        * Print a string to the error log if the associated debug flag is active
@@ -84,7 +84,7 @@ class DebugUtils final
        * @param flag the associated debug flag (usually set at the top of *.cpp files).
        * @param fmt the format string to print
        */
-      static void print(long flag, const char* fmt, ...) noexcept;
+      static void print(unsigned long flag, const char* fmt, ...) noexcept;
 
       /**
        * Standard debug pausing mechanism.

@@ -7,7 +7,7 @@
 #ifndef HOME_VIEW_MODEL_H
 #define HOME_VIEW_MODEL_H
 
-#include <Rocket/Controls/DataSource.h>
+#include <RmlUi/Controls/DataSource.h>
 #include "ImageFormatter.h"
 
 class PlayerData;
@@ -19,7 +19,7 @@ class PlayerData;
  *
  * @author Noam Chitayat
  */
-class HomeViewModel final : public Rocket::Controls::DataSource
+class HomeViewModel final : public Rml::Controls::DataSource
 {
    /** The player data backing the menu state */
    PlayerData& m_playerData;
@@ -43,14 +43,14 @@ class HomeViewModel final : public Rocket::Controls::DataSource
        * @param row_index The index of the desired row.
        * @param columns The list of desired columns within the row.
        */
-      void GetRow(Rocket::Core::StringList& row, const Rocket::Core::String& table, int row_index, const Rocket::Core::StringList& columns) override;
+      void GetRow(Rml::Core::StringList& row, const Rml::Core::String& table, int row_index, const Rml::Core::StringList& columns) override;
 
       /**
        * @param table The table to query for row count.
        *
        * @return The number of rows in the specified table.
        */
-      int GetNumRows(const Rocket::Core::String& table) override;
+      int GetNumRows(const Rml::Core::String& table) override;
 };
 
 #endif

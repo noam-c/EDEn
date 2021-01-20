@@ -17,10 +17,10 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_MENU
 
-const Rocket::Core::String SkillViewModel::UnknownSkillIconPath("data/images/icons/I_Rock01.png");
+const Rml::Core::String SkillViewModel::UnknownSkillIconPath("data/images/icons/I_Rock01.png");
 
 SkillViewModel::SkillViewModel(SkillMenu& skillMenu, const Metadata& metadata) :
-   Rocket::Controls::DataSource("skillViewModel"),
+   Rml::Controls::DataSource("skillViewModel"),
    m_skillMenu(skillMenu),
    m_metadata(metadata)
 {
@@ -49,9 +49,9 @@ std::string SkillViewModel::getCurrentCharacterId() const
    return "";
 }
 
-void SkillViewModel::GetRow(Rocket::Core::StringList& row,
-      const Rocket::Core::String& table, int row_index,
-      const Rocket::Core::StringList& columns)
+void SkillViewModel::GetRow(Rml::Core::StringList& row,
+      const Rml::Core::String& table, int row_index,
+      const Rml::Core::StringList& columns)
 {
    Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
    if(selectedCharacter == nullptr)
@@ -70,11 +70,11 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
          {
             if(rowSkill == nullptr)
             {
-               row.emplace_back(13, "Unknown %d", skillId);
+               row.push_back(std::string("Unknown skill: ").append(std::to_string(skillId)));
             }
             else
             {
-               row.emplace_back(rowSkill->getName().c_str());
+               row.emplace_back(rowSkill->getName());
             }
          }
          else if (columns[i] == "icon")
@@ -92,7 +92,7 @@ void SkillViewModel::GetRow(Rocket::Core::StringList& row,
    }
 }
 
-int SkillViewModel::GetNumRows(const Rocket::Core::String& table)
+int SkillViewModel::GetNumRows(const Rml::Core::String& table)
 {
    Character* selectedCharacter = m_skillMenu.getSelectedCharacter();
    if(selectedCharacter != nullptr && table == "skills")

@@ -7,11 +7,11 @@
 #ifndef ROCKET_CONTEXT_REGISTRY_H
 #define ROCKET_CONTEXT_REGISTRY_H
 
-#include <Rocket/Core.h>
-#include <Rocket/Core/Plugin.h>
+#include <RmlUi/Core.h>
+#include <RmlUi/Core/Plugin.h>
 #include <vector>
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -25,10 +25,10 @@ namespace Rocket
  *
  * @author Noam Chitayat
  */
-class RocketContextRegistry final : public Rocket::Core::Plugin
+class RocketContextRegistry final : public Rml::Core::Plugin
 {
    /** The list of currently active Rocket contexts. */
-   std::vector<Rocket::Core::Context*> m_activeRocketContexts;
+   std::vector<Rml::Core::Context*> m_activeRocketContexts;
 
    public:
       /**
@@ -44,19 +44,19 @@ class RocketContextRegistry final : public Rocket::Core::Plugin
        *
        * @param context The context that was just created.
        */
-      void OnContextCreate(Rocket::Core::Context* context) override;
+      void OnContextCreate(Rml::Core::Context* context) override;
 
       /**
        * Called by Rocket when a Rocket Context is destroyed.
        *
        * @param context The context that is being destroyed.
        */
-      void OnContextDestroy(Rocket::Core::Context* context) override;
+      void OnContextDestroy(Rml::Core::Context* context) override;
 
       /**
        * @return a list of all currently active contexts.
        */
-      const std::vector<Rocket::Core::Context*>& getActiveContexts() const;
+      const std::vector<Rml::Core::Context*>& getActiveContexts() const;
 };
 
 #endif
