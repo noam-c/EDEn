@@ -549,10 +549,7 @@ void TileEngine::handleInputEvents(bool& finishState)
                {
                   case SDLK_SPACE:
                   {
-                     if(m_dialogue.hasDialogue())
-                     {
-                        m_dialogue.setFastModeEnabled(false);
-                     }
+                     m_dialogue.setFastModeEnabled(false);
                      return;
                   }
                   default:
