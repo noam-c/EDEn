@@ -54,8 +54,11 @@ class RoyFloydWarshallMatrices final
     */
    static int coordsToTileNum(const geometry::Point2D& tileLocation, int width);
 
+   // Only making this public because MSVC's STL implementation requires std::async's result type to be default-constructible
+   // see: https://developercommunity.visualstudio.com/content/problem/123622/stdasyncs-stdfuture-doesnt-support-types-that-are.html
+   public:
    /**
-    * Constructor is private.
+    * Constructor is (well, should be) private.
     * Please use <code>RoyFloydWarshallMatrices::calculateRoyFloydWarshallMatrices</code>
     * to create an instance.
     */
