@@ -8,6 +8,7 @@
 #define SAVE_GAME_MODEL_H
 
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
