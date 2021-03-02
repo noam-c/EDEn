@@ -18,7 +18,7 @@
 #ifndef EDEN_ROCKET_RENDER_INTERFACE_H
 #define EDEN_ROCKET_RENDER_INTERFACE_H
 
-#include "Rocket/Core/RenderInterface.h"
+#include <RmlUi/Core/RenderInterface.h>
 
 /**
  * OpenGL render interface for Rocket, using EDEn's texture management
@@ -27,13 +27,13 @@
  * @author Peter Curry
  * @author Noam Chitayat
  */
-class EdenRocketRenderInterface final : public Rocket::Core::RenderInterface
+class EdenRocketRenderInterface final : public Rml::Core::RenderInterface
 {
    public:
       /**
        * Called by Rocket when it wants to render geometry that it does not wish to optimise.
        */
-      void RenderGeometry(Rocket::Core::Vertex* vertices, int numVertices, int* indices, int numIndices, Rocket::Core::TextureHandle texture, const Rocket::Core::Vector2f& translation) override;
+      void RenderGeometry(Rml::Core::Vertex* vertices, int numVertices, int* indices, int numIndices, Rml::Core::TextureHandle texture, const Rml::Core::Vector2f& translation) override;
 
       /**
        * Called by Rocket when it wants to enable or disable scissoring to clip content.
@@ -48,17 +48,17 @@ class EdenRocketRenderInterface final : public Rocket::Core::RenderInterface
       /**
        * Called by Rocket when a texture is required by the library.
        */
-      bool LoadTexture(Rocket::Core::TextureHandle& textureHandle, Rocket::Core::Vector2i& textureDimensions, const Rocket::Core::String& source) override;
+      bool LoadTexture(Rml::Core::TextureHandle& textureHandle, Rml::Core::Vector2i& textureDimensions, const Rml::Core::String& source) override;
 
       /**
        * Called by Rocket when a texture is required to be built from an internally-generated sequence of pixels.
        */
-      bool GenerateTexture(Rocket::Core::TextureHandle& textureHandle, const Rocket::Core::byte* source, const Rocket::Core::Vector2i& sourceDimensions) override;
+      bool GenerateTexture(Rml::Core::TextureHandle& textureHandle, const Rml::Core::byte* source, const Rml::Core::Vector2i& sourceDimensions) override;
 
       /**
        * Called by Rocket when a loaded texture is no longer required.
        */
-      void ReleaseTexture(Rocket::Core::TextureHandle textureHandle) override;
+      void ReleaseTexture(Rml::Core::TextureHandle textureHandle) override;
 };
 
 #endif

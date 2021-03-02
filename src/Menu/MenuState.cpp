@@ -7,7 +7,7 @@
 #include "MenuState.h"
 #include "MenuShell.h"
 #include "Scheduler.h"
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 #include "RocketSDLInputMapping.h"
 #include "EdenRocketBindings.h"
 #include "ShortcutBar.h"
@@ -35,7 +35,6 @@ MenuState::~MenuState()
    if(m_paneDocument != nullptr)
    {
       m_paneDocument->Close();
-      m_paneDocument->RemoveReference();
    }
 }
 

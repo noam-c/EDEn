@@ -15,14 +15,14 @@
 #define DEBUG_FLAG DEBUG_DIA_CONTR
 
 ChoicesDataSource::ChoicesDataSource(DialogueController& choiceProvider) :
-   Rocket::Controls::DataSource("choicesDataSource"),
+   Rml::Controls::DataSource("choicesDataSource"),
    m_choiceProvider(choiceProvider)
 {
 }
 
-void ChoicesDataSource::GetRow(Rocket::Core::StringList& row,
-      const Rocket::Core::String& table, int row_index,
-      const Rocket::Core::StringList& columns)
+void ChoicesDataSource::GetRow(Rml::Core::StringList& row,
+      const Rml::Core::String& table, int row_index,
+      const Rml::Core::StringList& columns)
 {
    if (table == "choices" && m_choiceProvider.hasDialogue())
    {
@@ -37,7 +37,7 @@ void ChoicesDataSource::GetRow(Rocket::Core::StringList& row,
    }
 }
 
-int ChoicesDataSource::GetNumRows(const Rocket::Core::String& table)
+int ChoicesDataSource::GetNumRows(const Rml::Core::String& table)
 {
    if (table == "choices")
    {

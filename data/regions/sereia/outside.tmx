@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="32" tileheight="32" nextobjectid="33">
- <tileset firstgid="1" source="../../tilesets/town.tsx"/>
+ <tileset firstgid="1" source="../tilesets/town.tsx"/>
  <layer name="background" width="30" height="20">
   <properties>
    <property name="tilesetName" value="town"/>

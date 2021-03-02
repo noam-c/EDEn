@@ -8,7 +8,7 @@
 #define ROCKET_SDL_INPUT_MAPPING_H
 
 #include <SDL.h>
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 #include <map>
 
 /**
@@ -24,7 +24,7 @@ class RocketSDLInputMapping final
     * The mapping between the SDLKey keyboard input enum to the
     * Rocket KeyIdentifier enum.
     */
-   static std::map<SDL_Keycode, Rocket::Core::Input::KeyIdentifier> keyMap;
+   static std::map<SDL_Keycode, Rml::Core::Input::KeyIdentifier> keyMap;
 
    /**
     * @param modifiers The SDL keyboard event's keyboard modifiers.
@@ -52,7 +52,7 @@ class RocketSDLInputMapping final
        * @param context The context to send the SDL input event to.
        * @param event The input event to send to the Rocket context (after proper mapping).
        */
-      static void handleSDLEvent(Rocket::Core::Context* context, const SDL_Event& event);
+      static void handleSDLEvent(Rml::Core::Context* context, const SDL_Event& event);
 };
 
 #endif

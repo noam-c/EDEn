@@ -506,17 +506,10 @@ int luaW_gc(lua_State* L)
 inline void luaW_registerfuncs(lua_State* L, const luaL_Reg defaulttable[], const luaL_Reg table[])
 {
    // ... T
-#if LUA_VERSION_NUM == 502
    if (defaulttable)
       luaL_setfuncs(L, defaulttable, 0); // ... T
    if (table)
       luaL_setfuncs(L, table, 0); // ... T
-#else
-   if (defaulttable)
-      luaL_register(L, NULL, defaulttable); // ... T
-   if (table)
-      luaL_register(L, NULL, table); // ... T
-#endif
 }
 
 // Initializes the LuaWrapper tables used to track internal state.

@@ -7,8 +7,8 @@
 #include "ItemMenu.h"
 #include "MenuShell.h"
 
-#include <Rocket/Core.h>
-#include <Rocket/Controls.h>
+#include <RmlUi/Core.h>
+#include <RmlUi/Controls.h>
 
 #include "Metadata.h"
 #include "PlayerData.h"
@@ -38,17 +38,17 @@ void ItemMenu::initialize()
    m_paneDocument = m_menuShell->getRocketContext()->LoadDocument("data/gui/itempane.rml");
    if(m_paneDocument != nullptr)
    {
-      m_bindings.bindAction(m_paneDocument, "itemGrid", "click", [this](Rocket::Core::Event& event) { itemClicked(event); });
-      m_bindings.bindAction(m_paneDocument, "itemGrid", "dragstart", [this](Rocket::Core::Event& event) { dragStarted(event); });
+      m_bindings.bindAction(m_paneDocument, "itemGrid", "click", [this](Rml::Core::Event& event) { itemClicked(event); });
+      m_bindings.bindAction(m_paneDocument, "itemGrid", "dragstart", [this](Rml::Core::Event& event) { dragStarted(event); });
    }
 }
 
-void ItemMenu::dragStarted(Rocket::Core::Event& event)
+void ItemMenu::dragStarted(Rml::Core::Event& event)
 {
-   Rocket::Core::Element* dragElement = static_cast<Rocket::Core::Element*>(event.GetParameter< void* >("drag_element", nullptr));
+   auto dragElement = static_cast<Rml::Core::Element*>(event.GetParameter< void* >("drag_element", nullptr));
    if (dragElement != nullptr)
    {
-      Rocket::Core::Element* target = event.GetTargetElement();
+      auto target = event.GetTargetElement();
 
       // Move up the DOM to the datagridrow item holding this element
       while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
@@ -59,7 +59,7 @@ void ItemMenu::dragStarted(Rocket::Core::Event& event)
       if(target != nullptr)
       {
          // If we found a row element, cast it and get its index
-         Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
+         Rml::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rml::Controls::ElementDataGridRow*>(target);
          if(rowElement != nullptr)
          {
             int itemIndex = rowElement->GetParentRelativeIndex();
@@ -71,9 +71,9 @@ void ItemMenu::dragStarted(Rocket::Core::Event& event)
    }
 }
 
-void ItemMenu::itemClicked(Rocket::Core::Event& event)
+void ItemMenu::itemClicked(Rml::Core::Event& event)
 {
-   Rocket::Core::Element* target = event.GetTargetElement();
+   auto target = event.GetTargetElement();
 
    // Move up the DOM to the datagridrow item holding this element
    while(target->GetParentNode() != nullptr && target->GetTagName() != "datagridrow")
@@ -84,7 +84,7 @@ void ItemMenu::itemClicked(Rocket::Core::Event& event)
    if(target != nullptr)
    {
       // If we found a row element, cast it and get its index
-      Rocket::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rocket::Controls::ElementDataGridRow*>(target);
+      Rml::Controls::ElementDataGridRow* rowElement = dynamic_cast<Rml::Controls::ElementDataGridRow*>(target);
       if(rowElement != nullptr)
       {
          int itemIndex = rowElement->GetParentRelativeIndex();

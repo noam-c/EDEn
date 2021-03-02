@@ -140,7 +140,14 @@ class GraphicsUtil final : public Singleton<GraphicsUtil>
        * @return a new Rocket context that spans the entire screen
        *         and has the specified name.
        */
-      Rocket::Core::Context* createRocketContext(const std::string& name);
+      Rml::Core::Context* createRocketContext(const std::string& name);
+
+      /**
+       * @param The name of the Rocket context to remove.
+       *
+       * @return true iff the context was successfully removed.
+       */
+      bool removeRocketContext(const std::string& name);
 
       /**
        * Flush any enqueued GL commands and then flip the screen buffer

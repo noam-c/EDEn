@@ -6,18 +6,18 @@
 
 #include "EdenRocketSystemInterface.h"
 #include "SDL.h"
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_ROCKET
 
-float EdenRocketSystemInterface::GetElapsedTime()
+double EdenRocketSystemInterface::GetElapsedTime()
 {
-   return SDL_GetTicks();
+   return static_cast<double>(SDL_GetTicks()) / 1000.0;
 }
 
-bool EdenRocketSystemInterface::LogMessage(Rocket::Core::Log::Type type, const Rocket::Core::String& message)
+bool EdenRocketSystemInterface::LogMessage(Rml::Core::Log::Type type, const Rml::Core::String& message)
 {
-   DEBUG("%s", message.CString());
+   DEBUG("%s", message.c_str());
    return true;
 }

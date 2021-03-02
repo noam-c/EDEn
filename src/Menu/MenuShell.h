@@ -13,7 +13,7 @@
 #include "EdenRocketBindings.h"
 #include "Scheduler.h"
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -43,16 +43,16 @@ class ShortcutBar;
 class MenuShell final
 {
    /** The Rocket context which holds the shell's GUI components. */
-   Rocket::Core::Context* m_rocketContext;
+   Rml::Core::Context* m_rocketContext;
 
    /** The RML document holding the shell GUI components. */
-   Rocket::Core::ElementDocument* m_shellDocument;
+   Rml::Core::ElementDocument* m_shellDocument;
 
    /**
     * The element containing the sidebar list for
     * the active menu's related actions.
     */
-   Rocket::Core::Element* m_sidebarElement;
+   Rml::Core::Element* m_sidebarElement;
 
    /**
     * The shortcut bar containing the player's set of shortcuts.
@@ -80,7 +80,7 @@ class MenuShell final
     *
     * @param event The click event that occurred in the sidebar.
     */
-   void sidebarClicked(Rocket::Core::Event& event);
+   void sidebarClicked(Rml::Core::Event& event);
 
    public:
       /**
@@ -88,7 +88,7 @@ class MenuShell final
        *
        * @param rocketContext The menu context that will contain the menu shell GUI.
        */
-      MenuShell(Rocket::Core::Context* rocketContext);
+      MenuShell(Rml::Core::Context* rocketContext);
 
       /**
        * Destructor.
@@ -100,7 +100,7 @@ class MenuShell final
       /**
        * @return The Rocket context managing the shell GUI.
        */
-      Rocket::Core::Context* getRocketContext() const;
+      Rml::Core::Context* getRocketContext() const;
 
       /**
        * @return The scheduler used to manage the menu coroutines.
@@ -110,7 +110,7 @@ class MenuShell final
       /**
        * @return The RML document managing the shell GUI.
        */
-      Rocket::Core::ElementDocument* getShellDocument() const;
+      Rml::Core::ElementDocument* getShellDocument() const;
 
       /**
        * Sets a new active menu state.

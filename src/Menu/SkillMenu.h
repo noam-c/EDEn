@@ -12,7 +12,7 @@
 #include "SkillViewModel.h"
 #include "UsableId.h"
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -46,8 +46,8 @@ class SkillMenu final : public CharacterDependentMenu
     */
    void initialize();
 
-   void skillClicked(Rocket::Core::Event& event);
-   void dragStarted(Rocket::Core::Event& event);
+   void skillClicked(Rml::Core::Event& event);
+   void dragStarted(Rml::Core::Event& event);
 
    void useSkill(int rowIndex);
 

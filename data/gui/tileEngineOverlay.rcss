@@ -31,8 +31,8 @@ body
 
 #dialogueBox #choiceList datagridheader
 {
-   height: 0;
-   display: none;
+   //height: 0;
+   //display: none;
 }
 
 #dialogueBox.narration #choiceList datagridcell
@@ -58,7 +58,7 @@ body
 .readyNote,
 #choiceList
 {
-   visibility: hidden;
+   visibility: visible;
 }
 
 .dialogueComplete.speech.noChoices .readyNote,

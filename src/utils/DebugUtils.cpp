@@ -8,16 +8,16 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-long DebugUtils::debugFlags = DEBUG_ALL;
+unsigned long DebugUtils::debugFlags = DEBUG_ALL;
 
-void DebugUtils::print(long flag, std::string str) noexcept
+void DebugUtils::print(unsigned long flag, std::string str) noexcept
 {
    if(debugFlags & flag) {
       fprintf(stderr, "%s", str.c_str());
    }
 }
 
-void DebugUtils::print(long flag, const char* fmt, ...) noexcept
+void DebugUtils::print(unsigned long flag, const char* fmt, ...) noexcept
 {
    if(debugFlags & flag)
    {

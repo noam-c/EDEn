@@ -7,21 +7,21 @@
 #ifndef ROCKET_SCRIPT_HANDLER_H
 #define ROCKET_SCRIPT_HANDLER_H
 
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 
 class ScriptEngine;
 
-class RocketScriptHandler final : public Rocket::Core::EventListener
+class RocketScriptHandler final : public Rml::Core::EventListener
 {
    ScriptEngine& m_scriptEngine;
    const std::string m_scriptString;
 
    public:
-      RocketScriptHandler(ScriptEngine& scriptEngine, Rocket::Core::String scriptString);
+      RocketScriptHandler(ScriptEngine& scriptEngine, Rml::Core::String scriptString);
 
-      void ProcessEvent(Rocket::Core::Event& event) override;
+      void ProcessEvent(Rml::Core::Event& event) override;
 
-      void OnDetach(Rocket::Core::Element* element) override;
+      void OnDetach(Rml::Core::Element* element) override;
 };
 
 #endif

@@ -13,7 +13,7 @@
 
 #include <SDL.h>
 
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 #include "RocketSDLInputMapping.h"
 
 #include "DebugUtils.h"
@@ -25,22 +25,24 @@ const int GameState::MAX_FRAME_TIME = 32; // 30fps == about 32ms per frame
 GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName) :
    m_time(SDL_GetTicks()),
    m_stateType(stateType),
-   m_gameContext(gameContext)
+   m_gameContext(gameContext),
+   m_ownedContext(true)
 {
    m_rocketContext = GraphicsUtil::getInstance()->createRocketContext(stateName.c_str());
 }
 
-GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName, Rocket::Core::Context* context) :
+GameState::GameState(GameContext& gameContext, GameStateType stateType, const std::string& stateName, Rml::Core::Context* context) :
    m_stateType(stateType),
    m_gameContext(gameContext),
    m_rocketContext(context)
 {
-   context->AddReference();
 }
 
-GameState::~GameState()
-{
-   m_rocketContext->RemoveReference();
+GameState::~GameState() {
+   if (m_ownedContext && m_rocketContext)
+   {
+      GraphicsUtil::getInstance()->removeRocketContext(m_rocketContext->GetName());
+   }
 }
 
 ExecutionStack* GameState::getExecutionStack() const

@@ -12,13 +12,8 @@ RocketScriptHandlerFactory::RocketScriptHandlerFactory(ScriptEngine& scriptEngin
 {
 }
 
-Rocket::Core::EventListener* RocketScriptHandlerFactory::InstanceEventListener(
-      const Rocket::Core::String& value, Rocket::Core::Element* element)
+Rml::Core::EventListener* RocketScriptHandlerFactory::InstanceEventListener(
+      const Rml::Core::String& value, Rml::Core::Element* element)
 {
    return new RocketScriptHandler(m_scriptEngine, value);
-}
-
-void RocketScriptHandlerFactory::Release()
-{
-   delete this;
 }

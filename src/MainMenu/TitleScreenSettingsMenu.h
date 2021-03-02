@@ -13,7 +13,7 @@
 
 #include <memory>
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -41,16 +41,16 @@ class TitleScreenSettingsMenu final : public GameState
    Scheduler m_scheduler;
 
    /** The title screen RML document */
-   Rocket::Core::ElementDocument* m_titleSettingsDocument;
+   Rml::Core::ElementDocument* m_titleSettingsDocument;
 
    /** The music checkbox */
-   Rocket::Core::Element* m_musicEnabledCheckbox;
+   Rml::Core::Element* m_musicEnabledCheckbox;
 
    /** The sound checkbox */
-   Rocket::Core::Element* m_soundEnabledCheckbox;
+   Rml::Core::Element* m_soundEnabledCheckbox;
 
    /** The fullscreen checkbox */
-   Rocket::Core::Element* m_fullScreenEnabledCheckbox;
+   Rml::Core::Element* m_fullScreenEnabledCheckbox;
 
    /**
     * Poll and handle the next input event.
@@ -59,15 +59,15 @@ class TitleScreenSettingsMenu final : public GameState
     */
    void waitForInputEvent(bool& finishState);
 
-   static bool getCheckboxValue(Rocket::Core::Event& event);
+   static bool getCheckboxValue(Rml::Core::Event& event);
    void loadSettings();
    void saveSettings();
    void revertSettings();
 
-   void onMusicEnabledChange(Rocket::Core::Event& event);
-   void onSoundEnabledChange(Rocket::Core::Event& event);
-   void onFullScreenEnabledChange(Rocket::Core::Event& event);
-   void onSubmit(Rocket::Core::Event& event);
+   void onMusicEnabledChange(Rml::Core::Event& event);
+   void onSoundEnabledChange(Rml::Core::Event& event);
+   void onFullScreenEnabledChange(Rml::Core::Event& event);
+   void onSubmit(Rml::Core::Event& event);
 
    protected:
       /**

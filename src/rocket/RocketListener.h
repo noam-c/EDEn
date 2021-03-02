@@ -7,18 +7,18 @@
 #ifndef ROCKET_LISTENER_H
 #define ROCKET_LISTENER_H
 
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 #include <functional>
 
-class RocketListener final : public Rocket::Core::EventListener
+class RocketListener final : public Rml::Core::EventListener
 {
-   Rocket::Core::Element* m_element;
-   Rocket::Core::String m_eventType;
+   Rml::Core::Element* m_element;
+   Rml::Core::String m_eventType;
    bool m_capture;
-   std::function<void(Rocket::Core::Event&)> m_processFunction;
+   std::function<void(Rml::Core::Event&)> m_processFunction;
 
    public:
-      RocketListener(Rocket::Core::Element* element, Rocket::Core::String eventType, bool capture, std::function<void(Rocket::Core::Event&)> processFunction);
+      RocketListener(Rml::Core::Element* element, Rml::Core::String eventType, bool capture, std::function<void(Rml::Core::Event&)> processFunction);
 
       RocketListener(const RocketListener& listener);
 
@@ -26,7 +26,7 @@ class RocketListener final : public Rocket::Core::EventListener
 
       ~RocketListener() override;
 
-      void ProcessEvent(Rocket::Core::Event& event) override;
+      void ProcessEvent(Rml::Core::Event& event) override;
 };
 
 #endif

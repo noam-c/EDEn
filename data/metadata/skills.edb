@@ -1,8 +1,8 @@
 {
 	"data" : 
 	[
-		{"id" : 1, "name" : "Heal", "icon": "data/images/icons/S_Holy01.png", "mastery": 30},
-		{"id" : 2, "name" : "Fireball",  "icon": "data/images/icons/S_Fire03.png", "mastery": 30},
-		{"id" : 3, "name" : "Heal2",  "icon": "data/images/icons/S_Holy03.png", "mastery": 75}
+		{"id" : 1, "name" : "Heal", "icon": "images/icons/S_Holy01.png", "mastery": 30},
+		{"id" : 2, "name" : "Fireball",  "icon": "images/icons/S_Fire03.png", "mastery": 30},
+		{"id" : 3, "name" : "Heal2",  "icon": "images/icons/S_Holy03.png", "mastery": 75}
 	]
 }

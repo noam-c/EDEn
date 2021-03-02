@@ -7,14 +7,14 @@
 #include "GameContext.h"
 #include "ScriptEngine.h"
 
-#include <Rocket/Core/Factory.h>
+#include <RmlUi/Core/Factory.h>
 #include "RocketScriptHandlerFactory.h"
 
 GameContext::GameContext(ScriptEngine& scriptEngine) :
    m_scriptEngine(scriptEngine),
    m_metadata(m_scriptEngine)
 {
-   Rocket::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(m_scriptEngine));
+   Rml::Core::Factory::RegisterEventListenerInstancer(new RocketScriptHandlerFactory(m_scriptEngine));
 }
 
 Metadata& GameContext::getMetadata()

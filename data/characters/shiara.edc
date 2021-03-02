@@ -3,7 +3,7 @@
    "schema" : "default",
    "Portrait" :
    {
-      "path" : "data/characters/shiara.png"
+      "path" : "characters/shiara.png"
    },
    "Aspects" : [ "mystic" ],
    "Spritesheet" : "npc1",

@@ -8,8 +8,7 @@ body
 
 .shell
 {
-   background-decorator: image;
-   background-image-src: ../images/menubg.jpg;
+	decorator: image( ../images/menubg.jpg );
 }
 
 .panel

@@ -5,7 +5,7 @@
  */
 
 #include "RocketContextRegistry.h"
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 #include <algorithm>
 
 int RocketContextRegistry::GetEventClasses()
@@ -13,19 +13,19 @@ int RocketContextRegistry::GetEventClasses()
    return EVT_BASIC;
 }
 
-void RocketContextRegistry::OnContextCreate(Rocket::Core::Context* context)
+void RocketContextRegistry::OnContextCreate(Rml::Core::Context* context)
 {
    m_activeRocketContexts.push_back(context);
 }
 
-void RocketContextRegistry::OnContextDestroy(Rocket::Core::Context* context)
+void RocketContextRegistry::OnContextDestroy(Rml::Core::Context* context)
 {
    // Search for the context to remove from back to front, since contexts are usually
    // destroyed in reverse order of creation.
    std::remove(m_activeRocketContexts.rbegin(), m_activeRocketContexts.rend(), context);
 }
 
-const std::vector<Rocket::Core::Context*>& RocketContextRegistry::getActiveContexts() const
+const std::vector<Rml::Core::Context*>& RocketContextRegistry::getActiveContexts() const
 {
    return m_activeRocketContexts;
 }

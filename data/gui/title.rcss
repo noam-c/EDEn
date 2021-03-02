@@ -2,8 +2,7 @@ body
 {
    font-family: FairydustB;
    font-size: 24px;
-   background-decorator: image;
-   background-image-src: ../images/splash.jpg;
+	decorator: image( ../images/splash.jpg );
    height: 100%;
    width: 100%;
    
@@ -33,40 +32,46 @@ body
    color: #999999;
 }
 
+@spritesheet checkbox {
+   src: title.png;
+
+   unchecked: 407px 60px 437px 90px; 
+   unchecked-hover: 437px 60px 467px 90px;
+   unchecked-active: 467px 60px 497px 90px;
+   checked: 407px 90px 437px 120px; 
+   checked-hover: 437px 90px 467px 120px;
+   checked-active: 467px 90px 497px 120px;
+}
+
 input.checkbox
 {
    width: 15px;
    height: 15px;
-   background-color: #ff0000;
-   icon-decorator: image;
-   icon-image: title.png 407px 60px 437px 90px;
+   decorator: image( unchecked );
 }
 
 input.checkbox:hover
 {
-   icon-image-s: 437px 467px;
+   decorator: image( unchecked-hover );
 }
 
 input.checkbox:active
 {
-   icon-image-s: 467px 497px;
+   decorator: image( unchecked-active );
 }
 
 input.checkbox:checked
 {
-   background-color: #00ff00;
-   icon-image-t: 90px 120px;
+   decorator: image( checked );
 }
 
 input.checkbox:checked:hover
 {
-   icon-image-s: 437px 467px;
-   icon-image-t: 90px 120px;
+   decorator: image( checked-hover );
 }
 
 input.checkbox:checked:active
 {
-   icon-image-s: 467px 497px;
-   icon-image-t: 90px 120px;
+   decorator: image( checked-active );
 }
 

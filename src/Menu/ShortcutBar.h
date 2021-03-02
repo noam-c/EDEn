@@ -11,7 +11,7 @@
 
 enum class GameStateType;
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -30,7 +30,7 @@ class ShortcutBar final
    EdenRocketBindings m_bindings;
 
    /** The Rocket context that holds this console window */
-   Rocket::Core::Context& m_rocketContext;
+   Rml::Core::Context& m_rocketContext;
 
    /** The item and skill metadata */
    Metadata& m_metadata;
@@ -42,10 +42,10 @@ class ShortcutBar final
    const GameStateType m_stateType;
 
    /** The Rocket document representing the shortcut bar GUI */
-   Rocket::Core::ElementDocument* m_shortcutBarDocument;
+   Rml::Core::ElementDocument* m_shortcutBarDocument;
 
    /** The Rocket element that contains the shortcut bar icons */
-   Rocket::Core::Element* m_shortcutContainer;
+   Rml::Core::Element* m_shortcutContainer;
 
    bool invokeShortcut(int shortcutIndex);
 
@@ -55,15 +55,15 @@ class ShortcutBar final
        *
        * @param rocketContext The Rocket context to which this console window should attach.
        */
-      ShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext);
+      ShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rml::Core::Context& rocketContext);
 
       /**
        * Destructor.
        */
       ~ShortcutBar();
 
-      void shortcutClicked(Rocket::Core::Event& event);
-      void usableDropped(Rocket::Core::Event& event);
+      void shortcutClicked(Rml::Core::Event& event);
+      void usableDropped(Rml::Core::Event& event);
 
       /**
        * Refresh the shortcut bar UI.

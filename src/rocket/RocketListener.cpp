@@ -6,7 +6,7 @@
 
 #include "RocketListener.h"
 
-RocketListener::RocketListener(Rocket::Core::Element* element, Rocket::Core::String eventType, bool capture, std::function<void(Rocket::Core::Event&)> processFunction) :
+RocketListener::RocketListener(Rml::Core::Element* element, Rml::Core::String eventType, bool capture, std::function<void(Rml::Core::Event&)> processFunction) :
    m_element(element),
    m_eventType(eventType),
    m_capture(capture),
@@ -28,7 +28,7 @@ RocketListener::RocketListener(RocketListener&& listener) : RocketListener::Rock
 {
 }
 
-void RocketListener::ProcessEvent(Rocket::Core::Event& event)
+void RocketListener::ProcessEvent(Rml::Core::Event& event)
 {
    m_processFunction(event);
 }

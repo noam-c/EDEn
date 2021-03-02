@@ -4,7 +4,9 @@
  *  Copyright (C) 2007-2016 Noam Chitayat. All rights reserved.
  */
 
-#include <Rocket/Controls.h>
+#include <RmlUi/Controls.h>
+#include <algorithm>
+#include <iterator>
 
 #include "DebugConsoleWindow.h"
 #include "DebugCommandMessage.h"
@@ -12,13 +14,11 @@
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_ROCKET
 
-DebugConsoleWindow::DebugConsoleWindow(messaging::MessagePipe& messagePipe, Rocket::Core::Context& context) :
+DebugConsoleWindow::DebugConsoleWindow(messaging::MessagePipe& messagePipe, Rml::Core::Context& context) :
    m_messagePipe(messagePipe),
    m_context(context)
 {
-   m_context.AddReference();
-
-   m_consoleDocument = context.LoadDocument("data/gui/debugConsole.rml");
+   m_consoleDocument = m_context.LoadDocument("data/gui/debugConsole.rml");
    if(m_consoleDocument != nullptr)
    {
       m_logElement = m_consoleDocument->GetElementById("commandLog");
@@ -27,11 +27,11 @@ DebugConsoleWindow::DebugConsoleWindow(messaging::MessagePipe& messagePipe, Rock
          DEBUG("Warning: missing \"commandLog\" element in debug console window.");
       }
 
-      m_commandElement = dynamic_cast<Rocket::Controls::ElementFormControlInput*>(m_consoleDocument->GetElementById("commandPrompt"));
+      m_commandElement = dynamic_cast<Rml::Controls::ElementFormControlInput*>(m_consoleDocument->GetElementById("commandPrompt"));
       if(m_commandElement != nullptr)
       {
-         m_bindings.bindAction(m_commandElement, "keydown", [this](Rocket::Core::Event& event) { onKeyPress(event); });
-         m_bindings.bindAction(m_commandElement, "change", [this](Rocket::Core::Event& event) { onTextChange(event); });
+         m_bindings.bindAction(m_commandElement, "keydown", [this](Rml::Core::Event& event) { onKeyPress(event); });
+         m_bindings.bindAction(m_commandElement, "change", [this](Rml::Core::Event& event) { onTextChange(event); });
       }
       else
       {
@@ -44,45 +44,46 @@ DebugConsoleWindow::~DebugConsoleWindow()
 {
    if(m_consoleDocument != nullptr)
    {
-      m_consoleDocument->RemoveReference();
       m_consoleDocument->Close();
    }
-
-   m_context.RemoveReference();
 }
 
-void DebugConsoleWindow::onFocus(Rocket::Core::Event& event)
+void DebugConsoleWindow::onFocus(Rml::Core::Event& event)
 {
    m_commandElement->Focus();
 }
 
-void DebugConsoleWindow::onTextChange(Rocket::Core::Event& event)
+void DebugConsoleWindow::onTextChange(Rml::Core::Event& event)
 {
-   Rocket::Core::String value = m_commandElement->GetValue();
-   m_commandElement->SetValue(value.Replace("`", ""));
+   auto oldValue = m_commandElement->GetValue();
+   Rml::Core::String newValue;
+   std::copy_if(
+      oldValue.begin(),
+      oldValue.end(),
+      std::back_inserter(newValue),
+      [](char c) { return c != '`'; }
+   );
+   m_commandElement->SetValue(newValue);
 }
 
-void DebugConsoleWindow::onKeyPress(Rocket::Core::Event& event)
+void DebugConsoleWindow::onKeyPress(Rml::Core::Event& event)
 {
-   Rocket::Core::Input::KeyIdentifier key = static_cast<Rocket::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rocket::Core::Input::KI_UNKNOWN));
+   Rml::Core::Input::KeyIdentifier key = static_cast<Rml::Core::Input::KeyIdentifier>(event.GetParameter<int>("key_identifier", Rml::Core::Input::KI_UNKNOWN));
 
-   if(key == Rocket::Core::Input::KI_RETURN)
+   if(key == Rml::Core::Input::KI_RETURN)
    {
-      Rocket::Core::String text = m_commandElement->GetValue();
-      if(text.Length() > 0)
+      const auto text = m_commandElement->GetValue();
+      if(text.length() > 0)
       {
-         Rocket::Core::Element* entryElement = m_logElement->GetOwnerDocument()->CreateElement("div");
-         Rocket::Core::ElementText* textElement = m_logElement->GetOwnerDocument()->CreateTextNode(text);
+         auto textElement = m_logElement->GetOwnerDocument()->CreateTextNode(text);
+         auto entryElement = m_logElement->GetOwnerDocument()->CreateElement("div");
 
-         entryElement->AppendChild(textElement);
-         m_logElement->AppendChild(entryElement);
-
-         entryElement->RemoveReference();
-         textElement->RemoveReference();
+         entryElement->AppendChild(std::move(textElement));
+         m_logElement->AppendChild(std::move(entryElement));
 
          m_commandElement->SetValue("");
 
-         m_messagePipe.sendMessage(DebugCommandMessage(text.CString()));
+         m_messagePipe.sendMessage(DebugCommandMessage(text.c_str()));
       }
    }
 }
@@ -94,7 +95,7 @@ bool DebugConsoleWindow::isVisible() const
 
 void DebugConsoleWindow::show()
 {
-   m_consoleDocument->Show(Rocket::Core::ElementDocument::MODAL);
+   m_consoleDocument->Show(Rml::Core::ModalFlag::Modal);
 }
 
 void DebugConsoleWindow::hide()

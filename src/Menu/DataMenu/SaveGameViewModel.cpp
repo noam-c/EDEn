@@ -15,14 +15,14 @@
 #define DEBUG_FLAG DEBUG_MENU
 
 SaveGameViewModel::SaveGameViewModel(SaveGameModel& model) :
-   Rocket::Controls::DataSource("dataViewModel"),
+   Rml::Controls::DataSource("dataViewModel"),
    m_model(model)
 {
 }
 
-void SaveGameViewModel::GetRow(Rocket::Core::StringList& row,
-      const Rocket::Core::String& table, int row_index,
-      const Rocket::Core::StringList& columns)
+void SaveGameViewModel::GetRow(Rml::Core::StringList& row,
+      const Rml::Core::String& table, int row_index,
+      const Rml::Core::StringList& columns)
 {
    const auto& saveGameData = m_model.getSaveGame(row_index);
    const std::vector<Character*> characters = saveGameData->getRoster()->getParty();
@@ -79,7 +79,7 @@ void SaveGameViewModel::GetRow(Rocket::Core::StringList& row,
    }
 }
 
-int SaveGameViewModel::GetNumRows(const Rocket::Core::String& table)
+int SaveGameViewModel::GetNumRows(const Rml::Core::String& table)
 {
    if (table == "saveGames")
    {

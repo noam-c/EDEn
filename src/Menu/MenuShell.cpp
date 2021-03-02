@@ -8,39 +8,31 @@
 #include "GraphicsUtil.h"
 #include "MenuState.h"
 #include "ShortcutBar.h"
-#include <Rocket/Core.h>
+#include <RmlUi/Core.h>
 
 #include "DebugUtils.h"
 #define DEBUG_FLAG DEBUG_MENU
 
-MenuShell::MenuShell(Rocket::Core::Context* rocketContext) :
+MenuShell::MenuShell(Rml::Core::Context* rocketContext) :
    m_rocketContext(rocketContext)
 {
-
-   m_rocketContext->AddReference();
    m_shellDocument = m_rocketContext->LoadDocument("data/gui/menushell.rml");
 
-   Rocket::Core::ElementDocument* background = rocketContext->LoadDocument("data/gui/menubg.rml");
-
+   auto background = m_rocketContext->LoadDocument("data/gui/menubg.rml");
    if (background != nullptr)
    {
-      background->Show(Rocket::Core::ElementDocument::NONE);
-      background->RemoveReference();
+      background->Show(Rml::Core::ModalFlag::None);
    }
 
    if(m_shellDocument != nullptr)
    {
       m_shellDocument->Show();
       m_sidebarElement = m_shellDocument->GetElementById("sidebar");
-      m_bindings.bindAction(m_sidebarElement, "click", [this](Rocket::Core::Event& event) { sidebarClicked(event); });
+      m_bindings.bindAction(m_sidebarElement, "click", [this](Rml::Core::Event& event) { sidebarClicked(event); });
    }
 }
 
-MenuShell::~MenuShell()
-{
-   m_shellDocument->RemoveReference();
-   m_rocketContext->RemoveReference();
-}
+MenuShell::~MenuShell() = default;
 
 void MenuShell::initializeShortcutBar(PlayerData& playerData, Metadata& metadata, GameStateType stateType)
 {
@@ -50,7 +42,7 @@ void MenuShell::initializeShortcutBar(PlayerData& playerData, Metadata& metadata
    }
 }
 
-Rocket::Core::Context* MenuShell::getRocketContext() const
+Rml::Core::Context* MenuShell::getRocketContext() const
 {
    return m_rocketContext;
 }
@@ -60,7 +52,7 @@ Scheduler* MenuShell::getScheduler()
    return &m_scheduler;
 }
 
-Rocket::Core::ElementDocument* MenuShell::getShellDocument() const
+Rml::Core::ElementDocument* MenuShell::getShellDocument() const
 {
    return m_shellDocument;
 }
@@ -77,10 +69,10 @@ void MenuShell::refresh()
       m_sidebarElement->SetClass("noSidebar", false);
       for(const auto& sidebarOption : sidebarOptions)
       {
-         Rocket::Core::Element* element = m_shellDocument->CreateElement("div");
+         auto element = m_shellDocument->CreateElement("div");
          element->SetClass("sidebarOption", true);
          element->AppendChild(m_shellDocument->CreateTextNode(sidebarOption.c_str()));
-         m_sidebarElement->AppendChild(element);
+         m_sidebarElement->AppendChild(std::move(element));
       }
    }
 
@@ -94,9 +86,9 @@ void MenuShell::changeMenuState(MenuState* newState)
    refresh();
 }
 
-void MenuShell::sidebarClicked(Rocket::Core::Event& event)
+void MenuShell::sidebarClicked(Rml::Core::Event& event)
 {
-   Rocket::Core::Element* target = event.GetTargetElement();
+   auto target = event.GetTargetElement();
    if(target->GetParentNode() == m_sidebarElement)
    {
       int childIndex = 0;

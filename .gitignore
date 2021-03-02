@@ -38,3 +38,5 @@ MinSizeRel
 RelWithDebInfo
 settings.ini
 build
+.vscode/settings.json
+.vscode/launch.json

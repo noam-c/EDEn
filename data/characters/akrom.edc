@@ -3,7 +3,7 @@
    "schema" : "default",
    "Portrait" : 
    {
-      "path" : "data/characters/akrom.jpg"
+      "path" : "characters/akrom.jpg"
    },
    "Spritesheet" : "npc1",
    "Aspects" : [

@@ -6,7 +6,7 @@
 
 #include "TileEngineOverlay.h"
 
-TileEngineOverlay::TileEngineOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rocket::Core::Context& rocketContext, DialogueController& dialogueController) :
+TileEngineOverlay::TileEngineOverlay(messaging::MessagePipe& messagePipe, PlayerData& playerData, Metadata& metadata, GameStateType stateType, Rml::Core::Context& rocketContext, DialogueController& dialogueController) :
    m_consoleWindow(messagePipe, rocketContext),
    m_shortcutBar(playerData, metadata, stateType, rocketContext)
 {
@@ -14,7 +14,7 @@ TileEngineOverlay::TileEngineOverlay(messaging::MessagePipe& messagePipe, Player
 
    if(m_overlayDocument != nullptr)
    {
-      Rocket::Core::Element* dialogueBoxElement = m_overlayDocument->GetElementById("dialogueBox");
+      auto dialogueBoxElement = m_overlayDocument->GetElementById("dialogueBox");
 
       if(dialogueBoxElement != nullptr)
       {
@@ -29,7 +29,6 @@ TileEngineOverlay::~TileEngineOverlay()
 {
    if(m_overlayDocument != nullptr)
    {
-      m_overlayDocument->RemoveReference();
       m_overlayDocument->Close();
    }
 }

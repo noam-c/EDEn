@@ -13,7 +13,7 @@
 
 #include <memory>
 
-namespace Rocket
+namespace Rml
 {
    namespace Core
    {
@@ -52,7 +52,7 @@ class MainMenu final : public GameState, public std::enable_shared_from_this<Mai
    std::shared_ptr<PlayerData> m_prototypePlayerData;
 
    /** The title screen RML document */
-   Rocket::Core::ElementDocument* m_titleDocument;
+   Rml::Core::ElementDocument* m_titleDocument;
 
    /**
     * Poll and handle the next input event.
@@ -67,7 +67,7 @@ class MainMenu final : public GameState, public std::enable_shared_from_this<Mai
     *
     * @param event The user input event.
     */
-   void listKeyDown(Rocket::Core::Event& event);
+   void listKeyDown(Rml::Core::Event& event);
 
    //Actions for the list ops - see documentation in MainMenuActions.cpp
    void NewGameAction();
